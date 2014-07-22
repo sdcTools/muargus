@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>&tau;-ARGUS Anco-news</title>
+<meta name="author" content="Statistics; Netherlands">
+<link rel="stylesheet" type="text/css" href="TAUARGUS.css">
+</head>
+<body>
+<h1>&tau;-ARGUS New experimental developments </h1><p>
+<h1>Only for testing by the project team</h1><p>
+<hr>
+<h2>Last modified: 12 January 2012</h2>
+<h2>&tau;-ARGUS version 3.5.0. B13</h2>
+<h2>News</h2>
+<hr><i>12 January 2012</i>
+As a test non-additive tables can be imported. It will be tricky to apply the suppression based
+on the optimisation routines, but the Hypercube is more flexible in this.
+<hr><i>28 June  2011</i>
+Experiment on request of Luigi: Virgili <br>
+1. The audit-routine can also be used before cell suppression.<br>
+2. After the cell suppression the status of a secondary can be changed manually.
+<hr><i>26 April 2011</i>
+Linked tables with modular is now possible<br>
+When a set of tables can be seen as as subset of a larger cover table, this set can now be protected.<br>
+It is a restriction that the cover table has not more than 4 dimensions.<br>
+The problem can also be solved using the hypercube.
+<hr><i>10 February 2011</i>
+A first version of the incomplete tables option is available.<br>
+If not all blocks of a table are filled (e.g different detail in parts of a hierarchical table) &tau;-ARGUS can now handle this.<br>
+All 'live' empty cells will be automatically converted into protected cells with value 0.<br>
+Then this table will be protected.<br>
+Temporarily this only works with tabular input including the status.
+This version is needed for protecting linked tabels
+<hr><i>1 February 2011</i>
+The three singletons-rules (familiar from the modular procedure) are now also available for the full optimisation.<br>
+This allows for the additional singleton protection in optimal.<br>
+The protection is achieved by adding additional cells (combination of singletons) to the problem
+<hr>
+<h2>Anco features</h2>
+<hr>
+Linked tables via the modular protection is available. Both starting from fixed format microdata and from tabular input.<br>
+When starting with tables use the option "Open Table set" to load the tables.<br>
+When starting with microdata just specify a set op tables. You can then still use global recodings to modify the tables.<br>
+Via Modify|Linked tables modular you can start the linked tables procedure. There is a standard automatic procedure to generate the cover table, but it can be done manually ss well.<br>
+In batch the command is LINKMOD without additional parameters<br>
+<hr>
+A JJ-file can be protected directly. Via the menu "Modify|Protect JJ Format" you will be prompted for the name of the inputfile, the output file and a time limit<br>
+In batch  the command is  JJ followed by the input, output file and optional the time limit (10 min. by default)
+<hr>
+Via "Output|Save Table" a table can be stored as a JJ-file.
+<hr>
+The solver options can be modified, but use with care.
+<hr>
+The distance funtion can be used as a cost function. see metadata file and the specify tables screen
+<hr>
+The marginal suppression is available, finding secondaries always in the margins.
+The Singleton preprocessing is still available, but not recommended.
+<hr>
+The Q-parameter is available for the PQ-rule.
+<hr>
+In the optimisation routines the cost-function is scaled at the interval 0,20000. This max can be changed when specifying the tables (MSC).
+<hr>
+<h2>Extended menu options</h2>
+<table>
+<tr><td>File</td><td>Specify</td><td>Modify</td><td>Output</td><td>Help</td></tr>
+<tr><td>Open Microdata</td><td>Metafile</td><td>Select Table</td><td>Save Table</td><td>Contents</td></tr>
+<tr><td>Open Table</td><td>Specify Tables</td><td>View Table</td><td>View Report</td><td>News</td></tr>
+<tr><td><b>Open Table Set</b></td><td>&nbsp;</td><td>Linked Tables</td><td>Generate Apriory</td><td><b>AncoNews</b></td></tr>
+<tr><td>Open Batch Process</td><td>&nbsp;</td><td><b>Linked Tables Modular</b></td><td>Write Batch File</td><td>Options</td></tr>
+<tr><td>Exit</td><td>&nbsp;</td><td><b>Protect JJ Format</b></td><td>&nbsp;</td><td><b>Solver Options</b></td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>About</td></tr>
+</table>
+</body>
+</html>
