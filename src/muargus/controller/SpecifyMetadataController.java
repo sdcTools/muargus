@@ -1,6 +1,8 @@
 // TODO: Combine buttonlist methods
 package muargus.controller;
 
+import java.util.ArrayList;
+import javax.swing.DefaultListModel;
 import muargus.view.SpecifyMetadataView;
 
 /**
@@ -10,6 +12,7 @@ import muargus.view.SpecifyMetadataView;
 public class SpecifyMetadataController {
     
     SpecifyMetadataView view;
+    ArrayList<String> list;
 
     /**
      * 
@@ -17,6 +20,17 @@ public class SpecifyMetadataController {
      */
     public SpecifyMetadataController(SpecifyMetadataView view) {
         this.view = view;
+        this.list = null;
+        //setList(list);
+        
+    }
+    
+    public void setList(ArrayList<String> list){
+        DefaultListModel model1 = new DefaultListModel();
+        for(String s: list){
+            model1.addElement(s);
+        }
+        
     }
     
     /**

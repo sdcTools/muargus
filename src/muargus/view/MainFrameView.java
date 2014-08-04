@@ -1,6 +1,14 @@
 package muargus.view;
 
+import argus.model.Application;
+import argus.model.ArgusException;
+import argus.model.DataFilePair;
+import argus.model.Metadata;
+import argus.view.DialogOpenMicrodata;
+import java.io.FileNotFoundException;
+import javax.swing.JOptionPane;
 import muargus.controller.MainFrameController;
+import muargus.model.OpenMicrodataModel;
 
 /**
  *
@@ -8,6 +16,8 @@ import muargus.controller.MainFrameController;
  */
 public class MainFrameView extends javax.swing.JFrame {
     
+    private DataFilePair dataFilePair;
+    private Metadata metadata;
     MainFrameController controller;
 
     /**
@@ -17,6 +27,28 @@ public class MainFrameView extends javax.swing.JFrame {
         initComponents();
         controller = new MainFrameController(this);
         this.setLocationRelativeTo(null); 
+    }
+    
+    /**
+     * enables buttons
+     */
+    public void organise() {
+//        specifyMetadataAction.setEnabled(Application.numberOfMetadatas() > 0);
+//        specifyTablesAction.setEnabled(Application.numberOfMetadatas() > 0);
+//
+//        selectTableAction.setEnabled(TableService.numberOfTables() 
+//        saveTableAction.setEnabled(TableService.numberOfTables() != 0);
+//        viewReportAction.setEnabled(TableService.numberOfTables() != 0);      
+//        menuItemWriteBatchFile.setEnabled(Application.numberOfMetadatas() > 0);  
+//
+//        menuItemProtectJJFormat.setVisible(Application.isAnco());
+//        menuItemAncoNews.setVisible(Application.isAnco());
+//        menuItemSolverOptions.setVisible(Application.isAnco());
+//
+//        panelTable.setVisible(TableService.numberOfTables() != 0);
+//        if (TableService.numberOfTables() != 0) {panelTable.enableHiddenFeatures(Application.isAnco());}> 1);     
+//        menuItemLinkedTables.setEnabled(TableService.numberOfTables() != 0);
+
     }
 
     /**
@@ -684,7 +716,42 @@ public class MainFrameView extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void openMicrodataMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openMicrodataMenuItemActionPerformed
-        controller.openMicrodata();
+ //         controller.openMicrodata(); 
+ //         DataFilePair dataFilePair = new DataFilePair(OpenMicrodataModel.getMicrodataPath(), OpenMicrodataModel.getMetadataPath());
+        DialogOpenMicrodata dialog = new DialogOpenMicrodata(MainFrameView.this, true);
+            if (dialog.showDialog() == DialogOpenMicrodata.APPROVE_OPTION) {
+                dataFilePair = dialog.getMicrodataFilePair();
+            
+    
+////
+//                //panelTable.setVisible(false);
+//                //TableService.clearTables();
+//                Application.clearMetadatas();
+
+//                metadata = new Metadata(false);
+ //               metadata.dataFile = dataFilePair.getDataFileName();
+ //               metadata.metaFile = dataFilePair.getMetaFileName();
+ //               OpenMicrodataModel.setMicrodataPath(dataFilePair.getDataFileName());
+ //               OpenMicrodataModel.setMetadataPath(dataFilePair.getMetaFileName());
+                
+  //              if (!metadata.metaFile.trim().equals(""))
+  //              {
+//                    try {
+//                        metadata.readMicroMetadata();
+//// Anco 1.6                        
+////                    } catch (ArgusException | FileNotFoundException ex) {
+//                    } catch (ArgusException  ex) {
+//                        JOptionPane.showMessageDialog(MainFrameView.this, ex.getMessage());}
+//                      catch ( FileNotFoundException ex) {
+//                        JOptionPane.showMessageDialog(MainFrameView.this, ex.getMessage());  
+//                    } 
+   //             }
+                
+                Application.addMetadata(metadata);
+                organise();
+            
+            }
+        
     }//GEN-LAST:event_openMicrodataMenuItemActionPerformed
 
     private void exitMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitMenuItemActionPerformed
@@ -692,6 +759,19 @@ public class MainFrameView extends javax.swing.JFrame {
     }//GEN-LAST:event_exitMenuItemActionPerformed
 
     private void metaDataMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_metaDataMenuItemActionPerformed
+//        String e = OpenMicrodataModel.getMicrodataPath();
+//        System.out.printf("%s\n", e);
+//        String f = OpenMicrodataModel.getMetadataPath();
+//        System.out.printf("%s\n", f);
+//        String c = metadata.dataFile;
+//        System.out.printf("%s\n", c);
+//        String d = metadata.metaFile;
+//        System.out.printf("%s\n", d);
+//        String a = dataFilePair.getDataFileName();
+//        System.out.printf("%s\n", a);
+//        String b = dataFilePair.getMetaFileName();
+//        System.out.printf("%s\n", b);
+
         controller.specifyMetaData();
     }//GEN-LAST:event_metaDataMenuItemActionPerformed
 

@@ -4,6 +4,7 @@
  */
 package muargus.view;
 
+import javax.swing.JFileChooser;
 import muargus.controller.OpenMicrodataController;
 import muargus.model.OpenMicrodataModel;
 /**
@@ -33,6 +34,7 @@ public class OpenMicrodataView extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        fileChooser = new javax.swing.JFileChooser();
         microdataLabel = new javax.swing.JLabel();
         microdataTextField = new javax.swing.JTextField();
         microdataButton = new javax.swing.JButton();
@@ -44,6 +46,8 @@ public class OpenMicrodataView extends javax.swing.JDialog {
         instructionPanel = new javax.swing.JPanel();
         instructionLabel = new javax.swing.JLabel();
         cancelButton = new javax.swing.JButton();
+
+        fileChooser.setCurrentDirectory(new java.io.File("C:\\Program Files\\MU_ARGUS\\data"));
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Open Microdata");
@@ -89,7 +93,6 @@ public class OpenMicrodataView extends javax.swing.JDialog {
         instructionPanel.setMinimumSize(new java.awt.Dimension(336, 50));
 
         instructionLabel.setForeground(new java.awt.Color(255, 0, 0));
-        instructionLabel.setText("<html>\nFor changing/inspecting the metadata go to Specify --> Metadata <br>\nFor specifying the combinations go to Specify --> Combinations\n</html>");
         instructionLabel.setMaximumSize(new java.awt.Dimension(2147483647, 2147483647));
         instructionLabel.setMinimumSize(new java.awt.Dimension(95, 80));
         instructionLabel.setName(""); // NOI18N
@@ -169,7 +172,7 @@ public class OpenMicrodataView extends javax.swing.JDialog {
                             .addComponent(metadataButton))
                         .addGap(18, 18, 18)
                         .addComponent(instructionPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 53, Short.MAX_VALUE))
+                        .addGap(0, 81, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -235,6 +238,10 @@ public class OpenMicrodataView extends javax.swing.JDialog {
         return metadataTextField.getText();
     }
     
+    public JFileChooser getFileChooser(){
+        return fileChooser;
+    }
+      
     /**
      * 
      * @param b 
@@ -287,6 +294,7 @@ public class OpenMicrodataView extends javax.swing.JDialog {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton cancelButton;
     private javax.swing.JButton clearButton;
+    private javax.swing.JFileChooser fileChooser;
     private javax.swing.JLabel instructionLabel;
     private javax.swing.JPanel instructionPanel;
     private javax.swing.JButton metadataButton;

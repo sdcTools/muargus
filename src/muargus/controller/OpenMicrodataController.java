@@ -60,8 +60,11 @@ public class OpenMicrodataController {
      * 
      */
     public void chooseMetadataFile() {                                               
-        JFileChooser fileChooser = new JFileChooser();
+        //view.getFileChooser().setDialogTitle("Open Microdata");
+        
+        JFileChooser fileChooser = view.getFileChooser();
         fileChooser.setFileFilter(new FileNameExtensionFilter("Metadata (*.rda)", "rda"));
+        fileChooser.setDialogTitle("Open Metadata");
         String hs = "C:\\Program Files\\MU_ARGUS\\data";
         File file = new File(hs);
         fileChooser.setCurrentDirectory(file);
@@ -73,10 +76,10 @@ public class OpenMicrodataController {
             filename = "";
         else {
             filename = f.getAbsolutePath();
-            view.setInstructionVisible(true);
+            view.setInstructionVisible(true);  
+            view.setMicrodataText(filename.substring(0, filename.length() - 3) + "asc");
         }
         view.setMetadataText(filename);
-        view.setMicrodataText(filename.substring(0, filename.length() - 3) + "asc");
     }                                              
 
     // TODO: this needs to be written way better. It is currently just to test and try some stuff. 
@@ -84,10 +87,11 @@ public class OpenMicrodataController {
      * 
      */
     public void chooseMicrodataFile() {                                                
-        JFileChooser fileChooser = new JFileChooser();
+        JFileChooser fileChooser = view.getFileChooser();
         fileChooser.setFileFilter(new FileNameExtensionFilter("Microdata (*.asc)", "asc"));
         fileChooser.addChoosableFileFilter(new FileNameExtensionFilter("Microdata (*.dat)", "dat"));
         fileChooser.addChoosableFileFilter(new FileNameExtensionFilter("SPSS system file (*.sav)", "sav"));
+        fileChooser.setDialogTitle("Open Microdata");
         String hs = "C:\\Program Files\\MU_ARGUS\\data";
         File file = new File(hs);
         fileChooser.setCurrentDirectory(file);
@@ -98,10 +102,9 @@ public class OpenMicrodataController {
         if(fileChooser.getSelectedFile() == null)
             filename = "";
         else {
-            filename = f.getAbsolutePath();
-            view.setInstructionVisible(true);
+            filename = f.getAbsolutePath(); 
+            view.setMetadataText(filename.substring(0, filename.length() - 3) + "rda");
         }
-        view.setMetadataText(filename.substring(0, filename.length() - 3) + "rda");
         view.setMicrodataText(filename);
-    }                                                                         
+    }         
 }

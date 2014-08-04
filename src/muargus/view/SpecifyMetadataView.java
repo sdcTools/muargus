@@ -4,7 +4,13 @@
  */
 package muargus.view;
 
+import argus.utils.SingleListSelectionModel;
+import java.util.ArrayList;
+import javax.swing.DefaultComboBoxModel;
+import muargus.Test;
 import muargus.controller.SpecifyMetadataController;
+import muargus.model.SpecifyMetadataModel;
+import muargus.model.Variables;
 
 /**
  *
@@ -13,6 +19,13 @@ import muargus.controller.SpecifyMetadataController;
 public class SpecifyMetadataView extends javax.swing.JDialog {
     
     SpecifyMetadataController controller;
+    private static ArrayList<Variables> variables;
+    private String[] names;
+    private String[] related;
+    private String[] idLevel = {"0","1","2","3","4","5"};
+    private String[] suppressionWeight = new String[101];
+    private int index = 0;
+    private Test t;
 
     /**
      * Creates new form SpecifyMetadataView
@@ -22,6 +35,69 @@ public class SpecifyMetadataView extends javax.swing.JDialog {
         controller = new SpecifyMetadataController(this);
         initComponents();
         this.setLocationRelativeTo(null);
+        makeVariables();
+        
+    }
+    
+    public void makeVariables(){
+        t = new Test();
+        t.readMetadata(t.getMetadataFile());
+        variables = SpecifyMetadataModel.getVariables();
+        names = new String[variables.size()];
+        related = new String[variables.size()+1];
+        related [0] = "--none--";
+        
+        for(int i = 0; i< variables.size(); i++){
+            names[i] = variables.get(i).getName();
+            related[i+1] = variables.get(i).getName();
+        }
+        
+        variablesList.setModel(new javax.swing.AbstractListModel() {
+            String[] strings = names;
+            public int getSize() { return strings.length; }
+            public Object getElementAt(int i) { return strings[i]; }
+        });
+        variablesList.setSelectionModel(new SingleListSelectionModel());
+        variablesList.setSelectedIndex(index);
+        
+        for (int i = 0; i < suppressionWeight.length; i++){
+            suppressionWeight[i] = Integer.toString(i);
+        }
+        
+        identificationComboBox.setModel(new DefaultComboBoxModel(idLevel));
+        relatedToComboBox.setModel(new DefaultComboBoxModel(related));
+        weightLocalSuppressionComboBox.setModel(new DefaultComboBoxModel(suppressionWeight));
+        
+        if(Test.isFree()){
+            separatorTextField.setText(Test.getSeparator());
+            variablesComboBox.setSelectedIndex(1);
+
+        }
+   
+        updateValues();
+    }
+    
+    
+    public void updateValues(){ 
+        Variables selected = variables.get(index);
+        identificationComboBox.setSelectedIndex(Integer.parseInt(selected.getIdLevenl()));
+        decimalsTextField.setText(selected.getDecimals());
+        truncationAllowedCheckBox.setSelected(selected.isTruncable());
+        codelistfileCheckBox.setSelected(selected.isCodelist());
+        codelistfileTextField.setText(selected.getCodeListFile());
+        weightLocalSuppressionComboBox.setSelectedIndex(Integer.parseInt(selected.getSuppressweight()));
+        numericalCheckBox.setSelected(selected.isNumeric());
+        categoricalCheckBox.setSelected(!selected.isNumeric());
+        weightRadioButton.setSelected(selected.isWeight());
+        hhIdentifierRadioButton.setSelected(selected.isHouse_id());
+        hhvariableRadioButton.setSelected(selected.isHousehold());
+        missing1TextField.setText(selected.getMissing(0));
+        missing2TextField.setText(selected.getMissing(1));
+        startingPositionTextField.setText(Integer.toString(selected.getbPos()));
+        lengthTextField.setText(Integer.toString(selected.getVarLen()));
+        
+        
+
     }
 
     /**
@@ -42,8 +118,8 @@ public class SpecifyMetadataView extends javax.swing.JDialog {
         variablesList = new javax.swing.JList();
         moveUpButton = new javax.swing.JButton();
         moveDownButton = new javax.swing.JButton();
-        jTextField1 = new javax.swing.JTextField();
-        jLabel1 = new javax.swing.JLabel();
+        separatorTextField = new javax.swing.JTextField();
+        separatorLabel = new javax.swing.JLabel();
         generateButton = new javax.swing.JButton();
         newButton = new javax.swing.JButton();
         deleteButton = new javax.swing.JButton();
@@ -67,9 +143,9 @@ public class SpecifyMetadataView extends javax.swing.JDialog {
         numericalCheckBox = new javax.swing.JCheckBox();
         optionsArgusPanel = new javax.swing.JPanel();
         identificationLevelLabel = new javax.swing.JLabel();
-        identificationSpinner = new javax.swing.JSpinner();
         weightLocalSuppressionLabel = new javax.swing.JLabel();
-        weightLocalSuppresionSpinner = new javax.swing.JSpinner();
+        identificationComboBox = new javax.swing.JComboBox();
+        weightLocalSuppressionComboBox = new javax.swing.JComboBox();
         categoriesPanel = new javax.swing.JPanel();
         truncationAllowedCheckBox = new javax.swing.JCheckBox();
         codelistfileCheckBox = new javax.swing.JCheckBox();
@@ -81,7 +157,7 @@ public class SpecifyMetadataView extends javax.swing.JDialog {
         missing2Label = new javax.swing.JLabel();
         missing2TextField = new javax.swing.JTextField();
         relatedToPanel = new javax.swing.JLabel();
-        relatedToSpinner = new javax.swing.JSpinner();
+        relatedToComboBox = new javax.swing.JComboBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Specify Metadata");
@@ -94,9 +170,15 @@ public class SpecifyMetadataView extends javax.swing.JDialog {
         });
 
         variablesList.setModel(new javax.swing.AbstractListModel() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+            String[] strings = { "item 1", "item 2" };
             public int getSize() { return strings.length; }
             public Object getElementAt(int i) { return strings[i]; }
+        });
+        variablesList.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        variablesList.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+                variablesListValueChanged(evt);
+            }
         });
         variablesScrollPane.setViewportView(variablesList);
 
@@ -114,7 +196,13 @@ public class SpecifyMetadataView extends javax.swing.JDialog {
             }
         });
 
-        jLabel1.setText("Separator");
+        separatorTextField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                separatorTextFieldActionPerformed(evt);
+            }
+        });
+
+        separatorLabel.setText("Separator");
 
         javax.swing.GroupLayout variablesPanelLayout = new javax.swing.GroupLayout(variablesPanel);
         variablesPanel.setLayout(variablesPanelLayout);
@@ -129,13 +217,13 @@ public class SpecifyMetadataView extends javax.swing.JDialog {
             .addGroup(variablesPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(variablesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(variablesComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(variablesScrollPane)
+                    .addComponent(variablesComboBox, 0, 0, Short.MAX_VALUE)
+                    .addComponent(variablesScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, variablesPanelLayout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jLabel1)
+                        .addComponent(separatorLabel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(separatorTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         variablesPanelLayout.setVerticalGroup(
@@ -145,8 +233,8 @@ public class SpecifyMetadataView extends javax.swing.JDialog {
                 .addComponent(variablesComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(variablesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel1))
+                    .addComponent(separatorTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(separatorLabel))
                 .addGap(8, 8, 8)
                 .addComponent(variablesScrollPane)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -197,6 +285,14 @@ public class SpecifyMetadataView extends javax.swing.JDialog {
 
         org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, variablesList, org.jdesktop.beansbinding.ELProperty.create("${selectedElement}"), nameTextField, org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
+
+        nameTextField.addInputMethodListener(new java.awt.event.InputMethodListener() {
+            public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
+            }
+            public void inputMethodTextChanged(java.awt.event.InputMethodEvent evt) {
+                nameTextFieldInputMethodTextChanged(evt);
+            }
+        });
 
         startingPositionLabel.setText("Starting position");
 
@@ -332,11 +428,11 @@ public class SpecifyMetadataView extends javax.swing.JDialog {
 
         identificationLevelLabel.setText("Identification Level:");
 
-        identificationSpinner.setModel(new javax.swing.SpinnerNumberModel(1, 0, 5, 1));
-
         weightLocalSuppressionLabel.setText("Weight for local suppression:");
 
-        weightLocalSuppresionSpinner.setModel(new javax.swing.SpinnerNumberModel(50, 0, 100, 1));
+        identificationComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
+        weightLocalSuppressionComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         javax.swing.GroupLayout optionsArgusPanelLayout = new javax.swing.GroupLayout(optionsArgusPanel);
         optionsArgusPanel.setLayout(optionsArgusPanelLayout);
@@ -347,10 +443,10 @@ public class SpecifyMetadataView extends javax.swing.JDialog {
                 .addGroup(optionsArgusPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(identificationLevelLabel)
                     .addComponent(weightLocalSuppressionLabel))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(optionsArgusPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(weightLocalSuppresionSpinner)
-                    .addComponent(identificationSpinner))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 22, Short.MAX_VALUE)
+                .addGroup(optionsArgusPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(identificationComboBox, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(weightLocalSuppressionComboBox, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
         optionsArgusPanelLayout.setVerticalGroup(
@@ -359,12 +455,12 @@ public class SpecifyMetadataView extends javax.swing.JDialog {
                 .addContainerGap()
                 .addGroup(optionsArgusPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(identificationLevelLabel)
-                    .addComponent(identificationSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                    .addComponent(identificationComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(9, 9, 9)
                 .addGroup(optionsArgusPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(weightLocalSuppressionLabel)
-                    .addComponent(weightLocalSuppresionSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(16, Short.MAX_VALUE))
+                    .addComponent(weightLocalSuppressionComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(18, Short.MAX_VALUE))
         );
 
         categoriesPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Categories"));
@@ -466,7 +562,7 @@ public class SpecifyMetadataView extends javax.swing.JDialog {
 
         relatedToPanel.setText("Related to:");
 
-        relatedToSpinner.setModel(new javax.swing.SpinnerListModel(new String[] {"Item 0", "Item 1", "Item 2", "Item 3"}));
+        relatedToComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -487,18 +583,18 @@ public class SpecifyMetadataView extends javax.swing.JDialog {
                         .addComponent(cancelButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(okButton, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(categoriesPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 0, Short.MAX_VALUE)
+                    .addComponent(categoriesPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 399, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addComponent(optionsArgusPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(attributesPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(variableTypePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(relatedToPanel)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(relatedToSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                                .addComponent(relatedToComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -512,12 +608,12 @@ public class SpecifyMetadataView extends javax.swing.JDialog {
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(relatedToPanel)
-                            .addComponent(relatedToSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(relatedToComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(attributesPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(9, 9, 9)
                         .addComponent(optionsArgusPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(9, 9, 9)
                 .addComponent(categoriesPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -526,7 +622,7 @@ public class SpecifyMetadataView extends javax.swing.JDialog {
                     .addComponent(deleteButton)
                     .addComponent(newButton)
                     .addComponent(generateButton))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(17, Short.MAX_VALUE))
         );
 
         bindingGroup.bind();
@@ -602,6 +698,26 @@ public class SpecifyMetadataView extends javax.swing.JDialog {
         controller.codelistfile();
     }//GEN-LAST:event_codelistfileCheckBoxStateChanged
 
+    private void variablesListValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_variablesListValueChanged
+        // TODO add your handling code here:
+        if(evt.getValueIsAdjusting()){
+            String value = (String) variablesList.getSelectedValue();
+            index = variablesList.getSelectedIndex();
+            nameTextField.setText(value);
+            //System.out.println(variables.get(index).getIdlevenl());
+            updateValues();
+        }
+    }//GEN-LAST:event_variablesListValueChanged
+
+    private void nameTextFieldInputMethodTextChanged(java.awt.event.InputMethodEvent evt) {//GEN-FIRST:event_nameTextFieldInputMethodTextChanged
+        // TODO add your handling code here:
+        lengthTextField.setText(nameTextField.getText());
+    }//GEN-LAST:event_nameTextFieldInputMethodTextChanged
+
+    private void separatorTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_separatorTextFieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_separatorTextFieldActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -613,7 +729,7 @@ public class SpecifyMetadataView extends javax.swing.JDialog {
          */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
+                if ("Windows Classic".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
                 }
@@ -657,10 +773,8 @@ public class SpecifyMetadataView extends javax.swing.JDialog {
     private javax.swing.JButton generateButton;
     private javax.swing.JRadioButton hhIdentifierRadioButton;
     private javax.swing.JRadioButton hhvariableRadioButton;
+    private javax.swing.JComboBox identificationComboBox;
     private javax.swing.JLabel identificationLevelLabel;
-    private javax.swing.JSpinner identificationSpinner;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JTextField jTextField1;
     private javax.swing.JLabel lengthLabel;
     private javax.swing.JTextField lengthTextField;
     private javax.swing.JLabel missing1Label;
@@ -677,8 +791,10 @@ public class SpecifyMetadataView extends javax.swing.JDialog {
     private javax.swing.JButton okButton;
     private javax.swing.JPanel optionsArgusPanel;
     private javax.swing.JRadioButton otherRadioButton;
+    private javax.swing.JComboBox relatedToComboBox;
     private javax.swing.JLabel relatedToPanel;
-    private javax.swing.JSpinner relatedToSpinner;
+    private javax.swing.JLabel separatorLabel;
+    private javax.swing.JTextField separatorTextField;
     private javax.swing.JLabel startingPositionLabel;
     private javax.swing.JTextField startingPositionTextField;
     private javax.swing.JCheckBox truncationAllowedCheckBox;
@@ -689,7 +805,7 @@ public class SpecifyMetadataView extends javax.swing.JDialog {
     private javax.swing.JList variablesList;
     private javax.swing.JPanel variablesPanel;
     private javax.swing.JScrollPane variablesScrollPane;
-    private javax.swing.JSpinner weightLocalSuppresionSpinner;
+    private javax.swing.JComboBox weightLocalSuppressionComboBox;
     private javax.swing.JLabel weightLocalSuppressionLabel;
     private javax.swing.JRadioButton weightRadioButton;
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;

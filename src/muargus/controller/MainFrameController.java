@@ -2,6 +2,7 @@
 
 package muargus.controller;
 
+import argus.view.DialogOpenMicrodata;
 import java.awt.Desktop;
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -33,8 +34,9 @@ public class MainFrameController {
     /**
      * 
      */
-    public void openMicrodata() {                                                      
+    public void openMicrodata() {    
         OpenMicrodataView view = new OpenMicrodataView(this.view, true);
+        //DialogOpenMicrodata view = new DialogOpenMicrodata(this.view, true);
         view.setVisible(true);
     }                                                     
 

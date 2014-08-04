@@ -13,7 +13,7 @@ import java.util.ArrayList;
 public class SpecifyMetadataModel {
     private String variableCategoryPath;
     private ArrayList<String> formatTypes;
-    private ArrayList<String> variables;
+    private static ArrayList<Variables> variables;
     // TODO: change type to generic type T 
     private ArrayList<String> defaultValues;
 
@@ -23,7 +23,7 @@ public class SpecifyMetadataModel {
     public SpecifyMetadataModel() {
         this.variableCategoryPath = "";
         this.formatTypes = new ArrayList<>();
-        this.variables = new ArrayList<>();
+        SpecifyMetadataModel.variables = new ArrayList<>();
         this.defaultValues = new ArrayList<>();
     }
 
@@ -55,7 +55,7 @@ public class SpecifyMetadataModel {
      * 
      * @return 
      */
-    public ArrayList<String> getVariables() {
+    public static ArrayList<Variables> getVariables() {
         return variables;
     }
 
@@ -63,8 +63,8 @@ public class SpecifyMetadataModel {
      * 
      * @param variables 
      */
-    public void setVariables(ArrayList<String> variables) {
-        this.variables = variables;
+    public static void setVariables(ArrayList<Variables> variables) {
+        SpecifyMetadataModel.variables = variables;
     }
 
     /**

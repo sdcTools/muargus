@@ -7,6 +7,13 @@ package muargus.model;
 public class OpenMicrodataModel {
     private static String microdataPath;
     private static String metadataPath;
+    public static final String instructionText1 = 
+            "<html>\nFor changing/inspecting the metadata go to Specify --> Metadata "
+            + "<br>\nFor specifying the combinations go to Specify --> Combinations\n</html>";
+    public static final String instructionText2 = 
+            "<html>\nAs no metadata file has been specified"
+            + "<br>\nspecify the metadata file too or"
+            + "<br>\nspecify the metadata via SpecifyMetadata\n</html>";
 
     /**
      * Constructs an object of the model class containing the data from the OpenMicrodata dialog.

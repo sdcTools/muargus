@@ -46,19 +46,19 @@
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="okButton" min="-2" pref="45" max="-2" attributes="0"/>
                   </Group>
-                  <Component id="categoriesPanel" pref="0" max="32767" attributes="0"/>
+                  <Component id="categoriesPanel" pref="399" max="32767" attributes="0"/>
                   <Group type="102" attributes="0">
                       <Group type="103" groupAlignment="1" max="-2" attributes="0">
                           <Component id="optionsArgusPanel" max="32767" attributes="0"/>
                           <Component id="attributesPanel" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
+                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
                           <Component id="variableTypePanel" alignment="0" min="-2" max="-2" attributes="0"/>
                           <Group type="102" alignment="0" attributes="0">
                               <Component id="relatedToPanel" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
-                              <Component id="relatedToSpinner" min="-2" pref="82" max="-2" attributes="0"/>
+                              <Component id="relatedToComboBox" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                   </Group>
@@ -78,7 +78,7 @@
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="relatedToPanel" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="relatedToSpinner" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="relatedToComboBox" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                   </Group>
                   <Group type="102" attributes="0">
@@ -87,7 +87,7 @@
                       <Component id="optionsArgusPanel" min="-2" max="-2" attributes="0"/>
                   </Group>
               </Group>
-              <EmptySpace max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="9" max="-2" attributes="0"/>
               <Component id="categoriesPanel" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
@@ -97,7 +97,7 @@
                   <Component id="newButton" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="generateButton" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace max="32767" attributes="0"/>
+              <EmptySpace pref="17" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -118,13 +118,13 @@
               <Group type="102" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="variablesComboBox" alignment="0" max="32767" attributes="0"/>
-                      <Component id="variablesScrollPane" alignment="0" max="32767" attributes="0"/>
+                      <Component id="variablesComboBox" alignment="0" pref="0" max="32767" attributes="0"/>
+                      <Component id="variablesScrollPane" alignment="0" pref="0" max="32767" attributes="0"/>
                       <Group type="102" alignment="1" attributes="0">
                           <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-                          <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
+                          <Component id="separatorLabel" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="jTextField1" min="-2" pref="35" max="-2" attributes="0"/>
+                          <Component id="separatorTextField" min="-2" pref="35" max="-2" attributes="0"/>
                       </Group>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
@@ -138,8 +138,8 @@
                   <Component id="variablesComboBox" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="jTextField1" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="jLabel1" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="separatorTextField" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="separatorLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace min="-2" pref="8" max="-2" attributes="0"/>
                   <Component id="variablesScrollPane" max="32767" attributes="0"/>
@@ -176,15 +176,16 @@
             <Component class="javax.swing.JList" name="variablesList">
               <Properties>
                 <Property name="model" type="javax.swing.ListModel" editor="org.netbeans.modules.form.editors2.ListModelEditor">
-                  <StringArray count="5">
-                    <StringItem index="0" value="Item 1"/>
-                    <StringItem index="1" value="Item 2"/>
-                    <StringItem index="2" value="Item 3"/>
-                    <StringItem index="3" value="Item 4"/>
-                    <StringItem index="4" value="Item 5"/>
+                  <StringArray count="2">
+                    <StringItem index="0" value="item 1"/>
+                    <StringItem index="1" value="item 2"/>
                   </StringArray>
                 </Property>
+                <Property name="selectionMode" type="int" value="0"/>
               </Properties>
+              <Events>
+                <EventHandler event="valueChanged" listener="javax.swing.event.ListSelectionListener" parameters="javax.swing.event.ListSelectionEvent" handler="variablesListValueChanged"/>
+              </Events>
             </Component>
           </SubComponents>
         </Container>
@@ -204,9 +205,12 @@
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="moveDownButtonActionPerformed"/>
           </Events>
         </Component>
-        <Component class="javax.swing.JTextField" name="jTextField1">
+        <Component class="javax.swing.JTextField" name="separatorTextField">
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="separatorTextFieldActionPerformed"/>
+          </Events>
         </Component>
-        <Component class="javax.swing.JLabel" name="jLabel1">
+        <Component class="javax.swing.JLabel" name="separatorLabel">
           <Properties>
             <Property name="text" type="java.lang.String" value="Separator"/>
           </Properties>
@@ -325,6 +329,9 @@
               <BindingParameter name="javax.swing.binding.ParameterKeys.TEXT_CHANGE_STRATEGY" value="javax.swing.binding.TextChangeStrategy.ON_TYPE"/>
             </BindingProperty>
           </BindingProperties>
+          <Events>
+            <EventHandler event="inputMethodTextChanged" listener="java.awt.event.InputMethodListener" parameters="java.awt.event.InputMethodEvent" handler="nameTextFieldInputMethodTextChanged"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JLabel" name="startingPositionLabel">
           <Properties>
@@ -482,10 +489,10 @@
                       <Component id="identificationLevelLabel" alignment="0" min="-2" max="-2" attributes="0"/>
                       <Component id="weightLocalSuppressionLabel" alignment="0" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace max="32767" attributes="0"/>
-                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                      <Component id="weightLocalSuppresionSpinner" max="32767" attributes="0"/>
-                      <Component id="identificationSpinner" max="32767" attributes="0"/>
+                  <EmptySpace pref="22" max="32767" attributes="0"/>
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Component id="identificationComboBox" alignment="1" min="-2" max="-2" attributes="0"/>
+                      <Component id="weightLocalSuppressionComboBox" alignment="1" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
@@ -497,14 +504,14 @@
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="identificationLevelLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="identificationSpinner" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="identificationComboBox" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="9" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="weightLocalSuppressionLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="weightLocalSuppresionSpinner" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="weightLocalSuppressionComboBox" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace pref="16" max="32767" attributes="0"/>
+                  <EmptySpace pref="18" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -515,22 +522,32 @@
             <Property name="text" type="java.lang.String" value="Identification Level:"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JSpinner" name="identificationSpinner">
-          <Properties>
-            <Property name="model" type="javax.swing.SpinnerModel" editor="org.netbeans.modules.form.editors2.SpinnerModelEditor">
-              <SpinnerModel initial="1" maximum="5" minimum="0" numberType="java.lang.Integer" stepSize="1" type="number"/>
-            </Property>
-          </Properties>
-        </Component>
         <Component class="javax.swing.JLabel" name="weightLocalSuppressionLabel">
           <Properties>
             <Property name="text" type="java.lang.String" value="Weight for local suppression:"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JSpinner" name="weightLocalSuppresionSpinner">
+        <Component class="javax.swing.JComboBox" name="identificationComboBox">
           <Properties>
-            <Property name="model" type="javax.swing.SpinnerModel" editor="org.netbeans.modules.form.editors2.SpinnerModelEditor">
-              <SpinnerModel initial="50" maximum="100" minimum="0" numberType="java.lang.Integer" stepSize="1" type="number"/>
+            <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+              <StringArray count="4">
+                <StringItem index="0" value="Item 1"/>
+                <StringItem index="1" value="Item 2"/>
+                <StringItem index="2" value="Item 3"/>
+                <StringItem index="3" value="Item 4"/>
+              </StringArray>
+            </Property>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JComboBox" name="weightLocalSuppressionComboBox">
+          <Properties>
+            <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+              <StringArray count="4">
+                <StringItem index="0" value="Item 1"/>
+                <StringItem index="1" value="Item 2"/>
+                <StringItem index="2" value="Item 3"/>
+                <StringItem index="3" value="Item 4"/>
+              </StringArray>
             </Property>
           </Properties>
         </Component>
@@ -692,15 +709,15 @@
         <Property name="text" type="java.lang.String" value="Related to:"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JSpinner" name="relatedToSpinner">
+    <Component class="javax.swing.JComboBox" name="relatedToComboBox">
       <Properties>
-        <Property name="model" type="javax.swing.SpinnerModel" editor="org.netbeans.modules.form.editors2.SpinnerModelEditor">
-          <SpinnerModel type="list">
-            <ListItem value="Item 0"/>
-            <ListItem value="Item 1"/>
-            <ListItem value="Item 2"/>
-            <ListItem value="Item 3"/>
-          </SpinnerModel>
+        <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+          <StringArray count="4">
+            <StringItem index="0" value="Item 1"/>
+            <StringItem index="1" value="Item 2"/>
+            <StringItem index="2" value="Item 3"/>
+            <StringItem index="3" value="Item 4"/>
+          </StringArray>
         </Property>
       </Properties>
     </Component>
