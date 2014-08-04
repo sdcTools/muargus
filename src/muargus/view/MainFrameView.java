@@ -1,14 +1,10 @@
 package muargus.view;
 
-import argus.model.Application;
-import argus.model.ArgusException;
 import argus.model.DataFilePair;
 import argus.model.Metadata;
 import argus.view.DialogOpenMicrodata;
-import java.io.FileNotFoundException;
-import javax.swing.JOptionPane;
+import muargus.MuARGUS;
 import muargus.controller.MainFrameController;
-import muargus.model.OpenMicrodataModel;
 
 /**
  *
@@ -727,10 +723,9 @@ public class MainFrameView extends javax.swing.JFrame {
 //                //panelTable.setVisible(false);
 //                //TableService.clearTables();
 //                Application.clearMetadatas();
-
-//                metadata = new Metadata(false);
- //               metadata.dataFile = dataFilePair.getDataFileName();
- //               metadata.metaFile = dataFilePair.getMetaFileName();
+                 metadata = new Metadata(false);
+                 metadata.dataFile = dataFilePair.getDataFileName();
+                 metadata.metaFile = dataFilePair.getMetaFileName();
  //               OpenMicrodataModel.setMicrodataPath(dataFilePair.getDataFileName());
  //               OpenMicrodataModel.setMetadataPath(dataFilePair.getMetaFileName());
                 
@@ -747,7 +742,7 @@ public class MainFrameView extends javax.swing.JFrame {
 //                    } 
    //             }
                 
-                Application.addMetadata(metadata);
+                MuARGUS.setMetadata(metadata);
                 organise();
             
             }
