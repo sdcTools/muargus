@@ -37,6 +37,16 @@ public class SpecifyMetadataView extends javax.swing.JDialog {
     private AbstractListModel abstractListModel;
 
 
+    public SpecifyMetadataView(java.awt.Frame parent, boolean modal) {
+        super(parent, modal);
+        controller = new SpecifyMetadataController(this);
+        initComponents();
+        this.setLocationRelativeTo(null);
+        this.metadataMu = new MetadataMu();
+        separatorTemp = MetadataMu.getSeparator();
+        makeVariables();
+        
+    }
     /**
      * Creates new form SpecifyMetadataView
      */
@@ -53,6 +63,13 @@ public class SpecifyMetadataView extends javax.swing.JDialog {
     
     public void makeVariables(){
         try {
+            
+            //TODO: remove this if statement after testing
+            //this if statement creates a new instance of MetadataMu if there is none. 
+            //this can only happen if no file is selected
+            if(metadataMu == null){
+                this.metadataMu = new MetadataMu();
+            }
             // read metadata file
             metadataMu.readMetadata(metadataMu.getMetadataFile());
         } catch (ArgusException ex) {

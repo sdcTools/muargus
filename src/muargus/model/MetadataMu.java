@@ -41,7 +41,7 @@ public class MetadataMu implements Cloneable{
     private static String separator = ";";
     
     // TODO: remove this default/test metadatafile name
-    private static String defaultmetaFile = "C:\\Program Files\\MU_ARGUS\\data\\Demodata.rda\\";
+    private String defaultmetaFile = "C:\\Program Files\\MU_ARGUS\\data\\Demodata.rda\\";
     
     
     
@@ -51,7 +51,7 @@ public class MetadataMu implements Cloneable{
     private ArrayList<Variables> data;
     private static ArrayList<Variables> cloneData;
     private DataFilePair filenames;
-    private static String metadataFile = defaultmetaFile;
+    private String metadataFile;
     
     public MetadataMu() {
         data = new ArrayList<>();
@@ -89,7 +89,7 @@ public class MetadataMu implements Cloneable{
     public void readMetadata(String metadata) throws ArgusException{
         dataFileType = DATA_FILE_TYPE_FIXED;
         try { 
-            reader = new BufferedReader(new FileReader(new File(getFileNames().getMetaFileName())));
+            reader = new BufferedReader(new FileReader(new File(metadata)));
         } catch (FileNotFoundException ex) {
             System.out.println("file not found");
             Logger.getLogger(MetadataMu.class.getName()).log(Level.SEVERE, null, ex);
@@ -203,15 +203,15 @@ public class MetadataMu implements Cloneable{
     }
 
     
-    public static void setMetadataFile(String metaFile){
-        MetadataMu.metadataFile = metaFile;
+    public void setMetadataFile(String metaFile){
+        this.metadataFile = metaFile;
     }
     
     public String getMetadataFile(){      
-        if(getFileNames().getMetaFileName() == null){
-            return metadataFile;
-        } else {
+        if (filenames.getMetaFileName() != null){
             metadataFile = getFileNames().getMetaFileName();
+        } else if(metadataFile == null || metadataFile.equals(defaultmetaFile)){ 
+            metadataFile = defaultmetaFile;
         }
         return metadataFile;
     }
@@ -234,11 +234,6 @@ public class MetadataMu implements Cloneable{
     
     public DataFilePair getFileNames() {
         return this.filenames;
-    }
-    
-    public String getMetaFile(){
-        String file = getFileNames().getMetaFileName();
-        return file;
     }
 
     public void setFileNames(DataFilePair filenames) {
