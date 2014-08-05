@@ -714,8 +714,8 @@ public class MainFrameView extends javax.swing.JFrame {
     private void openMicrodataMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openMicrodataMenuItemActionPerformed
  //         controller.openMicrodata(); 
  //         DataFilePair dataFilePair = new DataFilePair(OpenMicrodataModel.getMicrodataPath(), OpenMicrodataModel.getMetadataPath());
-        DialogOpenMicrodata dialog = new DialogOpenMicrodata(MainFrameView.this, true, 
-                MuARGUS.getMetadata().dataFile, MuARGUS.getMetadata().metaFile);
+        DialogOpenMicrodata dialog = new DialogOpenMicrodata(MainFrameView.this, true);//, 
+                //MuARGUS.getMetadata().dataFile, MuARGUS.getMetadata().metaFile);
             if (dialog.showDialog() == DialogOpenMicrodata.APPROVE_OPTION) {
                 dataFilePair = dialog.getMicrodataFilePair();
             

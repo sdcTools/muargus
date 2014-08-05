@@ -94,9 +94,9 @@ public class MetadataMu implements Cloneable{
         tokenizer = new Tokenizer(reader);
         
         while (tokenizer.nextLine() != null) {
-            tokenizer.nextToken();
+            String value = tokenizer.nextToken();
    
-            if( !tokenizer.getValue().substring(0, 1).equals("<")){   
+            if( !value.substring(0, 1).equals("<")){   
                 variables = new Variables();
                 variables.setName(tokenizer.getValue());
                 data.add(variables);
@@ -109,12 +109,12 @@ public class MetadataMu implements Cloneable{
                 variables.setMissing(0, tokenizer.nextToken());
                 variables.setMissing(1, tokenizer.nextToken());
             } else { 
-                switch(tokenizer.getValue()){
+                switch(value){
                     case "<SEPARATOR>":
                         setDataFileType(DATA_FILE_TYPE_FREE);
                         //setFree(true);
-                        if(!tokenizer.nextToken().equals(""))
-                            setSeparator(tokenizer.getValue());
+                        //if(!tokenizer.nextToken().equals(""))
+                            setSeparator(value);
                         break;
                     case "<SPSS>":
                         setDataFileType(DATA_FILE_TYPE_SPSS);
