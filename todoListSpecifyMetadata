@@ -1,29 +1,29 @@
+																	Wordt aan gewerkt/zal gemaakt worden door:
+
 1. default file aanpassen	
-Wordt aan gewerkt/zal gemaakt worden door: 
-
-2. codelistfile testen/aanpassen dat files goed gevonden worden (dus zowel regio.cdl als volledige path)	
-Wordt aan gewerkt/zal gemaakt worden door: 
-
-3. related to, name, id lvl en weight zorgen dat aanpassingen in de tempVariable worden opgeslagen	
-Zal gemaakt worden door: Jeldrik (is vergelijkbaar met dingen die al zijn gedaan) 
-
+2. codelistfile testen/aanpassen dat files goed gevonden worden 
+(dus zowel regio.cdl als volledige path)	
+2a. file open box bij codelist
+3. related to, name, id lvl en weight zorgen dat aanpassingen in de 
+tempVariable worden opgeslagen										Jeldrik (is vergelijkbaar met dingen die al zijn gedaan) 
 4. check of iets is verandert inbouwen	
-Wordt aan gewerkt/zal gemaakt worden door:  
+5. functionaliteit new button										Jeldrik
+6. functionaliteit delete button 									Jeldrik (waarschijnlijk overlap met het maken van nummer 5)
+7. functionaliteit move up/down button								Jeldrik (waarschijnlijk overlap met het maken van nummer 5)
+8. functionaliteit cancel button									Jeldrik (waarschijnlijk overlap met het maken van nummer 5)
+9. functionaliteit ok button (wegschrijven van de gegevens) 
+10. waarschuwingsscherm cancel
+11. geen integer in de drie int velden: save()
+12. inhoudelijke controles:
+  a. overlappende velden
+  b. related to
+  c. weight numeriek en niet caegorisch 
+13. options for argus + missing + truncation + codelijst: afhankelijk van categorical
 
-5. functionaliteit new button
-Wordt aan gewerkt: Jeldrik
 
-6. functionaliteit delete button 	
-Zal gemaakt worden door: Jeldrik (waarschijnlijk overlap met het maken van nummer 5)
 
-7. functionaliteit move up/down button	
-Zal gemaakt worden door: Jeldrik (waarschijnlijk overlap met het maken van nummer 5)
 
-8. functionaliteit cancel button	
-Zal gemaakt worden door: Jeldrik (waarschijnlijk overlap met het maken van nummer 5)
+Later:
+-Generate (SSPS)
 
-9. functionaliteit ok button (wegschrijven van de gegevens)	
-Wordt aan gewerkt/zal gemaakt worden door: 
 
-10. waarschuwingsschermpjes inbouwen	
-Wordt aan gewerkt/zal gemaakt worden door: 
