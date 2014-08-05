@@ -719,6 +719,8 @@ public class MainFrameView extends javax.swing.JFrame {
         dialog.setDataFileNames(filenames.getDataFileName(), filenames.getMetaFileName());
             if (dialog.showDialog() == DialogOpenMicrodata.APPROVE_OPTION) {
                 DataFilePair dataFilePair = dialog.getMicrodataFilePair();
+                
+                //System.out.println(dataFilePair.getMetaFileName());
             
     
 ////
@@ -768,7 +770,7 @@ public class MainFrameView extends javax.swing.JFrame {
 //        String b = dataFilePair.getMetaFileName();
 //        System.out.printf("%s\n", b);
 
-        controller.specifyMetaData();
+        controller.specifyMetaData(metadata);
     }//GEN-LAST:event_metaDataMenuItemActionPerformed
 
     private void combinationsMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_combinationsMenuItemActionPerformed

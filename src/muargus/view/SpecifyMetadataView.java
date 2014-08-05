@@ -31,7 +31,7 @@ public class SpecifyMetadataView extends javax.swing.JDialog {
     private String[] format = {"Fixed format", "Free format", "Free with meta", "SPSS system file" }; // maak hier enum van
     private String[] suppressionWeight = new String[101];
     private int index = 0;
-    private static MetadataMu metadataMu;
+    private MetadataMu metadataMu;
     private boolean change = false;
     private String separatorTemp;
     private AbstractListModel abstractListModel;
@@ -40,12 +40,12 @@ public class SpecifyMetadataView extends javax.swing.JDialog {
     /**
      * Creates new form SpecifyMetadataView
      */
-    public SpecifyMetadataView(java.awt.Frame parent, boolean modal) {
+    public SpecifyMetadataView(java.awt.Frame parent, boolean modal, MetadataMu metadata) {
         super(parent, modal);
         controller = new SpecifyMetadataController(this);
         initComponents();
         this.setLocationRelativeTo(null);
-        metadataMu = new MetadataMu();
+        this.metadataMu = metadata;
         separatorTemp = MetadataMu.getSeparator();
         makeVariables();
         
@@ -54,7 +54,7 @@ public class SpecifyMetadataView extends javax.swing.JDialog {
     public void makeVariables(){
         try {
             // read metadata file
-            metadataMu.readMetadata(MetadataMu.getMetadataFile());
+            metadataMu.readMetadata(metadataMu.getMetadataFile());
         } catch (ArgusException ex) {
             Logger.getLogger(SpecifyMetadataView.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -918,44 +918,44 @@ public class SpecifyMetadataView extends javax.swing.JDialog {
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Windows Classic".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(SpecifyMetadataView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(SpecifyMetadataView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(SpecifyMetadataView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(SpecifyMetadataView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the dialog */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                SpecifyMetadataView view = new SpecifyMetadataView(new javax.swing.JFrame(), true);
-                view.addWindowListener(new java.awt.event.WindowAdapter() {
-                    @Override
-                    public void windowClosing(java.awt.event.WindowEvent e) {
-                        System.exit(0);
-                    }
-                });
-                view.setVisible(true);
-            }
-        });
-    }
+//    public static void main(String args[]) {
+//        /* Set the Nimbus look and feel */
+//        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+//        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+//         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+//         */
+//        try {
+//            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+//                if ("Windows Classic".equals(info.getName())) {
+//                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+//                    break;
+//                }
+//            }
+//        } catch (ClassNotFoundException ex) {
+//            java.util.logging.Logger.getLogger(SpecifyMetadataView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        } catch (InstantiationException ex) {
+//            java.util.logging.Logger.getLogger(SpecifyMetadataView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        } catch (IllegalAccessException ex) {
+//            java.util.logging.Logger.getLogger(SpecifyMetadataView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+//            java.util.logging.Logger.getLogger(SpecifyMetadataView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        }
+//        //</editor-fold>
+//
+//        /* Create and display the dialog */
+//        java.awt.EventQueue.invokeLater(new Runnable() {
+//            public void run() {
+//                SpecifyMetadataView view = new SpecifyMetadataView(new javax.swing.JFrame(), true);
+//                view.addWindowListener(new java.awt.event.WindowAdapter() {
+//                    @Override
+//                    public void windowClosing(java.awt.event.WindowEvent e) {
+//                        System.exit(0);
+//                    }
+//                });
+//                view.setVisible(true);
+//            }
+//        });
+//    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel attributesPanel;
     private javax.swing.JButton cancelButton;

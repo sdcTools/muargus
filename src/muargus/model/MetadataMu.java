@@ -44,13 +44,14 @@ public class MetadataMu implements Cloneable{
     private static String defaultmetaFile = "C:\\Program Files\\MU_ARGUS\\data\\Demodata.rda\\";
     
     
-    private static String metadataFile = defaultmetaFile;
+    
     private BufferedReader reader;
     private Tokenizer tokenizer;
     private Variables variables;
     private ArrayList<Variables> data;
     private static ArrayList<Variables> cloneData;
     private DataFilePair filenames;
+    private static String metadataFile = defaultmetaFile;
     
     public MetadataMu() {
         data = new ArrayList<>();
@@ -88,7 +89,7 @@ public class MetadataMu implements Cloneable{
     public void readMetadata(String metadata) throws ArgusException{
         dataFileType = DATA_FILE_TYPE_FIXED;
         try { 
-            reader = new BufferedReader(new FileReader(new File(getMetadataFile())));
+            reader = new BufferedReader(new FileReader(new File(getFileNames().getMetaFileName())));
         } catch (FileNotFoundException ex) {
             System.out.println("file not found");
             Logger.getLogger(MetadataMu.class.getName()).log(Level.SEVERE, null, ex);
@@ -206,11 +207,11 @@ public class MetadataMu implements Cloneable{
         MetadataMu.metadataFile = metaFile;
     }
     
-    public static String getMetadataFile(){      
-        if(OpenMicrodataModel.getMetadataPath() == null){
+    public String getMetadataFile(){      
+        if(getFileNames().getMetaFileName() == null){
             return metadataFile;
         } else {
-            metadataFile = OpenMicrodataModel.getMetadataPath();
+            metadataFile = getFileNames().getMetaFileName();
         }
         return metadataFile;
     }
@@ -233,6 +234,11 @@ public class MetadataMu implements Cloneable{
     
     public DataFilePair getFileNames() {
         return this.filenames;
+    }
+    
+    public String getMetaFile(){
+        String file = getFileNames().getMetaFileName();
+        return file;
     }
 
     public void setFileNames(DataFilePair filenames) {

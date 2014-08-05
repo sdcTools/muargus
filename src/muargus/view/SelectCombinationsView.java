@@ -1,7 +1,6 @@
 package muargus.view;
 
 import muargus.controller.SelectCombinationsController;
-import muargus.model.OpenMicrodataModel;
 import muargus.model.SelectCombinationsModel;
 
 /**
@@ -23,7 +22,6 @@ public class SelectCombinationsView extends javax.swing.JDialog {
         
         initComponents();
         this.setLocationRelativeTo(null);
-        OpenMicrodataModel.printVariables();
     }
 
     /**

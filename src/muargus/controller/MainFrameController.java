@@ -2,15 +2,14 @@
 
 package muargus.controller;
 
-import argus.view.DialogOpenMicrodata;
 import java.awt.Desktop;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
+import muargus.model.MetadataMu;
 import muargus.view.GlobalRecodeView;
 import muargus.view.MainFrameView;
 import muargus.view.MakeProtectedFileView;
-import muargus.view.OpenMicrodataView;
 import muargus.view.SelectCombinationsView;
 import muargus.view.SpecifyMetadataView;
 import muargus.view.ViewReportView;
@@ -35,9 +34,6 @@ public class MainFrameController {
      * 
      */
     public void openMicrodata() {    
-        OpenMicrodataView view = new OpenMicrodataView(this.view, true);
-        //DialogOpenMicrodata view = new DialogOpenMicrodata(this.view, true);
-        view.setVisible(true);
     }                                                     
 
     /**
@@ -50,8 +46,8 @@ public class MainFrameController {
     /**
      * 
      */
-    public void specifyMetaData() {                                                 
-        SpecifyMetadataView view = new SpecifyMetadataView(this.view, true);
+    public void specifyMetaData(MetadataMu metadata) {                                                 
+        SpecifyMetadataView view = new SpecifyMetadataView(this.view, true, metadata);
         view.setVisible(true);
     }                                                
 
