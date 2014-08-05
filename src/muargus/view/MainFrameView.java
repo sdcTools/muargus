@@ -1,10 +1,10 @@
 package muargus.view;
 
 import argus.model.DataFilePair;
-import argus.model.Metadata;
 import argus.view.DialogOpenMicrodata;
 import muargus.MuARGUS;
 import muargus.controller.MainFrameController;
+import muargus.model.MetadataMu;
 
 /**
  *
@@ -12,8 +12,8 @@ import muargus.controller.MainFrameController;
  */
 public class MainFrameView extends javax.swing.JFrame {
     
-    private DataFilePair dataFilePair;
-    private Metadata metadata;
+    //private DataFilePair dataFilePair;
+    private MetadataMu metadata;
     MainFrameController controller;
 
     /**
@@ -714,19 +714,19 @@ public class MainFrameView extends javax.swing.JFrame {
     private void openMicrodataMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openMicrodataMenuItemActionPerformed
  //         controller.openMicrodata(); 
  //         DataFilePair dataFilePair = new DataFilePair(OpenMicrodataModel.getMicrodataPath(), OpenMicrodataModel.getMetadataPath());
-        DialogOpenMicrodata dialog = new DialogOpenMicrodata(MainFrameView.this, true); 
-        dialog.setDataFileNames(MuARGUS.getMetadata().dataFile, MuARGUS.getMetadata().metaFile);
+        DialogOpenMicrodata dialog = new DialogOpenMicrodata(MainFrameView.this, true);
+        DataFilePair filenames = MuARGUS.getMetadata().getFileNames();
+        dialog.setDataFileNames(filenames.getDataFileName(), filenames.getMetaFileName());
             if (dialog.showDialog() == DialogOpenMicrodata.APPROVE_OPTION) {
-                dataFilePair = dialog.getMicrodataFilePair();
+                DataFilePair dataFilePair = dialog.getMicrodataFilePair();
             
     
 ////
 //                //panelTable.setVisible(false);
 //                //TableService.clearTables();
 //                Application.clearMetadatas();
-                 metadata = new Metadata(false);
-                 metadata.dataFile = dataFilePair.getDataFileName();
-                 metadata.metaFile = dataFilePair.getMetaFileName();
+                 metadata = new MetadataMu();
+                 metadata.setFileNames(dataFilePair);
  //               OpenMicrodataModel.setMicrodataPath(dataFilePair.getDataFileName());
  //               OpenMicrodataModel.setMetadataPath(dataFilePair.getMetaFileName());
                 
