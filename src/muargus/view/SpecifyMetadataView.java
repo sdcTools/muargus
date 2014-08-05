@@ -9,6 +9,7 @@ import argus.utils.SingleListSelectionModel;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.AbstractListModel;
 import javax.swing.DefaultComboBoxModel;
 import muargus.model.MetadataMu;
 import muargus.controller.SpecifyMetadataController;
@@ -33,6 +34,8 @@ public class SpecifyMetadataView extends javax.swing.JDialog {
     private static MetadataMu metadataMu;
     private boolean change = false;
     private String separatorTemp;
+    private AbstractListModel abstractListModel;
+
 
     /**
      * Creates new form SpecifyMetadataView
@@ -772,6 +775,8 @@ public class SpecifyMetadataView extends javax.swing.JDialog {
     private void newButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newButtonActionPerformed
         Variables variables = new Variables("New");
         
+        //variablesList.add(variables.getName(), 2);
+        
         controller.newButton();
     }//GEN-LAST:event_newButtonActionPerformed
 
@@ -793,57 +798,59 @@ public class SpecifyMetadataView extends javax.swing.JDialog {
     }//GEN-LAST:event_moveDownButtonActionPerformed
 
     private void hhIdentifierRadioButtonStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_hhIdentifierRadioButtonStateChanged
+        tempVariables.get(index).setHouse_id(hhIdentifierRadioButton.isSelected());
         controller.hhIdentifier();
     }//GEN-LAST:event_hhIdentifierRadioButtonStateChanged
 
     private void hhvariableRadioButtonStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_hhvariableRadioButtonStateChanged
+        tempVariables.get(index).setHousehold(hhvariableRadioButton.isSelected());
         controller.hhvariable();
     }//GEN-LAST:event_hhvariableRadioButtonStateChanged
 
     private void weightRadioButtonStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_weightRadioButtonStateChanged
+        tempVariables.get(index).setWeight(weightRadioButton.isSelected());        
         controller.weight();
     }//GEN-LAST:event_weightRadioButtonStateChanged
 
     private void otherRadioButtonStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_otherRadioButtonStateChanged
+        //tempVariables.get(index).setOther(otherRadioButton.isSelected());
         controller.other();
     }//GEN-LAST:event_otherRadioButtonStateChanged
 
     private void categoricalCheckBoxStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_categoricalCheckBoxStateChanged
+        tempVariables.get(index).setCategorical(categoricalCheckBox.isSelected());
         controller.categorical();
     }//GEN-LAST:event_categoricalCheckBoxStateChanged
 
     private void numericalCheckBoxStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_numericalCheckBoxStateChanged
+        tempVariables.get(index).setNumeric(numericalCheckBox.isSelected());
         controller.numerical();
     }//GEN-LAST:event_numericalCheckBoxStateChanged
 
     private void truncationAllowedCheckBoxStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_truncationAllowedCheckBoxStateChanged
-        
-        
-        //controller.truncationAllowed();
+        tempVariables.get(index).setTruncable(truncationAllowedCheckBox.isSelected());
+        controller.truncationAllowed();
     }//GEN-LAST:event_truncationAllowedCheckBoxStateChanged
 
     private void codelistfileCheckBoxStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_codelistfileCheckBoxStateChanged
+        tempVariables.get(index).setCodelist(codelistfileCheckBox.isSelected());
         controller.codelistfile();
     }//GEN-LAST:event_codelistfileCheckBoxStateChanged
 
     private void variablesListValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_variablesListValueChanged
-        // TODO add your handling code here:
         if(evt.getValueIsAdjusting()){
             String value = (String) variablesList.getSelectedValue();
             index = variablesList.getSelectedIndex();
             nameTextField.setText(value);
-            //System.out.println(variables.get(index).getIdlevenl());
             updateValues();
         }
     }//GEN-LAST:event_variablesListValueChanged
 
     private void nameTextFieldInputMethodTextChanged(java.awt.event.InputMethodEvent evt) {//GEN-FIRST:event_nameTextFieldInputMethodTextChanged
-        // TODO add your handling code here:
         lengthTextField.setText(nameTextField.getText());
     }//GEN-LAST:event_nameTextFieldInputMethodTextChanged
 
     private void startingPositionTextFieldCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_startingPositionTextFieldCaretUpdate
-      
         try {
             tempVariables.get(index).setStartingPosition(startingPositionTextField.getText());
             if (originalVariables.get(index).getStartingPosition() != tempVariables.get(index).getStartingPosition()){
@@ -853,64 +860,58 @@ public class SpecifyMetadataView extends javax.swing.JDialog {
     }//GEN-LAST:event_startingPositionTextFieldCaretUpdate
 
     private void lengthTextFieldCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_lengthTextFieldCaretUpdate
-        
         try {
             tempVariables.get(index).setVariableLength(lengthTextField.getText());
-            if (originalVariables.get(index).getVariableLength()!= tempVariables.get(index).getVariableLength()){
-                change = true;
-            }
+//            if (originalVariables.get(index).getVariableLength()!= tempVariables.get(index).getVariableLength()){
+//                change = true;
+//            }
         } catch (Exception e){}
     }//GEN-LAST:event_lengthTextFieldCaretUpdate
 
     private void decimalsTextFieldCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_decimalsTextFieldCaretUpdate
-        
         try {
             tempVariables.get(index).setDecimals(decimalsTextField.getText());
-            if (originalVariables.get(index).getDecimals()!= tempVariables.get(index).getDecimals()){
-                change = true;
-            }
+//            if (originalVariables.get(index).getDecimals()!= tempVariables.get(index).getDecimals()){
+//                change = true;
+//            }
         } catch (Exception e){}
     }//GEN-LAST:event_decimalsTextFieldCaretUpdate
 
     private void missing1TextFieldCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_missing1TextFieldCaretUpdate
-        
         try {
             tempVariables.get(index).setMissing(0, missing1TextField.getText());
-            if (!originalVariables.get(index).getMissing(0).equals(tempVariables.get(index).getMissing(0))){
-                change = true;
+//            if (!originalVariables.get(index).getMissing(0).equals(tempVariables.get(index).getMissing(0))){
+//                change = true;
 //            } else if (originalVariables.get(index).getMissing(0).equals(variables.get(index).getMissing(0))){
 //                change = false;
-            }
+//            }
         } catch (Exception e){}
     }//GEN-LAST:event_missing1TextFieldCaretUpdate
 
     private void missing2TextFieldCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_missing2TextFieldCaretUpdate
-        
         try {
             tempVariables.get(index).setMissing(1, missing2TextField.getText());
-            if (!originalVariables.get(index).getMissing(1).equals(tempVariables.get(index).getMissing(1))){
-                change = true;
-            }
+//            if (!originalVariables.get(index).getMissing(1).equals(tempVariables.get(index).getMissing(1))){
+//                change = true;
+//            }
         } catch (Exception e){}
     }//GEN-LAST:event_missing2TextFieldCaretUpdate
 
     private void codelistfileTextFieldCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_codelistfileTextFieldCaretUpdate
-        
         try {
             tempVariables.get(index).setCodeListFile(codelistfileTextField.getText());
-            if (!originalVariables.get(index).getCodeListFile().equals(tempVariables.get(index).getCodeListFile())){
-                change = true;
-            }
+//            if (!originalVariables.get(index).getCodeListFile().equals(tempVariables.get(index).getCodeListFile())){
+//                change = true;
+//            }
         } catch (Exception e){}
     }//GEN-LAST:event_codelistfileTextFieldCaretUpdate
 
     private void separatorTextFieldCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_separatorTextFieldCaretUpdate
-        
         try {
             separatorTemp = separatorTextField.getText();
-            if (!MetadataMu.getSeparator().equals(separatorTextField.getText())){
-                //change = true;
-            }
+//            if (!MetadataMu.getSeparator().equals(separatorTextField.getText())){
+//                //change = true;
+//            }
         } catch (Exception e){}
     }//GEN-LAST:event_separatorTextFieldCaretUpdate
 

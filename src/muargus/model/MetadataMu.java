@@ -203,7 +203,7 @@ public class MetadataMu implements Cloneable{
         MetadataMu.metadataFile = metaFile;
     }
     
-    public static String getMetadataFile(){
+    public static String getMetadataFile(){      
         if(OpenMicrodataModel.getMetadataPath() == null){
             return metadataFile;
         } else {
