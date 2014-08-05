@@ -1,13 +1,13 @@
 package muargus;
 
 //import javax.swing.SwingUtilities;
-import argus.model.Metadata;
 import argus.utils.SystemUtils;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.SplashScreen;
 import java.util.logging.Logger;
+import muargus.model.MetadataMu;
 import muargus.view.MainFrameView;
 import org.apache.commons.io.FilenameUtils;
 
@@ -25,10 +25,10 @@ public class MuARGUS {
     public static final String REVISION = "1 (beta)";
     public static final int BUILD = 1;
 
-    private static Metadata metadata;
+    private static MetadataMu metadata;
     static
     {
-        metadata = new Metadata(false);
+        metadata = new MetadataMu();
     }
     
     
@@ -36,10 +36,10 @@ public class MuARGUS {
         return "" + MAJOR + "." + MINOR + "." + REVISION;
     }
    
-    public static Metadata getMetadata() {
+    public static MetadataMu getMetadata() {
         return MuARGUS.metadata;
     }
-    public static void setMetadata(Metadata metadata) {
+    public static void setMetadata(MetadataMu metadata) {
         MuARGUS.metadata = metadata;
     }
     private static String tempDir;

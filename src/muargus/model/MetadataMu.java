@@ -5,6 +5,7 @@
 package muargus.model;
 
 import argus.model.ArgusException;
+import argus.model.DataFilePair;
 import argus.utils.Tokenizer;
 import java.io.BufferedReader;
 import java.io.File;
@@ -49,9 +50,11 @@ public class MetadataMu implements Cloneable{
     private Variables variables;
     private ArrayList<Variables> data;
     private static ArrayList<Variables> cloneData;
+    private DataFilePair filenames;
     
     public MetadataMu() {
         data = new ArrayList<>();
+        filenames = new DataFilePair(null, null);
     }
     
     public static ArrayList<Variables> makeClone(ArrayList<Variables> list) throws CloneNotSupportedException{
@@ -228,7 +231,13 @@ public class MetadataMu implements Cloneable{
         MetadataMu.separator = separator;
     }
     
-    
+    public DataFilePair getFileNames() {
+        return this.filenames;
+    }
+
+    public void setFileNames(DataFilePair filenames) {
+        this.filenames = filenames;
+    }
 
         public void testPrintAll(){
         try {
