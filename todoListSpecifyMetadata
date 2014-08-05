@@ -1,6 +1,6 @@
 																	Wordt aan gewerkt/zal gemaakt worden door:
 
-1. default file aanpassen	
+1. default file aanpassen	                                        Jeldrik: is gefixed
 2. codelistfile testen/aanpassen dat files goed gevonden worden 
 (dus zowel regio.cdl als volledige path)	
 2a. file open box bij codelist
