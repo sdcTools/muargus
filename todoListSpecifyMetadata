@@ -6,6 +6,9 @@ Dingen die nog gedaan moeten worden
 - velden aanpassen met enabled (punt 13)
 - bij related (3b) loopt het nog niet helemaal soepel. Dit komt omdat ik probeer om het onmogelijk te maken om 
     de variabele aan zichzelf te relateren. De fout zit volgens mij bij SpecifyMetadataView regel 232
+    Bug: Als je het programma runt en bij het specify metadata scherm komt, vervolgens klik je op de tweede variabele (SEX)
+    en dan weer op de eerste (REGION), dan zie je bij related dat de volgorde niet meer goed is. (AGE) staat op de verkeerde
+    plek.
 
 
 1. default file aanpassen                                           Jeldrik: werkt niet meer --> er uit slopen en bij de main de buttons op disabled zetten?
