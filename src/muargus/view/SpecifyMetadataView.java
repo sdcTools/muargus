@@ -786,11 +786,12 @@ public class SpecifyMetadataView extends javax.swing.JDialog {
     }//GEN-LAST:event_okButtonActionPerformed
 
     private void moveUpButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_moveUpButtonActionPerformed
-        //int index = variablesList.getSelectedIndex();
+        int index = variablesList.getSelectedIndex();
         VariableMu variable = (VariableMu) variableListModel.get(index);
         variableListModel.set(index, variableListModel.get(index - 1));
         variableListModel.set(index - 1, variable);
-        variablesList.setSelectedIndex(index - 1); 
+        variablesList.setSelectedIndex(index-1 ); 
+        calculateButtonStates();
     }//GEN-LAST:event_moveUpButtonActionPerformed
 
     private void variablesComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_variablesComboBoxActionPerformed
@@ -846,11 +847,12 @@ public class SpecifyMetadataView extends javax.swing.JDialog {
     }//GEN-LAST:event_codelistfileButtonActionPerformed
 
     private void moveDownButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_moveDownButtonActionPerformed
-        //int index = variablesList.getSelectedIndex();
+        int index = variablesList.getSelectedIndex();
         VariableMu variable = (VariableMu) variableListModel.get(index);
         variableListModel.set(index, variableListModel.get(index + 1));
         variableListModel.set(index + 1, variable);
-        variablesList.setSelectedIndex(index + 1); 
+        variablesList.setSelectedIndex(index+1); 
+        calculateButtonStates();
     }//GEN-LAST:event_moveDownButtonActionPerformed
 
     private void hhIdentifierRadioButtonStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_hhIdentifierRadioButtonStateChanged
