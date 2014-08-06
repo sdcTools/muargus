@@ -8,19 +8,23 @@ package muargus.model;
  *
  * @author ambargus
  */
-public class Variables implements Cloneable {
-
+public class VariableMu implements Cloneable{
+    
     // Determines lengths of fixed sized arrays being used
     public static final int MAX_NUMBER_OF_MISSINGS = 2;
+    
+       
 //    // Only used by variables of type 'Categorical'
     public String[] missing = new String[MAX_NUMBER_OF_MISSINGS];
+    
 //
 //    // Only used in case of a recoded variable of type 'Categorical'
 //    public boolean recoded;
 //    public String currentRecodeFile = "";
 //    public String currentRecodeCodeListFile = "";
 //
-    public Variables originalVariable;
+    //public VariableMu originalVariable;
+
     //default values
     private String name = "";
     private int startingPosition = 0; // Only used if data file type is fixed format
@@ -30,30 +34,33 @@ public class Variables implements Cloneable {
     private int decimals = 0;
     private String codeListFile = "";
     //    private int truncLevels;
+    
     private boolean numeric = false;
     private boolean categorical = true;
+    
     private boolean recodable = false;
     private boolean codelist = false;
     private boolean truncable = false;
+    
     private boolean weight = false;
     private boolean house_id = false;
     private boolean household = false;
     private boolean related = false; // check how many variables a variable can be related to
     // private Variable relatedVariable = null;
-
+    
     /**
      * Empty constructor
      */
-    public Variables() {
+    public VariableMu(){
+        
     }
-
-    public Variables(String name) {
+    
+    public VariableMu(String name){
         this.name = name;
     }
 
     /**
      * Return variable name
-     *
      * @return Returns the name of the variable
      */
     public String getName() {
@@ -62,7 +69,6 @@ public class Variables implements Cloneable {
 
     /**
      * Set name variable
-     *
      * @param name name of the variable
      */
     public void setName(String name) {
@@ -70,8 +76,8 @@ public class Variables implements Cloneable {
     }
 
     /**
-     *
-     * @return
+     * 
+     * @return 
      */
     public boolean isRecodable() {
         return recodable;
@@ -200,11 +206,12 @@ public class Variables implements Cloneable {
     public void setMissing(int index, String value) {
         this.missing[index] = value;
     }
-
+    
     @Override
     public Object clone() throws CloneNotSupportedException {
-        Variables variable = (Variables) super.clone();
-
+        VariableMu variable = (VariableMu)super.clone();
+        
+        
 //        if (requestCode != null) {
 //            variable.requestCode = (String[])requestCode.clone();
 //        }
@@ -217,7 +224,8 @@ public class Variables implements Cloneable {
 //        if (missing != null) {
 //            variable.missing = (String[])missing.clone();
 //        }
-        variable.originalVariable = this;
+        //variable.originalVariable = this;
         return variable;
     }
+    
 }
