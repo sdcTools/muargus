@@ -1,16 +1,19 @@
 																	Wordt aan gewerkt/zal gemaakt worden door:
 
-1. default file aanpassen	                                        Jeldrik: is gefixed
+1. default file aanpassen	                                        Jeldrik: werkt niet meer --> er uit slopen en bij de main de buttons op disabled zetten?
 2. codelistfile testen/aanpassen dat files goed gevonden worden 
 (dus zowel regio.cdl als volledige path)	
-2a. file open box bij codelist
-3. related to, name, id lvl en weight zorgen dat aanpassingen in de 
-tempVariable worden opgeslagen										Jeldrik (is vergelijkbaar met dingen die al zijn gedaan) 
+2a. file open box bij codelist                                      Jeldrik: mee bezig
+3. zorgen dat aanpassingen in de tempVariable worden opgeslagen	
+3.a related to                                                      Jeldrik: mee bezig
+3.b name									                        Jeldrik: mee bezig 
+3.c id lvl									                        Jeldrik: mee bezig 
+3.d weight 						                        			Jeldrik: werkt 
 4. check of iets is verandert inbouwen	
-5. functionaliteit new button										Jeldrik
-6. functionaliteit delete button 									Jeldrik (waarschijnlijk overlap met het maken van nummer 5)
-7. functionaliteit move up/down button								Jeldrik (waarschijnlijk overlap met het maken van nummer 5)
-8. functionaliteit cancel button									Jeldrik (waarschijnlijk overlap met het maken van nummer 5)
+5. functionaliteit new button										Jeldrik: werkt
+6. functionaliteit delete button 									Jeldrik: werkt
+7. functionaliteit move up/down button								Jeldrik: werkt
+8. functionaliteit cancel button									Jeldrik: werkt
 9. functionaliteit ok button (wegschrijven van de gegevens) 
 10. waarschuwingsscherm cancel
 11. geen integer in de drie int velden: save()

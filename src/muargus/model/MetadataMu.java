@@ -12,6 +12,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.commons.lang3.StringUtils;
@@ -113,7 +114,7 @@ public class MetadataMu implements Cloneable {
                         setDataFileType(DATA_FILE_TYPE_FREE);
                         //setFree(true);
                         //if(!tokenizer.nextToken().equals(""))
-                        setSeparator(value);
+                        setSeparator(tokenizer.nextToken());
                         break;
                     case "<SPSS>":
                         setDataFileType(DATA_FILE_TYPE_SPSS);
@@ -160,14 +161,14 @@ public class MetadataMu implements Cloneable {
                         variable.setSuppressweight(tokenizer.nextToken());
                         break;
                     case "<RELATED>":
-                        variable.setRelated(true);
+                        variable.setRelatedVariableName(tokenizer.nextToken());
                         break;
                     default:
                         break;
                 }
             }
         }
-        SpecifyMetadataModel.setVariables(variables);
+        //SpecifyMetadataModel.setVariables(variables);
 //        try {
 //            ;
 //            //cloneData = makeClone(variables);
@@ -175,9 +176,18 @@ public class MetadataMu implements Cloneable {
 //            Logger.getLogger(MetadataMu.class.getName()).log(Level.SEVERE, null, ex);
 //        }
 //        TestClone();
+        linkRelatedVariables();
         verify();
     }
 
+    private void linkRelatedVariables() throws ArgusException {
+        for (VariableMu var : variables) {
+            var.linkRelatedVariable(variables);
+        }
+            
+    }
+    
+    
     // TODO: add a message explaining whats the problem
     public void verify() throws ArgusException {
         for (int i = 0; i < variables.size(); i++) {
@@ -250,7 +260,7 @@ public class MetadataMu implements Cloneable {
                 System.out.println("\tHouse_ID is " + v.isHouse_id());
                 System.out.println("\tHousehold is " + v.isHousehold());
                 System.out.println("\tSuppressWeight is " + v.getSuppressweight());
-                System.out.println("\tRelated is " + v.isRelated());
+                //System.out.println("\tRelatedVariable is " + v.getRelatedVariable().getName());
             }
         } catch (Exception e) {
         }
@@ -270,10 +280,20 @@ public class MetadataMu implements Cloneable {
 
         metadataMu.variables = (ArrayList<VariableMu>) this.variables.clone();
         metadataMu.dataFileType = this.dataFileType;
-        metadataMu.filenames = this.filenames; //no clone needed
+        metadataMu.filenames = this.filenames; //no clone needed here
         metadataMu.separator = this.separator;
 
         return metadataMu;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 41 * hash + Objects.hashCode(this.separator);
+        hash = 41 * hash + this.dataFileType;
+        hash = 41 * hash + Objects.hashCode(this.filenames);
+        hash = 41 * hash + Objects.hashCode(this.variables);
+        return hash;
     }
 
     
@@ -290,6 +310,8 @@ public class MetadataMu implements Cloneable {
         if (!this.separator.equals(cmp.separator))
             return false;
         if (this.dataFileType != cmp.dataFileType)
+            return false;
+        if (this.filenames != cmp.filenames)
             return false;
         return this.variables.equals(cmp.variables);
     }
