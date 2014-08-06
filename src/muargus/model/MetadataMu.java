@@ -237,6 +237,7 @@ public class MetadataMu implements Cloneable {
         this.filenames = filenames;
     }
 
+    // TODO: remove after testing
     public void testPrintAll() {
         try {
             for (VariableMu v : variables) {
