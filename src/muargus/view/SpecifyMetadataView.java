@@ -151,7 +151,6 @@ public class SpecifyMetadataView extends javax.swing.JDialog {
                 setSpss(true);
                 break;
         }
-        
         updateValues();
         calculateButtonStates();
     }
@@ -223,7 +222,8 @@ public class SpecifyMetadataView extends javax.swing.JDialog {
         startingPositionTextField.setText(Integer.toString(selected.getStartingPosition()));
         lengthTextField.setText(Integer.toString(selected.getVariableLength()));
         separatorTextField.setText(separatorTemp);
-        
+        // moet aangepast worden want dit is geen goede test. Zeker als er nieuwe variabelen worden aangemaakt
+        // of variabelen worden delete
         if(relatedToComboBox.getItemCount() == related.size()){
             relatedToComboBox.removeItem(selected);
         } else {
