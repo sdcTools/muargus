@@ -2,7 +2,10 @@
 package muargus.controller;
 
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
+import muargus.model.MetadataMu;
 import muargus.view.SpecifyMetadataView;
 
 /**
@@ -12,16 +15,34 @@ import muargus.view.SpecifyMetadataView;
 public class SpecifyMetadataController {
     
     SpecifyMetadataView view;
+    MetadataMu metadata;
+    MetadataMu metadataClone;
     ArrayList<String> list;
+
+    private static final Logger logger = Logger.getLogger(SpecifyMetadataController.class.getName());
 
     /**
      * 
      * @param view 
      */
-    public SpecifyMetadataController(SpecifyMetadataView view) {
-        this.view = view;
-        this.list = null;
+    public SpecifyMetadataController(java.awt.Frame parentView, MetadataMu metadata) {
+        this.view = new SpecifyMetadataView(parentView, true, this);
+        this.metadata = metadata;
+        try {
+        this.metadataClone = (MetadataMu) metadata.clone();
+        }
+        catch (CloneNotSupportedException ex) {
+                        logger.log(Level.SEVERE, null, ex);
+        }
+        this.view.setMetadataMu(this.metadataClone  );
+            
+        //this.view = view;
+        //this.list = null;
         //setList(list);
+    }
+    
+    public void showView() {
+        this.view.setVisible(true);
         
     }
     
@@ -45,7 +66,7 @@ public class SpecifyMetadataController {
      * 
      */
     public void ok() {                                         
-        view.setVisible(false);
+        this.view.setVisible(false);
     }                                        
 
     /**

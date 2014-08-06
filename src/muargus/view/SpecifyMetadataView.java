@@ -14,7 +14,7 @@ import javax.swing.DefaultComboBoxModel;
 import muargus.model.MetadataMu;
 import muargus.controller.SpecifyMetadataController;
 import muargus.model.SpecifyMetadataModel;
-import muargus.model.Variables;
+import muargus.model.VariableMu;
 
 /**
  *
@@ -23,8 +23,8 @@ import muargus.model.Variables;
 public class SpecifyMetadataView extends javax.swing.JDialog {
     
     SpecifyMetadataController controller;
-    private static ArrayList<Variables> tempVariables;
-    private static ArrayList<Variables> originalVariables;
+    //private static ArrayList<VariableMu> tempVariables;
+    private ArrayList<VariableMu> originalVariables;
     private String[] names;
     private String[] related;
     private String[] idLevel = {"0","1","2","3","4","5"};
@@ -37,32 +37,41 @@ public class SpecifyMetadataView extends javax.swing.JDialog {
     private AbstractListModel abstractListModel;
 
 
-    public SpecifyMetadataView(java.awt.Frame parent, boolean modal) {
-        super(parent, modal);
-        controller = new SpecifyMetadataController(this);
-        initComponents();
-        this.setLocationRelativeTo(null);
-        this.metadataMu = new MetadataMu();
-        separatorTemp = MetadataMu.getSeparator();
-        makeVariables();
-        
-    }
+//    public SpecifyMetadataView(java.awt.Frame parent, boolean modal) {
+//        super(parent, modal);
+//        controller = new SpecifyMetadataController(this);
+//        initComponents();
+//        this.setLocationRelativeTo(null);
+//        this.metadataMu = new MetadataMu();
+//        separatorTemp = this.metadataMu.getSeparator();
+//        makeVariables();
+//        
+//    }
     /**
      * Creates new form SpecifyMetadataView
      */
-    public SpecifyMetadataView(java.awt.Frame parent, boolean modal, MetadataMu metadata) {
+    public SpecifyMetadataView(java.awt.Frame parent, boolean modal, SpecifyMetadataController controller) {
         super(parent, modal);
-        controller = new SpecifyMetadataController(this);
         initComponents();
+        this.controller = controller;
         this.setLocationRelativeTo(null);
-        this.metadataMu = metadata;
-        separatorTemp = MetadataMu.getSeparator();
-        makeVariables();
+        //this.metadataMu = metadata;
+        //separatorTemp = MetadataMu.getSeparator();
+        //makeVariables();
         
     }
-    
+
+        public MetadataMu getMetadataMu() {
+        return metadataMu;
+    }
+
+    public void setMetadataMu(MetadataMu metadataMu) {
+        this.metadataMu = metadataMu;
+        makeVariables();
+    }
+
     public void makeVariables(){
-        try {
+       // try {
             
             //TODO: remove this if statement after testing
             //this if statement creates a new instance of MetadataMu if there is none. 
@@ -71,21 +80,21 @@ public class SpecifyMetadataView extends javax.swing.JDialog {
                 this.metadataMu = new MetadataMu();
             }
             // read metadata file
-            metadataMu.readMetadata(metadataMu.getMetadataFile());
-        } catch (ArgusException ex) {
-            Logger.getLogger(SpecifyMetadataView.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        tempVariables = MetadataMu.getClone();
-        originalVariables = SpecifyMetadataModel.getVariables();
+//            metadataMu.readMetadata(metadataMu.getFileNames().getMetaFileName());
+        //} catch (ArgusException ex) {
+          //  Logger.getLogger(SpecifyMetadataView.class.getName()).log(Level.SEVERE, null, ex);
+        //}
+        //tempVariables = ((MetadataMu) metadataMu.clone()). MetadataMu..getClone();
+        originalVariables = metadataMu.getVariables();
         
-        names = new String[tempVariables.size()];
-        related = new String[tempVariables.size()+1];
+        names = new String[originalVariables.size()];
+        related = new String[originalVariables.size()+1];
         related [0] = "--none--";
         
         // initializes the variable names for the variablesJList and relatedJComboBox
-        for(int i = 0; i< tempVariables.size(); i++){
-            names[i] = tempVariables.get(i).getName();
-            related[i+1] = tempVariables.get(i).getName();
+        for(int i = 0; i< originalVariables.size(); i++){
+            names[i] = originalVariables.get(i).getName();
+            related[i+1] = originalVariables.get(i).getName();
         }
         
         // sets the variable names to the variablesJList
@@ -109,7 +118,7 @@ public class SpecifyMetadataView extends javax.swing.JDialog {
         variablesComboBox.setModel(new DefaultComboBoxModel(format));
         
         // check the format and set the appropriate settings
-        switch(MetadataMu.getDataFileType()){
+        switch(metadataMu.getDataFileType()){
             case MetadataMu.DATA_FILE_TYPE_FIXED:
                 setFixed();
                 break;
@@ -176,7 +185,7 @@ public class SpecifyMetadataView extends javax.swing.JDialog {
     
     
     public void updateValues(){ 
-        Variables selected = tempVariables.get(index);
+        VariableMu selected = originalVariables.get(index);
         identificationComboBox.setSelectedIndex(selected.getIdLevel());
         decimalsTextField.setText(Integer.toString(selected.getDecimals()));
         truncationAllowedCheckBox.setSelected(selected.isTruncable());
@@ -790,7 +799,7 @@ public class SpecifyMetadataView extends javax.swing.JDialog {
     }//GEN-LAST:event_variablesComboBoxActionPerformed
 
     private void newButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newButtonActionPerformed
-        Variables variables = new Variables("New");
+        VariableMu variables = new VariableMu("New");
         
         //variablesList.add(variables.getName(), 2);
         
@@ -815,17 +824,17 @@ public class SpecifyMetadataView extends javax.swing.JDialog {
     }//GEN-LAST:event_moveDownButtonActionPerformed
 
     private void hhIdentifierRadioButtonStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_hhIdentifierRadioButtonStateChanged
-        tempVariables.get(index).setHouse_id(hhIdentifierRadioButton.isSelected());
+        originalVariables.get(index).setHouse_id(hhIdentifierRadioButton.isSelected());
         controller.hhIdentifier();
     }//GEN-LAST:event_hhIdentifierRadioButtonStateChanged
 
     private void hhvariableRadioButtonStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_hhvariableRadioButtonStateChanged
-        tempVariables.get(index).setHousehold(hhvariableRadioButton.isSelected());
+        originalVariables.get(index).setHousehold(hhvariableRadioButton.isSelected());
         controller.hhvariable();
     }//GEN-LAST:event_hhvariableRadioButtonStateChanged
 
     private void weightRadioButtonStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_weightRadioButtonStateChanged
-        tempVariables.get(index).setWeight(weightRadioButton.isSelected());        
+        originalVariables.get(index).setWeight(weightRadioButton.isSelected());        
         controller.weight();
     }//GEN-LAST:event_weightRadioButtonStateChanged
 
@@ -835,22 +844,22 @@ public class SpecifyMetadataView extends javax.swing.JDialog {
     }//GEN-LAST:event_otherRadioButtonStateChanged
 
     private void categoricalCheckBoxStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_categoricalCheckBoxStateChanged
-        tempVariables.get(index).setCategorical(categoricalCheckBox.isSelected());
+        originalVariables.get(index).setCategorical(categoricalCheckBox.isSelected());
         controller.categorical();
     }//GEN-LAST:event_categoricalCheckBoxStateChanged
 
     private void numericalCheckBoxStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_numericalCheckBoxStateChanged
-        tempVariables.get(index).setNumeric(numericalCheckBox.isSelected());
+        originalVariables.get(index).setNumeric(numericalCheckBox.isSelected());
         controller.numerical();
     }//GEN-LAST:event_numericalCheckBoxStateChanged
 
     private void truncationAllowedCheckBoxStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_truncationAllowedCheckBoxStateChanged
-        tempVariables.get(index).setTruncable(truncationAllowedCheckBox.isSelected());
+        originalVariables.get(index).setTruncable(truncationAllowedCheckBox.isSelected());
         controller.truncationAllowed();
     }//GEN-LAST:event_truncationAllowedCheckBoxStateChanged
 
     private void codelistfileCheckBoxStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_codelistfileCheckBoxStateChanged
-        tempVariables.get(index).setCodelist(codelistfileCheckBox.isSelected());
+        originalVariables.get(index).setCodelist(codelistfileCheckBox.isSelected());
         controller.codelistfile();
     }//GEN-LAST:event_codelistfileCheckBoxStateChanged
 
@@ -869,8 +878,8 @@ public class SpecifyMetadataView extends javax.swing.JDialog {
 
     private void startingPositionTextFieldCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_startingPositionTextFieldCaretUpdate
         try {
-            tempVariables.get(index).setStartingPosition(startingPositionTextField.getText());
-            if (originalVariables.get(index).getStartingPosition() != tempVariables.get(index).getStartingPosition()){
+            originalVariables.get(index).setStartingPosition(startingPositionTextField.getText());
+            if (originalVariables.get(index).getStartingPosition() != originalVariables.get(index).getStartingPosition()){
                 change = true;
             }
         } catch (Exception e){}
@@ -878,16 +887,16 @@ public class SpecifyMetadataView extends javax.swing.JDialog {
 
     private void lengthTextFieldCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_lengthTextFieldCaretUpdate
         try {
-            tempVariables.get(index).setVariableLength(lengthTextField.getText());
+            originalVariables.get(index).setVariableLength(lengthTextField.getText());
 //            if (originalVariables.get(index).getVariableLength()!= tempVariables.get(index).getVariableLength()){
-//                change = true;
+//                chaoriginalVariablesnge = true;
 //            }
         } catch (Exception e){}
     }//GEN-LAST:event_lengthTextFieldCaretUpdate
 
     private void decimalsTextFieldCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_decimalsTextFieldCaretUpdate
         try {
-            tempVariables.get(index).setDecimals(decimalsTextField.getText());
+            originalVariables.get(index).setDecimals(decimalsTextField.getText());
 //            if (originalVariables.get(index).getDecimals()!= tempVariables.get(index).getDecimals()){
 //                change = true;
 //            }
@@ -896,7 +905,7 @@ public class SpecifyMetadataView extends javax.swing.JDialog {
 
     private void missing1TextFieldCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_missing1TextFieldCaretUpdate
         try {
-            tempVariables.get(index).setMissing(0, missing1TextField.getText());
+            originalVariables.get(index).setMissing(0, missing1TextField.getText());
 //            if (!originalVariables.get(index).getMissing(0).equals(tempVariables.get(index).getMissing(0))){
 //                change = true;
 //            } else if (originalVariables.get(index).getMissing(0).equals(variables.get(index).getMissing(0))){
@@ -907,7 +916,7 @@ public class SpecifyMetadataView extends javax.swing.JDialog {
 
     private void missing2TextFieldCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_missing2TextFieldCaretUpdate
         try {
-            tempVariables.get(index).setMissing(1, missing2TextField.getText());
+            originalVariables.get(index).setMissing(1, missing2TextField.getText());
 //            if (!originalVariables.get(index).getMissing(1).equals(tempVariables.get(index).getMissing(1))){
 //                change = true;
 //            }
@@ -916,7 +925,7 @@ public class SpecifyMetadataView extends javax.swing.JDialog {
 
     private void codelistfileTextFieldCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_codelistfileTextFieldCaretUpdate
         try {
-            tempVariables.get(index).setCodeListFile(codelistfileTextField.getText());
+            originalVariables.get(index).setCodeListFile(codelistfileTextField.getText());
 //            if (!originalVariables.get(index).getCodeListFile().equals(tempVariables.get(index).getCodeListFile())){
 //                change = true;
 //            }
@@ -973,7 +982,7 @@ public class SpecifyMetadataView extends javax.swing.JDialog {
 //            }
 //        });
 //    }
-    // Variables declaration - do not modify//GEN-BEGIN:variables
+    // VariableMu declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel attributesPanel;
     private javax.swing.JButton cancelButton;
     private javax.swing.JCheckBox categoricalCheckBox;

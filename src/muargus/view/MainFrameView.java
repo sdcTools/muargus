@@ -1,5 +1,6 @@
 package muargus.view;
 
+import argus.model.ArgusException;
 import argus.model.DataFilePair;
 import argus.view.DialogOpenMicrodata;
 import muargus.MuARGUS;
@@ -729,6 +730,13 @@ public class MainFrameView extends javax.swing.JFrame {
 //                Application.clearMetadatas();
                  metadata = new MetadataMu();
                  metadata.setFileNames(dataFilePair);
+                 try {
+                 metadata.readMetadata();
+                 }
+                 catch (ArgusException ex) {
+                     //TODO: handle error
+                     //log it
+                 }
  //               OpenMicrodataModel.setMicrodataPath(dataFilePair.getDataFileName());
  //               OpenMicrodataModel.setMetadataPath(dataFilePair.getMetaFileName());
                 

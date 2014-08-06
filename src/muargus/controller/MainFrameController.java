@@ -47,8 +47,9 @@ public class MainFrameController {
      * 
      */
     public void specifyMetaData(MetadataMu metadata) {                                                 
-        SpecifyMetadataView view = new SpecifyMetadataView(this.view, true, metadata);
-        view.setVisible(true);
+        SpecifyMetadataController controller = new SpecifyMetadataController(this.view, metadata);
+        controller.showView();
+        //view.setVisible(true);
     }   
     
     /**

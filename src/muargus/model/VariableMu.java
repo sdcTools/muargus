@@ -8,7 +8,7 @@ package muargus.model;
  *
  * @author ambargus
  */
-public class Variables implements Cloneable{
+public class VariableMu implements Cloneable{
     
     // Determines lengths of fixed sized arrays being used
     public static final int MAX_NUMBER_OF_MISSINGS = 2;
@@ -23,7 +23,7 @@ public class Variables implements Cloneable{
 //    public String currentRecodeFile = "";
 //    public String currentRecodeCodeListFile = "";
 //
-    public Variables originalVariable;
+    //public VariableMu originalVariable;
 
     //default values
     private String name = "";
@@ -51,11 +51,11 @@ public class Variables implements Cloneable{
     /**
      * Empty constructor
      */
-    public Variables(){
+    public VariableMu(){
         
     }
     
-    public Variables(String name){
+    public VariableMu(String name){
         this.name = name;
     }
 
@@ -209,7 +209,8 @@ public class Variables implements Cloneable{
     
     @Override
     public Object clone() throws CloneNotSupportedException {
-        Variables variable = (Variables)super.clone(); 
+        VariableMu variable = (VariableMu)super.clone();
+        
         
 //        if (requestCode != null) {
 //            variable.requestCode = (String[])requestCode.clone();
@@ -223,7 +224,7 @@ public class Variables implements Cloneable{
 //        if (missing != null) {
 //            variable.missing = (String[])missing.clone();
 //        }
-        variable.originalVariable = this;
+        //variable.originalVariable = this;
         return variable;
     }
     
