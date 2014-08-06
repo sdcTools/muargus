@@ -7,6 +7,7 @@ package muargus.view;
 import argus.model.ArgusException;
 import argus.utils.SingleListSelectionModel;
 import argus.utils.SystemUtils;
+import java.awt.Component;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -36,6 +37,7 @@ public class SpecifyMetadataView extends javax.swing.JDialog {
     private MetadataMu metadataMu;
     private boolean change = false;
     private String separatorTemp;
+    private int previousIndex;
     
     private DefaultListModel variableListModel;
 
@@ -94,7 +96,7 @@ public class SpecifyMetadataView extends javax.swing.JDialog {
         separatorTemp = metadataMu.getSeparator();
         
         
-        
+        previousIndex = 0;
         cloneVariables = metadataMu.getVariables();
         variableListModel = new DefaultListModel<>(); 
         for (VariableMu variable : cloneVariables) {
@@ -219,6 +221,15 @@ public class SpecifyMetadataView extends javax.swing.JDialog {
         startingPositionTextField.setText(Integer.toString(selected.getStartingPosition()));
         lengthTextField.setText(Integer.toString(selected.getVariableLength()));
         separatorTextField.setText(separatorTemp);
+        
+        int items = relatedToComboBox.getItemCount();
+        if(items == related.size()){
+            relatedToComboBox.removeItem(selected);
+        } else {
+            relatedToComboBox.insertItemAt(cloneVariables.get(previousIndex), previousIndex+1);
+            relatedToComboBox.removeItem(selected);
+        }
+        previousIndex = variablesList.getSelectedIndex();
     }
     
     private void calculateButtonStates() {
