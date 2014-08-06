@@ -211,6 +211,24 @@ public class VariableMu implements Cloneable{
     public Object clone() throws CloneNotSupportedException {
         VariableMu variable = (VariableMu)super.clone();
         
+        variable.categorical = this.categorical;
+        variable.codeListFile = this.codeListFile;
+        variable.codelist = this.codelist;
+        variable.decimals = this.decimals;
+        variable.house_id = this.house_id;
+        variable.household = this.household;
+        variable.idLevel = this.idLevel;
+        if (this.missing != null) {
+            variable.missing = (String[])this.missing.clone();
+        }
+        variable.name = this.name;
+        variable.numeric = this.numeric;
+        variable.recodable = this.recodable;
+        variable.related = this.related; //TODO: change type
+        variable.startingPosition = this.startingPosition;
+        variable.suppressweight = this.suppressweight;
+        variable.truncable = this.truncable;
+        variable.weight = this.weight;
         
 //        if (requestCode != null) {
 //            variable.requestCode = (String[])requestCode.clone();
@@ -226,6 +244,16 @@ public class VariableMu implements Cloneable{
 //        }
         //variable.originalVariable = this;
         return variable;
+    }
+    
+        @Override
+    public boolean equals(Object o) {
+//        VariableMu cmp = (VariableMu)o;
+//        if (!this.separator.equals(cmp.separator))
+//            return false;
+//        if (this.dataFileType != cmp.dataFileType)
+//            return false;
+        return false;//this.variables.equals(cmp.variables);
     }
     
 }

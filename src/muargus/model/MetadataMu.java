@@ -269,14 +269,27 @@ public class MetadataMu implements Cloneable {
 
         metadataMu.variables = (ArrayList<VariableMu>) this.variables.clone();
         metadataMu.dataFileType = this.dataFileType;
-        metadataMu.filenames = this.filenames;
+        metadataMu.filenames = this.filenames; //no clone needed
         metadataMu.separator = this.separator;
 
         return metadataMu;
     }
 
+    
+
 //    public static void main (String[] args) throws ArgusException{
 //        MetadataMu t = new MetadataMu();
 //        t.readMetadata(t.getMetadataFile());
 //    }
+   
+
+    @Override
+    public boolean equals(Object o) {
+        MetadataMu cmp = (MetadataMu)o;
+        if (!this.separator.equals(cmp.separator))
+            return false;
+        if (this.dataFileType != cmp.dataFileType)
+            return false;
+        return this.variables.equals(cmp.variables);
+    }
 }
