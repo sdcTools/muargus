@@ -4,6 +4,9 @@
  */
 package muargus.model;
 
+import java.util.Arrays;
+import java.util.Objects;
+
 /**
  *
  * @author ambargus
@@ -52,11 +55,12 @@ public class VariableMu implements Cloneable{
      * Empty constructor
      */
     public VariableMu(){
-        
+        this(null);
     }
     
-    public VariableMu(String name){
+    public VariableMu(String name) {
         this.name = name;
+        missing = new String[0];
     }
 
     /**
@@ -212,8 +216,8 @@ public class VariableMu implements Cloneable{
         VariableMu variable = (VariableMu)super.clone();
         
         variable.categorical = this.categorical;
-        variable.codeListFile = this.codeListFile;
         variable.codelist = this.codelist;
+        variable.codeListFile = this.codeListFile;
         variable.decimals = this.decimals;
         variable.house_id = this.house_id;
         variable.household = this.household;
@@ -228,32 +232,59 @@ public class VariableMu implements Cloneable{
         variable.startingPosition = this.startingPosition;
         variable.suppressweight = this.suppressweight;
         variable.truncable = this.truncable;
+        variable.variableLength = this.variableLength;
         variable.weight = this.weight;
         
-//        if (requestCode != null) {
-//            variable.requestCode = (String[])requestCode.clone();
-//        }
-//        if (distanceFunction != null) {
-//            variable.distanceFunction = (int[])distanceFunction.clone();
-//        }
-//        if (hierLevels != null) {
-//            variable.hierLevels = (int[])hierLevels.clone();
-//        }
-//        if (missing != null) {
-//            variable.missing = (String[])missing.clone();
-//        }
-        //variable.originalVariable = this;
         return variable;
     }
     
         @Override
     public boolean equals(Object o) {
-//        VariableMu cmp = (VariableMu)o;
-//        if (!this.separator.equals(cmp.separator))
-//            return false;
-//        if (this.dataFileType != cmp.dataFileType)
-//            return false;
-        return false;//this.variables.equals(cmp.variables);
+        VariableMu cmp = (VariableMu)o;
+        return (this.categorical == cmp.categorical)
+                && (this.codelist == cmp.codelist)
+                && (this.codeListFile == null ? cmp.codeListFile == null : this.codeListFile.equals(cmp.codeListFile))
+                && (this.decimals == cmp.decimals)
+                && (this.house_id == cmp.house_id)
+                && (this.household == cmp.household)
+                && (this.idLevel == cmp.idLevel)
+                && (Arrays.equals(this.missing, cmp.missing))
+                && (this.name == null ? cmp.name == null : this.name.equals(cmp.name))
+                && (this.numeric == cmp.numeric)
+                && (this.recodable == cmp.recodable)
+                && (this.related == cmp.related)
+                && (this.startingPosition == cmp.startingPosition)
+                && (this.suppressweight == cmp.suppressweight)
+                && (this.truncable == cmp.truncable)
+                && (this.variableLength == cmp.variableLength)
+                && (this.weight == cmp.weight)
+        ;
     }
+
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 41 * hash + Objects.hashCode(this.categorical);
+        hash = 41 * hash + Objects.hashCode(this.codelist);
+        hash = 41 * hash + Objects.hashCode(this.codeListFile);
+        hash = 41 * hash + this.decimals;
+        hash = 41 * hash + Objects.hashCode(this.house_id);
+        hash = 41 * hash + Objects.hashCode(this.household);
+        hash = 41 * hash + this.idLevel;
+        hash = 41 * hash + Objects.hashCode(this.missing);
+        hash = 41 * hash + Objects.hashCode(this.name);
+        hash = 41 * hash + Objects.hashCode(this.numeric);
+        hash = 41 * hash + Objects.hashCode(this.recodable);
+        hash = 41 * hash + Objects.hashCode(this.related);
+        hash = 41 * hash + this.startingPosition;
+        hash = 41 * hash + Objects.hashCode(this.suppressweight);
+        hash = 41 * hash + Objects.hashCode(this.truncable);
+        hash = 41 * hash + this.variableLength;
+        hash = 41 * hash + Objects.hashCode(this.weight);
+        
+        return hash;
+    }
+    
+    
     
 }

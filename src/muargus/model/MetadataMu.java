@@ -12,6 +12,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.commons.lang3.StringUtils;
@@ -269,10 +270,20 @@ public class MetadataMu implements Cloneable {
 
         metadataMu.variables = (ArrayList<VariableMu>) this.variables.clone();
         metadataMu.dataFileType = this.dataFileType;
-        metadataMu.filenames = this.filenames; //no clone needed
+        metadataMu.filenames = this.filenames; //no clone needed here
         metadataMu.separator = this.separator;
 
         return metadataMu;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 41 * hash + Objects.hashCode(this.separator);
+        hash = 41 * hash + this.dataFileType;
+        hash = 41 * hash + Objects.hashCode(this.filenames);
+        hash = 41 * hash + Objects.hashCode(this.variables);
+        return hash;
     }
 
     
@@ -289,6 +300,8 @@ public class MetadataMu implements Cloneable {
         if (!this.separator.equals(cmp.separator))
             return false;
         if (this.dataFileType != cmp.dataFileType)
+            return false;
+        if (this.filenames != cmp.filenames)
             return false;
         return this.variables.equals(cmp.variables);
     }
