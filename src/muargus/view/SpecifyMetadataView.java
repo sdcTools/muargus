@@ -11,6 +11,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.AbstractListModel;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.DefaultListModel;
 import muargus.model.MetadataMu;
 import muargus.controller.SpecifyMetadataController;
 import muargus.model.SpecifyMetadataModel;
@@ -35,6 +36,7 @@ public class SpecifyMetadataView extends javax.swing.JDialog {
     private boolean change = false;
     private String separatorTemp;
     private AbstractListModel abstractListModel;
+    private DefaultListModel<Variables> variableListModel;
 
 
     public SpecifyMetadataView(java.awt.Frame parent, boolean modal) {
@@ -87,8 +89,18 @@ public class SpecifyMetadataView extends javax.swing.JDialog {
             names[i] = tempVariables.get(i).getName();
             related[i+1] = tempVariables.get(i).getName();
         }
+//        variableListModel = new DefaultListModel<Variables>();
+//        for (Variables variable : tempVariables) {
+//            variableListModel.addElement(variable);
+//        }
+//        variablesList.setModel(variableListModel);
+//        
+//        if (variableListModel.getSize() > 0) {
+//            variablesList.setSelectedIndex(0);
+//        }
         
-        // sets the variable names to the variablesJList
+        
+//        // sets the variable names to the variablesJList
         variablesList.setModel(new javax.swing.AbstractListModel() {
             String[] strings = names;
             public int getSize() { return strings.length; }
@@ -211,7 +223,7 @@ public class SpecifyMetadataView extends javax.swing.JDialog {
         variablesPanel = new javax.swing.JPanel();
         variablesComboBox = new javax.swing.JComboBox();
         variablesScrollPane = new javax.swing.JScrollPane();
-        variablesList = new javax.swing.JList();
+        variablesList = new javax.swing.JList<muargus.model.Variables>();
         moveUpButton = new javax.swing.JButton();
         moveDownButton = new javax.swing.JButton();
         separatorTextField = new javax.swing.JTextField();
@@ -265,11 +277,6 @@ public class SpecifyMetadataView extends javax.swing.JDialog {
             }
         });
 
-        variablesList.setModel(new javax.swing.AbstractListModel() {
-            String[] strings = { "item 1", "item 2" };
-            public int getSize() { return strings.length; }
-            public Object getElementAt(int i) { return strings[i]; }
-        });
         variablesList.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         variablesList.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
             public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
