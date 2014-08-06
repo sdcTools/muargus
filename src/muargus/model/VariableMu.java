@@ -4,6 +4,8 @@
  */
 package muargus.model;
 
+import argus.model.ArgusException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Objects;
 
@@ -48,8 +50,8 @@ public class VariableMu implements Cloneable{
     private boolean weight = false;
     private boolean house_id = false;
     private boolean household = false;
-    private boolean related = false; // check how many variables a variable can be related to
-    // private Variable relatedVariable = null;
+    private String relatedVariableName = null;
+    private VariableMu relatedVariable = null;
     
     /**
      * Empty constructor
@@ -178,12 +180,25 @@ public class VariableMu implements Cloneable{
         this.household = household;
     }
 
-    public boolean isRelated() {
-        return related;
+    public void linkRelatedVariable(ArrayList<VariableMu> variables) throws ArgusException {
+        if (this.relatedVariableName == null) {
+            this.relatedVariable = null;
+        } else {
+            for (VariableMu var : variables) {
+                if (relatedVariableName.equalsIgnoreCase(var.getName())) {
+                    this.relatedVariable = var;
+                }
+            }
+            throw new ArgusException("Variable " + this.name + " related to non-specified variable " + this.relatedVariableName);
+        }
+    }
+    
+    public VariableMu getRelatedVariable() {
+        return this.relatedVariable;
     }
 
-    public void setRelated(boolean related) {
-        this.related = related;
+    public void setRelatedVariableName(String relatedVariableName) {
+        this.relatedVariableName = relatedVariableName;
     }
 
     public int getStartingPosition() {
@@ -227,7 +242,7 @@ public class VariableMu implements Cloneable{
         variable.name = this.name;
         variable.numeric = this.numeric;
         variable.recodable = this.recodable;
-        variable.related = this.related; //TODO: change type
+        variable.relatedVariableName = this.relatedVariableName; //TODO: change type
         variable.startingPosition = this.startingPosition;
         variable.suppressweight = this.suppressweight;
         variable.truncable = this.truncable;
@@ -251,7 +266,7 @@ public class VariableMu implements Cloneable{
                 && (this.name == null ? cmp.name == null : this.name.equals(cmp.name))
                 && (this.numeric == cmp.numeric)
                 && (this.recodable == cmp.recodable)
-                && (this.related == cmp.related)
+                && (this.relatedVariableName == cmp.relatedVariableName)
                 && (this.startingPosition == cmp.startingPosition)
                 && (this.suppressweight == cmp.suppressweight)
                 && (this.truncable == cmp.truncable)
@@ -274,7 +289,7 @@ public class VariableMu implements Cloneable{
         hash = 41 * hash + Objects.hashCode(this.name);
         hash = 41 * hash + Objects.hashCode(this.numeric);
         hash = 41 * hash + Objects.hashCode(this.recodable);
-        hash = 41 * hash + Objects.hashCode(this.related);
+        hash = 41 * hash + Objects.hashCode(this.relatedVariableName);
         hash = 41 * hash + this.startingPosition;
         hash = 41 * hash + Objects.hashCode(this.suppressweight);
         hash = 41 * hash + Objects.hashCode(this.truncable);

@@ -114,7 +114,7 @@ public class MetadataMu implements Cloneable {
                         setDataFileType(DATA_FILE_TYPE_FREE);
                         //setFree(true);
                         //if(!tokenizer.nextToken().equals(""))
-                        setSeparator(value);
+                        setSeparator(tokenizer.nextToken());
                         break;
                     case "<SPSS>":
                         setDataFileType(DATA_FILE_TYPE_SPSS);
@@ -161,14 +161,14 @@ public class MetadataMu implements Cloneable {
                         variable.setSuppressweight(tokenizer.nextToken());
                         break;
                     case "<RELATED>":
-                        variable.setRelated(true);
+                        variable.setRelatedVariableName(tokenizer.nextToken());
                         break;
                     default:
                         break;
                 }
             }
         }
-        SpecifyMetadataModel.setVariables(variables);
+        //SpecifyMetadataModel.setVariables(variables);
 //        try {
 //            ;
 //            //cloneData = makeClone(variables);
@@ -176,9 +176,18 @@ public class MetadataMu implements Cloneable {
 //            Logger.getLogger(MetadataMu.class.getName()).log(Level.SEVERE, null, ex);
 //        }
 //        TestClone();
+        linkRelatedVariables();
         verify();
     }
 
+    private void linkRelatedVariables() throws ArgusException {
+        for (VariableMu var : variables) {
+            var.linkRelatedVariable(variables);
+        }
+            
+    }
+    
+    
     // TODO: add a message explaining whats the problem
     public void verify() throws ArgusException {
         for (int i = 0; i < variables.size(); i++) {
@@ -251,7 +260,7 @@ public class MetadataMu implements Cloneable {
                 System.out.println("\tHouse_ID is " + v.isHouse_id());
                 System.out.println("\tHousehold is " + v.isHousehold());
                 System.out.println("\tSuppressWeight is " + v.getSuppressweight());
-                System.out.println("\tRelated is " + v.isRelated());
+                //System.out.println("\tRelatedVariable is " + v.getRelatedVariable().getName());
             }
         } catch (Exception e) {
         }
