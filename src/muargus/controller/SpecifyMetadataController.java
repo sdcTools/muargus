@@ -65,10 +65,13 @@ public class SpecifyMetadataController {
     /**
      * 
      */
-    public void ok() {                                         
+    public void ok() {
+        if (!this.metadata.equals(this.metadataClone))
+        {
+        }
         this.view.setVisible(false);
     }                                        
-
+    
     /**
      * 
      */
