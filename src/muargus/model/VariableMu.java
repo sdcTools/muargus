@@ -60,7 +60,6 @@ public class VariableMu implements Cloneable{
     
     public VariableMu(String name) {
         this.name = name;
-        missing = new String[0];
     }
 
     /**
