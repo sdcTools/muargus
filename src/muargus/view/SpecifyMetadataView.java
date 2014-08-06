@@ -29,7 +29,7 @@ public class SpecifyMetadataView extends javax.swing.JDialog {
     
     SpecifyMetadataController controller;
     private ArrayList<VariableMu> cloneVariables;
-    private String[] related;
+    private ArrayList<VariableMu> related;
     private String[] idLevel = {"0","1","2","3","4","5"};
     private String[] format = {"Fixed format", "Free format", "Free with meta", "SPSS system file" }; // maak hier enum van
     private String[] suppressionWeight = new String[101];
@@ -60,6 +60,7 @@ public class SpecifyMetadataView extends javax.swing.JDialog {
         this.setLocationRelativeTo(null);
         variablesList.setSelectionModel(new SingleListSelectionModel());
         variablesList.setCellRenderer(new VariableNameCellRenderer());
+        relatedToComboBox.setRenderer(new VariableNameCellRenderer());
         //this.metadataMu = metadata;
         
         //makeVariables();
@@ -91,19 +92,31 @@ public class SpecifyMetadataView extends javax.swing.JDialog {
         //}
         //tempVariables = ((MetadataMu) metadataMu.clone()). MetadataMu.getClone();
         separatorTemp = metadataMu.getSeparator();
+        
+        
+        
         cloneVariables = metadataMu.getVariables();
         variableListModel = new DefaultListModel<>(); 
         for (VariableMu variable : cloneVariables) {
             variableListModel.addElement(variable);
         }
+        
+        related = new ArrayList<>();
+        related.add(new VariableMu("--none--"));
+        related.addAll(cloneVariables);
+        
+        relatedToComboBox.setModel(
+                new javax.swing.DefaultComboBoxModel(related.toArray()));
+                //new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        
         variablesList.setModel(variableListModel);
         if (variableListModel.getSize() > 0) {
             //index = 0;
             variablesList.setSelectedIndex(0);
         }
 
-//        related = new String[originalVariables.size()+1];
-//        related [0] = "--none--";
+        
+        
         
         // initializes the variable names for the variablesJList and relatedJComboBox
 //        for(int i = 0; i< originalVariables.size(); i++){
@@ -235,7 +248,7 @@ public class SpecifyMetadataView extends javax.swing.JDialog {
         variablesPanel = new javax.swing.JPanel();
         variablesComboBox = new javax.swing.JComboBox();
         variablesScrollPane = new javax.swing.JScrollPane();
-        variablesList = new javax.swing.JList<muargus.model.VariableMu>();
+        variablesList = new javax.swing.JList<>();
         moveUpButton = new javax.swing.JButton();
         moveDownButton = new javax.swing.JButton();
         separatorTextField = new javax.swing.JTextField();
