@@ -19,10 +19,10 @@
 10. waarschuwingsscherm cancel
 11. geen integer in de drie int velden: save()                      Anne: (onderdeel van Ok-button check)
 12. inhoudelijke controles:                                         Anne: (onderdeel van Ok-button check)
-  a. overlappende velden
+  a. overlappende velden                                            Anne: werkt
   b. related to
-  c. weight numeriek en niet caegorisch, geen missing 
-  d. lengtes van missing
+  c. weight numeriek en niet categorisch, geen missing 
+  d. lengtes van missing                                            Anne: werkt
 13. options for argus + missing + truncation +                      Jeldrik: 
     codelijst: afhankelijk van categorical
 
