@@ -50,6 +50,8 @@ public class VariableMu implements Cloneable{
     private boolean weight = false;
     private boolean house_id = false;
     private boolean household = false;
+    private boolean other = true;
+    private boolean related = false;
     private String relatedVariableName = null;
     private VariableMu relatedVariable = null;
     
@@ -193,12 +195,26 @@ public class VariableMu implements Cloneable{
         }
     }
     
+    public void setRelatedVariable(VariableMu relatedVariable){
+        this.relatedVariable = relatedVariable;
+    }
+    
     public VariableMu getRelatedVariable() {
         return this.relatedVariable;
     }
 
     public void setRelatedVariableName(String relatedVariableName) {
         this.relatedVariableName = relatedVariableName;
+    }
+
+    public boolean isRelated() {
+        return related;
+    }
+
+    public void setRelated(boolean related) {
+        this.related = related;
+        
+            
     }
 
     public int getStartingPosition() {
@@ -223,6 +239,14 @@ public class VariableMu implements Cloneable{
 
     public void setMissing(int index, String value) {
         this.missing[index] = value;
+    }
+
+    public boolean isOther() {
+        return other;
+    }
+
+    public void setOther(boolean other) {
+        this.other = other;
     }
     
     @Override

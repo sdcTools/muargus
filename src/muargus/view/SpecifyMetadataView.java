@@ -216,18 +216,26 @@ public class SpecifyMetadataView extends javax.swing.JDialog {
         weightRadioButton.setSelected(selected.isWeight());
         hhIdentifierRadioButton.setSelected(selected.isHouse_id());
         hhvariableRadioButton.setSelected(selected.isHousehold());
+        weightRadioButton.setSelected(selected.isWeight());
+        otherRadioButton.setSelected(selected.isOther());
         missing1TextField.setText(selected.getMissing(0));
         missing2TextField.setText(selected.getMissing(1));
         startingPositionTextField.setText(Integer.toString(selected.getStartingPosition()));
         lengthTextField.setText(Integer.toString(selected.getVariableLength()));
         separatorTextField.setText(separatorTemp);
         
-        int items = relatedToComboBox.getItemCount();
-        if(items == related.size()){
+        if(relatedToComboBox.getItemCount() == related.size()){
             relatedToComboBox.removeItem(selected);
         } else {
-            relatedToComboBox.insertItemAt(cloneVariables.get(previousIndex), previousIndex+1);
             relatedToComboBox.removeItem(selected);
+            // volgens mij zet ik hem hier nog niet altijd op de goeie plek
+            relatedToComboBox.insertItemAt(cloneVariables.get(previousIndex), previousIndex+1);
+            
+        }
+        if(selected.isRelated()){
+            relatedToComboBox.setSelectedItem(selected.getRelatedVariable());
+        } else {
+            relatedToComboBox.setSelectedIndex(0);
         }
         previousIndex = variablesList.getSelectedIndex();
     }
@@ -421,11 +429,9 @@ public class SpecifyMetadataView extends javax.swing.JDialog {
 
         nameLabel.setText("Name:");
 
-        nameTextField.addInputMethodListener(new java.awt.event.InputMethodListener() {
-            public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
-            }
-            public void inputMethodTextChanged(java.awt.event.InputMethodEvent evt) {
-                nameTextFieldInputMethodTextChanged(evt);
+        nameTextField.addCaretListener(new javax.swing.event.CaretListener() {
+            public void caretUpdate(javax.swing.event.CaretEvent evt) {
+                nameTextFieldCaretUpdate(evt);
             }
         });
 
@@ -916,7 +922,7 @@ public class SpecifyMetadataView extends javax.swing.JDialog {
     }//GEN-LAST:event_weightRadioButtonStateChanged
 
     private void otherRadioButtonStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_otherRadioButtonStateChanged
-        //tempVariables.get(index).setOther(otherRadioButton.isSelected());
+        getSelectedVariable().setOther(otherRadioButton.isSelected());
     }//GEN-LAST:event_otherRadioButtonStateChanged
 
     private void categoricalCheckBoxStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_categoricalCheckBoxStateChanged
@@ -943,11 +949,6 @@ public class SpecifyMetadataView extends javax.swing.JDialog {
             updateValues();
         }
     }//GEN-LAST:event_variablesListValueChanged
-
-    private void nameTextFieldInputMethodTextChanged(java.awt.event.InputMethodEvent evt) {//GEN-FIRST:event_nameTextFieldInputMethodTextChanged
-        // werkt nog niet
-        getSelectedVariable().setName(nameTextField.getText());
-    }//GEN-LAST:event_nameTextFieldInputMethodTextChanged
 
     private void startingPositionTextFieldCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_startingPositionTextFieldCaretUpdate
         try {
@@ -992,8 +993,18 @@ public class SpecifyMetadataView extends javax.swing.JDialog {
     }//GEN-LAST:event_weightLocalSuppressionComboBoxActionPerformed
 
     private void relatedToComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_relatedToComboBoxActionPerformed
-        getSelectedVariable().setSuppressweight((String) weightLocalSuppressionComboBox.getSelectedItem());
+        if(relatedToComboBox.getSelectedIndex() != 0){
+            getSelectedVariable().setRelatedVariable((VariableMu) relatedToComboBox.getSelectedItem());
+            getSelectedVariable().setRelated(true);
+        } else {
+            getSelectedVariable().setRelated(false);
+        }
     }//GEN-LAST:event_relatedToComboBoxActionPerformed
+
+    private void nameTextFieldCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_nameTextFieldCaretUpdate
+        getSelectedVariable().setName(nameTextField.getText());
+        variablesList.updateUI();
+    }//GEN-LAST:event_nameTextFieldCaretUpdate
 
     /**
      * @param args the command line arguments
