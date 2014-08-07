@@ -119,9 +119,15 @@ public class SpecifyMetadataController {
     /**
      * 
      */
-    public void cancel() {                                             
-        // TODO add your handling code here:
-    }                                            
+    public void cancel() {
+        if (!this.metadata.equals(this.metadataClone)) {
+            if (JOptionPane.showConfirmDialog(view, "All changes will be discarded. Are you sure?", "Mu Argus",
+                    JOptionPane.YES_NO_OPTION) == JOptionPane.NO_OPTION) {
+                return;
+            }
+        }
+        this.view.setVisible(false);
+    }
 
     /**
      * 

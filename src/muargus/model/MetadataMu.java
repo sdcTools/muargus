@@ -400,7 +400,9 @@ public class MetadataMu {
             return false;
         if (this.dataFileType != cmp.dataFileType)
             return false;
-        if (this.filenames != cmp.filenames)
+        if (this.filenames.getDataFileName() != cmp.filenames.getDataFileName())
+            return false;
+        if (this.filenames.getMetaFileName()!= cmp.filenames.getMetaFileName())
             return false;
         return this.variables.equals(cmp.variables);
     }
