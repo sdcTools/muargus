@@ -5,9 +5,12 @@
 package muargus.model;
 
 import argus.model.ArgusException;
+import argus.utils.StrUtils;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Objects;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  *
@@ -20,7 +23,7 @@ public class VariableMu {
     
        
 //    // Only used by variables of type 'Categorical'
-    public String[] missing = new String[MAX_NUMBER_OF_MISSINGS];
+    private String[] missing = new String[MAX_NUMBER_OF_MISSINGS];
     
 //
 //    // Only used in case of a recoded variable of type 'Categorical'
@@ -270,6 +273,48 @@ public class VariableMu {
         this.other = other;
     }
     
+    public void write(PrintWriter writer, final int dataFileType) {
+        writer.print(this.name);
+        if (MetadataMu.DATA_FILE_TYPE_FIXED == dataFileType) {
+            writer.print(" " + this.startingPosition);
+        } 
+        writer.print(" " + this.variableLength);
+        if (this.categorical) {
+            for (String missingValue : this.missing) {
+                if (StringUtils.isNotBlank(missingValue)) {
+                    writer.print(" " + StrUtils.quote(missingValue));
+                }
+            }
+        }
+        writer.println();
+        if (this.recodable) {
+            writer.println("    <RECODABLE>");
+        }
+        if (this.numeric) {
+            writer.println("    <NUMERIC>");
+        }
+        if (this.decimals > 0) {
+            writer.println("    <DECIMALS> " + this.decimals);
+        }
+        if (this.weight) {
+            writer.println("    <WEIGHT>");
+        }
+        if (this.house_id) {
+            writer.println("    <HOUSE_ID>");
+        }
+        if (this.truncable)
+            writer.println("    <TRUNCABLE>");
+        writer.println("    <IDLEVEL> " + this.idLevel);
+        writer.println("    <SUPPRESSWEIGHT> " + this.suppressweight);
+        if (this.codelist)
+            writer.println("    <CODELIST> " + StrUtils.quote(this.codeListFile));
+        if (this.household) {
+            writer.println("    <HOUSEHOLD>");
+        }
+        if (this.relatedVariable != null) { 
+            writer.println("    <RELATED> "  + StrUtils.quote(this.relatedVariable.getName()));
+        }
+    }
     
     
         @Override

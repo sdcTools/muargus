@@ -3,10 +3,11 @@ package muargus.controller;
 
 import argus.model.ArgusException;
 import java.util.ArrayList;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import muargus.MuARGUS;
 import muargus.model.MetadataMu;
 import muargus.view.SpecifyMetadataView;
 
@@ -73,6 +74,16 @@ public class SpecifyMetadataController {
                         ex.getMessage());
                 return;
             }
+            
+            this.metadata = this.metadataClone;
+            if (JOptionPane.showConfirmDialog(view, "Metadata has been changed. Save changes?", "Mu Argus",
+                    JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+                JFileChooser fileChooser = new JFileChooser();
+                if (fileChooser.showSaveDialog(view) == JFileChooser.APPROVE_OPTION) {
+                    this.metadata.write(fileChooser.getSelectedFile());
+                }
+            }
+            MuARGUS.setMetadata(this.metadata);
         } 
         this.view.setVisible(false);
     }                                        

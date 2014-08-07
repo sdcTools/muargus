@@ -14,7 +14,6 @@ import muargus.model.MetadataMu;
 public class MainFrameView extends javax.swing.JFrame {
     
     //private DataFilePair dataFilePair;
-    private MetadataMu metadata;
     MainFrameController controller;
 
     /**
@@ -728,7 +727,7 @@ public class MainFrameView extends javax.swing.JFrame {
 //                //panelTable.setVisible(false);
 //                //TableService.clearTables();
 //                Application.clearMetadatas();
-                 metadata = new MetadataMu();
+                 MetadataMu metadata = new MetadataMu();
                  metadata.setFileNames(dataFilePair);
                  try {
                  metadata.readMetadata();
@@ -778,7 +777,7 @@ public class MainFrameView extends javax.swing.JFrame {
 //        String b = dataFilePair.getMetaFileName();
 //        System.out.printf("%s\n", b);
 
-        controller.specifyMetaData(metadata);
+        controller.specifyMetaData(MuARGUS.getMetadata());
     }//GEN-LAST:event_metaDataMenuItemActionPerformed
 
     private void combinationsMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_combinationsMenuItemActionPerformed

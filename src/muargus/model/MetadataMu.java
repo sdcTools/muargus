@@ -6,11 +6,17 @@ package muargus.model;
 
 import argus.model.ArgusException;
 import argus.model.DataFilePair;
+import argus.utils.StrUtils;
 import argus.utils.Tokenizer;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.logging.Level;
@@ -186,18 +192,54 @@ public class MetadataMu {
                 }
             }
         }
-        //SpecifyMetadataModel.setVariables(variables);
-//        try {
-//            ;
-//            //cloneData = makeClone(variables);
-//        } catch (CloneNotSupportedException ex) {
-//            Logger.getLogger(MetadataMu.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-//        TestClone();
+        tokenizer.close();
+
         linkRelatedVariables();
         verify();
     }
 
+    private void writeVariable(Writer w, VariableMu variable) {
+    
+    }
+    private void write(Writer w) throws IOException, ArgusException {
+// Anco 1.6
+// try with resources verwijderd.        
+//        try (PrintWriter writer = new PrintWriter(w)) {
+        PrintWriter writer = null;
+        try {  writer = new PrintWriter(w);
+            if (dataFileType == DATA_FILE_TYPE_FREE) {
+                writer.println("   <SEPARATOR> " + StrUtils.quote(separator));
+            }
+            if (dataFileType == DATA_FILE_TYPE_SPSS) {
+                writer.println("   <SPSS>");
+            }
+//            if (dataOrigin != DATA_ORIGIN_MICRO) {
+//                writer.println("   <SAFE> " + StrUtils.quote(safeStatus));
+//                writer.println("   <UNSAFE> " + StrUtils.quote(unSafeStatus));
+//                writer.println("   <PROTECT> " + StrUtils.quote(protectStatus));
+//            }
+            for (VariableMu variable : this.variables) {
+                variable.write(writer, this.dataFileType);
+            }
+        }
+        finally {
+            if (writer != null) 
+                writer.close();
+        }
+    }
+
+    public void write(File file) {
+        try {
+            write(new BufferedWriter(new FileWriter(file)));
+// anco 1            
+//        } catch (ArgusException | IOException ex) {
+          } catch (ArgusException ex) {
+            logger.log(Level.SEVERE, null, ex);
+          } catch (IOException ex) {
+            logger.log(Level.SEVERE, null, ex);
+        }
+    }
+    
     private void linkRelatedVariables() throws ArgusException{
         for (VariableMu var : variables) {
             var.linkRelatedVariable(variables);
