@@ -7,6 +7,7 @@ package muargus.view;
 import argus.model.ArgusException;
 import argus.utils.SingleListSelectionModel;
 import argus.utils.SystemUtils;
+import java.awt.Component;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -29,13 +30,14 @@ public class SpecifyMetadataView extends javax.swing.JDialog {
     
     SpecifyMetadataController controller;
     private ArrayList<VariableMu> cloneVariables;
-    private String[] related;
+    private ArrayList<VariableMu> related;
     private String[] idLevel = {"0","1","2","3","4","5"};
     private String[] format = {"Fixed format", "Free format", "Free with meta", "SPSS system file" }; // maak hier enum van
     private String[] suppressionWeight = new String[101];
     private MetadataMu metadataMu;
     private boolean change = false;
     private String separatorTemp;
+    private int previousIndex;
     
     private DefaultListModel variableListModel;
 
@@ -60,6 +62,7 @@ public class SpecifyMetadataView extends javax.swing.JDialog {
         this.setLocationRelativeTo(null);
         variablesList.setSelectionModel(new SingleListSelectionModel());
         variablesList.setCellRenderer(new VariableNameCellRenderer());
+        relatedToComboBox.setRenderer(new VariableNameCellRenderer());
         //this.metadataMu = metadata;
         
         //makeVariables();
@@ -91,19 +94,31 @@ public class SpecifyMetadataView extends javax.swing.JDialog {
         //}
         //tempVariables = ((MetadataMu) metadataMu.clone()). MetadataMu.getClone();
         separatorTemp = metadataMu.getSeparator();
+        
+        
+        previousIndex = 0;
         cloneVariables = metadataMu.getVariables();
         variableListModel = new DefaultListModel<>(); 
         for (VariableMu variable : cloneVariables) {
             variableListModel.addElement(variable);
         }
+        
+        related = new ArrayList<>();
+        related.add(new VariableMu("--none--"));
+        related.addAll(cloneVariables);
+        
+        relatedToComboBox.setModel(
+                new javax.swing.DefaultComboBoxModel(related.toArray()));
+                //new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        
         variablesList.setModel(variableListModel);
         if (variableListModel.getSize() > 0) {
             //index = 0;
             variablesList.setSelectedIndex(0);
         }
 
-//        related = new String[originalVariables.size()+1];
-//        related [0] = "--none--";
+        
+        
         
         // initializes the variable names for the variablesJList and relatedJComboBox
 //        for(int i = 0; i< originalVariables.size(); i++){
@@ -136,7 +151,6 @@ public class SpecifyMetadataView extends javax.swing.JDialog {
                 setSpss(true);
                 break;
         }
-        
         updateValues();
         calculateButtonStates();
     }
@@ -201,11 +215,29 @@ public class SpecifyMetadataView extends javax.swing.JDialog {
         weightRadioButton.setSelected(selected.isWeight());
         hhIdentifierRadioButton.setSelected(selected.isHouse_id());
         hhvariableRadioButton.setSelected(selected.isHousehold());
+        weightRadioButton.setSelected(selected.isWeight());
+        otherRadioButton.setSelected(selected.isOther());
         missing1TextField.setText(selected.getMissing(0));
         missing2TextField.setText(selected.getMissing(1));
         startingPositionTextField.setText(Integer.toString(selected.getStartingPosition()));
         lengthTextField.setText(Integer.toString(selected.getVariableLength()));
         separatorTextField.setText(separatorTemp);
+        // moet aangepast worden want dit is geen goede test. Zeker als er nieuwe variabelen worden aangemaakt
+        // of variabelen worden delete
+        if(relatedToComboBox.getItemCount() == related.size()){
+            relatedToComboBox.removeItem(selected);
+        } else {
+            relatedToComboBox.removeItem(selected);
+            // volgens mij zet ik hem hier nog niet altijd op de goeie plek
+            relatedToComboBox.insertItemAt(cloneVariables.get(previousIndex), previousIndex+1);
+            
+        }
+        if(selected.isRelated()){
+            relatedToComboBox.setSelectedItem(selected.getRelatedVariable());
+        } else {
+            relatedToComboBox.setSelectedIndex(0);
+        }
+        previousIndex = variablesList.getSelectedIndex();
     }
     
     private void calculateButtonStates() {
@@ -235,7 +267,7 @@ public class SpecifyMetadataView extends javax.swing.JDialog {
         variablesPanel = new javax.swing.JPanel();
         variablesComboBox = new javax.swing.JComboBox();
         variablesScrollPane = new javax.swing.JScrollPane();
-        variablesList = new javax.swing.JList<muargus.model.VariableMu>();
+        variablesList = new javax.swing.JList<>();
         moveUpButton = new javax.swing.JButton();
         moveDownButton = new javax.swing.JButton();
         separatorTextField = new javax.swing.JTextField();
@@ -397,11 +429,9 @@ public class SpecifyMetadataView extends javax.swing.JDialog {
 
         nameLabel.setText("Name:");
 
-        nameTextField.addInputMethodListener(new java.awt.event.InputMethodListener() {
-            public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
-            }
-            public void inputMethodTextChanged(java.awt.event.InputMethodEvent evt) {
-                nameTextFieldInputMethodTextChanged(evt);
+        nameTextField.addCaretListener(new javax.swing.event.CaretListener() {
+            public void caretUpdate(javax.swing.event.CaretEvent evt) {
+                nameTextFieldCaretUpdate(evt);
             }
         });
 
@@ -892,7 +922,7 @@ public class SpecifyMetadataView extends javax.swing.JDialog {
     }//GEN-LAST:event_weightRadioButtonStateChanged
 
     private void otherRadioButtonStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_otherRadioButtonStateChanged
-        //tempVariables.get(index).setOther(otherRadioButton.isSelected());
+        getSelectedVariable().setOther(otherRadioButton.isSelected());
     }//GEN-LAST:event_otherRadioButtonStateChanged
 
     private void categoricalCheckBoxStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_categoricalCheckBoxStateChanged
@@ -919,11 +949,6 @@ public class SpecifyMetadataView extends javax.swing.JDialog {
             updateValues();
         }
     }//GEN-LAST:event_variablesListValueChanged
-
-    private void nameTextFieldInputMethodTextChanged(java.awt.event.InputMethodEvent evt) {//GEN-FIRST:event_nameTextFieldInputMethodTextChanged
-        // werkt nog niet
-        getSelectedVariable().setName(nameTextField.getText());
-    }//GEN-LAST:event_nameTextFieldInputMethodTextChanged
 
     private void startingPositionTextFieldCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_startingPositionTextFieldCaretUpdate
         try {
@@ -968,8 +993,18 @@ public class SpecifyMetadataView extends javax.swing.JDialog {
     }//GEN-LAST:event_weightLocalSuppressionComboBoxActionPerformed
 
     private void relatedToComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_relatedToComboBoxActionPerformed
-        getSelectedVariable().setSuppressweight((String) weightLocalSuppressionComboBox.getSelectedItem());
+        if(relatedToComboBox.getSelectedIndex() != 0){
+            getSelectedVariable().setRelatedVariable((VariableMu) relatedToComboBox.getSelectedItem());
+            getSelectedVariable().setRelated(true);
+        } else {
+            getSelectedVariable().setRelated(false);
+        }
     }//GEN-LAST:event_relatedToComboBoxActionPerformed
+
+    private void nameTextFieldCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_nameTextFieldCaretUpdate
+        getSelectedVariable().setName(nameTextField.getText());
+        variablesList.updateUI();
+    }//GEN-LAST:event_nameTextFieldCaretUpdate
 
     /**
      * @param args the command line arguments
