@@ -13,7 +13,7 @@ import java.util.Objects;
  *
  * @author ambargus
  */
-public class VariableMu implements Cloneable{
+public class VariableMu {
     
     // Determines lengths of fixed sized arrays being used
     public static final int MAX_NUMBER_OF_MISSINGS = 2;
@@ -57,11 +57,32 @@ public class VariableMu implements Cloneable{
      * Empty constructor
      */
     public VariableMu(){
-        this(null);
     }
     
     public VariableMu(String name) {
+        this();
         this.name = name;
+    }
+
+        public VariableMu(VariableMu variable) {
+        this();
+        this.categorical = variable.categorical;
+        this.codelist = variable.codelist;
+        this.codeListFile = variable.codeListFile;
+        this.decimals = variable.decimals;
+        this.house_id = variable.house_id;
+        this.household = variable.household;
+        this.idLevel = variable.idLevel;
+        this.missing = Arrays.copyOf(variable.missing, variable.missing.length);
+        this.name = variable.name;
+        this.numeric = variable.numeric;
+        this.recodable = variable.recodable;
+        this.relatedVariableName = variable.relatedVariableName;
+        this.startingPosition = variable.startingPosition;
+        this.suppressweight = variable.suppressweight;
+        this.truncable = variable.truncable;
+        this.variableLength = variable.variableLength;
+        this.weight = variable.weight;
     }
 
     /**
@@ -225,32 +246,7 @@ public class VariableMu implements Cloneable{
         this.missing[index] = value;
     }
     
-    @Override
-    public Object clone() throws CloneNotSupportedException {
-        VariableMu variable = (VariableMu)super.clone();
-        
-        variable.categorical = this.categorical;
-        variable.codelist = this.codelist;
-        variable.codeListFile = this.codeListFile;
-        variable.decimals = this.decimals;
-        variable.house_id = this.house_id;
-        variable.household = this.household;
-        variable.idLevel = this.idLevel;
-        if (this.missing != null) {
-            variable.missing = (String[])this.missing.clone();
-        }
-        variable.name = this.name;
-        variable.numeric = this.numeric;
-        variable.recodable = this.recodable;
-        variable.relatedVariableName = this.relatedVariableName; //TODO: change type
-        variable.startingPosition = this.startingPosition;
-        variable.suppressweight = this.suppressweight;
-        variable.truncable = this.truncable;
-        variable.variableLength = this.variableLength;
-        variable.weight = this.weight;
-        
-        return variable;
-    }
+    
     
         @Override
     public boolean equals(Object o) {

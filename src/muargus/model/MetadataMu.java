@@ -15,13 +15,12 @@ import java.util.ArrayList;
 import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.apache.commons.lang3.StringUtils;
 
 /**
  *
  * @author ambargus
  */
-public class MetadataMu implements Cloneable {
+public class MetadataMu {
 
     private static final Logger logger = Logger.getLogger(MetadataMu.class.getName());
 
@@ -55,14 +54,33 @@ public class MetadataMu implements Cloneable {
         variables = new ArrayList<>();
         filenames = new DataFilePair(null, null);
     }
+    
+    public MetadataMu(MetadataMu metadata) {
+        this();    
 
-    public static ArrayList<VariableMu> makeClone(ArrayList<VariableMu> list) throws CloneNotSupportedException {
-        ArrayList<VariableMu> clone = new ArrayList<>(list.size());
-        for (VariableMu item : list) {
-            clone.add((VariableMu) item.clone());
+        this.dataFileType = metadata.dataFileType;
+        this.filenames = new DataFilePair(
+                metadata.filenames.getDataFileName(),  metadata.filenames.getMetaFileName());
+        this.separator = metadata.separator;
+        for (VariableMu var : metadata.variables) {
+            this.variables.add(new VariableMu(var));
         }
-        return clone;
+        try {
+            linkRelatedVariables();
+        }
+        catch (ArgusException ex) {
+            ; //TODO: handle?
+        }
     }
+            
+
+//    public static ArrayList<VariableMu> makeClone(ArrayList<VariableMu> list) throws CloneNotSupportedException {
+//        ArrayList<VariableMu> clone = new ArrayList<>(list.size());
+//        for (VariableMu item : list) {
+//            clone.add((VariableMu) item.clone());
+//        }
+//        return clone;
+//    }
 
 //    public static ArrayList<Variables> getClone(){
 //        return cloneData;
@@ -180,7 +198,7 @@ public class MetadataMu implements Cloneable {
         verify();
     }
 
-    private void linkRelatedVariables() throws ArgusException {
+    private void linkRelatedVariables() throws ArgusException{
         for (VariableMu var : variables) {
             var.linkRelatedVariable(variables);
         }
@@ -190,24 +208,63 @@ public class MetadataMu implements Cloneable {
     
     // TODO: add a message explaining whats the problem
     public void verify() throws ArgusException {
-        for (int i = 0; i < variables.size(); i++) {
-            VariableMu variable = variables.get(i);
-            if (dataFileType == DATA_FILE_TYPE_FIXED) {
-                int b1 = variable.getStartingPosition();
-                int e1 = b1 + variable.getVariableLength();
-                for (int j = i + 1; j < variables.size(); j++) {
-                    VariableMu variable2 = variables.get(j);
-                    int b2 = variable2.getStartingPosition();
-                    int e2 = b2 + variable2.getVariableLength();
-                    if (b2 < e1 && e2 > b1) {
-                        throw new ArgusException("Variable " + variable.getName() + " and variable " + variable2.getName() + " overlap.");
-                    }
-                    if (StringUtils.equalsIgnoreCase(variable.getName(), variable2.getName())) {
-                        throw new ArgusException("Variable" + i + " and variable" + j + " have the same name.");
-                    }
+        for (VariableMu var : variables) {
+            
+            //Check for duplicate variable names
+            for (VariableMu var2 : variables) {
+                if (!var.equals(var2) && var.getName().equalsIgnoreCase(var2.getName())) {
+                    throw new ArgusException("Duplicate variable name: " + var.getName());
                 }
             }
+            
+            //Fixed file checks
+            if (dataFileType == DATA_FILE_TYPE_FIXED) {
+                int length = var.getVariableLength();
+
+                //Check if variableLength > 0
+                if (length <= 0)
+                    throw new ArgusException("Length of variable " + var.getName() + " must be > 0");
+                
+                //Check for overlap of variables in fixed file
+                int start = var.getStartingPosition();
+                int end = start + length;
+                for (VariableMu var2 : variables) {
+                    int start2 = var2.getStartingPosition();
+                    int end2 = start2 + var2.getVariableLength();
+                    if (!var.equals(var2) && start2 < end && start < end2)
+                        throw new ArgusException("Variables " + var.getName() + " and " + var2.getName() + " overlap");
+                }
+                         
+                //Check if length of missings is correct
+                for (int index=0; index < VariableMu.MAX_NUMBER_OF_MISSINGS; index++) {
+                    String missing = var.getMissing(index);
+                    if (missing != null && missing.length() > length)
+                        throw new ArgusException("Missing value for variable " + var.getName() + " too long");
+                }
+                    
+            }
+            
+                 
         }
+        
+//        for (int i = 0; i < variables.size(); i++) {
+//            VariableMu variable = variables.get(i);
+//            if (dataFileType == DATA_FILE_TYPE_FIXED) {
+//                int b1 = variable.getStartingPosition();
+//                int e1 = b1 + variable.getVariableLength();
+//                for (int j = i + 1; j < variables.size(); j++) {
+//                    VariableMu variable2 = variables.get(j);
+//                    int b2 = variable2.getStartingPosition();
+//                    int e2 = b2 + variable2.getVariableLength();
+//                    if (b2 < e1 && e2 > b1) {
+//                        throw new ArgusException("Variable " + variable.getName() + " and variable " + variable2.getName() + " overlap.");
+//                    }
+//                }
+//                if (StringUtils.equalsIgnoreCase(variable.getName(), variable2.getName())) {
+//                    throw new ArgusException("Variable" + i + " and variable" + j + " have the same name.");
+//                }
+//            }
+//        }
     }
 
 //    public void setMetadataFile(String metaFile){
@@ -274,17 +331,7 @@ public class MetadataMu implements Cloneable {
         this.variables = variables;
     }
 
-    @Override
-    public Object clone() throws CloneNotSupportedException {
-        MetadataMu metadataMu = (MetadataMu) super.clone();
 
-        metadataMu.variables = (ArrayList<VariableMu>) this.variables.clone();
-        metadataMu.dataFileType = this.dataFileType;
-        metadataMu.filenames = this.filenames; //no clone needed here
-        metadataMu.separator = this.separator;
-
-        return metadataMu;
-    }
 
     @Override
     public int hashCode() {

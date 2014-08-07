@@ -1,10 +1,12 @@
 // TODO: Combine buttonlist methods
 package muargus.controller;
 
+import argus.model.ArgusException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
+import javax.swing.JOptionPane;
 import muargus.model.MetadataMu;
 import muargus.view.SpecifyMetadataView;
 
@@ -28,13 +30,8 @@ public class SpecifyMetadataController {
     public SpecifyMetadataController(java.awt.Frame parentView, MetadataMu metadata) {
         this.view = new SpecifyMetadataView(parentView, true, this);
         this.metadata = metadata;
-        try {
-        this.metadataClone = (MetadataMu) metadata.clone();
-        }
-        catch (CloneNotSupportedException ex) {
-                        logger.log(Level.SEVERE, null, ex);
-        }
-        this.view.setMetadataMu(this.metadataClone  );
+        this.metadataClone = new  MetadataMu(metadata);
+        this.view.setMetadataMu(this.metadataClone);
             
         //this.view = view;
         //this.list = null;
@@ -68,7 +65,15 @@ public class SpecifyMetadataController {
     public void ok() {
         if (!this.metadata.equals(this.metadataClone))
         {
-        }
+            try {
+                this.metadataClone.verify();
+            }
+            catch (ArgusException ex) {
+                JOptionPane.showMessageDialog(view,
+                        ex.getMessage());
+                return;
+            }
+        } 
         this.view.setVisible(false);
     }                                        
     
