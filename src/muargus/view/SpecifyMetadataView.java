@@ -38,6 +38,7 @@ public class SpecifyMetadataView extends javax.swing.JDialog {
     private String separatorTemp;
     private int dataFileTypeTemp;
     private int previousIndex;
+    VariableMu previousVariableMu;
     
     private DefaultListModel variableListModel;
 
@@ -109,11 +110,9 @@ public class SpecifyMetadataView extends javax.swing.JDialog {
         
         relatedToComboBox.setModel(
                 new javax.swing.DefaultComboBoxModel(related.toArray()));
-                //new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         
         variablesList.setModel(variableListModel);
         if (variableListModel.getSize() > 0) {
-            //index = 0;
             variablesList.setSelectedIndex(0);
         }
 
@@ -226,22 +225,41 @@ public class SpecifyMetadataView extends javax.swing.JDialog {
         startingPositionTextField.setText(Integer.toString(selected.getStartingPosition()));
         lengthTextField.setText(Integer.toString(selected.getVariableLength()));
         separatorTextField.setText(separatorTemp);
-        // moet aangepast worden want dit is geen goede test. Zeker als er nieuwe variabelen worden aangemaakt
-        // of variabelen worden delete
-        if(relatedToComboBox.getItemCount() == related.size()){
+        
+        checkRelated(selected);
+         
+        if(previousVariableMu == null){
             relatedToComboBox.removeItem(selected);
         } else {
+            relatedToComboBox.insertItemAt(previousVariableMu, previousIndex);
             relatedToComboBox.removeItem(selected);
-            // volgens mij zet ik hem hier nog niet altijd op de goeie plek
-            relatedToComboBox.insertItemAt(cloneVariables.get(previousIndex), previousIndex+1);
-            
         }
+        
+        checkRelated(selected);
+        
+        previousIndex = getIndexOfRelated(selected);
+        previousVariableMu = (VariableMu) variablesList.getSelectedValue();
+    }
+    
+    private void checkRelated(VariableMu selected){
         if(selected.isRelated()){
             relatedToComboBox.setSelectedItem(selected.getRelatedVariable());
         } else {
             relatedToComboBox.setSelectedIndex(0);
         }
-        previousIndex = variablesList.getSelectedIndex();
+    }
+    
+    
+    private int getIndexOfRelated(VariableMu indexVariable){
+        int index = 1;
+        for(VariableMu variable: cloneVariables){
+            if(variable.equals(indexVariable)){
+                break;
+            }
+            index++;
+        }
+        return index;
+        
     }
     
     private void calculateButtonStates() {
