@@ -122,6 +122,7 @@ public class MetadataMu {
 
             if (!value.substring(0, 1).equals("<")) {
                 variable = new VariableMu();
+                variable.setRecodable(false);
                 variable.setName(tokenizer.getValue());
                 variables.add(variable);
                 if (getDataFileType() == DATA_FILE_TYPE_FIXED) {
@@ -167,7 +168,6 @@ public class MetadataMu {
                         break;
                     case "<NUMERIC>":
                         variable.setNumeric(true);
-                        variable.setCategorical(false);
                         break;
                     case "<DECIMALS>":
                         variable.setDecimals(tokenizer.nextToken());
