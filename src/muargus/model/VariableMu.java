@@ -46,7 +46,6 @@ public class VariableMu {
     private boolean numeric = false;
     private boolean categorical = true;
     
-    private boolean recodable = false;
     private boolean codelist = false;
     private boolean truncable = false;
     
@@ -80,7 +79,6 @@ public class VariableMu {
         this.missing = Arrays.copyOf(variable.missing, variable.missing.length);
         this.name = variable.name;
         this.numeric = variable.numeric;
-        this.recodable = variable.recodable;
         this.relatedVariableName = variable.relatedVariable == null ? 
                 null : variable.relatedVariable.getName();
         this.startingPosition = variable.startingPosition;
@@ -111,11 +109,11 @@ public class VariableMu {
      * @return 
      */
     public boolean isRecodable() {
-        return recodable;
+        return categorical;
     }
 
     public void setRecodable(boolean recodable) {
-        this.recodable = recodable;
+        this.categorical = recodable;
     }
 
     public boolean isCodelist() {
@@ -282,7 +280,7 @@ public class VariableMu {
             }
         }
         writer.println();
-        if (this.recodable) {
+        if (this.isRecodable()) {
             writer.println("    <RECODABLE>");
         }
         if (this.numeric) {
@@ -297,17 +295,21 @@ public class VariableMu {
         if (this.house_id) {
             writer.println("    <HOUSE_ID>");
         }
-        if (this.truncable)
-            writer.println("    <TRUNCABLE>");
-        writer.println("    <IDLEVEL> " + this.idLevel);
-        writer.println("    <SUPPRESSWEIGHT> " + this.suppressweight);
-        if (this.codelist)
-            writer.println("    <CODELIST> " + StrUtils.quote(this.codeListFile));
         if (this.household) {
             writer.println("    <HOUSEHOLD>");
         }
         if (this.relatedVariable != null) { 
             writer.println("    <RELATED> "  + StrUtils.quote(this.relatedVariable.getName()));
+        }
+        if (this.categorical) {
+            if (this.truncable) {
+                writer.println("    <TRUNCABLE>");
+            }
+            writer.println("    <IDLEVEL> " + this.idLevel);
+            writer.println("    <SUPPRESSWEIGHT> " + this.suppressweight);
+            if (this.codelist) {
+                writer.println("    <CODELIST> " + StrUtils.quote(this.codeListFile));
+            }
         }
     }
     
@@ -330,7 +332,6 @@ public class VariableMu {
                 && (Arrays.equals(this.missing, cmp.missing))
                 && (this.name == null ? cmp.name == null : this.name.equals(cmp.name))
                 && (this.numeric == cmp.numeric)
-                && (this.recodable == cmp.recodable)
                 && (this.relatedVariable == null ? cmp.relatedVariable == null 
                     : this.relatedVariable.getName().equals(cmpRelatedVariableName))
                 && (this.startingPosition == cmp.startingPosition)
@@ -356,7 +357,6 @@ public class VariableMu {
         hash = 41 * hash + Objects.hashCode(this.missing);
         hash = 41 * hash + Objects.hashCode(this.name);
         hash = 41 * hash + Objects.hashCode(this.numeric);
-        hash = 41 * hash + Objects.hashCode(this.recodable);
         hash = 41 * hash + Objects.hashCode(relatedVariableName);
         hash = 41 * hash + this.startingPosition;
         hash = 41 * hash + Objects.hashCode(this.suppressweight);

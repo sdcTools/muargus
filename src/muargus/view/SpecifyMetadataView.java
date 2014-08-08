@@ -4,22 +4,19 @@
  */
 package muargus.view;
 
-import argus.model.ArgusException;
 import argus.utils.SingleListSelectionModel;
 import argus.utils.SystemUtils;
 import java.awt.Component;
+import java.awt.Container;
 import java.io.File;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.AbstractListModel;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
+import javax.swing.JComponent;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import muargus.VariableNameCellRenderer;
 import muargus.model.MetadataMu;
 import muargus.controller.SpecifyMetadataController;
-import muargus.model.SpecifyMetadataModel;
 import muargus.model.VariableMu;
 
 /**
@@ -29,7 +26,6 @@ import muargus.model.VariableMu;
 public class SpecifyMetadataView extends javax.swing.JDialog {
     
     SpecifyMetadataController controller;
-    private ArrayList<VariableMu> cloneVariables;
     private ArrayList<VariableMu> related;
     private String[] idLevel = {"0","1","2","3","4","5"};
     private String[] format = {"Fixed format", "Free format", "Free with meta", "SPSS system file" }; // maak hier enum van
@@ -98,16 +94,12 @@ public class SpecifyMetadataView extends javax.swing.JDialog {
         dataFileTypeTemp = metadataMu.getDataFileType();
         
         previousIndex = 0;
-        cloneVariables = metadataMu.getVariables();
         variableListModel = new DefaultListModel<>(); 
-        for (VariableMu variable : cloneVariables) {
+        for (VariableMu variable : metadataMu.getVariables()) {
             variableListModel.addElement(variable);
         }
                 
         variablesList.setModel(variableListModel);
-        if (variableListModel.getSize() > 0) {
-            variablesList.setSelectedIndex(0);
-        }
 
         
         
@@ -143,7 +135,11 @@ public class SpecifyMetadataView extends javax.swing.JDialog {
                 setSpss(true);
                 break;
         }
-        updateValues();
+         if (variableListModel.getSize() > 0) {
+            //index = 0;
+            variablesList.setSelectedIndex(0);
+        }
+       //updateValues();
         calculateButtonStates();
     }
     
@@ -206,8 +202,8 @@ public class SpecifyMetadataView extends javax.swing.JDialog {
         codelistfileCheckBox.setSelected(selected.isCodelist());
         codelistfileTextField.setText(selected.getCodeListFile());
         weightLocalSuppressionComboBox.setSelectedIndex(selected.getSuppressweight());
+        categoricalCheckBox.setSelected(selected.isCategorical());
         numericalCheckBox.setSelected(selected.isNumeric());
-        categoricalCheckBox.setSelected(!selected.isNumeric());
         weightRadioButton.setSelected(selected.isWeight());
         hhIdentifierRadioButton.setSelected(selected.isHouse_id());
         hhvariableRadioButton.setSelected(selected.isHousehold());
@@ -559,7 +555,6 @@ public class SpecifyMetadataView extends javax.swing.JDialog {
             }
         });
 
-        variableTypeButtonGroup2.add(categoricalCheckBox);
         categoricalCheckBox.setSelected(true);
         categoricalCheckBox.setText("Categorical");
         categoricalCheckBox.addChangeListener(new javax.swing.event.ChangeListener() {
@@ -568,7 +563,6 @@ public class SpecifyMetadataView extends javax.swing.JDialog {
             }
         });
 
-        variableTypeButtonGroup2.add(numericalCheckBox);
         numericalCheckBox.setText("Numerical");
         numericalCheckBox.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
@@ -945,24 +939,67 @@ public class SpecifyMetadataView extends javax.swing.JDialog {
 
     private void hhIdentifierRadioButtonStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_hhIdentifierRadioButtonStateChanged
         getSelectedVariable().setHouse_id(hhIdentifierRadioButton.isSelected());
+        if (hhIdentifierRadioButton.isSelected()) {
+                categoricalCheckBox.setSelected(false);
+                categoricalCheckBox.setEnabled(false);
+                numericalCheckBox.setSelected(false);
+                numericalCheckBox.setEnabled(false);
+        }
     }//GEN-LAST:event_hhIdentifierRadioButtonStateChanged
 
     private void hhvariableRadioButtonStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_hhvariableRadioButtonStateChanged
         getSelectedVariable().setHousehold(hhvariableRadioButton.isSelected());
+        if (hhvariableRadioButton.isSelected()) {
+                categoricalCheckBox.setEnabled(true);
+                numericalCheckBox.setEnabled(true);
+        }
+
     }//GEN-LAST:event_hhvariableRadioButtonStateChanged
 
     private void weightRadioButtonStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_weightRadioButtonStateChanged
-        getSelectedVariable().setWeight(weightRadioButton.isSelected());        
+        getSelectedVariable().setWeight(weightRadioButton.isSelected());
+                if (weightRadioButton.isSelected()) {
+                categoricalCheckBox.setSelected(false);
+                categoricalCheckBox.setEnabled(false);
+                numericalCheckBox.setSelected(true);
+                numericalCheckBox.setEnabled(false);
+        }
     }//GEN-LAST:event_weightRadioButtonStateChanged
 
     private void otherRadioButtonStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_otherRadioButtonStateChanged
         getSelectedVariable().setOther(otherRadioButton.isSelected());
+        if (otherRadioButton.isSelected()) {
+                categoricalCheckBox.setEnabled(true);
+                numericalCheckBox.setEnabled(true);
+        }
     }//GEN-LAST:event_otherRadioButtonStateChanged
 
     private void categoricalCheckBoxStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_categoricalCheckBoxStateChanged
         getSelectedVariable().setCategorical(categoricalCheckBox.isSelected());
+        boolean enable = categoricalCheckBox.isSelected();
+        enableControls(this.categoriesPanel, enable);
+        enableControls(this.optionsArgusPanel, enable);
+//        categoriesPanel.setEnabled(enable);
+//        identificationComboBox.setEnabled(enable);
+//        identificationLevelLabel.setEnabled(enable);
+//        weightLocalSuppressionComboBox.setEnabled(enable);
+//        weightLocalSuppressionLabel.setEnabled(enable);
+//        optionsArgusPanel.setEnabled(enable);
+//        truncationAllowedCheckBox.setEnabled(enable);
+//        codelistfileCheckBox.setEnabled(enable);
+//        codelistfileTextField.setEnabled(enable);
+//        codelistfileButton.setEnabled(enable);
+//        missingsPanel.setEnabled(enable);
     }//GEN-LAST:event_categoricalCheckBoxStateChanged
 
+    private void enableControls(Component control, boolean enable) {
+        if (!(control instanceof JComponent))
+            return;
+        control.setEnabled(enable);
+        if (control instanceof Container)
+        for (Component c : ((Container)control).getComponents())
+            enableControls(c, enable);
+    }
     private void numericalCheckBoxStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_numericalCheckBoxStateChanged
         getSelectedVariable().setNumeric(numericalCheckBox.isSelected());
     }//GEN-LAST:event_numericalCheckBoxStateChanged
@@ -976,7 +1013,7 @@ public class SpecifyMetadataView extends javax.swing.JDialog {
     }//GEN-LAST:event_codelistfileCheckBoxStateChanged
 
     private void variablesListValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_variablesListValueChanged
-        if(evt.getValueIsAdjusting()){
+        if(!evt.getValueIsAdjusting()){
             VariableMu value = (VariableMu) variablesList.getSelectedValue();
             nameTextField.setText(value.getName());
             calculateButtonStates();

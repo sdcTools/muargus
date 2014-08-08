@@ -453,9 +453,6 @@
         </Component>
         <Component class="javax.swing.JCheckBox" name="categoricalCheckBox">
           <Properties>
-            <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
-              <ComponentRef name="variableTypeButtonGroup2"/>
-            </Property>
             <Property name="selected" type="boolean" value="true"/>
             <Property name="text" type="java.lang.String" value="Categorical"/>
           </Properties>
@@ -465,9 +462,6 @@
         </Component>
         <Component class="javax.swing.JCheckBox" name="numericalCheckBox">
           <Properties>
-            <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
-              <ComponentRef name="variableTypeButtonGroup2"/>
-            </Property>
             <Property name="text" type="java.lang.String" value="Numerical"/>
           </Properties>
           <Events>
