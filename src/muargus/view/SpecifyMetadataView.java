@@ -73,6 +73,7 @@ public class SpecifyMetadataView extends javax.swing.JDialog {
     public void setMetadataMu(MetadataMu metadataMu) {
         this.metadataMu = metadataMu;
         makeVariables();
+        variablesList.requestFocus();
     }
 
     public void makeVariables(){
