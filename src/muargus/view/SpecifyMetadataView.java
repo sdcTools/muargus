@@ -26,7 +26,6 @@ import muargus.model.VariableMu;
 public class SpecifyMetadataView extends javax.swing.JDialog {
     
     SpecifyMetadataController controller;
-    private ArrayList<VariableMu> cloneVariables;
     private ArrayList<VariableMu> related;
     private String[] idLevel = {"0","1","2","3","4","5"};
     private String[] format = {"Fixed format", "Free format", "Free with meta", "SPSS system file" }; // maak hier enum van
@@ -94,17 +93,12 @@ public class SpecifyMetadataView extends javax.swing.JDialog {
         dataFileTypeTemp = metadataMu.getDataFileType();
         
         previousIndex = 0;
-        cloneVariables = metadataMu.getVariables();
         variableListModel = new DefaultListModel<>(); 
-        for (VariableMu variable : cloneVariables) {
+        for (VariableMu variable : metadataMu.getVariables()) {
             variableListModel.addElement(variable);
         }
                 
         variablesList.setModel(variableListModel);
-        if (variableListModel.getSize() > 0) {
-            //index = 0;
-            variablesList.setSelectedIndex(0);
-        }
 
         
         
@@ -140,7 +134,11 @@ public class SpecifyMetadataView extends javax.swing.JDialog {
                 setSpss(true);
                 break;
         }
-        updateValues();
+         if (variableListModel.getSize() > 0) {
+            //index = 0;
+            variablesList.setSelectedIndex(0);
+        }
+       //updateValues();
         calculateButtonStates();
     }
     
@@ -1002,7 +1000,7 @@ public class SpecifyMetadataView extends javax.swing.JDialog {
     }//GEN-LAST:event_codelistfileCheckBoxStateChanged
 
     private void variablesListValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_variablesListValueChanged
-        if(evt.getValueIsAdjusting()){
+        if(!evt.getValueIsAdjusting()){
             VariableMu value = (VariableMu) variablesList.getSelectedValue();
             nameTextField.setText(value.getName());
             calculateButtonStates();
