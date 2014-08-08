@@ -248,17 +248,17 @@ public class SpecifyMetadataView extends javax.swing.JDialog {
     }
     
     
-    private int getIndexOfRelated(VariableMu indexVariable){
-        int index = 1;
-        for(VariableMu variable: cloneVariables){
-            if(variable.equals(indexVariable)){
-                break;
-            }
-            index++;
-        }
-        return index;
-        
-    }
+//    private int getIndexOfRelated(VariableMu indexVariable){
+//        int index = 1;
+//        for(VariableMu variable: cloneVariables){
+//            if(variable.equals(indexVariable)){
+//                break;
+//            }
+//            index++;
+//        }
+//        return index;
+//        
+//    }
     
     private void calculateButtonStates() {
         int index = variablesList.getSelectedIndex();
