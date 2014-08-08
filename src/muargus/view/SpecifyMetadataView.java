@@ -35,8 +35,8 @@ public class SpecifyMetadataView extends javax.swing.JDialog {
     private String[] format = {"Fixed format", "Free format", "Free with meta", "SPSS system file" }; // maak hier enum van
     private String[] suppressionWeight = new String[101];
     private MetadataMu metadataMu;
-    private boolean change = false;
     private String separatorTemp;
+    private int dataFileTypeTemp;
     private int previousIndex;
     
     private DefaultListModel variableListModel;
@@ -94,7 +94,7 @@ public class SpecifyMetadataView extends javax.swing.JDialog {
         //}
         //tempVariables = ((MetadataMu) metadataMu.clone()). MetadataMu.getClone();
         separatorTemp = metadataMu.getSeparator();
-        
+        dataFileTypeTemp = metadataMu.getDataFileType();
         
         previousIndex = 0;
         cloneVariables = metadataMu.getVariables();
@@ -156,6 +156,7 @@ public class SpecifyMetadataView extends javax.swing.JDialog {
     }
     
     public void setSpss(boolean b){
+        dataFileTypeTemp = MetadataMu.DATA_FILE_TYPE_SPSS;
         separatorLabel.setVisible(!b);
         separatorTextField.setVisible(!b);
         startingPositionLabel.setVisible(!b);
@@ -173,6 +174,7 @@ public class SpecifyMetadataView extends javax.swing.JDialog {
     
     public void setFixed(){
         setSpss(false);
+        dataFileTypeTemp = MetadataMu.DATA_FILE_TYPE_FIXED;
         separatorLabel.setVisible(false);
         separatorTextField.setVisible(false);
         startingPositionLabel.setVisible(true);
@@ -183,6 +185,7 @@ public class SpecifyMetadataView extends javax.swing.JDialog {
     
     public void setFree(){
         setSpss(false);
+        dataFileTypeTemp = MetadataMu.DATA_FILE_TYPE_FREE;
         separatorLabel.setVisible(true);
         separatorTextField.setVisible(true);
         startingPositionLabel.setVisible(false);
@@ -193,6 +196,7 @@ public class SpecifyMetadataView extends javax.swing.JDialog {
     
     public void setFreeWithMeta(){
         setSpss(false);
+        dataFileTypeTemp = MetadataMu.DATA_FILE_TYPE_FREE_WITH_META;
         separatorLabel.setVisible(true);
         separatorTextField.setVisible(true);
         startingPositionLabel.setVisible(false);
@@ -824,7 +828,17 @@ public class SpecifyMetadataView extends javax.swing.JDialog {
         controller.generate();
     }//GEN-LAST:event_generateButtonActionPerformed
 
+    private void updateMetadata() {
+        ArrayList<VariableMu> list = new ArrayList<VariableMu>();
+        for (Object o : variableListModel.toArray()) {
+            list.add((VariableMu) o);
+        }
+        metadataMu.setVariables(list);
+        metadataMu.setSeparator(separatorTemp);
+        metadataMu.setDataFileType(dataFileTypeTemp);
+    }
     private void okButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okButtonActionPerformed
+        updateMetadata();
         controller.ok();
     }//GEN-LAST:event_okButtonActionPerformed
 
@@ -879,7 +893,7 @@ public class SpecifyMetadataView extends javax.swing.JDialog {
     }//GEN-LAST:event_deleteButtonActionPerformed
 
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
-        System.out.println("Change = " + change);
+        updateMetadata();
         controller.cancel();
     }//GEN-LAST:event_cancelButtonActionPerformed
 

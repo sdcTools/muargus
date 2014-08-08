@@ -231,6 +231,7 @@ public class MetadataMu {
     public void write(File file) {
         try {
             write(new BufferedWriter(new FileWriter(file)));
+            this.filenames = new DataFilePair(this.filenames.getDataFileName(), file.getPath());
 // anco 1            
 //        } catch (ArgusException | IOException ex) {
           } catch (ArgusException ex) {
@@ -380,7 +381,8 @@ public class MetadataMu {
         int hash = 3;
         hash = 41 * hash + Objects.hashCode(this.separator);
         hash = 41 * hash + this.dataFileType;
-        hash = 41 * hash + Objects.hashCode(this.filenames);
+        hash = 41 * hash + Objects.hashCode(this.filenames.getDataFileName());
+        hash = 41 * hash + Objects.hashCode(this.filenames.getMetaFileName());
         hash = 41 * hash + Objects.hashCode(this.variables);
         return hash;
     }
@@ -400,10 +402,14 @@ public class MetadataMu {
             return false;
         if (this.dataFileType != cmp.dataFileType)
             return false;
-        if (this.filenames.getDataFileName() != cmp.filenames.getDataFileName())
+        if (this.filenames.getDataFileName() == null ? cmp.filenames.getDataFileName() != null : 
+                !this.filenames.getDataFileName().equals(cmp.filenames.getDataFileName())) {
             return false;
-        if (this.filenames.getMetaFileName()!= cmp.filenames.getMetaFileName())
+        }
+        if (this.filenames.getMetaFileName() == null ? cmp.filenames.getMetaFileName() != null : 
+                !this.filenames.getMetaFileName().equals(cmp.filenames.getMetaFileName())) {
             return false;
+        }
         return this.variables.equals(cmp.variables);
     }
 }
