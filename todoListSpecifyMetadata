@@ -2,8 +2,6 @@
 
 Dingen die nog gedaan moeten worden
 - Sommige controles na OK button
-- velden aanpassen met enabled (punt 13)
-
                                     
 1. default file aanpassen                                           Jeldrik: werkt niet meer --> er uit slopen en bij de main de buttons op disabled zetten?
 2. codelistfile testen/aanpassen dat files goed gevonden worden     Anne: pas bij gebruik codelijst-file check op bestaan gebeurt in oude mu ook pas later
@@ -28,7 +26,7 @@ Dingen die nog gedaan moeten worden
   b. related to                                                     Jeldrik: is niet meer nodig
   c. weight numeriek en niet categorisch, geen missing              Anne:
   d. lengtes van missing                                            Anne: werkt
-13. options for argus + missing + truncation +                      Anne: 
+13. options for argus + missing + truncation +                      Anne: werkt
     codelijst: afhankelijk van categorical
 
 
