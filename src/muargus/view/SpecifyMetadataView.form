@@ -352,9 +352,13 @@
         <Component class="javax.swing.JLabel" name="decimalsLabel">
           <Properties>
             <Property name="text" type="java.lang.String" value="Decimals:"/>
+            <Property name="enabled" type="boolean" value="false"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JTextField" name="decimalsTextField">
+          <Properties>
+            <Property name="enabled" type="boolean" value="false"/>
+          </Properties>
           <Events>
             <EventHandler event="caretUpdate" listener="javax.swing.event.CaretListener" parameters="javax.swing.event.CaretEvent" handler="decimalsTextFieldCaretUpdate"/>
           </Events>

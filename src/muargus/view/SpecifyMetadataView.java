@@ -459,7 +459,9 @@ public class SpecifyMetadataView extends javax.swing.JDialog {
         });
 
         decimalsLabel.setText("Decimals:");
+        decimalsLabel.setEnabled(false);
 
+        decimalsTextField.setEnabled(false);
         decimalsTextField.addCaretListener(new javax.swing.event.CaretListener() {
             public void caretUpdate(javax.swing.event.CaretEvent evt) {
                 decimalsTextFieldCaretUpdate(evt);
@@ -989,6 +991,8 @@ public class SpecifyMetadataView extends javax.swing.JDialog {
     }
     private void numericalCheckBoxStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_numericalCheckBoxStateChanged
         getSelectedVariable().setNumeric(numericalCheckBox.isSelected());
+        decimalsLabel.setEnabled(numericalCheckBox.isSelected());
+        decimalsTextField.setEnabled(numericalCheckBox.isSelected());
     }//GEN-LAST:event_numericalCheckBoxStateChanged
 
     private void truncationAllowedCheckBoxStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_truncationAllowedCheckBoxStateChanged
