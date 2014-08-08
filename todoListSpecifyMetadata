@@ -2,21 +2,15 @@
 
 Dingen die nog gedaan moeten worden
 - Sommige controles na OK button
-- Cancel button
 - velden aanpassen met enabled (punt 13)
-- bij related (3b) loopt het nog niet helemaal soepel. Dit komt omdat ik probeer om het onmogelijk te maken om 
-    de variabele aan zichzelf te relateren. De fout zit volgens mij bij SpecifyMetadataView regel 232
-    Bug: Als je het programma runt en bij het specify metadata scherm komt, vervolgens klik je op de tweede variabele (SEX)
-    en dan weer op de eerste (REGION), dan zie je bij related dat de volgorde niet meer goed is. (AGE) staat op de verkeerde
-    plek.
 
                                     
 1. default file aanpassen                                           Jeldrik: werkt niet meer --> er uit slopen en bij de main de buttons op disabled zetten?
 2. codelistfile testen/aanpassen dat files goed gevonden worden     Anne: pas bij gebruik codelijst-file check op bestaan gebeurt in oude mu ook pas later
    (dus zowel regio.cdl als volledige path)	
 2a. file open box bij codelist                                      Jeldrik: werkt
-3. zorgen dat aanpassingen in de tempVariable worden opgeslagen	
-3.a related to                                                      Jeldrik: werkt nog niet perfect
+3. zorgen dat aanpassingen in de tempVariable worden opgeslagen	    Anne: werkt
+3.a related to                                                      Anne: is opgelost
 3.b name                                                            Jeldrik: werkt
 3.c id lvl                                                          Jeldrik: werkt 
 3.d suppressionweight                                               Jeldrik: werkt 
@@ -27,14 +21,14 @@ Dingen die nog gedaan moeten worden
 7. functionaliteit move up/down button                              Jeldrik: werkt
 8. functionaliteit cancel button                                    Jeldrik: werkt
 9. functionaliteit ok button (wegschrijven van de gegevens)         Anne: werkt
-10. waarschuwingsscherm cancel                                      Anne: 
+10. waarschuwingsscherm cancel                                      Anne: werkt
 11. geen integer in de drie int velden: save()                      Anne: (onderdeel van Ok-button check)
 12. inhoudelijke controles:                                         Anne: (onderdeel van Ok-button check)
   a. overlappende velden                                            Anne: werkt
   b. related to                                                     Jeldrik: is niet meer nodig
   c. weight numeriek en niet categorisch, geen missing              Anne:
   d. lengtes van missing                                            Anne: werkt
-13. options for argus + missing + truncation +                      Jeldrik: 
+13. options for argus + missing + truncation +                      Anne: 
     codelijst: afhankelijk van categorical
 
 
