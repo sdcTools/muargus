@@ -34,6 +34,7 @@ public class SpecifyMetadataView extends javax.swing.JDialog {
     private String separatorTemp;
     private int dataFileTypeTemp;
     private int previousIndex;
+    VariableMu previousVariableMu;
     
     private DefaultListModel variableListModel;
 
@@ -244,7 +245,19 @@ public class SpecifyMetadataView extends javax.swing.JDialog {
         } else {
             relatedToComboBox.setSelectedIndex(0);
         }
-        previousIndex = variablesList.getSelectedIndex();
+    }
+    
+    
+    private int getIndexOfRelated(VariableMu indexVariable){
+        int index = 1;
+        for(VariableMu variable: cloneVariables){
+            if(variable.equals(indexVariable)){
+                break;
+            }
+            index++;
+        }
+        return index;
+        
     }
     
     private void calculateButtonStates() {

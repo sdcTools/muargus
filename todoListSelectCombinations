@@ -1,0 +1,60 @@
+
+Taak:
+1. variablesList: 
+    - vullen met de variabelen waarvan het ID-level groter is dan 0
+2. variablesSelectedList: 
+    - mogelijk maken dat de lijst gevuld/geleegd kan worden
+3. moveToSelectedButton: 
+    - geselecteerde variabele van variablesList toevoegen aan variablesSelectedList
+4. removeFromSelectedButton: 
+    - geselecteerde variabele van variablesSelectedList verwijderen
+5. removeAllFromSelectedButton:
+    - alle variabele in variablesSelectedList verwijderen 
+6. table:
+    - vul de tabel met tabellen die al zijn berekend (als er tabellen zijn)
+    - mogelijk maken dat de lijst gevuld/geleegd kan worden
+    - maak automatisch titels voor elke kolom aan
+6. addRowButton:
+    - check of een rij toegevoegd mag worden
+         a. er mag geen overlap zijn in de variabele voor het riskmodel (geef indien nodig waarschuwing)
+         b. als tabel al bestaat, voeg het niet toe (geen waarschuwing)
+    - voeg een rij toe aan table (let hier op id-level)
+    - verwijder alle variabelen in variablesSelectedList (zelfde als punt 5)
+7. removeRowButton:
+    - verwijder geselecteerde rij uit table
+    - voeg alle variabelen toe aan variablesSelectedList (vergelijkbaar met punt 3 maar dan voor alles)
+8. thresholdTextField
+    - zet bij het opstarten op de defaultwaarde (1)
+    - als de waarde veranderd, sla deze dan op (ook als Mu-ARGUS afgesloten wordt)
+9. automaticSpecificationButton
+    - controleer of de tabel leeg is en vraag of de tabellen verwijderd moeten worden als dit niet het geval is
+    - open "methods for generating tabels" scherm
+    - als "use identification levels" wordt gekozen, laat threshold scherm 1 keer zien
+    - als "make all tables up to dimension X" gekozen wordt, laat threshold scherm X keer zien voor elke dimensie
+    - maak alle mogelijke tabellen volgens de specificaties en zet ze in table
+10. clearButton:
+    - remove all rows from table
+11. setTableRiskModelButton:
+    - voeg een R toe of verwijder deze bij de geselecteerde rij in de tabel
+    - als een rij volgens het Risk model gemaakt moet worden, maak deze rij rood
+12. cancelButton
+    - sluit het scherm
+    opmerking: waarschuwingsscherm toevoegen die wordt getoond als er tabellen zijn gespecificeerd?
+13. calculateTablesButton
+    - bereken de frequenties van onveilige waardes voor elke tabel en geef deze aan de MainFrame
+    - sluit het scherm
+14. progressbar
+    - link dit aan de calculateTablesButton
+    - laat label zien als hij bezig is (nog zoeken wat er moet staan)
+15. TablesMu klasse vergelijkbaar met VariablesMu. In deze klasse komt:
+    - lijst van variabelen waar de tabel uit bestaat
+    - aantal unsafe combinations per dimensie
+    - boolean variable riskModel
+    - method isRiskModel
+    - method setRiskModel
+    - method getVariables
+    - method setVariables
+    - method getUnsafeCombinations(VariableMu ... variable, int dimensions) (dimensions should equal number of variables)
+    - iets om het aantal onveilige combinaties per dimensie goed op te slaan (array?)
+    
+
