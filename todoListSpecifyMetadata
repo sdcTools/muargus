@@ -2,6 +2,7 @@
 
 Dingen die nog gedaan moeten worden
 - Code opschonen en documentatie fixen                              Jeldrik: kan ik volgende week wel doen als ik even geen zin heb om te programmern
+- Categorical en numerical tegelijk verbieden? (Anco)
                                     
 1. default file aanpassen                                           Jeldrik: werkt niet meer --> er uit slopen en bij de main de buttons op disabled zetten?
 2. codelistfile testen/aanpassen dat files goed gevonden worden     Anne: pas bij gebruik codelijst-file check op bestaan gebeurt in oude mu ook pas later
