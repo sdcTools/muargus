@@ -102,15 +102,7 @@ public class SpecifyMetadataView extends javax.swing.JDialog {
         for (VariableMu variable : cloneVariables) {
             variableListModel.addElement(variable);
         }
-        
-        related = new ArrayList<>();
-        related.add(new VariableMu("--none--"));
-        related.addAll(cloneVariables);
-        
-        relatedToComboBox.setModel(
-                new javax.swing.DefaultComboBoxModel(related.toArray()));
-                //new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        
+                
         variablesList.setModel(variableListModel);
         if (variableListModel.getSize() > 0) {
             //index = 0;
@@ -226,16 +218,32 @@ public class SpecifyMetadataView extends javax.swing.JDialog {
         startingPositionTextField.setText(Integer.toString(selected.getStartingPosition()));
         lengthTextField.setText(Integer.toString(selected.getVariableLength()));
         separatorTextField.setText(separatorTemp);
-        // moet aangepast worden want dit is geen goede test. Zeker als er nieuwe variabelen worden aangemaakt
-        // of variabelen worden delete
-        if(relatedToComboBox.getItemCount() == related.size()){
-            relatedToComboBox.removeItem(selected);
-        } else {
-            relatedToComboBox.removeItem(selected);
-            // volgens mij zet ik hem hier nog niet altijd op de goeie plek
-            relatedToComboBox.insertItemAt(cloneVariables.get(previousIndex), previousIndex+1);
-            
+        related = new ArrayList<>();
+        related.add(new VariableMu("--none--"));
+        for (Object o: variableListModel.toArray()) {
+            if (!o.equals(selected))
+            related.add((VariableMu) o);
         }
+
+        //related.addAll(cloneVariables);
+        
+        relatedToComboBox.setModel(
+                new javax.swing.DefaultComboBoxModel(related.toArray()));
+
+//        if (relatedToComboBox.getItemCount() > 0) {
+//            relatedToComboBox.removeAllItems();
+//        }
+//        relatedToComboBox.addItem();
+//        // moet aangepast worden want dit is geen goede test. Zeker als er nieuwe variabelen worden aangemaakt
+//        // of variabelen worden delete
+//        if(relatedToComboBox.getItemCount() == related.size()){
+//            relatedToComboBox.removeItem(selected);
+//        } else {
+//            relatedToComboBox.removeItem(selected);
+//            // volgens mij zet ik hem hier nog niet altijd op de goeie plek
+//            relatedToComboBox.insertItemAt(cloneVariables.get(previousIndex), previousIndex+1);
+//            
+//        }
         if(selected.isRelated()){
             relatedToComboBox.setSelectedItem(selected.getRelatedVariable());
         } else {
@@ -1009,9 +1017,8 @@ public class SpecifyMetadataView extends javax.swing.JDialog {
     private void relatedToComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_relatedToComboBoxActionPerformed
         if(relatedToComboBox.getSelectedIndex() != 0){
             getSelectedVariable().setRelatedVariable((VariableMu) relatedToComboBox.getSelectedItem());
-            getSelectedVariable().setRelated(true);
         } else {
-            getSelectedVariable().setRelated(false);
+            getSelectedVariable().setRelatedVariable(null);
         }
     }//GEN-LAST:event_relatedToComboBoxActionPerformed
 

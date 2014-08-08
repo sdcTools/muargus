@@ -54,7 +54,6 @@ public class VariableMu {
     private boolean house_id = false;
     private boolean household = false;
     private boolean other = true;
-    private boolean related = false;
     private String relatedVariableName = null;
     private VariableMu relatedVariable = null;
     
@@ -82,7 +81,8 @@ public class VariableMu {
         this.name = variable.name;
         this.numeric = variable.numeric;
         this.recodable = variable.recodable;
-        this.relatedVariableName = variable.relatedVariableName;
+        this.relatedVariableName = variable.relatedVariable == null ? 
+                null : variable.relatedVariable.getName();
         this.startingPosition = variable.startingPosition;
         this.suppressweight = variable.suppressweight;
         this.truncable = variable.truncable;
@@ -213,6 +213,7 @@ public class VariableMu {
             for (VariableMu var : variables) {
                 if (relatedVariableName.equalsIgnoreCase(var.getName())) {
                     this.relatedVariable = var;
+                    return;
                 }
             }
             throw new ArgusException("Variable " + this.name + " related to non-specified variable " + this.relatedVariableName);
@@ -230,17 +231,11 @@ public class VariableMu {
     public void setRelatedVariableName(String relatedVariableName) {
         this.relatedVariableName = relatedVariableName;
     }
-
+    
     public boolean isRelated() {
-        return related;
+        return (this.relatedVariable != null);
     }
-
-    public void setRelated(boolean related) {
-        this.related = related;
-        
-            
-    }
-
+    
     public int getStartingPosition() {
         return startingPosition;
     }
@@ -320,6 +315,11 @@ public class VariableMu {
         @Override
     public boolean equals(Object o) {
         VariableMu cmp = (VariableMu)o;
+        if (cmp == null)
+            return false;
+        
+        String cmpRelatedVariableName = cmp.relatedVariable == null ?
+                            null : cmp.relatedVariable.getName();
         return (this.categorical == cmp.categorical)
                 && (this.codelist == cmp.codelist)
                 && (this.codeListFile == null ? cmp.codeListFile == null : this.codeListFile.equals(cmp.codeListFile))
@@ -331,7 +331,8 @@ public class VariableMu {
                 && (this.name == null ? cmp.name == null : this.name.equals(cmp.name))
                 && (this.numeric == cmp.numeric)
                 && (this.recodable == cmp.recodable)
-                && (this.relatedVariableName == cmp.relatedVariableName)
+                && (this.relatedVariable == null ? cmp.relatedVariable == null 
+                    : this.relatedVariable.getName().equals(cmpRelatedVariableName))
                 && (this.startingPosition == cmp.startingPosition)
                 && (this.suppressweight == cmp.suppressweight)
                 && (this.truncable == cmp.truncable)
@@ -343,6 +344,8 @@ public class VariableMu {
     @Override
     public int hashCode() {
         int hash = 3;
+        String relatedVariableName = this.relatedVariable == null ?
+                null : this.relatedVariable.getName();
         hash = 41 * hash + Objects.hashCode(this.categorical);
         hash = 41 * hash + Objects.hashCode(this.codelist);
         hash = 41 * hash + Objects.hashCode(this.codeListFile);
@@ -354,7 +357,7 @@ public class VariableMu {
         hash = 41 * hash + Objects.hashCode(this.name);
         hash = 41 * hash + Objects.hashCode(this.numeric);
         hash = 41 * hash + Objects.hashCode(this.recodable);
-        hash = 41 * hash + Objects.hashCode(this.relatedVariableName);
+        hash = 41 * hash + Objects.hashCode(relatedVariableName);
         hash = 41 * hash + this.startingPosition;
         hash = 41 * hash + Objects.hashCode(this.suppressweight);
         hash = 41 * hash + Objects.hashCode(this.truncable);

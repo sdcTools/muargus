@@ -75,7 +75,7 @@ public class MetadataMu {
             linkRelatedVariables();
         }
         catch (ArgusException ex) {
-            ; //TODO: handle?
+            logger.log(Level.SEVERE, null, ex);
         }
     }
             
