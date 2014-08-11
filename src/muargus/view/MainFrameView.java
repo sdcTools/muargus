@@ -781,7 +781,7 @@ public class MainFrameView extends javax.swing.JFrame {
     }//GEN-LAST:event_metaDataMenuItemActionPerformed
 
     private void combinationsMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_combinationsMenuItemActionPerformed
-        controller.specifyCombinations();
+        controller.specifyCombinations(MuARGUS.getMetadata());
     }//GEN-LAST:event_combinationsMenuItemActionPerformed
 
     private void showTableCollectionMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showTableCollectionMenuItemActionPerformed

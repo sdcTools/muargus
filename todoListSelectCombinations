@@ -1,15 +1,15 @@
 
 Taak:
 1. variablesList: 
-    - vullen met de variabelen waarvan het ID-level groter is dan 0
+    - vullen met de variabelen waarvan het ID-level groter is dan 0                                             Jeldrik: werkt
 2. variablesSelectedList: 
-    - mogelijk maken dat de lijst gevuld/geleegd kan worden
+    - mogelijk maken dat de lijst gevuld/geleegd kan worden                                                     Jeldrik: werkt
 3. moveToSelectedButton: 
-    - geselecteerde variabele van variablesList toevoegen aan variablesSelectedList
+    - geselecteerde variabele van variablesList toevoegen aan variablesSelectedList                             Jeldrik: werkt
 4. removeFromSelectedButton: 
-    - geselecteerde variabele van variablesSelectedList verwijderen
+    - geselecteerde variabele van variablesSelectedList verwijderen                                             Jeldrik: werkt
 5. removeAllFromSelectedButton:
-    - alle variabele in variablesSelectedList verwijderen 
+    - alle variabele in variablesSelectedList verwijderen                                                       Jeldrik: werkt
 6. table:
     - vul de tabel met tabellen die al zijn berekend (als er tabellen zijn)
     - mogelijk maken dat de lijst gevuld/geleegd kan worden
@@ -18,14 +18,15 @@ Taak:
     - check of een rij toegevoegd mag worden
          a. er mag geen overlap zijn in de variabele voor het riskmodel (geef indien nodig waarschuwing)
          b. als tabel al bestaat, voeg het niet toe (geen waarschuwing)
+         c. het aantal variabelen mag niet groter zijn dan 10 (geef een waarschuwing als dit wel het geval is)
     - voeg een rij toe aan table (let hier op id-level)
     - verwijder alle variabelen in variablesSelectedList (zelfde als punt 5)
 7. removeRowButton:
     - verwijder geselecteerde rij uit table
     - voeg alle variabelen toe aan variablesSelectedList (vergelijkbaar met punt 3 maar dan voor alles)
 8. thresholdTextField
-    - zet bij het opstarten op de defaultwaarde (1)
-    - als de waarde veranderd, sla deze dan op (ook als Mu-ARGUS afgesloten wordt)
+    - zet bij het opstarten op de defaultwaarde (1)                                                             Jeldrik: werkt
+    - als de waarde veranderd, sla deze dan op (ook als Mu-ARGUS afgesloten wordt)                              Jeldrik: wordt nu nog opgeslagen in de Model
 9. automaticSpecificationButton
     - controleer of de tabel leeg is en vraag of de tabellen verwijderd moeten worden als dit niet het geval is
     - open "methods for generating tabels" scherm

@@ -31,16 +31,16 @@ public class SelectCombinationsModel {
      * 
      * @return 
      */
-    public int getThreshold() {
-        return threshold;
+    public String getThreshold() {
+        return Integer.toString(threshold);
     }
 
     /**
      * 
      * @param threshold 
      */
-    public void setThreshold(int threshold) {
-        this.threshold = threshold;
+    public void setThreshold(String threshold) {
+        this.threshold = Integer.parseInt(threshold);
     }
 
     /**

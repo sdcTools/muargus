@@ -7,11 +7,10 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import muargus.model.MetadataMu;
+import muargus.model.SelectCombinationsModel;
 import muargus.view.GlobalRecodeView;
 import muargus.view.MainFrameView;
 import muargus.view.MakeProtectedFileView;
-import muargus.view.SelectCombinationsView;
-import muargus.view.SpecifyMetadataView;
 import muargus.view.ViewReportView;
 
 /**
@@ -21,6 +20,7 @@ import muargus.view.ViewReportView;
 public class MainFrameController {
     
     MainFrameView view;
+    SelectCombinationsModel selectCombinationsModel;
 
     /**
      * 
@@ -28,6 +28,7 @@ public class MainFrameController {
      */
     public MainFrameController(MainFrameView view) {
         this.view = view;
+        selectCombinationsModel = new SelectCombinationsModel();
     }
        
     /**
@@ -55,9 +56,10 @@ public class MainFrameController {
     /**
      * 
      */
-    public void specifyCombinations() {                                                     
-        SelectCombinationsView view = new SelectCombinationsView(this.view, true);
-        view.setVisible(true);
+    public void specifyCombinations(MetadataMu metadata) {                                                     
+        SelectCombinationsController controller = new SelectCombinationsController(this.view, metadata, selectCombinationsModel);
+        controller.showView();
+        //view.setVisible(true);
     }                                                    
 
     /**

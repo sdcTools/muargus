@@ -1,7 +1,17 @@
 package muargus.view;
 
+import argus.utils.SingleListSelectionModel;
+import java.util.ArrayList;
+import java.util.Arrays;
+import javax.swing.DefaultListModel;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
+import javax.swing.table.TableModel;
+import muargus.VariableNameCellRenderer;
 import muargus.controller.SelectCombinationsController;
+import muargus.model.MetadataMu;
 import muargus.model.SelectCombinationsModel;
+import muargus.model.VariableMu;
 
 /**
  *
@@ -11,18 +21,70 @@ public class SelectCombinationsView extends javax.swing.JDialog {
 
     SelectCombinationsController controller;
     SelectCombinationsModel model;
+    private MetadataMu metadataMu;
+    private DefaultListModel variableListModel;
+    private DefaultListModel variableSelectedListModel;
+    private TableModel tableModel;
+    private ArrayList<String> columnNames;
     
     /**
      * Creates new form SelectCombinationsView
      */
-    public SelectCombinationsView(java.awt.Frame parent, boolean modal) {
+    public SelectCombinationsView(java.awt.Frame parent, boolean modal, SelectCombinationsController controller, SelectCombinationsModel model) {
         super(parent, modal);
-        controller = new SelectCombinationsController(this);
-        model = new SelectCombinationsModel();
-        
         initComponents();
+        this.controller = controller;
+        this.model = model;
         this.setLocationRelativeTo(null);
+        variablesList.setSelectionModel(new SingleListSelectionModel());
+        variablesList.setCellRenderer(new VariableNameCellRenderer());
+        variablesSelectedList.setCellRenderer(new VariableNameCellRenderer());
+        //table.setDefaultRenderer(null, null);
     }
+
+    public MetadataMu getMetadataMu() {
+        return metadataMu;
+    }
+
+    public void setMetadataMu(MetadataMu metadataMu) {
+        this.metadataMu = metadataMu;
+        makeVariables();
+    }
+    
+    public void makeVariables(){
+        variableListModel = new DefaultListModel<>(); 
+        variableSelectedListModel = new DefaultListModel<>(); 
+        for (VariableMu variable : metadataMu.getVariables()) {
+            if(variable.getIdLevel() > 0){
+                variableListModel.addElement(variable);
+            }
+        }
+        variablesList.setModel(variableListModel);
+        variablesSelectedList.setModel(variableSelectedListModel);
+        if (variableListModel.getSize() > 0) {
+            variablesList.setSelectedIndex(0);
+        }
+        
+        columnNames = new ArrayList<>(Arrays.asList("Risk", "Thres.", "Var 1")); 
+        tableModel = new DefaultTableModel(columnNames.toArray(), WIDTH);
+        tableModel.setValueAt(5, 0, 0);
+        table.setModel(tableModel);
+        
+        this.thresholdTextField.setText(this.model.getThreshold());
+    }
+    
+    private void updateValues(){
+        
+        //VariableMu selected = getSelectedVariable();
+        
+    }
+    
+    private VariableMu getSelectedVariable(){
+        VariableMu selected = (VariableMu) variablesList.getSelectedValue();
+        return selected;
+    }
+    
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -33,10 +95,10 @@ public class SelectCombinationsView extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        itemsScrollPane = new javax.swing.JScrollPane();
-        itemsList = new javax.swing.JList();
-        itesmSelectedScrollPane = new javax.swing.JScrollPane();
-        itemsSelectedList = new javax.swing.JList();
+        variablesScrollPane = new javax.swing.JScrollPane();
+        variablesList = new javax.swing.JList();
+        variablesSelectedScrollPane = new javax.swing.JScrollPane();
+        variablesSelectedList = new javax.swing.JList();
         moveToSelectedButton = new javax.swing.JButton();
         removeFromSelectedButton = new javax.swing.JButton();
         removeAllFromSelectedButton = new javax.swing.JButton();
@@ -56,14 +118,14 @@ public class SelectCombinationsView extends javax.swing.JDialog {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Specify Combinations");
 
-        itemsList.setModel(new javax.swing.AbstractListModel() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public Object getElementAt(int i) { return strings[i]; }
+        variablesList.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+                variablesListValueChanged(evt);
+            }
         });
-        itemsScrollPane.setViewportView(itemsList);
+        variablesScrollPane.setViewportView(variablesList);
 
-        itesmSelectedScrollPane.setViewportView(itemsSelectedList);
+        variablesSelectedScrollPane.setViewportView(variablesSelectedList);
 
         moveToSelectedButton.setText("→");
         moveToSelectedButton.addActionListener(new java.awt.event.ActionListener() {
@@ -102,7 +164,11 @@ public class SelectCombinationsView extends javax.swing.JDialog {
 
         thresholdLabel.setText("Threshold:");
 
-        thresholdTextField.setText("1");
+        thresholdTextField.addCaretListener(new javax.swing.event.CaretListener() {
+            public void caretUpdate(javax.swing.event.CaretEvent evt) {
+                thresholdTextFieldCaretUpdate(evt);
+            }
+        });
 
         automaticSpecificationButton.setText("Automatic specification of tables");
         automaticSpecificationButton.addActionListener(new java.awt.event.ActionListener() {
@@ -142,54 +208,6 @@ public class SelectCombinationsView extends javax.swing.JDialog {
         table.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
                 {null, null, null, null, null}
             },
             new String [] {
@@ -206,7 +224,7 @@ public class SelectCombinationsView extends javax.swing.JDialog {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(itemsScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(variablesScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 49, Short.MAX_VALUE)
@@ -227,7 +245,7 @@ public class SelectCombinationsView extends javax.swing.JDialog {
                                 .addComponent(thresholdLabel)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(thresholdTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(itesmSelectedScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(variablesSelectedScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(addRowButton)
@@ -252,7 +270,7 @@ public class SelectCombinationsView extends javax.swing.JDialog {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(itemsScrollPane)
+                    .addComponent(variablesScrollPane)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
@@ -264,7 +282,7 @@ public class SelectCombinationsView extends javax.swing.JDialog {
                                         .addComponent(removeFromSelectedButton)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(removeAllFromSelectedButton))
-                                    .addComponent(itesmSelectedScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(variablesSelectedScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGap(32, 32, 32)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                     .addComponent(thresholdLabel)
@@ -298,19 +316,57 @@ public class SelectCombinationsView extends javax.swing.JDialog {
     }//GEN-LAST:event_calculateTablesButtonActionPerformed
 
     private void moveToSelectedButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_moveToSelectedButtonActionPerformed
-        controller.moveToSelected();
+        int index = variablesList.getSelectedIndex();
+        VariableMu variable = (VariableMu) variablesList.getSelectedValue();
+        boolean doubleVariable = false;
+        for(Object o: variableSelectedListModel.toArray()){
+            if(variable.equals(o)){
+                doubleVariable = true;
+                System.out.println(doubleVariable);
+            }
+        }
+        if(!doubleVariable){
+            variableSelectedListModel.add(variableSelectedListModel.getSize(), variable);
+        }
+        variablesList.setSelectedIndex(index+1);
+        //updateValues();
     }//GEN-LAST:event_moveToSelectedButtonActionPerformed
 
     private void removeFromSelectedButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeFromSelectedButtonActionPerformed
-        controller.removeFromSelected();
+        if(variablesSelectedList.getSelectedIndices().length == variableSelectedListModel.getSize()){
+            variableSelectedListModel.removeAllElements();
+        } else {
+            
+            for(Object o: variablesSelectedList.getSelectedValuesList()){
+                variableSelectedListModel.removeElement(o);
+            }
+        }
+        variablesSelectedList.setSelectedIndex(0);
     }//GEN-LAST:event_removeFromSelectedButtonActionPerformed
 
     private void removeAllFromSelectedButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeAllFromSelectedButtonActionPerformed
-        controller.removeAllFromSelected();
+        variableSelectedListModel.removeAllElements();
+        variablesList.setSelectedIndex(0);
+        //updateValues();
+        
+        //controller.removeAllFromSelected();
     }//GEN-LAST:event_removeAllFromSelectedButtonActionPerformed
 
     private void addRowButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addRowButtonActionPerformed
-        controller.addRow();
+        int columns = variablesSelectedList.getComponentCount();
+        int index = 2;
+        while(table.getColumnCount()<columns+2){
+            TableColumn column = new TableColumn();
+            column.setHeaderValue("Var " + index);
+            table.addColumn(column);
+            index++;
+        }
+        
+        for(int i = 0; i< columns; i++){
+            table.setValueAt(variableSelectedListModel.getElementAt(i), 0, i+2);
+        }
+        table.updateUI();
+        //controller.addRow();
     }//GEN-LAST:event_addRowButtonActionPerformed
 
     private void removeRowButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeRowButtonActionPerformed
@@ -333,57 +389,66 @@ public class SelectCombinationsView extends javax.swing.JDialog {
         controller.cancel();
     }//GEN-LAST:event_cancelButtonActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(SelectCombinationsView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(SelectCombinationsView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(SelectCombinationsView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(SelectCombinationsView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+    private void variablesListValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_variablesListValueChanged
+        if(!evt.getValueIsAdjusting()){
+            variablesList.setSelectedIndex(variablesList.getSelectedIndex());
+            //updateValues();
         }
-        //</editor-fold>
+    }//GEN-LAST:event_variablesListValueChanged
 
-        /* Create and display the dialog */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                SelectCombinationsView view = new SelectCombinationsView(new javax.swing.JFrame(), true);
-                view.addWindowListener(new java.awt.event.WindowAdapter() {
-                    @Override
-                    public void windowClosing(java.awt.event.WindowEvent e) {
-                        System.exit(0);
-                    }
-                });
-                view.setVisible(true);
-            }
-        });
-    }
+    private void thresholdTextFieldCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_thresholdTextFieldCaretUpdate
+        try {
+            model.setThreshold(this.thresholdTextField.getText());
+        } catch (Exception e){}
+    }//GEN-LAST:event_thresholdTextFieldCaretUpdate
+
+//    /**
+//     * @param args the command line arguments
+//     */
+//    public static void main(String args[]) {
+//        /* Set the Nimbus look and feel */
+//        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+//        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+//         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+//         */
+//        try {
+//            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+//                if ("Nimbus".equals(info.getName())) {
+//                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+//                    break;
+//                }
+//            }
+//        } catch (ClassNotFoundException ex) {
+//            java.util.logging.Logger.getLogger(SelectCombinationsView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        } catch (InstantiationException ex) {
+//            java.util.logging.Logger.getLogger(SelectCombinationsView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        } catch (IllegalAccessException ex) {
+//            java.util.logging.Logger.getLogger(SelectCombinationsView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+//            java.util.logging.Logger.getLogger(SelectCombinationsView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        }
+//        //</editor-fold>
+//
+//        /* Create and display the dialog */
+//        java.awt.EventQueue.invokeLater(new Runnable() {
+//            public void run() {
+//                SelectCombinationsView view = new SelectCombinationsView(new javax.swing.JFrame(), true);
+//                view.addWindowListener(new java.awt.event.WindowAdapter() {
+//                    @Override
+//                    public void windowClosing(java.awt.event.WindowEvent e) {
+//                        System.exit(0);
+//                    }
+//                });
+//                view.setVisible(true);
+//            }
+//        });
+//    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addRowButton;
     private javax.swing.JButton automaticSpecificationButton;
     private javax.swing.JButton calculateTablesButton;
     private javax.swing.JButton cancelButton;
     private javax.swing.JButton clearButton;
-    private javax.swing.JList itemsList;
-    private javax.swing.JScrollPane itemsScrollPane;
-    private javax.swing.JList itemsSelectedList;
-    private javax.swing.JScrollPane itesmSelectedScrollPane;
     private javax.swing.JButton moveToSelectedButton;
     private javax.swing.JProgressBar progressbar;
     private javax.swing.JButton removeAllFromSelectedButton;
@@ -394,5 +459,9 @@ public class SelectCombinationsView extends javax.swing.JDialog {
     private javax.swing.JScrollPane tablesScrollPane;
     private javax.swing.JLabel thresholdLabel;
     private javax.swing.JTextField thresholdTextField;
+    private javax.swing.JList variablesList;
+    private javax.swing.JScrollPane variablesScrollPane;
+    private javax.swing.JList variablesSelectedList;
+    private javax.swing.JScrollPane variablesSelectedScrollPane;
     // End of variables declaration//GEN-END:variables
 }

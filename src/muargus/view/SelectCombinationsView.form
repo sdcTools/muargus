@@ -26,7 +26,7 @@
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="itemsScrollPane" min="-2" pref="101" max="-2" attributes="0"/>
+              <Component id="variablesScrollPane" min="-2" pref="101" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
                       <EmptySpace pref="49" max="32767" attributes="0"/>
@@ -51,7 +51,7 @@
                               <EmptySpace type="unrelated" max="-2" attributes="0"/>
                               <Component id="thresholdTextField" min="-2" pref="52" max="-2" attributes="0"/>
                           </Group>
-                          <Component id="itesmSelectedScrollPane" min="-2" pref="102" max="-2" attributes="0"/>
+                          <Component id="variablesSelectedScrollPane" min="-2" pref="102" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
@@ -85,7 +85,7 @@
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="itemsScrollPane" max="32767" attributes="0"/>
+                  <Component id="variablesScrollPane" max="32767" attributes="0"/>
                   <Group type="102" attributes="0">
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" alignment="0" attributes="0">
@@ -98,7 +98,7 @@
                                       <EmptySpace max="-2" attributes="0"/>
                                       <Component id="removeAllFromSelectedButton" min="-2" max="-2" attributes="0"/>
                                   </Group>
-                                  <Component id="itesmSelectedScrollPane" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="variablesSelectedScrollPane" alignment="0" min="-2" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace min="-2" pref="32" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="3" attributes="0">
@@ -135,33 +135,30 @@
     </DimensionLayout>
   </Layout>
   <SubComponents>
-    <Container class="javax.swing.JScrollPane" name="itemsScrollPane">
+    <Container class="javax.swing.JScrollPane" name="variablesScrollPane">
 
       <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
       <SubComponents>
-        <Component class="javax.swing.JList" name="itemsList">
+        <Component class="javax.swing.JList" name="variablesList">
           <Properties>
             <Property name="model" type="javax.swing.ListModel" editor="org.netbeans.modules.form.editors2.ListModelEditor">
-              <StringArray count="5">
-                <StringItem index="0" value="Item 1"/>
-                <StringItem index="1" value="Item 2"/>
-                <StringItem index="2" value="Item 3"/>
-                <StringItem index="3" value="Item 4"/>
-                <StringItem index="4" value="Item 5"/>
-              </StringArray>
+              <StringArray count="0"/>
             </Property>
           </Properties>
+          <Events>
+            <EventHandler event="valueChanged" listener="javax.swing.event.ListSelectionListener" parameters="javax.swing.event.ListSelectionEvent" handler="variablesListValueChanged"/>
+          </Events>
         </Component>
       </SubComponents>
     </Container>
-    <Container class="javax.swing.JScrollPane" name="itesmSelectedScrollPane">
+    <Container class="javax.swing.JScrollPane" name="variablesSelectedScrollPane">
       <AuxValues>
         <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
       </AuxValues>
 
       <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
       <SubComponents>
-        <Component class="javax.swing.JList" name="itemsSelectedList">
+        <Component class="javax.swing.JList" name="variablesSelectedList">
           <Properties>
             <Property name="model" type="javax.swing.ListModel" editor="org.netbeans.modules.form.editors2.ListModelEditor">
               <StringArray count="0"/>
@@ -216,9 +213,9 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="thresholdTextField">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="1"/>
-      </Properties>
+      <Events>
+        <EventHandler event="caretUpdate" listener="javax.swing.event.CaretListener" parameters="javax.swing.event.CaretEvent" handler="thresholdTextFieldCaretUpdate"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="automaticSpecificationButton">
       <Properties>
@@ -268,14 +265,8 @@
       <SubComponents>
         <Component class="javax.swing.JTable" name="table">
           <Properties>
-            <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-              <Table columnCount="5" rowCount="50">
-                <Column editable="true" title="R" type="java.lang.Object"/>
-                <Column editable="true" title="Thres." type="java.lang.Object"/>
-                <Column editable="true" title="Var 1" type="java.lang.Object"/>
-                <Column editable="true" title="Var 2" type="java.lang.Object"/>
-                <Column editable="true" title="Var 3" type="java.lang.Object"/>
-              </Table>
+            <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+              <Connection code="new javax.swing.table.DefaultTableModel(&#xa;    new Object [][] {&#xa;        {null, null, null, null, null},&#xa;        {null, null, null, null, null}&#xa;    },&#xa;    new String [] {&#xa;        &quot;R&quot;, &quot;Thres.&quot;, &quot;Var 1&quot;, &quot;Var 2&quot;, &quot;Var 3&quot;&#xa;    }&#xa;)" type="code"/>
             </Property>
             <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
               <TableColumnModel selectionModel="0">
