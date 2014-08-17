@@ -1,16 +1,16 @@
 package muargus.view;
 
-import argus.utils.SingleListSelectionModel;
 import java.util.ArrayList;
 import java.util.Arrays;
 import javax.swing.DefaultListModel;
+import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
 import muargus.VariableNameCellRenderer;
 import muargus.controller.SelectCombinationsController;
 import muargus.model.MetadataMu;
 import muargus.model.SelectCombinationsModel;
+import muargus.model.TableMu;
 import muargus.model.VariableMu;
 
 /**
@@ -22,10 +22,11 @@ public class SelectCombinationsView extends javax.swing.JDialog {
     SelectCombinationsController controller;
     SelectCombinationsModel model;
     private MetadataMu metadataMu;
-    private DefaultListModel variableListModel;
-    private DefaultListModel variableSelectedListModel;
+    private DefaultListModel variablesListModel;
+    private DefaultListModel variablesSelectedListModel;
     private TableModel tableModel;
     private ArrayList<String> columnNames;
+    private String[][] data;
     
     /**
      * Creates new form SelectCombinationsView
@@ -36,55 +37,108 @@ public class SelectCombinationsView extends javax.swing.JDialog {
         this.controller = controller;
         this.model = model;
         this.setLocationRelativeTo(null);
-        variablesList.setSelectionModel(new SingleListSelectionModel());
         variablesList.setCellRenderer(new VariableNameCellRenderer());
         variablesSelectedList.setCellRenderer(new VariableNameCellRenderer());
-        //table.setDefaultRenderer(null, null);
     }
 
-    public MetadataMu getMetadataMu() {
-        return metadataMu;
-    }
+//    public MetadataMu getMetadataMu() {
+//        return metadataMu;
+//    }
 
+    /**
+     * Sets the metadata and calls the method to fill the variableList
+     * @param metadataMu Metadata Class containing all the metadata (variables etc)
+     */
     public void setMetadataMu(MetadataMu metadataMu) {
         this.metadataMu = metadataMu;
         makeVariables();
     }
     
+    /**
+     * Fills the selecCombinationsScreen with it's default values
+     */
     public void makeVariables(){
-        variableListModel = new DefaultListModel<>(); 
-        variableSelectedListModel = new DefaultListModel<>(); 
+        // make listModels and add the variables that are categorical
+        variablesListModel = new DefaultListModel<>(); 
+        variablesSelectedListModel = new DefaultListModel<>();
         for (VariableMu variable : metadataMu.getVariables()) {
-            if(variable.getIdLevel() > 0){
-                variableListModel.addElement(variable);
+            if(variable.isCategorical()){
+                variablesListModel.addElement(variable);
             }
         }
-        variablesList.setModel(variableListModel);
-        variablesSelectedList.setModel(variableSelectedListModel);
-        if (variableListModel.getSize() > 0) {
+        variablesList.setModel(variablesListModel);
+        variablesSelectedList.setModel(variablesSelectedListModel);
+        if (variablesListModel.getSize() > 0) {
             variablesList.setSelectedIndex(0);
         }
         
-        columnNames = new ArrayList<>(Arrays.asList("Risk", "Thres.", "Var 1")); 
-        tableModel = new DefaultTableModel(columnNames.toArray(), WIDTH);
-        tableModel.setValueAt(5, 0, 0);
-        table.setModel(tableModel);
-        
+        // set the default values and the size of the first two colums
+        columnNames = new ArrayList<>(Arrays.asList("Risk", "Thres.", "Var 1"));
         this.thresholdTextField.setText(this.model.getThreshold());
+        table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF );
+        table.getColumnModel().getColumn(0).setMinWidth(30);
+        table.getColumnModel().getColumn(0).setPreferredWidth(30);
+        table.getColumnModel().getColumn(1).setMinWidth(50);
+        table.getColumnModel().getColumn(1).setPreferredWidth(50);
+        
+        updateValues();
     }
     
+    /**
+     * Updates the table by filling it with the array of tables.
+     */
     private void updateValues(){
+        // gets the tables from SelectCombinationsModel and adds these to a double 
+        // array, containing the data
+        // TODO: remove the try catch after testing
+        ArrayList<TableMu> tables = model.getTables();
+        data = new String[model.getTables().size()][];
+        try{
+            int index = 0;
+            for(TableMu t: tables){
+                data[index] = t.getTable();
+                index++;
+            }
+        }catch(Exception e){
+            System.out.println("something is wrong here");
+            System.out.println(model.getTables().size());
+        }
         
-        //VariableMu selected = getSelectedVariable();
+        // TODO: add a check here that sets the columns to the size of the biggest table (+ 2)
         
+        tableModel = new DefaultTableModel(data, columnNames.toArray());
+        table.setModel(tableModel);
+       
+        // sets the size of each column
+        for(int i = 2; i < table.getColumnModel().getColumnCount(); i++){
+            table.getColumnModel().getColumn(i).setMinWidth(70);
+            table.getColumnModel().getColumn(i).setPreferredWidth(70);
+        }
+        
+        // TODO: check how the rows should be selected
+        if(tables.size() == 1){
+            table.getSelectionModel().setSelectionInterval(0, 0);
+        }
     }
     
-    private VariableMu getSelectedVariable(){
-        VariableMu selected = (VariableMu) variablesList.getSelectedValue();
-        return selected;
+    /**
+     * Removes all the tables
+     */
+    public void clear(){
+        int size =  model.getTables().size();
+        for(int i = size - 1; i >=  0; i--){
+           model.removeTable(i); 
+        }      
+        //model.setNumberOfRows(0); // should not be neccesary
+        
+        // TODO: replace this to an updateColumns method
+        int columns = columnNames.size();
+        for(int i = columns - 1; i > 2; i--){
+            this.columnNames.remove(i);
+        }
+        
+        updateValues();
     }
-    
-    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -118,11 +172,6 @@ public class SelectCombinationsView extends javax.swing.JDialog {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Specify Combinations");
 
-        variablesList.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
-            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
-                variablesListValueChanged(evt);
-            }
-        });
         variablesScrollPane.setViewportView(variablesList);
 
         variablesSelectedScrollPane.setViewportView(variablesSelectedList);
@@ -227,14 +276,16 @@ public class SelectCombinationsView extends javax.swing.JDialog {
                 .addComponent(variablesScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 49, Short.MAX_VALUE)
-                        .addComponent(setTableRiskModelButton)
-                        .addGap(51, 51, 51))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(cancelButton)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(calculateTablesButton))
+                            .addComponent(progressbar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(automaticSpecificationButton, javax.swing.GroupLayout.DEFAULT_SIZE, 207, Short.MAX_VALUE)))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(32, 32, 32)
-                        .addComponent(automaticSpecificationButton))
-                    .addGroup(layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGap(10, 10, 10)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(removeFromSelectedButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(moveToSelectedButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -251,18 +302,13 @@ public class SelectCombinationsView extends javax.swing.JDialog {
                             .addComponent(addRowButton)
                             .addComponent(removeRowButton)))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(93, 93, 93)
-                        .addComponent(clearButton))
+                        .addGap(83, 83, 83)
+                        .addComponent(clearButton, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(30, 30, 30)
-                        .addComponent(cancelButton)
-                        .addGap(18, 18, 18)
-                        .addComponent(calculateTablesButton))
-                    .addGroup(layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(progressbar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(tablesScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(45, 45, 45)
+                        .addComponent(setTableRiskModelButton)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(tablesScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 283, Short.MAX_VALUE)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -294,11 +340,11 @@ public class SelectCombinationsView extends javax.swing.JDialog {
                                 .addComponent(removeRowButton)))
                         .addGap(18, 18, 18)
                         .addComponent(automaticSpecificationButton)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGap(18, 18, 18)
                         .addComponent(clearButton)
-                        .addGap(32, 32, 32)
+                        .addGap(18, 18, 18)
                         .addComponent(setTableRiskModelButton)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 33, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 40, Short.MAX_VALUE)
                         .addComponent(progressbar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -312,89 +358,265 @@ public class SelectCombinationsView extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void calculateTablesButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_calculateTablesButtonActionPerformed
+        //TODO: does not work yet
         controller.calculateTables();
     }//GEN-LAST:event_calculateTablesButtonActionPerformed
 
     private void moveToSelectedButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_moveToSelectedButtonActionPerformed
-        int index = variablesList.getSelectedIndex();
-        VariableMu variable = (VariableMu) variablesList.getSelectedValue();
-        boolean doubleVariable = false;
-        for(Object o: variableSelectedListModel.toArray()){
-            if(variable.equals(o)){
-                doubleVariable = true;
-                System.out.println(doubleVariable);
+        int[] index = variablesList.getSelectedIndices();
+        Object[] variableMu =  variablesList.getSelectedValuesList().toArray();
+        
+        // checks for all variables if they are already in the variablesSelectedList and if not, adds them.
+        for(Object variable: variableMu){
+            boolean variableAlreadyExists = false;
+            for(Object o: variablesSelectedListModel.toArray()){
+                if(variable.equals(o)){
+                    variableAlreadyExists = true;
+                }
+            }
+            if(!variableAlreadyExists){
+                variablesSelectedListModel.add(variablesSelectedListModel.getSize(), (VariableMu) variable);
             }
         }
-        if(!doubleVariable){
-            variableSelectedListModel.add(variableSelectedListModel.getSize(), variable);
-        }
-        variablesList.setSelectedIndex(index+1);
-        //updateValues();
+        
+        variablesList.setSelectedIndex(index[index.length - 1]+1);
     }//GEN-LAST:event_moveToSelectedButtonActionPerformed
 
     private void removeFromSelectedButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeFromSelectedButtonActionPerformed
-        if(variablesSelectedList.getSelectedIndices().length == variableSelectedListModel.getSize()){
-            variableSelectedListModel.removeAllElements();
-        } else {
-            
-            for(Object o: variablesSelectedList.getSelectedValuesList()){
-                variableSelectedListModel.removeElement(o);
-            }
+        for(Object o: variablesSelectedList.getSelectedValuesList()){
+                variablesSelectedListModel.removeElement(o);
         }
         variablesSelectedList.setSelectedIndex(0);
     }//GEN-LAST:event_removeFromSelectedButtonActionPerformed
 
     private void removeAllFromSelectedButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeAllFromSelectedButtonActionPerformed
-        variableSelectedListModel.removeAllElements();
+        variablesSelectedListModel.removeAllElements();
         variablesList.setSelectedIndex(0);
-        //updateValues();
-        
-        //controller.removeAllFromSelected();
     }//GEN-LAST:event_removeAllFromSelectedButtonActionPerformed
 
     private void addRowButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addRowButtonActionPerformed
-        int columns = variablesSelectedList.getComponentCount();
-        int index = 2;
-        while(table.getColumnCount()<columns+2){
-            TableColumn column = new TableColumn();
-            column.setHeaderValue("Var " + index);
-            table.addColumn(column);
-            index++;
-        }
+        // TODO: hier ben ik mee bezig
         
-        for(int i = 0; i< columns; i++){
-            table.setValueAt(variableSelectedListModel.getElementAt(i), 0, i+2);
+        if(variablesSelectedListModel.size()> 10){
+            // place warning
+        } else {
+
+            ArrayList<TableMu> tables = model.getTables();
+            VariableMu[] variableMu = new VariableMu[variablesSelectedListModel.size()];
+            variablesSelectedListModel.copyInto(variableMu);
+
+            boolean riskModel = false;
+            boolean isValid = true;
+
+            for(TableMu t: tables){
+                if(t.isRiskModel() == true){
+                    riskModel = true;
+                }
+            }
+
+            if(tables.size()> 0){
+                isValid = compaireRows(riskModel, variableMu);
+            }
+
+            if(isValid){
+                if(variablesSelectedListModel.size()>0){
+                    model.setNumberOfRows(model.getNumberOfRows() + 1);
+                    int columns = columnNames.size();
+                    int sizeNewRow = variablesSelectedListModel.getSize();
+                    int addedColumns = (sizeNewRow + 2) - columns;
+                    if(addedColumns > 0){
+                        for(int i = 0; i< addedColumns; i++){
+                            this.columnNames.add("Var " + (columns - 1 + i));
+                        }
+                    }
+                    updateValues();
+
+                    TableMu tableMu = new TableMu();
+        //            VariableMu[] variableMu = new VariableMu[variableSelectedListModel.size()];
+        //            variableSelectedListModel.copyInto(variableMu);
+                    variablesSelectedListModel.removeAllElements();
+                    tableMu.setThreshold(model.getThreshold());
+                    tableMu.setVariables(variableMu);
+                    String[] output = tableMu.getTable();
+                    model.addTable(tableMu);
+                    int index = 0;
+                    for(String s: output){
+                        table.setValueAt(s, model.getNumberOfRows() -1, index);
+                        index++;
+                    }
+
+                    table.updateUI();
+
+                }
+            } else {
+                variablesSelectedListModel.removeAllElements();
+            }
+            updateValues();
+            table.getSelectionModel().setSelectionInterval(model.getNumberOfRows()-1, model.getNumberOfRows()-1);
         }
-        table.updateUI();
-        //controller.addRow();
     }//GEN-LAST:event_addRowButtonActionPerformed
 
+    //TODO: check how this works when it is combined with automatically generated data and when the riskmodel is set.
+    
+    /**
+     * This function compaires the different tables with a new table (VariableMu array)
+     * if the table is different (enough), which depends on the riskmodel, it returns true
+     * if the table has to much overlap, it returns false
+     * @param riskModel boolean that tells if the riskModel is set for at least one table
+     * @param variableMu an array of variables from the to be added table
+     * @return It returns if a table can be added
+     */
+    public boolean compaireRows(boolean riskModel, VariableMu[] variableMu){
+        boolean isValid = true;
+        boolean exit = false;
+        ArrayList<TableMu> tables = model.getTables();
+        int numberOfTables = tables.size();
+        int numberOfDoubleVariables = 0;
+            
+        for(int i = 0; i < numberOfTables; i++){
+            TableMu table_1 = tables.get(i);
+            for(VariableMu v_1: table_1.getVariables()){
+                for(VariableMu v_2: variableMu){
+                    if(v_1.equals(v_2)){
+                        numberOfDoubleVariables++;
+                    }
+                }
+                if(!riskModel && variableMu.length == table_1.getVariables().size() 
+                        && numberOfDoubleVariables == variableMu.length){
+                    table_1.setThreshold(thresholdTextField.getText());
+                    isValid = false;
+                    exit = true;
+                }
+                if(riskModel && numberOfDoubleVariables > 0 ){
+                    isValid = false;
+                    exit = true;
+                }
+                if(exit){
+                    break;
+                }
+            }
+            if(exit){
+                break;
+            }
+        }
+        return isValid;
+    }
+    
     private void removeRowButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeRowButtonActionPerformed
-        controller.removeRow();
+        if(model.getNumberOfRows() > 0){
+            try{
+                int[] selectedRows = table.getSelectedRows();
+                variablesSelectedListModel.removeAllElements();
+                ArrayList<VariableMu> variableMu = model.getTables().get(selectedRows[selectedRows.length - 1]).getVariables();
+                for(int j = 0; j < variableMu.size(); j++){
+                    variablesSelectedListModel.add(j, variableMu.get(j));
+                }
+                for(int i = selectedRows.length -1; i > -1; i--){
+                    model.removeTable(selectedRows[i]);
+                    model.setNumberOfRows(model.getNumberOfRows()-1);
+                }
+            } catch(Exception e) {
+                model.setNumberOfRows(model.getNumberOfRows()-1);
+                model.removeTable(model.getNumberOfRows());
+            }
+            if(model.getNumberOfRows()== 0){
+                this.clear();
+            }
+        }
+        updateValues();
+        table.getSelectionModel().setSelectionInterval(0, 0);
     }//GEN-LAST:event_removeRowButtonActionPerformed
 
     private void automaticSpecificationButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_automaticSpecificationButtonActionPerformed
-        controller.automaticSpecification();
+        // what to do when there are less than 3 variables?
+        
+        // make an array for each idLevel (0-5)
+        ArrayList<ArrayList<VariableMu>> variables = new ArrayList<>();
+        for(int i = 0; i < 6; i++){
+            ArrayList<VariableMu> array = new ArrayList<>();
+            variables.add(array);
+        }
+        
+        // fill the appropriate array according to the idLevels of the variables
+        for(int i = 0; i < variablesListModel.getSize(); i++){
+            VariableMu variable = (VariableMu) variablesListModel.getElementAt(i);
+            variables.get(variable.getIdLevel()).add(variable);
+        }
+        
+        // add all variables with an ID-level higher than 0 to the arrayList of variables.
+        ArrayList<VariableMu> allValidVariables = new ArrayList<>();
+        for(int i = 1; i< variables.size(); i++){
+            allValidVariables.addAll(variables.get(i));
+        }
+        
+        // get the number of idLevels higher than 0
+        int idLevels = 0;
+        for(ArrayList<VariableMu> v: variables){
+            if(v.size()>0){
+                idLevels++;
+            }
+        }
+        
+        list(allValidVariables, 2);
+        
+        //prints the variables of each table and the number of tables
+        //TODO: remove after testing
+//        for(TableMu t: model.getTables()){
+//            for(VariableMu v: t.getVariables()){
+//                System.out.print(v.getName() + " ");
+//            }
+//            System.out.println("");
+//        }
+//        System.out.println(model.getTables().size());
+        
+        updateValues();
     }//GEN-LAST:event_automaticSpecificationButtonActionPerformed
-
+    
+    
+    public void list(ArrayList<VariableMu> data, int dimensions){
+        ArrayList<VariableMu> variableSubset = new ArrayList<>();
+        list(0 , data, dimensions, variableSubset);
+    }
+    
+    public void list(int startPos, ArrayList<VariableMu> allVariables, int dimension, ArrayList<VariableMu> variableSubset){
+        if(dimension > 0){
+            for(int i = startPos; i< allVariables.size(); i++){
+                //make variable array 
+                ArrayList<VariableMu> temp = new ArrayList<>();
+                VariableMu s = allVariables.get(i);
+                temp.addAll(variableSubset);
+                temp.add(s);
+                
+                //Make table, add the variable array and add this table to the table array
+                TableMu tableMu = new TableMu();
+                tableMu.setVariables(temp);
+                model.getTables().add(tableMu);
+                
+                int d = dimension - 1;
+                list(i+1, allVariables, d, temp);
+            }
+        }
+    }
+    
     private void clearButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearButtonActionPerformed
+        this.clear();
         controller.clear();
     }//GEN-LAST:event_clearButtonActionPerformed
 
     private void setTableRiskModelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_setTableRiskModelButtonActionPerformed
-        controller.setTableRiskModel();
+        int[] indices = table.getSelectedRows();
+        for(int i = 0;  i < indices.length; i++){
+            TableMu tableMu = model.getTables().get(indices[i]);
+            tableMu.setRiskModel(!tableMu.isRiskModel());
+        }
+        updateValues();
+        table.getSelectionModel().setSelectionInterval(indices[indices.length -1], indices[indices.length -1]);
     }//GEN-LAST:event_setTableRiskModelButtonActionPerformed
 
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
+        this.clear();
         controller.cancel();
     }//GEN-LAST:event_cancelButtonActionPerformed
-
-    private void variablesListValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_variablesListValueChanged
-        if(!evt.getValueIsAdjusting()){
-            variablesList.setSelectedIndex(variablesList.getSelectedIndex());
-            //updateValues();
-        }
-    }//GEN-LAST:event_variablesListValueChanged
 
     private void thresholdTextFieldCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_thresholdTextFieldCaretUpdate
         try {
@@ -402,47 +624,6 @@ public class SelectCombinationsView extends javax.swing.JDialog {
         } catch (Exception e){}
     }//GEN-LAST:event_thresholdTextFieldCaretUpdate
 
-//    /**
-//     * @param args the command line arguments
-//     */
-//    public static void main(String args[]) {
-//        /* Set the Nimbus look and feel */
-//        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-//        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-//         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-//         */
-//        try {
-//            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-//                if ("Nimbus".equals(info.getName())) {
-//                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-//                    break;
-//                }
-//            }
-//        } catch (ClassNotFoundException ex) {
-//            java.util.logging.Logger.getLogger(SelectCombinationsView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        } catch (InstantiationException ex) {
-//            java.util.logging.Logger.getLogger(SelectCombinationsView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        } catch (IllegalAccessException ex) {
-//            java.util.logging.Logger.getLogger(SelectCombinationsView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-//            java.util.logging.Logger.getLogger(SelectCombinationsView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        }
-//        //</editor-fold>
-//
-//        /* Create and display the dialog */
-//        java.awt.EventQueue.invokeLater(new Runnable() {
-//            public void run() {
-//                SelectCombinationsView view = new SelectCombinationsView(new javax.swing.JFrame(), true);
-//                view.addWindowListener(new java.awt.event.WindowAdapter() {
-//                    @Override
-//                    public void windowClosing(java.awt.event.WindowEvent e) {
-//                        System.exit(0);
-//                    }
-//                });
-//                view.setVisible(true);
-//            }
-//        });
-//    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addRowButton;
     private javax.swing.JButton automaticSpecificationButton;

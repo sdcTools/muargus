@@ -111,7 +111,7 @@ public class SelectCombinationsController {
      * 
      */
     public void cancel() {                                             
-        // TODO add your handling code here:
+        view.setVisible(false);
     } 
     
 }

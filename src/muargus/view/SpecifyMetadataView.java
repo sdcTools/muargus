@@ -33,22 +33,9 @@ public class SpecifyMetadataView extends javax.swing.JDialog {
     private MetadataMu metadataMu;
     private String separatorTemp;
     private int dataFileTypeTemp;
-    private int previousIndex;
-    VariableMu previousVariableMu;
     
     private DefaultListModel variableListModel;
-
-
-//    public SpecifyMetadataView(java.awt.Frame parent, boolean modal) {
-//        super(parent, modal);
-//        controller = new SpecifyMetadataController(this);
-//        initComponents();
-//        this.setLocationRelativeTo(null);
-//        this.metadataMu = new MetadataMu();
-//        separatorTemp = this.metadataMu.getSeparator();
-//        makeVariables();
-//        
-//    }
+    
     /**
      * Creates new form SpecifyMetadataView
      */
@@ -60,10 +47,6 @@ public class SpecifyMetadataView extends javax.swing.JDialog {
         variablesList.setSelectionModel(new SingleListSelectionModel());
         variablesList.setCellRenderer(new VariableNameCellRenderer());
         relatedToComboBox.setRenderer(new VariableNameCellRenderer());
-        //this.metadataMu = metadata;
-        
-        //makeVariables();
-        
     }
 
     public MetadataMu getMetadataMu() {
@@ -77,38 +60,19 @@ public class SpecifyMetadataView extends javax.swing.JDialog {
     }
 
     public void makeVariables(){
-       // try {
-            
-            //TODO: remove this if statement after testing
-            //this if statement creates a new instance of MetadataMu if there is none. 
-            //this can only happen if no file is selected
-            if(metadataMu == null){
-                this.metadataMu = new MetadataMu();
-            }
-            // read metadata file
-//            metadataMu.readMetadata(metadataMu.getFileNames().getMetaFileName());
-        //} catch (ArgusException ex) {
-          //  Logger.getLogger(SpecifyMetadataView.class.getName()).log(Level.SEVERE, null, ex);
-        //}
-        //tempVariables = ((MetadataMu) metadataMu.clone()). MetadataMu.getClone();
+        if(metadataMu == null){
+            this.metadataMu = new MetadataMu();
+        }
+
         separatorTemp = metadataMu.getSeparator();
         dataFileTypeTemp = metadataMu.getDataFileType();
         
-        previousIndex = 0;
         variableListModel = new DefaultListModel<>(); 
         for (VariableMu variable : metadataMu.getVariables()) {
             variableListModel.addElement(variable);
         }
-                
         variablesList.setModel(variableListModel);
 
-        
-        
-        
-        // initializes the variable names for the variablesJList and relatedJComboBox
-//        for(int i = 0; i< originalVariables.size(); i++){
-//            related[i+1] = originalVariables.get(i).getName();
-//        }
 
         // makes the list of suppressionweights for the suppressionWeightJComboBox
         for (int i = 0; i < suppressionWeight.length; i++){
@@ -117,7 +81,6 @@ public class SpecifyMetadataView extends javax.swing.JDialog {
         
         // add lists of names to the ComboBoxes
         identificationComboBox.setModel(new DefaultComboBoxModel(idLevel));
-        //relatedToComboBox.setModel(new DefaultComboBoxModel(related));
         weightLocalSuppressionComboBox.setModel(new DefaultComboBoxModel(suppressionWeight));
         variablesComboBox.setModel(new DefaultComboBoxModel(format));
         
@@ -136,11 +99,10 @@ public class SpecifyMetadataView extends javax.swing.JDialog {
                 setSpss(true);
                 break;
         }
-         if (variableListModel.getSize() > 0) {
-            //index = 0;
+        
+        if (variableListModel.getSize() > 0) {
             variablesList.setSelectedIndex(0);
         }
-       //updateValues();
         calculateButtonStates();
     }
     
@@ -199,6 +161,7 @@ public class SpecifyMetadataView extends javax.swing.JDialog {
         nameTextField.setText(selected.getName());
         identificationComboBox.setSelectedIndex(selected.getIdLevel());
         decimalsTextField.setText(Integer.toString(selected.getDecimals()));
+        decimalsTextField.setEnabled(numericalCheckBox.isSelected());
         truncationAllowedCheckBox.setSelected(selected.isTruncable());
         codelistfileCheckBox.setSelected(selected.isCodelist());
         codelistfileTextField.setText(selected.getCodeListFile());
@@ -215,15 +178,13 @@ public class SpecifyMetadataView extends javax.swing.JDialog {
         startingPositionTextField.setText(Integer.toString(selected.getStartingPosition()));
         lengthTextField.setText(Integer.toString(selected.getVariableLength()));
         separatorTextField.setText(separatorTemp);
+        
         related = new ArrayList<>();
         related.add(new VariableMu("--none--"));
         for (Object o: variableListModel.toArray()) {
             if (!o.equals(selected))
             related.add((VariableMu) o);
         }
-
-        //related.addAll(cloneVariables);
-        
         relatedToComboBox.setModel(
                 new javax.swing.DefaultComboBoxModel(related.toArray()));
 
@@ -233,19 +194,6 @@ public class SpecifyMetadataView extends javax.swing.JDialog {
             relatedToComboBox.setSelectedIndex(0);
         }
     }
-    
-    
-//    private int getIndexOfRelated(VariableMu indexVariable){
-//        int index = 1;
-//        for(VariableMu variable: cloneVariables){
-//            if(variable.equals(indexVariable)){
-//                break;
-//            }
-//            index++;
-//        }
-//        return index;
-//        
-//    }
     
     private void calculateButtonStates() {
         int index = variablesList.getSelectedIndex();
@@ -832,7 +780,7 @@ public class SpecifyMetadataView extends javax.swing.JDialog {
     }//GEN-LAST:event_generateButtonActionPerformed
 
     private void updateMetadata() {
-        ArrayList<VariableMu> list = new ArrayList<VariableMu>();
+        ArrayList<VariableMu> list = new ArrayList<>();
         for (Object o : variableListModel.toArray()) {
             list.add((VariableMu) o);
         }
@@ -942,7 +890,6 @@ public class SpecifyMetadataView extends javax.swing.JDialog {
                 categoricalCheckBox.setEnabled(true);
                 numericalCheckBox.setEnabled(true);
         }
-
     }//GEN-LAST:event_hhvariableRadioButtonStateChanged
 
     private void weightRadioButtonStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_weightRadioButtonStateChanged
@@ -968,17 +915,6 @@ public class SpecifyMetadataView extends javax.swing.JDialog {
         boolean enable = categoricalCheckBox.isSelected();
         enableControls(this.categoriesPanel, enable);
         enableControls(this.optionsArgusPanel, enable);
-//        categoriesPanel.setEnabled(enable);
-//        identificationComboBox.setEnabled(enable);
-//        identificationLevelLabel.setEnabled(enable);
-//        weightLocalSuppressionComboBox.setEnabled(enable);
-//        weightLocalSuppressionLabel.setEnabled(enable);
-//        optionsArgusPanel.setEnabled(enable);
-//        truncationAllowedCheckBox.setEnabled(enable);
-//        codelistfileCheckBox.setEnabled(enable);
-//        codelistfileTextField.setEnabled(enable);
-//        codelistfileButton.setEnabled(enable);
-//        missingsPanel.setEnabled(enable);
     }//GEN-LAST:event_categoricalCheckBoxStateChanged
 
     private void enableControls(Component control, boolean enable) {
@@ -1067,47 +1003,7 @@ public class SpecifyMetadataView extends javax.swing.JDialog {
         variablesList.updateUI();
     }//GEN-LAST:event_nameTextFieldCaretUpdate
 
-    /**
-     * @param args the command line arguments
-     */
-//    public static void main(String args[]) {
-//        /* Set the Nimbus look and feel */
-//        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-//        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-//         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-//         */
-//        try {
-//            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-//                if ("Windows Classic".equals(info.getName())) {
-//                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-//                    break;
-//                }
-//            }
-//        } catch (ClassNotFoundException ex) {
-//            java.util.logging.Logger.getLogger(SpecifyMetadataView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        } catch (InstantiationException ex) {
-//            java.util.logging.Logger.getLogger(SpecifyMetadataView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        } catch (IllegalAccessException ex) {
-//            java.util.logging.Logger.getLogger(SpecifyMetadataView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-//            java.util.logging.Logger.getLogger(SpecifyMetadataView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        }
-//        //</editor-fold>
-//
-//        /* Create and display the dialog */
-//        java.awt.EventQueue.invokeLater(new Runnable() {
-//            public void run() {
-//                SpecifyMetadataView view = new SpecifyMetadataView(new javax.swing.JFrame(), true);
-//                view.addWindowListener(new java.awt.event.WindowAdapter() {
-//                    @Override
-//                    public void windowClosing(java.awt.event.WindowEvent e) {
-//                        System.exit(0);
-//                    }
-//                });
-//                view.setVisible(true);
-//            }
-//        });
-//    }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel attributesPanel;
     private javax.swing.JButton cancelButton;

@@ -12,19 +12,20 @@ import java.util.ArrayList;
  */
 public class SelectCombinationsModel {
     private int threshold;
-    private ArrayList<String> variablesList;
-    private ArrayList<String> itemsSelectedList;
-    // TODO: change type to generic type T
-    private ArrayList<ArrayList<String>> tablesTable;   
+    private ArrayList<TableMu> tables;
+    
+    //TODO: remove these and their usage and replace it with a direct call to the number of rows/columns
+    private int numberOfRows; 
+    private int numberOfColumns;
 
     /**
      * 
      */
     public SelectCombinationsModel() {
         this.threshold = 1;
-        this.variablesList = new ArrayList<>();
-        this.itemsSelectedList = new ArrayList<>();
-        this.tablesTable = new ArrayList<>();
+        this.numberOfColumns = 0;
+        this.numberOfRows = 0;
+        this.tables = new ArrayList<>();
     }
 
     /**
@@ -43,52 +44,36 @@ public class SelectCombinationsModel {
         this.threshold = Integer.parseInt(threshold);
     }
 
-    /**
-     * 
-     * @return 
-     */
-    public ArrayList<String> getVariablesList() {
-        return variablesList;
+    public ArrayList<TableMu> getTables() {
+        return tables;
     }
 
-    /**
-     * 
-     * @param variablesList 
-     */
-    public void setVariablesList(ArrayList<String> variablesList) {
-        this.variablesList = variablesList;
-    }
-
-    /**
-     * 
-     * @return 
-     */
-    public ArrayList<String> getItemsSelectedList() {
-        return itemsSelectedList;
-    }
-
-    /**
-     * 
-     * @param itemsSelectedList 
-     */
-    public void setItemsSelectedList(ArrayList<String> itemsSelectedList) {
-        this.itemsSelectedList = itemsSelectedList;
-    }
-
-    /**
-     * 
-     * @return 
-     */
-    public ArrayList<ArrayList<String>> getTablesTable() {
-        return tablesTable;
-    }
-
-    /**
-     * 
-     * @param tablesTable 
-     */
-    public void setTablesTable(ArrayList<ArrayList<String>> tablesTable) {
-        this.tablesTable = tablesTable;
+    public void setTables(ArrayList<TableMu> tables) {
+        this.tables = tables;
     }
     
+    public void addTable(TableMu table){
+        this.tables.add(table);
+    }
+    
+    public void removeTable(int i){
+        this.tables.remove(i);
+    }
+
+    public int getNumberOfRows() {
+        return numberOfRows;
+    }
+
+    public void setNumberOfRows(int numberOfRows) {
+        this.numberOfRows = numberOfRows;
+    }
+
+    public int getNumberOfColumns() {
+        return numberOfColumns;
+    }
+
+    public void setNumberOfColumns(int numberOfColumns) {
+        this.numberOfColumns = numberOfColumns;
+    }
+
 }

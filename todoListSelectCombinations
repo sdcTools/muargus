@@ -1,7 +1,23 @@
+Is het handig om in plaats van zoals nu een waarschuwing na elke 100 tabellen, in het begin een waarschuwing te geven
+als er meer tabellen zijn dan 100. Je kan bijvoorbeeld vrij gemakkelijk berekenen hoeveel tabellen er ontstaan:
+
+public void numberOfTabels(int numberOfTables, int dimensions, int numberOfVariables){
+    if(dimensions > 0){
+        int tempNumber = numberOfTables * numberOfVariables;
+        int tempNumberOfVariables = numberOfVariables - 1;
+        int tempDimensions = dimensions -1;
+        numberOfTabels(tempNumber, tempNumberOfVariables, tempDimensions);
+    }
+}
+
+ 
+
 
 Taak:
 1. variablesList: 
-    - vullen met de variabelen waarvan het ID-level groter is dan 0                                             Jeldrik: werkt
+    - vullen met de variabelen die categorisch zijn                                                             Jeldrik: verander ID naar categorical
+    opmerking: in de oude Mu worden variabelen met een ID-level van 0 wel geladen,
+        maar bij het automatisch genereren van data niet meegenomen (handmatig wel). Moet het zo blijven?
 2. variablesSelectedList: 
     - mogelijk maken dat de lijst gevuld/geleegd kan worden                                                     Jeldrik: werkt
 3. moveToSelectedButton: 
@@ -10,46 +26,48 @@ Taak:
     - geselecteerde variabele van variablesSelectedList verwijderen                                             Jeldrik: werkt
 5. removeAllFromSelectedButton:
     - alle variabele in variablesSelectedList verwijderen                                                       Jeldrik: werkt
-6. table:
-    - vul de tabel met tabellen die al zijn berekend (als er tabellen zijn)
-    - mogelijk maken dat de lijst gevuld/geleegd kan worden
-    - maak automatisch titels voor elke kolom aan
-6. addRowButton:
-    - check of een rij toegevoegd mag worden
-         a. er mag geen overlap zijn in de variabele voor het riskmodel (geef indien nodig waarschuwing)
-         b. als tabel al bestaat, voeg het niet toe (geen waarschuwing)
-         c. het aantal variabelen mag niet groter zijn dan 10 (geef een waarschuwing als dit wel het geval is)
-    - voeg een rij toe aan table (let hier op id-level)
-    - verwijder alle variabelen in variablesSelectedList (zelfde als punt 5)
-7. removeRowButton:
-    - verwijder geselecteerde rij uit table
-    - voeg alle variabelen toe aan variablesSelectedList (vergelijkbaar met punt 3 maar dan voor alles)
-8. thresholdTextField
-    - zet bij het opstarten op de defaultwaarde (1)                                                             Jeldrik: werkt
-    - als de waarde veranderd, sla deze dan op (ook als Mu-ARGUS afgesloten wordt)                              Jeldrik: wordt nu nog opgeslagen in de Model
-9. automaticSpecificationButton
+6. table:                                                                               
+    - vul de tabel met tabellen die al zijn berekend (als er tabellen zijn)                                     Jeldrik: werkt
+    - mogelijk maken dat de lijst gevuld/geleegd kan worden                                                     Jeldrik: werkt
+    - maak automatisch titels voor elke kolom aan                                                               Jeldrik: werkt
+7. addRowButton:                                                                                                Jeldrik: werken een paar dingen niet meer optimaal. Ben er nog mee bezig
+    - check of een rij toegevoegd mag worden                                                                    Jeldrik: werkt
+         a. er mag geen overlap zijn in de variabele voor het riskmodel (geef indien nodig waarschuwing)        Jeldrik: werkt
+         b. als tabel al bestaat, voeg het niet toe (geen waarschuwing) (verander indien nodig de threshold)    Jeldrik: werkt
+         c. het aantal variabelen mag niet groter zijn dan 10 (geef een waarschuwing als dit wel het geval is)  Jeldrik: werkt
+    - voeg een rij toe aan table (gaat gewoon op volgorde van de variabelenlijst)                               Jeldrik: werkt nu niet meer
+    - verwijder alle variabelen in variablesSelectedList (zelfde als punt 5)                                    Jeldrik: werkt
+8. removeRowButton:
+    - verwijder geselecteerde rij(en) uit table                                                                 Jeldrik: werkt
+    - voeg alle variabelen toe aan variablesSelectedList (vergelijkbaar met punt 3 maar dan voor alles)         Jeldrik: werkt
+9. thresholdTextField
+    - zet bij het opstarten op de defaultwaarde (= 1)                                                           Jeldrik: werkt
+    - als de waarde veranderd, sla deze dan op (ook als Mu-ARGUS afgesloten wordt)                              Jeldrik: wordt nu nog opgeslagen in de Model maar nog niet in registry (setRegistry/getRegistry)
+10. automaticSpecificationButton                                                                                Jeldrik: mee bezig
     - controleer of de tabel leeg is en vraag of de tabellen verwijderd moeten worden als dit niet het geval is
     - open "methods for generating tabels" scherm
     - als "use identification levels" wordt gekozen, laat threshold scherm 1 keer zien
     - als "make all tables up to dimension X" gekozen wordt, laat threshold scherm X keer zien voor elke dimensie
-    - maak alle mogelijke tabellen volgens de specificaties en zet ze in table
-10. clearButton:
-    - remove all rows from table
-11. setTableRiskModelButton:
-    - voeg een R toe of verwijder deze bij de geselecteerde rij in de tabel
-    - als een rij volgens het Risk model gemaakt moet worden, maak deze rij rood
-12. cancelButton
-    - sluit het scherm
+    - maak alle mogelijke tabellen volgens de specificaties en zet ze in table                                  Jeldrik: werkt voor dimensies
+11. clearButton:
+    - remove all rows from table                                                                                Jeldrik: werkt
+12. setTableRiskModelButton:
+    - check of de tabellen voldoen aan de nieuwe eisen.
+      Zo nee, geef een waarschuwing en verwijder tabellen indien gewenst
+    - voeg een R toe of verwijder deze bij de geselecteerde rij in de tabel                                     Jeldrik: werkt
+    - als een rij volgens het Risk model gemaakt moet worden, maak deze rij rood                                werkt nog niet
+13. cancelButton
+    - sluit het scherm                                                                                          Jeldrik: werkt
     opmerking: waarschuwingsscherm toevoegen die wordt getoond als er tabellen zijn gespecificeerd?
-13. calculateTablesButton
+14. calculateTablesButton
     - bereken de frequenties van onveilige waardes voor elke tabel en geef deze aan de MainFrame
     - sluit het scherm
-14. progressbar
+15. progressbar
     - link dit aan de calculateTablesButton
     - laat label zien als hij bezig is (nog zoeken wat er moet staan)
-15. TablesMu klasse vergelijkbaar met VariablesMu. In deze klasse komt:
+16. TablesMu klasse vergelijkbaar met VariablesMu. In deze klasse komt:
     - lijst van variabelen waar de tabel uit bestaat
-    - aantal unsafe combinations per dimensie
+    - aantal unsafe combinations per dimensie                                                                   --> moet nog bedacht worden hoe dit handig is
     - boolean variable riskModel
     - method isRiskModel
     - method setRiskModel
@@ -57,5 +75,7 @@ Taak:
     - method setVariables
     - method getUnsafeCombinations(VariableMu ... variable, int dimensions) (dimensions should equal number of variables)
     - iets om het aantal onveilige combinaties per dimensie goed op te slaan (array?)
+17. Kijk wat er in de Controller/Model kan en verplaats dat.
+18. zorg dat wanneer het scherm weggeklikt wordt via het rode kruisje, dat de tabellen dan nog goed laden.      Jeldrik: moet straks als het goed is werken
     
 
