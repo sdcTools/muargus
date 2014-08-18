@@ -27,7 +27,8 @@ public class SelectCombinationsView extends javax.swing.JDialog {
     private TableModel tableModel;
     private ArrayList<String> columnNames;
     private String[][] data;
-    
+
+    //TODO: remove this when cloning works properly
     /**
      * Creates new form SelectCombinationsView
      */
@@ -40,47 +41,47 @@ public class SelectCombinationsView extends javax.swing.JDialog {
         variablesList.setCellRenderer(new VariableNameCellRenderer());
         variablesSelectedList.setCellRenderer(new VariableNameCellRenderer());
     }
-    
-       /**
+
+    /**
      * Creates new form SelectCombinationsView
      */
     public SelectCombinationsView(java.awt.Frame parent, boolean modal, SelectCombinationsController controller) {
         super(parent, modal);
         initComponents();
         this.controller = controller;
+        this.model = this.controller.getModel();
         this.setLocationRelativeTo(null);
         variablesList.setCellRenderer(new VariableNameCellRenderer());
         variablesSelectedList.setCellRenderer(new VariableNameCellRenderer());
     }
-    
-    public void setModel(SelectCombinationsModel model){
-        
+
+    public void setModel(SelectCombinationsModel model) {
+        this.model = model;
     }
-    
-    
 
 //    public MetadataMu getMetadataMu() {
 //        return metadataMu;
 //    }
-
     /**
      * Sets the metadata and calls the method to fill the variableList
-     * @param metadataMu Metadata Class containing all the metadata (variables etc)
+     *
+     * @param metadataMu Metadata Class containing all the metadata (variables
+     * etc)
      */
     public void setMetadataMu(MetadataMu metadataMu) {
         this.metadataMu = metadataMu;
         makeVariables();
     }
-    
+
     /**
      * Fills the selecCombinationsScreen with it's default values
      */
-    public void makeVariables(){
+    public void makeVariables() {
         // make listModels and add the variables that are categorical
-        variablesListModel = new DefaultListModel<>(); 
+        variablesListModel = new DefaultListModel<>();
         variablesSelectedListModel = new DefaultListModel<>();
         for (VariableMu variable : metadataMu.getVariables()) {
-            if(variable.isCategorical()){
+            if (variable.isCategorical()) {
                 variablesListModel.addElement(variable);
             }
         }
@@ -89,72 +90,70 @@ public class SelectCombinationsView extends javax.swing.JDialog {
         if (variablesListModel.getSize() > 0) {
             variablesList.setSelectedIndex(0);
         }
-        
+
         // set the default values and the size of the first two colums
-        columnNames = new ArrayList<>(Arrays.asList("Risk", "Thres.", "Var 1"));
         this.thresholdTextField.setText(this.model.getThreshold());
-        table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF );
+        table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         table.getColumnModel().getColumn(0).setMinWidth(30);
         table.getColumnModel().getColumn(0).setPreferredWidth(30);
         table.getColumnModel().getColumn(1).setMinWidth(50);
         table.getColumnModel().getColumn(1).setPreferredWidth(50);
-        
+
         updateValues();
     }
-    
+
     /**
      * Updates the table by filling it with the array of tables.
      */
-    private void updateValues(){
-        // gets the tables from SelectCombinationsModel and adds these to a double 
-        // array, containing the data
-        // TODO: remove the try catch after testing
+    private void updateValues() {
+        // gets the tables from SelectCombinationsModel and adds these to a double  array, containing the data
         ArrayList<TableMu> tables = model.getTables();
-        data = new String[model.getTables().size()][];
-        try{
-            int index = 0;
-            for(TableMu t: tables){
-                data[index] = t.getTable();
-                index++;
-            }
-        }catch(Exception e){
-            System.out.println("something is wrong here");
-            System.out.println(model.getTables().size());
+        data = new String[model.getTables().size()][model.getNumberOfColumns()];
+        //ArrayList<Integer> removeIndices = new ArrayList<>();
+//        for(int i = 0; i< tables.size(); i++){
+//            for(int j = i+1; j < tables.size(); j++){
+//                if(!compaireRows(rootPaneCheckingEnabled, tables.get(i), tables.get(j))){
+//                    model.removeTable(j);
+//                }
+//            }
+//        }
+
+        int index = 0;
+        for (TableMu t : tables) {
+            data[index] = t.getTable();
+            index++;
         }
-        
-        // TODO: add a check here that sets the columns to the size of the biggest table (+ 2)
-        
+
+        columnNames = new ArrayList<>(Arrays.asList("Risk", "Thres.", "Var 1"));
+        if (model.getNumberOfColumns() > 3) {
+            for (int i = 2; i <= model.getNumberOfColumns() - 2; i++) {
+                this.columnNames.add("Var " + i);
+            }
+        }
+
         tableModel = new DefaultTableModel(data, columnNames.toArray());
         table.setModel(tableModel);
-       
+
         // sets the size of each column
-        for(int i = 2; i < table.getColumnModel().getColumnCount(); i++){
+        for (int i = 2; i < table.getColumnModel().getColumnCount(); i++) {
             table.getColumnModel().getColumn(i).setMinWidth(70);
             table.getColumnModel().getColumn(i).setPreferredWidth(70);
         }
-        
+
         // TODO: check how the rows should be selected
-        if(tables.size() == 1){
+        if (tables.size() == 1) {
             table.getSelectionModel().setSelectionInterval(0, 0);
         }
     }
-    
+
     /**
      * Removes all the tables
      */
-    public void clear(){
-        int size =  model.getTables().size();
-        for(int i = size - 1; i >=  0; i--){
-           model.removeTable(i); 
-        }      
-        //model.setNumberOfRows(0); // should not be neccesary
-        
-        // TODO: replace this to an updateColumns method
-        int columns = columnNames.size();
-        for(int i = columns - 1; i > 2; i--){
-            this.columnNames.remove(i);
+    public void clear() {
+        int size = model.getTables().size();
+        for (int i = size - 1; i >= 0; i--) {
+            model.removeTable(i);
         }
-        
         updateValues();
     }
 
@@ -382,27 +381,27 @@ public class SelectCombinationsView extends javax.swing.JDialog {
 
     private void moveToSelectedButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_moveToSelectedButtonActionPerformed
         int[] index = variablesList.getSelectedIndices();
-        Object[] variableMu =  variablesList.getSelectedValuesList().toArray();
-        
+        Object[] variableMu = variablesList.getSelectedValuesList().toArray();
+
         // checks for all variables if they are already in the variablesSelectedList and if not, adds them.
-        for(Object variable: variableMu){
+        for (Object variable : variableMu) {
             boolean variableAlreadyExists = false;
-            for(Object o: variablesSelectedListModel.toArray()){
-                if(variable.equals(o)){
+            for (Object o : variablesSelectedListModel.toArray()) {
+                if (variable.equals(o)) {
                     variableAlreadyExists = true;
                 }
             }
-            if(!variableAlreadyExists){
+            if (!variableAlreadyExists) {
                 variablesSelectedListModel.add(variablesSelectedListModel.getSize(), (VariableMu) variable);
             }
         }
-        
-        variablesList.setSelectedIndex(index[index.length - 1]+1);
+
+        variablesList.setSelectedIndex(index[index.length - 1] + 1);
     }//GEN-LAST:event_moveToSelectedButtonActionPerformed
 
     private void removeFromSelectedButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeFromSelectedButtonActionPerformed
-        for(Object o: variablesSelectedList.getSelectedValuesList()){
-                variablesSelectedListModel.removeElement(o);
+        for (Object o : variablesSelectedList.getSelectedValuesList()) {
+            variablesSelectedListModel.removeElement(o);
         }
         variablesSelectedList.setSelectedIndex(0);
     }//GEN-LAST:event_removeFromSelectedButtonActionPerformed
@@ -413,131 +412,104 @@ public class SelectCombinationsView extends javax.swing.JDialog {
     }//GEN-LAST:event_removeAllFromSelectedButtonActionPerformed
 
     private void addRowButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addRowButtonActionPerformed
-        // TODO: hier ben ik mee bezig
-        
-        if(variablesSelectedListModel.size()> 10){
+        if (variablesSelectedListModel.size() > 10) {
             // place warning
         } else {
-
-            ArrayList<TableMu> tables = model.getTables();
+            // copy the selected variables into a VariableMu array
             VariableMu[] variableMu = new VariableMu[variablesSelectedListModel.size()];
             variablesSelectedListModel.copyInto(variableMu);
 
-            boolean riskModel = false;
             boolean isValid = true;
 
-            for(TableMu t: tables){
-                if(t.isRiskModel() == true){
-                    riskModel = true;
+            if (model.getNumberOfRows() > 0) {
+                for (int i = 0; i < model.getNumberOfRows(); i++) {
+                    TableMu tableMu = model.getTables().get(i);
+                    isValid = compaireRows(model.isRiskModel(), variableMu, tableMu);
+                    if (!isValid) {
+                        break;
+                    }
                 }
             }
 
-            if(tables.size()> 0){
-                isValid = compaireRows(riskModel, variableMu);
-            }
-
-            if(isValid){
-                if(variablesSelectedListModel.size()>0){
-                    model.setNumberOfRows(model.getNumberOfRows() + 1);
-                    int columns = columnNames.size();
-                    int sizeNewRow = variablesSelectedListModel.getSize();
-                    int addedColumns = (sizeNewRow + 2) - columns;
-                    if(addedColumns > 0){
-                        for(int i = 0; i< addedColumns; i++){
-                            this.columnNames.add("Var " + (columns - 1 + i));
-                        }
-                    }
-                    updateValues();
-
+            if (isValid) {
+                if (variablesSelectedListModel.size() > 0) {
                     TableMu tableMu = new TableMu();
-        //            VariableMu[] variableMu = new VariableMu[variableSelectedListModel.size()];
-        //            variableSelectedListModel.copyInto(variableMu);
                     variablesSelectedListModel.removeAllElements();
                     tableMu.setThreshold(model.getThreshold());
                     tableMu.setVariables(variableMu);
-                    String[] output = tableMu.getTable();
                     model.addTable(tableMu);
-                    int index = 0;
-                    for(String s: output){
-                        table.setValueAt(s, model.getNumberOfRows() -1, index);
-                        index++;
-                    }
-
-                    table.updateUI();
-
                 }
             } else {
                 variablesSelectedListModel.removeAllElements();
             }
             updateValues();
-            table.getSelectionModel().setSelectionInterval(model.getNumberOfRows()-1, model.getNumberOfRows()-1);
+            table.getSelectionModel().setSelectionInterval(model.getNumberOfRows() - 1, model.getNumberOfRows() - 1);
         }
     }//GEN-LAST:event_addRowButtonActionPerformed
 
     //TODO: check how this works when it is combined with automatically generated data and when the riskmodel is set.
     
+    public boolean compaireRows(boolean riskModel, TableMu toVariables, TableMu tableMu){
+        VariableMu[] variableMu = new VariableMu[toVariables.getVariables().size()];
+        toVariables.getVariables().toArray(variableMu);
+        return compaireRows(riskModel, variableMu, tableMu);
+    }
     /**
-     * This function compaires the different tables with a new table (VariableMu array)
-     * if the table is different (enough), which depends on the riskmodel, it returns true
-     * if the table has to much overlap, it returns false
-     * @param riskModel boolean that tells if the riskModel is set for at least one table
+     * This function compaires the different tables with a new table (VariableMu
+     * array) if the table is different (enough), which depends on the
+     * riskmodel, it returns true if the table has to much overlap, it returns
+     * false
+     *
+     * @param riskModel boolean that tells if the riskModel is set for at least
+     * one table
      * @param variableMu an array of variables from the to be added table
      * @return It returns if a table can be added
      */
-    public boolean compaireRows(boolean riskModel, VariableMu[] variableMu){
+    public boolean compaireRows(boolean riskModel, VariableMu[] variableMu, TableMu tableMu) {
         boolean isValid = true;
         boolean exit = false;
-        ArrayList<TableMu> tables = model.getTables();
-        int numberOfTables = tables.size();
         int numberOfDoubleVariables = 0;
-            
-        for(int i = 0; i < numberOfTables; i++){
-            TableMu table_1 = tables.get(i);
-            for(VariableMu v_1: table_1.getVariables()){
-                for(VariableMu v_2: variableMu){
-                    if(v_1.equals(v_2)){
-                        numberOfDoubleVariables++;
-                    }
-                }
-                if(!riskModel && variableMu.length == table_1.getVariables().size() 
-                        && numberOfDoubleVariables == variableMu.length){
-                    table_1.setThreshold(thresholdTextField.getText());
-                    isValid = false;
-                    exit = true;
-                }
-                if(riskModel && numberOfDoubleVariables > 0 ){
-                    isValid = false;
-                    exit = true;
-                }
-                if(exit){
-                    break;
+
+        for (VariableMu oldVariable : tableMu.getVariables()) {
+            for (VariableMu newVariable : variableMu) {
+                if (oldVariable.equals(newVariable)) {
+                    numberOfDoubleVariables++;
                 }
             }
-            if(exit){
+            if (riskModel && numberOfDoubleVariables > 0) {
+                isValid = false;
+                exit = true;
+            } else if (!riskModel && variableMu.length == tableMu.getVariables().size()
+                    && numberOfDoubleVariables == variableMu.length) {
+                tableMu.setThreshold(thresholdTextField.getText());
+                isValid = false;
+                exit = true;
+            }
+            if (exit) {
                 break;
             }
         }
         return isValid;
     }
-    
+
     private void removeRowButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeRowButtonActionPerformed
-        if(model.getNumberOfRows() > 0){
-            try{
+        if (model.getNumberOfRows() > 0) {
+            try {
                 int[] selectedRows = table.getSelectedRows();
                 variablesSelectedListModel.removeAllElements();
                 ArrayList<VariableMu> variableMu = model.getTables().get(selectedRows[selectedRows.length - 1]).getVariables();
-                for(int j = 0; j < variableMu.size(); j++){
+                for (int j = 0; j < variableMu.size(); j++) {
                     variablesSelectedListModel.add(j, variableMu.get(j));
                 }
-                for(int i = selectedRows.length -1; i > -1; i--){
+                for (int i = selectedRows.length - 1; i > -1; i--) {
                     model.removeTable(selectedRows[i]);
-                    model.setNumberOfRows(model.getNumberOfRows()-1);
+                    model.setNumberOfRows(model.getNumberOfRows() - 1);
                 }
-            } catch(Exception e) {
-                model.setNumberOfRows(model.getNumberOfRows()-1);
+            } catch (Exception e) {
+                model.setNumberOfRows(model.getNumberOfRows() - 1);
                 model.removeTable(model.getNumberOfRows());
             }
-            if(model.getNumberOfRows()== 0){
+            if (model.getNumberOfRows() == 0) {
                 this.clear();
             }
         }
@@ -547,36 +519,36 @@ public class SelectCombinationsView extends javax.swing.JDialog {
 
     private void automaticSpecificationButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_automaticSpecificationButtonActionPerformed
         // what to do when there are less than 3 variables?
-        
+
         // make an array for each idLevel (0-5)
         ArrayList<ArrayList<VariableMu>> variables = new ArrayList<>();
-        for(int i = 0; i < 6; i++){
+        for (int i = 0; i < 6; i++) {
             ArrayList<VariableMu> array = new ArrayList<>();
             variables.add(array);
         }
-        
+
         // fill the appropriate array according to the idLevels of the variables
-        for(int i = 0; i < variablesListModel.getSize(); i++){
+        for (int i = 0; i < variablesListModel.getSize(); i++) {
             VariableMu variable = (VariableMu) variablesListModel.getElementAt(i);
             variables.get(variable.getIdLevel()).add(variable);
         }
-        
+
         // add all variables with an ID-level higher than 0 to the arrayList of variables.
         ArrayList<VariableMu> allValidVariables = new ArrayList<>();
-        for(int i = 1; i< variables.size(); i++){
+        for (int i = 1; i < variables.size(); i++) {
             allValidVariables.addAll(variables.get(i));
         }
-        
+
         // get the number of idLevels higher than 0
         int idLevels = 0;
-        for(ArrayList<VariableMu> v: variables){
-            if(v.size()>0){
+        for (ArrayList<VariableMu> v : variables) {
+            if (v.size() > 0) {
                 idLevels++;
             }
         }
-        
+
         list(allValidVariables, 2);
-        
+
         //prints the variables of each table and the number of tables
         //TODO: remove after testing
 //        for(TableMu t: model.getTables()){
@@ -586,36 +558,35 @@ public class SelectCombinationsView extends javax.swing.JDialog {
 //            System.out.println("");
 //        }
 //        System.out.println(model.getTables().size());
-        
+
         updateValues();
     }//GEN-LAST:event_automaticSpecificationButtonActionPerformed
-    
-    
-    public void list(ArrayList<VariableMu> data, int dimensions){
+
+    public void list(ArrayList<VariableMu> data, int dimensions) {
         ArrayList<VariableMu> variableSubset = new ArrayList<>();
-        list(0 , data, dimensions, variableSubset);
+        list(0, data, dimensions, variableSubset);
     }
-    
-    public void list(int startPos, ArrayList<VariableMu> allVariables, int dimension, ArrayList<VariableMu> variableSubset){
-        if(dimension > 0){
-            for(int i = startPos; i< allVariables.size(); i++){
+
+    public void list(int startPos, ArrayList<VariableMu> allVariables, int dimension, ArrayList<VariableMu> variableSubset) {
+        if (dimension > 0) {
+            for (int i = startPos; i < allVariables.size(); i++) {
                 //make variable array 
                 ArrayList<VariableMu> temp = new ArrayList<>();
                 VariableMu s = allVariables.get(i);
                 temp.addAll(variableSubset);
                 temp.add(s);
-                
+
                 //Make table, add the variable array and add this table to the table array
                 TableMu tableMu = new TableMu();
                 tableMu.setVariables(temp);
                 model.getTables().add(tableMu);
-                
+
                 int d = dimension - 1;
-                list(i+1, allVariables, d, temp);
+                list(i + 1, allVariables, d, temp);
             }
         }
     }
-    
+
     private void clearButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearButtonActionPerformed
         this.clear();
         controller.clear();
@@ -623,12 +594,12 @@ public class SelectCombinationsView extends javax.swing.JDialog {
 
     private void setTableRiskModelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_setTableRiskModelButtonActionPerformed
         int[] indices = table.getSelectedRows();
-        for(int i = 0;  i < indices.length; i++){
+        for (int i = 0; i < indices.length; i++) {
             TableMu tableMu = model.getTables().get(indices[i]);
             tableMu.setRiskModel(!tableMu.isRiskModel());
         }
         updateValues();
-        table.getSelectionModel().setSelectionInterval(indices[indices.length -1], indices[indices.length -1]);
+        table.getSelectionModel().setSelectionInterval(indices[indices.length - 1], indices[indices.length - 1]);
     }//GEN-LAST:event_setTableRiskModelButtonActionPerformed
 
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
@@ -639,9 +610,9 @@ public class SelectCombinationsView extends javax.swing.JDialog {
     private void thresholdTextFieldCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_thresholdTextFieldCaretUpdate
         try {
             model.setThreshold(this.thresholdTextField.getText());
-        } catch (Exception e){}
+        } catch (Exception e) {
+        }
     }//GEN-LAST:event_thresholdTextFieldCaretUpdate
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addRowButton;
     private javax.swing.JButton automaticSpecificationButton;

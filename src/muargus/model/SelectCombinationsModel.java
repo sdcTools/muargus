@@ -12,6 +12,7 @@ import java.util.ArrayList;
  */
 public class SelectCombinationsModel {
     private int threshold;
+    private boolean riskModel;
     private ArrayList<TableMu> tables;
     
     /**
@@ -70,12 +71,35 @@ public class SelectCombinationsModel {
         return; //Deprecated, do not use
     }
 
+    public boolean isRiskModel() {
+        this.riskModel = false;
+        for(TableMu t: this.tables){
+            if(t.isRiskModel()){
+                this.riskModel = true;
+            }
+        }
+        return this.riskModel;
+    }
+
+    public void setRiskModel(boolean riskModel) {
+        this.riskModel = riskModel;
+    }
+    
     public int getNumberOfColumns() {
-        return calculateNumberOfColumns();
+        return this.calculateNumberOfColumns();
     }
     
     private int calculateNumberOfColumns() { 
-        return -1; //TODO
+        int numberOfVariables = 0;
+        for(TableMu t: this.tables){
+            if(t.getVariables().size() > numberOfVariables){
+                numberOfVariables = t.getVariables().size();
+            }
+        }
+        int numberOfColumns = numberOfVariables + 2;
+        return numberOfColumns; 
     }
+
+    
 
 }
