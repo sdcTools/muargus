@@ -1,5 +1,6 @@
 package muargus.view;
 
+import argus.model.ArgusException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import javax.swing.DefaultListModel;
@@ -377,7 +378,12 @@ public class SelectCombinationsView extends javax.swing.JDialog {
 
     private void calculateTablesButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_calculateTablesButtonActionPerformed
         //TODO: does not work yet
-        controller.calculateTables();
+        try {
+            controller.calculateTables();
+        }
+        catch (ArgusException ex) {
+            ;
+        }
     }//GEN-LAST:event_calculateTablesButtonActionPerformed
 
     private void moveToSelectedButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_moveToSelectedButtonActionPerformed
