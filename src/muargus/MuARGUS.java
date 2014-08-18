@@ -25,7 +25,7 @@ public class MuARGUS {
     public static final String REVISION = "1 (beta)";
     public static final int BUILD = 1;
 
-    private static MetadataMu metadata;
+    private static MetadataMu metadata; // naar controller main frame
     static
     {
         metadata = new MetadataMu();

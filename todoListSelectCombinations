@@ -17,7 +17,7 @@ Taak:
 1. variablesList: 
     - vullen met de variabelen die categorisch zijn                                                             Jeldrik: verander ID naar categorical
     opmerking: in de oude Mu worden variabelen met een ID-level van 0 wel geladen,
-        maar bij het automatisch genereren van data niet meegenomen (handmatig wel). Moet het zo blijven?
+        maar bij het automatisch genereren van data niet meegenomen (handmatig wel). Moet het zo blijven?       Anco
 2. variablesSelectedList: 
     - mogelijk maken dat de lijst gevuld/geleegd kan worden                                                     Jeldrik: werkt
 3. moveToSelectedButton: 

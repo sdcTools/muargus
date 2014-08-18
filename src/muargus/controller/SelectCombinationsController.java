@@ -29,8 +29,8 @@ public class SelectCombinationsController {
         this.model = model;
         this.view = new SelectCombinationsView(parentView, true, this, this.model);
         this.metadata = metadata;
-        this.metadataClone = new  MetadataMu(metadata);
-        this.view.setMetadataMu(this.metadataClone);
+        this.metadataClone = new  MetadataMu(metadata); // kan weg
+        this.view.setMetadataMu(this.metadata); // clone SelectCombinationsModel
     }
     
     public void showView() {

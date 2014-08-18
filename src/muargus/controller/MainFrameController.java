@@ -19,6 +19,8 @@ import muargus.view.ViewReportView;
  */
 public class MainFrameController {
     
+    
+    //TODO: add all models here
     MainFrameView view;
     SelectCombinationsModel selectCombinationsModel;
 
