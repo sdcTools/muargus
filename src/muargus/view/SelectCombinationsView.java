@@ -40,6 +40,24 @@ public class SelectCombinationsView extends javax.swing.JDialog {
         variablesList.setCellRenderer(new VariableNameCellRenderer());
         variablesSelectedList.setCellRenderer(new VariableNameCellRenderer());
     }
+    
+       /**
+     * Creates new form SelectCombinationsView
+     */
+    public SelectCombinationsView(java.awt.Frame parent, boolean modal, SelectCombinationsController controller) {
+        super(parent, modal);
+        initComponents();
+        this.controller = controller;
+        this.setLocationRelativeTo(null);
+        variablesList.setCellRenderer(new VariableNameCellRenderer());
+        variablesSelectedList.setCellRenderer(new VariableNameCellRenderer());
+    }
+    
+    public void setModel(SelectCombinationsModel model){
+        
+    }
+    
+    
 
 //    public MetadataMu getMetadataMu() {
 //        return metadataMu;
