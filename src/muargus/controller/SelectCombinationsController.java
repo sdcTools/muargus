@@ -4,11 +4,15 @@
  */
 package muargus.controller;
 
+import argus.model.ArgusException;
 import java.util.ArrayList;
 import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
+import muargus.extern.dataengine.CMuArgCtrl;
 import muargus.model.MetadataMu;
 import muargus.model.SelectCombinationsModel;
+import muargus.model.TableMu;
+import muargus.model.VariableMu;
 import muargus.view.SelectCombinationsView;
 
 /**
@@ -52,9 +56,53 @@ public class SelectCombinationsController {
     /**
      * 
      */
-    public void calculateTables() {                                                      
+    public void calculateTables() throws ArgusException {                                                      
         view.setVisible(false);
-    }                                                     
+        CMuArgCtrl c = new CMuArgCtrl();
+        boolean result = c.SetNumberVar(metadata.getVariables().size());
+        if (!result)
+            throw new ArgusException("Insufficient memory");
+        for (int index=0; index < metadata.getVariables().size(); index++) {
+            VariableMu variable = metadata.getVariables().get(index);
+            c.SetVariable(index,
+                    variable.getStartingPosition(),
+                    variable.getVariableLength(),
+                    variable.getDecimals(),
+                    variable.getMissing(0),
+                    variable.getMissing(1),
+                    variable.isHouse_id(),
+                    variable.isHousehold(),
+                    variable.isCategorical(),
+                    variable.isNumeric(),
+                    variable.isWeight(),
+                    metadata.getVariables().indexOf(variable.getRelatedVariable())); //TODO: handle error
+        }
+        int[] errorCodes = new int[1];
+        int[] lineNumbers = new int[1];
+        int[] varIndex = new int[1];
+        result = c.ExploreFile(metadata.getFileNames().getDataFileName(),
+                errorCodes,
+                lineNumbers,
+                varIndex);
+        //TODO handle error
+        
+        result = c.SetNumberTab(this.model.getTables().size());
+        //TODO handle error
+        
+        for (int index=0; index < model.getTables().size(); index++) {
+            TableMu table = model.getTables().get(index);
+            c.SetTable(index,
+                    table.getThreshold(),
+                    table.getVariables().size(),
+                    getVarIndices(table),
+                    false, //TODO
+                    1); //TODO
+        }
+    }
+    
+    private int[] getVarIndices(TableMu table) {
+        return new int[] {0}; //TODO
+    }
 
     /**
      * 
