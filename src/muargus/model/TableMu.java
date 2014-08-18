@@ -6,6 +6,7 @@ package muargus.model;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 
 /**
  *
@@ -16,7 +17,7 @@ public class TableMu {
     private boolean riskModel = false;
     private int threshold = 1;
     private ArrayList<VariableMu> variables = new ArrayList<>();
-    
+    private HashMap<VariableMu, UnsafeInfo> unsafe = new HashMap<>(); 
     
     public TableMu(){
         
