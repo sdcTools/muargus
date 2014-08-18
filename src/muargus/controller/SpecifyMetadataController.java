@@ -83,11 +83,15 @@ public class SpecifyMetadataController {
                     this.metadata.write(fileChooser.getSelectedFile());
                 }
             }
-            MuARGUS.setMetadata(this.metadata);
+            //MuARGUS.setMetadata(this.metadata);
         } 
         this.view.setVisible(false);
     }                                        
     
+    
+    public MetadataMu getMetadata() {
+        return this.metadata;
+    }
     /**
      * 
      */

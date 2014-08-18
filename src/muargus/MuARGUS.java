@@ -23,25 +23,12 @@ public class MuARGUS {
     public static final int MAJOR = 4;
     public static final int MINOR = 0;
     public static final String REVISION = "1 (beta)";
-    public static final int BUILD = 1;
-
-    private static MetadataMu metadata; // naar controller main frame
-    static
-    {
-        metadata = new MetadataMu();
-    }
-    
+    public static final int BUILD = 1;    
     
     public static String getFullVersion() {
         return "" + MAJOR + "." + MINOR + "." + REVISION;
     }
    
-    public static MetadataMu getMetadata() {
-        return MuARGUS.metadata;
-    }
-    public static void setMetadata(MetadataMu metadata) {
-        MuARGUS.metadata = metadata;
-    }
     private static String tempDir;
     static {
         setTempDir(System.getProperty("java.io.tmpdir"));
@@ -59,7 +46,7 @@ public class MuARGUS {
         return FilenameUtils.concat(tempDir, fileName);
     }
     
-        public static void showBuildInfoInSplashScreen() {
+    public static void showBuildInfoInSplashScreen() {
        final SplashScreen splash = SplashScreen.getSplashScreen();
        if (splash == null) {
            System.out.println("SplashScreen.getSplashScreen() returned null");

@@ -21,6 +21,14 @@ public class TableMu {
     public TableMu(){
         
     }
+    
+    public TableMu(TableMu table) {
+        this.riskModel = table.riskModel;
+        this.threshold = table.threshold;
+        for (VariableMu variable : table.variables) {
+            this.variables.add(variable);
+        }
+    }
 
     public boolean isRiskModel() {
         return riskModel;

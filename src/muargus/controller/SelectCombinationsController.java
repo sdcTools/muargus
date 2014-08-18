@@ -19,18 +19,20 @@ public class SelectCombinationsController {
     
     SelectCombinationsView view;
     SelectCombinationsModel model;
+    SelectCombinationsModel modelClone;
     MetadataMu metadata;
-    MetadataMu metadataClone;
-    ArrayList<String> list;
+    //ArrayList<String> list;
     
     private static final Logger logger = Logger.getLogger(SelectCombinationsController.class.getName());
 
     public SelectCombinationsController(java.awt.Frame parentView, MetadataMu metadata, SelectCombinationsModel model) {
         this.model = model;
-        this.view = new SelectCombinationsView(parentView, true, this, this.model);
+        this.modelClone = new SelectCombinationsModel(model);
+
+        this.view = new SelectCombinationsView(parentView, true, this);
         this.metadata = metadata;
-        this.metadataClone = new  MetadataMu(metadata); // kan weg
         this.view.setMetadataMu(this.metadata); // clone SelectCombinationsModel
+        this.view.setModel(this.modelClone);
     }
     
     public void showView() {
@@ -44,6 +46,9 @@ public class SelectCombinationsController {
         }
     }
     
+    public SelectCombinationsModel getModel() {
+        return this.model;
+    }
     /**
      * 
      */
