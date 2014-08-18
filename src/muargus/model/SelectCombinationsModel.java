@@ -14,18 +14,20 @@ public class SelectCombinationsModel {
     private int threshold;
     private ArrayList<TableMu> tables;
     
-    //TODO: remove these and their usage and replace it with a direct call to the number of rows/columns
-    private int numberOfRows; 
-    private int numberOfColumns;
-
     /**
      * 
      */
     public SelectCombinationsModel() {
         this.threshold = 1;
-        this.numberOfColumns = 0;
-        this.numberOfRows = 0;
         this.tables = new ArrayList<>();
+    }
+    
+    public SelectCombinationsModel(SelectCombinationsModel model) {
+        this.threshold = model.threshold;
+        this.tables = new ArrayList<>();
+        for (TableMu table : model.tables) {
+            this.tables.add(new TableMu(table));
+        }
     }
 
     /**
@@ -61,19 +63,19 @@ public class SelectCombinationsModel {
     }
 
     public int getNumberOfRows() {
-        return numberOfRows;
+        return this.tables.size();
     }
 
-    public void setNumberOfRows(int numberOfRows) {
-        this.numberOfRows = numberOfRows;
+    public void setNumberOfRows(int n) {
+        return; //Deprecated, do not use
     }
 
     public int getNumberOfColumns() {
-        return numberOfColumns;
+        return calculateNumberOfColumns();
     }
-
-    public void setNumberOfColumns(int numberOfColumns) {
-        this.numberOfColumns = numberOfColumns;
+    
+    private int calculateNumberOfColumns() { 
+        return -1; //TODO
     }
 
 }

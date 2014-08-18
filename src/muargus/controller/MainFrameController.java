@@ -19,9 +19,9 @@ import muargus.view.ViewReportView;
  */
 public class MainFrameController {
     
-    
-    //TODO: add all models here
     MainFrameView view;
+    
+    MetadataMu metadata;
     SelectCombinationsModel selectCombinationsModel;
 
     /**
@@ -30,9 +30,18 @@ public class MainFrameController {
      */
     public MainFrameController(MainFrameView view) {
         this.view = view;
-        selectCombinationsModel = new SelectCombinationsModel();
+        this.selectCombinationsModel = new SelectCombinationsModel();
+        this.metadata = new MetadataMu(); 
     }
-       
+
+    public MetadataMu getMetadata() {
+        return metadata;
+    }
+
+    public void setMetadata(MetadataMu metadata) {
+        this.metadata = metadata;
+    }
+
     /**
      * 
      */
@@ -49,18 +58,21 @@ public class MainFrameController {
     /**
      * 
      */
-    public void specifyMetaData(MetadataMu metadata) {                                                 
-        SpecifyMetadataController controller = new SpecifyMetadataController(this.view, metadata);
+    public void specifyMetaData() {                                                 
+        SpecifyMetadataController controller = new SpecifyMetadataController(this.view, this.metadata);
         controller.showView();
+        this.metadata = controller.getMetadata();
         //view.setVisible(true);
     }   
     
     /**
      * 
      */
-    public void specifyCombinations(MetadataMu metadata) {                                                     
-        SelectCombinationsController controller = new SelectCombinationsController(this.view, metadata, selectCombinationsModel);
+    public void specifyCombinations() {                                                     
+        SelectCombinationsController controller = new SelectCombinationsController(
+                this.view, this.metadata, this.selectCombinationsModel);
         controller.showView();
+        this.selectCombinationsModel = controller.getModel();
         //view.setVisible(true);
     }                                                    
 

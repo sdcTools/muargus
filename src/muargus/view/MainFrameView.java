@@ -715,7 +715,7 @@ public class MainFrameView extends javax.swing.JFrame {
  //         controller.openMicrodata(); 
  //         DataFilePair dataFilePair = new DataFilePair(OpenMicrodataModel.getMicrodataPath(), OpenMicrodataModel.getMetadataPath());
         DialogOpenMicrodata dialog = new DialogOpenMicrodata(MainFrameView.this, true);
-        DataFilePair filenames = MuARGUS.getMetadata().getFileNames();
+        DataFilePair filenames = controller.getMetadata().getFileNames();
         dialog.setDataFileNames(filenames.getDataFileName(), filenames.getMetaFileName());
             if (dialog.showDialog() == DialogOpenMicrodata.APPROVE_OPTION) {
                 DataFilePair dataFilePair = dialog.getMicrodataFilePair();
@@ -752,7 +752,7 @@ public class MainFrameView extends javax.swing.JFrame {
 //                    } 
    //             }
                 
-                MuARGUS.setMetadata(metadata);
+                controller.setMetadata(metadata);
                 organise();
             
             }
@@ -777,11 +777,11 @@ public class MainFrameView extends javax.swing.JFrame {
 //        String b = dataFilePair.getMetaFileName();
 //        System.out.printf("%s\n", b);
 
-        controller.specifyMetaData(MuARGUS.getMetadata());
+        controller.specifyMetaData();
     }//GEN-LAST:event_metaDataMenuItemActionPerformed
 
     private void combinationsMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_combinationsMenuItemActionPerformed
-        controller.specifyCombinations(MuARGUS.getMetadata());
+        controller.specifyCombinations();
     }//GEN-LAST:event_combinationsMenuItemActionPerformed
 
     private void showTableCollectionMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showTableCollectionMenuItemActionPerformed
