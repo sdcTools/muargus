@@ -15,9 +15,8 @@ import java.util.ArrayList;
 public class UnsafeInfo {
     
     private ArrayList<UnsafeCodeInfo> unsafeCodeInfos = new ArrayList<>();
-    private UnsafeCodeInfo[] missingInfos;
-    private int[] unsafe; 
-    private int frequency;
+    //private UnsafeCodeInfo[] missingInfos;
+    private int[] unsafeCombinations; 
             
     public UnsafeInfo() {
         
@@ -34,16 +33,11 @@ public class UnsafeInfo {
     private int getNDims() {
         return 3; //TODO
     }
-    public void calculateUnsafe() {
-        int nDims = getNDims();
-        this.frequency = 0;
-        this.unsafe = new int[nDims];
-        for (UnsafeCodeInfo unsafeCode : this.unsafeCodeInfos) {
-            for (int i=0; i < nDims; i++) {
-                this.unsafe[i] += unsafeCode.getUnsafe(i);
-            }
-            this.frequency += unsafeCode.getFrequency();
-        }
+    
+    public void setUnsafeCombinations(int count, int[] unsafe) {
+        this.unsafeCombinations = new int[count];
+        System.arraycopy(unsafe, 0, this.unsafeCombinations, 0, count);
     }
+    
 }
  
