@@ -30,20 +30,9 @@ public class SelectCombinationsView extends javax.swing.JDialog {
     private ArrayList<String> columnNames;
     private String[][] data;
     private Frame parent;
+    private static int numberOfVariables;
+    private long numberOfTables;
 
-    //TODO: remove this when cloning works properly
-    /**
-     * Creates new form SelectCombinationsView
-     */
-//    public SelectCombinationsView(java.awt.Frame parent, boolean modal, SelectCombinationsController controller, SelectCombinationsModel model) {
-//        super(parent, modal);
-//        initComponents();
-//        this.controller = controller;
-//        this.model = model;
-//        this.setLocationRelativeTo(null);
-//        variablesList.setCellRenderer(new VariableNameCellRenderer());
-//        variablesSelectedList.setCellRenderer(new VariableNameCellRenderer());
-//    }
     /**
      * Creates new form SelectCombinationsView
      */
@@ -62,9 +51,6 @@ public class SelectCombinationsView extends javax.swing.JDialog {
         this.model = model;
     }
 
-//    public MetadataMu getMetadataMu() {
-//        return metadataMu;
-//    }
     /**
      * Sets the metadata and calls the method to fill the variableList
      *
@@ -89,10 +75,6 @@ public class SelectCombinationsView extends javax.swing.JDialog {
             }
         }
         variablesList.setModel(variablesListModel);
-        // places a copy of the list of used variables (variablesList) in the model
-        VariableMu[] copyVariables = new VariableMu[variablesListModel.size()];
-        variablesSelectedListModel.copyInto(copyVariables);
-        model.setVariables(copyVariables);
 
         variablesSelectedList.setModel(variablesSelectedListModel);
         if (variablesListModel.getSize() > 0) {
@@ -117,14 +99,25 @@ public class SelectCombinationsView extends javax.swing.JDialog {
         // gets the tables from SelectCombinationsModel and adds these to a double  array, containing the data
         ArrayList<TableMu> tables = model.getTables();
         data = new String[model.getTables().size()][model.getNumberOfColumns()];
-        //ArrayList<Integer> removeIndices = new ArrayList<>();
-//        for(int i = 0; i< tables.size(); i++){
-//            for(int j = i+1; j < tables.size(); j++){
-//                if(!compaireRows(rootPaneCheckingEnabled, tables.get(i), tables.get(j))){
-//                    model.removeTable(j);
-//                }
-//            }
-//        }
+
+        // nog bezig met de check
+        ArrayList<int[]> doubleIndices = new ArrayList<>();
+        for (int i = 0; i < tables.size(); i++) {
+            for (int j = i + 1; j < tables.size(); j++) {
+                if (!compaireRows(model.isRiskModel(), tables.get(i), tables.get(j))) {
+                    int[] temp = {i, j};
+                    doubleIndices.add(temp);
+                }
+            }
+        }
+        for (int[] d : doubleIndices) {
+            if (tables.get(d[1]).isRiskModel()) {
+                model.removeTable(d[0]);
+            } else {
+                model.removeTable(d[1]);
+            }
+            //System.out.printf("%d, %d\n", d[0], d[1]);
+        }
 
         int index = 0;
         for (TableMu t : tables) {
@@ -423,38 +416,42 @@ public class SelectCombinationsView extends javax.swing.JDialog {
         variablesList.setSelectedIndex(0);
     }//GEN-LAST:event_removeAllFromSelectedButtonActionPerformed
 
-    public boolean validThreshold(){
+    public boolean validThreshold() {
         boolean valid;
-        try{
+        try {
             int threshold = Integer.parseInt(thresholdTextField.getText());
-            if(threshold > 0){
-               valid = true; 
+            if (threshold > 0) {
+                valid = true;
             } else {
                 valid = false;
             }
-        } catch(Exception e){
+        } catch (Exception e) {
             valid = false;
         }
         return valid;
     }
-    
+
     private void addRowButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addRowButtonActionPerformed
         if (variablesSelectedListModel.size() > 10) {
             // place warning
-        } else if(!validThreshold()){ 
+        } else if (!validThreshold()) {
             System.out.println("The threshold is not valid, try a whole number");
             // place warning non valid threshold
         } else {
             // copy the selected variables into a VariableMu array
             VariableMu[] variableMu = new VariableMu[variablesSelectedListModel.size()];
             variablesSelectedListModel.copyInto(variableMu);
+            TableMu tableMuNew = new TableMu();
+            for (VariableMu v : variableMu) {
+                tableMuNew.addVariable(v);
+            }
 
             boolean isValid = true;
 
             if (model.getNumberOfRows() > 0) {
                 for (int i = 0; i < model.getNumberOfRows(); i++) {
-                    TableMu tableMu = model.getTables().get(i);
-                    isValid = compaireRows(model.isRiskModel(), variableMu, tableMu);
+                    TableMu tableMuOld = model.getTables().get(i);
+                    isValid = compaireRows(model.isRiskModel(), tableMuNew, tableMuOld);
                     if (!isValid) {
                         break;
                     }
@@ -477,13 +474,6 @@ public class SelectCombinationsView extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_addRowButtonActionPerformed
 
-    //TODO: check how this works when it is combined with automatically generated data and when the riskmodel is set.
-    public boolean compaireRows(boolean riskModel, TableMu toVariables, TableMu tableMu) {
-        VariableMu[] variableMu = new VariableMu[toVariables.getVariables().size()];
-        toVariables.getVariables().toArray(variableMu);
-        return compaireRows(riskModel, variableMu, tableMu);
-    }
-
     /**
      * This function compaires the different tables with a new table (VariableMu
      * array) if the table is different (enough), which depends on the
@@ -495,13 +485,13 @@ public class SelectCombinationsView extends javax.swing.JDialog {
      * @param variableMu an array of variables from the to be added table
      * @return It returns if a table can be added
      */
-    public boolean compaireRows(boolean riskModel, VariableMu[] variableMu, TableMu tableMu) {
+    public boolean compaireRows(boolean riskModel, TableMu tableMuNew, TableMu tableMuOld) {
         boolean isValid = true;
         boolean exit = false;
         int numberOfDoubleVariables = 0;
 
-        for (VariableMu oldVariable : tableMu.getVariables()) {
-            for (VariableMu newVariable : variableMu) {
+        for (VariableMu oldVariable : tableMuOld.getVariables()) {
+            for (VariableMu newVariable : tableMuNew.getVariables()) {
                 if (oldVariable.equals(newVariable)) {
                     numberOfDoubleVariables++;
                 }
@@ -509,16 +499,16 @@ public class SelectCombinationsView extends javax.swing.JDialog {
             if (riskModel && numberOfDoubleVariables > 0) {
                 isValid = false;
                 exit = true;
-            } else if (!riskModel && variableMu.length == tableMu.getVariables().size()
-                    && numberOfDoubleVariables == variableMu.length) {
-                try{
-                    int thresholdOld = tableMu.getThreshold();
+            } else if (!riskModel && tableMuNew.getVariables().size() == tableMuOld.getVariables().size()
+                    && numberOfDoubleVariables == tableMuNew.getVariables().size()) {
+                try {
+                    int thresholdOld = tableMuOld.getThreshold();
                     int thresholdNew = Integer.parseInt(thresholdTextField.getText());
-                    if(thresholdNew > thresholdOld){
-                        tableMu.setThreshold(thresholdTextField.getText());
+                    if (thresholdNew > thresholdOld) {
+                        tableMuOld.setThreshold(thresholdTextField.getText());
                     }
-                } catch (Exception e){
-                    thresholdTextField.setText(Integer.toString(tableMu.getThreshold()));
+                } catch (Exception e) {
+                    thresholdTextField.setText(Integer.toString(tableMuOld.getThreshold()));
                 }
                 isValid = false;
                 exit = true;
@@ -556,9 +546,6 @@ public class SelectCombinationsView extends javax.swing.JDialog {
     }//GEN-LAST:event_removeRowButtonActionPerformed
 
     private void automaticSpecificationButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_automaticSpecificationButtonActionPerformed
-        GenerateAutomaticTables generateAutomaticTables = new GenerateAutomaticTables(parent, true, this.model);
-        generateAutomaticTables.setVisible(true);
-
         // make an array for each idLevel (0-5)
         ArrayList<ArrayList<VariableMu>> variables = new ArrayList<>();
         for (int i = 0; i < 6; i++) {
@@ -577,14 +564,21 @@ public class SelectCombinationsView extends javax.swing.JDialog {
         ArrayList<VariableMu> allValidVariables = new ArrayList<>();
         for (int i = 1; i < variables.size(); i++) {
             allValidVariables.addAll(variables.get(i));
-            if(variables.get(i).size() > 0){
+            if (variables.get(i).size() > 0) {
                 numberOfLevels++;
             }
         }
 
+        this.numberOfVariables = allValidVariables.size();
+
+        GenerateAutomaticTables generateAutomaticTables = new GenerateAutomaticTables(parent, true, this.model);
+        generateAutomaticTables.setVisible(true);
+
         if (generateAutomaticTables.isValid()) {
             if (generateAutomaticTables.isMakeUpToDimensionRadioButton()) {
                 int dimensions = generateAutomaticTables.getDimensionTextField();
+                this.setNumberOfTables(dimensions, numberOfVariables);
+                System.out.println(getNumberOfTables()); // prints the number of tables --> should become a warning
                 calculateTablesForDimensions(allValidVariables, dimensions);
             }
             if (generateAutomaticTables.isUseIdentificatinLevelRadioButton()) {
@@ -594,6 +588,32 @@ public class SelectCombinationsView extends javax.swing.JDialog {
 
         updateValues();
     }//GEN-LAST:event_automaticSpecificationButtonActionPerformed
+
+    public static int getNumberOfVariables() {
+        return numberOfVariables;
+    }
+
+    public long getNumberOfTables() {
+        return numberOfTables;
+    }
+
+    public void setNumberOfTables(int dimensions, int numberOfVariables) {
+       this.numberOfTabels(1, dimensions, numberOfVariables);
+    }
+    
+    
+
+    public void numberOfTabels(long numberOfTables, int dimensions, int numberOfVariables) {
+        if (dimensions > 0) {
+            long tempNumber = numberOfTables * numberOfVariables;
+            int tempNumberOfVariables = numberOfVariables - 1;
+            int tempDimensions = dimensions - 1;
+            numberOfTabels(tempNumber, tempDimensions, tempNumberOfVariables);
+        }
+        else if(dimensions == 0){
+            this.numberOfTables = numberOfTables;
+        }
+    }
 
     public void calculateTablesForDimensions(ArrayList<VariableMu> data, int dimensions) {
         ArrayList<VariableMu> variableSubset = new ArrayList<>();

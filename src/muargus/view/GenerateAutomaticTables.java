@@ -28,7 +28,6 @@ public class GenerateAutomaticTables extends javax.swing.JDialog {
         initComponents();
         this.setLocationRelativeTo(null);
         this.setTitle("Method for generating tables");
-        //dimensionTextField.setText(model.getThreshold());
     }
 
     public int getDimensionTextField() {
@@ -171,19 +170,20 @@ public class GenerateAutomaticTables extends javax.swing.JDialog {
     private void okButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okButtonActionPerformed
         boolean isValid = true;
         int dimensions = 0;
-
         if (makeUpToDimensionRadioButton.isSelected()) {
             try {
                 dimensions = Integer.parseInt(dimensionTextField.getText());
+                
                 if (dimensions <= 0) {
                     //show message: Illegal value for the dimension
                     System.out.println("Illegal value for the dimension, dimension cannot be smaller than 1");
                     isValid = false;
-                } else if (dimensions > model.getVariables().length) {
+                } else if (dimensions > SelectCombinationsView.getNumberOfVariables()) {
                     System.out.println("Not enough identifying variables for this request");
                     //show message: Not enough identifying variables for this request
                     isValid = false;
-                }
+                } 
+                
             } catch (Exception e) {
                 System.out.println("Illegal value for the dimension, give a whole number");
                 //show message: Illegal value for the dimension

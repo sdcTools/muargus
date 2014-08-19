@@ -77,6 +77,7 @@ public class TableMu {
         for(int i = 0; i < variables.size(); i++){
             table[i+2] = variables.get(i).getName();
         }
+        
         //table.setForeground(Color.red);
         return table;
     }

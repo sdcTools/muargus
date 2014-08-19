@@ -139,12 +139,12 @@ public class SelectCombinationsModel {
         return variables;
     }
     
-    public VariableMu[] getVariables(){
-        return variables;
-    }
-    
-    public void setVariables(VariableMu[] variables){
-        this.variables = variables;
-    }
+//    public VariableMu[] getVariables(){
+//        return variables;
+//    }
+//    
+//    public void setVariables(VariableMu[] variables){
+//        this.variables = variables;
+//    }
 
 }

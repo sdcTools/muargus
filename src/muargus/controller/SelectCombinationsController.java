@@ -104,7 +104,7 @@ public class SelectCombinationsController {
             int d = table.getVariables().size();
             int[] i = getVarIndices(table);
             boolean b = table.isRiskModel();
-            result = c.SetTable(
+            result = c.SetTable(    
                     //index+1,
                     //table.getThreshold(),
                     //table.getVariables().size(),
