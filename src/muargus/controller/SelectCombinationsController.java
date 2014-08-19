@@ -27,7 +27,7 @@ public class SelectCombinationsController {
     SelectCombinationsModel model;
     SelectCombinationsModel modelClone;
     MetadataMu metadata;
-    //ArrayList<String> calculateTablesForDimensions;
+    //ArrayList<String> list;
     
     static {
         System.loadLibrary("libmuargusdll");
@@ -70,8 +70,8 @@ public class SelectCombinationsController {
         if (!result)
             throw new ArgusException("Insufficient memory");
         
-        for (int index=0; index < model.getVariables().length; index++) {
-            VariableMu variable = model.getVariables()[index];
+        for (int index=0; index < model.getVariablesInTables().size(); index++) {
+            VariableMu variable = model.getVariablesInTables().get(index);
             result = c.SetVariable(index+1,
                     variable.getStartingPosition(),
                     variable.getVariableLength(),

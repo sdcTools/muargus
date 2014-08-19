@@ -128,7 +128,7 @@ public class SelectCombinationsModel {
         return numberOfColumns; 
     }
     
-    public ArrayList<VariableMu> getVariablesInTable() {
+    public ArrayList<VariableMu> getVariablesInTables() {
         ArrayList<VariableMu> variables = new ArrayList<>();
         for (TableMu table : this.tables) {
             for (VariableMu variable : table.getVariables()) {
