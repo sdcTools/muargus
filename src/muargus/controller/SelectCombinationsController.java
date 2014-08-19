@@ -25,7 +25,7 @@ public class SelectCombinationsController {
     SelectCombinationsModel model;
     SelectCombinationsModel modelClone;
     MetadataMu metadata;
-    //ArrayList<String> list;
+    //ArrayList<String> calculateTablesForDimensions;
     
     private static final Logger logger = Logger.getLogger(SelectCombinationsController.class.getName());
 

@@ -1,6 +1,7 @@
 package muargus.view;
 
 import argus.model.ArgusException;
+import java.awt.Frame;
 import java.util.ArrayList;
 import java.util.Arrays;
 import javax.swing.DefaultListModel;
@@ -28,26 +29,28 @@ public class SelectCombinationsView extends javax.swing.JDialog {
     private TableModel tableModel;
     private ArrayList<String> columnNames;
     private String[][] data;
+    private Frame parent;
 
     //TODO: remove this when cloning works properly
     /**
      * Creates new form SelectCombinationsView
      */
-    public SelectCombinationsView(java.awt.Frame parent, boolean modal, SelectCombinationsController controller, SelectCombinationsModel model) {
-        super(parent, modal);
-        initComponents();
-        this.controller = controller;
-        this.model = model;
-        this.setLocationRelativeTo(null);
-        variablesList.setCellRenderer(new VariableNameCellRenderer());
-        variablesSelectedList.setCellRenderer(new VariableNameCellRenderer());
-    }
+//    public SelectCombinationsView(java.awt.Frame parent, boolean modal, SelectCombinationsController controller, SelectCombinationsModel model) {
+//        super(parent, modal);
+//        initComponents();
+//        this.controller = controller;
+//        this.model = model;
+//        this.setLocationRelativeTo(null);
+//        variablesList.setCellRenderer(new VariableNameCellRenderer());
+//        variablesSelectedList.setCellRenderer(new VariableNameCellRenderer());
+//    }
 
     /**
      * Creates new form SelectCombinationsView
      */
     public SelectCombinationsView(java.awt.Frame parent, boolean modal, SelectCombinationsController controller) {
         super(parent, modal);
+        this.parent = parent;
         initComponents();
         this.controller = controller;
         this.model = this.controller.getModel();
@@ -524,14 +527,16 @@ public class SelectCombinationsView extends javax.swing.JDialog {
     }//GEN-LAST:event_removeRowButtonActionPerformed
 
     private void automaticSpecificationButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_automaticSpecificationButtonActionPerformed
-        // what to do when there are less than 3 variables?
-
+        GenerateAutomaticTables generateAutomaticTables = new GenerateAutomaticTables(parent, true, this.model);
+        generateAutomaticTables.setVisible(true);
+        
         // make an array for each idLevel (0-5)
         ArrayList<ArrayList<VariableMu>> variables = new ArrayList<>();
         for (int i = 0; i < 6; i++) {
             ArrayList<VariableMu> array = new ArrayList<>();
             variables.add(array);
         }
+        
 
         // fill the appropriate array according to the idLevels of the variables
         for (int i = 0; i < variablesListModel.getSize(); i++) {
@@ -546,14 +551,22 @@ public class SelectCombinationsView extends javax.swing.JDialog {
         }
 
         // get the number of idLevels higher than 0
-        int idLevels = 0;
+        int numberOfLevels = 0;
         for (ArrayList<VariableMu> v : variables) {
             if (v.size() > 0) {
-                idLevels++;
+                numberOfLevels++;
             }
         }
-
-        list(allValidVariables, 2);
+        
+        if(generateAutomaticTables.isMakeUpToDimensionRadioButton()){
+            int dimensions = generateAutomaticTables.getDimensionTextField();
+            calculateTablesForDimensions(allValidVariables, dimensions);
+        }
+        if(generateAutomaticTables.isUseIdentificatinLevelRadioButton()){
+            //int dimensions = generateAutomaticTables.getDimensionTextField();
+            calculateTablesForID(numberOfLevels, variables);
+        }
+        //list(allValidVariables, 2);
 
         //prints the variables of each table and the number of tables
         //TODO: remove after testing
@@ -568,12 +581,12 @@ public class SelectCombinationsView extends javax.swing.JDialog {
         updateValues();
     }//GEN-LAST:event_automaticSpecificationButtonActionPerformed
 
-    public void list(ArrayList<VariableMu> data, int dimensions) {
+    public void calculateTablesForDimensions(ArrayList<VariableMu> data, int dimensions) {
         ArrayList<VariableMu> variableSubset = new ArrayList<>();
-        list(0, data, dimensions, variableSubset);
+        calculateTablesForDimensions(0, data, dimensions, variableSubset);
     }
 
-    public void list(int startPos, ArrayList<VariableMu> allVariables, int dimension, ArrayList<VariableMu> variableSubset) {
+    public void calculateTablesForDimensions(int startPos, ArrayList<VariableMu> allVariables, int dimension, ArrayList<VariableMu> variableSubset) {
         if (dimension > 0) {
             for (int i = startPos; i < allVariables.size(); i++) {
                 //make variable array 
@@ -588,7 +601,52 @@ public class SelectCombinationsView extends javax.swing.JDialog {
                 model.getTables().add(tableMu);
 
                 int d = dimension - 1;
-                list(i + 1, allVariables, d, temp);
+                calculateTablesForDimensions(i + 1, allVariables, d, temp);
+            }
+        }
+    }
+    
+    public void calculateTablesForID(int numberOfLevels, ArrayList<ArrayList<VariableMu>> variables) {
+        int index = 1; // don't add the variables with an ID number of 0
+        int _size = 0;
+        int currentLevel = 0;
+        ArrayList<VariableMu> variableSubset = new ArrayList<>();
+        ArrayList<VariableMu> allVariables = new ArrayList<>();
+        for(ArrayList<VariableMu> v: variables){
+            allVariables.addAll(v);
+        }
+        
+        calculateTablesForID(0, index, _size, currentLevel, variableSubset, numberOfLevels, variables, allVariables);
+    }
+    
+    public void calculateTablesForID(int _i, int _index, int _size, int _currentLevel, ArrayList<VariableMu> variableSubset,
+            int numberOfLevels, ArrayList<ArrayList<VariableMu>> variables, ArrayList<VariableMu> allVariables) {
+        
+        int currentLevel = _currentLevel + 1;
+        if (currentLevel <= numberOfLevels) {
+            int index = _index;
+            int size = _size;
+            
+            // find the next idLevel larger than zero and add the number of variables to the size
+            for (int u = index; u < variables.size(); u++) {
+                if (variables.get(u).size() > 0) {
+                    size = size + variables.get(u).size();
+                    index = u+1;
+                    break;
+                }
+            }
+            
+            for (int i = _i; i < size; i++) {
+                ArrayList<VariableMu> temp = new ArrayList<>();
+                temp.addAll(variableSubset);
+                temp.add(allVariables.get(i));
+                        
+                if (temp.size() == numberOfLevels) {
+                    TableMu tableMu = new TableMu();
+                    tableMu.setVariables(temp);
+                    model.addTable(tableMu);
+                }
+                calculateTablesForID(i+1, index, size, currentLevel, temp, numberOfLevels, variables, allVariables);
             }
         }
     }
