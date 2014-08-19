@@ -29,6 +29,10 @@ public class SelectCombinationsController {
     MetadataMu metadata;
     //ArrayList<String> list;
     
+    static {
+        System.loadLibrary("libmuargusdll");
+    }
+    
     private static final Logger logger = Logger.getLogger(SelectCombinationsController.class.getName());
 
     public SelectCombinationsController(java.awt.Frame parentView, MetadataMu metadata, SelectCombinationsModel model) {
@@ -38,7 +42,7 @@ public class SelectCombinationsController {
         this.view = new SelectCombinationsView(parentView, true, this);
         this.metadata = metadata;
         this.view.setMetadataMu(this.metadata); // clone SelectCombinationsModel
-        //this.view.setModel(this.modelClone);
+        this.view.setModel(this.modelClone);
     }
     
     public void showView() {
@@ -58,7 +62,8 @@ public class SelectCombinationsController {
     /**
      * 
      */
-    public void calculateTables() throws ArgusException {                                                      
+    public void calculateTables() throws ArgusException {
+        this.model = this.modelClone;
         view.setVisible(false);
         CMuArgCtrl c = new CMuArgCtrl();
         boolean result = c.SetNumberVar(model.getVariables().size());
@@ -67,7 +72,7 @@ public class SelectCombinationsController {
         
         for (int index=0; index < model.getVariables().size(); index++) {
             VariableMu variable = model.getVariables().get(index);
-            c.SetVariable(index+1,
+            result = c.SetVariable(index+1,
                     variable.getStartingPosition(),
                     variable.getVariableLength(),
                     variable.getDecimals(),
@@ -78,7 +83,7 @@ public class SelectCombinationsController {
                     variable.isCategorical(),
                     variable.isNumeric(),
                     variable.isWeight(),
-                    metadata.getVariables().indexOf(variable.getRelatedVariable())); //TODO: handle error
+                    1 + metadata.getVariables().indexOf(variable.getRelatedVariable())); //TODO: handle error
         }
         int[] errorCodes = new int[1];
         int[] lineNumbers = new int[1];
@@ -88,18 +93,28 @@ public class SelectCombinationsController {
                 lineNumbers,
                 varIndexOut);
         //TODO handle error
-        
-        result = c.SetNumberTab(this.model.getTables().size());
+        int x = this.model.getTables().size();
+        result = c.SetNumberTab(x); //this.model.getTables().size());
         //TODO handle error
         
         for (int index=0; index < model.getTables().size(); index++) {
             TableMu table = model.getTables().get(index);
-            result = c.SetTable(index+1,
-                    table.getThreshold(),
-                    table.getVariables().size(),
-                    getVarIndices(table),
-                    false, //TODO
-                    1); //TODO
+            int a = index+1;
+            int t = table.getThreshold();
+            int d = table.getVariables().size();
+            int[] i = getVarIndices(table);
+            boolean b = table.isRiskModel();
+            result = c.SetTable(
+                    //index+1,
+                    //table.getThreshold(),
+                    //table.getVariables().size(),
+                    //getVarIndices(table),
+                    //table.isRiskModel(),
+                    a,t,d,i,b, 1); //TODO
+            if (!result) {
+                throw new ArgusException("Error during SetTable");
+            }
+                
             //TODO: handle error
         }
         
@@ -142,7 +157,7 @@ public class SelectCombinationsController {
     private int[] getVarIndices(TableMu table) {
         int[] indices = new int[table.getVariables().size()];
         for (int index=0; index < indices.length; index++) {
-            indices[index] = this.metadata.getVariables().indexOf(table.getVariables().get(index));
+            indices[index] = 1+this.model.getVariables().indexOf(table.getVariables().get(index));
         }
         return indices;
     }
