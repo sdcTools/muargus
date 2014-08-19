@@ -12,6 +12,8 @@ import muargus.extern.dataengine.CMuArgCtrl;
 import muargus.model.MetadataMu;
 import muargus.model.SelectCombinationsModel;
 import muargus.model.TableMu;
+import muargus.model.UnsafeCodeInfo;
+import muargus.model.UnsafeInfo;
 import muargus.model.VariableMu;
 import muargus.view.SelectCombinationsView;
 
@@ -59,12 +61,13 @@ public class SelectCombinationsController {
     public void calculateTables() throws ArgusException {                                                      
         view.setVisible(false);
         CMuArgCtrl c = new CMuArgCtrl();
-        boolean result = c.SetNumberVar(metadata.getVariables().size());
+        boolean result = c.SetNumberVar(model.getVariables().size());
         if (!result)
             throw new ArgusException("Insufficient memory");
-        for (int index=0; index < metadata.getVariables().size(); index++) {
-            VariableMu variable = metadata.getVariables().get(index);
-            c.SetVariable(index,
+        
+        for (int index=0; index < model.getVariables().size(); index++) {
+            VariableMu variable = model.getVariables().get(index);
+            c.SetVariable(index+1,
                     variable.getStartingPosition(),
                     variable.getVariableLength(),
                     variable.getDecimals(),
@@ -79,11 +82,11 @@ public class SelectCombinationsController {
         }
         int[] errorCodes = new int[1];
         int[] lineNumbers = new int[1];
-        int[] varIndex = new int[1];
+        int[] varIndexOut = new int[1];
         result = c.ExploreFile(metadata.getFileNames().getDataFileName(),
                 errorCodes,
                 lineNumbers,
-                varIndex);
+                varIndexOut);
         //TODO handle error
         
         result = c.SetNumberTab(this.model.getTables().size());
@@ -91,17 +94,57 @@ public class SelectCombinationsController {
         
         for (int index=0; index < model.getTables().size(); index++) {
             TableMu table = model.getTables().get(index);
-            c.SetTable(index,
+            result = c.SetTable(index+1,
                     table.getThreshold(),
                     table.getVariables().size(),
                     getVarIndices(table),
                     false, //TODO
                     1); //TODO
+            //TODO: handle error
         }
+        
+        result = c.ComputeTables(errorCodes, varIndexOut);
+        //TODO: handle error
+        
+        model.clearUnsafe();
+        for (int varIndex=0; varIndex < model.getVariables().size(); varIndex++) {
+            VariableMu variable = model.getVariables().get(varIndex);
+            int[] nDims = new int[] {0};
+            int[] unsafeCount = new int[model.getVariables().size()];
+            result = c.UnsafeVariable(varIndex+1, nDims, unsafeCount);
+            UnsafeInfo unsafe = new UnsafeInfo();
+            unsafe.setUnsafeCombinations(nDims[0], unsafeCount);
+            model.setUnsafe(variable, unsafe);
+            
+            int[] nCodes = new int[]{0};
+            result = c.UnsafeVariablePrepare(varIndex, nCodes);
+            int[] isMissing = new int[]{0};
+            int[] freq = new int[]{0};
+            String[] code = new String[1];
+            for (int codeIndex=0; codeIndex < nCodes[0]; codeIndex++) {
+                result = c.UnsafeVariableCodes(varIndex+1, 
+                        codeIndex+1,
+                        isMissing,
+                        freq,
+                        code,
+                        nDims,
+                        unsafeCount);
+                UnsafeCodeInfo codeInfo = new UnsafeCodeInfo(code[0], isMissing[0] != 0);
+                codeInfo.setFrequency(freq[0]);
+                codeInfo.setUnsafeCombinations(nDims[0], unsafeCount);
+                unsafe.addUnsafeCodeInfo(codeInfo);
+            }
+            result = c.UnsafeVariableClose(varIndex+1);
+        }
+            
     }
     
     private int[] getVarIndices(TableMu table) {
-        return new int[] {0}; //TODO
+        int[] indices = new int[table.getVariables().size()];
+        for (int index=0; index < indices.length; index++) {
+            indices[index] = this.metadata.getVariables().indexOf(table.getVariables().get(index));
+        }
+        return indices;
     }
 
     /**

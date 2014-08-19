@@ -5,6 +5,7 @@
 package muargus.model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  *
@@ -14,6 +15,7 @@ public class SelectCombinationsModel {
     private int threshold;
     private boolean riskModel;
     private ArrayList<TableMu> tables;
+    private HashMap<VariableMu, UnsafeInfo> unsafe;
     
     /**
      * 
@@ -31,6 +33,18 @@ public class SelectCombinationsModel {
         }
     }
 
+    public void clearUnsafe() {
+        this.unsafe = new HashMap<>();
+    }
+    
+    public void setUnsafe(VariableMu variable, UnsafeInfo unsafe) {
+        this.unsafe.put(variable, unsafe);
+    }
+    
+    public UnsafeInfo getUnsafe(VariableMu variable) {
+        return this.unsafe.get(variable);
+    }
+    
     /**
      * 
      * @return 
@@ -99,7 +113,17 @@ public class SelectCombinationsModel {
         int numberOfColumns = numberOfVariables + 2;
         return numberOfColumns; 
     }
-
+    
+    public ArrayList<VariableMu> getVariables() {
+        ArrayList<VariableMu> variables = new ArrayList<>();
+        for (TableMu table : this.tables) {
+            for (VariableMu variable : table.getVariables()) {
+                if (!variables.contains(variable))
+                    variables.add(variable);
+            }
+        }
+        return variables;
+    }
     
 
 }

@@ -13,19 +13,30 @@ package muargus.model;
 public class UnsafeCodeInfo {
 
     private String code;
+    private boolean isMissing;
     private int frequency;
-    private int[] unsafe;
+    private int[] unsafeCombinations;
     
-    public UnsafeCodeInfo() {
-        
+    public UnsafeCodeInfo(String code, boolean isMissing) {
+        this.code = code;
+        this.isMissing = isMissing;
     }
     
     public int getUnsafe(int dimIndex) {
-        return this.unsafe[dimIndex];
+        return this.unsafeCombinations[dimIndex];
     }
     
     public int getFrequency() {
         return this.frequency;
+    }
+    
+    public void setFrequency(int frequency) {
+        this.frequency = frequency;
+    }
+    
+    public void setUnsafeCombinations(int count, int[] unsafe) {
+        this.unsafeCombinations = new int[count];
+        System.arraycopy(unsafe, 0, this.unsafeCombinations, 0, count);
     }
     
 }
