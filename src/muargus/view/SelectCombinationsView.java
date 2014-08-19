@@ -423,9 +423,27 @@ public class SelectCombinationsView extends javax.swing.JDialog {
         variablesList.setSelectedIndex(0);
     }//GEN-LAST:event_removeAllFromSelectedButtonActionPerformed
 
+    public boolean validThreshold(){
+        boolean valid;
+        try{
+            int threshold = Integer.parseInt(thresholdTextField.getText());
+            if(threshold > 0){
+               valid = true; 
+            } else {
+                valid = false;
+            }
+        } catch(Exception e){
+            valid = false;
+        }
+        return valid;
+    }
+    
     private void addRowButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addRowButtonActionPerformed
         if (variablesSelectedListModel.size() > 10) {
             // place warning
+        } else if(!validThreshold()){ 
+            System.out.println("The threshold is not valid, try a whole number");
+            // place warning non valid threshold
         } else {
             // copy the selected variables into a VariableMu array
             VariableMu[] variableMu = new VariableMu[variablesSelectedListModel.size()];
@@ -493,7 +511,15 @@ public class SelectCombinationsView extends javax.swing.JDialog {
                 exit = true;
             } else if (!riskModel && variableMu.length == tableMu.getVariables().size()
                     && numberOfDoubleVariables == variableMu.length) {
-                tableMu.setThreshold(thresholdTextField.getText());
+                try{
+                    int thresholdOld = tableMu.getThreshold();
+                    int thresholdNew = Integer.parseInt(thresholdTextField.getText());
+                    if(thresholdNew > thresholdOld){
+                        tableMu.setThreshold(thresholdTextField.getText());
+                    }
+                } catch (Exception e){
+                    thresholdTextField.setText(Integer.toString(tableMu.getThreshold()));
+                }
                 isValid = false;
                 exit = true;
             }

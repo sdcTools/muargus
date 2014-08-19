@@ -4,8 +4,6 @@
  */
 package muargus.view;
 
-import java.awt.TextField;
-import javax.swing.JTextField;
 import muargus.model.SelectCombinationsModel;
 
 /**
@@ -132,6 +130,7 @@ public class ArgusInput extends javax.swing.JDialog {
 
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
         //textField.setText("");
+        GenerateAutomaticTables.setValid(false);
         this.setVisible(false);
     }//GEN-LAST:event_cancelButtonActionPerformed
 

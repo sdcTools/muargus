@@ -4,9 +4,9 @@
  */
 package muargus.model;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 
 /**
  *
@@ -77,6 +77,7 @@ public class TableMu {
         for(int i = 0; i < variables.size(); i++){
             table[i+2] = variables.get(i).getName();
         }
+        //table.setForeground(Color.red);
         return table;
     }
 }

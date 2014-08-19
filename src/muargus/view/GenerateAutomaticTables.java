@@ -14,7 +14,7 @@ import muargus.model.SelectCombinationsModel;
 public class GenerateAutomaticTables extends javax.swing.JDialog {
 
     SelectCombinationsModel model;
-    private boolean valid; // is used to continue with the calculation
+    private static boolean valid; // is used to continue with the calculation
     private Frame parent;
 
     /**
@@ -23,7 +23,7 @@ public class GenerateAutomaticTables extends javax.swing.JDialog {
     public GenerateAutomaticTables(java.awt.Frame parent, boolean modal, SelectCombinationsModel model) {
         super(parent, modal);
         this.model = model;
-        this.valid = false;
+        GenerateAutomaticTables.valid = false;
         this.parent = parent;
         initComponents();
         this.setLocationRelativeTo(null);
@@ -47,8 +47,8 @@ public class GenerateAutomaticTables extends javax.swing.JDialog {
         return valid;
     }
 
-    public void setValid(boolean valid) {
-        this.valid = valid;
+    public static void setValid(boolean valid) {
+        GenerateAutomaticTables.valid = valid;
     }
 
     /**
@@ -164,7 +164,7 @@ public class GenerateAutomaticTables extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
-        this.setValid(false);
+        GenerateAutomaticTables.setValid(false);
         this.setVisible(false);
     }//GEN-LAST:event_cancelButtonActionPerformed
 
@@ -192,7 +192,7 @@ public class GenerateAutomaticTables extends javax.swing.JDialog {
         }
         //System.out.println(isValid);
         if (isValid) {
-            this.setValid(true);
+            GenerateAutomaticTables.setValid(true);
             if (useIdentificatinLevelRadioButton.isSelected()) {
                 ArgusInput getThreshold = new ArgusInput(parent, true, this.model);
                 getThreshold.setLabelText("Threshold");
@@ -210,12 +210,14 @@ public class GenerateAutomaticTables extends javax.swing.JDialog {
                     getThreshold.setLabelText("Threshold for dim" + (i + 1));
                     getThreshold.setTitle("Threshold");
                     getThreshold.setVisible(true);
+                    if(!GenerateAutomaticTables.valid){
+                        break;
+                    }
                     try {
                         thresholds[i] = getThreshold.getTextField();
                     } catch (Exception e) {
                         isValid = false;
                     }
-
                 }
                 model.setThresholds(thresholds);
             }
