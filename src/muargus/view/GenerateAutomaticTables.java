@@ -194,7 +194,7 @@ public class GenerateAutomaticTables extends javax.swing.JDialog {
         if (isValid) {
             this.setValid(true);
             if (useIdentificatinLevelRadioButton.isSelected()) {
-                ArgusInput getThreshold = new ArgusInput(parent, true);
+                ArgusInput getThreshold = new ArgusInput(parent, true, this.model);
                 getThreshold.setLabelText("Threshold");
                 getThreshold.setTitle("Threshold");
                 getThreshold.setVisible(true);
@@ -206,7 +206,7 @@ public class GenerateAutomaticTables extends javax.swing.JDialog {
             } else {
                 int[] thresholds = new int[dimensions];
                 for (int i = 0; i < dimensions; i++) {
-                    ArgusInput getThreshold = new ArgusInput(parent, true);
+                    ArgusInput getThreshold = new ArgusInput(parent, true, this.model);
                     getThreshold.setLabelText("Threshold for dim" + (i + 1));
                     getThreshold.setTitle("Threshold");
                     getThreshold.setVisible(true);
