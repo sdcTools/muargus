@@ -44,7 +44,6 @@ public class SelectCombinationsView extends javax.swing.JDialog {
 //        variablesList.setCellRenderer(new VariableNameCellRenderer());
 //        variablesSelectedList.setCellRenderer(new VariableNameCellRenderer());
 //    }
-
     /**
      * Creates new form SelectCombinationsView
      */
@@ -94,7 +93,7 @@ public class SelectCombinationsView extends javax.swing.JDialog {
         VariableMu[] copyVariables = new VariableMu[variablesListModel.size()];
         variablesSelectedListModel.copyInto(copyVariables);
         model.setVariables(copyVariables);
-        
+
         variablesSelectedList.setModel(variablesSelectedListModel);
         if (variablesListModel.getSize() > 0) {
             variablesList.setSelectedIndex(0);
@@ -387,8 +386,7 @@ public class SelectCombinationsView extends javax.swing.JDialog {
         //TODO: does not work yet
         try {
             controller.calculateTables();
-        }
-        catch (ArgusException ex) {
+        } catch (ArgusException ex) {
             ;
         }
     }//GEN-LAST:event_calculateTablesButtonActionPerformed
@@ -462,12 +460,12 @@ public class SelectCombinationsView extends javax.swing.JDialog {
     }//GEN-LAST:event_addRowButtonActionPerformed
 
     //TODO: check how this works when it is combined with automatically generated data and when the riskmodel is set.
-    
-    public boolean compaireRows(boolean riskModel, TableMu toVariables, TableMu tableMu){
+    public boolean compaireRows(boolean riskModel, TableMu toVariables, TableMu tableMu) {
         VariableMu[] variableMu = new VariableMu[toVariables.getVariables().size()];
         toVariables.getVariables().toArray(variableMu);
         return compaireRows(riskModel, variableMu, tableMu);
     }
+
     /**
      * This function compaires the different tables with a new table (VariableMu
      * array) if the table is different (enough), which depends on the
@@ -534,7 +532,7 @@ public class SelectCombinationsView extends javax.swing.JDialog {
     private void automaticSpecificationButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_automaticSpecificationButtonActionPerformed
         GenerateAutomaticTables generateAutomaticTables = new GenerateAutomaticTables(parent, true, this.model);
         generateAutomaticTables.setVisible(true);
-        
+
         // make an array for each idLevel (0-5)
         ArrayList<ArrayList<VariableMu>> variables = new ArrayList<>();
         for (int i = 0; i < 6; i++) {
@@ -549,40 +547,24 @@ public class SelectCombinationsView extends javax.swing.JDialog {
         }
 
         // add all variables with an ID-level higher than 0 to the arrayList of variables.
+        int numberOfLevels = 0; // the number of idLevels higher than 0
         ArrayList<VariableMu> allValidVariables = new ArrayList<>();
         for (int i = 1; i < variables.size(); i++) {
             allValidVariables.addAll(variables.get(i));
-        }
-
-        // get the number of idLevels higher than 0
-        int numberOfLevels = 0;
-        for (ArrayList<VariableMu> v : variables) {
-            if (v.size() > 0) {
+            if(variables.get(i).size() > 0){
                 numberOfLevels++;
             }
         }
-        
-        if(generateAutomaticTables.isValid()){
-        if(generateAutomaticTables.isMakeUpToDimensionRadioButton()){
-            int dimensions = generateAutomaticTables.getDimensionTextField();
-            calculateTablesForDimensions(allValidVariables, dimensions);
-        }
-        if(generateAutomaticTables.isUseIdentificatinLevelRadioButton()){
-            //int dimensions = generateAutomaticTables.getDimensionTextField();
-            calculateTablesForID(numberOfLevels, variables);
-        }
-        }
-        //list(allValidVariables, 2);
 
-        //prints the variables of each table and the number of tables
-        //TODO: remove after testing
-//        for(TableMu t: model.getTables()){
-//            for(VariableMu v: t.getVariablesInTable()){
-//                System.out.print(v.getName() + " ");
-//            }
-//            System.out.println("");
-//        }
-//        System.out.println(model.getTables().size());
+        if (generateAutomaticTables.isValid()) {
+            if (generateAutomaticTables.isMakeUpToDimensionRadioButton()) {
+                int dimensions = generateAutomaticTables.getDimensionTextField();
+                calculateTablesForDimensions(allValidVariables, dimensions);
+            }
+            if (generateAutomaticTables.isUseIdentificatinLevelRadioButton()) {
+                calculateTablesForID(numberOfLevels, variables, allValidVariables);
+            }
+        }
 
         updateValues();
     }//GEN-LAST:event_automaticSpecificationButtonActionPerformed
@@ -594,7 +576,7 @@ public class SelectCombinationsView extends javax.swing.JDialog {
         calculateTablesForDimensions(startPos, data, dimensions, variableSubset, threshold);
     }
 
-    public void calculateTablesForDimensions(int startPos, ArrayList<VariableMu> allVariables, int dimension, 
+    public void calculateTablesForDimensions(int startPos, ArrayList<VariableMu> allVariables, int dimension,
             ArrayList<VariableMu> variableSubset, int threshold) {
         if (dimension > 0) {
             for (int i = startPos; i < allVariables.size(); i++) {
@@ -615,49 +597,45 @@ public class SelectCombinationsView extends javax.swing.JDialog {
             }
         }
     }
-    
-    public void calculateTablesForID(int numberOfLevels, ArrayList<ArrayList<VariableMu>> variables) {
+
+    public void calculateTablesForID(int numberOfLevels, ArrayList<ArrayList<VariableMu>> variables, ArrayList<VariableMu> allValidVariables) {
         int index = 1; // don't add the variables with an ID number of 0
         int _size = 0;
         int currentLevel = 0;
         ArrayList<VariableMu> variableSubset = new ArrayList<>();
-        ArrayList<VariableMu> allVariables = new ArrayList<>();
-        for(ArrayList<VariableMu> v: variables){
-            allVariables.addAll(v);
-        }
-        
-        calculateTablesForID(0, index, _size, currentLevel, variableSubset, numberOfLevels, variables, allVariables);
+
+        calculateTablesForID(0, index, _size, currentLevel, variableSubset, numberOfLevels, variables, allValidVariables);
     }
-    
+
     public void calculateTablesForID(int _i, int _index, int _size, int _currentLevel, ArrayList<VariableMu> variableSubset,
             int numberOfLevels, ArrayList<ArrayList<VariableMu>> variables, ArrayList<VariableMu> allVariables) {
-        
+
         int currentLevel = _currentLevel + 1;
         if (currentLevel <= numberOfLevels) {
             int index = _index;
             int size = _size;
-            
+
             // find the next idLevel larger than zero and add the number of variables to the size
             for (int u = index; u < variables.size(); u++) {
                 if (variables.get(u).size() > 0) {
                     size = size + variables.get(u).size();
-                    index = u+1;
+                    index = u + 1;
                     break;
                 }
             }
-            
+
             for (int i = _i; i < size; i++) {
                 ArrayList<VariableMu> temp = new ArrayList<>();
                 temp.addAll(variableSubset);
                 temp.add(allVariables.get(i));
-                        
+
                 if (temp.size() == numberOfLevels) {
                     TableMu tableMu = new TableMu();
                     tableMu.setVariables(temp);
                     tableMu.setThreshold(model.getThreshold());
                     model.addTable(tableMu);
                 }
-                calculateTablesForID(i+1, index, size, currentLevel, temp, numberOfLevels, variables, allVariables);
+                calculateTablesForID(i + 1, index, size, currentLevel, temp, numberOfLevels, variables, allVariables);
             }
         }
     }
