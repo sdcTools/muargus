@@ -45,6 +45,10 @@ public class TableMu {
     public void setThreshold(String threshold) {
         this.threshold = Integer.parseInt(threshold);
     }
+    
+    public void setThreshold(int threshold) {
+        this.threshold = threshold;
+    }
 
     public ArrayList<VariableMu> getVariables() {
         return variables;

@@ -22,12 +22,12 @@ public class CombinationCalculator {
     private int numberOfLevels = 0;
 
     public CombinationCalculator() {
-        idLevels[0] = 1;
-        idLevels[1] = 2;
-        idLevels[2] = 1;
-        idLevels[3] = 1;
-        idLevels[4] = 2;
-        idLevels[5] = 2;
+        idLevels[0] = 0;
+        idLevels[1] = 1;
+        idLevels[2] = 0;
+        idLevels[3] = 0;
+        idLevels[4] = 1;
+        idLevels[5] = 0;
         
 
         for (int i : idLevels) {
@@ -42,18 +42,23 @@ public class CombinationCalculator {
         }
     }
 
-    public void calculate() {
+    public int getNumberOfLevels() {
+        return numberOfLevels;
+    }
+
+    
+    public void calculate(int numberOfLevels) {
         int index = 1; // don't add the variables with an ID number of 0
         int _size = 0;
         int currentLevel = 0;
         ArrayList<VariableMu> variableSubset = new ArrayList<>();
         
-        calculate(0, index, _size, "", currentLevel, variableSubset);
+        calculate(0, index, _size, "", currentLevel, variableSubset, numberOfLevels);
     }
     
-    public void calculate(int _i, int _index, int _size, String _s, int _currentLevel,ArrayList<VariableMu> variableSubset) {
+    public void calculate(int _i, int _index, int _size, String _s, int _currentLevel,ArrayList<VariableMu> variableSubset, int _numberOfLevels) {
         int currentLevel = _currentLevel + 1;
-        if (currentLevel <= numberOfLevels) {
+        if (currentLevel <= _numberOfLevels) {
             int index = _index;
             int size = _size;
             
@@ -71,12 +76,12 @@ public class CombinationCalculator {
                 temp.addAll(variableSubset);
                 temp.add(data.get(i));
                         
-                if (temp.size() == numberOfLevels) {
+                if (temp.size() == _numberOfLevels) {
                     TableMu tableMu = new TableMu();
                     tableMu.setVariables(temp);
                     tables.add(tableMu);
                 }
-                calculate(i+1, index, size, _s, currentLevel, temp);
+                calculate(i+1, index, size, _s, currentLevel, temp, _numberOfLevels);
             }
         }
     }
@@ -98,7 +103,7 @@ public class CombinationCalculator {
 
     public static void main(String[] args) {
         CombinationCalculator c = new CombinationCalculator();
-        c.calculate();
+        c.calculate(c.getNumberOfLevels());
         c.print();
     }
 }

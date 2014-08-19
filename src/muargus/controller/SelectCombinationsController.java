@@ -27,7 +27,7 @@ public class SelectCombinationsController {
     SelectCombinationsModel model;
     SelectCombinationsModel modelClone;
     MetadataMu metadata;
-    //ArrayList<String> list;
+    //ArrayList<String> calculateTablesForDimensions;
     
     static {
         System.loadLibrary("libmuargusdll");
@@ -66,12 +66,12 @@ public class SelectCombinationsController {
         this.model = this.modelClone;
         view.setVisible(false);
         CMuArgCtrl c = new CMuArgCtrl();
-        boolean result = c.SetNumberVar(model.getVariables().size());
+        boolean result = c.SetNumberVar(model.getVariablesInTables().size());
         if (!result)
             throw new ArgusException("Insufficient memory");
         
-        for (int index=0; index < model.getVariables().size(); index++) {
-            VariableMu variable = model.getVariables().get(index);
+        for (int index=0; index < model.getVariables().length; index++) {
+            VariableMu variable = model.getVariables()[index];
             result = c.SetVariable(index+1,
                     variable.getStartingPosition(),
                     variable.getVariableLength(),
@@ -122,10 +122,10 @@ public class SelectCombinationsController {
         //TODO: handle error
         
         model.clearUnsafe();
-        for (int varIndex=0; varIndex < model.getVariables().size(); varIndex++) {
-            VariableMu variable = model.getVariables().get(varIndex);
+        for (int varIndex=0; varIndex < model.getVariablesInTables().size(); varIndex++) {
+            VariableMu variable = model.getVariablesInTables().get(varIndex);
             int[] nDims = new int[] {0};
-            int[] unsafeCount = new int[model.getVariables().size()];
+            int[] unsafeCount = new int[model.getVariablesInTables().size()];
             result = c.UnsafeVariable(varIndex+1, nDims, unsafeCount);
             UnsafeInfo unsafe = new UnsafeInfo();
             unsafe.setUnsafeCombinations(nDims[0], unsafeCount);
@@ -157,7 +157,7 @@ public class SelectCombinationsController {
     private int[] getVarIndices(TableMu table) {
         int[] indices = new int[table.getVariables().size()];
         for (int index=0; index < indices.length; index++) {
-            indices[index] = 1+this.model.getVariables().indexOf(table.getVariables().get(index));
+            indices[index] = 1+this.model.getVariablesInTables().indexOf(table.getVariables().get(index));
         }
         return indices;
     }

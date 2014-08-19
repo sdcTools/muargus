@@ -1,34 +1,29 @@
 																	Wordt aan gewerkt/zal gemaakt worden door:
 
-Dingen die nog gedaan moeten worden
-- Code opschonen en documentatie fixen                              Jeldrik: kan ik volgende week wel doen als ik even geen zin heb om te programmern
-- Categorical en numerical tegelijk verbieden? (Anco)               Jeldrik: Nee, want het is mogelijk dat een variabele zowel numeriek als categorisch is (ordinale varibelen)
-                                    
-1. default file aanpassen                                           Jeldrik: werkt niet meer --> er uit slopen en bij de main de buttons op disabled zetten?
-2. codelistfile testen/aanpassen dat files goed gevonden worden     Anne: pas bij gebruik codelijst-file check op bestaan gebeurt in oude mu ook pas later
-   (dus zowel regio.cdl als volledige path)	
-2a. file open box bij codelist                                      Jeldrik: werkt
-3. zorgen dat aanpassingen in de tempVariable worden opgeslagen	    Anne: werkt
-3.a related to                                                      Anne: is opgelost
-3.b name                                                            Jeldrik: werkt
-3.c id lvl                                                          Jeldrik: werkt 
-3.d suppressionweight                                               Jeldrik: werkt 
-3.e weight                                                          Jeldrik: werkt 
-4. check of iets is verandert inbouwen                              Anne: werkt
-5. functionaliteit new button                                       Jeldrik: werkt
-6. functionaliteit delete button                                    Jeldrik: werkt
-7. functionaliteit move up/down button                              Jeldrik: werkt
-8. functionaliteit cancel button                                    Jeldrik: werkt
-9. functionaliteit ok button (wegschrijven van de gegevens)         Anne: werkt
-10. waarschuwingsscherm cancel                                      Anne: werkt
-11. geen integer in de drie int velden: save()                      Anne: (onderdeel van Ok-button check)
-12. inhoudelijke controles:                                         Anne: (onderdeel van Ok-button check)
-  a. overlappende velden                                            Anne: werkt
-  b. related to                                                     Jeldrik: is niet meer nodig
-  c. weight numeriek en niet categorisch, geen missing              Anne: wordt door UI afgevangen, extra controle hier eigenlijk niet nodig
-  d. lengtes van missing                                            Anne: werkt
-13. options for argus + missing + truncation +                      Anne: werkt
-    codelijst: afhankelijk van categorical
+1. default file aanpassen	                                        Jeldrik: werkt niet meer maar misschien kunnen we het er beter uit slopen en de buttons op disabled zetten
+1a. disable knoppen in main
+2. codelistfile testen/aanpassen dat files goed gevonden worden 
+(dus zowel regio.cdl als volledige path)	
+2a. file open box bij codelist
+3. zorgen dat aanpassingen opgeslagen worden
+3a. name                                                            Jeldrik (is vergelijkbaar met dingen die al zijn gedaan)
+3b. id lvl
+3c. related
+3d. weight			                                                Jeldrik: werkt					         
+4. check of iets is verandert inbouwen	
+5. functionaliteit new button										Jeldrik: werkt
+6. functionaliteit delete button 									Jeldrik: werkt
+7. functionaliteit move up/down button								Jeldrik: werkt
+8. functionaliteit cancel button									Jeldrik: werkt
+9. functionaliteit ok button (wegschrijven van de gegevens) 
+10. waarschuwingsscherm cancel
+11. geen integer in de drie int velden: save()
+12. inhoudelijke controles:
+  a. overlappende velden
+  b. related to
+  c. weight numeriek en niet caegorisch, geen missing 
+  d. lengtes van missing
+13. options for argus + missing + truncation + codelijst: afhankelijk van categorical
 
 
 
