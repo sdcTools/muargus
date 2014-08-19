@@ -90,6 +90,11 @@ public class SelectCombinationsView extends javax.swing.JDialog {
             }
         }
         variablesList.setModel(variablesListModel);
+        // places a copy of the list of used variables (variablesList) in the model
+        VariableMu[] copyVariables = new VariableMu[variablesListModel.size()];
+        variablesSelectedListModel.copyInto(copyVariables);
+        model.setVariables(copyVariables);
+        
         variablesSelectedList.setModel(variablesSelectedListModel);
         if (variablesListModel.getSize() > 0) {
             variablesList.setSelectedIndex(0);
@@ -536,7 +541,6 @@ public class SelectCombinationsView extends javax.swing.JDialog {
             ArrayList<VariableMu> array = new ArrayList<>();
             variables.add(array);
         }
-        
 
         // fill the appropriate array according to the idLevels of the variables
         for (int i = 0; i < variablesListModel.getSize(); i++) {
@@ -558,6 +562,7 @@ public class SelectCombinationsView extends javax.swing.JDialog {
             }
         }
         
+        if(generateAutomaticTables.isValid()){
         if(generateAutomaticTables.isMakeUpToDimensionRadioButton()){
             int dimensions = generateAutomaticTables.getDimensionTextField();
             calculateTablesForDimensions(allValidVariables, dimensions);
@@ -566,12 +571,13 @@ public class SelectCombinationsView extends javax.swing.JDialog {
             //int dimensions = generateAutomaticTables.getDimensionTextField();
             calculateTablesForID(numberOfLevels, variables);
         }
+        }
         //list(allValidVariables, 2);
 
         //prints the variables of each table and the number of tables
         //TODO: remove after testing
 //        for(TableMu t: model.getTables()){
-//            for(VariableMu v: t.getVariables()){
+//            for(VariableMu v: t.getVariablesInTable()){
 //                System.out.print(v.getName() + " ");
 //            }
 //            System.out.println("");
@@ -583,10 +589,13 @@ public class SelectCombinationsView extends javax.swing.JDialog {
 
     public void calculateTablesForDimensions(ArrayList<VariableMu> data, int dimensions) {
         ArrayList<VariableMu> variableSubset = new ArrayList<>();
-        calculateTablesForDimensions(0, data, dimensions, variableSubset);
+        int startPos = 0;
+        int threshold = 0;
+        calculateTablesForDimensions(startPos, data, dimensions, variableSubset, threshold);
     }
 
-    public void calculateTablesForDimensions(int startPos, ArrayList<VariableMu> allVariables, int dimension, ArrayList<VariableMu> variableSubset) {
+    public void calculateTablesForDimensions(int startPos, ArrayList<VariableMu> allVariables, int dimension, 
+            ArrayList<VariableMu> variableSubset, int threshold) {
         if (dimension > 0) {
             for (int i = startPos; i < allVariables.size(); i++) {
                 //make variable array 
@@ -598,10 +607,11 @@ public class SelectCombinationsView extends javax.swing.JDialog {
                 //Make table, add the variable array and add this table to the table array
                 TableMu tableMu = new TableMu();
                 tableMu.setVariables(temp);
+                tableMu.setThreshold(model.getThresholds()[threshold]);
                 model.getTables().add(tableMu);
 
                 int d = dimension - 1;
-                calculateTablesForDimensions(i + 1, allVariables, d, temp);
+                calculateTablesForDimensions(i + 1, allVariables, d, temp, threshold + 1);
             }
         }
     }
@@ -644,6 +654,7 @@ public class SelectCombinationsView extends javax.swing.JDialog {
                 if (temp.size() == numberOfLevels) {
                     TableMu tableMu = new TableMu();
                     tableMu.setVariables(temp);
+                    tableMu.setThreshold(model.getThreshold());
                     model.addTable(tableMu);
                 }
                 calculateTablesForID(i+1, index, size, currentLevel, temp, numberOfLevels, variables, allVariables);

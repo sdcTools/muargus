@@ -61,12 +61,12 @@ public class SelectCombinationsController {
     public void calculateTables() throws ArgusException {                                                      
         view.setVisible(false);
         CMuArgCtrl c = new CMuArgCtrl();
-        boolean result = c.SetNumberVar(model.getVariables().size());
+        boolean result = c.SetNumberVar(model.getVariablesInTable().size());
         if (!result)
             throw new ArgusException("Insufficient memory");
         
-        for (int index=0; index < model.getVariables().size(); index++) {
-            VariableMu variable = model.getVariables().get(index);
+        for (int index=0; index < model.getVariablesInTable().size(); index++) {
+            VariableMu variable = model.getVariablesInTable().get(index);
             c.SetVariable(index+1,
                     variable.getStartingPosition(),
                     variable.getVariableLength(),
@@ -107,10 +107,10 @@ public class SelectCombinationsController {
         //TODO: handle error
         
         model.clearUnsafe();
-        for (int varIndex=0; varIndex < model.getVariables().size(); varIndex++) {
-            VariableMu variable = model.getVariables().get(varIndex);
+        for (int varIndex=0; varIndex < model.getVariablesInTable().size(); varIndex++) {
+            VariableMu variable = model.getVariablesInTable().get(varIndex);
             int[] nDims = new int[] {0};
-            int[] unsafeCount = new int[model.getVariables().size()];
+            int[] unsafeCount = new int[model.getVariablesInTable().size()];
             result = c.UnsafeVariable(varIndex+1, nDims, unsafeCount);
             UnsafeInfo unsafe = new UnsafeInfo();
             unsafe.setUnsafeCombinations(nDims[0], unsafeCount);

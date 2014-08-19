@@ -4,6 +4,7 @@
  */
 package muargus.view;
 
+import java.awt.Frame;
 import muargus.model.SelectCombinationsModel;
 
 /**
@@ -12,14 +13,21 @@ import muargus.model.SelectCombinationsModel;
  */
 public class GenerateAutomaticTables extends javax.swing.JDialog {
 
-    
+    SelectCombinationsModel model;
+    private boolean valid; // is used to continue with the calculation
+    private Frame parent;
+
     /**
      * Creates new form GenerateAutomaticTables
      */
     public GenerateAutomaticTables(java.awt.Frame parent, boolean modal, SelectCombinationsModel model) {
         super(parent, modal);
+        this.model = model;
+        this.valid = false;
+        this.parent = parent;
         initComponents();
         this.setLocationRelativeTo(null);
+        this.setTitle("Method for generating tables");
         //dimensionTextField.setText(model.getThreshold());
     }
 
@@ -35,8 +43,14 @@ public class GenerateAutomaticTables extends javax.swing.JDialog {
         return useIdentificatinLevelRadioButton.isSelected();
     }
 
-    
-    
+    public boolean isValid() {
+        return valid;
+    }
+
+    public void setValid(boolean valid) {
+        this.valid = valid;
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -62,9 +76,20 @@ public class GenerateAutomaticTables extends javax.swing.JDialog {
         methodButtonGroup.add(useIdentificatinLevelRadioButton);
         useIdentificatinLevelRadioButton.setSelected(true);
         useIdentificatinLevelRadioButton.setText("Use identification level");
+        useIdentificatinLevelRadioButton.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                useIdentificatinLevelRadioButtonStateChanged(evt);
+            }
+        });
 
         methodButtonGroup.add(makeUpToDimensionRadioButton);
         makeUpToDimensionRadioButton.setText("Make all tables up to dimension");
+
+        dimensionTextField.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                dimensionTextFieldFocusGained(evt);
+            }
+        });
 
         javax.swing.GroupLayout methodPanelLayout = new javax.swing.GroupLayout(methodPanel);
         methodPanel.setLayout(methodPanelLayout);
@@ -139,15 +164,76 @@ public class GenerateAutomaticTables extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
+        this.setValid(false);
         this.setVisible(false);
     }//GEN-LAST:event_cancelButtonActionPerformed
 
     private void okButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okButtonActionPerformed
-        
-        
-        this.setVisible(false);
+        boolean isValid = true;
+        int dimensions = 0;
+
+        if (makeUpToDimensionRadioButton.isSelected()) {
+            try {
+                dimensions = Integer.parseInt(dimensionTextField.getText());
+                if (dimensions <= 0) {
+                    //show message: Illegal value for the dimension
+                    System.out.println("Illegal value for the dimension, dimension cannot be smaller than 1");
+                    isValid = false;
+                } else if (dimensions > model.getVariables().length) {
+                    System.out.println("Not enough identifying variables for this request");
+                    //show message: Not enough identifying variables for this request
+                    isValid = false;
+                }
+            } catch (Exception e) {
+                System.out.println("Illegal value for the dimension, give a whole number");
+                //show message: Illegal value for the dimension
+                isValid = false;
+            }
+        }
+        //System.out.println(isValid);
+        if (isValid) {
+            this.setValid(true);
+            if (useIdentificatinLevelRadioButton.isSelected()) {
+                ArgusInput getThreshold = new ArgusInput(parent, true);
+                getThreshold.setLabelText("Threshold");
+                getThreshold.setTitle("Threshold");
+                getThreshold.setVisible(true);
+                try {
+                    model.setThreshold(getThreshold.getTextField());
+                } catch (Exception e) {
+                    isValid = false;
+                }
+            } else {
+                int[] thresholds = new int[dimensions];
+                for (int i = 0; i < dimensions; i++) {
+                    ArgusInput getThreshold = new ArgusInput(parent, true);
+                    getThreshold.setLabelText("Threshold for dim" + (i + 1));
+                    getThreshold.setTitle("Threshold");
+                    getThreshold.setVisible(true);
+                    try {
+                        thresholds[i] = getThreshold.getTextField();
+                    } catch (Exception e) {
+                        isValid = false;
+                    }
+
+                }
+                model.setThresholds(thresholds);
+            }
+        }
+        if (isValid) {
+            this.setVisible(false);
+        }
     }//GEN-LAST:event_okButtonActionPerformed
 
+    private void dimensionTextFieldFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_dimensionTextFieldFocusGained
+        makeUpToDimensionRadioButton.setSelected(true);
+    }//GEN-LAST:event_dimensionTextFieldFocusGained
+
+    private void useIdentificatinLevelRadioButtonStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_useIdentificatinLevelRadioButtonStateChanged
+        if (useIdentificatinLevelRadioButton.isSelected()) {
+            dimensionTextField.setText("");
+        }
+    }//GEN-LAST:event_useIdentificatinLevelRadioButtonStateChanged
 //    /**
 //     * @param args the command line arguments
 //     */

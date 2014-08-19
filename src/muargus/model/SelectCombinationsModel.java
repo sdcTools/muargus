@@ -15,6 +15,8 @@ public class SelectCombinationsModel {
     private int threshold;
     private boolean riskModel;
     private ArrayList<TableMu> tables;
+    private VariableMu[] variables;
+    private int[] thresholds;
     private HashMap<VariableMu, UnsafeInfo> unsafe;
     
     /**
@@ -53,12 +55,24 @@ public class SelectCombinationsModel {
         return Integer.toString(threshold);
     }
 
+    public int[] getThresholds() {
+        return thresholds;
+    }
+
+    public void setThresholds(int[] thresholds) {
+        this.thresholds = thresholds;
+    }
+    
     /**
      * 
      * @param threshold 
      */
     public void setThreshold(String threshold) {
         this.threshold = Integer.parseInt(threshold);
+    }
+    
+    public void setThreshold(int threshold) {
+        this.threshold = threshold;
     }
 
     public ArrayList<TableMu> getTables() {
@@ -114,7 +128,7 @@ public class SelectCombinationsModel {
         return numberOfColumns; 
     }
     
-    public ArrayList<VariableMu> getVariables() {
+    public ArrayList<VariableMu> getVariablesInTable() {
         ArrayList<VariableMu> variables = new ArrayList<>();
         for (TableMu table : this.tables) {
             for (VariableMu variable : table.getVariables()) {
@@ -125,5 +139,12 @@ public class SelectCombinationsModel {
         return variables;
     }
     
+    public VariableMu[] getVariables(){
+        return variables;
+    }
+    
+    public void setVariables(VariableMu[] variables){
+        this.variables = variables;
+    }
 
 }
