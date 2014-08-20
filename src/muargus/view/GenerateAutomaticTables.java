@@ -5,6 +5,7 @@
 package muargus.view;
 
 import java.awt.Frame;
+import javax.swing.JOptionPane;
 import muargus.model.SelectCombinationsModel;
 
 /**
@@ -175,22 +176,18 @@ public class GenerateAutomaticTables extends javax.swing.JDialog {
                 dimensions = Integer.parseInt(dimensionTextField.getText());
                 
                 if (dimensions <= 0) {
-                    //show message: Illegal value for the dimension
-                    System.out.println("Illegal value for the dimension, dimension cannot be smaller than 1");
+                    JOptionPane.showMessageDialog(this, "Illegal value for the dimension, dimension cannot be smaller than 1");
                     isValid = false;
                 } else if (dimensions > SelectCombinationsView.getNumberOfVariables()) {
-                    System.out.println("Not enough identifying variables for this request");
-                    //show message: Not enough identifying variables for this request
+                    JOptionPane.showMessageDialog(this, "Not enough identifying variables for this request");
                     isValid = false;
                 } 
-                
             } catch (Exception e) {
-                System.out.println("Illegal value for the dimension, give a whole number");
-                //show message: Illegal value for the dimension
+                JOptionPane.showMessageDialog(this, "Illegal value for the dimension, give a whole number");
                 isValid = false;
             }
         }
-        //System.out.println(isValid);
+        
         if (isValid) {
             GenerateAutomaticTables.setValid(true);
             if (useIdentificatinLevelRadioButton.isSelected()) {

@@ -1,14 +1,4 @@
-Is het handig om in plaats van zoals nu een waarschuwing na elke 100 tabellen, in het begin een waarschuwing te geven
-als er meer tabellen zijn dan 100. Je kan bijvoorbeeld vrij gemakkelijk berekenen hoeveel tabellen er ontstaan:
-
-public void numberOfTabels(int numberOfTables, int dimensions, int numberOfVariables){
-    if(dimensions > 0){
-        int tempNumber = numberOfTables * numberOfVariables;
-        int tempNumberOfVariables = numberOfVariables - 1;
-        int tempDimensions = dimensions -1;
-        numberOfTabels(tempNumber, tempNumberOfVariables, tempDimensions);
-    }
-}
+TODO: zorg dat tabellen niet automatisch aangemaakt worden als er een verkeerde threshold wordt gegeven en dan op het rode kruisje wordt gedrukt
 
  
 
@@ -46,10 +36,10 @@ Taak:
 10. automaticSpecificationButton                                                                                Jeldrik: mee bezig
     - controleer of de tabel leeg is en vraag of de tabellen verwijderd moeten worden als dit niet het geval is
     - open "methods for generating tabels" scherm                                                               Jeldrik: werkt
-    - als "use identification levels" wordt gekozen, laat threshold scherm 1 keer zien
-    - als "make all tables up to dimension X" gekozen wordt, laat threshold scherm X keer zien voor elke dimensie
+    - als "use identification levels" wordt gekozen, laat threshold scherm 1 keer zien                          Jeldrik: werkt
+    - als "make all tables up to dimension X" gekozen wordt, laat threshold scherm X keer zien voor elke dimensie Jeldrik: werkt
     - maak alle mogelijke tabellen volgens de specificaties en zet ze in table                                  Jeldrik: werkt voor dimensies
-    - zorg dat er een check is die kijkt of er voldoende variabelen zijn.
+    - zorg dat er een check is die kijkt of er voldoende variabelen zijn.                                       Jeldrik: werkt
 11. clearButton:
     - remove all rows from table                                                                                Jeldrik: werkt
 12. setTableRiskModelButton:

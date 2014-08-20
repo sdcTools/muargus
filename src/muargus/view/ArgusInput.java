@@ -4,6 +4,7 @@
  */
 package muargus.view;
 
+import javax.swing.JOptionPane;
 import muargus.model.SelectCombinationsModel;
 
 /**
@@ -112,14 +113,12 @@ public class ArgusInput extends javax.swing.JDialog {
             try {
                 int threshold = Integer.parseInt(this.textField.getText());
                 if(threshold <= 0){
-                    System.out.println("Illegal value for the threshold, threshold cannot be smaller than 1");
-                    //show message: Illegal value for the dimension
+                    JOptionPane.showMessageDialog(this, "Illegal value for the threshold, threshold cannot be smaller than 1");
                     valid = false; 
                 }
                 
             } catch (Exception e) {
-                System.out.println("Illegal value for the threshold, give a whole number");
-                //show message: Illegal value for the dimension
+                JOptionPane.showMessageDialog(this, "Illegal value for the threshold, give a whole number");
                 valid = false;
             }
         //}

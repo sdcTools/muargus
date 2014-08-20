@@ -5,6 +5,7 @@ import java.awt.Frame;
 import java.util.ArrayList;
 import java.util.Arrays;
 import javax.swing.DefaultListModel;
+import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
@@ -101,23 +102,23 @@ public class SelectCombinationsView extends javax.swing.JDialog {
         data = new String[model.getTables().size()][model.getNumberOfColumns()];
 
         // nog bezig met de check
-        ArrayList<int[]> doubleIndices = new ArrayList<>();
-        for (int i = 0; i < tables.size(); i++) {
-            for (int j = i + 1; j < tables.size(); j++) {
-                if (!compaireRows(model.isRiskModel(), tables.get(i), tables.get(j))) {
-                    int[] temp = {i, j};
-                    doubleIndices.add(temp);
-                }
-            }
-        }
-        for (int[] d : doubleIndices) {
-            if (tables.get(d[1]).isRiskModel()) {
-                model.removeTable(d[0]);
-            } else {
-                model.removeTable(d[1]);
-            }
-            //System.out.printf("%d, %d\n", d[0], d[1]);
-        }
+//        ArrayList<int[]> doubleIndices = new ArrayList<>();
+//        for (int i = 0; i < tables.size(); i++) {
+//            for (int j = i + 1; j < tables.size(); j++) {
+//                if (!compaireRows(model.isRiskModel(), tables.get(i), tables.get(j))) {
+//                    int[] temp = {i, j};
+//                    doubleIndices.add(temp);
+//                }
+//            }
+//        }
+//        for (int[] d : doubleIndices) {
+//            if (tables.get(d[1]).isRiskModel()) {
+//                model.removeTable(d[0]);
+//            } else {
+//                model.removeTable(d[1]);
+//            }
+//            //System.out.printf("%d, %d\n", d[0], d[1]);
+//        }
 
         int index = 0;
         for (TableMu t : tables) {
@@ -433,10 +434,9 @@ public class SelectCombinationsView extends javax.swing.JDialog {
 
     private void addRowButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addRowButtonActionPerformed
         if (variablesSelectedListModel.size() > 10) {
-            // place warning
+            JOptionPane.showMessageDialog(this, "Cannot add more than 10 variables");
         } else if (!validThreshold()) {
-            System.out.println("The threshold is not valid, try a whole number");
-            // place warning non valid threshold
+            JOptionPane.showMessageDialog(this, "The threshold is not valid, try a whole number");
         } else {
             // copy the selected variables into a VariableMu array
             VariableMu[] variableMu = new VariableMu[variablesSelectedListModel.size()];
@@ -569,7 +569,7 @@ public class SelectCombinationsView extends javax.swing.JDialog {
             }
         }
 
-        this.numberOfVariables = allValidVariables.size();
+        SelectCombinationsView.numberOfVariables = allValidVariables.size();
 
         GenerateAutomaticTables generateAutomaticTables = new GenerateAutomaticTables(parent, true, this.model);
         generateAutomaticTables.setVisible(true);
@@ -578,8 +578,11 @@ public class SelectCombinationsView extends javax.swing.JDialog {
             if (generateAutomaticTables.isMakeUpToDimensionRadioButton()) {
                 int dimensions = generateAutomaticTables.getDimensionTextField();
                 this.setNumberOfTables(dimensions, numberOfVariables);
-                System.out.println(getNumberOfTables()); // prints the number of tables --> should become a warning
-                calculateTablesForDimensions(allValidVariables, dimensions);
+                if (getNumberOfTables() > 100) {
+                    if (JOptionPane.showConfirmDialog(this, "Are you sure that you want to generate " + getNumberOfTables() + " tables?", "Mu Argus", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+                        calculateTablesForDimensions(allValidVariables, dimensions);
+                    }
+                }
             }
             if (generateAutomaticTables.isUseIdentificatinLevelRadioButton()) {
                 calculateTablesForID(numberOfLevels, variables, allValidVariables);
@@ -598,19 +601,21 @@ public class SelectCombinationsView extends javax.swing.JDialog {
     }
 
     public void setNumberOfTables(int dimensions, int numberOfVariables) {
-       this.numberOfTabels(1, dimensions, numberOfVariables);
+        this.numberOfTabels(1, dimensions, numberOfVariables);
     }
-    
-    
 
     public void numberOfTabels(long numberOfTables, int dimensions, int numberOfVariables) {
         if (dimensions > 0) {
             long tempNumber = numberOfTables * numberOfVariables;
-            int tempNumberOfVariables = numberOfVariables - 1;
-            int tempDimensions = dimensions - 1;
-            numberOfTabels(tempNumber, tempDimensions, tempNumberOfVariables);
-        }
-        else if(dimensions == 0){
+            if (tempNumber < 0) {
+                JOptionPane.showMessageDialog(this, "To ... many ... dimensions ...\nCan't ... visualize :-(");
+            } else {
+                int tempNumberOfVariables = numberOfVariables - 1;
+                int tempDimensions = dimensions - 1;
+                numberOfTabels(tempNumber, tempDimensions, tempNumberOfVariables);
+            }
+
+        } else if (dimensions == 0) {
             this.numberOfTables = numberOfTables;
         }
     }
