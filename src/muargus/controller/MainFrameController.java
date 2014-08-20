@@ -73,6 +73,7 @@ public class MainFrameController {
                 this.view, this.metadata, this.selectCombinationsModel);
         controller.showView();
         this.selectCombinationsModel = controller.getModel();
+        view.showUnsafeCombinations(this.selectCombinationsModel);
         //view.setVisible(true);
     }                                                    
 

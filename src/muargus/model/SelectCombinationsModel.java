@@ -139,6 +139,15 @@ public class SelectCombinationsModel {
         return variables;
     }
     
+    public int getMaxDimsInTables() {
+        int max = 0;
+        for (TableMu table : this.tables) {
+            if (table.getVariables().size() > max) {
+                max = table.getVariables().size();
+            }
+        }
+        return max;
+    }
 //    public VariableMu[] getVariables(){
 //        return variables;
 //    }

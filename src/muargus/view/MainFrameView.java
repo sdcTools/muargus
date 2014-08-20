@@ -3,9 +3,12 @@ package muargus.view;
 import argus.model.ArgusException;
 import argus.model.DataFilePair;
 import argus.view.DialogOpenMicrodata;
-import muargus.MuARGUS;
+import java.util.ArrayList;
+import javax.swing.table.DefaultTableModel;
 import muargus.controller.MainFrameController;
 import muargus.model.MetadataMu;
+import muargus.model.SelectCombinationsModel;
+import muargus.model.VariableMu;
 
 /**
  *
@@ -759,6 +762,24 @@ public class MainFrameView extends javax.swing.JFrame {
         
     }//GEN-LAST:event_openMicrodataMenuItemActionPerformed
 
+    public void showUnsafeCombinations(SelectCombinationsModel model) {
+        ArrayList<String> columnNames = new ArrayList<>();
+        columnNames.add("Variable");
+        int nDims = model.getMaxDimsInTables();
+        for (int dimNr=1; dimNr <= nDims; dimNr++) {
+            columnNames.add("dim " + dimNr);
+        }
+        
+        Object[][] data = new Object[model.getVariablesInTables().size()][];
+        int rowIndex = 0;
+        for (VariableMu variable : model.getVariablesInTables()) {
+            data[rowIndex] = model.getUnsafe(variable).toObjectArray(variable, nDims);
+            rowIndex++;
+        }
+        DefaultTableModel tableModel = new DefaultTableModel(data, columnNames.toArray());
+        this.unsafeCombinationsTable.setModel(tableModel);
+    }
+    
     private void exitMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitMenuItemActionPerformed
         controller.exit();
     }//GEN-LAST:event_exitMenuItemActionPerformed
