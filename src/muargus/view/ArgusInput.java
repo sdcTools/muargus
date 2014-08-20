@@ -15,12 +15,16 @@ public class ArgusInput extends javax.swing.JDialog {
 
     /**
      * Creates new form ArgusInput
+     * @param parent
+     * @param modal
+     * @param model
      */
     public ArgusInput(java.awt.Frame parent, boolean modal, SelectCombinationsModel model) {
         super(parent, modal);
         initComponents();
         textField.setText(model.getThreshold());
         this.setLocationRelativeTo(null);
+
     }
 
 
@@ -55,7 +59,7 @@ public class ArgusInput extends javax.swing.JDialog {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Input");
 
-        label.setText("jLabel1");
+        label.setText("label");
 
         cancelButton.setText("Cancel");
         cancelButton.addActionListener(new java.awt.event.ActionListener() {
@@ -80,7 +84,7 @@ public class ArgusInput extends javax.swing.JDialog {
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(label)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 147, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 159, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(okButton)
@@ -123,6 +127,7 @@ public class ArgusInput extends javax.swing.JDialog {
             }
         //}
         if(valid){
+            GenerateAutomaticTables.setValid(true);
             this.setVisible(false);
         }
     }//GEN-LAST:event_okButtonActionPerformed

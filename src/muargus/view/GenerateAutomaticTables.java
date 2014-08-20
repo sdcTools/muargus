@@ -189,7 +189,7 @@ public class GenerateAutomaticTables extends javax.swing.JDialog {
         }
         
         if (isValid) {
-            GenerateAutomaticTables.setValid(true);
+            GenerateAutomaticTables.setValid(false);
             if (useIdentificatinLevelRadioButton.isSelected()) {
                 ArgusInput getThreshold = new ArgusInput(parent, true, this.model);
                 getThreshold.setLabelText("Threshold");

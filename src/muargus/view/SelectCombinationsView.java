@@ -446,8 +446,8 @@ public class SelectCombinationsView extends javax.swing.JDialog {
             }
 
             boolean isValid = true;
-
-            if (model.getNumberOfRows() > 0) {
+            // only check for double tables when then number of tables is between 0 and 100
+            if (model.getNumberOfRows() > 0 && model.getNumberOfRows() < 100) {
                 for (int i = 0; i < model.getNumberOfRows(); i++) {
                     TableMu tableMuOld = model.getTables().get(i);
                     isValid = compaireRows(model.isRiskModel(), tableMuNew, tableMuOld);
@@ -546,6 +546,7 @@ public class SelectCombinationsView extends javax.swing.JDialog {
     }//GEN-LAST:event_removeRowButtonActionPerformed
 
     private void automaticSpecificationButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_automaticSpecificationButtonActionPerformed
+        // checks if there are tables and askes if they need to be removed
         if (model.getNumberOfRows() > 0) {
             if (JOptionPane.showConfirmDialog(this, "Do you want to delete the current set of tables?", "Mu Argus", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
                 this.clear();
