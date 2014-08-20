@@ -29,7 +29,7 @@ public class IProgressListener {
     if (swigCPtr != 0) {
       if (swigCMemOwn) {
         swigCMemOwn = false;
-        MuargusCtrlJNI.delete_IProgressListener(swigCPtr);
+        MuArgusCtrlJNI.delete_IProgressListener(swigCPtr);
       }
       swigCPtr = 0;
     }
@@ -42,21 +42,21 @@ public class IProgressListener {
 
   public void swigReleaseOwnership() {
     swigCMemOwn = false;
-    MuargusCtrlJNI.IProgressListener_change_ownership(this, swigCPtr, false);
+    MuArgusCtrlJNI.IProgressListener_change_ownership(this, swigCPtr, false);
   }
 
   public void swigTakeOwnership() {
     swigCMemOwn = true;
-    MuargusCtrlJNI.IProgressListener_change_ownership(this, swigCPtr, true);
+    MuArgusCtrlJNI.IProgressListener_change_ownership(this, swigCPtr, true);
   }
 
   public void UpdateProgress(int perc) {
-    MuargusCtrlJNI.IProgressListener_UpdateProgress(swigCPtr, this, perc);
+    MuArgusCtrlJNI.IProgressListener_UpdateProgress(swigCPtr, this, perc);
   }
 
   public IProgressListener() {
-    this(MuargusCtrlJNI.new_IProgressListener(), true);
-    MuargusCtrlJNI.IProgressListener_director_connect(this, swigCPtr, swigCMemOwn, true);
+    this(MuArgusCtrlJNI.new_IProgressListener(), true);
+    MuArgusCtrlJNI.IProgressListener_director_connect(this, swigCPtr, swigCMemOwn, true);
   }
 
 }
