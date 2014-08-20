@@ -64,15 +64,16 @@ Taak:
 13. cancelButton
     - sluit het scherm                                                                                          Jeldrik: werkt
     opmerking: waarschuwingsscherm toevoegen die wordt getoond als er tabellen zijn gespecificeerd?
-14. calculateTablesButton
-    - bereken de frequenties van onveilige waardes voor elke tabel en geef deze aan de MainFrame
-    - sluit het scherm
+14. calculateTablesButton                                                                        
+    - bereken de frequenties van onveilige waardes voor elke tabel en geef deze aan de MainFrame                Anne: werkt
+    - sluit het scherm                                                                                          Anne: werkt (nog verplaatst)
+    - codelijst relatief pad: altijd t.o.v. pad naar metadata file?                                             werkt nog niet
 15. progressbar
     - link dit aan de calculateTablesButton
     - laat label zien als hij bezig is (nog zoeken wat er moet staan)
-16. TablesMu klasse vergelijkbaar met VariablesMu. In deze klasse komt:
+16. TablesMu klasse vergelijkbaar met VariablesMu. In deze klasse komt:                                         Anne: werkt
     - lijst van variabelen waar de tabel uit bestaat
-    - aantal unsafe combinations per dimensie                                                                   --> moet nog bedacht worden hoe dit handig is
+    - aantal unsafe combinations per dimensie                                                                   
     - boolean variable riskModel
     - method isRiskModel
     - method setRiskModel
