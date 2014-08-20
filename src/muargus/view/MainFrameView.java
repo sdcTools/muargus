@@ -793,6 +793,8 @@ public class MainFrameView extends javax.swing.JFrame {
     }
     
     private void selectionChanged(javax.swing.event.ListSelectionEvent evt) {
+        if (evt.getValueIsAdjusting())
+            return;
         int j = ((ListSelectionModel)evt.getSource()).getMinSelectionIndex();
         VariableMu variable = this.model.getVariablesInTables().get(j);
         UnsafeInfo unsafeInfo = this.model.getUnsafe(variable);
