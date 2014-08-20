@@ -1,0 +1,38 @@
+Taak:
+1. View:
+    - voeg een textfield + button toe voor de .grc file                                                 Jeldrik: check
+    - verander de missing values zodat zowel oude als nieuwe zichtbaar zijn                             Jeldrik: check
+2. VariableMu:
+    - voeg twee booleans toe: isTruncated & isRecoded en zorg dat niet beiden true kunnen zijn          Jeldrik: check
+3. variablesTable:
+    - maak voor elke categorische variabele een string array (value[2])
+    - value[0] = "" of "T" (isTruncated) of "R" (isRecoded) --> default = ""
+    - value[1] = naam variabele
+    - voeg de array toe aan de tabel
+    - vul het textField van de missing values met de missing values van de geselecteerde variabele
+4. readButton:
+    - open een fileChooser geschikt voor .grc files 
+    - plaats de text van de .grc file die niet tussen <> staat in de EditTextField
+    - plaats de .grc filenaam in het .grc textfield   
+    - plaats de .cdl filenaam in het .cdl textfield (staat in de .grc file)
+    - plaats de nieuwe missing values op de goede plek (staan in de .grc file) 
+5. applyButton:
+    - alleen klikbaar als het EditTextField niet leeg is
+    - check of de waardes in het EditTextField correct zijn (gebeurd als het goed is al in de dll)
+    - hercodeerd met behulp van de dllfunctie doRecode (pak de benodigde waardes van het scherm)
+    - voeg een R toe bij de variabele en zet deze variabela as isRecoded bij VariableMU
+    - maak de Undo button klikbaar
+6. truncateButton:
+    - is alleen zichtbaar als de variabele truncatable is
+    - geef een scherm die vraagt om het aantal getallen voor de truncate
+    - check of het aantal getallen voor de truncate geldig is
+    - voer truncate uit met de dllFunctie doTruncate
+7. undoButton:
+    - alleen zichtbaar als de geselecteerde waarde of truncated of recoded is
+    - voer undo uit met de dllFunctie undoRecode
+8. warningTextArea
+    - laat de foutmeldingen zien
+9. closeButton:
+    - voer de hercodering uit met de dllFunctie applyRecode
+
+

@@ -2,8 +2,7 @@ Nog te doen:
     
 9. thresholdTextField
     - sla waarde op in registry
-10. automaticSpecificationButton
-    - controleer of de tabel leeg is en vraag of de tabellen verwijderd moeten worden als dit niet het geval is
+10. automaticSpecificationButton 
     - Check op dubbele tabellen
     - bug fixen bij wegklikken van specificeren threshold. 
       bug treed op als er een int kleiner dan 1 wordt gegeven en het scherm wordt weggeklikt.
