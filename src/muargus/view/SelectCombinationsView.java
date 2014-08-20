@@ -30,12 +30,16 @@ public class SelectCombinationsView extends javax.swing.JDialog {
     private TableModel tableModel;
     private ArrayList<String> columnNames;
     private String[][] data;
-    private Frame parent;
+    private final Frame parent;
     private static int numberOfVariables;
     private long numberOfTables;
 
     /**
      * Creates new form SelectCombinationsView
+     *
+     * @param parent
+     * @param modal
+     * @param controller
      */
     public SelectCombinationsView(java.awt.Frame parent, boolean modal, SelectCombinationsController controller) {
         super(parent, modal);
@@ -119,7 +123,6 @@ public class SelectCombinationsView extends javax.swing.JDialog {
 //            }
 //            //System.out.printf("%d, %d\n", d[0], d[1]);
 //        }
-
         int index = 0;
         for (TableMu t : tables) {
             data[index] = t.getTable();
@@ -421,12 +424,8 @@ public class SelectCombinationsView extends javax.swing.JDialog {
         boolean valid;
         try {
             int threshold = Integer.parseInt(thresholdTextField.getText());
-            if (threshold > 0) {
-                valid = true;
-            } else {
-                valid = false;
-            }
-        } catch (Exception e) {
+            valid = threshold > 0;
+        } catch (NumberFormatException e) {
             valid = false;
         }
         return valid;
@@ -482,7 +481,8 @@ public class SelectCombinationsView extends javax.swing.JDialog {
      *
      * @param riskModel boolean that tells if the riskModel is set for at least
      * one table
-     * @param variableMu an array of variables from the to be added table
+     * @param tableMuNew
+     * @param tableMuOld
      * @return It returns if a table can be added
      */
     public boolean compaireRows(boolean riskModel, TableMu tableMuNew, TableMu tableMuOld) {
@@ -507,7 +507,7 @@ public class SelectCombinationsView extends javax.swing.JDialog {
                     if (thresholdNew > thresholdOld) {
                         tableMuOld.setThreshold(thresholdTextField.getText());
                     }
-                } catch (Exception e) {
+                } catch (NumberFormatException e) {
                     thresholdTextField.setText(Integer.toString(tableMuOld.getThreshold()));
                 }
                 isValid = false;
@@ -546,6 +546,12 @@ public class SelectCombinationsView extends javax.swing.JDialog {
     }//GEN-LAST:event_removeRowButtonActionPerformed
 
     private void automaticSpecificationButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_automaticSpecificationButtonActionPerformed
+        if (model.getNumberOfRows() > 0) {
+            if (JOptionPane.showConfirmDialog(this, "Do you want to delete the current set of tables?", "Mu Argus", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+                this.clear();
+            }
+        }
+
         // make an array for each idLevel (0-5)
         ArrayList<ArrayList<VariableMu>> variables = new ArrayList<>();
         for (int i = 0; i < 6; i++) {
