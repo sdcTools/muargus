@@ -55,6 +55,8 @@ public class VariableMu {
     private boolean other = true;
     private String relatedVariableName = null;
     private VariableMu relatedVariable = null;
+    private boolean isTruncated = false;
+    private boolean isRecoded = false;
     
     /**
      * Empty constructor
@@ -258,6 +260,28 @@ public class VariableMu {
         this.missing[index] = value;
     }
 
+    public boolean isIsTruncated() {
+        return isTruncated;
+    }
+
+    public void setIsTruncated(boolean isTruncated) {
+        this.isTruncated = isTruncated;
+        if(isTruncated){
+            this.isRecoded = false;
+        }
+    }
+
+    public boolean isIsRecoded() {
+        return isRecoded;
+    }
+
+    public void setIsRecoded(boolean isRecoded) {
+        this.isRecoded = isRecoded;
+        if(isRecoded){
+            this.isTruncated = false;
+        }
+    }
+    
     public boolean isOther() {
         return other;
     }
