@@ -4,10 +4,13 @@ import argus.model.ArgusException;
 import argus.model.DataFilePair;
 import argus.view.DialogOpenMicrodata;
 import java.util.ArrayList;
+import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 import muargus.controller.MainFrameController;
 import muargus.model.MetadataMu;
 import muargus.model.SelectCombinationsModel;
+import muargus.model.UnsafeCodeInfo;
+import muargus.model.UnsafeInfo;
 import muargus.model.VariableMu;
 
 /**
@@ -17,14 +20,15 @@ import muargus.model.VariableMu;
 public class MainFrameView extends javax.swing.JFrame {
     
     //private DataFilePair dataFilePair;
-    MainFrameController controller;
+    private MainFrameController controller;
+    private SelectCombinationsModel model;
 
     /**
      * Creates new form MainFrameView
      */
     public MainFrameView() {
         initComponents();
-        controller = new MainFrameController(this);
+        this.controller = new MainFrameController(this);
         this.setLocationRelativeTo(null); 
     }
     
@@ -763,6 +767,7 @@ public class MainFrameView extends javax.swing.JFrame {
     }//GEN-LAST:event_openMicrodataMenuItemActionPerformed
 
     public void showUnsafeCombinations(SelectCombinationsModel model) {
+        this.model = model;
         ArrayList<String> columnNames = new ArrayList<>();
         columnNames.add("Variable");
         int nDims = model.getMaxDimsInTables();
@@ -778,6 +783,40 @@ public class MainFrameView extends javax.swing.JFrame {
         }
         DefaultTableModel tableModel = new DefaultTableModel(data, columnNames.toArray());
         this.unsafeCombinationsTable.setModel(tableModel);
+        
+        this.unsafeCombinationsTable.getSelectionModel().addListSelectionListener(
+                new javax.swing.event.ListSelectionListener() {
+            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+                selectionChanged(evt);
+            }
+        });
+    }
+    
+    private void selectionChanged(javax.swing.event.ListSelectionEvent evt) {
+        int j = ((ListSelectionModel)evt.getSource()).getMinSelectionIndex();
+        VariableMu variable = this.model.getVariablesInTables().get(j);
+        UnsafeInfo unsafeInfo = this.model.getUnsafe(variable);
+        this.variableNameLabel.setText(variable.getName());
+        
+        ArrayList<String> columnNames = new ArrayList<>();
+        columnNames.add("Code");
+        columnNames.add("Label");
+        columnNames.add("Freq");
+        int nDims = model.getMaxDimsInTables();
+        for (int dimNr=1; dimNr <= nDims; dimNr++) {
+            columnNames.add("dim " + dimNr);
+        }
+
+        Object[][] data = new Object[unsafeInfo.getUnsafeCodeInfos().size()][];
+        int rowIndex = 0;
+        for (UnsafeCodeInfo unsafeCode : unsafeInfo.getUnsafeCodeInfos()) {
+            data[rowIndex] = unsafeCode.toObjectArray(nDims);
+            rowIndex++;
+        }
+
+        DefaultTableModel tableModel = new DefaultTableModel(data, columnNames.toArray());
+        variablesTable.setModel(tableModel);
+
     }
     
     private void exitMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitMenuItemActionPerformed

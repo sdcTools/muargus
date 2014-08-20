@@ -132,7 +132,7 @@ public class SelectCombinationsController {
             model.setUnsafe(variable, unsafe);
             
             int[] nCodes = new int[]{0};
-            result = c.UnsafeVariablePrepare(varIndex, nCodes);
+            result = c.UnsafeVariablePrepare(varIndex+1, nCodes);
             int[] isMissing = new int[]{0};
             int[] freq = new int[]{0};
             String[] code = new String[1];
