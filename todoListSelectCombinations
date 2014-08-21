@@ -3,25 +3,25 @@ niet behandelde opmerkingen/vragen:
 Nog te doen:                                                                                                    Mee bezig:
     
 9. thresholdTextField
-    - sla waarde op in registry
+    - sla waarde op in registry                                                                                 Anne
 10. automaticSpecificationButton 
-    - zorgen dat een hogere dimensie geen lagere threshold kan krijgen dan de dimensie daarvoor
+    - zorgen dat een hogere dimensie geen lagere threshold kan krijgen dan de dimensie daarvoor                 ..   
     - zorg dat een alleen een hogere threshold wordt overgenomen                                                Jeldrik: werkt nu wel voor automatisch gegenereerde tabellen maar niet meer voor addRow
-    - bug fixen bij wegklikken van specificeren threshold. 
+    - bug fixen bij wegklikken van specificeren threshold.                                                      ..
       bug treed op als er een int kleiner dan 1 wordt gegeven en het scherm wordt weggeklikt.
       resultaat: tabellen worden gewoon gegenereerd met de foutieve threshold
 12. setTableRiskModelButton:
-    - zorg dat er niets gebeurd als er nog geen tabellen zijn gemaakt
-    - check of de tabellen voldoen aan de nieuwe eisen.
-    - als een rij volgens het Risk model gemaakt moet worden, maak deze rij rood
+    - zorg dat er niets gebeurd als er nog geen tabellen zijn gemaakt                                           .. 
+    - check of de tabellen voldoen aan de nieuwe eisen.                                                         ..
+    - als een rij volgens het Risk model gemaakt moet worden, maak deze rij rood                                ..
 14. calculateTablesButton                      
-    -foutafhandeling                                                                                             Anne
+    -foutafhandeling                                                                                            Anne
 15. progressbar
-    - link dit aan de calculateTablesButton
-    - laat label zien als hij bezig is (nog zoeken wat er moet staan)
-17. Kijk wat er in de Controller/Model kan en verplaats dat.
-18. code opschonen
-19. javadoc schrijven voor de methodes
+    - link dit aan de calculateTablesButton                                                                     ..
+    - laat label zien als hij bezig is (nog zoeken wat er moet staan)                                           ..
+17. Kijk wat er in de Controller/Model kan en verplaats dat.                                                    ..
+18. code opschonen                                                                                              ..
+19. javadoc schrijven voor de methodes                                                                          ..
 
  
 
