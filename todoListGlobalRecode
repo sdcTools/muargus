@@ -2,8 +2,10 @@ Taak:
 1. View:
     - voeg een textfield + button toe voor de .grc file                                                 Jeldrik: check
     - verander de missing values zodat zowel oude als nieuwe zichtbaar zijn                             Jeldrik: check
-2. VariableMu:
-    - voeg twee booleans toe: isTruncated & isRecoded en zorg dat niet beiden true kunnen zijn          Jeldrik: check
+2. GlobalRedodeList:
+    - voeg twee booleans toe: isTruncated & isRecoded en zorg dat niet beiden true kunnen zijn 
+    - .grc gegevens
+    - variabele waar het aan gelinkt is
 3. variablesTable:
     - maak voor elke categorische variabele een string array (value[2])
     - value[0] = "" of "T" (isTruncated) of "R" (isRecoded) --> default = ""
@@ -20,6 +22,7 @@ Taak:
     - alleen klikbaar als het EditTextField niet leeg is
     - check of de waardes in het EditTextField correct zijn (gebeurd als het goed is al in de dll)
     - hercodeerd met behulp van de dllfunctie doRecode (pak de benodigde waardes van het scherm)
+    - voer de hercodering uit met de dllFunctie applyRecode
     - voeg een R toe bij de variabele en zet deze variabela as isRecoded bij VariableMU
     - maak de Undo button klikbaar
 6. truncateButton:
@@ -33,6 +36,7 @@ Taak:
 8. warningTextArea
     - laat de foutmeldingen zien
 9. closeButton:
-    - voer de hercodering uit met de dllFunctie applyRecode
+    - close screen
+   
 
 

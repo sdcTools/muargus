@@ -503,12 +503,15 @@ public class SelectCombinationsView extends javax.swing.JDialog {
                     && numberOfDoubleVariables == tableMuNew.getVariables().size()) {
                 try {
                     int thresholdOld = tableMuOld.getThreshold();
-                    int thresholdNew = Integer.parseInt(thresholdTextField.getText());
-                    if (thresholdNew > thresholdOld) {
-                        tableMuOld.setThreshold(thresholdTextField.getText());
+                    int thresholdNew = tableMuNew.getThreshold();
+                    if(thresholdNew > thresholdOld){
+                        tableMuOld.setThreshold(thresholdNew);
+                    } else {
+                        tableMuNew.setThreshold(thresholdOld);
                     }
                 } catch (NumberFormatException e) {
                     thresholdTextField.setText(Integer.toString(tableMuOld.getThreshold()));
+                    System.out.println("this part is necesary");
                 }
                 isValid = false;
                 exit = true;
