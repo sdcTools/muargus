@@ -71,7 +71,6 @@ public class SelectCombinationsController {
      */
     public void calculateTables() throws ArgusException {
         this.model = this.modelClone;
-        view.setVisible(false);
         CMuArgCtrl c = new CMuArgCtrl();
         boolean result = c.SetNumberVar(model.getVariablesInTables().size());
         if (!result)
@@ -167,7 +166,7 @@ public class SelectCombinationsController {
             }
             result = c.UnsafeVariableClose(varIndex+1);
         }
-            
+        view.setVisible(false);            
     }
     
     private void readCodelist(HashMap<String, String> codelist, String path) {
