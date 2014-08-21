@@ -547,6 +547,7 @@ public class SelectCombinationsView extends javax.swing.JDialog {
 
     private void automaticSpecificationButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_automaticSpecificationButtonActionPerformed
         // checks if there are tables and askes if they need to be removed
+        int numberOfOldTables = model.getNumberOfRows();
         if (model.getNumberOfRows() > 0) {
             if (JOptionPane.showConfirmDialog(this, "Do you want to delete the current set of tables?", "Mu Argus", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
                 this.clear();
@@ -593,6 +594,21 @@ public class SelectCombinationsView extends javax.swing.JDialog {
             }
             if (generateAutomaticTables.isUseIdentificatinLevelRadioButton()) {
                 calculateTablesForID(numberOfLevels, variables, allValidVariables);
+            }
+        }
+
+        if (numberOfOldTables < 25000) { // tot dit aantal kan die het redelijk goed hebben, maar is die wel +/- 5 seconden aan het rekenen. progressbar laten zien? 
+            ArrayList<Integer> remove = new ArrayList<>();
+            boolean risk = model.isRiskModel();
+            for (int i = 0; i < numberOfOldTables; i++) {
+                for (int j = numberOfOldTables; j < model.getNumberOfRows(); j++) {
+                    if (!compaireRows(risk, model.getTables().get(i), model.getTables().get(j))) {
+                        remove.add(i);
+                    }
+                }
+            }
+            for (int i = remove.size() - 1; i >= 0; i--) {
+                model.removeTable(i);
             }
         }
 

@@ -15,6 +15,8 @@ public class GlobalRecodeView extends javax.swing.JDialog {
     GlobalRecodeController controller;
     /**
      * Creates new form GlobalRecodeView
+     * @param parent
+     * @param modal
      */
     public GlobalRecodeView(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
@@ -323,7 +325,7 @@ public class GlobalRecodeView extends javax.swing.JDialog {
                 .addComponent(buttonPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(missingValuesPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 21, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(closePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -398,7 +400,7 @@ public class GlobalRecodeView extends javax.swing.JDialog {
                                 .addGap(18, 18, 18)
                                 .addComponent(warningLabel)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(warningScrollPane)))
+                                .addComponent(warningScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 102, Short.MAX_VALUE)))
                         .addContainerGap())))
         );
 

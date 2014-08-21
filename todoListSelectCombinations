@@ -4,10 +4,13 @@ Nog te doen:
     - sla waarde op in registry
 10. automaticSpecificationButton 
     - Check op dubbele tabellen
+    - zorgen dat een hogere dimensie geen lagere threshold kan krijgen dan de dimensie daarvoor
+    - zorg dat een alleen een hogere threshold wordt overgenomen
     - bug fixen bij wegklikken van specificeren threshold. 
       bug treed op als er een int kleiner dan 1 wordt gegeven en het scherm wordt weggeklikt.
       resultaat: tabellen worden gewoon gegenereerd met de foutieve threshold
 12. setTableRiskModelButton:
+    - zorg dat er niets gebeurd als er nog geen tabellen zijn gemaakt
     - check of de tabellen voldoen aan de nieuwe eisen.
     - als een rij volgens het Risk model gemaakt moet worden, maak deze rij rood
 15. progressbar
