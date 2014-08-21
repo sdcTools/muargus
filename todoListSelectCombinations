@@ -66,10 +66,11 @@ Taak:
     opmerking: waarschuwingsscherm toevoegen die wordt getoond als er tabellen zijn gespecificeerd?
 14. calculateTablesButton                                                                        
     - bereken de frequenties van onveilige waardes voor elke tabel en geef deze aan de MainFrame                Anne: werkt
-    - sluit het scherm                                                                                          Anne: werkt (nog verplaatst)
-    - codelijst relatief pad: altijd t.o.v. pad naar metadata file?                                             werkt nog niet
+    - sluit het scherm                                                                                          Anne: werkt
+    - codelijst relatief pad: altijd t.o.v. pad naar metadata file?                                             Anne: werkt
+    -foutafhandeling                                                                                            werkt nog niet 
 15. progressbar
-    - link dit aan de calculateTablesButton
+    - link dit aan de calculateTablesButton                                                                     werkt nog niet
     - laat label zien als hij bezig is (nog zoeken wat er moet staan)
 16. TablesMu klasse vergelijkbaar met VariablesMu. In deze klasse komt:                                         Anne: werkt
     - lijst van variabelen waar de tabel uit bestaat
