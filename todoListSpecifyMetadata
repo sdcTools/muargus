@@ -9,6 +9,11 @@ Nog te doen:                                                                    
 17. wanneer tabellen gespecificeerd zijn en de metadata is aangepast, iets doen (zie opmerking boven)
 18. code opschonen
 19. javadoc schrijven voor de methodes
+20. Bug: wanneer een codelistfile wordt aangepast en vervolgens op Ok wordt geklikt, 
+    dan wordt gevraagd of je het wilt opslaan. Als je het vervolgens wilt opslaan, dan kan je niet opslaan
+    in de default directory omdat daar administrator rechten voor nodig zijn. Er komt dan de volgende foutmelding:
+    java.io.FileNotFoundException: C:\Program Files\MU_ARGUS\data\Demodata.rda (Toegang geweigerd)
+    Dit moet afgevangen worden.
 
 
 Behandelde opmerkingen/vragen:                                                                              Antwoord:
