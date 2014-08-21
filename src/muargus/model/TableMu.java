@@ -81,4 +81,17 @@ public class TableMu {
         //table.setForeground(Color.red);
         return table;
     }
+
+    public boolean contains(ArrayList<VariableMu> riskModelVariables) {
+        boolean contains = false;
+        for(VariableMu riskVariables: riskModelVariables){
+            for(VariableMu thisVariables: this.getVariables()){
+                if(riskVariables.equals(thisVariables)){
+                    contains = true;
+                }
+                
+            }
+        }
+        return contains;
+    }
 }

@@ -90,6 +90,10 @@ public class SelectCombinationsModel {
     public void removeTable(int i){
         this.tables.remove(i);
     }
+    
+    public void removeTable(TableMu t){
+        this.tables.remove(t);
+    }
 
     public int getNumberOfRows() {
         return this.tables.size();

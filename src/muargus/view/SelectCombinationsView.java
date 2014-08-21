@@ -719,13 +719,35 @@ public class SelectCombinationsView extends javax.swing.JDialog {
     }//GEN-LAST:event_clearButtonActionPerformed
 
     private void setTableRiskModelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_setTableRiskModelButtonActionPerformed
-        int[] indices = table.getSelectedRows();
-        for (int i = 0; i < indices.length; i++) {
-            TableMu tableMu = model.getTables().get(indices[i]);
+        if (model.getTables().size() > 0) {
+            int index = table.getSelectedRow();
+            TableMu tableMu = model.getTables().get(index);
             tableMu.setRiskModel(!tableMu.isRiskModel());
+
+            if (model.isRiskModel()) {
+                ArrayList<VariableMu> riskModelVariables = new ArrayList<>();
+                for (TableMu t : model.getTables()) {
+                    if (t.isRiskModel()) {
+                        for (VariableMu v : t.getVariables()) {
+                            riskModelVariables.add(v);
+                        }
+                    }
+                }
+
+                for (int i = model.getNumberOfRows() - 1; i >= 0; i--) {
+                    TableMu t = model.getTables().get(i);
+                    if (!t.isRiskModel()) {
+                        if (t.contains(riskModelVariables)) {
+                            model.removeTable(t);
+                        }
+                    }
+                }
+            }
+
+            updateValues();
+            table.getSelectionModel().setSelectionInterval(index, index);
+            //table.getSelectionModel().setSelectionInterval(indices[indices.length - 1], indices[indices.length - 1]);
         }
-        updateValues();
-        table.getSelectionModel().setSelectionInterval(indices[indices.length - 1], indices[indices.length - 1]);
     }//GEN-LAST:event_setTableRiskModelButtonActionPerformed
 
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
