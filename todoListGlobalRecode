@@ -1,9 +1,10 @@
-Taak:
-1. View:
-    - voeg een textfield + button toe voor de .grc file                                                 Jeldrik: check
-    - verander de missing values zodat zowel oude als nieuwe zichtbaar zijn                             Jeldrik: check
+niet behandelde opmerkingen/vragen:
+
+
+Nog te doen:                                                                                                Mee bezig:
+
 2. GlobalRedodeList:
-    - voeg twee booleans toe: isTruncated & isRecoded en zorg dat niet beiden true kunnen zijn 
+    - voeg twee booleans toe: isTruncated & isRecoded en zorg dat niet beiden true kunnen zijn              
     - .grc gegevens
     - variabele waar het aan gelinkt is
 3. variablesTable:
@@ -37,6 +38,14 @@ Taak:
     - laat de foutmeldingen zien
 9. closeButton:
     - close screen
+10. code opschonen
+11. javadoc schrijven voor de methodes
    
 
+Behandelde opmerkingen/vragen:                                                                              Antwoord:
 
+Gedaan:                                                                                                     Door:
+
+1. View:
+    - voeg een textfield + button toe voor de .grc file                                                     Jeldrik
+    - verander de missing values zodat zowel oude als nieuwe zichtbaar zijn                                 Jeldrik

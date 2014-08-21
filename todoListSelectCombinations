@@ -1,11 +1,12 @@
-Nog te doen:
+niet behandelde opmerkingen/vragen:
+
+Nog te doen:                                                                                                    Mee bezig:
     
 9. thresholdTextField
     - sla waarde op in registry
 10. automaticSpecificationButton 
-    - Check op dubbele tabellen
     - zorgen dat een hogere dimensie geen lagere threshold kan krijgen dan de dimensie daarvoor
-    - zorg dat een alleen een hogere threshold wordt overgenomen
+    - zorg dat een alleen een hogere threshold wordt overgenomen                                                Jeldrik: werkt nu wel voor automatisch gegenereerde tabellen maar niet meer voor addRow
     - bug fixen bij wegklikken van specificeren threshold. 
       bug treed op als er een int kleiner dan 1 wordt gegeven en het scherm wordt weggeklikt.
       resultaat: tabellen worden gewoon gegenereerd met de foutieve threshold
@@ -13,69 +14,70 @@ Nog te doen:
     - zorg dat er niets gebeurd als er nog geen tabellen zijn gemaakt
     - check of de tabellen voldoen aan de nieuwe eisen.
     - als een rij volgens het Risk model gemaakt moet worden, maak deze rij rood
+14. calculateTablesButton                      
+    -foutafhandeling                                                                                             Anne
 15. progressbar
     - link dit aan de calculateTablesButton
     - laat label zien als hij bezig is (nog zoeken wat er moet staan)
 17. Kijk wat er in de Controller/Model kan en verplaats dat.
+18. code opschonen
+19. javadoc schrijven voor de methodes
+
  
 
+Behandelde opmerkingen/vragen:                                                                                  Antwoord:
+    - in de oude Mu worden variabelen met een ID-level van 0 wel geladen,
+      maar bij het automatisch genereren van data niet meegenomen (handmatig wel). Moet het zo blijven?         Ja
 
-Taak:
+
+
+Gedaan:                                                                                                         Door:
 1. variablesList: 
-    - vullen met de variabelen die categorisch zijn                                                             Jeldrik: verander ID naar categorical
-    opmerking: in de oude Mu worden variabelen met een ID-level van 0 wel geladen,
-        maar bij het automatisch genereren van data niet meegenomen (handmatig wel). Moet het zo blijven?       Anco: ja
+    - vullen met de variabelen die categorisch zijn                                                             Jeldrik
 2. variablesSelectedList: 
-    - mogelijk maken dat de lijst gevuld/geleegd kan worden                                                     Jeldrik: werkt
+    - mogelijk maken dat de lijst gevuld/geleegd kan worden                                                     Jeldrik
 3. moveToSelectedButton: 
-    - geselecteerde variabele van variablesList toevoegen aan variablesSelectedList                             Jeldrik: werkt
+    - geselecteerde variabele van variablesList toevoegen aan variablesSelectedList                             Jeldrik
 4. removeFromSelectedButton: 
-    - geselecteerde variabele van variablesSelectedList verwijderen                                             Jeldrik: werkt
+    - geselecteerde variabele van variablesSelectedList verwijderen                                             Jeldrik
 5. removeAllFromSelectedButton:
-    - alle variabele in variablesSelectedList verwijderen                                                       Jeldrik: werkt
+    - alle variabele in variablesSelectedList verwijderen                                                       Jeldrik
 6. table:                                                                               
-    - vul de tabel met tabellen die al zijn berekend (als er tabellen zijn)                                     Jeldrik: werkt
-    - mogelijk maken dat de lijst gevuld/geleegd kan worden                                                     Jeldrik: werkt
-    - maak automatisch titels voor elke kolom aan                                                               Jeldrik: werkt
-7. addRowButton:                                                                                                Jeldrik: werkt
-    - check of een rij toegevoegd mag worden                                                                    Jeldrik: werkt
-         a. er mag geen overlap zijn in de variabele voor het riskmodel (geef indien nodig waarschuwing)        Jeldrik: werkt
-         b. als tabel al bestaat, voeg het niet toe (geen waarschuwing) (verander indien nodig de threshold)    Jeldrik: werkt
-         c. het aantal variabelen mag niet groter zijn dan 10 (geef een waarschuwing als dit wel het geval is)  Jeldrik: werkt
-    - voeg een rij toe aan table (gaat gewoon op volgorde van de variabelenlijst)                               Jeldrik: werkt 
-    - verwijder alle variabelen in variablesSelectedList (zelfde als punt 5)                                    Jeldrik: werkt
+    - vul de tabel met tabellen die al zijn berekend (als er tabellen zijn)                                     Jeldrik
+    - mogelijk maken dat de lijst gevuld/geleegd kan worden                                                     Jeldrik
+    - maak automatisch titels voor elke kolom aan                                                               Jeldrik
+7. addRowButton:                                                                                                
+    - check of een rij toegevoegd mag worden                                                                    Jeldrik
+         a. er mag geen overlap zijn in de variabele voor het riskmodel (geef indien nodig waarschuwing)        Jeldrik
+         b. als tabel al bestaat, voeg het niet toe (geen waarschuwing) (verander indien nodig de threshold)    Jeldrik
+         c. het aantal variabelen mag niet groter zijn dan 10 (geef een waarschuwing als dit wel het geval is)  Jeldrik
+    - voeg een rij toe aan table (gaat gewoon op volgorde van de variabelenlijst)                               Jeldrik 
+    - verwijder alle variabelen in variablesSelectedList (zelfde als punt 5)                                    Jeldrik
 8. removeRowButton:
-    - verwijder geselecteerde rij(en) uit table                                                                 Jeldrik: werkt
-    - voeg alle variabelen toe aan variablesSelectedList (vergelijkbaar met punt 3 maar dan voor alles)         Jeldrik: werkt
+    - verwijder geselecteerde rij(en) uit table                                                                 Jeldrik
+    - voeg alle variabelen toe aan variablesSelectedList (vergelijkbaar met punt 3 maar dan voor alles)         Jeldrik
 9. thresholdTextField
-    - zet bij het opstarten op de defaultwaarde (= 1)                                                           Jeldrik: werkt
-    - als de waarde veranderd, sla deze dan op (ook als Mu-ARGUS afgesloten wordt)                              Jeldrik: wordt nu nog opgeslagen in de Model maar nog niet in registry (setRegistry/getRegistry)
-10. automaticSpecificationButton                                                                                Jeldrik: mee bezig
-    - controleer of de tabel leeg is en vraag of de tabellen verwijderd moeten worden als dit niet het geval is
-    - open "methods for generating tabels" scherm                                                               Jeldrik: werkt
-    - als "use identification levels" wordt gekozen, laat threshold scherm 1 keer zien                          Jeldrik: werkt
-    - als "make all tables up to dimension X" gekozen wordt, laat threshold scherm X keer zien voor elke dimensie Jeldrik: werkt
-    - maak alle mogelijke tabellen volgens de specificaties en zet ze in table                                  Jeldrik: werkt voor dimensies
-    - zorg dat er een check is die kijkt of er voldoende variabelen zijn.                                       Jeldrik: werkt
+    - zet bij het opstarten op de defaultwaarde (= 1)                                                           Jeldrik
+10. automaticSpecificationButton                                                                                
+    - controleer of de tabel leeg is en vraag of de tabellen verwijderd moeten worden als dit niet het geval is Jeldrik
+    - open "methods for generating tabels" scherm                                                               Jeldrik
+    - als "use identification levels" wordt gekozen, laat threshold scherm 1 keer zien                          Jeldrik
+    - als "make all tables up to dimension" gekozen wordt, laat threshold scherm X keer zien voor elke dimensie Jeldrik
+    - maak alle mogelijke tabellen volgens de specificaties en zet ze in table                                  Jeldrik
+    - zorg dat er een check is die kijkt of er voldoende variabelen zijn.                                       Jeldrik
+    - Check op dubbele tabellen                                                                                 Jeldrik
+
 11. clearButton:
-    - remove all rows from table                                                                                Jeldrik: werkt
+    - remove all rows from table                                                                                Jeldrik
 12. setTableRiskModelButton:
-    - check of de tabellen voldoen aan de nieuwe eisen.
-      Zo nee, geef een waarschuwing en verwijder tabellen indien gewenst
-    - voeg een R toe of verwijder deze bij de geselecteerde rij in de tabel                                     Jeldrik: werkt
-    - als een rij volgens het Risk model gemaakt moet worden, maak deze rij rood                                werkt nog niet
+    - voeg een R toe of verwijder deze bij de geselecteerde rij in de tabel                                     Jeldrik
 13. cancelButton
-    - sluit het scherm                                                                                          Jeldrik: werkt
-    opmerking: waarschuwingsscherm toevoegen die wordt getoond als er tabellen zijn gespecificeerd?
+    - sluit het scherm                                                                                          Jeldrik
 14. calculateTablesButton                                                                        
-    - bereken de frequenties van onveilige waardes voor elke tabel en geef deze aan de MainFrame                Anne: werkt
-    - sluit het scherm                                                                                          Anne: werkt
-    - codelijst relatief pad: altijd t.o.v. pad naar metadata file?                                             Anne: werkt
-    -foutafhandeling                                                                                            werkt nog niet 
-15. progressbar
-    - link dit aan de calculateTablesButton                                                                     werkt nog niet
-    - laat label zien als hij bezig is (nog zoeken wat er moet staan)
-16. TablesMu klasse vergelijkbaar met VariablesMu. In deze klasse komt:                                         Anne: werkt
+    - bereken de frequenties van onveilige waardes voor elke tabel en geef deze aan de MainFrame                Anne
+    - sluit het scherm                                                                                          Anne
+    - codelijst relatief pad: altijd t.o.v. pad naar metadata file?                                             Anne
+16. TablesMu klasse vergelijkbaar met VariablesMu. In deze klasse komt:                                         Anne
     - lijst van variabelen waar de tabel uit bestaat
     - aantal unsafe combinations per dimensie                                                                   
     - boolean variable riskModel
@@ -85,7 +87,5 @@ Taak:
     - method setVariables
     - method getUnsafeCombinations(VariableMu ... variable, int dimensions) (dimensions should equal number of variables)
     - iets om het aantal onveilige combinaties per dimensie goed op te slaan (array?)
-17. Kijk wat er in de Controller/Model kan en verplaats dat.
-18. zorg dat wanneer het scherm weggeklikt wordt via het rode kruisje, dat de tabellen dan nog goed laden.      Jeldrik: werkt
     
 
