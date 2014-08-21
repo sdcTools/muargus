@@ -5,17 +5,25 @@
 package muargus.controller;
 
 import argus.model.ArgusException;
+import argus.model.Metadata;
+import static com.sun.glass.ui.Cursor.setVisible;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
+import static javax.swing.JFileChooser.APPROVE_OPTION;
+import javax.swing.JOptionPane;
+import javax.swing.SwingWorker;
 import muargus.extern.dataengine.CMuArgCtrl;
+import muargus.extern.dataengine.IProgressListener;
 import muargus.model.MetadataMu;
 import muargus.model.SelectCombinationsModel;
 import muargus.model.TableMu;
@@ -28,7 +36,7 @@ import muargus.view.SelectCombinationsView;
  *
  * @author ambargus
  */
-public class SelectCombinationsController {
+public class SelectCombinationsController implements PropertyChangeListener{
     
     SelectCombinationsView view;
     SelectCombinationsModel model;
@@ -71,7 +79,57 @@ public class SelectCombinationsController {
      */
     public void calculateTables() throws ArgusException {
         this.model = this.modelClone;
+        //saveDefaultsToRegistry();
+        final SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
+
+            // called in a separate thread...
+            @Override
+            protected Void doInBackground() throws Exception {
+                calculateInBackground(getPropertyChangeListener(this));
+                return null;
+            }
+
+            // called on the GUI thread
+            @Override
+            public void done() {
+                super.done();
+                try {
+                    get();
+                    //returnValue = APPROVE_OPTION;
+                    view.setVisible(false);
+                } catch (InterruptedException ex) {
+                    logger.log(Level.SEVERE, null, ex);
+                } catch (ExecutionException ex) {
+                    JOptionPane.showMessageDialog(null, ex.getCause().getMessage());
+                }
+            }
+        };        
+        worker.addPropertyChangeListener(null);
+        worker.execute();
+//        for(int i=0;i<TableService.numberOfTables();i++){
+//            SystemUtils.writeLogbook("Table: "+TableService.getTable(i).toString()  +" has been specified");
+//        }
+//        SystemUtils.writeLogbook("Tables have been computed");
+    }
+    
+    private PropertyChangeListener getPropertyChangeListener(final SwingWorker worker) {
+            return new PropertyChangeListener() {
+            @Override
+            public void propertyChange(PropertyChangeEvent evt) {
+                worker.firePropertyChange(evt.getPropertyName(), evt.getOldValue(), evt.getNewValue());
+            }
+        };
+
+    }
+    
+    private void propertyChanged(String properyName, String smth, Object newValue) {
+        PropertyChangeEvent evt = new PropertyChangeEvent(this, properyName, 0, newValue);
+        propertyChange(evt);
+    }
+    
+    private void calculateInBackground(PropertyChangeListener listener) throws ArgusException {
         CMuArgCtrl c = new CMuArgCtrl();
+        
         boolean result = c.SetNumberVar(model.getVariablesInTables().size());
         if (!result)
             throw new ArgusException("Insufficient memory");
@@ -94,6 +152,20 @@ public class SelectCombinationsController {
         int[] errorCodes = new int[1];
         int[] lineNumbers = new int[1];
         int[] varIndexOut = new int[1];
+
+        IProgressListener progressListener = new IProgressListener() {
+            @Override
+            public void UpdateProgress(final int percentage) {
+                propertyChanged("progress", null, percentage);
+            }
+        };
+        c.SetProgressListener(progressListener);
+        propertyChanged("stepName", null, "ExploreFile");
+
+        result = c.SetInFileInfo(this.metadata.getDataFileType() == MetadataMu.DATA_FILE_TYPE_FIXED, 
+                this.metadata.getSeparator(), 
+                this.metadata.getDataFileType() == MetadataMu.DATA_FILE_TYPE_FREE_WITH_META);
+        
         result = c.ExploreFile(metadata.getFileNames().getDataFileName(),
                 errorCodes,
                 lineNumbers,
@@ -124,6 +196,7 @@ public class SelectCombinationsController {
             //TODO: handle error
         }
         
+        propertyChanged("stepName", null, "ComputeTables");
         result = c.ComputeTables(errorCodes, varIndexOut);
         //TODO: handle error
         
@@ -274,5 +347,17 @@ public class SelectCombinationsController {
     public void cancel() {                                             
         view.setVisible(false);
     } 
+
+    @Override
+    public void propertyChange(PropertyChangeEvent pce) {
+        switch (pce.getPropertyName()) {
+            case "stepName":
+                view.setStepName(pce.getNewValue());
+                break;                
+            case "progress":
+                view.setProgress(pce.getNewValue());
+                break;
+        }
+    }
     
 }
