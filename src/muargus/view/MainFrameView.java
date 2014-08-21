@@ -5,6 +5,7 @@ import argus.model.DataFilePair;
 import argus.view.DialogOpenMicrodata;
 import java.util.ArrayList;
 import javax.swing.ListSelectionModel;
+import javax.swing.event.ListSelectionEvent;
 import javax.swing.table.DefaultTableModel;
 import muargus.controller.MainFrameController;
 import muargus.model.MetadataMu;
@@ -782,7 +783,7 @@ public class MainFrameView extends javax.swing.JFrame {
             rowIndex++;
         }
         DefaultTableModel tableModel = new DefaultTableModel(data, columnNames.toArray());
-        this.unsafeCombinationsTable.setModel(tableModel);
+        this.unsafeCombinationsTable.setModel(tableModel);       
         
         this.unsafeCombinationsTable.getSelectionModel().addListSelectionListener(
                 new javax.swing.event.ListSelectionListener() {
@@ -790,12 +791,16 @@ public class MainFrameView extends javax.swing.JFrame {
                 selectionChanged(evt);
             }
         });
+        
+        this.unsafeCombinationsTable.getSelectionModel().setSelectionInterval(0,0);
     }
     
     private void selectionChanged(javax.swing.event.ListSelectionEvent evt) {
         if (evt.getValueIsAdjusting())
             return;
         int j = ((ListSelectionModel)evt.getSource()).getMinSelectionIndex();
+        if (0 > j || j >= this.model.getVariablesInTables().size())
+            return;
         VariableMu variable = this.model.getVariablesInTables().get(j);
         UnsafeInfo unsafeInfo = this.model.getUnsafe(variable);
         this.variableNameLabel.setText(variable.getName());

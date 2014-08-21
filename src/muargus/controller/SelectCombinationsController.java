@@ -174,7 +174,12 @@ public class SelectCombinationsController {
         
         BufferedReader reader = null;
         try {
-            reader = new BufferedReader(new FileReader(new File(path)));
+            File file = new File(path);
+            if (!file.isAbsolute()) {
+                File dir = new File(this.metadata.getFileNames().getMetaFileName()).getParentFile();
+                file = new File(dir, path);
+            }
+            reader = new BufferedReader(new FileReader(file));
         } catch (FileNotFoundException ex) {
             System.out.println("file not found");
             logger.log(Level.SEVERE, null, ex);
