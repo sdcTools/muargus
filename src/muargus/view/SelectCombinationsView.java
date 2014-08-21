@@ -190,6 +190,7 @@ public class SelectCombinationsView extends javax.swing.JDialog {
         progressbar = new javax.swing.JProgressBar();
         tablesScrollPane = new javax.swing.JScrollPane();
         table = new javax.swing.JTable();
+        progressLabel = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Specify Combinations");
@@ -286,8 +287,10 @@ public class SelectCombinationsView extends javax.swing.JDialog {
             }
         ));
         tablesScrollPane.setViewportView(table);
-        table.getColumnModel().getColumn(0).setMinWidth(20);
-        table.getColumnModel().getColumn(0).setPreferredWidth(20);
+        if (table.getColumnModel().getColumnCount() > 0) {
+            table.getColumnModel().getColumn(0).setMinWidth(20);
+            table.getColumnModel().getColumn(0).setPreferredWidth(20);
+        }
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -297,15 +300,6 @@ public class SelectCombinationsView extends javax.swing.JDialog {
                 .addContainerGap()
                 .addComponent(variablesScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(cancelButton)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(calculateTablesButton))
-                            .addComponent(progressbar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(automaticSpecificationButton, javax.swing.GroupLayout.DEFAULT_SIZE, 207, Short.MAX_VALUE)))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(10, 10, 10)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -328,7 +322,18 @@ public class SelectCombinationsView extends javax.swing.JDialog {
                         .addComponent(clearButton, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(45, 45, 45)
-                        .addComponent(setTableRiskModelButton)))
+                        .addComponent(setTableRiskModelButton))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(progressLabel)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addGroup(layout.createSequentialGroup()
+                                    .addComponent(cancelButton)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(calculateTablesButton))
+                                .addComponent(progressbar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(automaticSpecificationButton, javax.swing.GroupLayout.DEFAULT_SIZE, 207, Short.MAX_VALUE)))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(tablesScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 283, Short.MAX_VALUE)
                 .addContainerGap())
@@ -366,7 +371,9 @@ public class SelectCombinationsView extends javax.swing.JDialog {
                         .addComponent(clearButton)
                         .addGap(18, 18, 18)
                         .addComponent(setTableRiskModelButton)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 40, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 34, Short.MAX_VALUE)
+                        .addComponent(progressLabel)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(progressbar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -627,6 +634,14 @@ public class SelectCombinationsView extends javax.swing.JDialog {
         }
     }
 
+    public void setProgress(Object value) {
+        this.progressbar.setValue((Integer)value);
+    }
+    
+    public void setStepName(Object value) {
+        this.progressLabel.setText(value.toString());
+    }
+    
     public void calculateTablesForDimensions(ArrayList<VariableMu> data, int dimensions) {
         ArrayList<VariableMu> variableSubset = new ArrayList<>();
         int startPos = 0;
@@ -731,6 +746,7 @@ public class SelectCombinationsView extends javax.swing.JDialog {
     private javax.swing.JButton cancelButton;
     private javax.swing.JButton clearButton;
     private javax.swing.JButton moveToSelectedButton;
+    private javax.swing.JLabel progressLabel;
     private javax.swing.JProgressBar progressbar;
     private javax.swing.JButton removeAllFromSelectedButton;
     private javax.swing.JButton removeFromSelectedButton;
