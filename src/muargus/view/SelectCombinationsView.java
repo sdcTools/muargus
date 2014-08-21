@@ -441,6 +441,7 @@ public class SelectCombinationsView extends javax.swing.JDialog {
             VariableMu[] variableMu = new VariableMu[variablesSelectedListModel.size()];
             variablesSelectedListModel.copyInto(variableMu);
             TableMu tableMuNew = new TableMu();
+            tableMuNew.setThreshold(model.getThreshold());
             for (VariableMu v : variableMu) {
                 tableMuNew.addVariable(v);
             }
@@ -501,17 +502,12 @@ public class SelectCombinationsView extends javax.swing.JDialog {
                 exit = true;
             } else if (!riskModel && tableMuNew.getVariables().size() == tableMuOld.getVariables().size()
                     && numberOfDoubleVariables == tableMuNew.getVariables().size()) {
-                try {
-                    int thresholdOld = tableMuOld.getThreshold();
-                    int thresholdNew = tableMuNew.getThreshold();
-                    if(thresholdNew > thresholdOld){
-                        tableMuOld.setThreshold(thresholdNew);
-                    } else {
-                        tableMuNew.setThreshold(thresholdOld);
-                    }
-                } catch (NumberFormatException e) {
-                    thresholdTextField.setText(Integer.toString(tableMuOld.getThreshold()));
-                    System.out.println("this part is necesary");
+                int thresholdOld = tableMuOld.getThreshold();
+                int thresholdNew = tableMuNew.getThreshold();
+                if (thresholdNew > thresholdOld) {
+                    tableMuOld.setThreshold(thresholdNew);
+                } else {
+                    tableMuNew.setThreshold(thresholdOld);
                 }
                 isValid = false;
                 exit = true;

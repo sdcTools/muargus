@@ -5,8 +5,7 @@ Nog te doen:                                                                    
 9. thresholdTextField
     - sla waarde op in registry                                                                                 Anne
 10. automaticSpecificationButton 
-    - zorgen dat een hogere dimensie geen lagere threshold kan krijgen dan de dimensie daarvoor                 ..   
-    - zorg dat een alleen een hogere threshold wordt overgenomen                                                Jeldrik: werkt nu wel voor automatisch gegenereerde tabellen maar niet meer voor addRow
+    - zorgen dat een hogere dimensie geen lagere threshold kan krijgen dan de dimensie daarvoor                 Jeldrik   
     - bug fixen bij wegklikken van specificeren threshold.                                                      ..
       bug treed op als er een int kleiner dan 1 wordt gegeven en het scherm wordt weggeklikt.
       resultaat: tabellen worden gewoon gegenereerd met de foutieve threshold
@@ -66,7 +65,7 @@ Gedaan:                                                                         
     - maak alle mogelijke tabellen volgens de specificaties en zet ze in table                                  Jeldrik
     - zorg dat er een check is die kijkt of er voldoende variabelen zijn.                                       Jeldrik
     - Check op dubbele tabellen                                                                                 Jeldrik
-
+    - zorg dat een alleen een hogere threshold wordt overgenomen                                                Jeldrik
 11. clearButton:
     - remove all rows from table                                                                                Jeldrik
 12. setTableRiskModelButton:
