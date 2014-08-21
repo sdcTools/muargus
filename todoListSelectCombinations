@@ -12,7 +12,7 @@ Nog te doen:                                                                    
       bug treed op als er een int kleiner dan 1 wordt gegeven en het scherm wordt weggeklikt.
       resultaat: tabellen worden gewoon gegenereerd met de foutieve threshold
 12. setTableRiskModelButton:
-    - voeg een waarschuwing toe voordat tabellen worden verwijderd.                                             Jeldrik
+
     - als een rij volgens het Risk model gemaakt moet worden, maak deze rij rood                                ..
 14. calculateTablesButton                      
     -foutafhandeling                                                                                            Anne
@@ -73,6 +73,7 @@ Gedaan:                                                                         
     - voeg een R toe of verwijder deze bij de geselecteerde rij in de tabel                                     Jeldrik
     - zorg dat er niets gebeurd als er nog geen tabellen zijn gemaakt                                           Jeldrik
     - check of de tabellen voldoen aan de nieuwe eisen.                                                         Jeldrik
+    - voeg een waarschuwing toe voordat tabellen worden verwijderd.                                             Jeldrik
 13. cancelButton
     - sluit het scherm                                                                                          Jeldrik
 14. calculateTablesButton                                                                        

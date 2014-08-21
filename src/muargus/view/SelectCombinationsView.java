@@ -734,12 +734,24 @@ public class SelectCombinationsView extends javax.swing.JDialog {
                     }
                 }
 
+                ArrayList<TableMu> toBeRemovedTables = new ArrayList<>();
+
                 for (int i = model.getNumberOfRows() - 1; i >= 0; i--) {
                     TableMu t = model.getTables().get(i);
                     if (!t.isRiskModel()) {
                         if (t.contains(riskModelVariables)) {
+                            toBeRemovedTables.add(t);
+
+                        }
+                    }
+                }
+                if (toBeRemovedTables.size() > 0) {
+                    if (JOptionPane.showConfirmDialog(this, "Overlapping tables found with this risk table\nDo you want to remove them?", "Mu Argus", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+                        for (TableMu t : toBeRemovedTables) {
                             model.removeTable(t);
                         }
+                    } else {
+                        tableMu.setRiskModel(!tableMu.isRiskModel());
                     }
                 }
             }
