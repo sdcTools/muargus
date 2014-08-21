@@ -13,6 +13,7 @@ package muargus.model;
 public class UnsafeCodeInfo {
 
     private String code;
+    private String label = "";
     private boolean isMissing;
     private int frequency;
     private int[] unsafeCombinations;
@@ -20,6 +21,10 @@ public class UnsafeCodeInfo {
     public UnsafeCodeInfo(String code, boolean isMissing) {
         this.code = code;
         this.isMissing = isMissing;
+    }
+    
+    public void setLabel(String label) {
+        this.label = label;
     }
     
     public int getUnsafe(int dimIndex) {
@@ -38,5 +43,17 @@ public class UnsafeCodeInfo {
         this.unsafeCombinations = new int[count];
         System.arraycopy(unsafe, 0, this.unsafeCombinations, 0, count);
     }
-    
+ 
+    public Object[] toObjectArray(int maxDims) {
+        Object[] objArr = new Object[maxDims + 3];
+        objArr[0] = this.code;
+        objArr[1] = this.label;
+        objArr[2] = this.frequency; 
+        for (int dimNr=1; dimNr <= maxDims; dimNr++) {
+            objArr[dimNr+2] = this.unsafeCombinations.length < dimNr ?
+                    "-" : Integer.toString(this.unsafeCombinations[dimNr-1]);
+        }
+        return objArr;
+    }
+
 }

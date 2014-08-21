@@ -5,7 +5,14 @@
 package muargus.controller;
 
 import argus.model.ArgusException;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 import muargus.extern.dataengine.CMuArgCtrl;
@@ -124,6 +131,12 @@ public class SelectCombinationsController {
         model.clearUnsafe();
         for (int varIndex=0; varIndex < model.getVariablesInTables().size(); varIndex++) {
             VariableMu variable = model.getVariablesInTables().get(varIndex);
+            
+            HashMap<String, String> codelist = new HashMap<>();
+            if (variable.isCodelist()) {
+                readCodelist(codelist, variable.getCodeListFile());
+            }
+            
             int[] nDims = new int[] {0};
             int[] unsafeCount = new int[model.getVariablesInTables().size()];
             result = c.UnsafeVariable(varIndex+1, nDims, unsafeCount);
@@ -132,7 +145,7 @@ public class SelectCombinationsController {
             model.setUnsafe(variable, unsafe);
             
             int[] nCodes = new int[]{0};
-            result = c.UnsafeVariablePrepare(varIndex, nCodes);
+            result = c.UnsafeVariablePrepare(varIndex+1, nCodes);
             int[] isMissing = new int[]{0};
             int[] freq = new int[]{0};
             String[] code = new String[1];
@@ -145,6 +158,9 @@ public class SelectCombinationsController {
                         nDims,
                         unsafeCount);
                 UnsafeCodeInfo codeInfo = new UnsafeCodeInfo(code[0], isMissing[0] != 0);
+                if (codelist.containsKey(code[0].trim())) {
+                    codeInfo.setLabel(codelist.get(code[0].trim()));
+                }
                 codeInfo.setFrequency(freq[0]);
                 codeInfo.setUnsafeCombinations(nDims[0], unsafeCount);
                 unsafe.addUnsafeCodeInfo(codeInfo);
@@ -152,6 +168,41 @@ public class SelectCombinationsController {
             result = c.UnsafeVariableClose(varIndex+1);
         }
             
+    }
+    
+    private void readCodelist(HashMap<String, String> codelist, String path) {
+        
+        BufferedReader reader = null;
+        try {
+            File file = new File(path);
+            if (!file.isAbsolute()) {
+                File dir = new File(this.metadata.getFileNames().getMetaFileName()).getParentFile();
+                file = new File(dir, path);
+            }
+            reader = new BufferedReader(new FileReader(file));
+        } catch (FileNotFoundException ex) {
+            System.out.println("file not found");
+            logger.log(Level.SEVERE, null, ex);
+            return;
+        }
+        try {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(",");
+            
+                codelist.put(parts[0].trim(), parts[1].trim());
+            }
+            reader.close();
+        }
+        catch (Exception ex) {
+            logger.log(Level.SEVERE, null, ex);
+            try  {
+                reader.close();
+            }
+            catch (Exception e) {
+                ;
+            }                
+        }
     }
     
     private int[] getVarIndices(TableMu table) {

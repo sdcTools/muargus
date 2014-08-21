@@ -29,6 +29,10 @@ public class UnsafeInfo {
     public void addUnsafeCodeInfo(UnsafeCodeInfo info) {
         this.unsafeCodeInfos.add(info);
     }
+    
+    public ArrayList<UnsafeCodeInfo> getUnsafeCodeInfos() {
+        return this.unsafeCodeInfos;
+    }
         
     public void setUnsafeCombinations(int count, int[] unsafe) {
         this.unsafeCombinations = new int[count];
