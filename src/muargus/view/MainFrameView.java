@@ -4,8 +4,9 @@ import argus.model.ArgusException;
 import argus.model.DataFilePair;
 import argus.view.DialogOpenMicrodata;
 import java.util.ArrayList;
+import javax.swing.JButton;
+import javax.swing.JMenuItem;
 import javax.swing.ListSelectionModel;
-import javax.swing.event.ListSelectionEvent;
 import javax.swing.table.DefaultTableModel;
 import muargus.controller.MainFrameController;
 import muargus.model.MetadataMu;
@@ -33,6 +34,31 @@ public class MainFrameView extends javax.swing.JFrame {
         this.setLocationRelativeTo(null); 
     }
     
+    public void enableAction(MainFrameController.Action action, boolean enable) {
+        switch (action) {
+            case SpecifyMetadata:
+                doEnable(specifyMetaDataButton, metaDataMenuItem, enable);
+                return;
+            case SpecifyCombinations:
+                doEnable(specifyCombinationsButton, combinationsMenuItem, enable);
+                return;
+            case GlobalRecode:
+                doEnable(globalRecodeButton, globalRecodeMenuItem, enable);
+                return;
+            case ShowTableCollection:
+                doEnable(globalRecodeButton, globalRecodeMenuItem, enable);
+                return;
+        }
+    }
+    
+    private void doEnable(JButton button, JMenuItem item, boolean enable) {
+        if (button != null) {
+            button.setEnabled(enable);
+        }
+        if (item != null) {
+            item.setEnabled(enable);
+        }
+    }
     /**
      * enables buttons
      */
@@ -142,6 +168,7 @@ public class MainFrameView extends javax.swing.JFrame {
         toolBar.add(toolBarSeparator1);
 
         specifyMetaDataButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/muargus/resources/icons/SpecifyMetadata.png"))); // NOI18N
+        specifyMetaDataButton.setEnabled(false);
         specifyMetaDataButton.setFocusable(false);
         specifyMetaDataButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         specifyMetaDataButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -153,6 +180,7 @@ public class MainFrameView extends javax.swing.JFrame {
         toolBar.add(specifyMetaDataButton);
 
         specifyCombinationsButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/muargus/resources/icons/SpecifyCombinations.png"))); // NOI18N
+        specifyCombinationsButton.setEnabled(false);
         specifyCombinationsButton.setFocusable(false);
         specifyCombinationsButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         specifyCombinationsButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -165,6 +193,7 @@ public class MainFrameView extends javax.swing.JFrame {
         toolBar.add(toolBarSeparator2);
 
         showTableCollectionButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/muargus/resources/icons/ShowTable.png"))); // NOI18N
+        showTableCollectionButton.setEnabled(false);
         showTableCollectionButton.setFocusable(false);
         showTableCollectionButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         showTableCollectionButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -176,6 +205,7 @@ public class MainFrameView extends javax.swing.JFrame {
         toolBar.add(showTableCollectionButton);
 
         globalRecodeButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/muargus/resources/icons/globrec_1_16x16x4.png"))); // NOI18N
+        globalRecodeButton.setEnabled(false);
         globalRecodeButton.setFocusable(false);
         globalRecodeButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         globalRecodeButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -187,6 +217,7 @@ public class MainFrameView extends javax.swing.JFrame {
         toolBar.add(globalRecodeButton);
 
         pramSpecificationButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/muargus/resources/icons/pram_1_16x16x4.png"))); // NOI18N
+        pramSpecificationButton.setEnabled(false);
         pramSpecificationButton.setFocusable(false);
         pramSpecificationButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         pramSpecificationButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -198,6 +229,7 @@ public class MainFrameView extends javax.swing.JFrame {
         toolBar.add(pramSpecificationButton);
 
         individualRiskSpecificationButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/muargus/resources/icons/Risk_1_16x16x4.png"))); // NOI18N
+        individualRiskSpecificationButton.setEnabled(false);
         individualRiskSpecificationButton.setFocusable(false);
         individualRiskSpecificationButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         individualRiskSpecificationButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -209,6 +241,7 @@ public class MainFrameView extends javax.swing.JFrame {
         toolBar.add(individualRiskSpecificationButton);
 
         householdRiskSpecificationButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/muargus/resources/icons/hr.png"))); // NOI18N
+        householdRiskSpecificationButton.setEnabled(false);
         householdRiskSpecificationButton.setFocusable(false);
         householdRiskSpecificationButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         householdRiskSpecificationButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -220,6 +253,7 @@ public class MainFrameView extends javax.swing.JFrame {
         toolBar.add(householdRiskSpecificationButton);
 
         modifyNumericalVariablesButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/muargus/resources/icons/Numeric_1_16x16x4.png"))); // NOI18N
+        modifyNumericalVariablesButton.setEnabled(false);
         modifyNumericalVariablesButton.setFocusable(false);
         modifyNumericalVariablesButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         modifyNumericalVariablesButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -231,6 +265,7 @@ public class MainFrameView extends javax.swing.JFrame {
         toolBar.add(modifyNumericalVariablesButton);
 
         numericalMicroaggregationButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/muargus/resources/icons/MA.png"))); // NOI18N
+        numericalMicroaggregationButton.setEnabled(false);
         numericalMicroaggregationButton.setFocusable(false);
         numericalMicroaggregationButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         numericalMicroaggregationButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -242,6 +277,7 @@ public class MainFrameView extends javax.swing.JFrame {
         toolBar.add(numericalMicroaggregationButton);
 
         numericalRankSwappingButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/muargus/resources/icons/RS.png"))); // NOI18N
+        numericalRankSwappingButton.setEnabled(false);
         numericalRankSwappingButton.setFocusable(false);
         numericalRankSwappingButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         numericalRankSwappingButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -254,6 +290,7 @@ public class MainFrameView extends javax.swing.JFrame {
         toolBar.add(toolBarSeparator3);
 
         makeProtectedFileButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/muargus/resources/icons/MakeSafeFile.png"))); // NOI18N
+        makeProtectedFileButton.setEnabled(false);
         makeProtectedFileButton.setFocusable(false);
         makeProtectedFileButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         makeProtectedFileButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -265,6 +302,7 @@ public class MainFrameView extends javax.swing.JFrame {
         toolBar.add(makeProtectedFileButton);
 
         viewReportButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/muargus/resources/icons/ViewReport.png"))); // NOI18N
+        viewReportButton.setEnabled(false);
         viewReportButton.setFocusable(false);
         viewReportButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         viewReportButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -523,6 +561,7 @@ public class MainFrameView extends javax.swing.JFrame {
         metaDataMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_M, java.awt.event.InputEvent.CTRL_MASK));
         metaDataMenuItem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/muargus/resources/icons/SpecifyMetadata.png"))); // NOI18N
         metaDataMenuItem.setText("MetaData");
+        metaDataMenuItem.setEnabled(false);
         metaDataMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 metaDataMenuItemActionPerformed(evt);
@@ -533,6 +572,7 @@ public class MainFrameView extends javax.swing.JFrame {
         combinationsMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_C, java.awt.event.InputEvent.CTRL_MASK));
         combinationsMenuItem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/muargus/resources/icons/SpecifyCombinations.png"))); // NOI18N
         combinationsMenuItem.setText("Combinations");
+        combinationsMenuItem.setEnabled(false);
         combinationsMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 combinationsMenuItemActionPerformed(evt);
@@ -547,6 +587,7 @@ public class MainFrameView extends javax.swing.JFrame {
         showTableCollectionMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_T, java.awt.event.InputEvent.CTRL_MASK));
         showTableCollectionMenuItem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/muargus/resources/icons/ShowTable.png"))); // NOI18N
         showTableCollectionMenuItem.setText("Show Table Collection");
+        showTableCollectionMenuItem.setEnabled(false);
         showTableCollectionMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 showTableCollectionMenuItemActionPerformed(evt);
@@ -557,6 +598,7 @@ public class MainFrameView extends javax.swing.JFrame {
         globalRecodeMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_G, java.awt.event.InputEvent.CTRL_MASK));
         globalRecodeMenuItem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/muargus/resources/icons/globrec_1_16x16x4.png"))); // NOI18N
         globalRecodeMenuItem.setText("Global Recode");
+        globalRecodeMenuItem.setEnabled(false);
         globalRecodeMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 globalRecodeMenuItemActionPerformed(evt);
@@ -568,6 +610,7 @@ public class MainFrameView extends javax.swing.JFrame {
         pramSpecificationMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_P, java.awt.event.InputEvent.CTRL_MASK));
         pramSpecificationMenuItem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/muargus/resources/icons/pram_1_16x16x4.png"))); // NOI18N
         pramSpecificationMenuItem.setText("PRAM Specification");
+        pramSpecificationMenuItem.setEnabled(false);
         pramSpecificationMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 pramSpecificationMenuItemActionPerformed(evt);
@@ -578,6 +621,7 @@ public class MainFrameView extends javax.swing.JFrame {
         individualRiskSpecificationMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_R, java.awt.event.InputEvent.CTRL_MASK));
         individualRiskSpecificationMenuItem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/muargus/resources/icons/Risk_1_16x16x4.png"))); // NOI18N
         individualRiskSpecificationMenuItem.setText("Individual Risk Specification");
+        individualRiskSpecificationMenuItem.setEnabled(false);
         individualRiskSpecificationMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 individualRiskSpecificationMenuItemActionPerformed(evt);
@@ -588,6 +632,7 @@ public class MainFrameView extends javax.swing.JFrame {
         householdRiskSpecificationMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_H, java.awt.event.InputEvent.CTRL_MASK));
         householdRiskSpecificationMenuItem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/muargus/resources/icons/hr.png"))); // NOI18N
         householdRiskSpecificationMenuItem.setText("Household Risk Specification");
+        householdRiskSpecificationMenuItem.setEnabled(false);
         householdRiskSpecificationMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 householdRiskSpecificationMenuItemActionPerformed(evt);
@@ -599,6 +644,7 @@ public class MainFrameView extends javax.swing.JFrame {
         numericalVariablesMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_N, java.awt.event.InputEvent.CTRL_MASK));
         numericalVariablesMenuItem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/muargus/resources/icons/Numeric_1_16x16x4.png"))); // NOI18N
         numericalVariablesMenuItem.setText("Modify Numerical Variables");
+        numericalVariablesMenuItem.setEnabled(false);
         numericalVariablesMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 numericalVariablesMenuItemActionPerformed(evt);
@@ -609,6 +655,7 @@ public class MainFrameView extends javax.swing.JFrame {
         numericalMicroaggregationMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_M, java.awt.event.InputEvent.CTRL_MASK));
         numericalMicroaggregationMenuItem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/muargus/resources/icons/MA.png"))); // NOI18N
         numericalMicroaggregationMenuItem.setText("Numberical Microaggregation");
+        numericalMicroaggregationMenuItem.setEnabled(false);
         numericalMicroaggregationMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 numericalMicroaggregationMenuItemActionPerformed(evt);
@@ -619,6 +666,7 @@ public class MainFrameView extends javax.swing.JFrame {
         numericalRankSwappingMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_MASK));
         numericalRankSwappingMenuItem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/muargus/resources/icons/RS.png"))); // NOI18N
         numericalRankSwappingMenuItem.setText("Numerical Rank Swapping");
+        numericalRankSwappingMenuItem.setEnabled(false);
         numericalRankSwappingMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 numericalRankSwappingMenuItemActionPerformed(evt);
@@ -633,6 +681,7 @@ public class MainFrameView extends javax.swing.JFrame {
         makeProtectedFileMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_M, java.awt.event.InputEvent.CTRL_MASK));
         makeProtectedFileMenuItem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/muargus/resources/icons/MakeSafeFile.png"))); // NOI18N
         makeProtectedFileMenuItem.setText("Make protected file");
+        makeProtectedFileMenuItem.setEnabled(false);
         makeProtectedFileMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 makeProtectedFileMenuItemActionPerformed(evt);
@@ -643,6 +692,7 @@ public class MainFrameView extends javax.swing.JFrame {
         viewReportMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_V, java.awt.event.InputEvent.CTRL_MASK));
         viewReportMenuItem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/muargus/resources/icons/ViewReport.png"))); // NOI18N
         viewReportMenuItem.setText("View report");
+        viewReportMenuItem.setEnabled(false);
         viewReportMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 viewReportMenuItemActionPerformed(evt);
@@ -760,9 +810,7 @@ public class MainFrameView extends javax.swing.JFrame {
 //                    } 
    //             }
                 
-                controller.setMetadata(metadata);
-                organise();
-            
+                controller.setMetadata(metadata);            
             }
         
     }//GEN-LAST:event_openMicrodataMenuItemActionPerformed

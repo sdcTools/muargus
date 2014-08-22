@@ -8,7 +8,7 @@ import muargus.model.VariableMu;
 public class VariableNameCellRenderer extends DefaultListCellRenderer {
     @Override
     public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
-        String valueString = ((VariableMu)value).getName();
+        String valueString = value instanceof VariableMu ? ((VariableMu)value).getName() : value.toString();
         return super.getListCellRendererComponent(list, valueString, index, isSelected, cellHasFocus);
     }
 }

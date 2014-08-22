@@ -24,6 +24,25 @@ public class MainFrameController {
     MetadataMu metadata;
     SelectCombinationsModel selectCombinationsModel;
 
+    public enum Action {
+        OpenMicrodata,
+        SpecifyMetadata,
+        SpecifyCombinations,
+        ShowTableCollection,
+        GlobalRecode,
+        PramSpecification,
+        IndividualRiskSpecification,
+        HouseholdRiskSpecification,
+        ModifyNumericalVariables,
+        NumericalMicroAggregation,
+        NumericalRankSwapping,
+        MakeProtectedFile,
+        ViewReport,
+        Contents,
+        News,
+        About,
+    }
+
     /**
      * 
      * @param view 
@@ -40,6 +59,17 @@ public class MainFrameController {
 
     public void setMetadata(MetadataMu metadata) {
         this.metadata = metadata;
+        organise();
+    }
+    
+    private void organise() {
+        view.enableAction(Action.SpecifyMetadata, this.metadata != null);
+        view.enableAction(Action.SpecifyCombinations, this.metadata != null &&
+                this.metadata.getVariables().size() > 0);
+        view.enableAction(Action.GlobalRecode, this.metadata != null &&
+                this.selectCombinationsModel.getTables().size() > 0);
+        view.enableAction(Action.ShowTableCollection, this.metadata != null &&
+                this.selectCombinationsModel.getTables().size() > 0);
     }
 
     /**
@@ -62,7 +92,7 @@ public class MainFrameController {
         SpecifyMetadataController controller = new SpecifyMetadataController(this.view, this.metadata);
         controller.showView();
         this.metadata = controller.getMetadata();
-        //view.setVisible(true);
+        organise();
     }   
     
     /**
@@ -74,7 +104,7 @@ public class MainFrameController {
         controller.showView();
         this.selectCombinationsModel = controller.getModel();
         view.showUnsafeCombinations(this.selectCombinationsModel);
-        //view.setVisible(true);
+        organise();
     }                                                    
 
     /**
