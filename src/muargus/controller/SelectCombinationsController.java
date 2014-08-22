@@ -6,7 +6,7 @@ package muargus.controller;
 
 import argus.model.ArgusException;
 import argus.model.Metadata;
-import static com.sun.glass.ui.Cursor.setVisible;
+//import static com.sun.glass.ui.Cursor.setVisible;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.BufferedReader;

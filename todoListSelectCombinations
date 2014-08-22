@@ -16,6 +16,8 @@ Nog te doen:                                                                    
 14. calculateTablesButton                      
     - foutafhandeling                                                                                           Anne
     - zorgen dan de berekening ook gedaan kan worden het riskmodel wordt gebruikt                               Anne?
+    - met veel tabellen (automatic specification of tables --> all tables up to 3 dimensions) 
+      komen lege cellen in de main --> opvangen?
 15. progressbar
     - link dit aan de calculateTablesButton                                                                     ..
     - laat label zien als hij bezig is (nog zoeken wat er moet staan)                                           ..
