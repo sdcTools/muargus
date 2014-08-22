@@ -52,10 +52,10 @@
                               <Component id="codelistRecodeLabel1" min="-2" max="-2" attributes="0"/>
                               <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                           </Group>
-                          <Component id="codelistRecodeTextField1" max="32767" attributes="0"/>
+                          <Component id="globalRecodeRecodeTextField" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="codelistRecodeButton1" min="-2" max="-2" attributes="0"/>
+                      <Component id="globalRecodeRecodeButton" min="-2" max="-2" attributes="0"/>
                   </Group>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
@@ -86,8 +86,8 @@
                               <Component id="codelistRecodeLabel1" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="3" attributes="0">
-                                  <Component id="codelistRecodeTextField1" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  <Component id="codelistRecodeButton1" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="globalRecodeRecodeTextField" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="globalRecodeRecodeButton" alignment="3" min="-2" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace type="separate" max="-2" attributes="0"/>
                               <Component id="warningLabel" min="-2" max="-2" attributes="0"/>
@@ -134,6 +134,10 @@
               <TableHeader reorderingAllowed="true" resizingAllowed="true"/>
             </Property>
           </Properties>
+          <Events>
+            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="variablesTableMouseClicked"/>
+            <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="variablesTableKeyReleased"/>
+          </Events>
         </Component>
       </SubComponents>
     </Container>
@@ -163,6 +167,16 @@
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="codelistRecodeButtonActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JTextField" name="globalRecodeRecodeTextField">
+    </Component>
+    <Component class="javax.swing.JButton" name="globalRecodeRecodeButton">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="..."/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="globalRecodeRecodeButtonActionPerformed"/>
       </Events>
     </Component>
     <Component class="javax.swing.JLabel" name="warningLabel">
@@ -309,32 +323,32 @@
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" attributes="0">
                               <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="missingValue2Label" alignment="0" min="-2" max="-2" attributes="0"/>
-                                  <Component id="missingValue1Label" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="missing_2_originalLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="missing_1_originalLabel" alignment="0" min="-2" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace type="unrelated" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="missingValue1TextField" max="32767" attributes="0"/>
-                                  <Component id="missingValue2TextField" max="32767" attributes="0"/>
+                                  <Component id="missing_1_originalTextField" max="32767" attributes="0"/>
+                                  <Component id="missing_2_originalTextField" max="32767" attributes="0"/>
                               </Group>
                           </Group>
                           <Group type="102" alignment="0" attributes="0">
-                              <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
+                              <Component id="mising_1_newLabel" min="-2" max="-2" attributes="0"/>
                               <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                              <Component id="jTextField1" max="32767" attributes="0"/>
+                              <Component id="missing_1_newTextField" max="32767" attributes="0"/>
                           </Group>
                           <Group type="102" attributes="0">
-                              <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
+                              <Component id="originalValuesLabel" min="-2" max="-2" attributes="0"/>
                               <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                           </Group>
                           <Group type="102" alignment="0" attributes="0">
-                              <Component id="jLabel4" min="-2" max="-2" attributes="0"/>
+                              <Component id="missing_2_newLabel" min="-2" max="-2" attributes="0"/>
                               <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                              <Component id="jTextField2" max="32767" attributes="0"/>
+                              <Component id="missing_2_newTextField" max="32767" attributes="0"/>
                           </Group>
                           <Group type="102" alignment="1" attributes="0">
                               <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-                              <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
+                              <Component id="valuesAfterRecoding" min="-2" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
@@ -345,28 +359,28 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
+                      <Component id="originalValuesLabel" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="missingValue1Label" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="missingValue1TextField" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="missing_1_originalLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="missing_1_originalTextField" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="missingValue2Label" min="-2" max="-2" attributes="0"/>
-                          <Component id="missingValue2TextField" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="missing_2_originalLabel" min="-2" max="-2" attributes="0"/>
+                          <Component id="missing_2_originalTextField" alignment="0" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace pref="25" max="32767" attributes="0"/>
-                      <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
+                      <Component id="valuesAfterRecoding" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="jTextField1" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="jLabel3" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="missing_1_newTextField" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="mising_1_newLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="jTextField2" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="jLabel4" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="missing_2_newTextField" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="missing_2_newLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
@@ -374,43 +388,49 @@
             </DimensionLayout>
           </Layout>
           <SubComponents>
-            <Component class="javax.swing.JLabel" name="missingValue1Label">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="1"/>
-              </Properties>
-            </Component>
-            <Component class="javax.swing.JTextField" name="missingValue1TextField">
-            </Component>
-            <Component class="javax.swing.JLabel" name="missingValue2Label">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="2"/>
-              </Properties>
-            </Component>
-            <Component class="javax.swing.JTextField" name="missingValue2TextField">
-            </Component>
-            <Component class="javax.swing.JLabel" name="jLabel1">
+            <Component class="javax.swing.JLabel" name="originalValuesLabel">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Original values"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JLabel" name="jLabel2">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="Values after recoding"/>
-              </Properties>
-            </Component>
-            <Component class="javax.swing.JLabel" name="jLabel3">
+            <Component class="javax.swing.JLabel" name="missing_1_originalLabel">
               <Properties>
                 <Property name="text" type="java.lang.String" value="1"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JTextField" name="jTextField1">
+            <Component class="javax.swing.JTextField" name="missing_1_originalTextField">
+              <Properties>
+                <Property name="editable" type="boolean" value="false"/>
+              </Properties>
             </Component>
-            <Component class="javax.swing.JLabel" name="jLabel4">
+            <Component class="javax.swing.JLabel" name="missing_2_originalLabel">
               <Properties>
                 <Property name="text" type="java.lang.String" value="2"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JTextField" name="jTextField2">
+            <Component class="javax.swing.JTextField" name="missing_2_originalTextField">
+              <Properties>
+                <Property name="editable" type="boolean" value="false"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JLabel" name="valuesAfterRecoding">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Values after recoding"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JLabel" name="mising_1_newLabel">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="1"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JTextField" name="missing_1_newTextField">
+            </Component>
+            <Component class="javax.swing.JLabel" name="missing_2_newLabel">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="2"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JTextField" name="missing_2_newTextField">
             </Component>
           </SubComponents>
         </Container>
@@ -456,16 +476,6 @@
         </Container>
       </SubComponents>
     </Container>
-    <Component class="javax.swing.JTextField" name="codelistRecodeTextField1">
-    </Component>
-    <Component class="javax.swing.JButton" name="codelistRecodeButton1">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="..."/>
-      </Properties>
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="codelistRecodeButton1ActionPerformed"/>
-      </Events>
-    </Component>
     <Component class="javax.swing.JLabel" name="codelistRecodeLabel1">
       <Properties>
         <Property name="text" type="java.lang.String" value="Global recode file"/>

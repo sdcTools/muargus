@@ -3,16 +3,7 @@ niet behandelde opmerkingen/vragen:
 
 Nog te doen:                                                                                                Mee bezig:
 
-2. GlobalRedodeList:
-    - voeg twee booleans toe: isTruncated & isRecoded en zorg dat niet beiden true kunnen zijn              
-    - .grc gegevens
-    - variabele waar het aan gelinkt is
-3. variablesTable:
-    - maak voor elke categorische variabele een string array (value[2])
-    - value[0] = "" of "T" (isTruncated) of "R" (isRecoded) --> default = ""
-    - value[1] = naam variabele
-    - voeg de array toe aan de tabel
-    - vul het textField van de missing values met de missing values van de geselecteerde variabele
+
 4. readButton:
     - open een fileChooser geschikt voor .grc files 
     - plaats de text van de .grc file die niet tussen <> staat in de EditTextField
@@ -27,7 +18,6 @@ Nog te doen:                                                                    
     - voeg een R toe bij de variabele en zet deze variabela as isRecoded bij VariableMU
     - maak de Undo button klikbaar
 6. truncateButton:
-    - is alleen zichtbaar als de variabele truncatable is
     - geef een scherm die vraagt om het aantal getallen voor de truncate
     - check of het aantal getallen voor de truncate geldig is
     - voer truncate uit met de dllFunctie doTruncate
@@ -40,8 +30,7 @@ Nog te doen:                                                                    
     - close screen
 10. code opschonen
 11. javadoc schrijven voor de methodes
-12. Missing values:
-    - zet original values non-editable
+
    
 
 Behandelde opmerkingen/vragen:                                                                              Antwoord:
@@ -51,3 +40,19 @@ Gedaan:                                                                         
 1. View:
     - voeg een textfield + button toe voor de .grc file                                                     Jeldrik
     - verander de missing values zodat zowel oude als nieuwe zichtbaar zijn                                 Jeldrik
+2. RecodeMu:
+    - voeg twee booleans toe: isTruncated & isRecoded en zorg dat niet beiden true kunnen zijn              Jeldrik        
+    - .grc file                                                                                             Jeldrik
+    - .cdl file                                                                                             Jeldrik
+    - variabele waar het aan gelinkt is                                                                     Jeldrik
+    - missing values                                                                                        Jeldrik
+3. variablesTable:
+    - maak voor elke categorische variabele een string array (value[2])                                     Jeldrik
+    - value[0] = "" of "T" (isTruncated) of "R" (isRecoded) --> default = ""                                Jeldrik
+    - value[1] = naam variabele                                                                             Jeldrik
+    - voeg de array toe aan de tabel                                                                        Jeldrik
+    - vul het textField van de missing values met de missing values van de geselecteerde variabele          Jeldrik
+6. truncateButton:
+    - is alleen zichtbaar als de variabele truncatable is                                                   Jeldrik
+12. Missing values:
+    - zet original values non-editable                                                                      Jeldrik

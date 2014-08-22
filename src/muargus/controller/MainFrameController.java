@@ -122,7 +122,7 @@ public class MainFrameController {
      */
     public void globalRecode() {  
         GlobalRecodeController controller = new GlobalRecodeController(
-                this.view, this.metadata, this.globalRecodeModel);
+                this.view, this.metadata, this.globalRecodeModel, this.selectCombinationsModel);
         controller.showView();
     }                                                    
 

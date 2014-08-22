@@ -11,101 +11,41 @@ import java.util.ArrayList;
  * @author ambargus
  */
 public class GlobalRecodeModel {
-    private ArrayList<Integer> defaultValues;
-    private ArrayList<ArrayList<String>> variablesTable;
-    private ArrayList<String> editBoxValues;
-    private String codelistPath;
-    private String nameCodelistPath;
+    private ArrayList<VariableMu> variables;
+    private ArrayList<RecodeMu> recodeMus;
+    private final String[] columnNames;
 
-    /**
-     * 
-     */
     public GlobalRecodeModel() {
-        this.defaultValues = new ArrayList<>();
-        this.variablesTable = new ArrayList<>();
-        this.editBoxValues = new ArrayList<>();
-        this.codelistPath = "";
-        this.nameCodelistPath = "";
+        this.variables = new ArrayList<>();
+        this.recodeMus = new ArrayList<>();
+        this.columnNames = new String[]{"R", "Variables"};
+    }
+    
+    public void setVariables(ArrayList<VariableMu> variables){
+        this.variables = variables;
     }
 
-    /**
-     * 
-     * @return 
-     */
-    public ArrayList<Integer> getDefaultValues() {
-        return defaultValues;
+    public ArrayList<VariableMu> getVariables() {
+        return variables;
+    }
+    
+    public void addRecodeMu(RecodeMu recodeMu){
+        this.recodeMus.add(recodeMu);
     }
 
-    /**
-     * 
-     * @param defaultValues 
-     */
-    public void setDefaultValues(ArrayList<Integer> defaultValues) {
-        this.defaultValues = defaultValues;
+    public ArrayList<RecodeMu> getRecodeMus() {
+        return recodeMus;
     }
 
-    /**
-     * 
-     * @return 
-     */
-    public ArrayList<ArrayList<String>> getVariablesTable() {
-        return variablesTable;
+    public String[] getColumnNames() {
+        return columnNames;
     }
+    
+    
+    
+    
 
-    /**
-     * 
-     * @param variablesTable 
-     */
-    public void setVariablesTable(ArrayList<ArrayList<String>> variablesTable) {
-        this.variablesTable = variablesTable;
-    }
+    
 
-    /**
-     * 
-     * @return 
-     */
-    public ArrayList<String> getEditBoxValues() {
-        return editBoxValues;
-    }
-
-    /**
-     * 
-     * @param editBoxValues 
-     */
-    public void setEditBoxValues(ArrayList<String> editBoxValues) {
-        this.editBoxValues = editBoxValues;
-    }
-
-    /**
-     * 
-     * @return 
-     */
-    public String getCodelistPath() {
-        return codelistPath;
-    }
-
-    /**
-     * 
-     * @param codelistPath 
-     */
-    public void setCodelistPath(String codelistPath) {
-        this.codelistPath = codelistPath;
-    }
-
-    /**
-     * 
-     * @return 
-     */
-    public String getNameCodelistPath() {
-        return nameCodelistPath;
-    }
-
-    /**
-     * 
-     * @param nameCodelistPath 
-     */
-    public void setNameCodelistPath(String nameCodelistPath) {
-        this.nameCodelistPath = nameCodelistPath;
-    }
     
 }
