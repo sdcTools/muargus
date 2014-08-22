@@ -52,6 +52,7 @@
                   <Image iconType="3" name="/muargus/resources/icons/SpecifyMetadata.png"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="MetaData"/>
+                <Property name="enabled" type="boolean" value="false"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="metaDataMenuItemActionPerformed"/>
@@ -66,6 +67,7 @@
                   <Image iconType="3" name="/muargus/resources/icons/SpecifyCombinations.png"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Combinations"/>
+                <Property name="enabled" type="boolean" value="false"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="combinationsMenuItemActionPerformed"/>
@@ -87,6 +89,7 @@
                   <Image iconType="3" name="/muargus/resources/icons/ShowTable.png"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Show Table Collection"/>
+                <Property name="enabled" type="boolean" value="false"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="showTableCollectionMenuItemActionPerformed"/>
@@ -101,6 +104,7 @@
                   <Image iconType="3" name="/muargus/resources/icons/globrec_1_16x16x4.png"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Global Recode"/>
+                <Property name="enabled" type="boolean" value="false"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="globalRecodeMenuItemActionPerformed"/>
@@ -117,6 +121,7 @@
                   <Image iconType="3" name="/muargus/resources/icons/pram_1_16x16x4.png"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="PRAM Specification"/>
+                <Property name="enabled" type="boolean" value="false"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="pramSpecificationMenuItemActionPerformed"/>
@@ -131,6 +136,7 @@
                   <Image iconType="3" name="/muargus/resources/icons/Risk_1_16x16x4.png"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Individual Risk Specification"/>
+                <Property name="enabled" type="boolean" value="false"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="individualRiskSpecificationMenuItemActionPerformed"/>
@@ -145,6 +151,7 @@
                   <Image iconType="3" name="/muargus/resources/icons/hr.png"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Household Risk Specification"/>
+                <Property name="enabled" type="boolean" value="false"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="householdRiskSpecificationMenuItemActionPerformed"/>
@@ -161,6 +168,7 @@
                   <Image iconType="3" name="/muargus/resources/icons/Numeric_1_16x16x4.png"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Modify Numerical Variables"/>
+                <Property name="enabled" type="boolean" value="false"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="numericalVariablesMenuItemActionPerformed"/>
@@ -175,6 +183,7 @@
                   <Image iconType="3" name="/muargus/resources/icons/MA.png"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Numberical Microaggregation"/>
+                <Property name="enabled" type="boolean" value="false"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="numericalMicroaggregationMenuItemActionPerformed"/>
@@ -189,6 +198,7 @@
                   <Image iconType="3" name="/muargus/resources/icons/RS.png"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Numerical Rank Swapping"/>
+                <Property name="enabled" type="boolean" value="false"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="numericalRankSwappingMenuItemActionPerformed"/>
@@ -210,6 +220,7 @@
                   <Image iconType="3" name="/muargus/resources/icons/MakeSafeFile.png"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Make protected file"/>
+                <Property name="enabled" type="boolean" value="false"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="makeProtectedFileMenuItemActionPerformed"/>
@@ -224,6 +235,7 @@
                   <Image iconType="3" name="/muargus/resources/icons/ViewReport.png"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="View report"/>
+                <Property name="enabled" type="boolean" value="false"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="viewReportMenuItemActionPerformed"/>
@@ -354,6 +366,7 @@
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
               <Image iconType="3" name="/muargus/resources/icons/SpecifyMetadata.png"/>
             </Property>
+            <Property name="enabled" type="boolean" value="false"/>
             <Property name="focusable" type="boolean" value="false"/>
             <Property name="horizontalTextPosition" type="int" value="0"/>
             <Property name="verticalTextPosition" type="int" value="3"/>
@@ -367,6 +380,7 @@
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
               <Image iconType="3" name="/muargus/resources/icons/SpecifyCombinations.png"/>
             </Property>
+            <Property name="enabled" type="boolean" value="false"/>
             <Property name="focusable" type="boolean" value="false"/>
             <Property name="horizontalTextPosition" type="int" value="0"/>
             <Property name="verticalTextPosition" type="int" value="3"/>
@@ -382,6 +396,7 @@
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
               <Image iconType="3" name="/muargus/resources/icons/ShowTable.png"/>
             </Property>
+            <Property name="enabled" type="boolean" value="false"/>
             <Property name="focusable" type="boolean" value="false"/>
             <Property name="horizontalTextPosition" type="int" value="0"/>
             <Property name="verticalTextPosition" type="int" value="3"/>
@@ -395,6 +410,7 @@
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
               <Image iconType="3" name="/muargus/resources/icons/globrec_1_16x16x4.png"/>
             </Property>
+            <Property name="enabled" type="boolean" value="false"/>
             <Property name="focusable" type="boolean" value="false"/>
             <Property name="horizontalTextPosition" type="int" value="0"/>
             <Property name="verticalTextPosition" type="int" value="3"/>
@@ -408,6 +424,7 @@
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
               <Image iconType="3" name="/muargus/resources/icons/pram_1_16x16x4.png"/>
             </Property>
+            <Property name="enabled" type="boolean" value="false"/>
             <Property name="focusable" type="boolean" value="false"/>
             <Property name="horizontalTextPosition" type="int" value="0"/>
             <Property name="verticalTextPosition" type="int" value="3"/>
@@ -421,6 +438,7 @@
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
               <Image iconType="3" name="/muargus/resources/icons/Risk_1_16x16x4.png"/>
             </Property>
+            <Property name="enabled" type="boolean" value="false"/>
             <Property name="focusable" type="boolean" value="false"/>
             <Property name="horizontalTextPosition" type="int" value="0"/>
             <Property name="verticalTextPosition" type="int" value="3"/>
@@ -434,6 +452,7 @@
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
               <Image iconType="3" name="/muargus/resources/icons/hr.png"/>
             </Property>
+            <Property name="enabled" type="boolean" value="false"/>
             <Property name="focusable" type="boolean" value="false"/>
             <Property name="horizontalTextPosition" type="int" value="0"/>
             <Property name="verticalTextPosition" type="int" value="3"/>
@@ -447,6 +466,7 @@
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
               <Image iconType="3" name="/muargus/resources/icons/Numeric_1_16x16x4.png"/>
             </Property>
+            <Property name="enabled" type="boolean" value="false"/>
             <Property name="focusable" type="boolean" value="false"/>
             <Property name="horizontalTextPosition" type="int" value="0"/>
             <Property name="verticalTextPosition" type="int" value="3"/>
@@ -460,6 +480,7 @@
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
               <Image iconType="3" name="/muargus/resources/icons/MA.png"/>
             </Property>
+            <Property name="enabled" type="boolean" value="false"/>
             <Property name="focusable" type="boolean" value="false"/>
             <Property name="horizontalTextPosition" type="int" value="0"/>
             <Property name="verticalTextPosition" type="int" value="3"/>
@@ -473,6 +494,7 @@
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
               <Image iconType="3" name="/muargus/resources/icons/RS.png"/>
             </Property>
+            <Property name="enabled" type="boolean" value="false"/>
             <Property name="focusable" type="boolean" value="false"/>
             <Property name="horizontalTextPosition" type="int" value="0"/>
             <Property name="verticalTextPosition" type="int" value="3"/>
@@ -488,6 +510,7 @@
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
               <Image iconType="3" name="/muargus/resources/icons/MakeSafeFile.png"/>
             </Property>
+            <Property name="enabled" type="boolean" value="false"/>
             <Property name="focusable" type="boolean" value="false"/>
             <Property name="horizontalTextPosition" type="int" value="0"/>
             <Property name="verticalTextPosition" type="int" value="3"/>
@@ -501,6 +524,7 @@
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
               <Image iconType="3" name="/muargus/resources/icons/ViewReport.png"/>
             </Property>
+            <Property name="enabled" type="boolean" value="false"/>
             <Property name="focusable" type="boolean" value="false"/>
             <Property name="horizontalTextPosition" type="int" value="0"/>
             <Property name="verticalTextPosition" type="int" value="3"/>

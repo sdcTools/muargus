@@ -106,14 +106,19 @@ public class MetadataMu {
      * @throws ArgusException when verify() of the read model fails
      */
     public void readMetadata() throws ArgusException {
+        if (this.filenames.getMetaFileName().length() == 0)
+            return;
+        
         dataFileType = DATA_FILE_TYPE_FIXED;
         VariableMu variable = null;
+        
 
         try {
             reader = new BufferedReader(new FileReader(new File(this.filenames.getMetaFileName())));
         } catch (FileNotFoundException ex) {
             System.out.println("file not found");
             logger.log(Level.SEVERE, null, ex);
+            throw new ArgusException("Metadata file not found");
         }
 
         tokenizer = new Tokenizer(reader);
@@ -129,7 +134,7 @@ public class MetadataMu {
                     variable.setStartingPosition(tokenizer.nextToken());
                 }
                 else {
-                    variable.setStartingPosition("0");
+                    variable.setStartingPosition("1");  //not relevant, but must be >0
                 }
                     
                     
