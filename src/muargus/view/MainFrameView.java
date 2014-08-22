@@ -46,7 +46,7 @@ public class MainFrameView extends javax.swing.JFrame {
                 doEnable(globalRecodeButton, globalRecodeMenuItem, enable);
                 return;
             case ShowTableCollection:
-                doEnable(globalRecodeButton, globalRecodeMenuItem, enable);
+                doEnable(showTableCollectionButton, showTableCollectionMenuItem, enable);
                 return;
         }
     }
