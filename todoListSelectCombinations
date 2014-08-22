@@ -13,11 +13,6 @@ Nog te doen:                                                                    
       resultaat: tabellen worden gewoon gegenereerd met de foutieve threshold
 12. setTableRiskModelButton:
     - als een rij volgens het Risk model gemaakt moet worden, maak deze rij rood                                ..
-14. calculateTablesButton                      
-    - foutafhandeling                                                                                           Anne
-    - zorgen dan de berekening ook gedaan kan worden het riskmodel wordt gebruikt                               Anne
-15. progressbar
-    - refactoring                                                                                               Anne
 17. Kijk wat er in de Controller/Model kan en verplaats dat.                                                    ..
 18. code opschonen                                                                                              ..
 19. javadoc schrijven voor de methodes                                                                          ..
@@ -82,9 +77,12 @@ Gedaan:                                                                         
     - bereken de frequenties van onveilige waardes voor elke tabel en geef deze aan de MainFrame                Anne
     - sluit het scherm                                                                                          Anne
     - codelijst relatief pad: altijd t.o.v. pad naar metadata file?                                             Anne
+    - foutafhandeling                                                                                           Anne
+    - zorgen dan de berekening ook gedaan kan worden het riskmodel wordt gebruikt                               Anne
 15. progressbar
     - link dit aan de calculateTablesButton                                                                     Anne
     - laat label zien als hij bezig is (nog zoeken wat er moet staan)                                           Anne
+    - refactoring                                                                                               Anne
 16. TablesMu klasse vergelijkbaar met VariablesMu. In deze klasse komt:                                         Anne
     - lijst van variabelen waar de tabel uit bestaat
     - aantal unsafe combinations per dimensie                                                                   
