@@ -6,9 +6,9 @@ import java.awt.Desktop;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
+import muargus.model.GlobalRecodeModel;
 import muargus.model.MetadataMu;
 import muargus.model.SelectCombinationsModel;
-import muargus.view.GlobalRecodeView;
 import muargus.view.MainFrameView;
 import muargus.view.MakeProtectedFileView;
 import muargus.view.ViewReportView;
@@ -23,6 +23,7 @@ public class MainFrameController {
     
     MetadataMu metadata;
     SelectCombinationsModel selectCombinationsModel;
+    GlobalRecodeModel globalRecodeModel;
 
     /**
      * 
@@ -31,6 +32,7 @@ public class MainFrameController {
     public MainFrameController(MainFrameView view) {
         this.view = view;
         this.selectCombinationsModel = new SelectCombinationsModel();
+        this.globalRecodeModel = new GlobalRecodeModel();
         this.metadata = new MetadataMu(); 
     }
 
@@ -72,7 +74,7 @@ public class MainFrameController {
         SelectCombinationsController controller = new SelectCombinationsController(
                 this.view, this.metadata, this.selectCombinationsModel);
         controller.showView();
-        this.selectCombinationsModel = controller.getModel();
+        this.selectCombinationsModel = controller.getModel(); // wat doet dit? De model is toch hier al aangemaakt?
         view.showUnsafeCombinations(this.selectCombinationsModel);
         //view.setVisible(true);
     }                                                    
@@ -87,9 +89,10 @@ public class MainFrameController {
     /**
      * 
      */
-    public void globalRecode() {                                                     
-        GlobalRecodeView view = new GlobalRecodeView(this.view, true);
-        view.setVisible(true);
+    public void globalRecode() {  
+        GlobalRecodeController controller = new GlobalRecodeController(
+                this.view, this.metadata, this.globalRecodeModel);
+        controller.showView();
     }                                                    
 
     /**

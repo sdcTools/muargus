@@ -7,6 +7,8 @@ package muargus.controller;
 import java.io.File;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import muargus.model.GlobalRecodeModel;
+import muargus.model.MetadataMu;
 import muargus.view.GlobalRecodeView;
 
 /**
@@ -16,14 +18,31 @@ import muargus.view.GlobalRecodeView;
 public class GlobalRecodeController {
     
     GlobalRecodeView view;
+    GlobalRecodeModel model;
+    MetadataMu metadata;
 
     /**
      * 
-     * @param view 
+     * @param parentView
+     * @param metadata 
+     * @param model 
      */
-    public GlobalRecodeController(GlobalRecodeView view) {
-        this.view = view;
+    public GlobalRecodeController(java.awt.Frame parentView, MetadataMu metadata, GlobalRecodeModel model) {
+        this.model = model;
+        this.view = new GlobalRecodeView(parentView, true, this);
+        this.metadata = metadata;
+        this.view.setMetadataMu(this.metadata);
+        //this.view = view;
     }
+    
+    public void showView() {
+        this.view.setVisible(true);
+    }
+    
+    public GlobalRecodeModel getModel() {
+        return this.model;
+    }
+    
     
     /**
      * 
@@ -79,5 +98,5 @@ public class GlobalRecodeController {
     public void undo() {                                           
         // TODO add your handling code here:
     }      
-    
+
 }
