@@ -2,7 +2,8 @@ niet behandelde opmerkingen/vragen:
 
 
 Nog te doen:                                                                                                Mee bezig:
-
+- nu wordt bij een klik op read een R toegevoegd, maar dit moet pas bij apply (ik was wat aan het uitproberen)
+- aanmaken van de tabel moet naar update values/tables maar ik heb wat probleempjes met de geslecteerde rij
 
 4. readButton:
     - open een fileChooser geschikt voor .grc files 
@@ -17,17 +18,23 @@ Nog te doen:                                                                    
     - voer de hercodering uit met de dllFunctie applyRecode
     - voeg een R toe bij de variabele en zet deze variabela as isRecoded bij VariableMU
     - maak de Undo button klikbaar
+    - maak apply disabled
 6. truncateButton:
     - geef een scherm die vraagt om het aantal getallen voor de truncate
     - check of het aantal getallen voor de truncate geldig is
     - voer truncate uit met de dllFunctie doTruncate
+    - maak de undo button klikbaar
+    - past volgens Anco de VariableMu aan maar ik weet niet precies wat hij hiermee bedoeld
 7. undoButton:
     - alleen zichtbaar als de geselecteerde waarde of truncated of recoded is
     - voer undo uit met de dllFunctie undoRecode
+    - zet recoded/truncated op false
 8. warningTextArea
-    - laat de foutmeldingen zien
+    - laat de foutmeldingen zien (gebeurd in de dll)
 9. closeButton:
     - close screen
+    - sla de gegevens op
+    - pas het hoofdscherm aan
 10. code opschonen
 11. javadoc schrijven voor de methodes
 
