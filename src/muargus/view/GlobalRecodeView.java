@@ -4,9 +4,11 @@
  */
 package muargus.view;
 
+import java.util.ArrayList;
 import muargus.controller.GlobalRecodeController;
 import muargus.model.GlobalRecodeModel;
 import muargus.model.MetadataMu;
+import muargus.model.TableMu;
 
 /**
  *
@@ -38,7 +40,7 @@ public class GlobalRecodeView extends javax.swing.JDialog {
     }
     
     public void makeVariables(){
-        
+        //ArrayList<TableMu> tables = model.getVariablesTable();
     }
     
 
