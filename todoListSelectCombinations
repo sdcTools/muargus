@@ -1,11 +1,12 @@
 niet behandelde opmerkingen/vragen:
+ - Thresholds: er is een threshold per 'dimensie'. Moet deze dan niet default weergegeven worden als je 
+   een tabel aan het specificeren bent? of wordt hiervoor een globale (Thresh0 in oude mu) gebruikt? 
+
 
 Nog te doen:                                                                                                    Mee bezig:
     
 7. addRowButton:  
     - geef een waarschuwing als een tabel overlap vertoond bij het toevoegen                                    ..
-9. thresholdTextField
-    - sla waarde op in registry                                                                                 Anne
 10. automaticSpecificationButton 
     - zorgen dat een hogere dimensie geen lagere threshold kan krijgen dan de dimensie daarvoor                 Jeldrik   
     - bug fixen bij wegklikken van specificeren threshold.                                                      Jeldrik
@@ -17,6 +18,7 @@ Nog te doen:                                                                    
 18. code opschonen                                                                                              ..
 19. javadoc schrijven voor de methodes                                                                          ..
 20. bug CalculateTables: free format crasht                                                                     ..
+21. thresholds: array gebruiken                                                                                 ..
  
 
 
@@ -54,6 +56,7 @@ Gedaan:                                                                         
     - verwijder geselecteerde rij(en) uit table                                                                 Jeldrik
     - voeg alle variabelen toe aan variablesSelectedList (vergelijkbaar met punt 3 maar dan voor alles)         Jeldrik
 9. thresholdTextField
+    - sla waarde op in registry                                                                                 Anne
     - zet bij het opstarten op de defaultwaarde (= 1)                                                           Jeldrik
 10. automaticSpecificationButton                                                                                
     - controleer of de tabel leeg is en vraag of de tabellen verwijderd moeten worden als dit niet het geval is Jeldrik
