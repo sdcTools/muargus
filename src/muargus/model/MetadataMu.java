@@ -134,7 +134,7 @@ public class MetadataMu {
                     variable.setStartingPosition(tokenizer.nextToken());
                 }
                 else {
-                    variable.setStartingPosition("0");
+                    variable.setStartingPosition("1");  //not relevant, but must be >0
                 }
                     
                     

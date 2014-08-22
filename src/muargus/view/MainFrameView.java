@@ -48,6 +48,12 @@ public class MainFrameView extends javax.swing.JFrame {
             case ShowTableCollection:
                 doEnable(showTableCollectionButton, showTableCollectionMenuItem, enable);
                 return;
+            case MakeProtectedFile:
+                doEnable(makeProtectedFileButton, makeProtectedFileMenuItem, enable);
+                return;
+            case ViewReport:
+                doEnable(viewReportButton, viewReportMenuItem, enable);
+                return;
         }
     }
     

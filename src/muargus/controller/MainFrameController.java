@@ -66,10 +66,11 @@ public class MainFrameController {
         view.enableAction(Action.SpecifyMetadata, this.metadata != null);
         view.enableAction(Action.SpecifyCombinations, this.metadata != null &&
                 this.metadata.getVariables().size() > 0);
-        view.enableAction(Action.GlobalRecode, this.metadata != null &&
-                this.selectCombinationsModel.getTables().size() > 0);
-        view.enableAction(Action.ShowTableCollection, this.metadata != null &&
-                this.selectCombinationsModel.getTables().size() > 0);
+        boolean tablesCalculated = this.metadata != null &&
+                this.selectCombinationsModel.getTables().size() > 0;
+        view.enableAction(Action.GlobalRecode, tablesCalculated);
+        view.enableAction(Action.ShowTableCollection, tablesCalculated);
+        view.enableAction(Action.MakeProtectedFile, tablesCalculated);
     }
 
     /**
