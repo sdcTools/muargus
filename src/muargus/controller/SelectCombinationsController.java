@@ -5,31 +5,15 @@
 package muargus.controller;
 
 import argus.model.ArgusException;
-import argus.model.Metadata;
-import static com.sun.glass.ui.Cursor.setVisible;
+import argus.utils.SystemUtils;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.concurrent.ExecutionException;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
-import static javax.swing.JFileChooser.APPROVE_OPTION;
-import javax.swing.JOptionPane;
-import javax.swing.SwingWorker;
-import muargus.extern.dataengine.CMuArgCtrl;
-import muargus.extern.dataengine.IProgressListener;
+import muargus.MuARGUS;
 import muargus.model.MetadataMu;
 import muargus.model.SelectCombinationsModel;
-import muargus.model.TableMu;
-import muargus.model.UnsafeCodeInfo;
-import muargus.model.UnsafeInfo;
-import muargus.model.VariableMu;
 import muargus.view.SelectCombinationsView;
 
 /**
@@ -48,6 +32,7 @@ public class SelectCombinationsController implements PropertyChangeListener{
 
     public SelectCombinationsController(java.awt.Frame parentView, MetadataMu metadata, SelectCombinationsModel model) {
         this.model = model;
+        getSettings();
         this.modelClone = new SelectCombinationsModel(model);
 
         this.view = new SelectCombinationsView(parentView, true, this);
@@ -75,12 +60,30 @@ public class SelectCombinationsController implements PropertyChangeListener{
      */
     public void calculateTables() throws ArgusException {
         this.model = this.modelClone;
+        saveSettings();
         TableService service = new TableService();
         service.setPropertyChangeListener(this);
         service.calculateTables(this.model, this.metadata);
         //service.getUnsafeCombinations(this.model, this.metadata);
     }
-                   
+    
+    private void getSettings() {
+        int[] thresholds = new int[MuARGUS.MAXDIMS];
+        for (int t=1; t <= MuARGUS.MAXDIMS; t++) {
+            thresholds[t-1] = SystemUtils.getRegInteger("general", "threshold" + Integer.toString(t), 1);
+        }
+        this.model.setThresholds(thresholds);
+    }
+    
+    private void saveSettings() {
+        if (this.model.getThresholds() == null || this.model.getThresholds().length < MuARGUS.MAXDIMS) {
+            return;
+        }
+        for (int t=1; t <= MuARGUS.MAXDIMS; t++) {
+            SystemUtils.putRegInteger("general", "threshold" + Integer.toString(t), this.model.getThresholds()[t]);
+        }
+    }
+                
 
     /**
      * 

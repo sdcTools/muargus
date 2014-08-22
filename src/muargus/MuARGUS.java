@@ -25,6 +25,8 @@ public class MuARGUS {
     public static final String REVISION = "1 (beta)";
     public static final int BUILD = 1;    
     
+    public static final int MAXDIMS = 10;
+    
     public static String getFullVersion() {
         return "" + MAJOR + "." + MINOR + "." + REVISION;
     }
@@ -101,6 +103,7 @@ public class MuARGUS {
         //</editor-fold>
         //batch = BATCH_NOBATCH;
         //getAnco();
+        SystemUtils.setRegistryRoot("muargus");
         SystemUtils.setLogbook(SystemUtils.getRegString("general", "logbook", getTempFile("MuLogbook.txt")));
         SystemUtils.writeLogbook(" ");
         SystemUtils.writeLogbook("Start of MuArgus run");
