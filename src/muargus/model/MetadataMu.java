@@ -128,6 +128,11 @@ public class MetadataMu {
                 if (getDataFileType() == DATA_FILE_TYPE_FIXED) {
                     variable.setStartingPosition(tokenizer.nextToken());
                 }
+                else {
+                    variable.setStartingPosition("0");
+                }
+                    
+                    
                 variable.setVariableLength(tokenizer.nextToken());
 
                 // make fancier
