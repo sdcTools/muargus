@@ -15,6 +15,7 @@ import muargus.model.MetadataMu;
 import muargus.model.SelectCombinationsModel;
 import muargus.model.TableMu;
 import muargus.model.VariableMu;
+import muargus.MuARGUS;
 
 /**
  *
@@ -439,8 +440,8 @@ public class SelectCombinationsView extends javax.swing.JDialog {
     }
 
     private void addRowButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addRowButtonActionPerformed
-        if (variablesSelectedListModel.size() > 10) {
-            JOptionPane.showMessageDialog(this, "Cannot add more than 10 variables");
+        if (variablesSelectedListModel.size() > MuARGUS.MAXDIMS) {
+            JOptionPane.showMessageDialog(this, String.format("Cannot add more than %d variables", MuARGUS.MAXDIMS));
         } else if (!validThreshold()) {
             JOptionPane.showMessageDialog(this, "The threshold is not valid, try a whole number");
         } else {
