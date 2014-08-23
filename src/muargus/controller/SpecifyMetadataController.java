@@ -33,10 +33,6 @@ public class SpecifyMetadataController {
         this.metadata = metadata;
         this.metadataClone = new  MetadataMu(metadata);
         this.view.setMetadataMu(this.metadataClone);
-            
-        //this.view = view;
-        //this.list = null;
-        //setList(list);
     }
     
     public void showView() {
@@ -55,7 +51,9 @@ public class SpecifyMetadataController {
     /**
      * 
      */
-    public void generate() {                                               
+    public void generate() {
+        //TODO: Wat moet hier gebeuren?
+
         //Generate generate; = new Generate(view, true);
         //generate.setVisible(true);
     }                                              
@@ -83,7 +81,6 @@ public class SpecifyMetadataController {
                     this.metadata.write(fileChooser.getSelectedFile());
                 }
             }
-            //MuARGUS.setMetadata(this.metadata);
         } 
         this.view.setVisible(false);
     }                                        
@@ -92,34 +89,7 @@ public class SpecifyMetadataController {
     public MetadataMu getMetadata() {
         return this.metadata;
     }
-    /**
-     * 
-     */
-    public void moveUp() {                                             
-        // TODO add your handling code here:
-    }                                            
-
-    /**
-     * 
-     */
-    public void variables() {                                                  
-        // TODO add your handling code here:
-    }                                                 
-
-    /**
-     * 
-     */
-    public void newButton() {                                          
-        // TODO add your handling code here:
-    }                                         
-
-    /**
-     * 
-     */
-    public void delete() {                                             
-        // TODO add your handling code here:
-    }                                            
-
+    
     /**
      * 
      */
@@ -131,76 +101,6 @@ public class SpecifyMetadataController {
             }
         }
         this.view.setVisible(false);
-    }
-
-    /**
-     * 
-     */
-    public void codelistfileButton() {                                                   
-        // TODO add your handling code here:
-    }                                                  
-
-    /**
-     * 
-     */
-    public void moveDown() {                                               
-        // TODO add your handling code here:
-    }                                              
-
-    /**
-     * 
-     */
-    public void hhIdentifier() {                                                     
-        // TODO add your handling code here:
-    }                                                    
-
-    /**
-     * 
-     */
-    public void hhvariable() {                                                   
-        // TODO add your handling code here:
-    }                                                  
-
-    /**
-     * 
-     */
-    public void weight() {                                               
-        // TODO add your handling code here:
-    }                                              
-
-    /**
-     * 
-     */
-    public void other() {                                              
-        // TODO add your handling code here:
-    }                                             
-
-    /**
-     * 
-     */
-    public void categorical() {                                                 
-        // TODO add your handling code here:
-    }                                                
-
-    /**
-     * 
-     */
-    public void numerical() {                                               
-        // TODO add your handling code here:
-    }                                              
-
-    /**
-     * 
-     */
-    public void truncationAllowed() {                                                       
-        // TODO add your handling code here:
-    }                                                      
-
-    /**
-     * 
-     */
-    public void codelistfile() {                                                  
-        // TODO add your handling code here:
     }
     
 }

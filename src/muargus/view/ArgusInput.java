@@ -13,6 +13,8 @@ import muargus.model.SelectCombinationsModel;
  */
 public class ArgusInput extends javax.swing.JDialog {
 
+    
+    private boolean valid;
     /**
      * Creates new form ArgusInput
      * @param parent
@@ -24,6 +26,7 @@ public class ArgusInput extends javax.swing.JDialog {
         initComponents();
         textField.setText(model.getThreshold());
         this.setLocationRelativeTo(null);
+        this.valid = false;
 
     }
 
@@ -40,7 +43,9 @@ public class ArgusInput extends javax.swing.JDialog {
         this.textField.setText(text);
     }
 
-  
+    public boolean isValid() {
+        return this.valid;
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -112,29 +117,29 @@ public class ArgusInput extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void okButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okButtonActionPerformed
-        boolean valid = true;
+        this.valid = true;
         
             try {
                 int threshold = Integer.parseInt(this.textField.getText());
                 if(threshold <= 0){
                     JOptionPane.showMessageDialog(this, "Illegal value for the threshold, threshold cannot be smaller than 1");
-                    valid = false; 
+                    this.valid = false; 
                 }
                 
             } catch (Exception e) {
-                JOptionPane.showMessageDialog(this, "Illegal value for the threshold, give a whole number");
-                valid = false;
+                JOptionPane.showMessageDialog(this, "Illegal value for the threshold, please enter a positive integer");
+                this.valid = false;
             }
         //}
-        if(valid){
-            GenerateAutomaticTables.setValid(true);
+        if(this.valid){
+            //GenerateAutomaticTables.setValid(true);
             this.setVisible(false);
         }
     }//GEN-LAST:event_okButtonActionPerformed
 
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
         //textField.setText("");
-        GenerateAutomaticTables.setValid(false);
+        //GenerateAutomaticTables.setValid(false);
         this.setVisible(false);
     }//GEN-LAST:event_cancelButtonActionPerformed
 

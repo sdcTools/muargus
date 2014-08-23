@@ -23,16 +23,14 @@ import muargus.MuARGUS;
  */
 public class SelectCombinationsView extends javax.swing.JDialog {
 
-    SelectCombinationsController controller;
-    SelectCombinationsModel model;
+    private final SelectCombinationsController controller;
+    private SelectCombinationsModel model;
     private MetadataMu metadataMu;
     private DefaultListModel variablesListModel;
     private DefaultListModel variablesSelectedListModel;
     private TableModel tableModel;
-    private ArrayList<String> columnNames;
-    private String[][] data;
     private final Frame parent;
-    private static int numberOfVariables;
+    //private int numberOfVariables;
     private long numberOfTables;
 
     /**
@@ -104,7 +102,7 @@ public class SelectCombinationsView extends javax.swing.JDialog {
     private void updateValues() {
         // gets the tables from SelectCombinationsModel and adds these to a double  array, containing the data
         ArrayList<TableMu> tables = model.getTables();
-        data = new String[model.getTables().size()][model.getNumberOfColumns()];
+        String[][] data = new String[model.getTables().size()][model.getNumberOfColumns()];
 
         // nog bezig met de check
 //        ArrayList<int[]> doubleIndices = new ArrayList<>();
@@ -130,10 +128,10 @@ public class SelectCombinationsView extends javax.swing.JDialog {
             index++;
         }
 
-        columnNames = new ArrayList<>(Arrays.asList("Risk", "Thres.", "Var 1"));
+        ArrayList<String> columnNames = new ArrayList<>(Arrays.asList("Risk", "Thres.", "Var 1"));
         if (model.getNumberOfColumns() > 3) {
             for (int i = 2; i <= model.getNumberOfColumns() - 2; i++) {
-                this.columnNames.add("Var " + i);
+                columnNames.add("Var " + i);
             }
         }
 
@@ -443,7 +441,7 @@ public class SelectCombinationsView extends javax.swing.JDialog {
         if (variablesSelectedListModel.size() > MuARGUS.MAXDIMS) {
             JOptionPane.showMessageDialog(this, String.format("Cannot add more than %d variables", MuARGUS.MAXDIMS));
         } else if (!validThreshold()) {
-            JOptionPane.showMessageDialog(this, "The threshold is not valid, try a whole number");
+            JOptionPane.showMessageDialog(this, "The threshold is not valid, please enter a positive integer");
         } else {
             // copy the selected variables into a VariableMu array
             VariableMu[] variableMu = new VariableMu[variablesSelectedListModel.size()];
@@ -454,19 +452,24 @@ public class SelectCombinationsView extends javax.swing.JDialog {
                 tableMuNew.addVariable(v);
             }
 
-            boolean isValid = true;
+            boolean add = true;
             // only check for double tables when then number of tables is between 0 and 100
+            //TODO: constant
             if (model.getNumberOfRows() > 0 && model.getNumberOfRows() < 100) {
                 for (int i = 0; i < model.getNumberOfRows(); i++) {
                     TableMu tableMuOld = model.getTables().get(i);
-                    isValid = compaireRows(model.isRiskModel(), tableMuNew, tableMuOld);
-                    if (!isValid) {
+                    add = compareRows(tableMuOld.isRiskModel(), tableMuNew, tableMuOld);
+                    if (!add) {
+                        if (tableMuOld.isRiskModel()) {
+                            JOptionPane.showMessageDialog(this, 
+                                    "The new table overlaps with a BIR table and cannot be added");
+                        }
                         break;
                     }
                 }
             }
 
-            if (isValid) {
+            if (add) {
                 if (variablesSelectedListModel.size() > 0) {
                     TableMu tableMu = new TableMu();
                     variablesSelectedListModel.removeAllElements();
@@ -474,7 +477,7 @@ public class SelectCombinationsView extends javax.swing.JDialog {
                     tableMu.setVariables(variableMu);
                     model.addTable(tableMu);
                 }
-            } else {
+            } else if (!model.isRiskModel()) {
                 variablesSelectedListModel.removeAllElements();
             }
             updateValues();
@@ -483,7 +486,7 @@ public class SelectCombinationsView extends javax.swing.JDialog {
     }//GEN-LAST:event_addRowButtonActionPerformed
 
     /**
-     * This function compaires the different tables with a new table (VariableMu
+     * This function compares the different tables with a new table (VariableMu
      * array) if the table is different (enough), which depends on the
      * riskmodel, it returns true if the table has to much overlap, it returns
      * false
@@ -494,7 +497,7 @@ public class SelectCombinationsView extends javax.swing.JDialog {
      * @param tableMuOld
      * @return It returns if a table can be added
      */
-    public boolean compaireRows(boolean riskModel, TableMu tableMuNew, TableMu tableMuOld) {
+    public boolean compareRows(boolean riskModel, TableMu tableMuNew, TableMu tableMuOld) {
         boolean isValid = true;
         boolean exit = false;
         int numberOfDoubleVariables = 0;
@@ -584,9 +587,9 @@ public class SelectCombinationsView extends javax.swing.JDialog {
             }
         }
 
-        SelectCombinationsView.numberOfVariables = allValidVariables.size();
+        int numberOfVariables = allValidVariables.size();
 
-        GenerateAutomaticTables generateAutomaticTables = new GenerateAutomaticTables(parent, true, this.model);
+        GenerateAutomaticTables generateAutomaticTables = new GenerateAutomaticTables(parent, true, this.model, numberOfVariables);
         generateAutomaticTables.setVisible(true);
 
         if (generateAutomaticTables.isValid()) {
@@ -605,11 +608,12 @@ public class SelectCombinationsView extends javax.swing.JDialog {
         }
 
         if (numberOfOldTables < 25000) { // tot dit aantal kan die het redelijk goed hebben, maar is die wel +/- 5 seconden aan het rekenen. progressbar laten zien? 
+            //TODO: constant
             ArrayList<Integer> remove = new ArrayList<>();
             boolean risk = model.isRiskModel();
             for (int i = 0; i < numberOfOldTables; i++) {
                 for (int j = numberOfOldTables; j < model.getNumberOfRows(); j++) {
-                    if (!compaireRows(risk, model.getTables().get(i), model.getTables().get(j))) {
+                    if (!compareRows(risk, model.getTables().get(i), model.getTables().get(j))) {
                         remove.add(i);
                     }
                 }
@@ -622,9 +626,9 @@ public class SelectCombinationsView extends javax.swing.JDialog {
         updateValues();
     }//GEN-LAST:event_automaticSpecificationButtonActionPerformed
 
-    public static int getNumberOfVariables() {
-        return numberOfVariables;
-    }
+//    public int getNumberOfVariables() {
+//        return this.numberOfVariables;
+//    }
 
     public long getNumberOfTables() {
         return numberOfTables;
@@ -731,47 +735,38 @@ public class SelectCombinationsView extends javax.swing.JDialog {
 
     private void clearButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearButtonActionPerformed
         this.clear();
-        controller.clear();
+        //controller.clear();
     }//GEN-LAST:event_clearButtonActionPerformed
 
     private void setTableRiskModelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_setTableRiskModelButtonActionPerformed
         if (model.getTables().size() > 0) {
             int index = table.getSelectedRow();
             TableMu tableMu = model.getTables().get(index);
+                       
             tableMu.setRiskModel(!tableMu.isRiskModel());
-
-            if (model.isRiskModel()) {
-                ArrayList<VariableMu> riskModelVariables = new ArrayList<>();
-                for (TableMu t : model.getTables()) {
-                    if (t.isRiskModel()) {
-                        for (VariableMu v : t.getVariables()) {
-                            riskModelVariables.add(v);
-                        }
-                    }
-                }
-
+            if (tableMu.isRiskModel()) {  //The table is added to the risk model
                 ArrayList<TableMu> toBeRemovedTables = new ArrayList<>();
 
                 for (int i = model.getNumberOfRows() - 1; i >= 0; i--) {
                     TableMu t = model.getTables().get(i);
                     if (!t.isRiskModel()) {
-                        if (t.contains(riskModelVariables)) {
+                        if (t.contains(this.model.getRiskModelVariables())) {
                             toBeRemovedTables.add(t);
-
                         }
                     }
                 }
                 if (toBeRemovedTables.size() > 0) {
-                    if (JOptionPane.showConfirmDialog(this, "Overlapping tables found with this risk table\nDo you want to remove them?", "Mu Argus", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
-                        for (TableMu t : toBeRemovedTables) {
-                            model.removeTable(t);
-                        }
-                    } else {
-                        tableMu.setRiskModel(!tableMu.isRiskModel());
+                    if (JOptionPane.showConfirmDialog(this, "Overlapping tables found with this risk table\nDo you want to remove them?", "Mu Argus", JOptionPane.YES_NO_OPTION) == JOptionPane.NO_OPTION) {
+                        tableMu.setRiskModel(!tableMu.isRiskModel());  //Revert the change
+                        return;
                     }
                 }
+                
+                for (TableMu t : toBeRemovedTables) {
+                    model.removeTable(t);
+                }
             }
-
+            
             updateValues();
             table.getSelectionModel().setSelectionInterval(index, index);
             //table.getSelectionModel().setSelectionInterval(indices[indices.length - 1], indices[indices.length - 1]);

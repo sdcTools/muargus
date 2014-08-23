@@ -104,17 +104,22 @@ public class SelectCombinationsModel {
     }
 
     public boolean isRiskModel() {
-        this.riskModel = false;
         for(TableMu t: this.tables){
             if(t.isRiskModel()){
-                this.riskModel = true;
+                return true;
             }
         }
-        return this.riskModel;
+        return false;
     }
-
-    public void setRiskModel(boolean riskModel) {
-        this.riskModel = riskModel;
+    
+    public ArrayList<VariableMu> getRiskModelVariables() {
+        ArrayList<VariableMu> riskVariables = new ArrayList<>();
+        for (TableMu table : this.tables) {
+            if (table.isRiskModel()) {
+                riskVariables.addAll(table.getVariables());
+            }
+        }
+        return riskVariables;
     }
     
     public int getNumberOfColumns() {

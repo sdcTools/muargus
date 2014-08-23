@@ -84,63 +84,17 @@ public class SelectCombinationsController implements PropertyChangeListener{
             SystemUtils.putRegInteger("general", "threshold" + Integer.toString(t), this.model.getThresholds()[t]);
         }
     }
-                
+                                                                  
 
-    /**
-     * 
-     */
-    public void moveToSelected() {                                                     
-        // TODO add your handling code here:
-    }                                                    
-
-    /**
-     * 
-     */
-    public void removeFromSelected() {                                                         
-        // TODO add your handling code here:
-    }                                                        
-
-    /**
-     * 
-     */
-    public void removeAllFromSelected() {                                                            
-        // TODO add your handling code here:
-    }                                                           
-
-    /**
-     * 
-     */
-    public void addRow() {                                             
-        // TODO add your handling code here:
-    }                                            
-
-    /**
-     * 
-     */
-    public void removeRow() {                                                
-        // TODO add your handling code here:
-    }                                               
+                                                          
 
     /**
      * 
      */
     public void automaticSpecification() {                                                             
-        // TODO add your handling code here:
+        //het zou mooier zijn als de berekening niet in de view zou gebeuren
     }                                                            
 
-    /**
-     * 
-     */
-    public void clear() {                                            
-        // TODO add your handling code here:
-    }                                           
-
-    /**
-     * 
-     */
-    public void setTableRiskModel() {                                                        
-        // TODO add your handling code here:
-    }                                                       
 
     /**
      * 

@@ -15,17 +15,19 @@ import muargus.model.SelectCombinationsModel;
 public class GenerateAutomaticTables extends javax.swing.JDialog {
 
     SelectCombinationsModel model;
-    private static boolean valid; // is used to continue with the calculation
-    private Frame parent;
+    private boolean valid; // is used to continue with the calculation
+    private final Frame parent;
+    private final int numberOfVariables;
 
     /**
      * Creates new form GenerateAutomaticTables
      */
-    public GenerateAutomaticTables(java.awt.Frame parent, boolean modal, SelectCombinationsModel model) {
+    public GenerateAutomaticTables(java.awt.Frame parent, boolean modal, SelectCombinationsModel model, int numberOfVariables) {
         super(parent, modal);
         this.model = model;
-        GenerateAutomaticTables.valid = false;
+        this.valid = false;
         this.parent = parent;
+        this.numberOfVariables = numberOfVariables;
         initComponents();
         this.setLocationRelativeTo(null);
         this.setTitle("Method for generating tables");
@@ -44,11 +46,11 @@ public class GenerateAutomaticTables extends javax.swing.JDialog {
     }
 
     public boolean isValid() {
-        return valid;
+        return this.valid;
     }
 
-    public static void setValid(boolean valid) {
-        GenerateAutomaticTables.valid = valid;
+    public void setValid(boolean valid) {
+        this.valid = valid;
     }
 
     /**
@@ -164,12 +166,12 @@ public class GenerateAutomaticTables extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
-        GenerateAutomaticTables.setValid(false);
+        this.setValid(false);
         this.setVisible(false);
     }//GEN-LAST:event_cancelButtonActionPerformed
 
     private void okButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okButtonActionPerformed
-        boolean isValid = true;
+        setValid(true);
         int dimensions = 0;
         if (makeUpToDimensionRadioButton.isSelected()) {
             try {
@@ -177,19 +179,18 @@ public class GenerateAutomaticTables extends javax.swing.JDialog {
                 
                 if (dimensions <= 0) {
                     JOptionPane.showMessageDialog(this, "Illegal value for the dimension, dimension cannot be smaller than 1");
-                    isValid = false;
-                } else if (dimensions > SelectCombinationsView.getNumberOfVariables()) {
+                    setValid(false);
+                } else if (dimensions > this.numberOfVariables) {
                     JOptionPane.showMessageDialog(this, "Not enough identifying variables for this request");
-                    isValid = false;
+                    setValid (false);
                 } 
             } catch (Exception e) {
-                JOptionPane.showMessageDialog(this, "Illegal value for the dimension, give a whole number");
-                isValid = false;
+                JOptionPane.showMessageDialog(this, "Illegal value for the dimension, please enter a positive integer");
+                setValid(false);
             }
         }
         
-        if (isValid) {
-            GenerateAutomaticTables.setValid(false);
+        if (isValid()) {
             if (useIdentificatinLevelRadioButton.isSelected()) {
                 ArgusInput getThreshold = new ArgusInput(parent, true, this.model);
                 getThreshold.setLabelText("Threshold");
@@ -198,7 +199,7 @@ public class GenerateAutomaticTables extends javax.swing.JDialog {
                 try {
                     model.setThreshold(getThreshold.getTextField());
                 } catch (Exception e) {
-                    isValid = false;
+                    setValid(false);
                 }
             } else {
                 int[] thresholds = new int[dimensions];
@@ -207,19 +208,19 @@ public class GenerateAutomaticTables extends javax.swing.JDialog {
                     getThreshold.setLabelText("Threshold for dim" + (i + 1));
                     getThreshold.setTitle("Threshold");
                     getThreshold.setVisible(true);
-                    if(!GenerateAutomaticTables.valid){
+                    if(!getThreshold.isValid()){
                         break;
                     }
                     try {
                         thresholds[i] = getThreshold.getTextField();
                     } catch (Exception e) {
-                        isValid = false;
+                        setValid(false);
                     }
                 }
                 model.setThresholds(thresholds);
             }
         }
-        if (isValid) {
+        if (isValid()) {
             this.setVisible(false);
         }
     }//GEN-LAST:event_okButtonActionPerformed
