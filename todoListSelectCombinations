@@ -10,8 +10,6 @@ Nog te doen:                                                                    
     - bug fixen bij wegklikken van specificeren threshold.                                                      Jeldrik
       bug treed op als er een int kleiner dan 1 wordt gegeven en het scherm wordt weggeklikt.
       resultaat: tabellen worden gewoon gegenereerd met de foutieve threshold
-12. setTableRiskModelButton:
-    - als een rij volgens het Risk model gemaakt moet worden, maak deze rij rood                                ..
 17. Kijk wat er in de Controller/Model kan en verplaats dat.                                                    ..
 18. code opschonen                                                                                              ..
 19. javadoc schrijven voor de methodes                                                                          ..
@@ -73,6 +71,7 @@ Gedaan:                                                                         
     - zorg dat er niets gebeurd als er nog geen tabellen zijn gemaakt                                           Jeldrik
     - check of de tabellen voldoen aan de nieuwe eisen.                                                         Jeldrik
     - voeg een waarschuwing toe voordat tabellen worden verwijderd.                                             Jeldrik
+    - als een rij volgens het Risk model gemaakt moet worden, maak deze rij rood                                Anne
 13. cancelButton
     - sluit het scherm                                                                                          Jeldrik
 14. calculateTablesButton                                                                        
