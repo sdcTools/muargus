@@ -165,7 +165,8 @@ public class GlobalRecodeController {
             throw new ArgusException(warning[0]);
         }
         applyRecode();
-        
+        recode.setRecoded(true);
+
         
         
     }
@@ -176,6 +177,7 @@ public class GlobalRecodeController {
         if (!result) {
             throw new ArgusException("Error during Apply recode");
         }
+        
         new TableService().getUnsafeCombinations(this.selectCombinationsModel, this.metadata);
         
             
@@ -196,6 +198,8 @@ public class GlobalRecodeController {
         if (!result) {
             throw new ArgusException("Error during Apply recode");
         }
+        recode.setRecoded(false);
+        recode.setTruncated(false);
         
    }      
 }
