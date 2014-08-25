@@ -19,6 +19,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.SwingWorker;
+import muargus.MuARGUS;
 import muargus.extern.dataengine.CMuArgCtrl;
 import muargus.extern.dataengine.IProgressListener;
 import muargus.model.MetadataMu;
@@ -36,13 +37,9 @@ public class TableService {
     
     private static final Logger logger = Logger.getLogger(SelectCombinationsController.class.getName());
 
-    private final CMuArgCtrl c = new CMuArgCtrl();
+    private final CMuArgCtrl c = MuARGUS.getMuArgCtrl();
     
     private PropertyChangeListener listener;
-    
-    static {
-        System.loadLibrary("libmuargusdll");
-    }
 
     public void calculateTables(final SelectCombinationsModel model, final MetadataMu metadata) {
 

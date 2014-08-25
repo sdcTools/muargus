@@ -5,20 +5,15 @@ Nog te doen:                                                                    
 - nu wordt bij een klik op read een R toegevoegd, maar dit moet pas bij apply (ik was wat aan het uitproberen)
 - aanmaken van de tabel moet naar update values/tables maar ik heb wat probleempjes met de geslecteerde rij
 
-4. readButton:
-    - open een fileChooser geschikt voor .grc files                                                         Anne
-    - plaats de text van de .grc file die niet tussen <> staat in de EditTextField                            Anne
-    - plaats de .grc filenaam in het .grc textfield                                                           Anne
-    - plaats de .cdl filenaam in het .cdl textfield (staat in de .grc file)                                 Anne
-    - plaats de nieuwe missing values op de goede plek (staan in de .grc file)                               Anne
+
 5. applyButton:
-    - alleen klikbaar als het EditTextField niet leeg is
-    - check of de waardes in het EditTextField correct zijn (gebeurd als het goed is al in de dll)
-    - hercodeerd met behulp van de dllfunctie doRecode (pak de benodigde waardes van het scherm)
-    - voer de hercodering uit met de dllFunctie applyRecode
-    - voeg een R toe bij de variabele en zet deze variabela as isRecoded bij VariableMU
-    - maak de Undo button klikbaar
-    - maak apply disabled
+    - alleen klikbaar als het EditTextField niet leeg is                                                    Anne
+    - check of de waardes in het EditTextField correct zijn (gebeurd als het goed is al in de dll)            Anne
+    - hercodeerd met behulp van de dllfunctie doRecode (pak de benodigde waardes van het scherm)               Anne
+    - voer de hercodering uit met de dllFunctie applyRecode                                                    Anne
+    - voeg een R toe bij de variabele en zet deze variabela as isRecoded bij VariableMU                    Anne
+    - maak de Undo button klikbaar                                                                            Anne
+    - maak apply disabled                                                                                      Anne
 6. truncateButton:
     - geef een scherm die vraagt om het aantal getallen voor de truncate
     - check of het aantal getallen voor de truncate geldig is
@@ -59,6 +54,12 @@ Gedaan:                                                                         
     - value[1] = naam variabele                                                                             Jeldrik
     - voeg de array toe aan de tabel                                                                        Jeldrik
     - vul het textField van de missing values met de missing values van de geselecteerde variabele          Jeldrik
+4. readButton:
+    - open een fileChooser geschikt voor .grc files                                                         Anne
+    - plaats de text van de .grc file die niet tussen <> staat in de EditTextField                            Anne
+    - plaats de .grc filenaam in het .grc textfield                                                           Anne
+    - plaats de .cdl filenaam in het .cdl textfield (staat in de .grc file)                                 Anne
+    - plaats de nieuwe missing values op de goede plek (staan in de .grc file)                               Anne
 6. truncateButton:
     - is alleen zichtbaar als de variabele truncatable is                                                   Jeldrik
 12. Missing values:

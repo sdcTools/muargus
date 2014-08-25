@@ -7,6 +7,7 @@ import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.SplashScreen;
 import java.util.logging.Logger;
+import muargus.extern.dataengine.CMuArgCtrl;
 import muargus.model.MetadataMu;
 import muargus.view.MainFrameView;
 import org.apache.commons.io.FilenameUtils;
@@ -26,6 +27,16 @@ public class MuARGUS {
     public static final int BUILD = 1;    
     
     public static final int MAXDIMS = 10;
+    
+    static {
+        System.loadLibrary("libmuargusdll");
+    }
+    
+    private static CMuArgCtrl muArgCrtl = new CMuArgCtrl();
+    
+    public static CMuArgCtrl getMuArgCtrl() {
+        return muArgCrtl;
+    }
     
     public static String getFullVersion() {
         return "" + MAJOR + "." + MINOR + "." + REVISION;
