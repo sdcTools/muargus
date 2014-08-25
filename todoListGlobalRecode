@@ -6,11 +6,11 @@ Nog te doen:                                                                    
 - aanmaken van de tabel moet naar update values/tables maar ik heb wat probleempjes met de geslecteerde rij
 
 4. readButton:
-    - open een fileChooser geschikt voor .grc files 
-    - plaats de text van de .grc file die niet tussen <> staat in de EditTextField
-    - plaats de .grc filenaam in het .grc textfield   
-    - plaats de .cdl filenaam in het .cdl textfield (staat in de .grc file)
-    - plaats de nieuwe missing values op de goede plek (staan in de .grc file) 
+    - open een fileChooser geschikt voor .grc files                                                         Anne
+    - plaats de text van de .grc file die niet tussen <> staat in de EditTextField                            Anne
+    - plaats de .grc filenaam in het .grc textfield                                                           Anne
+    - plaats de .cdl filenaam in het .cdl textfield (staat in de .grc file)                                 Anne
+    - plaats de nieuwe missing values op de goede plek (staan in de .grc file)                               Anne
 5. applyButton:
     - alleen klikbaar als het EditTextField niet leeg is
     - check of de waardes in het EditTextField correct zijn (gebeurd als het goed is al in de dll)

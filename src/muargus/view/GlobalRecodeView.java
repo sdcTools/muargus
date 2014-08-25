@@ -48,6 +48,7 @@ public class GlobalRecodeView extends javax.swing.JDialog {
     }
 
     public void makeVariables() {
+        this.model.clearRecodeMus();
         for (VariableMu v : this.model.getVariables()) {
             RecodeMu recodeMu = new RecodeMu(v);
             this.model.addRecodeMu(recodeMu);
@@ -63,7 +64,7 @@ public class GlobalRecodeView extends javax.swing.JDialog {
         this.variablesTable.getColumnModel().getColumn(1).setMinWidth(70);
         this.variablesTable.getColumnModel().getColumn(1).setPreferredWidth(70);
 
-        //updateValues();
+        updateValues();
     }
 
     public void updateTable() {

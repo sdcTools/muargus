@@ -32,6 +32,10 @@ public class GlobalRecodeModel {
     public void addRecodeMu(RecodeMu recodeMu){
         this.recodeMus.add(recodeMu);
     }
+    
+    public void clearRecodeMus() {
+        this.recodeMus.clear();
+    }
 
     public ArrayList<RecodeMu> getRecodeMus() {
         return recodeMus;
