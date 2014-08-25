@@ -6,10 +6,10 @@ package muargus.controller;
 
 import argus.model.ArgusException;
 import argus.utils.SystemUtils;
-import argus.model.Metadata;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 import muargus.MuARGUS;
@@ -33,7 +33,7 @@ public class SelectCombinationsController implements PropertyChangeListener{
 
     public SelectCombinationsController(java.awt.Frame parentView, MetadataMu metadata, SelectCombinationsModel model) {
         this.model = model;
-        getSettings();
+        this.getSettings();
         this.modelClone = new SelectCombinationsModel(model);
 
         this.view = new SelectCombinationsView(parentView, true, this);
@@ -58,6 +58,7 @@ public class SelectCombinationsController implements PropertyChangeListener{
     }
     /**
      * 
+     * @throws argus.model.ArgusException
      */
     public void calculateTables() throws ArgusException {
         this.model = this.modelClone;
@@ -81,7 +82,7 @@ public class SelectCombinationsController implements PropertyChangeListener{
             return;
         }
         for (int t=1; t <= MuARGUS.MAXDIMS; t++) {
-            SystemUtils.putRegInteger("general", "threshold" + Integer.toString(t), this.model.getThresholds()[t]);
+            SystemUtils.putRegInteger("general", "threshold" + Integer.toString(t), this.model.getThresholds()[t-1]); 
         }
     }
                                                                   

@@ -2,6 +2,7 @@ package muargus.view;
 
 import argus.model.ArgusException;
 import java.awt.Frame;
+import java.awt.HeadlessException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import javax.swing.DefaultListModel;
@@ -87,7 +88,6 @@ public class SelectCombinationsView extends javax.swing.JDialog {
         }
 
         // set the default values and the size of the first two colums
-        
         table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         table.getColumnModel().getColumn(0).setMinWidth(30);
         table.getColumnModel().getColumn(0).setPreferredWidth(30);
@@ -108,24 +108,6 @@ public class SelectCombinationsView extends javax.swing.JDialog {
         ArrayList<TableMu> tables = model.getTables();
         String[][] data = new String[model.getTables().size()][model.getNumberOfColumns()];
 
-        // nog bezig met de check
-//        ArrayList<int[]> doubleIndices = new ArrayList<>();
-//        for (int i = 0; i < tables.size(); i++) {
-//            for (int j = i + 1; j < tables.size(); j++) {
-//                if (!compaireRows(model.isRiskModel(), tables.get(i), tables.get(j))) {
-//                    int[] temp = {i, j};
-//                    doubleIndices.add(temp);
-//                }
-//            }
-//        }
-//        for (int[] d : doubleIndices) {
-//            if (tables.get(d[1]).isRiskModel()) {
-//                model.removeTable(d[0]);
-//            } else {
-//                model.removeTable(d[1]);
-//            }
-//            //System.out.printf("%d, %d\n", d[0], d[1]);
-//        }
         int index = 0;
         for (TableMu t : tables) {
             data[index] = t.getTable();
@@ -592,7 +574,7 @@ public class SelectCombinationsView extends javax.swing.JDialog {
         }
 
         int numberOfVariables = allValidVariables.size();
-
+        
         GenerateAutomaticTables generateAutomaticTables = new GenerateAutomaticTables(parent, true, this.model, numberOfVariables);
         generateAutomaticTables.setVisible(true);
 
@@ -600,10 +582,12 @@ public class SelectCombinationsView extends javax.swing.JDialog {
             if (generateAutomaticTables.isMakeUpToDimensionRadioButton()) {
                 int dimensions = generateAutomaticTables.getDimensionTextField();
                 this.setNumberOfTables(dimensions, numberOfVariables);
-                if (getNumberOfTables() > 100) {
+                if (getNumberOfTables() > this.model.getMaximumSizeCheckForDoubles()) {
                     if (JOptionPane.showConfirmDialog(this, "Are you sure that you want to generate " + getNumberOfTables() + " tables?", "Mu Argus", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
                         calculateTablesForDimensions(allValidVariables, dimensions);
                     }
+                } else {
+                    calculateTablesForDimensions(allValidVariables, dimensions);
                 }
             }
             if (generateAutomaticTables.isUseIdentificatinLevelRadioButton()) {
@@ -611,8 +595,8 @@ public class SelectCombinationsView extends javax.swing.JDialog {
             }
         }
 
-        if (numberOfOldTables < 25000) { // tot dit aantal kan die het redelijk goed hebben, maar is die wel +/- 5 seconden aan het rekenen. progressbar laten zien? 
-            //TODO: constant
+        //TODO: progressbar laten zien?
+        if (numberOfOldTables < this.model.getMaximumNumberOfTables()) {  
             ArrayList<Integer> remove = new ArrayList<>();
             boolean risk = model.isRiskModel();
             for (int i = 0; i < numberOfOldTables; i++) {
@@ -744,8 +728,11 @@ public class SelectCombinationsView extends javax.swing.JDialog {
 
     private void setTableRiskModelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_setTableRiskModelButtonActionPerformed
         if (model.getTables().size() > 0) {
-            int index = table.getSelectedRow();
-            TableMu tableMu = model.getTables().get(index);
+            try{
+                int index = table.getSelectedRow();
+            
+            
+                TableMu tableMu = model.getTables().get(index);
                        
             tableMu.setRiskModel(!tableMu.isRiskModel());
             if (tableMu.isRiskModel()) {  //The table is added to the risk model
@@ -773,7 +760,9 @@ public class SelectCombinationsView extends javax.swing.JDialog {
             
             updateValues();
             table.getSelectionModel().setSelectionInterval(index, index);
-            //table.getSelectionModel().setSelectionInterval(indices[indices.length - 1], indices[indices.length - 1]);
+            } catch (HeadlessException e){
+                JOptionPane.showMessageDialog(this, "No table is selected");
+            }
         }
     }//GEN-LAST:event_setTableRiskModelButtonActionPerformed
 

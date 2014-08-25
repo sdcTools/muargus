@@ -604,6 +604,10 @@ public class GlobalRecodeView extends javax.swing.JDialog {
         getSelectedRecode().setMissing_1_new(this.missing_1_newTextField.getText());
     }//GEN-LAST:event_missing_1_newTextFieldCaretUpdate
 
+    private void globalRecodeRecodeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_globalRecodeRecodeButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_globalRecodeRecodeButtonActionPerformed
+
     /**
      *
      * @param filename

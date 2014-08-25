@@ -13,38 +13,63 @@ import muargus.model.SelectCombinationsModel;
  */
 public class ArgusInput extends javax.swing.JDialog {
 
-    
-    private boolean valid;
+    private boolean isThreshold;
+    private boolean okButtonPressed = false;
+    private int previousThreshold = 1;
+
     /**
      * Creates new form ArgusInput
+     *
      * @param parent
      * @param modal
      * @param model
+     * @param isThreshold
      */
-    public ArgusInput(java.awt.Frame parent, boolean modal, SelectCombinationsModel model) {
+    public ArgusInput(java.awt.Frame parent, boolean modal, SelectCombinationsModel model, boolean isThreshold) {
         super(parent, modal);
+        this.isThreshold = isThreshold;
         initComponents();
         textField.setText(model.getThreshold());
         this.setLocationRelativeTo(null);
-        this.valid = false;
-
     }
-
 
     public void setLabelText(String text) {
         this.label.setText(text);
     }
 
-    public int getTextField() {
-       return Integer.parseInt(textField.getText());
+    public String getTextField() {
+        return textField.getText();
     }
 
     public void setTextField(String text) {
         this.textField.setText(text);
     }
 
-    public boolean isValid() {
-        return this.valid;
+    public void setPreviousThreshold(int previousThreshold) {
+        this.previousThreshold = previousThreshold;
+    }
+
+    public boolean isOkButtonPressed() {
+        return okButtonPressed;
+    }
+    
+    public boolean isThresholdValid() {
+        boolean valid = true;
+
+        try {
+            int threshold = Integer.parseInt(this.textField.getText());
+            if (threshold <= 0) {
+                JOptionPane.showMessageDialog(this, "Illegal value for the threshold, threshold cannot be smaller than 1");
+                valid = false;
+            } else if (this.previousThreshold > threshold) {
+                JOptionPane.showMessageDialog(this, "The threshold needs to be equal to or larger than " + this.previousThreshold);
+                valid = false;
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Illegal value for the threshold, please enter a positive integer");
+            valid = false;
+        }
+        return valid;
     }
 
     /**
@@ -117,29 +142,15 @@ public class ArgusInput extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void okButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okButtonActionPerformed
-        this.valid = true;
-        
-            try {
-                int threshold = Integer.parseInt(this.textField.getText());
-                if(threshold <= 0){
-                    JOptionPane.showMessageDialog(this, "Illegal value for the threshold, threshold cannot be smaller than 1");
-                    this.valid = false; 
-                }
-                
-            } catch (Exception e) {
-                JOptionPane.showMessageDialog(this, "Illegal value for the threshold, please enter a positive integer");
-                this.valid = false;
+        if (this.isThreshold) {
+            if (this.isThresholdValid()) {
+                this.okButtonPressed = true;
+                this.setVisible(false);
             }
-        //}
-        if(this.valid){
-            //GenerateAutomaticTables.setValid(true);
-            this.setVisible(false);
         }
     }//GEN-LAST:event_okButtonActionPerformed
 
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
-        //textField.setText("");
-        //GenerateAutomaticTables.setValid(false);
         this.setVisible(false);
     }//GEN-LAST:event_cancelButtonActionPerformed
 

@@ -6,29 +6,37 @@ package muargus.model;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import muargus.MuARGUS;
 
 /**
  *
  * @author ambargus
  */
 public class SelectCombinationsModel {
+
     private int threshold;
     private boolean riskModel;
     private ArrayList<TableMu> tables;
     private VariableMu[] variables;
     private int[] thresholds;
     private HashMap<VariableMu, UnsafeInfo> unsafe;
-    
+
+    // tot dit aantal kan die het redelijk goed hebben, maar is die wel +/- 5 seconden aan het rekenen. 
+    private final int maximumNumberOfTables = 25000;
+
+    private final int maximumSizeCheckForDoubles = 100;
+
     /**
-     * 
+     *
      */
     public SelectCombinationsModel() {
         this.threshold = 1;
         this.tables = new ArrayList<>();
     }
-    
+
     public SelectCombinationsModel(SelectCombinationsModel model) {
         this.threshold = model.threshold;
+        this.thresholds = model.getThresholds();
         this.tables = new ArrayList<>();
         for (TableMu table : model.tables) {
             this.tables.add(new TableMu(table));
@@ -38,18 +46,18 @@ public class SelectCombinationsModel {
     public void clearUnsafe() {
         this.unsafe = new HashMap<>();
     }
-    
+
     public void setUnsafe(VariableMu variable, UnsafeInfo unsafe) {
         this.unsafe.put(variable, unsafe);
     }
-    
+
     public UnsafeInfo getUnsafe(VariableMu variable) {
         return this.unsafe.get(variable);
     }
-    
+
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     public String getThreshold() {
         return Integer.toString(threshold);
@@ -62,15 +70,19 @@ public class SelectCombinationsModel {
     public void setThresholds(int[] thresholds) {
         this.thresholds = thresholds;
     }
-    
+
+    public void setThresholds(int thresholds, int dimension) {
+        this.thresholds[dimension - 1] = thresholds;
+    }
+
     /**
-     * 
-     * @param threshold 
+     *
+     * @param threshold
      */
     public void setThreshold(String threshold) {
         this.threshold = Integer.parseInt(threshold);
     }
-    
+
     public void setThreshold(int threshold) {
         this.threshold = threshold;
     }
@@ -82,16 +94,16 @@ public class SelectCombinationsModel {
     public void setTables(ArrayList<TableMu> tables) {
         this.tables = tables;
     }
-    
-    public void addTable(TableMu table){
+
+    public void addTable(TableMu table) {
         this.tables.add(table);
     }
-    
-    public void removeTable(int i){
+
+    public void removeTable(int i) {
         this.tables.remove(i);
     }
-    
-    public void removeTable(TableMu t){
+
+    public void removeTable(TableMu t) {
         this.tables.remove(t);
     }
 
@@ -99,19 +111,27 @@ public class SelectCombinationsModel {
         return this.tables.size();
     }
 
+    public int getMaximumNumberOfTables() {
+        return maximumNumberOfTables;
+    }
+
+    public int getMaximumSizeCheckForDoubles() {
+        return maximumSizeCheckForDoubles;
+    }
+
     public void setNumberOfRows(int n) {
-        return; //Deprecated, do not use
+        //Deprecated, do not use
     }
 
     public boolean isRiskModel() {
-        for(TableMu t: this.tables){
-            if(t.isRiskModel()){
+        for (TableMu t : this.tables) {
+            if (t.isRiskModel()) {
                 return true;
             }
         }
         return false;
     }
-    
+
     public ArrayList<VariableMu> getRiskModelVariables() {
         ArrayList<VariableMu> riskVariables = new ArrayList<>();
         for (TableMu table : this.tables) {
@@ -121,33 +141,34 @@ public class SelectCombinationsModel {
         }
         return riskVariables;
     }
-    
+
     public int getNumberOfColumns() {
         return this.calculateNumberOfColumns();
     }
-    
-    private int calculateNumberOfColumns() { 
+
+    private int calculateNumberOfColumns() {
         int numberOfVariables = 0;
-        for(TableMu t: this.tables){
-            if(t.getVariables().size() > numberOfVariables){
+        for (TableMu t : this.tables) {
+            if (t.getVariables().size() > numberOfVariables) {
                 numberOfVariables = t.getVariables().size();
             }
         }
         int numberOfColumns = numberOfVariables + 2;
-        return numberOfColumns; 
+        return numberOfColumns;
     }
-    
+
     public ArrayList<VariableMu> getVariablesInTables() {
-        ArrayList<VariableMu> variables = new ArrayList<>();
+        ArrayList<VariableMu> variablesMu = new ArrayList<>();
         for (TableMu table : this.tables) {
             for (VariableMu variable : table.getVariables()) {
-                if (!variables.contains(variable))
-                    variables.add(variable);
+                if (!variablesMu.contains(variable)) {
+                    variablesMu.add(variable);
+                }
             }
         }
-        return variables;
+        return variablesMu;
     }
-    
+
     public int getMaxDimsInTables() {
         int max = 0;
         for (TableMu table : this.tables) {
@@ -157,12 +178,5 @@ public class SelectCombinationsModel {
         }
         return max;
     }
-//    public VariableMu[] getVariables(){
-//        return variables;
-//    }
-//    
-//    public void setVariables(VariableMu[] variables){
-//        this.variables = variables;
-//    }
 
 }
