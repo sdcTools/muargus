@@ -2,9 +2,7 @@ niet behandelde opmerkingen/vragen:
 
 
 Nog te doen:                                                                                                Mee bezig:
-- nu wordt bij een klik op read een R toegevoegd, maar dit moet pas bij apply (ik was wat aan het uitproberen)
-- aanmaken van de tabel moet naar update values/tables maar ik heb wat probleempjes met de geslecteerde rij
-
+  
 
 5. applyButton:
     - alleen klikbaar als het EditTextField niet leeg is                                                    Anne
@@ -14,6 +12,7 @@ Nog te doen:                                                                    
     - voeg een R toe bij de variabele en zet deze variabela as isRecoded bij VariableMU                    Anne
     - maak de Undo button klikbaar                                                                            Anne
     - maak apply disabled                                                                                      Anne
+    - nu wordt bij een klik op read een R toegevoegd, maar dit moet pas bij apply                              Anne
 6. truncateButton:
     - geef een scherm die vraagt om het aantal getallen voor de truncate
     - check of het aantal getallen voor de truncate geldig is
@@ -32,6 +31,9 @@ Nog te doen:                                                                    
     - pas het hoofdscherm aan
 10. code opschonen
 11. javadoc schrijven voor de methodes
+12. - aanmaken van de tabel moet naar update values/tables? (werkt nu: R/T worden gezet bij verandering)
+
+
 
    
 
