@@ -89,7 +89,7 @@ public class GlobalRecodeView extends javax.swing.JDialog {
         //System.out.println(variablesTable.getSelectedRow());
         //this.variablesTable.getSelectionModel().setSelectionInterval(variablesTable.getSelectedRow(), variablesTable.getSelectedRow());
 
-        RecodeMu selected = this.getSelectedVariable();
+        RecodeMu selected = this.getSelectedRecode();
         this.missing_1_originalTextField.setText(selected.getMissing_1_original());
         this.missing_2_originalTextField.setText(selected.getMissing_2_original());
         this.missing_1_newTextField.setText(selected.getMissing_1_new());
@@ -98,13 +98,35 @@ public class GlobalRecodeView extends javax.swing.JDialog {
         this.globalRecodeRecodeTextField.setText(selected.getGrcFile());
         this.truncateButton.setEnabled(selected.getVariable().isTruncable());
         this.applyButton.setEnabled(this.editTextArea.getText().length() > 0);
-        this.undoButton.setEnabled(selected.isRecoded());
+        this.undoButton.setEnabled(selected.isRecoded() || selected.isTruncated());
         this.editTextArea.setText(selected.getGrcText());
     }
 
-    private RecodeMu getSelectedVariable() {
+    private RecodeMu getSelectedRecode() {
         RecodeMu selected = model.getRecodeMus().get(variablesTable.getSelectedRow());
         return selected;
+    }
+
+        private String askForGrcPath() {
+        JFileChooser fileChooser = new JFileChooser();
+        String hs = SystemUtils.getRegString("general", "datadir", "");
+        if (!hs.equals("")){
+            File file = new File(hs); 
+            fileChooser.setCurrentDirectory(file);
+        }
+        fileChooser.setDialogTitle("Open Codelist File");
+        fileChooser.setSelectedFile(new File(""));
+        fileChooser.resetChoosableFileFilters();
+        fileChooser.setFileFilter(new FileNameExtensionFilter("Recode files (*.grc)", "grc"));
+        if (fileChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+            //codelistfileTextField.setText(fileChooser.getSelectedFile().toString());
+            hs = fileChooser.getSelectedFile().getPath();
+            if (!hs.equals("")){
+                SystemUtils.putRegString("general", "datadir", hs);
+            }
+            return fileChooser.getSelectedFile().toString();
+        }
+        return null;
     }
 
     /**
@@ -514,44 +536,24 @@ public class GlobalRecodeView extends javax.swing.JDialog {
     }//GEN-LAST:event_codelistRecodeButtonActionPerformed
 
     private void truncateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_truncateButtonActionPerformed
-        this.getSelectedVariable().setTruncated(!this.getSelectedVariable().isTruncated());
-        updateValues();
         try {
-        controller.truncate(getSelectedVariable());
+            controller.truncate(getSelectedRecode());
+            int rowIndex = this.model.getVariables().indexOf(getSelectedRecode().getVariable());
+            variablesTable.getModel().setValueAt("T", rowIndex, 0);
+            updateValues();
+ 
         }
         catch (ArgusException ex) {
             ;
         }
     }//GEN-LAST:event_truncateButtonActionPerformed
 
-    private String askForGrcPath() {
-        JFileChooser fileChooser = new JFileChooser();
-        String hs = SystemUtils.getRegString("general", "datadir", "");
-        if (!hs.equals("")){
-            File file = new File(hs); 
-            fileChooser.setCurrentDirectory(file);
-        }
-        fileChooser.setDialogTitle("Open Codelist File");
-        fileChooser.setSelectedFile(new File(""));
-        fileChooser.resetChoosableFileFilters();
-        fileChooser.setFileFilter(new FileNameExtensionFilter("Recode files (*.grc)", "grc"));
-        if (fileChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
-            //codelistfileTextField.setText(fileChooser.getSelectedFile().toString());
-            hs = fileChooser.getSelectedFile().getPath();
-            if (!hs.equals("")){
-                SystemUtils.putRegString("general", "datadir", hs);
-            }
-            return fileChooser.getSelectedFile().toString();
-        }
-        return null;
-    }
     
     private void readButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_readButtonActionPerformed
         String path = askForGrcPath();
         if (path != null) {
             try {
-                controller.read(path, this.getSelectedVariable());
-                this.getSelectedVariable().setRead(!this.getSelectedVariable().isRead());
+                controller.read(path, this.getSelectedRecode());
                 updateValues();
             }
             catch (ArgusException ex) {
@@ -562,7 +564,10 @@ public class GlobalRecodeView extends javax.swing.JDialog {
 
     private void applyButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_applyButtonActionPerformed
         try {
-        controller.apply(getSelectedVariable());
+            controller.apply(getSelectedRecode());
+            int rowIndex = this.model.getVariables().indexOf(getSelectedRecode().getVariable());
+            variablesTable.getModel().setValueAt("R", rowIndex, 0);
+            updateValues();
         }
         catch (ArgusException ex) {
                 JOptionPane.showMessageDialog(this, ex.getMessage());
@@ -571,7 +576,9 @@ public class GlobalRecodeView extends javax.swing.JDialog {
 
     private void undoButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_undoButtonActionPerformed
         try {
-            controller.undo(getSelectedVariable());
+            controller.undo(getSelectedRecode());
+            int rowIndex = this.model.getVariables().indexOf(getSelectedRecode().getVariable());
+            variablesTable.getModel().setValueAt("", rowIndex, 0);
         }
         catch (ArgusException ex) {
             ;
@@ -589,12 +596,12 @@ public class GlobalRecodeView extends javax.swing.JDialog {
     }//GEN-LAST:event_variablesTableKeyReleased
 
     private void editTextAreaCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_editTextAreaCaretUpdate
-        getSelectedVariable().setGrcText(this.editTextArea.getText());
+        getSelectedRecode().setGrcText(this.editTextArea.getText());
         this.applyButton.setEnabled(this.editTextArea.getText().length() > 0);
     }//GEN-LAST:event_editTextAreaCaretUpdate
 
     private void missing_1_newTextFieldCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_missing_1_newTextFieldCaretUpdate
-        getSelectedVariable().setMissing_1_new(this.missing_1_newTextField.getText());
+        getSelectedRecode().setMissing_1_new(this.missing_1_newTextField.getText());
     }//GEN-LAST:event_missing_1_newTextFieldCaretUpdate
 
     private void globalRecodeRecodeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_globalRecodeRecodeButtonActionPerformed

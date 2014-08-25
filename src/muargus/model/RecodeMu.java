@@ -16,7 +16,6 @@ public class RecodeMu {
     private boolean truncated;
     private boolean recoded;
     private String grcText;
-    private boolean read;
     private final VariableMu variable;
     private String grcFile;
     private String codeListFile; // willen we dit als String of als File?
@@ -29,7 +28,6 @@ public class RecodeMu {
     public RecodeMu(VariableMu variable) {
         this.variable = variable;
         this.truncated = false;
-        this.read = false;
         this.recoded = false;
         this.grcFile = null;
         this.grcText = null;
@@ -68,17 +66,6 @@ public class RecodeMu {
     public VariableMu getVariable() {
         return this.variable;
     }
-
-    public boolean isRead() {
-        return this.read;
-    }
-
-    public void setRead(boolean read) {
-        this.read = read;
-        if (read) {
-            this.truncated = false;
-        }
-    }
     
     public boolean isTruncated() {
         return this.truncated;
@@ -92,7 +79,11 @@ public class RecodeMu {
     }
 
     public boolean isRecoded() {
-        return isTruncated() || isRead();
+        return this.recoded;
+    }
+    
+    public void setRecoded(boolean isRecoded) {
+        this.recoded = isRecoded;
     }
 
     public String getMissing_1_new() {

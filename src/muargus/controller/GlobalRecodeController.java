@@ -10,6 +10,8 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.HashSet;
+import java.util.Set;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import muargus.MuARGUS;
@@ -94,6 +96,7 @@ public class GlobalRecodeController {
         if (!result)
             throw new ArgusException("Error during Truncate");
         applyRecode();
+        recode.setTruncated(true);
     }                                              
 
     /**
@@ -162,14 +165,19 @@ public class GlobalRecodeController {
             throw new ArgusException(warning[0]);
         }
         applyRecode();
+        recode.setRecoded(true);
+
+        
+        
     }
     
     private void applyRecode() throws ArgusException {
         CMuArgCtrl c = MuARGUS.getMuArgCtrl();
-        boolean result = c.ApplyRecode();
+        boolean result = true; //c.ApplyRecode();
         if (!result) {
             throw new ArgusException("Error during Apply recode");
         }
+        
         new TableService().getUnsafeCombinations(this.selectCombinationsModel, this.metadata);
         
             
@@ -190,6 +198,8 @@ public class GlobalRecodeController {
         if (!result) {
             throw new ArgusException("Error during Apply recode");
         }
+        recode.setRecoded(false);
+        recode.setTruncated(false);
         
    }      
 }
