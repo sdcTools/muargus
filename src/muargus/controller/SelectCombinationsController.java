@@ -82,7 +82,7 @@ public class SelectCombinationsController implements PropertyChangeListener{
             return;
         }
         for (int t=1; t <= MuARGUS.MAXDIMS; t++) {
-            SystemUtils.putRegInteger("general", "threshold" + Integer.toString(t), this.model.getThresholds()[t]); // moet dit niet getThresholds()[t-1] zijn?
+            SystemUtils.putRegInteger("general", "threshold" + Integer.toString(t), this.model.getThresholds()[t-1]); 
         }
     }
                                                                   
