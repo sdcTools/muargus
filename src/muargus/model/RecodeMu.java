@@ -15,6 +15,7 @@ public class RecodeMu {
 
     private boolean truncated;
     private boolean recoded;
+    private String grcText;
     private boolean read;
     private final VariableMu variable;
     private File grcFile;
@@ -31,6 +32,7 @@ public class RecodeMu {
         this.read = false;
         this.recoded = false;
         this.grcFile = null;
+        this.grcText = null;
         this.codeListFile = variable.getCodeListFile();
         this.missing_1_new = "";
         this.missing_2_new = "";
@@ -54,6 +56,15 @@ public class RecodeMu {
         this.codeListFile = codeListFile;
     }
 
+
+    public String getGrcText() {
+        return grcText;
+    }
+
+    public void setGrcText(String grcText) {
+        this.grcText = grcText;
+    }
+    
     public VariableMu getVariable() {
         return variable;
     }

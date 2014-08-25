@@ -4,11 +4,17 @@
  */
 package muargus.controller;
 
+import argus.model.ArgusException;
+import argus.utils.Tokenizer;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import muargus.model.GlobalRecodeModel;
 import muargus.model.MetadataMu;
+import muargus.model.RecodeMu;
 import muargus.model.SelectCombinationsModel;
 import muargus.view.GlobalRecodeView;
 
@@ -84,8 +90,41 @@ public class GlobalRecodeController {
     /**
      * 
      */
-    public void read() {                                           
-        // TODO add your handling code here:
+    public void read(String path, RecodeMu recode) throws ArgusException {                                           
+        File file = new File(path);
+        try {
+        BufferedReader reader = new BufferedReader(new FileReader(file));
+        StringBuilder sb = new StringBuilder();
+        String line = "";
+        Tokenizer tokenizer = new Tokenizer(reader);
+        while ((line = tokenizer.nextLine()) != null) {
+            String token = tokenizer.nextToken();
+            if (!token.startsWith("<")) {
+                sb.append(line);
+                sb.append(System.lineSeparator());
+            }
+            else if (token == "<MISSING>") {
+                token = tokenizer.nextToken();
+                recode.setMissing_1_new(token);
+                token = tokenizer.nextToken();
+                if (token != null)
+                    recode.setMissing_2_new(token);
+            }
+            else if (token == "<CODELIST>") {
+                recode.setCodeListFile(tokenizer.nextToken());
+            }
+            else {
+                throw new ArgusException("Error reading file, invalid token: " + token);
+            }
+        }
+        reader.close();
+        recode.setGrcText(sb.toString());
+        }
+        catch (IOException ex) {
+            throw new ArgusException("Error during reading file");
+        }
+        
+                
     }                                          
 
     /**

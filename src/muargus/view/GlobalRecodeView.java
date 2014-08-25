@@ -4,6 +4,8 @@
  */
 package muargus.view;
 
+import argus.model.ArgusException;
+import javax.swing.JOptionPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
@@ -506,10 +508,22 @@ public class GlobalRecodeView extends javax.swing.JDialog {
         controller.truncate();
     }//GEN-LAST:event_truncateButtonActionPerformed
 
+    private String askForGrcPath() {
+        //TODO
+        return null;
+    }
     private void readButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_readButtonActionPerformed
-        this.getSelectedVariable().setRead(!this.getSelectedVariable().isRead());
-        updateValues();
-        controller.read();
+        String path = askForGrcPath();
+        if (path != null) {
+            try {
+                controller.read(path, this.getSelectedVariable());
+                this.getSelectedVariable().setRead(!this.getSelectedVariable().isRead());
+                updateValues();
+            }
+            catch (ArgusException ex) {
+                JOptionPane.showMessageDialog(this, ex.getMessage());
+            }
+        }
     }//GEN-LAST:event_readButtonActionPerformed
 
     private void applyButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_applyButtonActionPerformed
