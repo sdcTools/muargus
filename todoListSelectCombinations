@@ -1,7 +1,7 @@
 niet behandelde opmerkingen/vragen:
  - Thresholds: er is een threshold per 'dimensie'. Moet deze dan niet default weergegeven worden als je 
    een tabel aan het specificeren bent? of wordt hiervoor een globale (Thresh0 in oude mu) gebruikt? 
-
+ 
 
 Nog te doen:                                                                                                    Mee bezig:
     
@@ -10,6 +10,10 @@ Nog te doen:                                                                    
     - bug fixen bij wegklikken van specificeren threshold.                                                      Jeldrik
       bug treed op als er een int kleiner dan 1 wordt gegeven en het scherm wordt weggeklikt.
       resultaat: tabellen worden gewoon gegenereerd met de foutieve threshold
+    - wanneer riskmodel aanstaat, op de automaticSpecificationButton wordt gedrukt en dan aangegeven dat
+      de tabellen bewaard moeten blijven, dan is de riskmodeltabel geen riskmodel meer
+12. setTableRiskModelButton:
+    - geeft een error als geen rij geselecteerd is en men riskmodel wil aanzetten 
 17. Kijk wat er in de Controller/Model kan en verplaats dat.                                                    ..
 18. code opschonen                                                                                              ..
 19. javadoc schrijven voor de methodes                                                                          ..
