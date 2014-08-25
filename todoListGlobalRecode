@@ -7,13 +7,13 @@ Nog te doen:                                                                    
 
 
 5. applyButton:
-    - alleen klikbaar als het EditTextField niet leeg is
-    - check of de waardes in het EditTextField correct zijn (gebeurd als het goed is al in de dll)
-    - hercodeerd met behulp van de dllfunctie doRecode (pak de benodigde waardes van het scherm)
-    - voer de hercodering uit met de dllFunctie applyRecode
-    - voeg een R toe bij de variabele en zet deze variabela as isRecoded bij VariableMU
-    - maak de Undo button klikbaar
-    - maak apply disabled
+    - alleen klikbaar als het EditTextField niet leeg is                                                    Anne
+    - check of de waardes in het EditTextField correct zijn (gebeurd als het goed is al in de dll)            Anne
+    - hercodeerd met behulp van de dllfunctie doRecode (pak de benodigde waardes van het scherm)               Anne
+    - voer de hercodering uit met de dllFunctie applyRecode                                                    Anne
+    - voeg een R toe bij de variabele en zet deze variabela as isRecoded bij VariableMU                    Anne
+    - maak de Undo button klikbaar                                                                            Anne
+    - maak apply disabled                                                                                      Anne
 6. truncateButton:
     - geef een scherm die vraagt om het aantal getallen voor de truncate
     - check of het aantal getallen voor de truncate geldig is
