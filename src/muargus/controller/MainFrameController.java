@@ -51,7 +51,7 @@ public class MainFrameController {
     public MainFrameController(MainFrameView view) {
         this.view = view;
         this.selectCombinationsModel = new SelectCombinationsModel();
-        this.globalRecodeModel = new GlobalRecodeModel();
+        this.globalRecodeModel = null;
         this.metadata = new MetadataMu(); 
     }
 
@@ -120,7 +120,13 @@ public class MainFrameController {
     /**
      * 
      */
-    public void globalRecode() {  
+    public void globalRecode() {
+        if (this.globalRecodeModel == null)
+        {
+            this.globalRecodeModel = new GlobalRecodeModel();
+            this.globalRecodeModel.setVariables(this.selectCombinationsModel.getVariablesInTables());
+        }
+        
         GlobalRecodeController controller = new GlobalRecodeController(
                 this.view, this.metadata, this.globalRecodeModel, this.selectCombinationsModel);
         controller.showView();

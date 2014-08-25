@@ -44,19 +44,20 @@ public class GlobalRecodeView extends javax.swing.JDialog {
         this.model = this.controller.getModel();
         this.setLocationRelativeTo(null);
         this.variablesTable.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        makeVariables();
 
     }
 
     public void setMetadataMu(MetadataMu metadataMu) {
         this.metadataMu = metadataMu;
-        makeVariables();
     }
 
     public void makeVariables() {
-        this.model.clearRecodeMus();
-        for (VariableMu v : this.model.getVariables()) {
-            RecodeMu recodeMu = new RecodeMu(v);
-            this.model.addRecodeMu(recodeMu);
+        if (this.model.getRecodeMus().size() == 0) {
+            for (VariableMu v : this.model.getVariables()) {
+                RecodeMu recodeMu = new RecodeMu(v);
+                this.model.addRecodeMu(recodeMu);
+            }
         }
 
         this.updateTable();
@@ -96,7 +97,7 @@ public class GlobalRecodeView extends javax.swing.JDialog {
         this.codelistRecodeTextField.setText(selected.getCodeListFile());
         this.globalRecodeRecodeTextField.setText(selected.getGrcFile());
         this.truncateButton.setEnabled(selected.getVariable().isTruncable());
-        this.applyButton.setEnabled(selected.isRead());
+        this.applyButton.setEnabled(this.editTextArea.getText().length() > 0);
         this.undoButton.setEnabled(selected.isRecoded());
         this.editTextArea.setText(selected.getGrcText());
     }
@@ -229,6 +230,11 @@ public class GlobalRecodeView extends javax.swing.JDialog {
 
         editTextArea.setColumns(20);
         editTextArea.setRows(5);
+        editTextArea.addCaretListener(new javax.swing.event.CaretListener() {
+            public void caretUpdate(javax.swing.event.CaretEvent evt) {
+                editTextAreaCaretUpdate(evt);
+            }
+        });
         jScrollPane1.setViewportView(editTextArea);
 
         editScrollPane.setViewportView(jScrollPane1);
@@ -323,6 +329,12 @@ public class GlobalRecodeView extends javax.swing.JDialog {
         valuesAfterRecoding.setText("Values after recoding");
 
         mising_1_newLabel.setText("1");
+
+        missing_1_newTextField.addCaretListener(new javax.swing.event.CaretListener() {
+            public void caretUpdate(javax.swing.event.CaretEvent evt) {
+                missing_1_newTextFieldCaretUpdate(evt);
+            }
+        });
 
         missing_2_newLabel.setText("2");
 
@@ -560,6 +572,15 @@ public class GlobalRecodeView extends javax.swing.JDialog {
         // TODO add your handling code here:
         updateValues();
     }//GEN-LAST:event_variablesTableKeyReleased
+
+    private void editTextAreaCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_editTextAreaCaretUpdate
+        getSelectedVariable().setGrcText(this.editTextArea.getText());
+        this.applyButton.setEnabled(this.editTextArea.getText().length() > 0);
+    }//GEN-LAST:event_editTextAreaCaretUpdate
+
+    private void missing_1_newTextFieldCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_missing_1_newTextFieldCaretUpdate
+        getSelectedVariable().setMissing_1_new(this.missing_1_newTextField.getText());
+    }//GEN-LAST:event_missing_1_newTextFieldCaretUpdate
 
     /**
      *

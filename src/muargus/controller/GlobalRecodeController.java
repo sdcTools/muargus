@@ -38,7 +38,6 @@ public class GlobalRecodeController {
     public GlobalRecodeController(java.awt.Frame parentView, MetadataMu metadata, 
             GlobalRecodeModel model, SelectCombinationsModel selectCombinationsModel) {
         this.model = model;
-        this.model.setVariables(selectCombinationsModel.getVariablesInTables());
         this.view = new GlobalRecodeView(parentView, true, this);
         this.metadata = metadata;
         this.view.setMetadataMu(this.metadata);
