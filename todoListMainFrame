@@ -3,8 +3,15 @@ niet behandelde opmerkingen/vragen:
 
 Nog te doen:                                                                                                Mee bezig:
 
+Release 1
+4. missing values rood maken                                                                                Anne
+5. missende codelist afhandelen                                                                             Anne
+
+Release 2+
 1. code opschonen
 2. javadoc schrijven voor de methodes
+
+
 
 
 Behandelde opmerkingen/vragen:                                                                              Antwoord:
@@ -12,3 +19,7 @@ Behandelde opmerkingen/vragen:                                                  
 
 Gedaan:                                                                                                     Door:
 3. icoontjes aan/uit zetten   																				Anne
+
+
+wishlish:
+- icoontjes achtergrond mooi maken

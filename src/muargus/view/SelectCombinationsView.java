@@ -87,7 +87,7 @@ public class SelectCombinationsView extends javax.swing.JDialog {
         }
 
         // set the default values and the size of the first two colums
-        this.thresholdTextField.setText(this.model.getThreshold());
+        
         table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         table.getColumnModel().getColumn(0).setMinWidth(30);
         table.getColumnModel().getColumn(0).setPreferredWidth(30);
@@ -103,6 +103,7 @@ public class SelectCombinationsView extends javax.swing.JDialog {
      * Updates the table by filling it with the array of tables.
      */
     private void updateValues() {
+        this.thresholdTextField.setText(this.model.getThreshold());
         // gets the tables from SelectCombinationsModel and adds these to a double  array, containing the data
         ArrayList<TableMu> tables = model.getTables();
         String[][] data = new String[model.getTables().size()][model.getNumberOfColumns()];
