@@ -520,10 +520,6 @@ public class GlobalRecodeView extends javax.swing.JDialog {
         controller.undo();
     }//GEN-LAST:event_undoButtonActionPerformed
 
-    private void globalRecodeRecodeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_globalRecodeRecodeButtonActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_globalRecodeRecodeButtonActionPerformed
-
     private void variablesTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_variablesTableMouseClicked
 
         updateValues();
@@ -533,6 +529,10 @@ public class GlobalRecodeView extends javax.swing.JDialog {
         // TODO add your handling code here:
         updateValues();
     }//GEN-LAST:event_variablesTableKeyReleased
+
+    private void globalRecodeRecodeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_globalRecodeRecodeButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_globalRecodeRecodeButtonActionPerformed
 
     /**
      *

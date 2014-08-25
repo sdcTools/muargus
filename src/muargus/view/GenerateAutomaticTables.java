@@ -21,6 +21,11 @@ public class GenerateAutomaticTables extends javax.swing.JDialog {
 
     /**
      * Creates new form GenerateAutomaticTables
+     *
+     * @param parent
+     * @param modal
+     * @param model
+     * @param numberOfVariables
      */
     public GenerateAutomaticTables(java.awt.Frame parent, boolean modal, SelectCombinationsModel model, int numberOfVariables) {
         super(parent, modal);
@@ -171,55 +176,61 @@ public class GenerateAutomaticTables extends javax.swing.JDialog {
     }//GEN-LAST:event_cancelButtonActionPerformed
 
     private void okButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okButtonActionPerformed
-        setValid(true);
+        this.setValid(true);
         int dimensions = 0;
         if (makeUpToDimensionRadioButton.isSelected()) {
             try {
                 dimensions = Integer.parseInt(dimensionTextField.getText());
-                
+
                 if (dimensions <= 0) {
                     JOptionPane.showMessageDialog(this, "Illegal value for the dimension, dimension cannot be smaller than 1");
-                    setValid(false);
+                    this.setValid(false);
                 } else if (dimensions > this.numberOfVariables) {
                     JOptionPane.showMessageDialog(this, "Not enough identifying variables for this request");
-                    setValid (false);
-                } 
+                    this.setValid(false);
+                }
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(this, "Illegal value for the dimension, please enter a positive integer");
-                setValid(false);
+                this.setValid(false);
             }
         }
-        
+
         if (isValid()) {
+            this.setValid(false);
             if (useIdentificatinLevelRadioButton.isSelected()) {
-                ArgusInput getThreshold = new ArgusInput(parent, true, this.model);
+                ArgusInput getThreshold = new ArgusInput(parent, true, this.model, true);
                 getThreshold.setLabelText("Threshold");
                 getThreshold.setTitle("Threshold");
                 getThreshold.setVisible(true);
-                try {
+                if (getThreshold.isThresholdValid() && getThreshold.isOkButtonPressed()) {
                     model.setThreshold(getThreshold.getTextField());
-                } catch (Exception e) {
-                    setValid(false);
+                    this.setValid(true);
                 }
-            } else {
-                int[] thresholds = new int[dimensions];
+            } else if (makeUpToDimensionRadioButton.isSelected()) {
+                int[] thresholds = model.getThresholds();
                 for (int i = 0; i < dimensions; i++) {
-                    ArgusInput getThreshold = new ArgusInput(parent, true, this.model);
+                    this.setValid(false);
+                    ArgusInput getThreshold = new ArgusInput(parent, true, this.model, true);
                     getThreshold.setLabelText("Threshold for dim" + (i + 1));
                     getThreshold.setTitle("Threshold");
-                    getThreshold.setVisible(true);
-                    if(!getThreshold.isValid()){
-                        break;
+                    getThreshold.setTextField(Integer.toString(thresholds[i]));
+                    if (i > 0) {
+                        getThreshold.setPreviousThreshold(thresholds[i - 1]);
+                        if (thresholds[i] < thresholds[i - 1]) {
+                            getThreshold.setTextField(Integer.toString(thresholds[i - 1]));
+                        }
                     }
-                    try {
-                        thresholds[i] = getThreshold.getTextField();
-                    } catch (Exception e) {
-                        setValid(false);
+                    getThreshold.setVisible(true);
+                    if (getThreshold.isThresholdValid() && getThreshold.isOkButtonPressed()) {
+                        thresholds[i] = Integer.parseInt(getThreshold.getTextField());
+                        this.setValid(true);
                     }
                 }
                 model.setThresholds(thresholds);
+                model.setThreshold(thresholds[0]);
             }
         }
+
         if (isValid()) {
             this.setVisible(false);
         }
