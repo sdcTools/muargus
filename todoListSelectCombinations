@@ -1,20 +1,34 @@
 niet behandelde opmerkingen/vragen:
  - Thresholds: er is een threshold per 'dimensie'. Moet deze dan niet default weergegeven worden als je 
    een tabel aan het specificeren bent? of wordt hiervoor een globale (Thresh0 in oude mu) gebruikt? 
-
+ - geselecteerde tabel visable 
+- automatic specifications table 1 dimensie doet het niet 
+- constanten bovenaan zetten, niet in de code
 
 Nog te doen:                                                                                                    Mee bezig:
     
+Release 1
 10. automaticSpecificationButton 
+
+    - wanneer riskmodel aanstaat, op de automaticSpecificationButton wordt gedrukt en dan aangegeven dat
+      de tabellen bewaard moeten blijven, dan is de riskmodeltabel geen riskmodel meer
     - zorgen dat een hogere dimensie geen lagere threshold kan krijgen dan de dimensie daarvoor                 Jeldrik   
     - bug fixen bij wegklikken van specificeren threshold.                                                      Jeldrik
       bug treed op als er een int kleiner dan 1 wordt gegeven en het scherm wordt weggeklikt.
       resultaat: tabellen worden gewoon gegenereerd met de foutieve threshold
+12. setTableRiskModelButton:
+    - geeft een error als geen rij geselecteerd is en men riskmodel wil aanzetten 
+20. bug CalculateTables: free format crasht 
+21. thresholds: array gebruiken  
+
+Release 2+
+
+
 17. Kijk wat er in de Controller/Model kan en verplaats dat.                                                    ..
 18. code opschonen                                                                                              ..
 19. javadoc schrijven voor de methodes                                                                          ..
-20. bug CalculateTables: free format crasht                                                                     ..
-21. thresholds: array gebruiken                                                                                 ..
+                                                                    ..
+                                                                               ..
  
 
 

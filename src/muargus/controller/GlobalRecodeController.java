@@ -33,6 +33,7 @@ public class GlobalRecodeController {
      * @param parentView
      * @param metadata 
      * @param model 
+     * @param selectCombinationsModel 
      */
     public GlobalRecodeController(java.awt.Frame parentView, MetadataMu metadata, 
             GlobalRecodeModel model, SelectCombinationsModel selectCombinationsModel) {

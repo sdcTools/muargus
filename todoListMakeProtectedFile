@@ -1,0 +1,45 @@
+niet behandelde opmerkingen/vragen:
+
+
+Nog te doen:                                                                                                    Mee bezig:
+
+1. noSuppressionRadioButton:
+-   als aangeklikt, disable suppressionWeightPerVariableLabel, suppressionWeightList en suppressionWeightSlider
+2. useWeightRadioButton:
+-   als aangeklikt, enable suppressionWeightPerVariableLabel, suppressionWeightList en suppressionWeightSlider
+3. useEntropyRadioButton:
+-   als aangeklikt, disable suppressionWeightPerVariableLabel, suppressionWeightList en suppressionWeightSlider
+4. suppressionWeightList:
+-   verander naar jTable ipv List
+-   vul eerste kolom met alle variabelen die gebruikt zijn om tabellen mee te maken
+-   vul tweede kolom met 50 (Anco: of een geselecteerde weightVariable??)
+5. suppressionWeightSlider:
+-   geef aan dat het een waarde van 0 tot 100 kan aannemen
+-   zet de positie van de slider op de waarde van de geselecteerde rij van de suppressionWeightTable
+-   link de slider aan de geselecteerde waarde (weight) van de tabel
+6. hhIdentifierPanel:
+-   dit deel (plus alle daartoe behorende elementen) is alleen enabled als er een hhIdentifier in de metadata zit
+7. hhRadioButtons:
+-   zet deze RadioButtons in een RadioButtonGroup zodat maar 1 tegelijkertijd geselecteerd kan zijn
+8. progressbar:
+-   link aan makeFileButton
+9. cancelButton:
+-   zet waarde terug naar default
+-   sluit het scherm
+10. makeFileButton:
+-   open fileChooser om te bepalen waar de nieuwe files opgeslagen moeten worden
+-   maak protected file, metadatafile en html-output (dll)
+-   open view report die de ouput weergeeft
+
+
+
+Behandelde opmerkingen/vragen:                                                                                  Antwoord:
+
+Gedaan:                                                                                                         Door:
+
+
+Whishlist:
+-   weights automatisch bepalen door middel van entropie? Ik weet niet precies hoe dit zou moeten maar hierdoor
+    zou je dus kunnen zien hoeveel een variabele meeweegt als er gebruik gemaakt wordt van entropie. 
+    Nu weet je dat entropie wordt gebruikt maar niet wat dat precies betekend voor de bescherming van je data.
+ 
