@@ -18,7 +18,7 @@ public class RecodeMu {
     private String grcText;
     private boolean read;
     private final VariableMu variable;
-    private File grcFile;
+    private String grcFile;
     private String codeListFile; // willen we dit als String of als File?
     private final String missing_1_original;
     private final String missing_2_original;
@@ -40,16 +40,16 @@ public class RecodeMu {
         this.missing_2_original = variable.getMissing(1);
     }
 
-    public File getGrcFile() {
-        return grcFile;
+    public String getGrcFile() {
+        return this.grcFile;
     }
 
-    public void setGrcFile(File grcFile) {
+    public void setGrcFile(String grcFile) {
         this.grcFile = grcFile;
     }
 
     public String getCodeListFile() {
-        return codeListFile;
+        return this.codeListFile;
     }
 
     public void setCodeListFile(String codeListFile) {
@@ -58,7 +58,7 @@ public class RecodeMu {
 
 
     public String getGrcText() {
-        return grcText;
+        return this.grcText;
     }
 
     public void setGrcText(String grcText) {
@@ -66,11 +66,11 @@ public class RecodeMu {
     }
     
     public VariableMu getVariable() {
-        return variable;
+        return this.variable;
     }
 
     public boolean isRead() {
-        return read;
+        return this.read;
     }
 
     public void setRead(boolean read) {
@@ -81,7 +81,7 @@ public class RecodeMu {
     }
     
     public boolean isTruncated() {
-        return truncated;
+        return this.truncated;
     }
 
     public void setTruncated(boolean isTruncated) {
@@ -96,7 +96,7 @@ public class RecodeMu {
     }
 
     public String getMissing_1_new() {
-        return missing_1_new;
+        return this.missing_1_new;
     }
 
     public void setMissing_1_new(String missing_1_new) {
@@ -104,7 +104,7 @@ public class RecodeMu {
     }
 
     public String getMissing_2_new() {
-        return missing_2_new;
+        return this.missing_2_new;
     }
 
     public void setMissing_2_new(String missing_2_new) {
@@ -112,16 +112,16 @@ public class RecodeMu {
     }
 
     public String getMissing_1_original() {
-        return missing_1_original;
+        return this.missing_1_original;
     }
 
     public String getMissing_2_original() {
-        return missing_2_original;
+        return this.missing_2_original;
     }
 
     public String[] getTableRow() {
         String[] row = new String[2];
-        if (this.isRead()) {
+        if (this.isRecoded()) {
             row[0] = "R";
         } else if (this.isTruncated()) {
             row[0] = "T";

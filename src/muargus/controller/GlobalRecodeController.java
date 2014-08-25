@@ -92,35 +92,39 @@ public class GlobalRecodeController {
      * 
      */
     public void read(String path, RecodeMu recode) throws ArgusException {                                           
+        recode.setMissing_1_new(null);
+        recode.setMissing_2_new(null);
+        recode.setCodeListFile(null);
         File file = new File(path);
         try {
-        BufferedReader reader = new BufferedReader(new FileReader(file));
-        StringBuilder sb = new StringBuilder();
-        String line = "";
-        Tokenizer tokenizer = new Tokenizer(reader);
-        while ((line = tokenizer.nextLine()) != null) {
-            String token = tokenizer.nextToken();
-            if (!token.startsWith("<")) {
-                sb.append(line);
-                sb.append(System.lineSeparator());
+            BufferedReader reader = new BufferedReader(new FileReader(file));
+            StringBuilder sb = new StringBuilder();
+            String line;
+            Tokenizer tokenizer = new Tokenizer(reader);
+            while ((line = tokenizer.nextLine()) != null) {
+                String token = tokenizer.nextToken();
+                if (!token.startsWith("<")) {
+                    sb.append(line);
+                    sb.append(System.lineSeparator());
+                }
+                else if ("<MISSING>".equals(token)) {
+                    token = tokenizer.nextToken();
+                    recode.setMissing_1_new(token);
+                    token = tokenizer.nextToken();
+                    if (token != null)
+                        recode.setMissing_2_new(token);
+                }
+                else if ("<CODELIST>".equals(token)) {
+                    recode.setCodeListFile(tokenizer.nextToken());
+                }
+                else {
+                    throw new ArgusException("Error reading file, invalid token: " + token);
+                }
             }
-            else if (token == "<MISSING>") {
-                token = tokenizer.nextToken();
-                recode.setMissing_1_new(token);
-                token = tokenizer.nextToken();
-                if (token != null)
-                    recode.setMissing_2_new(token);
+            reader.close();
+            recode.setGrcText(sb.toString());
+            recode.setGrcFile(path);
             }
-            else if (token == "<CODELIST>") {
-                recode.setCodeListFile(tokenizer.nextToken());
-            }
-            else {
-                throw new ArgusException("Error reading file, invalid token: " + token);
-            }
-        }
-        reader.close();
-        recode.setGrcText(sb.toString());
-        }
         catch (IOException ex) {
             throw new ArgusException("Error during reading file");
         }
