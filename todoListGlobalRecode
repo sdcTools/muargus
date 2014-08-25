@@ -5,12 +5,7 @@ Nog te doen:                                                                    
 - nu wordt bij een klik op read een R toegevoegd, maar dit moet pas bij apply (ik was wat aan het uitproberen)
 - aanmaken van de tabel moet naar update values/tables maar ik heb wat probleempjes met de geslecteerde rij
 
-4. readButton:
-    - open een fileChooser geschikt voor .grc files                                                         Anne
-    - plaats de text van de .grc file die niet tussen <> staat in de EditTextField                            Anne
-    - plaats de .grc filenaam in het .grc textfield                                                           Anne
-    - plaats de .cdl filenaam in het .cdl textfield (staat in de .grc file)                                 Anne
-    - plaats de nieuwe missing values op de goede plek (staan in de .grc file)                               Anne
+
 5. applyButton:
     - alleen klikbaar als het EditTextField niet leeg is
     - check of de waardes in het EditTextField correct zijn (gebeurd als het goed is al in de dll)
@@ -59,6 +54,12 @@ Gedaan:                                                                         
     - value[1] = naam variabele                                                                             Jeldrik
     - voeg de array toe aan de tabel                                                                        Jeldrik
     - vul het textField van de missing values met de missing values van de geselecteerde variabele          Jeldrik
+4. readButton:
+    - open een fileChooser geschikt voor .grc files                                                         Anne
+    - plaats de text van de .grc file die niet tussen <> staat in de EditTextField                            Anne
+    - plaats de .grc filenaam in het .grc textfield                                                           Anne
+    - plaats de .cdl filenaam in het .cdl textfield (staat in de .grc file)                                 Anne
+    - plaats de nieuwe missing values op de goede plek (staan in de .grc file)                               Anne
 6. truncateButton:
     - is alleen zichtbaar als de variabele truncatable is                                                   Jeldrik
 12. Missing values:
