@@ -8,9 +8,6 @@ niet behandelde opmerkingen/vragen:
 Nog te doen:                                                                                                    Mee bezig:
     
 Release 1
-10. automaticSpecificationButton 
-    - wanneer riskmodel aanstaat, op de automaticSpecificationButton wordt gedrukt en dan aangegeven dat        Jeldrik
-      de tabellen bewaard moeten blijven, dan is de riskmodeltabel geen riskmodel meer
 20. bug CalculateTables: free format crasht 
 21. thresholds: array gebruiken                                                                                 Jeldrik
 
@@ -72,6 +69,8 @@ Gedaan:                                                                         
     - bug fixen bij wegklikken van specificeren threshold.                                                      Jeldrik
       bug treed op als er een int kleiner dan 1 wordt gegeven en het scherm wordt weggeklikt.
       resultaat: tabellen worden gewoon gegenereerd met de foutieve threshold 
+    - wanneer riskmodel aanstaat, op de automaticSpecificationButton wordt gedrukt en dan aangegeven dat        Jeldrik
+      de tabellen bewaard moeten blijven, dan is de riskmodeltabel geen riskmodel meer
 11. clearButton:
     - remove all rows from table                                                                                Jeldrik
 12. setTableRiskModelButton:
