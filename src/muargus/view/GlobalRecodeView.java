@@ -516,7 +516,12 @@ public class GlobalRecodeView extends javax.swing.JDialog {
     private void truncateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_truncateButtonActionPerformed
         this.getSelectedVariable().setTruncated(!this.getSelectedVariable().isTruncated());
         updateValues();
-        controller.truncate();
+        try {
+        controller.truncate(getSelectedVariable());
+        }
+        catch (ArgusException ex) {
+            ;
+        }
     }//GEN-LAST:event_truncateButtonActionPerformed
 
     private String askForGrcPath() {
@@ -556,11 +561,21 @@ public class GlobalRecodeView extends javax.swing.JDialog {
     }//GEN-LAST:event_readButtonActionPerformed
 
     private void applyButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_applyButtonActionPerformed
-        controller.apply();
+        try {
+        controller.apply(getSelectedVariable());
+        }
+        catch (ArgusException ex) {
+                JOptionPane.showMessageDialog(this, ex.getMessage());
+        }
     }//GEN-LAST:event_applyButtonActionPerformed
 
     private void undoButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_undoButtonActionPerformed
-        controller.undo();
+        try {
+            controller.undo(getSelectedVariable());
+        }
+        catch (ArgusException ex) {
+            ;
+        }
     }//GEN-LAST:event_undoButtonActionPerformed
 
     private void variablesTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_variablesTableMouseClicked
