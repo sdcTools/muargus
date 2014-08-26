@@ -24,7 +24,7 @@ public class SelectCombinationsModel {
     // tot dit aantal kan die het redelijk goed hebben, maar is die wel +/- 5 seconden aan het rekenen. 
     private final int maximumNumberOfTables = 25000;
 
-    private final int maximumSizeCheckForDoubles = 100;
+    private final int maximumSizeBeforeUserConfirmation = 100;
 
     /**
      *
@@ -115,8 +115,8 @@ public class SelectCombinationsModel {
         return maximumNumberOfTables;
     }
 
-    public int getMaximumSizeCheckForDoubles() {
-        return maximumSizeCheckForDoubles;
+    public int getMaximumSizeBeforeUserConfirmation() {
+        return maximumSizeBeforeUserConfirmation;
     }
 
     public void setNumberOfRows(int n) {

@@ -12,7 +12,7 @@ Nog te doen:                                                                    
 4. suppressionWeightList:
 -   verander naar jTable ipv List
 -   vul eerste kolom met alle variabelen die gebruikt zijn om tabellen mee te maken
--   vul tweede kolom met 50 (Anco: of een geselecteerde weightVariable??)
+-   vul tweede kolom met de suppressionweight (zit in de metadata)
 5. suppressionWeightSlider:
 -   geef aan dat het een waarde van 0 tot 100 kan aannemen
 -   zet de positie van de slider op de waarde van de geselecteerde rij van de suppressionWeightTable
@@ -28,8 +28,10 @@ Nog te doen:                                                                    
 -   sluit het scherm
 10. makeFileButton:
 -   open fileChooser om te bepalen waar de nieuwe files opgeslagen moeten worden
--   maak protected file, metadatafile en html-output (dll)
+-   maak protected file, metadatafile en html-output (groot deel kan met de dll)
 -   open view report die de ouput weergeeft
+11. writeRecordRamdomOrderCheckBox
+-   alleen mogelijk bij fixed format
 
 
 
