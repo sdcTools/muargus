@@ -147,6 +147,10 @@ public class VariableMu {
     public void setSuppressweight(String suppressweight) {
         this.suppressweight = Integer.parseInt(suppressweight);
     }
+    
+    public void setSuppressweight(int suppressweight) {
+        this.suppressweight = suppressweight;
+    }
 
     public boolean isTruncable() {
         return truncable;

@@ -4,6 +4,8 @@
  */
 package muargus.view;
 
+import javax.swing.JCheckBox;
+import javax.swing.JRadioButton;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
@@ -22,6 +24,7 @@ public class MakeProtectedFileView extends javax.swing.JDialog {
     private MetadataMu metadataMu;
     private TableModel tableModel;
     private int selectedRow;
+    private boolean householdData;
 
     /**
      * Creates new form MakeProtectedFileView
@@ -46,11 +49,11 @@ public class MakeProtectedFileView extends javax.swing.JDialog {
     }
 
     public final void makeVariables() {
-        boolean isHouseholdData = metadataMu.isHouseholdData();
-        this.hhIdentifierPanel.setEnabled(isHouseholdData);
-        this.keepInSafeFileRadioButton.setEnabled(isHouseholdData);
-        this.changeIntoSequenceNumberRadioButton.setEnabled(isHouseholdData);
-        this.removeFromSafeFileRadioButton.setEnabled(isHouseholdData);
+        householdData = metadataMu.isHouseholdData();
+        this.hhIdentifierPanel.setEnabled(householdData);
+        this.keepInSafeFileRadioButton.setEnabled(householdData);
+        this.changeIntoSequenceNumberRadioButton.setEnabled(householdData);
+        this.removeFromSafeFileRadioButton.setEnabled(householdData);
         this.writeRecordRandomOrderCheckBox.setEnabled(metadataMu.getDataFileType() == MetadataMu.DATA_FILE_TYPE_FIXED);
         this.selectedRow = 0;
         this.updateValues();
@@ -73,6 +76,40 @@ public class MakeProtectedFileView extends javax.swing.JDialog {
     public void setProgress(Object value) {
         this.progressbar.setValue((Integer) value);
     }
+
+    public JRadioButton getChangeIntoSequenceNumberRadioButton() {
+        return changeIntoSequenceNumberRadioButton;
+    }
+
+    public JRadioButton getKeepInSafeFileRadioButton() {
+        return keepInSafeFileRadioButton;
+    }
+
+    public JRadioButton getNoSuppressionRadioButton() {
+        return noSuppressionRadioButton;
+    }
+
+    public JRadioButton getRemoveFromSafeFileRadioButton() {
+        return removeFromSafeFileRadioButton;
+    }
+
+    public JRadioButton getUseEntropyRadioButton() {
+        return useEntropyRadioButton;
+    }
+
+    public JRadioButton getUseWeightRadioButton() {
+        return useWeightRadioButton;
+    }
+
+    public JCheckBox getWriteRecordRandomOrderCheckBox() {
+        return writeRecordRandomOrderCheckBox;
+    }
+
+    public boolean isHouseholdData() {
+        return householdData;
+    }
+    
+    
     
     /**
      * This method is called from within the constructor to initialize the form.
@@ -322,33 +359,26 @@ public class MakeProtectedFileView extends javax.swing.JDialog {
 
     private void noSuppressionRadioButtonStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_noSuppressionRadioButtonStateChanged
         this.updateValues();
-        controller.noSuppression();
     }//GEN-LAST:event_noSuppressionRadioButtonStateChanged
 
     private void useWeightRadioButtonStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_useWeightRadioButtonStateChanged
         this.updateValues();
-        controller.useWeight();
     }//GEN-LAST:event_useWeightRadioButtonStateChanged
 
     private void useEntropyRadioButtonStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_useEntropyRadioButtonStateChanged
         this.updateValues();
-        controller.useEntropy();
     }//GEN-LAST:event_useEntropyRadioButtonStateChanged
 
     private void keepInSafeFileRadioButtonStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_keepInSafeFileRadioButtonStateChanged
-        controller.keepInSafeFile();
     }//GEN-LAST:event_keepInSafeFileRadioButtonStateChanged
 
     private void changeIntoSequenceNumberRadioButtonStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_changeIntoSequenceNumberRadioButtonStateChanged
-        controller.changeIntoSequenceNumber();
     }//GEN-LAST:event_changeIntoSequenceNumberRadioButtonStateChanged
 
     private void removeFromSafeFileRadioButtonStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_removeFromSafeFileRadioButtonStateChanged
-        controller.removeFromSafeFile();
     }//GEN-LAST:event_removeFromSafeFileRadioButtonStateChanged
 
     private void writeRecordRandomOrderCheckBoxStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_writeRecordRandomOrderCheckBoxStateChanged
-        controller.writeRecordRandomOrder();
     }//GEN-LAST:event_writeRecordRandomOrderCheckBoxStateChanged
 
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed

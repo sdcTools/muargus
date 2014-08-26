@@ -92,7 +92,16 @@ public class TableService {
                 c.SetSuppressPrior(index, variable.getSuppressweight());
             }
         }
-        //c.MakeFileSafe(null, true, true, HHIdentOption, true, true)
+        
+        //TODO: give a proper name
+        String nameOfSafeFile = "";
+        boolean withPrior = model.isWithPrior();
+        boolean withEntropy = model.isWithEntropy();
+        int hhOption = model.getHhOption();
+        boolean randomizeOutput = model.isRandomizeOutput();
+        boolean printBHR;
+        
+        c.MakeFileSafe(nameOfSafeFile, withPrior, withEntropy, hhOption, randomizeOutput, true);
     }
     
     public void calculateTables(final SelectCombinationsModel model, final MetadataMu metadata) {

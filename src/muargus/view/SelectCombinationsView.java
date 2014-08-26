@@ -2,7 +2,6 @@ package muargus.view;//GEN-FIRST:event_automaticSpecificationButtonActionPerform
 //GEN-LAST:event_automaticSpecificationButtonActionPerformed
 import argus.model.ArgusException;
 import java.awt.Frame;
-import java.awt.HeadlessException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import javax.swing.DefaultListModel;
@@ -24,7 +23,7 @@ import muargus.CombinationsTableCellRenderer;
  * @author ambargus
  */
 public class SelectCombinationsView extends javax.swing.JDialog {
-    
+
     private final SelectCombinationsController controller;
     private SelectCombinationsModel model;
     private MetadataMu metadataMu;
@@ -32,8 +31,8 @@ public class SelectCombinationsView extends javax.swing.JDialog {
     private DefaultListModel variablesSelectedListModel;
     private TableModel tableModel;
     private final Frame parent;
-    //private int numberOfVariables;
     private long numberOfTables;
+    private final int[] columnWidth = new int[]{30,50,70}; // gives the width of column 1, 2 and the final value is the width of all the other columns
 
     /**
      * Creates new form SelectCombinationsView
@@ -52,7 +51,7 @@ public class SelectCombinationsView extends javax.swing.JDialog {
         variablesList.setCellRenderer(new VariableNameCellRenderer());
         variablesSelectedList.setCellRenderer(new VariableNameCellRenderer());
     }
-    
+
     public void setModel(SelectCombinationsModel model) {
         this.model = model;
     }
@@ -81,7 +80,7 @@ public class SelectCombinationsView extends javax.swing.JDialog {
             }
         }
         variablesList.setModel(variablesListModel);
-        
+
         variablesSelectedList.setModel(variablesSelectedListModel);
         if (variablesListModel.getSize() > 0) {
             variablesList.setSelectedIndex(0);
@@ -89,13 +88,9 @@ public class SelectCombinationsView extends javax.swing.JDialog {
 
         // set the default values and the size of the first two colums
         table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-        table.getColumnModel().getColumn(0).setMinWidth(30);
-        table.getColumnModel().getColumn(0).setPreferredWidth(30);
-        table.getColumnModel().getColumn(1).setMinWidth(50);
-        table.getColumnModel().getColumn(1).setPreferredWidth(50);
-        
+
         table.setDefaultRenderer(Object.class, new CombinationsTableCellRenderer());
-        
+
         updateValues();
     }
 
@@ -107,27 +102,33 @@ public class SelectCombinationsView extends javax.swing.JDialog {
         // gets the tables from SelectCombinationsModel and adds these to a double  array, containing the data
         ArrayList<TableMu> tables = model.getTables();
         String[][] data = new String[model.getTables().size()][model.getNumberOfColumns()];
-        
+
         int index = 0;
         for (TableMu t : tables) {
             data[index] = t.getTable();
             index++;
         }
-        
+
         ArrayList<String> columnNames = new ArrayList<>(Arrays.asList("Risk", "Thres.", "Var 1"));
         if (model.getNumberOfColumns() > 3) {
             for (int i = 2; i <= model.getNumberOfColumns() - 2; i++) {
                 columnNames.add("Var " + i);
             }
         }
-        
+
         tableModel = new DefaultTableModel(data, columnNames.toArray());
         table.setModel(tableModel);
 
         // sets the size of each column
-        for (int i = 2; i < table.getColumnModel().getColumnCount(); i++) {
-            table.getColumnModel().getColumn(i).setMinWidth(70);
-            table.getColumnModel().getColumn(i).setPreferredWidth(70);
+        for (int i = 0; i < table.getColumnModel().getColumnCount(); i++) {
+            int colWidth;
+            if(i> 2){
+                colWidth = this.columnWidth[2];
+            } else{
+                colWidth = this.columnWidth[i];
+            }
+            table.getColumnModel().getColumn(i).setMinWidth(colWidth);
+            table.getColumnModel().getColumn(i).setPreferredWidth(colWidth);
         }
 
         // TODO: check how the rows should be selected
@@ -263,13 +264,13 @@ public class SelectCombinationsView extends javax.swing.JDialog {
         });
 
         table.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null}
-            },
-            new String [] {
-                "R", "Thres.", "Var 1", "Var 2", "Var 3"
-            }
+                new Object[][]{
+                    {null, null, null, null, null},
+                    {null, null, null, null, null}
+                },
+                new String[]{
+                    "R", "Thres.", "Var 1", "Var 2", "Var 3"
+                }
         ));
         table.getTableHeader().setReorderingAllowed(false);
         tablesScrollPane.setViewportView(table);
@@ -281,107 +282,107 @@ public class SelectCombinationsView extends javax.swing.JDialog {
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(variablesScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(10, 10, 10)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(removeFromSelectedButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(moveToSelectedButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(removeAllFromSelectedButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(18, 18, 18)
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(variablesScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(thresholdLabel)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(thresholdTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(variablesSelectedScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(addRowButton)
-                            .addComponent(removeRowButton)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(83, 83, 83)
-                        .addComponent(clearButton, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(45, 45, 45)
-                        .addComponent(setTableRiskModelButton))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(progressLabel)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                 .addGroup(layout.createSequentialGroup()
-                                    .addComponent(cancelButton)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(calculateTablesButton))
-                                .addComponent(progressbar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(automaticSpecificationButton, javax.swing.GroupLayout.DEFAULT_SIZE, 207, Short.MAX_VALUE)))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(tablesScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 283, Short.MAX_VALUE)
-                .addContainerGap())
+                                        .addGap(10, 10, 10)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                                .addComponent(removeFromSelectedButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                .addComponent(moveToSelectedButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                .addComponent(removeAllFromSelectedButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                        .addGap(18, 18, 18)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                .addGroup(layout.createSequentialGroup()
+                                                        .addComponent(thresholdLabel)
+                                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                                        .addComponent(thresholdTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                .addComponent(variablesSelectedScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                .addComponent(addRowButton)
+                                                .addComponent(removeRowButton)))
+                                .addGroup(layout.createSequentialGroup()
+                                        .addGap(83, 83, 83)
+                                        .addComponent(clearButton, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(layout.createSequentialGroup()
+                                        .addGap(45, 45, 45)
+                                        .addComponent(setTableRiskModelButton))
+                                .addGroup(layout.createSequentialGroup()
+                                        .addGap(18, 18, 18)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                .addComponent(progressLabel)
+                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                                        .addGroup(layout.createSequentialGroup()
+                                                                .addComponent(cancelButton)
+                                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                                .addComponent(calculateTablesButton))
+                                                        .addComponent(progressbar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                        .addComponent(automaticSpecificationButton, javax.swing.GroupLayout.DEFAULT_SIZE, 207, Short.MAX_VALUE)))))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(tablesScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 283, Short.MAX_VALUE)
+                        .addContainerGap())
         );
         layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(variablesScrollPane)
-                    .addGroup(layout.createSequentialGroup()
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGap(28, 28, 28)
-                                        .addComponent(moveToSelectedButton)
+                                .addComponent(variablesScrollPane)
+                                .addGroup(layout.createSequentialGroup()
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                .addGroup(layout.createSequentialGroup()
+                                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                                .addGroup(layout.createSequentialGroup()
+                                                                        .addGap(28, 28, 28)
+                                                                        .addComponent(moveToSelectedButton)
+                                                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                                        .addComponent(removeFromSelectedButton)
+                                                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                                        .addComponent(removeAllFromSelectedButton))
+                                                                .addComponent(variablesSelectedScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                        .addGap(32, 32, 32)
+                                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                                .addComponent(thresholdLabel)
+                                                                .addComponent(thresholdTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                                .addGroup(layout.createSequentialGroup()
+                                                        .addGap(44, 44, 44)
+                                                        .addComponent(addRowButton)
+                                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                        .addComponent(removeRowButton)))
+                                        .addGap(18, 18, 18)
+                                        .addComponent(automaticSpecificationButton)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(clearButton)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(setTableRiskModelButton)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 34, Short.MAX_VALUE)
+                                        .addComponent(progressLabel)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(removeFromSelectedButton)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(removeAllFromSelectedButton))
-                                    .addComponent(variablesSelectedScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(32, 32, 32)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(thresholdLabel)
-                                    .addComponent(thresholdTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(44, 44, 44)
-                                .addComponent(addRowButton)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(removeRowButton)))
-                        .addGap(18, 18, 18)
-                        .addComponent(automaticSpecificationButton)
-                        .addGap(18, 18, 18)
-                        .addComponent(clearButton)
-                        .addGap(18, 18, 18)
-                        .addComponent(setTableRiskModelButton)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 34, Short.MAX_VALUE)
-                        .addComponent(progressLabel)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(progressbar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(cancelButton)
-                            .addComponent(calculateTablesButton)))
-                    .addComponent(tablesScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
-                .addContainerGap())
+                                        .addComponent(progressbar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(18, 18, 18)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                .addComponent(cancelButton)
+                                                .addComponent(calculateTablesButton)))
+                                .addComponent(tablesScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                        .addContainerGap())
         );
 
         pack();
     }// </editor-fold>                        
 
-    private void calculateTablesButtonActionPerformed(java.awt.event.ActionEvent evt) {                                                      
+    private void calculateTablesButtonActionPerformed(java.awt.event.ActionEvent evt) {
         //TODO: does not work yet
         try {
             controller.calculateTables();
         } catch (ArgusException ex) {
             ;
         }
-    }                                                     
+    }
 
-    private void moveToSelectedButtonActionPerformed(java.awt.event.ActionEvent evt) {                                                     
+    private void moveToSelectedButtonActionPerformed(java.awt.event.ActionEvent evt) {
         int[] index = variablesList.getSelectedIndices();
         Object[] variableMu = variablesList.getSelectedValuesList().toArray();
 
@@ -397,22 +398,22 @@ public class SelectCombinationsView extends javax.swing.JDialog {
                 variablesSelectedListModel.add(variablesSelectedListModel.getSize(), (VariableMu) variable);
             }
         }
-        
-        variablesList.setSelectedIndex(index[index.length - 1] + 1);
-    }                                                    
 
-    private void removeFromSelectedButtonActionPerformed(java.awt.event.ActionEvent evt) {                                                         
+        variablesList.setSelectedIndex(index[index.length - 1] + 1);
+    }
+
+    private void removeFromSelectedButtonActionPerformed(java.awt.event.ActionEvent evt) {
         for (Object o : variablesSelectedList.getSelectedValuesList()) {
             variablesSelectedListModel.removeElement(o);
         }
         variablesSelectedList.setSelectedIndex(0);
-    }                                                        
+    }
 
-    private void removeAllFromSelectedButtonActionPerformed(java.awt.event.ActionEvent evt) {                                                            
+    private void removeAllFromSelectedButtonActionPerformed(java.awt.event.ActionEvent evt) {
         variablesSelectedListModel.removeAllElements();
         variablesList.setSelectedIndex(0);
-    }                                                           
-    
+    }
+
     public boolean validThreshold() {
         boolean valid;
         try {
@@ -424,7 +425,7 @@ public class SelectCombinationsView extends javax.swing.JDialog {
         return valid;
     }
 
-    private void addRowButtonActionPerformed(java.awt.event.ActionEvent evt) {                                             
+    private void addRowButtonActionPerformed(java.awt.event.ActionEvent evt) {
         if (variablesSelectedListModel.size() > MuARGUS.MAXDIMS) {
             JOptionPane.showMessageDialog(this, String.format("Cannot add more than %d variables", MuARGUS.MAXDIMS));
         } else if (!validThreshold()) {
@@ -438,7 +439,7 @@ public class SelectCombinationsView extends javax.swing.JDialog {
             for (VariableMu v : variableMu) {
                 tableMuNew.addVariable(v);
             }
-            
+
             boolean add = true;
             // only check for double tables when then number of tables is between 0 and 100
             //TODO: constant
@@ -455,7 +456,7 @@ public class SelectCombinationsView extends javax.swing.JDialog {
                     }
                 }
             }
-            
+
             if (add) {
                 if (variablesSelectedListModel.size() > 0) {
                     TableMu tableMu = new TableMu();
@@ -470,7 +471,7 @@ public class SelectCombinationsView extends javax.swing.JDialog {
             updateValues();
             table.getSelectionModel().setSelectionInterval(model.getNumberOfRows() - 1, model.getNumberOfRows() - 1);
         }
-    }                                            
+    }
 
     /**
      * This function compares the different tables with a new table (VariableMu
@@ -486,7 +487,7 @@ public class SelectCombinationsView extends javax.swing.JDialog {
         boolean isValid = true;
         boolean exit = false;
         int numberOfDoubleVariables = 0;
-        
+
         for (VariableMu oldVariable : tableMuOld.getVariables()) {
             for (VariableMu newVariable : tableMuNew.getVariables()) {
                 if (oldVariable.equals(newVariable)) {
@@ -512,7 +513,7 @@ public class SelectCombinationsView extends javax.swing.JDialog {
         return isValid;
     }
 
-    private void removeRowButtonActionPerformed(java.awt.event.ActionEvent evt) {                                                
+    private void removeRowButtonActionPerformed(java.awt.event.ActionEvent evt) {
         if (model.getNumberOfRows() > 0) {
             try {
                 int[] selectedRows = table.getSelectedRows();
@@ -535,9 +536,9 @@ public class SelectCombinationsView extends javax.swing.JDialog {
         }
         updateValues();
         table.getSelectionModel().setSelectionInterval(0, 0);
-    }                                               
+    }
 
-    private void automaticSpecificationButtonActionPerformed(java.awt.event.ActionEvent evt) {                                                             
+    private void automaticSpecificationButtonActionPerformed(java.awt.event.ActionEvent evt) {
         // checks if there are tables and askes if they need to be removed
         int numberOfOldTables = model.getNumberOfRows();
         if (model.getNumberOfRows() > 0) {
@@ -568,12 +569,12 @@ public class SelectCombinationsView extends javax.swing.JDialog {
                 numberOfLevels++;
             }
         }
-        
+
         int numberOfVariables = allValidVariables.size();
-        
+
         GenerateAutomaticTables generateAutomaticTables = new GenerateAutomaticTables(parent, true, this.model, numberOfVariables);
         generateAutomaticTables.setVisible(true);
-        
+
         if (generateAutomaticTables.isValid()) {
             if (generateAutomaticTables.isMakeUpToDimensionRadioButton()) {
                 int dimensions = generateAutomaticTables.getDimensionTextField();
@@ -593,7 +594,7 @@ public class SelectCombinationsView extends javax.swing.JDialog {
 
         //TODO: progressbar laten zien?
         // removes double tables
-        if (numberOfOldTables < this.model.getMaximumNumberOfTables()) {            
+        if (numberOfOldTables < this.model.getMaximumNumberOfTables()) {
             for (int i = 0; i < numberOfOldTables; i++) {
                 for (int j = model.getNumberOfRows() - 1; j >= numberOfOldTables; j--) {
                     if (!compareRows(model.getTables().get(i), model.getTables().get(j))) {
@@ -602,23 +603,23 @@ public class SelectCombinationsView extends javax.swing.JDialog {
                 }
             }
         }
-        
+
         boolean risk = model.isRiskModel();
         if (risk && numberOfOldTables < this.model.getMaximumNumberOfTables()) {
             this.removeTableRiskModel(this.getListOfRemovedTables());
         }
-        
+
         updateValues();
-    }                                                            
-    
+    }
+
     public long getNumberOfTables() {
         return numberOfTables;
     }
-    
+
     public void setNumberOfTables(int dimensions, int numberOfVariables) {
         this.numberOfTabels(1, dimensions, numberOfVariables);
     }
-    
+
     public void numberOfTabels(long numberOfTables, int dimensions, int numberOfVariables) {
         if (dimensions > 0) {
             long tempNumber = numberOfTables * numberOfVariables;
@@ -629,27 +630,27 @@ public class SelectCombinationsView extends javax.swing.JDialog {
                 int tempDimensions = dimensions - 1;
                 numberOfTabels(tempNumber, tempDimensions, tempNumberOfVariables);
             }
-            
+
         } else if (dimensions == 0) {
             this.numberOfTables = numberOfTables;
         }
     }
-    
+
     public void setProgress(Object value) {
         this.progressbar.setValue((Integer) value);
     }
-    
+
     public void setStepName(Object value) {
         this.progressLabel.setText(value.toString());
     }
-    
+
     public void calculateTablesForDimensions(ArrayList<VariableMu> data, int dimensions) {
         ArrayList<VariableMu> variableSubset = new ArrayList<>();
         int startPos = 0;
         int threshold = 0;
         calculateTablesForDimensions(startPos, data, dimensions, variableSubset, threshold);
     }
-    
+
     public void calculateTablesForDimensions(int startPos, ArrayList<VariableMu> allVariables, int dimension,
             ArrayList<VariableMu> variableSubset, int threshold) {
         if (dimension > 0) {
@@ -665,25 +666,25 @@ public class SelectCombinationsView extends javax.swing.JDialog {
                 tableMu.setVariables(temp);
                 tableMu.setThreshold(model.getThresholds()[threshold]);
                 model.getTables().add(tableMu);
-                
+
                 int d = dimension - 1;
                 calculateTablesForDimensions(i + 1, allVariables, d, temp, threshold + 1);
             }
         }
     }
-    
+
     public void calculateTablesForID(int numberOfLevels, ArrayList<ArrayList<VariableMu>> variables, ArrayList<VariableMu> allValidVariables) {
         int index = 1; // don't add the variables with an ID number of 0
         int _size = 0;
         int currentLevel = 0;
         ArrayList<VariableMu> variableSubset = new ArrayList<>();
-        
+
         calculateTablesForID(0, index, _size, currentLevel, variableSubset, numberOfLevels, variables, allValidVariables);
     }
-    
+
     public void calculateTablesForID(int _i, int _index, int _size, int _currentLevel, ArrayList<VariableMu> variableSubset,
             int numberOfLevels, ArrayList<ArrayList<VariableMu>> variables, ArrayList<VariableMu> allVariables) {
-        
+
         int currentLevel = _currentLevel + 1;
         if (currentLevel <= numberOfLevels) {
             int index = _index;
@@ -697,12 +698,12 @@ public class SelectCombinationsView extends javax.swing.JDialog {
                     break;
                 }
             }
-            
+
             for (int i = _i; i < size; i++) {
                 ArrayList<VariableMu> temp = new ArrayList<>();
                 temp.addAll(variableSubset);
                 temp.add(allVariables.get(i));
-                
+
                 if (temp.size() == numberOfLevels) {
                     TableMu tableMu = new TableMu();
                     tableMu.setVariables(temp);
@@ -714,13 +715,13 @@ public class SelectCombinationsView extends javax.swing.JDialog {
         }
     }
 
-    private void clearButtonActionPerformed(java.awt.event.ActionEvent evt) {                                            
+    private void clearButtonActionPerformed(java.awt.event.ActionEvent evt) {
         this.clear();
-    }                                           
-    
-    public ArrayList<TableMu> getListOfRemovedTables(){
+    }
+
+    public ArrayList<TableMu> getListOfRemovedTables() {
         ArrayList<TableMu> toBeRemovedTables = new ArrayList<>();
-        
+
         for (int i = model.getNumberOfRows() - 1; i >= 0; i--) {
             TableMu t = model.getTables().get(i);
             if (!t.isRiskModel()) {
@@ -731,8 +732,8 @@ public class SelectCombinationsView extends javax.swing.JDialog {
         }
         return toBeRemovedTables;
     }
-    
-    public boolean overlappingTables(ArrayList<TableMu> toBeRemovedTables, TableMu tableMu){
+
+    public boolean overlappingTables(ArrayList<TableMu> toBeRemovedTables, TableMu tableMu) {
         boolean valid = false;
         if (toBeRemovedTables.size() > 0) {
             if (JOptionPane.showConfirmDialog(this, "Overlapping tables found with this risk table\nDo you want to remove them?", "Mu Argus", JOptionPane.YES_NO_OPTION) == JOptionPane.NO_OPTION) {
@@ -742,46 +743,46 @@ public class SelectCombinationsView extends javax.swing.JDialog {
         }
         return valid;
     }
-    
+
     public void removeTableRiskModel(ArrayList<TableMu> toBeRemovedTables) {
         for (TableMu t : toBeRemovedTables) {
             model.removeTable(t);
         }
     }
-    
-    private void setTableRiskModelButtonActionPerformed(java.awt.event.ActionEvent evt) {                                                        
+
+    private void setTableRiskModelButtonActionPerformed(java.awt.event.ActionEvent evt) {
         if (model.getTables().size() > 0) {
-            
+
             try { // afvangen geen tabel geselecteerd
                 int index = table.getSelectedRow();
                 TableMu tableMu = model.getTables().get(index);
                 tableMu.setRiskModel(!tableMu.isRiskModel());
-                
+
                 if (tableMu.isRiskModel()) {  //The table is added to the risk model
                     ArrayList<TableMu> toBeRemovedTables = this.getListOfRemovedTables();
                     this.overlappingTables(toBeRemovedTables, tableMu);
                     this.removeTableRiskModel(toBeRemovedTables);
                 }
-                
+
                 updateValues();
                 table.getSelectionModel().setSelectionInterval(index, index);
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(this, "No table is selected");
             }
         }
-    }                                                       
+    }
 
-    private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {                                             
+    private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {
         this.clear();
         controller.cancel();
-    }                                            
+    }
 
-    private void thresholdTextFieldCaretUpdate(javax.swing.event.CaretEvent evt) {                                               
+    private void thresholdTextFieldCaretUpdate(javax.swing.event.CaretEvent evt) {
         try {
             model.setThreshold(this.thresholdTextField.getText());
         } catch (Exception e) {
         }
-    }                                              
+    }
     // Variables declaration - do not modify                     
     private javax.swing.JButton addRowButton;
     private javax.swing.JButton automaticSpecificationButton;

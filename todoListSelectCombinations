@@ -4,17 +4,14 @@ niet behandelde opmerkingen/vragen:
 Nog te doen:                                                                                                    Mee bezig:
     
 Release 1
-- constanten bovenaan zetten, niet in de code -->                                                               Jeldrik
-    Anne: is dit ook nodig voor de waardes die zijn gebruikt om de breedte van de kolommen aan te geven?
-    Ja, beter om dit ook te doen.
+
 
 Release 2+
 
 6. table: - constanten bovenaan zetten, niet in de code --> 
-    Anne: is dit ook nodig voor de waardes die zijn gebruikt om de breedte van de kolommen aan te geven?
-    Ja, beter om dit ook te doen.
     - geselecteerde rij visable 
     - kolommen klikken en sorteren (RowSorter: http://docs.oracle.com/javase/7/docs/api/javax/swing/RowSorter.html)
+    - kolombreedte fixen (rij 1 en 2 zijn te groot)
 15. progressbar
     - checken of hier nog iets aan gedaan moet worden bij heel veel tabellen?
     - moet deze ook gekoppeld worden aan automatic generate tables? Ik denk dat het beter is om in plaats 
@@ -29,6 +26,8 @@ Behandelde opmerkingen/vragen:                                                  
       maar bij het automatisch genereren van data niet meegenomen (handmatig wel). Moet het zo blijven?         Ja
     - Thresholds: er is een threshold per 'dimensie'. Moet deze dan niet default weergegeven worden als je 
       een tabel aan het specificeren bent? of wordt hiervoor een globale (Thresh0 in oude mu) gebruikt?         Nee
+    - constanten bovenaan zetten, niet in de code -->                                                           Ja, beter om dit ook te doen.
+      Anne: is dit ook nodig voor de waardes die zijn gebruikt om de breedte van de kolommen aan te geven?
 
 
 Gedaan:                                                                                                         Door:
