@@ -3,6 +3,8 @@ niet behandelde opmerkingen/vragen:
 
 Nog te doen:                                                                                                    Mee bezig:
 
+Release 1
+
 8. progressbar:
 -   link aan makeFileButton
 9. cancelButton:
@@ -13,6 +15,7 @@ Nog te doen:                                                                    
 -   maak protected file, metadatafile en html-output (groot deel kan met de dll)
 -   open view report die de ouput weergeeft
 
+Release 2+
 
 
 

@@ -3,6 +3,7 @@ niet behandelde opmerkingen/vragen:
 
 Nog te doen:                                                                                                Mee bezig:
   
+Release 1
 
 5. applyButton:
     - maak apply disabled na apply, en weer enabled als gebruiker iets aanpast?                             Anne
@@ -21,7 +22,7 @@ Nog te doen:                                                                    
 12. - aanmaken van de tabel moet naar update values/tables? (werkt nu: R/T worden gezet bij verandering)
 13. kolommen verwisselen uitzetten (onder properties: tableHeader)
 
-
+Release 2+
 
    
 

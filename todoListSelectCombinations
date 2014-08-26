@@ -4,7 +4,7 @@ niet behandelde opmerkingen/vragen:
 Nog te doen:                                                                                                    Mee bezig:
     
 Release 1
-- constanten bovenaan zetten, niet in de code --> 
+- constanten bovenaan zetten, niet in de code -->                                                               Jeldrik
     Anne: is dit ook nodig voor de waardes die zijn gebruikt om de breedte van de kolommen aan te geven?
     Ja, beter om dit ook te doen.
 
