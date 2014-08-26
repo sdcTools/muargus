@@ -427,6 +427,7 @@ public class MainFrameView extends javax.swing.JFrame {
         ));
         unsafeCombinationsTable.setShowHorizontalLines(false);
         unsafeCombinationsTable.setShowVerticalLines(false);
+        unsafeCombinationsTable.getTableHeader().setReorderingAllowed(false);
         unsafeCombinationsScrollPane.setViewportView(unsafeCombinationsTable);
 
         javax.swing.GroupLayout unsafeCombinationsPanelLayout = new javax.swing.GroupLayout(unsafeCombinationsPanel);
@@ -512,6 +513,7 @@ public class MainFrameView extends javax.swing.JFrame {
         ));
         variablesTable.setShowHorizontalLines(false);
         variablesTable.setShowVerticalLines(false);
+        variablesTable.getTableHeader().setReorderingAllowed(false);
         variablesScrollPane.setViewportView(variablesTable);
 
         variableNameLabel.setText("jLabel3");

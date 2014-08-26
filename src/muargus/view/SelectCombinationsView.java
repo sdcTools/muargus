@@ -271,6 +271,7 @@ public class SelectCombinationsView extends javax.swing.JDialog {
                 "R", "Thres.", "Var 1", "Var 2", "Var 3"
             }
         ));
+        table.getTableHeader().setReorderingAllowed(false);
         tablesScrollPane.setViewportView(table);
         if (table.getColumnModel().getColumnCount() > 0) {
             table.getColumnModel().getColumn(0).setMinWidth(20);

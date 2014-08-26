@@ -17,7 +17,7 @@ Release 2+
 17. Kijk wat er in de Controller/Model kan en verplaats dat.                                                    ..
 18. code opschonen                                                                                              ..
 19. javadoc schrijven voor de methodes                                                                          ..
-
+22. kolommen klikken en sorteren (RowSorter: http://docs.oracle.com/javase/7/docs/api/javax/swing/RowSorter.html)
 
 
 Behandelde opmerkingen/vragen:                                                                                  Antwoord:

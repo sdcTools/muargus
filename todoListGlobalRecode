@@ -19,6 +19,7 @@ Nog te doen:                                                                    
 10. code opschonen
 11. javadoc schrijven voor de methodes
 12. - aanmaken van de tabel moet naar update values/tables? (werkt nu: R/T worden gezet bij verandering)
+13. kolommen verwisselen uitzetten (onder properties: tableHeader)
 
 
 
