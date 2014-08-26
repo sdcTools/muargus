@@ -4,24 +4,70 @@
  */
 package muargus.view;
 
+import javax.swing.ListSelectionModel;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 import muargus.controller.MakeProtectedFileController;
+import muargus.model.MakeProtectedFileModel;
+import muargus.model.MetadataMu;
 
 /**
  *
  * @author ambargus
  */
 public class MakeProtectedFileView extends javax.swing.JDialog {
-    
+
     MakeProtectedFileController controller;
+    MakeProtectedFileModel model;
+    private MetadataMu metadataMu;
+    private TableModel tableModel;
+    private int selectedRow;
 
     /**
      * Creates new form MakeProtectedFileView
+     *
+     * @param parent
+     * @param modal
+     * @param controller
      */
-    public MakeProtectedFileView(java.awt.Frame parent, boolean modal) {
+    public MakeProtectedFileView(java.awt.Frame parent, boolean modal, MakeProtectedFileController controller) {
         super(parent, modal);
-        controller = new MakeProtectedFileController(this);
         initComponents();
+        this.controller = controller;
+        this.model = this.controller.getModel();
         this.setLocationRelativeTo(null);
+        this.suppressionWeightTable.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
+    }
+
+    public void setMetadataMu(MetadataMu metadataMu) {
+        this.metadataMu = metadataMu;
+        this.makeVariables();
+    }
+
+    public final void makeVariables() {
+        boolean isHouseholdData = metadataMu.isHouseholdData();
+        this.hhIdentifierPanel.setEnabled(isHouseholdData);
+        this.keepInSafeFileRadioButton.setEnabled(isHouseholdData);
+        this.changeIntoSequenceNumberRadioButton.setEnabled(isHouseholdData);
+        this.removeFromSafeFileRadioButton.setEnabled(isHouseholdData);
+        this.writeRecordRandomOrderCheckBox.setEnabled(metadataMu.getDataFileType() == MetadataMu.DATA_FILE_TYPE_FIXED);
+        this.selectedRow = 0;
+        this.updateValues();
+    }
+
+    public void updateValues() {
+        boolean suppression = this.useWeightRadioButton.isSelected();
+        this.suppressionWeightPerVariableLabel.setEnabled(suppression);
+        this.suppressionWeightScrollPane.setEnabled(suppression);
+        this.suppressionWeightSlider.setEnabled(suppression);
+        this.suppressionWeightTable.setEnabled(suppression);
+
+        this.tableModel = new DefaultTableModel(this.model.getData(), this.model.getColumnames());
+        this.suppressionWeightTable.setModel(this.tableModel);
+        this.suppressionWeightTable.getSelectionModel().setSelectionInterval(this.selectedRow, this.selectedRow);
+        int index = this.suppressionWeightTable.getSelectedRow();
+        this.suppressionWeightSlider.setValue(Integer.parseInt(this.model.getData()[index][1]));
     }
 
     /**
@@ -42,7 +88,7 @@ public class MakeProtectedFileView extends javax.swing.JDialog {
         separator = new javax.swing.JSeparator();
         suppressionWeightPerVariableLabel = new javax.swing.JLabel();
         suppressionWeightScrollPane = new javax.swing.JScrollPane();
-        suppressionWeightList = new javax.swing.JList();
+        suppressionWeightTable = new javax.swing.JTable();
         suppressionWeightSlider = new javax.swing.JSlider();
         hhIdentifierPanel = new javax.swing.JPanel();
         keepInSafeFileRadioButton = new javax.swing.JRadioButton();
@@ -55,6 +101,7 @@ public class MakeProtectedFileView extends javax.swing.JDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Make Protected File");
+        setResizable(false);
 
         suppressionPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Suppression"));
 
@@ -85,21 +132,33 @@ public class MakeProtectedFileView extends javax.swing.JDialog {
 
         suppressionWeightPerVariableLabel.setText("Suppression weight per variable");
 
-        suppressionWeightList.setModel(new javax.swing.AbstractListModel() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public Object getElementAt(int i) { return strings[i]; }
+        suppressionWeightTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null},
+                {null, null}
+            },
+            new String [] {
+                "Variable", "Priority"
+            }
+        ));
+        suppressionWeightTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                suppressionWeightTableMouseClicked(evt);
+            }
         });
-        suppressionWeightScrollPane.setViewportView(suppressionWeightList);
+        suppressionWeightTable.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                suppressionWeightTableKeyReleased(evt);
+            }
+        });
+        suppressionWeightScrollPane.setViewportView(suppressionWeightTable);
 
         suppressionWeightSlider.setMajorTickSpacing(100);
         suppressionWeightSlider.setMinorTickSpacing(5);
         suppressionWeightSlider.setPaintTicks(true);
-        suppressionWeightSlider.addInputMethodListener(new java.awt.event.InputMethodListener() {
-            public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
-                suppressionWeightSliderCaretPositionChanged(evt);
-            }
-            public void inputMethodTextChanged(java.awt.event.InputMethodEvent evt) {
+        suppressionWeightSlider.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                suppressionWeightSliderStateChanged(evt);
             }
         });
 
@@ -110,13 +169,14 @@ public class MakeProtectedFileView extends javax.swing.JDialog {
             .addComponent(separator)
             .addGroup(suppressionPanelLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(suppressionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(suppressionWeightScrollPane)
+                .addGroup(suppressionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(noSuppressionRadioButton, javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(useWeightRadioButton, javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(useEntropyRadioButton, javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(suppressionWeightPerVariableLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(suppressionWeightSlider, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                    .addComponent(suppressionWeightPerVariableLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 452, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, suppressionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addComponent(suppressionWeightScrollPane, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                        .addComponent(suppressionWeightSlider, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 152, Short.MAX_VALUE)))
                 .addGap(12, 12, 12))
         );
         suppressionPanelLayout.setVerticalGroup(
@@ -215,20 +275,18 @@ public class MakeProtectedFileView extends javax.swing.JDialog {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(suppressionPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(suppressionPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(hhIdentifierPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(writeRecordRandomOrderCheckBox)
-                            .addComponent(progressbar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(cancelButton)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(makeFileButton)))
-                .addContainerGap())
+                    .addComponent(writeRecordRandomOrderCheckBox)
+                    .addComponent(hhIdentifierPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addGroup(layout.createSequentialGroup()
+                            .addComponent(cancelButton)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(makeFileButton))
+                        .addComponent(progressbar, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -240,11 +298,11 @@ public class MakeProtectedFileView extends javax.swing.JDialog {
                         .addContainerGap())
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(hhIdentifierPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(writeRecordRandomOrderCheckBox)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(progressbar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGap(9, 9, 9)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(cancelButton)
                             .addComponent(makeFileButton))
@@ -259,14 +317,17 @@ public class MakeProtectedFileView extends javax.swing.JDialog {
     }//GEN-LAST:event_makeFileButtonActionPerformed
 
     private void noSuppressionRadioButtonStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_noSuppressionRadioButtonStateChanged
+        this.updateValues();
         controller.noSuppression();
     }//GEN-LAST:event_noSuppressionRadioButtonStateChanged
 
     private void useWeightRadioButtonStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_useWeightRadioButtonStateChanged
+        this.updateValues();
         controller.useWeight();
     }//GEN-LAST:event_useWeightRadioButtonStateChanged
 
     private void useEntropyRadioButtonStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_useEntropyRadioButtonStateChanged
+        this.updateValues();
         controller.useEntropy();
     }//GEN-LAST:event_useEntropyRadioButtonStateChanged
 
@@ -287,54 +348,65 @@ public class MakeProtectedFileView extends javax.swing.JDialog {
     }//GEN-LAST:event_writeRecordRandomOrderCheckBoxStateChanged
 
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
-        controller.cancel();
+        this.setVisible(false);
     }//GEN-LAST:event_cancelButtonActionPerformed
 
-    private void suppressionWeightSliderCaretPositionChanged(java.awt.event.InputMethodEvent evt) {//GEN-FIRST:event_suppressionWeightSliderCaretPositionChanged
-        controller.suppressionWeight();
-    }//GEN-LAST:event_suppressionWeightSliderCaretPositionChanged
+    private void suppressionWeightSliderStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_suppressionWeightSliderStateChanged
+        this.model.setPriority(selectedRow, suppressionWeightSlider.getValue());
+        updateValues();
+    }//GEN-LAST:event_suppressionWeightSliderStateChanged
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(MakeProtectedFileView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(MakeProtectedFileView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(MakeProtectedFileView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(MakeProtectedFileView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
+    private void suppressionWeightTableKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_suppressionWeightTableKeyReleased
+        this.selectedRow = suppressionWeightTable.getSelectedRow();
+        updateValues();
+    }//GEN-LAST:event_suppressionWeightTableKeyReleased
 
-        /* Create and display the dialog */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                MakeProtectedFileView view = new MakeProtectedFileView(new javax.swing.JFrame(), true);
-                view.addWindowListener(new java.awt.event.WindowAdapter() {
-                    @Override
-                    public void windowClosing(java.awt.event.WindowEvent e) {
-                        System.exit(0);
-                    }
-                });
-                view.setVisible(true);
-            }
-        });
-    }
+    private void suppressionWeightTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_suppressionWeightTableMouseClicked
+        this.selectedRow = suppressionWeightTable.getSelectedRow();
+        updateValues();
+    }//GEN-LAST:event_suppressionWeightTableMouseClicked
+
+//    /**
+//     * @param args the command line arguments
+//     */
+//    public static void main(String args[]) {
+//        /* Set the Nimbus look and feel */
+//        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+//        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+//         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+//         */
+//        try {
+//            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+//                if ("Nimbus".equals(info.getName())) {
+//                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+//                    break;
+//                }
+//            }
+//        } catch (ClassNotFoundException ex) {
+//            java.util.logging.Logger.getLogger(MakeProtectedFileView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        } catch (InstantiationException ex) {
+//            java.util.logging.Logger.getLogger(MakeProtectedFileView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        } catch (IllegalAccessException ex) {
+//            java.util.logging.Logger.getLogger(MakeProtectedFileView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+//            java.util.logging.Logger.getLogger(MakeProtectedFileView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        }
+//        //</editor-fold>
+//
+//        /* Create and display the dialog */
+//        java.awt.EventQueue.invokeLater(new Runnable() {
+//            public void run() {
+//                MakeProtectedFileView view = new MakeProtectedFileView(new javax.swing.JFrame(), true);
+//                view.addWindowListener(new java.awt.event.WindowAdapter() {
+//                    @Override
+//                    public void windowClosing(java.awt.event.WindowEvent e) {
+//                        System.exit(0);
+//                    }
+//                });
+//                view.setVisible(true);
+//            }
+//        });
+//    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton cancelButton;
     private javax.swing.JRadioButton changeIntoSequenceNumberRadioButton;
@@ -348,10 +420,10 @@ public class MakeProtectedFileView extends javax.swing.JDialog {
     private javax.swing.JSeparator separator;
     private javax.swing.ButtonGroup suppressionButtonGroup;
     private javax.swing.JPanel suppressionPanel;
-    private javax.swing.JList suppressionWeightList;
     private javax.swing.JLabel suppressionWeightPerVariableLabel;
     private javax.swing.JScrollPane suppressionWeightScrollPane;
     private javax.swing.JSlider suppressionWeightSlider;
+    private javax.swing.JTable suppressionWeightTable;
     private javax.swing.JRadioButton useEntropyRadioButton;
     private javax.swing.JRadioButton useWeightRadioButton;
     private javax.swing.JCheckBox writeRecordRandomOrderCheckBox;

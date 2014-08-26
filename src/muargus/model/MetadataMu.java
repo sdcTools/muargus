@@ -38,23 +38,15 @@ public class MetadataMu {
 
     //default
     private int dataFileType = DATA_FILE_TYPE_FIXED;
+    private boolean householdData = false;
 
-    //private static boolean fixed = true;
-    //private static boolean free = false;
-    //private static boolean freeWithMeta = false;
-    //private static boolean spss = false;
     // default value
     private String separator = ";";
-
-    // TODO: remove this default/test metadatafile name
-    private String defaultmetaFile = "C:\\Program Files\\MU_ARGUS\\data\\Demodata.rda\\";
 
     private BufferedReader reader;
     private Tokenizer tokenizer;
     private ArrayList<VariableMu> variables;
-    //private static ArrayList<Variables> cloneData;
     private DataFilePair filenames;
-    //private String metadataFile;
 
     public MetadataMu() {
         variables = new ArrayList<>();
@@ -102,7 +94,6 @@ public class MetadataMu {
      * variable it finds and provides the relevant information of this variable
      * (is it recodable, what is it's ID_level etc).
      *
-     * @param metadata the file name/path
      * @throws ArgusException when verify() of the read model fails
      */
     public void readMetadata() throws ArgusException {
@@ -186,6 +177,7 @@ public class MetadataMu {
                         variable.setWeight(true);
                         break;
                     case "<HOUSE_ID>":
+                        this.setHouseholdData(true);
                         variable.setHouse_id(true);
                         break;
                     case "<HOUSEHOLD>":
@@ -354,6 +346,14 @@ public class MetadataMu {
 
     public void setFileNames(DataFilePair filenames) {
         this.filenames = filenames;
+    }
+
+    public boolean isHouseholdData() {
+        return householdData;
+    }
+
+    public void setHouseholdData(boolean householdData) {
+        this.householdData = householdData;
     }
 
     // TODO: remove after testing

@@ -11,29 +11,46 @@ import java.util.ArrayList;
  * @author ambargus
  */
 public class MakeProtectedFileModel {
-    private ArrayList<ArrayList<String>> suppressionVariablesTable;
+    
+    private ArrayList<VariableMu> variables;
+    private String[][] data;
+    private final String[] columnames;
 
     /**
      * 
      */
     public MakeProtectedFileModel() {
-        this.suppressionVariablesTable = new ArrayList<>();
+        this.variables = new ArrayList<>();
+        this.columnames = new String[]{"Variables", "Priority"};
     }
 
-    /**
-     * 
-     * @return 
-     */
-    public ArrayList<ArrayList<String>> getSuppressionVariablesTable() {
-        return suppressionVariablesTable;
+    public void setVariables(ArrayList<VariableMu> variables){
+        this.variables = variables;
     }
 
-    /**
-     * 
-     * @param suppressionVariablesTable 
-     */
-    public void setSuppressionVariablesTable(ArrayList<ArrayList<String>> suppressionVariablesTable) {
-        this.suppressionVariablesTable = suppressionVariablesTable;
+    public ArrayList<VariableMu> getVariables() {
+        return variables;
+    }
+
+    public String[] getColumnames() {
+        return columnames;
+    }
+    
+    public String[][] getData(){
+        if(this.data == null){
+            this.data = new String[this.variables.size()][2];
+            int index = 0;
+            for(VariableMu v: variables){
+                this.data[index][0] = v.getName();
+                this.data[index][1] = Integer.toString(v.getSuppressweight());
+                index++;
+            }
+        }
+        return this.data;
+    }
+    
+    public void setPriority(int selectedRow, int priority){
+        this.data[selectedRow][1] = Integer.toString(priority);
     }
      
 }
