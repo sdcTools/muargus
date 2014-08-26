@@ -2,7 +2,6 @@ package muargus.view;
 
 import argus.model.ArgusException;
 import java.awt.Frame;
-import java.awt.HeadlessException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import javax.swing.DefaultListModel;
@@ -32,7 +31,6 @@ public class SelectCombinationsView extends javax.swing.JDialog {
     private DefaultListModel variablesSelectedListModel;
     private TableModel tableModel;
     private final Frame parent;
-    //private int numberOfVariables;
     private long numberOfTables;
 
     /**
@@ -87,13 +85,8 @@ public class SelectCombinationsView extends javax.swing.JDialog {
             variablesList.setSelectedIndex(0);
         }
 
-        // set the default values and the size of the first two colums
+        // set the default values 
         table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-        table.getColumnModel().getColumn(0).setMinWidth(30);
-        table.getColumnModel().getColumn(0).setPreferredWidth(30);
-        table.getColumnModel().getColumn(1).setMinWidth(50);
-        table.getColumnModel().getColumn(1).setPreferredWidth(50);
-        
         table.setDefaultRenderer(Object.class, new TableCellRenderer());
         
         updateValues();
@@ -125,6 +118,10 @@ public class SelectCombinationsView extends javax.swing.JDialog {
         table.setModel(tableModel);
 
         // sets the size of each column
+        table.getColumnModel().getColumn(0).setMinWidth(30);
+        table.getColumnModel().getColumn(0).setPreferredWidth(30);
+        table.getColumnModel().getColumn(1).setMinWidth(50);
+        table.getColumnModel().getColumn(1).setPreferredWidth(50);
         for (int i = 2; i < table.getColumnModel().getColumnCount(); i++) {
             table.getColumnModel().getColumn(i).setMinWidth(70);
             table.getColumnModel().getColumn(i).setPreferredWidth(70);

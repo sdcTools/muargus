@@ -4,7 +4,12 @@
  */
 package muargus.controller;
 
+import muargus.model.MakeProtectedFileModel;
+import muargus.model.MetadataMu;
+import muargus.model.SelectCombinationsModel;
 import muargus.view.MakeProtectedFileView;
+
+    
 
 /**
  *
@@ -13,13 +18,31 @@ import muargus.view.MakeProtectedFileView;
 public class MakeProtectedFileController {
     
     MakeProtectedFileView view;
-
+    MakeProtectedFileModel model;
+    MetadataMu metadata;
+    SelectCombinationsModel selectCombinationsModel;
     /**
      * 
-     * @param view 
+     * @param parentView
+     * @param metadata 
+     * @param model 
+     * @param selectCombinationsModel 
      */
-    public MakeProtectedFileController(MakeProtectedFileView view) {
-        this.view = view;
+    public MakeProtectedFileController(java.awt.Frame parentView, MetadataMu metadata,
+            MakeProtectedFileModel model, SelectCombinationsModel selectCombinationsModel) {
+        this.model = model;
+        this.view = new MakeProtectedFileView(parentView, true, this);
+        this.metadata = metadata;
+        this.view.setMetadataMu(this.metadata);
+        this.selectCombinationsModel = selectCombinationsModel;
+    }
+    
+    public void showView(){
+        this.view.setVisible(true);
+    }
+    
+    public MakeProtectedFileModel getModel() {
+        return this.model;
     }
     
     /**
@@ -28,6 +51,10 @@ public class MakeProtectedFileController {
     public void makeFile() {                                               
         view.setVisible(false);
     }                                              
+
+    public SelectCombinationsModel getSelectCombinationsModel() {
+        return selectCombinationsModel;
+    }
     
     /**
      * 

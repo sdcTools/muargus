@@ -3,24 +3,6 @@ niet behandelde opmerkingen/vragen:
 
 Nog te doen:                                                                                                    Mee bezig:
 
-1. noSuppressionRadioButton:
--   als aangeklikt, disable suppressionWeightPerVariableLabel, suppressionWeightList en suppressionWeightSlider
-2. useWeightRadioButton:
--   als aangeklikt, enable suppressionWeightPerVariableLabel, suppressionWeightList en suppressionWeightSlider
-3. useEntropyRadioButton:
--   als aangeklikt, disable suppressionWeightPerVariableLabel, suppressionWeightList en suppressionWeightSlider
-4. suppressionWeightList:
--   verander naar jTable ipv List
--   vul eerste kolom met alle variabelen die gebruikt zijn om tabellen mee te maken
--   vul tweede kolom met de suppressionweight (zit in de metadata)
-5. suppressionWeightSlider:
--   geef aan dat het een waarde van 0 tot 100 kan aannemen
--   zet de positie van de slider op de waarde van de geselecteerde rij van de suppressionWeightTable
--   link de slider aan de geselecteerde waarde (weight) van de tabel
-6. hhIdentifierPanel:
--   dit deel (plus alle daartoe behorende elementen) is alleen enabled als er een hhIdentifier in de metadata zit
-7. hhRadioButtons:
--   zet deze RadioButtons in een RadioButtonGroup zodat maar 1 tegelijkertijd geselecteerd kan zijn
 8. progressbar:
 -   link aan makeFileButton
 9. cancelButton:
@@ -30,15 +12,35 @@ Nog te doen:                                                                    
 -   open fileChooser om te bepalen waar de nieuwe files opgeslagen moeten worden
 -   maak protected file, metadatafile en html-output (groot deel kan met de dll)
 -   open view report die de ouput weergeeft
+
+
+
+
+Behandelde opmerkingen/vragen:                                                                                      Antwoord:
+
+Gedaan:                                                                                                             Door:
+1. noSuppressionRadioButton:
+    - als aangeklikt, disable suppressionWeightPerVariableLabel, suppressionWeightList en suppressionWeightSlider   Jeldrik
+2. useWeightRadioButton:
+    - als aangeklikt, enable suppressionWeightPerVariableLabel, suppressionWeightList en suppressionWeightSlider    Jeldrik
+3. useEntropyRadioButton:
+    - als aangeklikt, disable suppressionWeightPerVariableLabel, suppressionWeightList en suppressionWeightSlider   Jeldrik 
+4. suppressionWeightList:
+    - verander naar jTable ipv List                                                                                 Jeldrik
+    - vul eerste kolom met alle variabelen die gebruikt zijn om tabellen mee te maken                               Jeldrik
+    - vul tweede kolom met de suppressionweight (zit in de metadata)                                                Jeldrik
+5. suppressionWeightSlider:
+    - geef aan dat het een waarde van 0 tot 100 kan aannemen                                                        Jeldrik  
+    - link de slider aan de geselecteerde waarde (weight) van de tabel                                              Jeldrik
+    - zet de positie van de slider op de waarde van de geselecteerde rij van de suppressionWeightTable              Jeldrik
+6. hhIdentifierPanel:
+    - dit deel (plus alle daartoe behorende elementen) is alleen enabled als er een hhIdentifier in de metadata zit Jeldrik
+7. hhRadioButtons:
+    - zet deze RadioButtons in een RadioButtonGroup zodat maar 1 tegelijkertijd geselecteerd kan zijn               Jeldrik
+9. cancelButton:
+    - sluit het scherm                                                                                              Jeldrik
 11. writeRecordRamdomOrderCheckBox
--   alleen mogelijk bij fixed format
-
-
-
-Behandelde opmerkingen/vragen:                                                                                  Antwoord:
-
-Gedaan:                                                                                                         Door:
-
+    - alleen mogelijk bij fixed format                                                                              Jeldrik
 
 Whishlist:
 -   weights automatisch bepalen door middel van entropie? Ik weet niet precies hoe dit zou moeten maar hierdoor

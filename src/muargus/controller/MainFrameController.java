@@ -7,10 +7,10 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import muargus.model.GlobalRecodeModel;
+import muargus.model.MakeProtectedFileModel;
 import muargus.model.MetadataMu;
 import muargus.model.SelectCombinationsModel;
 import muargus.view.MainFrameView;
-import muargus.view.MakeProtectedFileView;
 import muargus.view.ViewReportView;
 
 /**
@@ -24,6 +24,7 @@ public class MainFrameController {
     MetadataMu metadata;
     SelectCombinationsModel selectCombinationsModel;
     GlobalRecodeModel globalRecodeModel;
+    MakeProtectedFileModel makeProtectedFileModel;
 
     public enum Action {
         OpenMicrodata,
@@ -52,6 +53,7 @@ public class MainFrameController {
         this.view = view;
         this.selectCombinationsModel = new SelectCombinationsModel();
         this.globalRecodeModel = null;
+        this.makeProtectedFileModel = null;
         this.metadata = new MetadataMu(); 
     }
 
@@ -121,8 +123,7 @@ public class MainFrameController {
      * 
      */
     public void globalRecode() {
-        if (this.globalRecodeModel == null)
-        {
+        if (this.globalRecodeModel == null){
             this.globalRecodeModel = new GlobalRecodeModel();
             this.globalRecodeModel.setVariables(this.selectCombinationsModel.getVariablesInTables());
         }
@@ -177,10 +178,17 @@ public class MainFrameController {
     /**
      * 
      */
-    public void makeProtectedFile() {                                                          
-        MakeProtectedFileView view = new MakeProtectedFileView(this.view, true);
-        view.setVisible(true);
-    }                                                         
+    public void makeProtectedFile() {      
+        if (this.makeProtectedFileModel == null){
+            this.makeProtectedFileModel = new MakeProtectedFileModel();
+            this.makeProtectedFileModel.setVariables(this.selectCombinationsModel.getVariablesInTables());
+        }
+        
+        MakeProtectedFileController controller = new  MakeProtectedFileController(
+                this.view, this.metadata, this.makeProtectedFileModel, this.selectCombinationsModel);
+        controller.showView();
+    }     
+   
 
     /**
      * 

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
-<Form version="1.3" maxVersion="1.8" type="org.netbeans.modules.form.forminfo.JDialogFormInfo">
+<Form version="1.5" maxVersion="1.8" type="org.netbeans.modules.form.forminfo.JDialogFormInfo">
   <NonVisualComponents>
     <Component class="javax.swing.ButtonGroup" name="suppressionButtonGroup">
     </Component>
@@ -10,6 +10,7 @@
   <Properties>
     <Property name="defaultCloseOperation" type="int" value="2"/>
     <Property name="title" type="java.lang.String" value="Make Protected File"/>
+    <Property name="resizable" type="boolean" value="false"/>
   </Properties>
   <SyntheticProperties>
     <SyntheticProperty name="formSizePolicy" type="int" value="1"/>
@@ -32,24 +33,21 @@
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="suppressionPanel" min="-2" max="-2" attributes="0"/>
-              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+              <Component id="suppressionPanel" min="-2" pref="184" max="-2" attributes="0"/>
+              <EmptySpace type="separate" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" attributes="0">
-                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                          <Component id="hhIdentifierPanel" max="32767" attributes="0"/>
-                          <Component id="writeRecordRandomOrderCheckBox" min="-2" max="-2" attributes="0"/>
-                          <Component id="progressbar" alignment="0" max="32767" attributes="0"/>
+                  <Component id="writeRecordRandomOrderCheckBox" min="-2" max="-2" attributes="0"/>
+                  <Component id="hhIdentifierPanel" min="-2" max="-2" attributes="0"/>
+                  <Group type="103" alignment="0" groupAlignment="1" max="-2" attributes="0">
+                      <Group type="102" attributes="0">
+                          <Component id="cancelButton" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace max="32767" attributes="0"/>
+                          <Component id="makeFileButton" min="-2" max="-2" attributes="0"/>
                       </Group>
-                  </Group>
-                  <Group type="102" alignment="0" attributes="0">
-                      <Component id="cancelButton" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="32767" attributes="0"/>
-                      <Component id="makeFileButton" min="-2" max="-2" attributes="0"/>
+                      <Component id="progressbar" alignment="0" min="-2" pref="195" max="-2" attributes="0"/>
                   </Group>
               </Group>
-              <EmptySpace max="-2" attributes="0"/>
+              <EmptySpace max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -64,11 +62,11 @@
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
                       <Component id="hhIdentifierPanel" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Component id="writeRecordRandomOrderCheckBox" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="32767" attributes="0"/>
                       <Component id="progressbar" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="9" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="cancelButton" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="makeFileButton" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -96,13 +94,15 @@
               <Component id="separator" alignment="0" max="32767" attributes="0"/>
               <Group type="102" attributes="0">
                   <EmptySpace max="32767" attributes="0"/>
-                  <Group type="103" groupAlignment="1" max="-2" attributes="0">
-                      <Component id="suppressionWeightScrollPane" max="32767" attributes="0"/>
+                  <Group type="103" groupAlignment="1" attributes="0">
                       <Component id="noSuppressionRadioButton" alignment="0" min="-2" max="-2" attributes="0"/>
                       <Component id="useWeightRadioButton" alignment="0" min="-2" max="-2" attributes="0"/>
                       <Component id="useEntropyRadioButton" alignment="0" min="-2" max="-2" attributes="0"/>
-                      <Component id="suppressionWeightPerVariableLabel" alignment="1" max="32767" attributes="0"/>
-                      <Component id="suppressionWeightSlider" pref="0" max="32767" attributes="0"/>
+                      <Component id="suppressionWeightPerVariableLabel" alignment="1" min="-2" pref="452" max="-2" attributes="0"/>
+                      <Group type="103" alignment="0" groupAlignment="1" max="-2" attributes="0">
+                          <Component id="suppressionWeightScrollPane" alignment="0" pref="0" max="32767" attributes="0"/>
+                          <Component id="suppressionWeightSlider" alignment="0" pref="152" max="32767" attributes="0"/>
+                      </Group>
                   </Group>
                   <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
               </Group>
@@ -174,18 +174,16 @@
 
           <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
           <SubComponents>
-            <Component class="javax.swing.JList" name="suppressionWeightList">
+            <Component class="javax.swing.JTable" name="suppressionWeightTable">
               <Properties>
-                <Property name="model" type="javax.swing.ListModel" editor="org.netbeans.modules.form.editors2.ListModelEditor">
-                  <StringArray count="5">
-                    <StringItem index="0" value="Item 1"/>
-                    <StringItem index="1" value="Item 2"/>
-                    <StringItem index="2" value="Item 3"/>
-                    <StringItem index="3" value="Item 4"/>
-                    <StringItem index="4" value="Item 5"/>
-                  </StringArray>
+                <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                  <Connection code="new javax.swing.table.DefaultTableModel(&#xa;    new Object [][] {&#xa;        {null, null},&#xa;        {null, null}&#xa;    },&#xa;    new String [] {&#xa;        &quot;Variable&quot;, &quot;Priority&quot;&#xa;    }&#xa;)" type="code"/>
                 </Property>
               </Properties>
+              <Events>
+                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="suppressionWeightTableMouseClicked"/>
+                <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="suppressionWeightTableKeyReleased"/>
+              </Events>
             </Component>
           </SubComponents>
         </Container>
@@ -196,7 +194,7 @@
             <Property name="paintTicks" type="boolean" value="true"/>
           </Properties>
           <Events>
-            <EventHandler event="caretPositionChanged" listener="java.awt.event.InputMethodListener" parameters="java.awt.event.InputMethodEvent" handler="suppressionWeightSliderCaretPositionChanged"/>
+            <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="suppressionWeightSliderStateChanged"/>
           </Events>
         </Component>
       </SubComponents>
