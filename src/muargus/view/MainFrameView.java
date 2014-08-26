@@ -8,6 +8,7 @@ import javax.swing.JButton;
 import javax.swing.JMenuItem;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
+import muargus.CodeTableCellRenderer;
 import muargus.controller.MainFrameController;
 import muargus.model.MetadataMu;
 import muargus.model.SelectCombinationsModel;
@@ -879,6 +880,7 @@ public class MainFrameView extends javax.swing.JFrame {
 
         DefaultTableModel tableModel = new DefaultTableModel(data, columnNames.toArray());
         variablesTable.setModel(tableModel);
+        variablesTable.setDefaultRenderer(Object.class, new CodeTableCellRenderer());
 
     }
     

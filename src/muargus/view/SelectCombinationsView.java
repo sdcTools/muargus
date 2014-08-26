@@ -17,7 +17,7 @@ import muargus.model.SelectCombinationsModel;
 import muargus.model.TableMu;
 import muargus.model.VariableMu;
 import muargus.MuARGUS;
-import muargus.TableCellRenderer;
+import muargus.CombinationsTableCellRenderer;
 
 /**
  *
@@ -94,7 +94,7 @@ public class SelectCombinationsView extends javax.swing.JDialog {
         table.getColumnModel().getColumn(1).setMinWidth(50);
         table.getColumnModel().getColumn(1).setPreferredWidth(50);
         
-        table.setDefaultRenderer(Object.class, new TableCellRenderer());
+        table.setDefaultRenderer(Object.class, new CombinationsTableCellRenderer());
         
         updateValues();
     }
