@@ -4,6 +4,8 @@
  */
 package muargus.controller;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import muargus.model.MakeProtectedFileModel;
 import muargus.model.MetadataMu;
 import muargus.model.SelectCombinationsModel;
@@ -15,7 +17,7 @@ import muargus.view.MakeProtectedFileView;
  *
  * @author ambargus
  */
-public class MakeProtectedFileController {
+public class MakeProtectedFileController implements PropertyChangeListener {
     
     MakeProtectedFileView view;
     MakeProtectedFileModel model;
@@ -48,8 +50,10 @@ public class MakeProtectedFileController {
     /**
      * 
      */
-    public void makeFile() {                                               
-        view.setVisible(false);
+    public void makeFile() {
+        TableService service = new TableService();
+        service.setPropertyChangeListener(this);
+        service.makeProtectedFile(model, metadata, selectCombinationsModel);
     }                                              
 
     public SelectCombinationsModel getSelectCombinationsModel() {
@@ -118,5 +122,17 @@ public class MakeProtectedFileController {
     public void suppressionWeight() {                                                             
         // TODO add your handling code here:
     }
+    
+        @Override
+    public void propertyChange(PropertyChangeEvent pce) {
+        switch (pce.getPropertyName()) {
+            case "progress":
+                view.setProgress(pce.getNewValue());
+                break;
+            case "status":
+                view.setVisible(pce.getNewValue() != "done");
+        }
+    }
+
     
 }

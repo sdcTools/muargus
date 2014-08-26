@@ -70,6 +70,10 @@ public class MakeProtectedFileView extends javax.swing.JDialog {
         this.suppressionWeightSlider.setValue(Integer.parseInt(this.model.getData()[index][1]));
     }
 
+    public void setProgress(Object value) {
+        this.progressbar.setValue((Integer) value);
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always

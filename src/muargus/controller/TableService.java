@@ -13,6 +13,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.nio.channels.SeekableByteChannel;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.concurrent.ExecutionException;
@@ -23,6 +24,7 @@ import javax.swing.SwingWorker;
 import muargus.MuARGUS;
 import muargus.extern.dataengine.CMuArgCtrl;
 import muargus.extern.dataengine.IProgressListener;
+import muargus.model.MakeProtectedFileModel;
 import muargus.model.MetadataMu;
 import muargus.model.SelectCombinationsModel;
 import muargus.model.TableMu;
@@ -42,6 +44,57 @@ public class TableService {
     
     private PropertyChangeListener listener;
 
+    public void makeProtectedFile(final MakeProtectedFileModel model, final MetadataMu metadata, 
+            final SelectCombinationsModel selectCombinationsModel)
+    {
+        final SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
+
+            // called in a separate thread...
+            @Override
+            protected Void doInBackground() throws Exception {
+                makeFileInBackground(model, metadata, selectCombinationsModel);
+                return null;
+            }
+
+            // called on the GUI thread
+            @Override
+            public void done() {
+                super.done();
+                try {
+                    get();
+                    workerDone();
+                } catch (InterruptedException ex) {
+                    logger.log(Level.SEVERE, null, ex);
+                } catch (ExecutionException ex) {
+                    JOptionPane.showMessageDialog(null, ex.getCause().getMessage());
+                }
+            }
+        };        
+        worker.addPropertyChangeListener(null);
+        worker.execute();
+    }
+    
+    private void makeFileInBackground(final MakeProtectedFileModel model, final MetadataMu metadata,
+            final SelectCombinationsModel selectCombinationsModel) {
+        
+                IProgressListener progressListener = new IProgressListener() {
+            @Override
+            public void UpdateProgress(final int percentage) {
+                firePropertyChange("progress", null, percentage);
+                //propertyChanged(listener, "progress", null, percentage);
+            }
+        };
+        c.SetProgressListener(progressListener);
+        int index=0;
+        for (VariableMu variable : getVariables(metadata, selectCombinationsModel)) {
+            index++;
+            if (model.getVariables().contains(variable)) {
+                c.SetSuppressPrior(index, variable.getSuppressweight());
+            }
+        }
+        //c.MakeFileSafe(null, true, true, HHIdentOption, true, true)
+    }
+    
     public void calculateTables(final SelectCombinationsModel model, final MetadataMu metadata) {
 
         final SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
@@ -73,7 +126,7 @@ public class TableService {
     }
     
     private void workerDone() {
-        this. firePropertyChange("status", null, "done");
+        this.firePropertyChange("status", null, "done");
     }
     
     public void setPropertyChangeListener(PropertyChangeListener listener) {
