@@ -1,16 +1,18 @@
 niet behandelde opmerkingen/vragen:
  
-- constanten bovenaan zetten, niet in de code --> 
-    Anne: is dit ook nodig voor de waardes die zijn gebruikt om de breedte van de kolommen aan te geven?
 
 Nog te doen:                                                                                                    Mee bezig:
     
 Release 1
-20. bug CalculateTables: free format crasht 
+- constanten bovenaan zetten, niet in de code --> 
+    Anne: is dit ook nodig voor de waardes die zijn gebruikt om de breedte van de kolommen aan te geven?
+    Ja, beter om dit ook te doen.
 
 Release 2+
 
-6. table: 
+6. table: - constanten bovenaan zetten, niet in de code --> 
+    Anne: is dit ook nodig voor de waardes die zijn gebruikt om de breedte van de kolommen aan te geven?
+    Ja, beter om dit ook te doen.
     - geselecteerde rij visable 
     - kolommen klikken en sorteren (RowSorter: http://docs.oracle.com/javase/7/docs/api/javax/swing/RowSorter.html)
 15. progressbar
@@ -101,8 +103,13 @@ Gedaan:                                                                         
     - boolean variable riskModel
     - method isRiskModel
     - method setRiskModel
+20. bug CalculateTables: free format crasht                                                                     Anne
+
+
     - method getVariables
     - method setVariables
     - method getUnsafeCombinations(VariableMu ... variable, int dimensions) (dimensions should equal number of variables)
     - iets om het aantal onveilige combinaties per dimensie goed op te slaan (array?)
+
+
     
