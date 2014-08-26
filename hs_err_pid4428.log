@@ -1,0 +1,554 @@
+#
+# A fatal error has been detected by the Java Runtime Environment:
+#
+#  EXCEPTION_ACCESS_VIOLATION (0xc0000005) at pc=0x6afc19d7, pid=4428, tid=4560
+#
+# JRE version: Java(TM) SE Runtime Environment (8.0-b132) (build 1.8.0-b132)
+# Java VM: Java HotSpot(TM) Client VM (25.0-b70 mixed mode, sharing windows-x86 )
+# Problematic frame:
+# C  [libmuargusdll.dll+0x19d7]
+#
+# Failed to write core dump. Minidumps are not enabled by default on client versions of Windows
+#
+# If you would like to submit a bug report, please visit:
+#   http://bugreport.sun.com/bugreport/crash.jsp
+# The crash happened outside the Java Virtual Machine in native code.
+# See problematic frame for where to report the bug.
+#
+
+---------------  T H R E A D  ---------------
+
+Current thread (0x1505c000):  JavaThread "AWT-EventQueue-0" [_thread_in_native, id=4560, stack(0x15300000,0x15350000)]
+
+siginfo: ExceptionCode=0xc0000005, reading address 0x00000008
+
+Registers:
+EAX=0x00000008, EBX=0x00000003, ECX=0x00183c00, EDX=0x00000000
+ESP=0x1534cca0, EBP=0x1534ccb8, ESI=0x1610a748, EDI=0x16117608
+EIP=0x6afc19d7, EFLAGS=0x00010202
+
+Top of Stack: (sp=0x1534cca0)
+0x1534cca0:   00000000 00000000 00000001 00183c00
+0x1534ccb0:   1610a748 00000003 1534cf38 6afc4c1c
+0x1534ccc0:   00000000 1534cd18 00000000 1534ccf0
+0x1534ccd0:   ffffffff 00000014 5fa82ba0 00000000
+0x1534cce0:   0000fffe 027f0c7f 000000bd 00183c00
+0x1534ccf0:   0000001c 0000001c 0000001c ffffffff
+0x1534cd00:   00000014 5fa82ba0 00000000 fffffffe
+0x1534cd10:   00000000 00000001 00000001 00000002 
+
+Instructions: (pc=0x6afc19d7)
+0x6afc19b7:   04 00 90 55 89 e5 53 83 ec 14 89 4d f4 8b 45 f4
+0x6afc19c7:   8b 00 85 c0 74 1e 8b 45 f4 8b 00 8b 00 83 c0 08
+0x6afc19d7:   8b 18 8b 45 f4 8b 00 8b 55 08 89 14 24 89 c1 ff
+0x6afc19e7:   d3 83 ec 04 8b 5d fc c9 c2 04 00 55 89 e5 57 56 
+
+
+Register to memory mapping:
+
+EAX=0x00000008 is an unknown value
+EBX=0x00000003 is an unknown value
+ECX=0x00183c00 is an unknown value
+EDX=0x00000000 is an unknown value
+ESP=0x1534cca0 is pointing into the stack for thread: 0x1505c000
+EBP=0x1534ccb8 is pointing into the stack for thread: 0x1505c000
+ESI=0x1610a748 is an unknown value
+EDI=0x16117608 is an unknown value
+
+
+Stack: [0x15300000,0x15350000],  sp=0x1534cca0,  free space=307k
+Native frames: (J=compiled Java code, j=interpreted, Vv=VM code, C=native code)
+C  [libmuargusdll.dll+0x19d7]
+C  [libmuargusdll.dll+0x4c1c]
+C  [libmuargusdll.dll+0x8dd3]
+C  [libmuargusdll.dll+0x180c6]
+j  muargus.extern.dataengine.MuArgusCtrlJNI.CMuArgCtrl_ApplyRecode(JLmuargus/extern/dataengine/CMuArgCtrl;)Z+0
+j  muargus.extern.dataengine.CMuArgCtrl.ApplyRecode()Z+5
+j  muargus.controller.GlobalRecodeController.undo(Lmuargus/model/RecodeMu;)V+44
+j  muargus.view.GlobalRecodeView.undoButtonActionPerformed(Ljava/awt/event/ActionEvent;)V+8
+j  muargus.view.GlobalRecodeView.access$700(Lmuargus/view/GlobalRecodeView;Ljava/awt/event/ActionEvent;)V+2
+j  muargus.view.GlobalRecodeView$8.actionPerformed(Ljava/awt/event/ActionEvent;)V+5
+j  javax.swing.AbstractButton.fireActionPerformed(Ljava/awt/event/ActionEvent;)V+83
+j  javax.swing.AbstractButton$Handler.actionPerformed(Ljava/awt/event/ActionEvent;)V+5
+j  javax.swing.DefaultButtonModel.fireActionPerformed(Ljava/awt/event/ActionEvent;)V+34
+j  javax.swing.DefaultButtonModel.setPressed(Z)V+117
+j  javax.swing.plaf.basic.BasicButtonListener.mouseReleased(Ljava/awt/event/MouseEvent;)V+35
+j  java.awt.Component.processMouseEvent(Ljava/awt/event/MouseEvent;)V+64
+j  javax.swing.JComponent.processMouseEvent(Ljava/awt/event/MouseEvent;)V+23
+J 1553 C1 java.awt.Component.processEvent(Ljava/awt/AWTEvent;)V (220 bytes) @ 0x01dc70b8 [0x01dc6fb0+0x108]
+J 1580 C1 java.awt.Container.processEvent(Ljava/awt/AWTEvent;)V (22 bytes) @ 0x01dce758 [0x01dce6e0+0x78]
+J 1081 C1 java.awt.Component.dispatchEventImpl(Ljava/awt/AWTEvent;)V (883 bytes) @ 0x01d341ec [0x01d33450+0xd9c]
+J 735 C1 java.awt.Container.dispatchEventImpl(Ljava/awt/AWTEvent;)V (129 bytes) @ 0x01cb94fc [0x01cb94a0+0x5c]
+J 395 C1 java.awt.LightweightDispatcher.retargetMouseEvent(Ljava/awt/Component;ILjava/awt/event/MouseEvent;)V (350 bytes) @ 0x01c50aac [0x01c50470+0x63c]
+J 1476 C1 java.awt.LightweightDispatcher.processMouseEvent(Ljava/awt/event/MouseEvent;)Z (301 bytes) @ 0x01dac950 [0x01dac5a0+0x3b0]
+J 1101 C1 java.awt.LightweightDispatcher.dispatchEvent(Ljava/awt/AWTEvent;)Z (73 bytes) @ 0x01d3c45c [0x01d3c370+0xec]
+J 735 C1 java.awt.Container.dispatchEventImpl(Ljava/awt/AWTEvent;)V (129 bytes) @ 0x01cb94e0 [0x01cb94a0+0x40]
+J 1194 C1 java.awt.Window.dispatchEventImpl(Ljava/awt/AWTEvent;)V (23 bytes) @ 0x01d55248 [0x01d55140+0x108]
+J 586 C1 java.awt.EventQueue.dispatchEventImpl(Ljava/awt/AWTEvent;Ljava/lang/Object;)V (149 bytes) @ 0x01c8a948 [0x01c8a570+0x3d8]
+J 523 C1 java.awt.EventQueue$3.run()Ljava/lang/Void; (60 bytes) @ 0x01c78c9c [0x01c78c40+0x5c]
+J 522 C1 java.awt.EventQueue$3.run()Ljava/lang/Object; (5 bytes) @ 0x01c78a20 [0x01c78a00+0x20]
+v  ~StubRoutines::call_stub
+V  [jvm.dll+0x142285]
+V  [jvm.dll+0x2070be]
+V  [jvm.dll+0x14231e]
+V  [jvm.dll+0xf99ed]
+C  [java.dll+0x102f]
+J 453 C1 java.security.ProtectionDomain$1.doIntersectionPrivilege(Ljava/security/PrivilegedAction;Ljava/security/AccessControlContext;Ljava/security/AccessControlContext;)Ljava/lang/Object; (32 bytes) @ 0x01c64ed4 [0x01c64e30+0xa4]
+J 1053 C1 java.awt.EventQueue$4.run()Ljava/lang/Object; (5 bytes) @ 0x01d2b5ac [0x01d2b4f0+0xbc]
+v  ~StubRoutines::call_stub
+V  [jvm.dll+0x142285]
+V  [jvm.dll+0x2070be]
+V  [jvm.dll+0x14231e]
+V  [jvm.dll+0xf99ed]
+C  [java.dll+0x102f]
+J 584 C1 java.awt.EventQueue.dispatchEvent(Ljava/awt/AWTEvent;)V (80 bytes) @ 0x01c89874 [0x01c895c0+0x2b4]
+J 369 C1 java.awt.EventDispatchThread.pumpOneEventForFilters(I)V (295 bytes) @ 0x01c45218 [0x01c44b80+0x698]
+J 876 C1 java.awt.EventDispatchThread.pumpEventsForFilter(ILjava/awt/Conditional;Ljava/awt/EventFilter;)V (47 bytes) @ 0x01ce5850 [0x01ce57c0+0x90]
+j  java.awt.EventDispatchThread.pumpEventsForFilter(Ljava/awt/Conditional;Ljava/awt/EventFilter;)V+4
+j  java.awt.WaitDispatchSupport$2.run()V+59
+j  java.awt.WaitDispatchSupport$4.run()Ljava/lang/Void;+4
+j  java.awt.WaitDispatchSupport$4.run()Ljava/lang/Object;+1
+v  ~StubRoutines::call_stub
+V  [jvm.dll+0x142285]
+V  [jvm.dll+0x2070be]
+V  [jvm.dll+0x14231e]
+V  [jvm.dll+0xf99ed]
+C  [java.dll+0x1015]
+j  java.awt.WaitDispatchSupport.enter()Z+279
+j  java.awt.Dialog.show()V+233
+j  java.awt.Component.show(Z)V+5
+j  java.awt.Component.setVisible(Z)V+2
+j  java.awt.Window.setVisible(Z)V+2
+j  java.awt.Dialog.setVisible(Z)V+2
+j  muargus.controller.GlobalRecodeController.showView()V+5
+j  muargus.controller.MainFrameController.globalRecode()V+57
+j  muargus.view.MainFrameView.globalRecodeMenuItemActionPerformed(Ljava/awt/event/ActionEvent;)V+4
+j  muargus.view.MainFrameView.access$400(Lmuargus/view/MainFrameView;Ljava/awt/event/ActionEvent;)V+2
+j  muargus.view.MainFrameView$5.actionPerformed(Ljava/awt/event/ActionEvent;)V+5
+j  javax.swing.AbstractButton.fireActionPerformed(Ljava/awt/event/ActionEvent;)V+83
+j  javax.swing.AbstractButton$Handler.actionPerformed(Ljava/awt/event/ActionEvent;)V+5
+j  javax.swing.DefaultButtonModel.fireActionPerformed(Ljava/awt/event/ActionEvent;)V+34
+j  javax.swing.DefaultButtonModel.setPressed(Z)V+117
+j  javax.swing.plaf.basic.BasicButtonListener.mouseReleased(Ljava/awt/event/MouseEvent;)V+35
+j  java.awt.Component.processMouseEvent(Ljava/awt/event/MouseEvent;)V+64
+j  javax.swing.JComponent.processMouseEvent(Ljava/awt/event/MouseEvent;)V+23
+J 1553 C1 java.awt.Component.processEvent(Ljava/awt/AWTEvent;)V (220 bytes) @ 0x01dc70b8 [0x01dc6fb0+0x108]
+J 1580 C1 java.awt.Container.processEvent(Ljava/awt/AWTEvent;)V (22 bytes) @ 0x01dce758 [0x01dce6e0+0x78]
+J 1081 C1 java.awt.Component.dispatchEventImpl(Ljava/awt/AWTEvent;)V (883 bytes) @ 0x01d341ec [0x01d33450+0xd9c]
+J 735 C1 java.awt.Container.dispatchEventImpl(Ljava/awt/AWTEvent;)V (129 bytes) @ 0x01cb94fc [0x01cb94a0+0x5c]
+J 395 C1 java.awt.LightweightDispatcher.retargetMouseEvent(Ljava/awt/Component;ILjava/awt/event/MouseEvent;)V (350 bytes) @ 0x01c50aac [0x01c50470+0x63c]
+J 1476 C1 java.awt.LightweightDispatcher.processMouseEvent(Ljava/awt/event/MouseEvent;)Z (301 bytes) @ 0x01dac950 [0x01dac5a0+0x3b0]
+J 1101 C1 java.awt.LightweightDispatcher.dispatchEvent(Ljava/awt/AWTEvent;)Z (73 bytes) @ 0x01d3c45c [0x01d3c370+0xec]
+J 735 C1 java.awt.Container.dispatchEventImpl(Ljava/awt/AWTEvent;)V (129 bytes) @ 0x01cb94e0 [0x01cb94a0+0x40]
+J 1194 C1 java.awt.Window.dispatchEventImpl(Ljava/awt/AWTEvent;)V (23 bytes) @ 0x01d55248 [0x01d55140+0x108]
+J 586 C1 java.awt.EventQueue.dispatchEventImpl(Ljava/awt/AWTEvent;Ljava/lang/Object;)V (149 bytes) @ 0x01c8a948 [0x01c8a570+0x3d8]
+J 523 C1 java.awt.EventQueue$3.run()Ljava/lang/Void; (60 bytes) @ 0x01c78c9c [0x01c78c40+0x5c]
+J 522 C1 java.awt.EventQueue$3.run()Ljava/lang/Object; (5 bytes) @ 0x01c78a20 [0x01c78a00+0x20]
+v  ~StubRoutines::call_stub
+V  [jvm.dll+0x142285]
+V  [jvm.dll+0x2070be]
+V  [jvm.dll+0x14231e]
+V  [jvm.dll+0xf99ed]
+C  [java.dll+0x102f]
+J 453 C1 java.security.ProtectionDomain$1.doIntersectionPrivilege(Ljava/security/PrivilegedAction;Ljava/security/AccessControlContext;Ljava/security/AccessControlContext;)Ljava/lang/Object; (32 bytes) @ 0x01c64ed4 [0x01c64e30+0xa4]
+J 1053 C1 java.awt.EventQueue$4.run()Ljava/lang/Object; (5 bytes) @ 0x01d2b5ac [0x01d2b4f0+0xbc]
+v  ~StubRoutines::call_stub
+V  [jvm.dll+0x142285]
+V  [jvm.dll+0x2070be]
+V  [jvm.dll+0x14231e]
+V  [jvm.dll+0xf99ed]
+C  [java.dll+0x102f]
+...<more frames>...
+
+Java frames: (J=compiled Java code, j=interpreted, Vv=VM code)
+j  muargus.extern.dataengine.MuArgusCtrlJNI.CMuArgCtrl_ApplyRecode(JLmuargus/extern/dataengine/CMuArgCtrl;)Z+0
+j  muargus.extern.dataengine.CMuArgCtrl.ApplyRecode()Z+5
+j  muargus.controller.GlobalRecodeController.undo(Lmuargus/model/RecodeMu;)V+44
+j  muargus.view.GlobalRecodeView.undoButtonActionPerformed(Ljava/awt/event/ActionEvent;)V+8
+j  muargus.view.GlobalRecodeView.access$700(Lmuargus/view/GlobalRecodeView;Ljava/awt/event/ActionEvent;)V+2
+j  muargus.view.GlobalRecodeView$8.actionPerformed(Ljava/awt/event/ActionEvent;)V+5
+j  javax.swing.AbstractButton.fireActionPerformed(Ljava/awt/event/ActionEvent;)V+83
+j  javax.swing.AbstractButton$Handler.actionPerformed(Ljava/awt/event/ActionEvent;)V+5
+j  javax.swing.DefaultButtonModel.fireActionPerformed(Ljava/awt/event/ActionEvent;)V+34
+j  javax.swing.DefaultButtonModel.setPressed(Z)V+117
+j  javax.swing.plaf.basic.BasicButtonListener.mouseReleased(Ljava/awt/event/MouseEvent;)V+35
+j  java.awt.Component.processMouseEvent(Ljava/awt/event/MouseEvent;)V+64
+j  javax.swing.JComponent.processMouseEvent(Ljava/awt/event/MouseEvent;)V+23
+J 1553 C1 java.awt.Component.processEvent(Ljava/awt/AWTEvent;)V (220 bytes) @ 0x01dc70b8 [0x01dc6fb0+0x108]
+J 1580 C1 java.awt.Container.processEvent(Ljava/awt/AWTEvent;)V (22 bytes) @ 0x01dce758 [0x01dce6e0+0x78]
+J 1081 C1 java.awt.Component.dispatchEventImpl(Ljava/awt/AWTEvent;)V (883 bytes) @ 0x01d341ec [0x01d33450+0xd9c]
+J 735 C1 java.awt.Container.dispatchEventImpl(Ljava/awt/AWTEvent;)V (129 bytes) @ 0x01cb94fc [0x01cb94a0+0x5c]
+J 395 C1 java.awt.LightweightDispatcher.retargetMouseEvent(Ljava/awt/Component;ILjava/awt/event/MouseEvent;)V (350 bytes) @ 0x01c50aac [0x01c50470+0x63c]
+J 1476 C1 java.awt.LightweightDispatcher.processMouseEvent(Ljava/awt/event/MouseEvent;)Z (301 bytes) @ 0x01dac950 [0x01dac5a0+0x3b0]
+J 1101 C1 java.awt.LightweightDispatcher.dispatchEvent(Ljava/awt/AWTEvent;)Z (73 bytes) @ 0x01d3c45c [0x01d3c370+0xec]
+J 735 C1 java.awt.Container.dispatchEventImpl(Ljava/awt/AWTEvent;)V (129 bytes) @ 0x01cb94e0 [0x01cb94a0+0x40]
+J 1194 C1 java.awt.Window.dispatchEventImpl(Ljava/awt/AWTEvent;)V (23 bytes) @ 0x01d55248 [0x01d55140+0x108]
+J 586 C1 java.awt.EventQueue.dispatchEventImpl(Ljava/awt/AWTEvent;Ljava/lang/Object;)V (149 bytes) @ 0x01c8a948 [0x01c8a570+0x3d8]
+J 523 C1 java.awt.EventQueue$3.run()Ljava/lang/Void; (60 bytes) @ 0x01c78c9c [0x01c78c40+0x5c]
+J 522 C1 java.awt.EventQueue$3.run()Ljava/lang/Object; (5 bytes) @ 0x01c78a20 [0x01c78a00+0x20]
+v  ~StubRoutines::call_stub
+J 431  java.security.AccessController.doPrivileged(Ljava/security/PrivilegedAction;Ljava/security/AccessControlContext;)Ljava/lang/Object; (0 bytes) @ 0x01c5f647 [0x01c5f5e0+0x67]
+J 453 C1 java.security.ProtectionDomain$1.doIntersectionPrivilege(Ljava/security/PrivilegedAction;Ljava/security/AccessControlContext;Ljava/security/AccessControlContext;)Ljava/lang/Object; (32 bytes) @ 0x01c64ed4 [0x01c64e30+0xa4]
+J 1053 C1 java.awt.EventQueue$4.run()Ljava/lang/Object; (5 bytes) @ 0x01d2b5ac [0x01d2b4f0+0xbc]
+v  ~StubRoutines::call_stub
+J 431  java.security.AccessController.doPrivileged(Ljava/security/PrivilegedAction;Ljava/security/AccessControlContext;)Ljava/lang/Object; (0 bytes) @ 0x01c5f647 [0x01c5f5e0+0x67]
+J 584 C1 java.awt.EventQueue.dispatchEvent(Ljava/awt/AWTEvent;)V (80 bytes) @ 0x01c89874 [0x01c895c0+0x2b4]
+J 369 C1 java.awt.EventDispatchThread.pumpOneEventForFilters(I)V (295 bytes) @ 0x01c45218 [0x01c44b80+0x698]
+J 876 C1 java.awt.EventDispatchThread.pumpEventsForFilter(ILjava/awt/Conditional;Ljava/awt/EventFilter;)V (47 bytes) @ 0x01ce5850 [0x01ce57c0+0x90]
+j  java.awt.EventDispatchThread.pumpEventsForFilter(Ljava/awt/Conditional;Ljava/awt/EventFilter;)V+4
+j  java.awt.WaitDispatchSupport$2.run()V+59
+j  java.awt.WaitDispatchSupport$4.run()Ljava/lang/Void;+4
+j  java.awt.WaitDispatchSupport$4.run()Ljava/lang/Object;+1
+v  ~StubRoutines::call_stub
+j  java.security.AccessController.doPrivileged(Ljava/security/PrivilegedAction;)Ljava/lang/Object;+0
+j  java.awt.WaitDispatchSupport.enter()Z+279
+j  java.awt.Dialog.show()V+233
+j  java.awt.Component.show(Z)V+5
+j  java.awt.Component.setVisible(Z)V+2
+j  java.awt.Window.setVisible(Z)V+2
+j  java.awt.Dialog.setVisible(Z)V+2
+j  muargus.controller.GlobalRecodeController.showView()V+5
+j  muargus.controller.MainFrameController.globalRecode()V+57
+j  muargus.view.MainFrameView.globalRecodeMenuItemActionPerformed(Ljava/awt/event/ActionEvent;)V+4
+j  muargus.view.MainFrameView.access$400(Lmuargus/view/MainFrameView;Ljava/awt/event/ActionEvent;)V+2
+j  muargus.view.MainFrameView$5.actionPerformed(Ljava/awt/event/ActionEvent;)V+5
+j  javax.swing.AbstractButton.fireActionPerformed(Ljava/awt/event/ActionEvent;)V+83
+j  javax.swing.AbstractButton$Handler.actionPerformed(Ljava/awt/event/ActionEvent;)V+5
+j  javax.swing.DefaultButtonModel.fireActionPerformed(Ljava/awt/event/ActionEvent;)V+34
+j  javax.swing.DefaultButtonModel.setPressed(Z)V+117
+j  javax.swing.plaf.basic.BasicButtonListener.mouseReleased(Ljava/awt/event/MouseEvent;)V+35
+j  java.awt.Component.processMouseEvent(Ljava/awt/event/MouseEvent;)V+64
+j  javax.swing.JComponent.processMouseEvent(Ljava/awt/event/MouseEvent;)V+23
+J 1553 C1 java.awt.Component.processEvent(Ljava/awt/AWTEvent;)V (220 bytes) @ 0x01dc70b8 [0x01dc6fb0+0x108]
+J 1580 C1 java.awt.Container.processEvent(Ljava/awt/AWTEvent;)V (22 bytes) @ 0x01dce758 [0x01dce6e0+0x78]
+J 1081 C1 java.awt.Component.dispatchEventImpl(Ljava/awt/AWTEvent;)V (883 bytes) @ 0x01d341ec [0x01d33450+0xd9c]
+J 735 C1 java.awt.Container.dispatchEventImpl(Ljava/awt/AWTEvent;)V (129 bytes) @ 0x01cb94fc [0x01cb94a0+0x5c]
+J 395 C1 java.awt.LightweightDispatcher.retargetMouseEvent(Ljava/awt/Component;ILjava/awt/event/MouseEvent;)V (350 bytes) @ 0x01c50aac [0x01c50470+0x63c]
+J 1476 C1 java.awt.LightweightDispatcher.processMouseEvent(Ljava/awt/event/MouseEvent;)Z (301 bytes) @ 0x01dac950 [0x01dac5a0+0x3b0]
+J 1101 C1 java.awt.LightweightDispatcher.dispatchEvent(Ljava/awt/AWTEvent;)Z (73 bytes) @ 0x01d3c45c [0x01d3c370+0xec]
+J 735 C1 java.awt.Container.dispatchEventImpl(Ljava/awt/AWTEvent;)V (129 bytes) @ 0x01cb94e0 [0x01cb94a0+0x40]
+J 1194 C1 java.awt.Window.dispatchEventImpl(Ljava/awt/AWTEvent;)V (23 bytes) @ 0x01d55248 [0x01d55140+0x108]
+J 586 C1 java.awt.EventQueue.dispatchEventImpl(Ljava/awt/AWTEvent;Ljava/lang/Object;)V (149 bytes) @ 0x01c8a948 [0x01c8a570+0x3d8]
+J 523 C1 java.awt.EventQueue$3.run()Ljava/lang/Void; (60 bytes) @ 0x01c78c9c [0x01c78c40+0x5c]
+J 522 C1 java.awt.EventQueue$3.run()Ljava/lang/Object; (5 bytes) @ 0x01c78a20 [0x01c78a00+0x20]
+v  ~StubRoutines::call_stub
+J 431  java.security.AccessController.doPrivileged(Ljava/security/PrivilegedAction;Ljava/security/AccessControlContext;)Ljava/lang/Object; (0 bytes) @ 0x01c5f647 [0x01c5f5e0+0x67]
+J 453 C1 java.security.ProtectionDomain$1.doIntersectionPrivilege(Ljava/security/PrivilegedAction;Ljava/security/AccessControlContext;Ljava/security/AccessControlContext;)Ljava/lang/Object; (32 bytes) @ 0x01c64ed4 [0x01c64e30+0xa4]
+J 1053 C1 java.awt.EventQueue$4.run()Ljava/lang/Object; (5 bytes) @ 0x01d2b5ac [0x01d2b4f0+0xbc]
+v  ~StubRoutines::call_stub
+J 431  java.security.AccessController.doPrivileged(Ljava/security/PrivilegedAction;Ljava/security/AccessControlContext;)Ljava/lang/Object; (0 bytes) @ 0x01c5f647 [0x01c5f5e0+0x67]
+J 584 C1 java.awt.EventQueue.dispatchEvent(Ljava/awt/AWTEvent;)V (80 bytes) @ 0x01c89874 [0x01c895c0+0x2b4]
+J 369 C1 java.awt.EventDispatchThread.pumpOneEventForFilters(I)V (295 bytes) @ 0x01c45218 [0x01c44b80+0x698]
+j  java.awt.EventDispatchThread.pumpEventsForFilter(ILjava/awt/Conditional;Ljava/awt/EventFilter;)V+35
+j  java.awt.EventDispatchThread.pumpEventsForHierarchy(ILjava/awt/Conditional;Ljava/awt/Component;)V+11
+j  java.awt.EventDispatchThread.pumpEvents(ILjava/awt/Conditional;)V+4
+j  java.awt.EventDispatchThread.pumpEvents(Ljava/awt/Conditional;)V+3
+j  java.awt.EventDispatchThread.run()V+9
+v  ~StubRoutines::call_stub
+
+---------------  P R O C E S S  ---------------
+
+Java Threads: ( => current thread )
+  0x14fab400 JavaThread "SwingWorker-pool-2-thread-1" daemon [_thread_blocked, id=5856, stack(0x15e30000,0x15e80000)]
+  0x16cbc800 JavaThread "Swing-Shell" daemon [_thread_blocked, id=2856, stack(0x15720000,0x15770000)]
+  0x16caf000 JavaThread "TimerQueue" daemon [_thread_blocked, id=4308, stack(0x15240000,0x15290000)]
+  0x0016c000 JavaThread "DestroyJavaVM" [_thread_blocked, id=4736, stack(0x017a0000,0x017f0000)]
+=>0x1505c000 JavaThread "AWT-EventQueue-0" [_thread_in_native, id=4560, stack(0x15300000,0x15350000)]
+  0x15035800 JavaThread "AWT-Windows" daemon [_thread_in_native, id=2212, stack(0x15510000,0x15560000)]
+  0x15033000 JavaThread "AWT-Shutdown" [_thread_blocked, id=4436, stack(0x15370000,0x153c0000)]
+  0x15030400 JavaThread "Java2D Disposer" daemon [_thread_blocked, id=3612, stack(0x15290000,0x152e0000)]
+  0x016c0000 JavaThread "Service Thread" daemon [_thread_blocked, id=3600, stack(0x14e50000,0x14ea0000)]
+  0x016a8000 JavaThread "C1 CompilerThread0" daemon [_thread_blocked, id=5348, stack(0x14f20000,0x14f70000)]
+  0x016a6000 JavaThread "Attach Listener" daemon [_thread_blocked, id=3872, stack(0x147b0000,0x14800000)]
+  0x01698400 JavaThread "Signal Dispatcher" daemon [_thread_blocked, id=5176, stack(0x14db0000,0x14e00000)]
+  0x01696c00 JavaThread "Finalizer" daemon [_thread_blocked, id=5968, stack(0x14640000,0x14690000)]
+  0x01691c00 JavaThread "Reference Handler" daemon [_thread_blocked, id=2784, stack(0x14720000,0x14770000)]
+
+Other Threads:
+  0x0168fc00 VMThread [stack: 0x14d40000,0x14d90000] [id=2852]
+  0x016d1800 WatcherThread [stack: 0x14690000,0x146e0000] [id=1292]
+
+VM state:not at safepoint (normal execution)
+
+VM Mutex/Monitor currently owned by a thread: None
+
+Heap:
+ def new generation   total 4992K, used 2204K [0x03c00000, 0x04160000, 0x09150000)
+  eden space 4480K,  38% used [0x03c00000, 0x03db15b8, 0x04060000)
+  from space 512K,  92% used [0x04060000, 0x040d5c58, 0x040e0000)
+  to   space 512K,   0% used [0x040e0000, 0x040e0000, 0x04160000)
+ tenured generation   total 10944K, used 4718K [0x09150000, 0x09c00000, 0x13c00000)
+   the space 10944K,  43% used [0x09150000, 0x095ebbe8, 0x095ebc00, 0x09c00000)
+ Metaspace       used 1791K, capacity 2630K, committed 2752K, reserved 4480K
+
+Card table byte_map: [0x03b20000,0x03bb0000] byte_map_base: 0x03b02000
+
+Polling page: 0x00140000
+
+CodeCache: size=32768Kb used=2776Kb max_used=2776Kb free=29991Kb
+ bounds [0x01b20000, 0x01dd8000, 0x03b20000]
+ total_blobs=1842 nmethods=1608 adapters=163
+ compilation: enabled
+
+Compilation events (10 events):
+Event: 140.458 Thread 0x016a8000 1607             javax.swing.JViewport::fireStateChanged (68 bytes)
+Event: 140.459 Thread 0x016a8000 nmethod 1607 0x01dd4d48 code [0x01dd4e70, 0x01dd50d8]
+Event: 140.498 Thread 0x016a8000 1608             javax.swing.plaf.basic.BasicTextUI$RootView::getPreferredSpan (19 bytes)
+Event: 140.498 Thread 0x016a8000 nmethod 1608 0x01dd52c8 code [0x01dd53e0, 0x01dd549c]
+Event: 140.499 Thread 0x016a8000 1609             javax.swing.text.AbstractDocument$BranchElement::getElementCount (5 bytes)
+Event: 140.499 Thread 0x016a8000 nmethod 1609 0x01dd5508 code [0x01dd5600, 0x01dd5680]
+Event: 141.908 Thread 0x016a8000 1610  s!         javax.swing.text.AbstractDocument::readLock (50 bytes)
+Event: 141.908 Thread 0x016a8000 nmethod 1610 0x01dd56c8 code [0x01dd57e0, 0x01dd5ad8]
+Event: 141.908 Thread 0x016a8000 1611  s          javax.swing.text.AbstractDocument::readUnlock (43 bytes)
+Event: 141.909 Thread 0x016a8000 nmethod 1611 0x01dd5c08 code [0x01dd5d20, 0x01dd5fb8]
+
+GC Heap History (10 events):
+Event: 53.091 GC heap before
+{Heap before GC invocations=69 (full 14):
+ def new generation   total 4992K, used 2705K [0x03c00000, 0x04160000, 0x09150000)
+  eden space 4480K,  57% used [0x03c00000, 0x03e80070, 0x04060000)
+  from space 512K,  28% used [0x040e0000, 0x041046a0, 0x04160000)
+  to   space 512K,   0% used [0x04060000, 0x04060000, 0x040e0000)
+ tenured generation   total 10944K, used 8693K [0x09150000, 0x09c00000, 0x13c00000)
+   the space 10944K,  79% used [0x09150000, 0x099cd618, 0x099cd800, 0x09c00000)
+ Metaspace       used 1784K, capacity 2628K, committed 2752K, reserved 4480K
+Event: 53.095 GC heap after
+Heap after GC invocations=70 (full 14):
+ def new generation   total 4992K, used 297K [0x03c00000, 0x04160000, 0x09150000)
+  eden space 4480K,   0% used [0x03c00000, 0x03c00000, 0x04060000)
+  from space 512K,  58% used [0x04060000, 0x040aa6c0, 0x040e0000)
+  to   space 512K,   0% used [0x040e0000, 0x040e0000, 0x04160000)
+ tenured generation   total 10944K, used 10627K [0x09150000, 0x09c00000, 0x13c00000)
+   the space 10944K,  97% used [0x09150000, 0x09bb0ca8, 0x09bb0e00, 0x09c00000)
+ Metaspace       used 1784K, capacity 2628K, committed 2752K, reserved 4480K
+}
+Event: 66.538 GC heap before
+{Heap before GC invocations=70 (full 14):
+ def new generation   total 4992K, used 4777K [0x03c00000, 0x04160000, 0x09150000)
+  eden space 4480K, 100% used [0x03c00000, 0x04060000, 0x04060000)
+  from space 512K,  58% used [0x04060000, 0x040aa6c0, 0x040e0000)
+  to   space 512K,   0% used [0x040e0000, 0x040e0000, 0x04160000)
+ tenured generation   total 10944K, used 10627K [0x09150000, 0x09c00000, 0x13c00000)
+   the space 10944K,  97% used [0x09150000, 0x09bb0ca8, 0x09bb0e00, 0x09c00000)
+ Metaspace       used 1785K, capacity 2630K, committed 2752K, reserved 4480K
+Event: 66.564 GC heap after
+Heap after GC invocations=71 (full 15):
+ def new generation   total 4992K, used 0K [0x03c00000, 0x04160000, 0x09150000)
+  eden space 4480K,   0% used [0x03c00000, 0x03c00000, 0x04060000)
+  from space 512K,   0% used [0x040e0000, 0x040e0000, 0x04160000)
+  to   space 512K,   0% used [0x04060000, 0x04060000, 0x040e0000)
+ tenured generation   total 10944K, used 4423K [0x09150000, 0x09c00000, 0x13c00000)
+   the space 10944K,  40% used [0x09150000, 0x095a1e18, 0x095a2000, 0x09c00000)
+ Metaspace       used 1785K, capacity 2630K, committed 2752K, reserved 4480K
+}
+Event: 81.434 GC heap before
+{Heap before GC invocations=71 (full 15):
+ def new generation   total 4992K, used 4480K [0x03c00000, 0x04160000, 0x09150000)
+  eden space 4480K, 100% used [0x03c00000, 0x04060000, 0x04060000)
+  from space 512K,   0% used [0x040e0000, 0x040e0000, 0x04160000)
+  to   space 512K,   0% used [0x04060000, 0x04060000, 0x040e0000)
+ tenured generation   total 10944K, used 4423K [0x09150000, 0x09c00000, 0x13c00000)
+   the space 10944K,  40% used [0x09150000, 0x095a1e18, 0x095a2000, 0x09c00000)
+ Metaspace       used 1786K, capacity 2630K, committed 2752K, reserved 4480K
+Event: 81.436 GC heap after
+Heap after GC invocations=72 (full 15):
+ def new generation   total 4992K, used 356K [0x03c00000, 0x04160000, 0x09150000)
+  eden space 4480K,   0% used [0x03c00000, 0x03c00000, 0x04060000)
+  from space 512K,  69% used [0x04060000, 0x040b9118, 0x040e0000)
+  to   space 512K,   0% used [0x040e0000, 0x040e0000, 0x04160000)
+ tenured generation   total 10944K, used 4423K [0x09150000, 0x09c00000, 0x13c00000)
+   the space 10944K,  40% used [0x09150000, 0x095a1e18, 0x095a2000, 0x09c00000)
+ Metaspace       used 1786K, capacity 2630K, committed 2752K, reserved 4480K
+}
+Event: 91.226 GC heap before
+{Heap before GC invocations=72 (full 15):
+ def new generation   total 4992K, used 4836K [0x03c00000, 0x04160000, 0x09150000)
+  eden space 4480K, 100% used [0x03c00000, 0x04060000, 0x04060000)
+  from space 512K,  69% used [0x04060000, 0x040b9118, 0x040e0000)
+  to   space 512K,   0% used [0x040e0000, 0x040e0000, 0x04160000)
+ tenured generation   total 10944K, used 4423K [0x09150000, 0x09c00000, 0x13c00000)
+   the space 10944K,  40% used [0x09150000, 0x095a1e18, 0x095a2000, 0x09c00000)
+ Metaspace       used 1786K, capacity 2630K, committed 2752K, reserved 4480K
+Event: 91.228 GC heap after
+Heap after GC invocations=73 (full 15):
+ def new generation   total 4992K, used 512K [0x03c00000, 0x04160000, 0x09150000)
+  eden space 4480K,   0% used [0x03c00000, 0x03c00000, 0x04060000)
+  from space 512K, 100% used [0x040e0000, 0x04160000, 0x04160000)
+  to   space 512K,   0% used [0x04060000, 0x04060000, 0x040e0000)
+ tenured generation   total 10944K, used 4588K [0x09150000, 0x09c00000, 0x13c00000)
+   the space 10944K,  41% used [0x09150000, 0x095cb2c0, 0x095cb400, 0x09c00000)
+ Metaspace       used 1786K, capacity 2630K, committed 2752K, reserved 4480K
+}
+Event: 136.721 GC heap before
+{Heap before GC invocations=73 (full 15):
+ def new generation   total 4992K, used 4972K [0x03c00000, 0x04160000, 0x09150000)
+  eden space 4480K,  99% used [0x03c00000, 0x0405b298, 0x04060000)
+  from space 512K, 100% used [0x040e0000, 0x04160000, 0x04160000)
+  to   space 512K,   0% used [0x04060000, 0x04060000, 0x040e0000)
+ tenured generation   total 10944K, used 4588K [0x09150000, 0x09c00000, 0x13c00000)
+   the space 10944K,  41% used [0x09150000, 0x095cb2c0, 0x095cb400, 0x09c00000)
+ Metaspace       used 1790K, capacity 2630K, committed 2752K, reserved 4480K
+Event: 136.724 GC heap after
+Heap after GC invocations=74 (full 15):
+ def new generation   total 4992K, used 471K [0x03c00000, 0x04160000, 0x09150000)
+  eden space 4480K,   0% used [0x03c00000, 0x03c00000, 0x04060000)
+  from space 512K,  92% used [0x04060000, 0x040d5c58, 0x040e0000)
+  to   space 512K,   0% used [0x040e0000, 0x040e0000, 0x04160000)
+ tenured generation   total 10944K, used 4718K [0x09150000, 0x09c00000, 0x13c00000)
+   the space 10944K,  43% used [0x09150000, 0x095ebbe8, 0x095ebc00, 0x09c00000)
+ Metaspace       used 1790K, capacity 2630K, committed 2752K, reserved 4480K
+}
+
+Deoptimization events (0 events):
+No events
+
+Internal exceptions (10 events):
+Event: 29.593 Thread 0x1505c000 Exception <a 'java/security/PrivilegedActionException'> (0x03d83dc8) thrown at [D:\re\workspace\8-2-build-windows-i586-cygwin\jdk8\2238\hotspot\src\share\vm\prims\jvm.cpp, line 1248]
+Event: 29.594 Thread 0x1505c000 Exception <a 'java/security/PrivilegedActionException'> (0x03d85d40) thrown at [D:\re\workspace\8-2-build-windows-i586-cygwin\jdk8\2238\hotspot\src\share\vm\prims\jvm.cpp, line 1248]
+Event: 29.595 Thread 0x1505c000 Exception <a 'java/security/PrivilegedActionException'> (0x03d87da8) thrown at [D:\re\workspace\8-2-build-windows-i586-cygwin\jdk8\2238\hotspot\src\share\vm\prims\jvm.cpp, line 1248]
+Event: 29.595 Thread 0x1505c000 Exception <a 'java/security/PrivilegedActionException'> (0x03d89df8) thrown at [D:\re\workspace\8-2-build-windows-i586-cygwin\jdk8\2238\hotspot\src\share\vm\prims\jvm.cpp, line 1248]
+Event: 29.596 Thread 0x1505c000 Exception <a 'java/security/PrivilegedActionException'> (0x03d8c4c0) thrown at [D:\re\workspace\8-2-build-windows-i586-cygwin\jdk8\2238\hotspot\src\share\vm\prims\jvm.cpp, line 1248]
+Event: 29.596 Thread 0x1505c000 Exception <a 'java/security/PrivilegedActionException'> (0x03d8e310) thrown at [D:\re\workspace\8-2-build-windows-i586-cygwin\jdk8\2238\hotspot\src\share\vm\prims\jvm.cpp, line 1248]
+Event: 29.597 Thread 0x1505c000 Exception <a 'java/security/PrivilegedActionException'> (0x03d901c8) thrown at [D:\re\workspace\8-2-build-windows-i586-cygwin\jdk8\2238\hotspot\src\share\vm\prims\jvm.cpp, line 1248]
+Event: 29.597 Thread 0x1505c000 Exception <a 'java/security/PrivilegedActionException'> (0x03d91ff0) thrown at [D:\re\workspace\8-2-build-windows-i586-cygwin\jdk8\2238\hotspot\src\share\vm\prims\jvm.cpp, line 1248]
+Event: 29.598 Thread 0x1505c000 Exception <a 'java/security/PrivilegedActionException'> (0x03d95750) thrown at [D:\re\workspace\8-2-build-windows-i586-cygwin\jdk8\2238\hotspot\src\share\vm\prims\jvm.cpp, line 1248]
+Event: 29.599 Thread 0x1505c000 Exception <a 'java/security/PrivilegedActionException'> (0x03d99328) thrown at [D:\re\workspace\8-2-build-windows-i586-cygwin\jdk8\2238\hotspot\src\share\vm\prims\jvm.cpp, line 1248]
+
+Events (10 events):
+Event: 91.226 Executing VM operation: GenCollectForAllocation
+Event: 91.228 Executing VM operation: GenCollectForAllocation done
+Event: 96.650 loading class javax/swing/JTable$CellEditorRemover
+Event: 96.650 loading class javax/swing/JTable$CellEditorRemover done
+Event: 96.651 loading class javax/swing/JTable$GenericEditor
+Event: 96.651 loading class javax/swing/JTable$GenericEditor done
+Event: 136.698 Executing VM operation: BulkRevokeBias
+Event: 136.698 Executing VM operation: BulkRevokeBias done
+Event: 136.721 Executing VM operation: GenCollectForAllocation
+Event: 136.724 Executing VM operation: GenCollectForAllocation done
+
+
+Dynamic libraries:
+0x01240000 - 0x01270000 	C:\Program Files\Java\jdk1.8.0\jre\bin\java.exe
+0x76de0000 - 0x76f1c000 	C:\Windows\SYSTEM32\ntdll.dll
+0x754b0000 - 0x75584000 	C:\Windows\system32\kernel32.dll
+0x74f10000 - 0x74f5b000 	C:\Windows\system32\KERNELBASE.dll
+0x76b10000 - 0x76bb0000 	C:\Windows\system32\ADVAPI32.dll
+0x76660000 - 0x7670c000 	C:\Windows\system32\msvcrt.dll
+0x76ff0000 - 0x77009000 	C:\Windows\SYSTEM32\sechost.dll
+0x765b0000 - 0x76652000 	C:\Windows\system32\RPCRT4.dll
+0x75160000 - 0x75229000 	C:\Windows\system32\USER32.dll
+0x76d90000 - 0x76dde000 	C:\Windows\system32\GDI32.dll
+0x75470000 - 0x7547a000 	C:\Windows\system32\LPK.dll
+0x753d0000 - 0x7546d000 	C:\Windows\system32\USP10.dll
+0x73960000 - 0x73afe000 	C:\Windows\WinSxS\x86_microsoft.windows.common-controls_6595b64144ccf1df_6.0.7601.17514_none_41e6975e2bd6f2b2\COMCTL32.dll
+0x76bb0000 - 0x76c07000 	C:\Windows\system32\SHLWAPI.dll
+0x75490000 - 0x754af000 	C:\Windows\system32\IMM32.DLL
+0x76770000 - 0x7683c000 	C:\Windows\system32\MSCTF.dll
+0x6b9f0000 - 0x6baaf000 	C:\Program Files\Java\jdk1.8.0\jre\bin\msvcr100.dll
+0x5f7e0000 - 0x5fb76000 	C:\Program Files\Java\jdk1.8.0\jre\bin\client\jvm.dll
+0x72080000 - 0x72087000 	C:\Windows\system32\WSOCK32.dll
+0x75230000 - 0x75265000 	C:\Windows\system32\WS2_32.dll
+0x75590000 - 0x75596000 	C:\Windows\system32\NSI.dll
+0x73410000 - 0x73442000 	C:\Windows\system32\WINMM.dll
+0x75480000 - 0x75485000 	C:\Windows\system32\PSAPI.DLL
+0x6c9e0000 - 0x6ca15000 	C:\Program Files\Java\jdk1.8.0\jre\bin\splashscreen.dll
+0x714c0000 - 0x714cc000 	C:\Program Files\Java\jdk1.8.0\jre\bin\verify.dll
+0x6fdc0000 - 0x6fde1000 	C:\Program Files\Java\jdk1.8.0\jre\bin\java.dll
+0x6bc30000 - 0x6bc43000 	C:\Program Files\Java\jdk1.8.0\jre\bin\zip.dll
+0x757c0000 - 0x7640a000 	C:\Windows\system32\SHELL32.dll
+0x75270000 - 0x753cc000 	C:\Windows\system32\ole32.dll
+0x74e50000 - 0x74e5b000 	C:\Windows\system32\profapi.dll
+0x6afc0000 - 0x6b056000 	D:\Users\pwof\Documents\Argus\Java\muargus\libmuargusdll.dll
+0x6e940000 - 0x6e964000 	D:\Users\pwof\Documents\Argus\Java\muargus\libgcc_s_dw2-1.dll
+0x6fc40000 - 0x6fd40000 	D:\Users\pwof\Documents\Argus\Java\muargus\libstdc++-6.dll
+0x62e10000 - 0x62f55000 	C:\Program Files\Java\jdk1.8.0\jre\bin\awt.dll
+0x768c0000 - 0x7694f000 	C:\Windows\system32\OLEAUT32.dll
+0x73c50000 - 0x73c90000 	C:\Windows\system32\uxtheme.dll
+0x73050000 - 0x73063000 	C:\Windows\system32\dwmapi.dll
+0x74d30000 - 0x74d3c000 	C:\Windows\system32\CRYPTBASE.dll
+0x6bbf0000 - 0x6bc29000 	C:\Program Files\Java\jdk1.8.0\jre\bin\fontmanager.dll
+0x6f9b0000 - 0x6f9c4000 	C:\Program Files\Java\jdk1.8.0\jre\bin\net.dll
+0x74780000 - 0x747bc000 	C:\Windows\system32\mswsock.dll
+0x749d0000 - 0x749d6000 	C:\Windows\System32\wship6.dll
+0x72690000 - 0x7269f000 	C:\Program Files\Java\jdk1.8.0\jre\bin\nio.dll
+0x6b9c0000 - 0x6b9f0000 	C:\Program Files\Java\jdk1.8.0\jre\bin\t2k.dll
+0x76f60000 - 0x76fe3000 	C:\Windows\system32\CLBCatQ.DLL
+0x71080000 - 0x71087000 	C:\Windows\system32\msiltcfg.dll
+0x742f0000 - 0x742f9000 	C:\Windows\system32\VERSION.dll
+0x71090000 - 0x712d5000 	C:\Windows\system32\msi.dll
+0x70dc0000 - 0x70dc3000 	C:\Windows\system32\SFC.DLL
+0x70db0000 - 0x70dbd000 	C:\Windows\system32\sfc_os.DLL
+0x70ff0000 - 0x71074000 	C:\Windows\WinSxS\x86_microsoft.windows.common-controls_6595b64144ccf1df_5.82.7601.18201_none_ec80f00e8593ece5\comctl32.dll
+0x76410000 - 0x765ad000 	C:\Windows\system32\SETUPAPI.dll
+0x74e60000 - 0x74e87000 	C:\Windows\system32\CFGMGR32.dll
+0x74f60000 - 0x74f72000 	C:\Windows\system32\DEVOBJ.dll
+0x73b00000 - 0x73bf5000 	C:\Windows\system32\propsys.dll
+0x73db0000 - 0x73dd1000 	C:\Windows\system32\ntmarta.dll
+0x76c10000 - 0x76c55000 	C:\Windows\system32\WLDAP32.dll
+0x74ce0000 - 0x74d2c000 	C:\Windows\system32\apphelp.dll
+0x63020000 - 0x631b8000 	C:\Windows\system32\NetworkExplorer.dll
+0x6d890000 - 0x6d8bf000 	C:\Windows\System32\shdocvw.dll
+0x73460000 - 0x7346a000 	C:\Windows\system32\slc.dll
+0x72a20000 - 0x72b50000 	C:\Windows\system32\WindowsCodecs.dll
+0x6db00000 - 0x6db23000 	D:\Users\pwof\AppData\Roaming\Dropbox\bin\DropboxExt.24.dll
+0x71f90000 - 0x7207b000 	C:\Windows\system32\dbghelp.dll
+0x6da70000 - 0x6dafe000 	C:\Windows\WinSxS\x86_microsoft.vc90.crt_1fc8b3b9a1e18e3b_9.0.30729.6161_none_50934f2ebcb7eb57\MSVCP90.dll
+0x70830000 - 0x708d3000 	C:\Windows\WinSxS\x86_microsoft.vc90.crt_1fc8b3b9a1e18e3b_9.0.30729.6161_none_50934f2ebcb7eb57\MSVCR90.dll
+0x6da30000 - 0x6da61000 	C:\Windows\system32\EhStorShell.dll
+0x6d9a0000 - 0x6da2f000 	C:\Program Files\Google\Drive\googledrivesync32.dll
+0x717a0000 - 0x717b2000 	C:\Windows\system32\MPR.dll
+0x6e180000 - 0x6e188000 	C:\Windows\System32\drprov.dll
+0x74da0000 - 0x74dc9000 	C:\Windows\System32\WINSTA.dll
+0x64010000 - 0x64024000 	C:\Windows\System32\ntlanman.dll
+0x63d20000 - 0x63d37000 	C:\Windows\System32\davclnt.dll
+0x6dbf0000 - 0x6dbf8000 	C:\Windows\System32\DAVHLPR.dll
+0x72fc0000 - 0x72fcf000 	C:\Windows\system32\wkscli.dll
+0x71d30000 - 0x71d3b000 	C:\Windows\system32\cscapi.dll
+0x73000000 - 0x73009000 	C:\Windows\system32\netutils.dll
+0x58790000 - 0x589c8000 	C:\Windows\system32\wpdshext.dll
+0x737d0000 - 0x73960000 	C:\Windows\WinSxS\x86_microsoft.windows.gdiplus_6595b64144ccf1df_1.1.7601.18455_none_72d576ad8665e853\gdiplus.dll
+0x6fab0000 - 0x6fb39000 	C:\Windows\system32\PortableDeviceApi.dll
+0x74ed0000 - 0x74efe000 	C:\Windows\system32\WINTRUST.dll
+0x74fa0000 - 0x750c0000 	C:\Windows\system32\CRYPT32.dll
+0x74e40000 - 0x74e4c000 	C:\Windows\system32\MSASN1.dll
+0x6f3d0000 - 0x6f3fb000 	C:\Windows\system32\PortableDeviceTypes.dll
+0x63c20000 - 0x63c5f000 	C:\Windows\system32\audiodev.dll
+0x6f4b0000 - 0x6f717000 	C:\Windows\system32\WMVCore.DLL
+0x6f470000 - 0x6f4ad000 	C:\Windows\system32\WMASF.DLL
+0x6be70000 - 0x6be92000 	C:\Windows\system32\EhStorAPI.dll
+0x6d780000 - 0x6d789000 	C:\Windows\system32\LINKINFO.dll
+0x63c80000 - 0x63d20000 	C:\Windows\system32\SearchFolder.dll
+0x72fd0000 - 0x72fff000 	C:\Windows\system32\XmlLite.dll
+0x74840000 - 0x74856000 	C:\Windows\system32\CRYPTSP.dll
+0x745d0000 - 0x7460b000 	C:\Windows\system32\rsaenh.dll
+0x74dd0000 - 0x74dde000 	C:\Windows\system32\RpcRtRemote.dll
+0x74c90000 - 0x74c98000 	C:\Windows\system32\Secur32.dll
+0x74cc0000 - 0x74cdb000 	C:\Windows\system32\SSPICLI.DLL
+
+VM Arguments:
+jvm_args: -Dfile.encoding=UTF-8 
+java_command: muargus.MuARGUS
+java_class_path (initial): C:\Program Files\NetBeans 8.0\java\modules\ext\beansbinding-1.2.1.jar;D:\Users\pwof\Documents\Argus\Java\arguslibrary\dist\ArgusLib.jar;D:\Users\pwof\Documents\Argus\Java\muargus\lib\commons-io-2.4.jar;D:\Users\pwof\Documents\Argus\Java\muargus\lib\commons-lang3-3.1.jar;D:\Users\pwof\Documents\Argus\Java\muargus\build\classes
+Launcher Type: SUN_STANDARD
+
+Environment Variables:
+PATH=C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Program Files\Microsoft SQL Server\90\Tools\binn\;C:\Program Files\MiKTeX 2.9\miktex\bin\;C:\MinGW\bin;C:\MinGW\msys\1.0\bin;C:\strawberry\c\bin;C:\strawberry\perl\site\bin;C:\strawberry\perl\bin;C:\Program Files\AMD\CodeAnalyst\bin;C:\Program Files\doxygen\bin;C:\Program Files\Microsoft Windows Performance Toolkit\;C:\Program Files\IBM\RationalPurifyPlus
+USERNAME=pwof
+OS=Windows_NT
+PROCESSOR_IDENTIFIER=x86 Family 6 Model 23 Stepping 10, GenuineIntel
+
+
+
+---------------  S Y S T E M  ---------------
+
+OS: Windows 7 Build 7601 Service Pack 1
+
+CPU:total 4 (4 cores per cpu, 1 threads per core) family 6 model 23 stepping 10, cmov, cx8, fxsr, mmx, sse, sse2, sse3, ssse3, sse4.1, tsc
+
+Memory: 4k page, physical 3600624k(1436440k free), swap 7199496k(4758272k free)
+
+vm_info: Java HotSpot(TM) Client VM (25.0-b70) for windows-x86 JRE (1.8.0-b132), built on Mar  4 2014 03:51:15 by "java_re" with MS VC++ 10.0 (VS2010)
+
+time: Tue Aug 26 09:04:06 2014
+elapsed time: 143 seconds
+
