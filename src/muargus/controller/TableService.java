@@ -13,6 +13,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
@@ -110,6 +111,10 @@ public class TableService {
     }
     
     private int getNVar(SelectCombinationsModel model, MetadataMu metadata) throws ArgusException {
+        //For free format, all variables
+        if (metadata.getDataFileType() != MetadataMu.DATA_FILE_TYPE_FIXED)
+            return metadata.getVariables().size();
+        
         int nVar = model.getVariablesInTables().size();
         if (model.isRiskModel()) {
             //Add weight when risk model is used.
@@ -126,38 +131,53 @@ public class TableService {
         return nVar;
     }
     
-    private void calculateInBackground(
-            SelectCombinationsModel model, 
-            MetadataMu metadata) throws ArgusException {
-                
-        boolean result = c.SetNumberVar(getNVar(model, metadata));
-        if (!result)
-            throw new ArgusException("Error in SetNumberVar: Insufficient memory");
-        
-        for (int index=0; index < model.getVariablesInTables().size(); index++) {
-            VariableMu variable = model.getVariablesInTables().get(index);
-            result = addVariable(variable, index+1);
-            if (!result) {
-                throw new ArgusException("Error in SetVariable: variable " + Integer.toString(index+1));
-            }
+    private ArrayList<VariableMu> getVariables(MetadataMu metadata, SelectCombinationsModel model) {
+        if (metadata.getDataFileType() != MetadataMu.DATA_FILE_TYPE_FIXED) {
+            return metadata.getVariables();
         }
-        int riskVarIndex=0;
-        //Add weight when risk model is used. It's the first weight var in the list
+        ArrayList<VariableMu> variables = new ArrayList<>(model.getVariablesInTables());
         if (model.isRiskModel()) {
             for (VariableMu weightVar : metadata.getVariables()) {
                 if (weightVar.isWeight()) {
-                    if (!model.getVariablesInTables().contains(weightVar)) {
-                        riskVarIndex = model.getVariablesInTables().size()+1;
-                        addVariable(weightVar, riskVarIndex);
-                    }
-                    else {
-                        riskVarIndex = model.getVariablesInTables().indexOf(weightVar);
+                    if (!variables.contains(weightVar)) {
+                        variables.add(weightVar);
                     }
                     break;
                 }
             }
         }
+        return variables;
+    }
+    
+    private int getRiskVarIndex(ArrayList<VariableMu> variables) {
+        int index=0;
+        for (VariableMu variable : variables) {
+            index++;
+            if (variable.isWeight())
+                return index;
+        }
+        return 0;
+    }
+    
+    
+    private void calculateInBackground(
+            SelectCombinationsModel model, 
+            MetadataMu metadata) throws ArgusException {
+
+        ArrayList<VariableMu> variables = getVariables(metadata, model);
+        boolean result = c.SetNumberVar(variables.size());
+        if (!result)
+            throw new ArgusException("Error in SetNumberVar: Insufficient memory");
         
+        int index=0;
+        for (VariableMu variable : variables) {
+            index++;
+            result = addVariable(variable, index);
+            if (!result) {
+                throw new ArgusException(String.format("Error in SetVariable: variable %d", index));
+            }
+        }
+                
         int[] errorCodes = new int[1];
         int[] lineNumbers = new int[1];
         int[] varIndexOut = new int[1];
@@ -191,15 +211,12 @@ public class TableService {
         if (!result)
             throw new ArgusException("Error in SetNumberTab");
         
-        for (int index=0; index < model.getTables().size(); index++) {
-            TableMu table = model.getTables().get(index);
-//            int a = index+1;
-//            int t = table.getThreshold();
-//            int d = table.getVariables().size();
-//            int[] i = getVarIndices(table, model);
-//            boolean b = table.isRiskModel();
+        int riskVarIndex = getRiskVarIndex(variables);
+        index = 0;
+        for (TableMu table : model.getTables()) {
+            index++;
             result = c.SetTable(    
-                    index+1,
+                    index,
                     table.getThreshold(),
                     table.getVariables().size(),
                     getVarIndices(table, model),
@@ -210,7 +227,8 @@ public class TableService {
             }
         }
         firePropertyChange("stepName", null, "ComputeTables");
-        //propertyChanged(listener, "stepName", null, "ComputeTables");
+        firePropertyChange("progress", null, 0);
+
         result = c.ComputeTables(errorCodes, varIndexOut);
         if (!result)
                 throw new ArgusException("Error in ComputeTables");
