@@ -4,14 +4,28 @@ package muargus.controller;
 
 import java.awt.Desktop;
 import java.io.IOException;
+import java.io.Reader;
+import java.io.StringReader;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.html.HTMLDocument;
+import javax.swing.text.html.HTMLEditorKit;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import muargus.model.GlobalRecodeModel;
 import muargus.model.MakeProtectedFileModel;
 import muargus.model.MetadataMu;
 import muargus.model.SelectCombinationsModel;
 import muargus.view.MainFrameView;
-import muargus.view.ViewReportView;
+import org.w3c.dom.Document;
+import org.w3c.dom.DocumentType;
+import org.w3c.dom.Element;
+import org.w3c.dom.ls.DOMImplementationLS;
+import org.w3c.dom.ls.LSSerializer;
 
 /**
  *
@@ -187,17 +201,57 @@ public class MainFrameController {
         MakeProtectedFileController controller = new  MakeProtectedFileController(
                 this.view, this.metadata, this.makeProtectedFileModel, this.selectCombinationsModel);
         controller.showView();
+        
+        viewReport();
     }     
    
 
     /**
      * 
      */
-    public void viewReport() {                                                   
-        ViewReportView view = new ViewReportView(this.view, true);
-        view.setVisible(true);
+    public void viewReport() {
+        ViewReportController viewReportController = new ViewReportController(this.view, createReport());
+        viewReportController.showView();
     }                                                  
 
+    private void createReportTree(Document doc) {
+                    doc.appendChild(doc.createElement("html"));
+            Element elm = doc.getDocumentElement();
+            elm.appendChild(doc.createElement("head"));
+            Element e = (Element) elm.appendChild(doc.createElement("body"));
+            e.setTextContent("abcd");
+
+    }
+    private HTMLDocument createReport() {
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder builder;
+        try {
+            
+            builder = factory.newDocumentBuilder();
+            DocumentType t;
+            
+            Document doc = builder.newDocument();
+            
+            
+            createReportTree(doc);
+            DOMImplementationLS imp = (DOMImplementationLS)doc.getImplementation();
+            
+            LSSerializer serializer = imp.createLSSerializer();
+            String s = serializer.writeToString(doc.getDocumentElement());
+            s = s.substring(39);
+            Reader stringReader = new StringReader(s);
+            HTMLEditorKit htmlKit = new HTMLEditorKit();
+            HTMLDocument htmlDoc = (HTMLDocument) htmlKit.createDefaultDocument();
+            htmlKit.read(stringReader, htmlDoc, 0);
+            
+            return htmlDoc;
+        } catch (ParserConfigurationException|IOException|BadLocationException ex) {
+            Logger.getLogger(MainFrameController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        
+        return null;
+    }
     /**
      * 
      */

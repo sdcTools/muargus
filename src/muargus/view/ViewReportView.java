@@ -4,6 +4,7 @@
  */
 package muargus.view;
 
+import javax.swing.text.html.HTMLDocument;
 import muargus.controller.ViewReportController;
 
 /**
@@ -17,11 +18,15 @@ public class ViewReportView extends javax.swing.JDialog {
     /**
      * Creates new form OutputViewReport
      */
-    public ViewReportView(java.awt.Frame parent, boolean modal) {
+    public ViewReportView(java.awt.Frame parent, ViewReportController controller, boolean modal) {
         super(parent, modal);
-        controller = new ViewReportController(this);
+        this.controller = controller;
         initComponents();
         this.setLocationRelativeTo(null);
+    }
+    
+    public void showReport(HTMLDocument htmlDoc) {
+        htmlPane.setDocument(htmlDoc);
     }
 
     /**
@@ -36,7 +41,7 @@ public class ViewReportView extends javax.swing.JDialog {
         printButton = new javax.swing.JButton();
         closeButton = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jEditorPane1 = new javax.swing.JEditorPane();
+        htmlPane = new javax.swing.JEditorPane();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("View Report");
@@ -57,8 +62,10 @@ public class ViewReportView extends javax.swing.JDialog {
 
         jScrollPane1.setName(""); // NOI18N
 
-        jEditorPane1.setName(""); // NOI18N
-        jScrollPane1.setViewportView(jEditorPane1);
+        htmlPane.setEditable(false);
+        htmlPane.setContentType("text/html"); // NOI18N
+        htmlPane.setName(""); // NOI18N
+        jScrollPane1.setViewportView(htmlPane);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -124,24 +131,24 @@ public class ViewReportView extends javax.swing.JDialog {
             java.util.logging.Logger.getLogger(ViewReportView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-
-        /* Create and display the dialog */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                ViewReportView view = new ViewReportView(new javax.swing.JFrame(), true);
-                view.addWindowListener(new java.awt.event.WindowAdapter() {
-                    @Override
-                    public void windowClosing(java.awt.event.WindowEvent e) {
-                        System.exit(0);
-                    }
-                });
-                view.setVisible(true);
-            }
-        });
+//
+//        /* Create and display the dialog */
+//        java.awt.EventQueue.invokeLater(new Runnable() {
+//            public void run() {
+//                ViewReportView view = new ViewReportView(new javax.swing.JFrame(), true);
+//                view.addWindowListener(new java.awt.event.WindowAdapter() {
+//                    @Override
+//                    public void windowClosing(java.awt.event.WindowEvent e) {
+//                        System.exit(0);
+//                    }
+//                });
+//                view.setVisible(true);
+//            }
+//        });
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton closeButton;
-    private javax.swing.JEditorPane jEditorPane1;
+    private javax.swing.JEditorPane htmlPane;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JButton printButton;
     // End of variables declaration//GEN-END:variables
