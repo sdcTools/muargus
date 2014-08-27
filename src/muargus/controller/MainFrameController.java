@@ -3,14 +3,34 @@ package muargus.controller;
 
 import java.awt.Desktop;
 import java.io.IOException;
+import java.io.Reader;
+import java.io.StringReader;
+import java.io.StringWriter;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.html.HTMLDocument;
+import javax.swing.text.html.HTMLEditorKit;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+import muargus.HTMLReportWriter;
 import muargus.model.GlobalRecodeModel;
 import muargus.model.MakeProtectedFileModel;
 import muargus.model.MetadataMu;
 import muargus.model.SelectCombinationsModel;
 import muargus.view.MainFrameView;
-import muargus.view.ViewReportView;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 
 /**
  *
@@ -196,16 +216,59 @@ public class MainFrameController {
         MakeProtectedFileController controller = new MakeProtectedFileController(
                 this.view, this.metadata, this.makeProtectedFileModel, this.selectCombinationsModel);
         controller.showView();
-    }
+        
+        viewReport();
+    }     
+   
 
     /**
      *
      */
     public void viewReport() {
-        ViewReportView view = new ViewReportView(this.view, true);
-        view.setVisible(true);
-    }
+        ViewReportController viewReportController = new ViewReportController(this.view, createReport());
+        viewReportController.showView();
+    }                                                  
+    
+    private HTMLDocument createReport() {
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder builder;
+        try {
+            
+            builder = factory.newDocumentBuilder();
+            
+            Document doc = builder.newDocument();
+            
+            //OutputFormat format = new OutputFormat(doc);
+            HTMLReportWriter.createReportTree(doc, metadata, selectCombinationsModel, globalRecodeModel);
+            Transformer tr = TransformerFactory.newInstance().newTransformer();
+            
+            tr.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
+            //tr.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
+            StringWriter output = new StringWriter();
+            
+            tr.transform(new DOMSource(doc), new StreamResult(output));
+            
+            
+//            DOMImplementationLS imp = (DOMImplementationLS)doc.getImplementation();
+//            
+//            LSSerializer serializer = imp.createLSSerializer();
+//            String s = serializer.writeToString(doc.getDocumentElement());
+            String s = output.toString();
+            Reader stringReader = new StringReader(s);
+            HTMLEditorKit htmlKit = new HTMLEditorKit();
+            
+            HTMLDocument htmlDoc = (HTMLDocument) htmlKit.createDefaultDocument();
+            htmlDoc.putProperty("IgnoreCharsetDirective", new Boolean(true));
+            htmlKit.read(stringReader, htmlDoc, 0);
+            
+            return htmlDoc;
+        } catch (ParserConfigurationException|IOException|BadLocationException|TransformerException ex) {
+            Logger.getLogger(MainFrameController.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
+        
+        return null;
+    }
     /**
      *
      */

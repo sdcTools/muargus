@@ -4,6 +4,7 @@
  */
 package muargus.controller;
 
+import javax.swing.text.html.HTMLDocument;
 import muargus.view.ViewReportView;
 
 /**
@@ -12,14 +13,21 @@ import muargus.view.ViewReportView;
  */
 public class ViewReportController {
     
-    ViewReportView view;
+    private ViewReportView view;
+    private HTMLDocument htmlDoc;
 
     /**
      * 
      * @param view 
      */
-    public ViewReportController(ViewReportView view) {
-        this.view = view;
+    public ViewReportController(java.awt.Frame parentView, HTMLDocument htmlDoc) {
+        this.view = new ViewReportView(parentView, this, true);
+        this.htmlDoc = htmlDoc;
+    }
+    
+    public void showView() {
+        this.view.showReport(htmlDoc);
+        this.view.setVisible(true);
     }
     
     /**
