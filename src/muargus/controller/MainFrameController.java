@@ -6,6 +6,7 @@ import java.awt.Desktop;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
+import java.io.StringWriter;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.logging.Level;
@@ -16,16 +17,21 @@ import javax.swing.text.html.HTMLEditorKit;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+import muargus.HTMLReportWriter;
 import muargus.model.GlobalRecodeModel;
 import muargus.model.MakeProtectedFileModel;
 import muargus.model.MetadataMu;
 import muargus.model.SelectCombinationsModel;
 import muargus.view.MainFrameView;
 import org.w3c.dom.Document;
-import org.w3c.dom.DocumentType;
 import org.w3c.dom.Element;
-import org.w3c.dom.ls.DOMImplementationLS;
-import org.w3c.dom.ls.LSSerializer;
+import org.w3c.dom.Node;
 
 /**
  *
@@ -213,39 +219,41 @@ public class MainFrameController {
         ViewReportController viewReportController = new ViewReportController(this.view, createReport());
         viewReportController.showView();
     }                                                  
-
-    private void createReportTree(Document doc) {
-                    doc.appendChild(doc.createElement("html"));
-            Element elm = doc.getDocumentElement();
-            elm.appendChild(doc.createElement("head"));
-            Element e = (Element) elm.appendChild(doc.createElement("body"));
-            e.setTextContent("abcd");
-
-    }
+    
     private HTMLDocument createReport() {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder;
         try {
             
             builder = factory.newDocumentBuilder();
-            DocumentType t;
             
             Document doc = builder.newDocument();
             
+            //OutputFormat format = new OutputFormat(doc);
+            HTMLReportWriter.createReportTree(doc, metadata, selectCombinationsModel, globalRecodeModel);
+            Transformer tr = TransformerFactory.newInstance().newTransformer();
             
-            createReportTree(doc);
-            DOMImplementationLS imp = (DOMImplementationLS)doc.getImplementation();
+            tr.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
+            //tr.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
+            StringWriter output = new StringWriter();
             
-            LSSerializer serializer = imp.createLSSerializer();
-            String s = serializer.writeToString(doc.getDocumentElement());
-            s = s.substring(39);
+            tr.transform(new DOMSource(doc), new StreamResult(output));
+            
+            
+//            DOMImplementationLS imp = (DOMImplementationLS)doc.getImplementation();
+//            
+//            LSSerializer serializer = imp.createLSSerializer();
+//            String s = serializer.writeToString(doc.getDocumentElement());
+            String s = output.toString();
             Reader stringReader = new StringReader(s);
             HTMLEditorKit htmlKit = new HTMLEditorKit();
+            
             HTMLDocument htmlDoc = (HTMLDocument) htmlKit.createDefaultDocument();
+            htmlDoc.putProperty("IgnoreCharsetDirective", new Boolean(true));
             htmlKit.read(stringReader, htmlDoc, 0);
             
             return htmlDoc;
-        } catch (ParserConfigurationException|IOException|BadLocationException ex) {
+        } catch (ParserConfigurationException|IOException|BadLocationException|TransformerException ex) {
             Logger.getLogger(MainFrameController.class.getName()).log(Level.SEVERE, null, ex);
         }
 
