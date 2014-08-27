@@ -1,25 +1,23 @@
 niet behandelde opmerkingen/vragen:
 - wat zijn de regels omtrend het vinkje: add Riks to Output File
+- wat moet de default filetype zijn? Het is volgens mij nu .sav maar wil men ook andere zoals .asc?
 
 Nog te doen:                                                                                                    Mee bezig:
 
 Release 1
 
+0. Openen scherm:
+    - zorg dat onthouden wordt welke radiobutton aangeklikt is                                                  Jeldrik
 4. suppressionWeightTablet:
-    - maak achtergrond donker als disabled
-8. progressbar:
--   link aan makeFileButton
-9. cancelButton:
--   zet waarde terug naar default
--   sluit het scherm
+    - maak achtergrond donker als disabled                                                                      Jeldrik
 10. makeFileButton:
--   open fileChooser om te bepalen waar de nieuwe files opgeslagen moeten worden
--   maak protected file, metadatafile en html-output (groot deel kan met de dll)
+-   zet een filter op de filechooser                                                                            Jeldrik
+-   zorg voor een default datatype                                                                              Jeldrik
+-   maak metadatafile 
+-   maak html-output 
 -   open view report die de ouput weergeeft
 
-
 Release 2+
-
 
 
 Behandelde opmerkingen/vragen:                                                                                      Antwoord:
@@ -43,8 +41,13 @@ Gedaan:                                                                         
     - dit deel (plus alle daartoe behorende elementen) is alleen enabled als er een hhIdentifier in de metadata zit Jeldrik
 7. hhRadioButtons:
     - zet deze RadioButtons in een RadioButtonGroup zodat maar 1 tegelijkertijd geselecteerd kan zijn               Jeldrik
+8. progressbar:
+-   link aan makeFileButton                                                                                         Anne & Jeldrik
 9. cancelButton:
     - sluit het scherm                                                                                              Jeldrik
+10. makeFileButton:
+-   open fileChooser om te bepalen waar de nieuwe files opgeslagen moeten worden                                    Jeldrik
+-   maak protected file                                                                                             Jeldrik
 11. writeRecordRamdomOrderCheckBox
     - alleen mogelijk bij fixed format                                                                              Jeldrik
 
