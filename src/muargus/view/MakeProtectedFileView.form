@@ -143,6 +143,7 @@
           </Properties>
           <Events>
             <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="noSuppressionRadioButtonStateChanged"/>
+            <EventHandler event="itemStateChanged" listener="java.awt.event.ItemListener" parameters="java.awt.event.ItemEvent" handler="noSuppressionRadioButtonItemStateChanged"/>
           </Events>
         </Component>
         <Component class="javax.swing.JRadioButton" name="useWeightRadioButton">
@@ -154,6 +155,7 @@
           </Properties>
           <Events>
             <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="useWeightRadioButtonStateChanged"/>
+            <EventHandler event="itemStateChanged" listener="java.awt.event.ItemListener" parameters="java.awt.event.ItemEvent" handler="useWeightRadioButtonItemStateChanged"/>
           </Events>
         </Component>
         <Component class="javax.swing.JRadioButton" name="useEntropyRadioButton">
@@ -166,6 +168,7 @@
           </Properties>
           <Events>
             <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="useEntropyRadioButtonStateChanged"/>
+            <EventHandler event="itemStateChanged" listener="java.awt.event.ItemListener" parameters="java.awt.event.ItemEvent" handler="useEntropyRadioButtonItemStateChanged"/>
           </Events>
         </Component>
         <Component class="javax.swing.JSeparator" name="separator">
@@ -181,8 +184,11 @@
           <SubComponents>
             <Component class="javax.swing.JTable" name="suppressionWeightTable">
               <Properties>
-                <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                  <Connection code="new javax.swing.table.DefaultTableModel(&#xa;    new Object [][] {&#xa;        {null, null},&#xa;        {null, null}&#xa;    },&#xa;    new String [] {&#xa;        &quot;Variable&quot;, &quot;Priority&quot;&#xa;    }&#xa;)" type="code"/>
+                <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
+                  <Table columnCount="2" rowCount="2">
+                    <Column editable="false" title="Variables" type="java.lang.Object"/>
+                    <Column editable="false" title="Priority" type="java.lang.Object"/>
+                  </Table>
                 </Property>
               </Properties>
               <Events>

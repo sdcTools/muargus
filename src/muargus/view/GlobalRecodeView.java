@@ -80,7 +80,11 @@ public class GlobalRecodeView extends javax.swing.JDialog {
             index++;
         }
 
-        this.tableModel = new DefaultTableModel(data, this.model.getColumnNames());
+        this.tableModel = new DefaultTableModel(data, this.model.getColumnNames()){
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return false;
+            }
+        };
         this.variablesTable.setModel(this.tableModel);
     }
 

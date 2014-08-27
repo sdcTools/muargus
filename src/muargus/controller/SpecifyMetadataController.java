@@ -21,18 +21,22 @@ public class SpecifyMetadataController {
     MetadataMu metadata;
     MetadataMu metadataClone;
     ArrayList<String> list;
+    MainFrameController controller;
 
     private static final Logger logger = Logger.getLogger(SpecifyMetadataController.class.getName());
 
     /**
      * 
-     * @param view 
+     * @param parentView
+     * @param metadata
+     * @param controller 
      */
-    public SpecifyMetadataController(java.awt.Frame parentView, MetadataMu metadata) {
+    public SpecifyMetadataController(java.awt.Frame parentView, MetadataMu metadata, MainFrameController controller) {
         this.view = new SpecifyMetadataView(parentView, true, this);
         this.metadata = metadata;
         this.metadataClone = new  MetadataMu(metadata);
         this.view.setMetadataMu(this.metadataClone);
+        this.controller = controller;
     }
     
     public void showView() {
@@ -74,6 +78,7 @@ public class SpecifyMetadataController {
             }
             
             this.metadata = this.metadataClone;
+            this.clearData();
             if (JOptionPane.showConfirmDialog(view, "Metadata has been changed. Save changes?", "Mu Argus",
                     JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
                 JFileChooser fileChooser = new JFileChooser();
@@ -103,4 +108,7 @@ public class SpecifyMetadataController {
         this.view.setVisible(false);
     }
     
+    public void clearData(){
+        this.controller.clearDataBeforeSelectCombinations();
+    }
 }

@@ -6,6 +6,7 @@ package muargus.controller;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import javax.swing.JRadioButton;
 import muargus.model.MakeProtectedFileModel;
 import muargus.model.MetadataMu;
 import muargus.model.SelectCombinationsModel;
@@ -78,16 +79,16 @@ public class MakeProtectedFileController implements PropertyChangeListener {
         // set the action for the household identifier
         int houseHoldOption = 0;
         if (this.view.isHouseholdData()) {
-            houseHoldOption = 1;
-        } else if (this.view.getKeepInSafeFileRadioButton().isSelected()) {
-            houseHoldOption = 2;
-        } else if (this.view.getChangeIntoSequenceNumberRadioButton().isSelected()) {
-            houseHoldOption = 3;
-        } else if (this.view.getRemoveFromSafeFileRadioButton().isSelected()) {
-            houseHoldOption = 4;
+            if (this.view.getKeepInSafeFileRadioButton().isSelected()) {
+                houseHoldOption = 1;
+            } else if (this.view.getChangeIntoSequenceNumberRadioButton().isSelected()) {
+                houseHoldOption = 2;
+            } else if (this.view.getRemoveFromSafeFileRadioButton().isSelected()) {
+                houseHoldOption = 3;
+            }
         }
         this.model.setHhOption(houseHoldOption);
-        
+
         // set add risk to output file 
         this.model.setPrintBHR(this.view.getAddRiskToOutputFileCheckBox().isSelected());
         // set randomize output
@@ -104,6 +105,20 @@ public class MakeProtectedFileController implements PropertyChangeListener {
             case "status":
                 view.setVisible(pce.getNewValue() != "done");
         }
+    }
+    
+    public JRadioButton getSuppressionRadioButton() {
+        
+        switch (this.model.getSuppressionType()) {
+            case (0):
+                return this.view.getNoSuppressionRadioButton();
+            case (1):
+                return this.view.getUseWeightRadioButton();
+            case(2):
+                return this.view.getUseEntropyRadioButton();
+        }
+        return null;
+        
     }
 
 }
