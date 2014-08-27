@@ -6,6 +6,8 @@
     </Component>
     <Component class="javax.swing.ButtonGroup" name="hhIdentifierButtonGroup">
     </Component>
+    <Component class="javax.swing.JFileChooser" name="fileChooser">
+    </Component>
   </NonVisualComponents>
   <Properties>
     <Property name="defaultCloseOperation" type="int" value="2"/>
@@ -46,6 +48,7 @@
                       </Group>
                       <Component id="progressbar" alignment="0" min="-2" pref="195" max="-2" attributes="0"/>
                   </Group>
+                  <Component id="addRiskToOutputFileCheckBox" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="32767" attributes="0"/>
           </Group>
@@ -64,6 +67,8 @@
                       <Component id="hhIdentifierPanel" min="-2" max="-2" attributes="0"/>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Component id="writeRecordRandomOrderCheckBox" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <Component id="addRiskToOutputFileCheckBox" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="32767" attributes="0"/>
                       <Component id="progressbar" min="-2" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="9" max="-2" attributes="0"/>
@@ -245,9 +250,6 @@
             <Property name="selected" type="boolean" value="true"/>
             <Property name="text" type="java.lang.String" value="Keep in safe file"/>
           </Properties>
-          <Events>
-            <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="keepInSafeFileRadioButtonStateChanged"/>
-          </Events>
         </Component>
         <Component class="javax.swing.JRadioButton" name="changeIntoSequenceNumberRadioButton">
           <Properties>
@@ -267,9 +269,6 @@
             </Property>
             <Property name="text" type="java.lang.String" value="Remove from safe file"/>
           </Properties>
-          <Events>
-            <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="removeFromSafeFileRadioButtonStateChanged"/>
-          </Events>
         </Component>
       </SubComponents>
     </Container>
@@ -277,9 +276,6 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="Write records in random order"/>
       </Properties>
-      <Events>
-        <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="writeRecordRandomOrderCheckBoxStateChanged"/>
-      </Events>
     </Component>
     <Component class="javax.swing.JProgressBar" name="progressbar">
     </Component>
@@ -298,6 +294,11 @@
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="makeFileButtonActionPerformed"/>
       </Events>
+    </Component>
+    <Component class="javax.swing.JCheckBox" name="addRiskToOutputFileCheckBox">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Add Risk to Output File "/>
+      </Properties>
     </Component>
   </SubComponents>
 </Form>

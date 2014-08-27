@@ -4,6 +4,9 @@
  */
 package muargus.model;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.util.ArrayList;
 
 /**
@@ -15,11 +18,15 @@ public class MakeProtectedFileModel {
     private ArrayList<VariableMu> variables;
     private String[][] data;
     private final String[] columnames;
-    boolean withPrior;
-    boolean withEntropy;
-    int hhOption;
-    boolean randomizeOutput;
-    boolean printBHR;
+    private boolean riskModel;
+    
+    // values for the dll
+    private boolean withPrior;
+    private boolean withEntropy;
+    private int hhOption;
+    private boolean randomizeOutput;
+    private boolean printBHR; 
+    private String nameOfSafeFile;
 
     /**
      *
@@ -98,7 +105,25 @@ public class MakeProtectedFileModel {
     public void setPrintBHR(boolean printBHR) {
         this.printBHR = printBHR;
     }
-    
-    
 
+    public boolean isRiskModel() {
+        return riskModel;
+    }
+
+    public void setRiskModel(boolean riskModel) {
+        this.riskModel = riskModel;
+    }
+
+    public String getNameOfSafeFile() {
+        return nameOfSafeFile;
+    }
+
+    public void setNameOfSafeFile(File file) {
+        try {
+            this.nameOfSafeFile = file.getPath();
+        } catch (Exception e){
+            
+        }
+    }
+    
 }

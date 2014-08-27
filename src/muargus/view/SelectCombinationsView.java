@@ -443,7 +443,7 @@ public class SelectCombinationsView extends javax.swing.JDialog {
             boolean add = true;
             // only check for double tables when then number of tables is between 0 and 100
             //TODO: constant
-            if (model.getNumberOfRows() > 0 && model.getNumberOfRows() < 100) {
+            if (model.getNumberOfRows() > 0 && model.getNumberOfRows() < model.getMaximumSizeBeforeUserConfirmation()) {
                 for (int i = 0; i < model.getNumberOfRows(); i++) {
                     TableMu tableMuOld = model.getTables().get(i);
                     add = compareRows(tableMuNew, tableMuOld);

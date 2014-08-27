@@ -160,8 +160,8 @@ public class MainFrameView extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Main Frame");
 
-        toolBar.setFloatable(false);
         toolBar.setRollover(true);
+        toolBar.setEnabled(false);
 
         openMicrodataButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/muargus/resources/icons/OpenMicrodata.png"))); // NOI18N
         openMicrodataButton.setFocusable(false);
