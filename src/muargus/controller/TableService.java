@@ -299,7 +299,6 @@ public class TableService {
         if (!result) {
             throw new ArgusException("Error in ComputeTables");
         }
-
     }
 
     private int[] getVarIndices(TableMu table, SelectCombinationsModel model) {

@@ -16,6 +16,7 @@ import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import muargus.MuARGUS;
 import muargus.extern.dataengine.CMuArgCtrl;
+import muargus.extern.dataengine.IProgressListener;
 import muargus.model.GlobalRecodeModel;
 import muargus.model.MetadataMu;
 import muargus.model.RecodeMu;
@@ -173,7 +174,15 @@ public class GlobalRecodeController {
     
     private void applyRecode() throws ArgusException {
         CMuArgCtrl c = MuARGUS.getMuArgCtrl();
-        boolean result = true; //c.ApplyRecode();
+        IProgressListener progressListener = new IProgressListener() {
+            @Override
+            public void UpdateProgress(final int percentage) {
+                ;
+            }
+        };
+        c.SetProgressListener(null);
+
+        boolean result = c.ApplyRecode();
         if (!result) {
             throw new ArgusException("Error during Apply recode");
         }
@@ -187,8 +196,9 @@ public class GlobalRecodeController {
     /**
      * 
      */
-    public void undo(RecodeMu recode) throws ArgusException {                                           
+    public void undo(RecodeMu recode) throws ArgusException {    
         CMuArgCtrl c = MuARGUS.getMuArgCtrl();
+        c.SetProgressListener(null);
         int index = this.model.getVariables().indexOf(recode.getVariable());
         boolean result = c.UndoRecode(index + 1);
                 if (!result) {
