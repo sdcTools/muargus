@@ -9,7 +9,6 @@ import argus.utils.SystemUtils;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 import muargus.MuARGUS;
@@ -64,9 +63,9 @@ public class SelectCombinationsController implements PropertyChangeListener{
      * @throws argus.model.ArgusException
      */
     public void calculateTables() throws ArgusException {
+        this.view.enableCalculateTables(false);
         this.model = this.modelClone;
         saveSettings();
-        //System.out.println(this.controller.view.getUnsafeCombinationsTable().getRowCount());
         if(this.controller.view.getUnsafeCombinationsTable().getRowCount() > 0){
             this.clearData();
         }

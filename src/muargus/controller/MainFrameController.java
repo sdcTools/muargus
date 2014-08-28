@@ -315,11 +315,6 @@ public class MainFrameController {
     public void clearDataAfterSelectCombinations() {
         this.globalRecodeModel = null;
         this.makeProtectedFileModel = null;
-        try{
-            this.metadata = this.specifyMetadataController.getMetadata();
-        } catch(Exception e){
-            System.out.println("yeah");
-        }
     }
 
 }

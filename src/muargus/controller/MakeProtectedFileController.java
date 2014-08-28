@@ -62,40 +62,6 @@ public class MakeProtectedFileController implements PropertyChangeListener {
         return selectCombinationsModel;
     }
 
-    public void setValuesForDLL() {
-
-        // set the type of suppression
-        if (this.view.getChangeIntoSequenceNumberRadioButton().isSelected()) {
-            this.model.setWithEntropy(false);
-            this.model.setWithPrior(false);
-        } else if (this.view.getUseEntropyRadioButton().isSelected()) {
-            this.model.setWithEntropy(true);
-            this.model.setWithPrior(false);
-        } else if (this.view.getUseWeightRadioButton().isSelected()) {
-            this.model.setWithEntropy(false);
-            this.model.setWithPrior(true);
-        }
-
-        // set the action for the household identifier
-        int houseHoldOption = 0;
-        if (this.view.isHouseholdData()) {
-            if (this.view.getKeepInSafeFileRadioButton().isSelected()) {
-                houseHoldOption = 1;
-            } else if (this.view.getChangeIntoSequenceNumberRadioButton().isSelected()) {
-                houseHoldOption = 2;
-            } else if (this.view.getRemoveFromSafeFileRadioButton().isSelected()) {
-                houseHoldOption = 3;
-            }
-        }
-        this.model.setHhOption(houseHoldOption);
-
-        // set add risk to output file 
-        this.model.setPrintBHR(this.view.getAddRiskToOutputFileCheckBox().isSelected());
-        // set randomize output
-        this.model.setRandomizeOutput(this.view.getWriteRecordRandomOrderCheckBox().isSelected());
-
-    }
-
     @Override
     public void propertyChange(PropertyChangeEvent pce) {
         switch (pce.getPropertyName()) {
@@ -108,7 +74,6 @@ public class MakeProtectedFileController implements PropertyChangeListener {
     }
     
     public JRadioButton getSuppressionRadioButton() {
-        
         switch (this.model.getSuppressionType()) {
             case (0):
                 return this.view.getNoSuppressionRadioButton();
@@ -118,7 +83,5 @@ public class MakeProtectedFileController implements PropertyChangeListener {
                 return this.view.getUseEntropyRadioButton();
         }
         return null;
-        
     }
-
 }

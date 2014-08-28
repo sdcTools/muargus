@@ -6,7 +6,6 @@ package muargus.model;
 
 import java.io.File;
 import java.util.ArrayList;
-import javax.swing.JRadioButton;
 
 /**
  *
@@ -19,8 +18,8 @@ public class MakeProtectedFileModel {
     public final int USE_WEIGHT = 1;
     public final int USE_ENTROPY = 2;
     
-    
     private int householdType = 0;
+    public final int NOT_HOUSEHOLD_DATA = 0;
     public final int KEEP_IN_SAFE_FILE = 1;
     public final int CHANGE_INTO_SEQUENCE_NUMBER = 2;
     public final int REMOVE_FROM_SAFE_FILE = 3;
@@ -33,7 +32,6 @@ public class MakeProtectedFileModel {
     // values for the dll
     private boolean withPrior;
     private boolean withEntropy;
-    private int hhOption;
     private boolean randomizeOutput;
     private boolean printBHR; 
     private String nameOfSafeFile;
@@ -79,7 +77,7 @@ public class MakeProtectedFileModel {
     }
 
     public boolean isWithPrior() {
-        return withPrior;
+        return this.suppressionType == this.USE_WEIGHT;
     }
 
     public void setWithPrior(boolean withPrior) {
@@ -87,19 +85,11 @@ public class MakeProtectedFileModel {
     }
 
     public boolean isWithEntropy() {
-        return withEntropy;
+        return this.suppressionType == this.USE_ENTROPY;
     }
 
     public void setWithEntropy(boolean withEntropy) {
         this.withEntropy = withEntropy;
-    }
-
-    public int getHhOption() {
-        return hhOption;
-    }
-
-    public void setHhOption(int hhOption) {
-        this.hhOption = hhOption;
     }
 
     public boolean isRandomizeOutput() {
@@ -132,7 +122,11 @@ public class MakeProtectedFileModel {
 
     public void setNameOfSafeFile(File file) {
         try {
-            this.nameOfSafeFile = file.getPath() + ".saf";
+            if(file.getPath().contains(".")){
+                this.nameOfSafeFile = file.getPath();
+            } else {
+                this.nameOfSafeFile = file.getPath() + ".saf";
+            }
         } catch (Exception e){
             
         }
@@ -141,7 +135,6 @@ public class MakeProtectedFileModel {
     public int getSuppressionType() {
         return suppressionType;
     }
-    
 
     public void setSuppressionType(int suppressionType) {
         this.suppressionType = suppressionType;
@@ -161,6 +154,19 @@ public class MakeProtectedFileModel {
 
     public void setSelectedRow(int selectedRow) {
         this.selectedRow = selectedRow;
+    }
+
+    public boolean isHouseholdData() {
+        return this.householdType != this.NOT_HOUSEHOLD_DATA;
+    }
+
+    public void setHouseholdData(boolean householdData) {
+        if(!householdData){
+            this.householdType = this.NOT_HOUSEHOLD_DATA;
+        } else {
+            //TODO: zorgen dat onthouden wordt wat de optie is
+            this.householdType = this.KEEP_IN_SAFE_FILE;
+        }
     }
     
 }

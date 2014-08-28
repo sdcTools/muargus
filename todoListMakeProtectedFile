@@ -1,27 +1,28 @@
 niet behandelde opmerkingen/vragen:
-- wat zijn de regels omtrend het vinkje: add Riks to Output File
-- wat moet de default filetype zijn? Het is volgens mij nu .sav maar wil men ook andere zoals .asc?
-- de suppressionweight wordt nu direct opgeslagen als deze wordt aangepast is het MakeProtectedFile schem.
-  Als er vervolgens wijzigingen in de metadata of in de tabellen worden gemaakt blijft deze wijziging behalve
-  als dit wordt gewijzigd in de metadata. Is dit de bedoeling
-
+                                                                                                                
 Nog te doen:                                                                                                    Mee bezig:
 
 Release 1
-- household radiobuttons aanpassen
+
 10. makeFileButton:
--   maak metadatafile 
--   maak html-output 
--   open view report die de ouput weergeeft
+-   maak metadatafile                                                                                           Anne
+-   maak html-output                                                                                            Jeldrik
+
 
 Release 2+
 
 
 Behandelde opmerkingen/vragen:                                                                                      Antwoord:
+- wat zijn de regels omtrend het vinkje: add Riks to Output File                                                    random write file kan niet samen met dit
+- wat moet de default filetype zijn? Het is volgens mij nu .saf maar wil men ook andere zoals .asc?                 Anco: is misschien wel mooi
+- de suppressionweight wordt nu direct opgeslagen als deze wordt aangepast is het MakeProtectedFile schem.          Anco: Ja, is mooi zo.
+  Als er vervolgens wijzigingen in de metadata of in de tabellen worden gemaakt blijft deze wijziging behalve
+  als dit wordt gewijzigd in de metadata. Is dit de bedoeling
 
 Gedaan:                                                                                                             Door:
 - zorg dat de geselecteerde rij ook opgeslagen wordt
-
+- als add risk aangevinkt is wordt random order uitgevinkt en disabled
+- household radiobuttons aanpassen
 0. Openen scherm:
     - zorg dat onthouden wordt welke radiobutton aangeklikt is                                                      Jeldrik
 1. noSuppressionRadioButton:
@@ -53,6 +54,7 @@ Gedaan:                                                                         
 -   maak protected file                                                                                             Jeldrik
 -   zet een filter op de filechooser                                                                                Jeldrik
 -   zorg voor een default datatype                                                                                  Jeldrik
+-   open view report die de ouput weergeeft
 11. writeRecordRamdomOrderCheckBox
     - alleen mogelijk bij fixed format                                                                              Jeldrik
 

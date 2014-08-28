@@ -16,7 +16,7 @@ import muargus.view.SpecifyMetadataView;
  * @author ambargus
  */
 public class SpecifyMetadataController {
-    
+
     SpecifyMetadataView view;
     MetadataMu metadata;
     MetadataMu metadataClone;
@@ -26,77 +26,87 @@ public class SpecifyMetadataController {
     private static final Logger logger = Logger.getLogger(SpecifyMetadataController.class.getName());
 
     /**
-     * 
+     *
      * @param parentView
      * @param metadata
-     * @param controller 
+     * @param controller
      */
     public SpecifyMetadataController(java.awt.Frame parentView, MetadataMu metadata, MainFrameController controller) {
         this.view = new SpecifyMetadataView(parentView, true, this);
         this.metadata = metadata;
-        this.metadataClone = new  MetadataMu(metadata);
+        this.metadataClone = new MetadataMu(metadata);
         this.view.setMetadataMu(this.metadataClone);
         this.controller = controller;
     }
-    
+
     public void showView() {
         this.view.setVisible(true);
-        
+
     }
-    
-    public void setList(ArrayList<String> list){
+
+    public void setList(ArrayList<String> list) {
         DefaultListModel model1 = new DefaultListModel();
-        for(String s: list){
+        for (String s : list) {
             model1.addElement(s);
         }
-        
+
     }
-    
+
     /**
-     * 
+     *
      */
     public void generate() {
         //TODO: Wat moet hier gebeuren?
 
         //Generate generate; = new Generate(view, true);
         //generate.setVisible(true);
-    }                                              
+    }
 
     /**
-     * 
+     *
      */
     public void ok() {
-        if (!this.metadata.equals(this.metadataClone))
-        {
+        if (!this.metadata.equals(this.metadataClone)) {
             try {
                 this.metadataClone.verify();
-            }
-            catch (ArgusException ex) {
+            } catch (ArgusException ex) {
                 JOptionPane.showMessageDialog(view,
                         ex.getMessage());
                 return;
             }
-            
+
+            boolean tablesSpecified = this.controller.selectCombinationsModel.getTables().size() > 0;
+            String message;
+            if(tablesSpecified){
+                message = "";
+                if (JOptionPane.showConfirmDialog(view, "Changing the Metadata will result in losing already specified tables.\n"
+                        + "Do you wish to continue?", "Mu Argus",
+                        JOptionPane.YES_NO_OPTION) == JOptionPane.NO_OPTION) {
+                    return;
+                }
+                this.controller.clearDataBeforeSelectCombinations();
+            } else {
+                message = "Metadata has been changed. ";
+            }
+
             this.metadata = this.metadataClone;
-            this.clearData();
-            if (JOptionPane.showConfirmDialog(view, "Metadata has been changed. Save changes?", "Mu Argus",
+            if (JOptionPane.showConfirmDialog(view, message + "Save changes?", "Mu Argus",
                     JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
                 JFileChooser fileChooser = new JFileChooser();
                 if (fileChooser.showSaveDialog(view) == JFileChooser.APPROVE_OPTION) {
                     this.metadata.write(fileChooser.getSelectedFile());
                 }
             }
-        } 
+        }
         this.view.setVisible(false);
-    }                                        
-    
-    
+    }
+
     public MetadataMu getMetadata() {
         return this.metadata;
     }
-    
+
     /**
-     * 
+     *
      */
     public void cancel() {
         if (!this.metadata.equals(this.metadataClone)) {
@@ -107,8 +117,5 @@ public class SpecifyMetadataController {
         }
         this.view.setVisible(false);
     }
-    
-    public void clearData(){
-        this.controller.clearDataBeforeSelectCombinations();
-    }
+
 }

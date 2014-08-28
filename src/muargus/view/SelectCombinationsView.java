@@ -375,7 +375,11 @@ public class SelectCombinationsView extends javax.swing.JDialog {
         );
 
         pack();
-    }// </editor-fold>                        
+    }// </editor-fold>        
+    
+    public void enableCalculateTables(boolean enabled){
+        this.calculateTablesButton.setEnabled(enabled);
+    }
 
     private void calculateTablesButtonActionPerformed(java.awt.event.ActionEvent evt) {
         //TODO: does not work yet
