@@ -5,7 +5,9 @@ import argus.model.DataFilePair;
 import argus.view.DialogOpenMicrodata;
 import java.util.ArrayList;
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JMenuItem;
+import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 import muargus.CodeTableCellRenderer;
@@ -66,6 +68,19 @@ public class MainFrameView extends javax.swing.JFrame {
             item.setEnabled(enable);
         }
     }
+
+    public JTable getUnsafeCombinationsTable() {
+        return unsafeCombinationsTable;
+    }
+
+    public JTable getVariablesTable() {
+        return variablesTable;
+    }
+
+    public void setVariableNameLabel(String variableNameLabel) {
+        this.variableNameLabel.setText(variableNameLabel);
+    }
+    
     /**
      * enables buttons
      */
@@ -372,56 +387,7 @@ public class MainFrameView extends javax.swing.JFrame {
 
         unsafeCombinationsTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null}
+
             },
             new String [] {
                 "Variable", "dim 1", ""
@@ -458,56 +424,7 @@ public class MainFrameView extends javax.swing.JFrame {
 
         variablesTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
+
             },
             new String [] {
                 "Code", "Label", "Freq", "dim1", ""
@@ -517,8 +434,6 @@ public class MainFrameView extends javax.swing.JFrame {
         variablesTable.setShowVerticalLines(false);
         variablesTable.getTableHeader().setReorderingAllowed(false);
         variablesScrollPane.setViewportView(variablesTable);
-
-        variableNameLabel.setText("jLabel3");
 
         javax.swing.GroupLayout variablesPanelLayout = new javax.swing.GroupLayout(variablesPanel);
         variablesPanel.setLayout(variablesPanelLayout);
@@ -840,7 +755,11 @@ public class MainFrameView extends javax.swing.JFrame {
             data[rowIndex] = model.getUnsafe(variable).toObjectArray(variable, nDims);
             rowIndex++;
         }
-        DefaultTableModel tableModel = new DefaultTableModel(data, columnNames.toArray());
+        DefaultTableModel tableModel = new DefaultTableModel(data, columnNames.toArray()){
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return false;
+            }
+        };
         this.unsafeCombinationsTable.setModel(tableModel);       
         
         this.unsafeCombinationsTable.getSelectionModel().addListSelectionListener(
@@ -879,7 +798,11 @@ public class MainFrameView extends javax.swing.JFrame {
             rowIndex++;
         }
 
-        DefaultTableModel tableModel = new DefaultTableModel(data, columnNames.toArray());
+        DefaultTableModel tableModel = new DefaultTableModel(data, columnNames.toArray()){
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return false;
+            }
+        };
         variablesTable.setModel(tableModel);
         variablesTable.setDefaultRenderer(Object.class, new CodeTableCellRenderer());
 
@@ -955,6 +878,11 @@ public class MainFrameView extends javax.swing.JFrame {
     }//GEN-LAST:event_contentsMenuItemActionPerformed
 
     private void newsMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newsMenuItemActionPerformed
+        System.out.println("clicked");
+        //this.variablesTable.getColumnModel().removeColumn(this.variablesTable.getColumnModel().getColumn(0));
+        //this.variablesTable.updateUI();
+        //this.unsafeCombinationsTable.removeAll();
+        
         controller.news();
     }//GEN-LAST:event_newsMenuItemActionPerformed
 

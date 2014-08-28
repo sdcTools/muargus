@@ -4,10 +4,12 @@
  */
 package muargus.view;
 
+import java.awt.Color;
 import javax.swing.JCheckBox;
 import javax.swing.JFileChooser;
 import javax.swing.JRadioButton;
 import javax.swing.ListSelectionModel;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import muargus.controller.MakeProtectedFileController;
@@ -24,8 +26,6 @@ public class MakeProtectedFileView extends javax.swing.JDialog {
     MakeProtectedFileModel model;
     private MetadataMu metadataMu;
     private TableModel tableModel;
-    private int selectedRow;
-    private boolean householdData;
 
     /**
      * Creates new form MakeProtectedFileView
@@ -41,7 +41,6 @@ public class MakeProtectedFileView extends javax.swing.JDialog {
         this.model = this.controller.getModel();
         this.setLocationRelativeTo(null);
         this.suppressionWeightTable.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-
     }
 
     public void setMetadataMu(MetadataMu metadataMu) {
@@ -50,14 +49,14 @@ public class MakeProtectedFileView extends javax.swing.JDialog {
     }
 
     public final void makeVariables() {
-        householdData = metadataMu.isHouseholdData();
-        this.hhIdentifierPanel.setEnabled(householdData);
-        this.keepInSafeFileRadioButton.setEnabled(householdData);
-        this.changeIntoSequenceNumberRadioButton.setEnabled(householdData);
-        this.removeFromSafeFileRadioButton.setEnabled(householdData);
+        this.controller.getSuppressionRadioButton().setSelected(true);
+        this.model.setHouseholdData(this.metadataMu.isHouseholdData());
+        this.hhIdentifierPanel.setEnabled(this.model.isHouseholdData());
+        this.keepInSafeFileRadioButton.setEnabled(this.model.isHouseholdData());
+        this.changeIntoSequenceNumberRadioButton.setEnabled(this.model.isHouseholdData());
+        this.removeFromSafeFileRadioButton.setEnabled(this.model.isHouseholdData());
         this.addRiskToOutputFileCheckBox.setVisible(this.model.isRiskModel());
         this.writeRecordRandomOrderCheckBox.setEnabled(metadataMu.getDataFileType() == MetadataMu.DATA_FILE_TYPE_FIXED);
-        this.selectedRow = 0;
         this.updateValues();
     }
 
@@ -68,11 +67,22 @@ public class MakeProtectedFileView extends javax.swing.JDialog {
         this.suppressionWeightSlider.setEnabled(suppression);
         this.suppressionWeightTable.setEnabled(suppression);
 
-        this.tableModel = new DefaultTableModel(this.model.getData(), this.model.getColumnames());
+        // different color when table is selected or not
+        if (suppression) {
+            this.suppressionWeightTable.setBackground(Color.white);
+        } else {
+            this.suppressionWeightTable.setBackground(new Color(240, 240, 240));
+        }
+
+        // makes it impossible to change values in the table (during usage)
+        this.tableModel = new DefaultTableModel(this.model.getData(), this.model.getColumnames()) {
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return false;
+            }
+        };
         this.suppressionWeightTable.setModel(this.tableModel);
-        this.suppressionWeightTable.getSelectionModel().setSelectionInterval(this.selectedRow, this.selectedRow);
-        int index = this.suppressionWeightTable.getSelectedRow();
-        this.suppressionWeightSlider.setValue(Integer.parseInt(this.model.getData()[index][1]));
+        this.suppressionWeightTable.getSelectionModel().setSelectionInterval(this.model.getSelectedRow(), this.model.getSelectedRow());
+        this.suppressionWeightSlider.setValue(Integer.parseInt(this.model.getData()[this.model.getSelectedRow()][1]));
     }
 
     public void setProgress(Object value) {
@@ -105,10 +115,6 @@ public class MakeProtectedFileView extends javax.swing.JDialog {
 
     public JCheckBox getWriteRecordRandomOrderCheckBox() {
         return writeRecordRandomOrderCheckBox;
-    }
-
-    public boolean isHouseholdData() {
-        return householdData;
     }
 
     public JCheckBox getAddRiskToOutputFileCheckBox() {
@@ -154,26 +160,26 @@ public class MakeProtectedFileView extends javax.swing.JDialog {
 
         suppressionButtonGroup.add(noSuppressionRadioButton);
         noSuppressionRadioButton.setText("No suppression");
-        noSuppressionRadioButton.addChangeListener(new javax.swing.event.ChangeListener() {
-            public void stateChanged(javax.swing.event.ChangeEvent evt) {
-                noSuppressionRadioButtonStateChanged(evt);
+        noSuppressionRadioButton.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                noSuppressionRadioButtonItemStateChanged(evt);
             }
         });
 
         suppressionButtonGroup.add(useWeightRadioButton);
         useWeightRadioButton.setText("Use weights");
-        useWeightRadioButton.addChangeListener(new javax.swing.event.ChangeListener() {
-            public void stateChanged(javax.swing.event.ChangeEvent evt) {
-                useWeightRadioButtonStateChanged(evt);
+        useWeightRadioButton.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                useWeightRadioButtonItemStateChanged(evt);
             }
         });
 
         suppressionButtonGroup.add(useEntropyRadioButton);
         useEntropyRadioButton.setSelected(true);
         useEntropyRadioButton.setText("Use entropy");
-        useEntropyRadioButton.addChangeListener(new javax.swing.event.ChangeListener() {
-            public void stateChanged(javax.swing.event.ChangeEvent evt) {
-                useEntropyRadioButtonStateChanged(evt);
+        useEntropyRadioButton.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                useEntropyRadioButtonItemStateChanged(evt);
             }
         });
 
@@ -185,9 +191,17 @@ public class MakeProtectedFileView extends javax.swing.JDialog {
                 {null, null}
             },
             new String [] {
-                "Variable", "Priority"
+                "Variables", "Priority"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         suppressionWeightTable.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 suppressionWeightTableMouseClicked(evt);
@@ -249,17 +263,27 @@ public class MakeProtectedFileView extends javax.swing.JDialog {
         hhIdentifierButtonGroup.add(keepInSafeFileRadioButton);
         keepInSafeFileRadioButton.setSelected(true);
         keepInSafeFileRadioButton.setText("Keep in safe file");
+        keepInSafeFileRadioButton.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                keepInSafeFileRadioButtonItemStateChanged(evt);
+            }
+        });
 
         hhIdentifierButtonGroup.add(changeIntoSequenceNumberRadioButton);
         changeIntoSequenceNumberRadioButton.setText("Change into sequence number");
-        changeIntoSequenceNumberRadioButton.addChangeListener(new javax.swing.event.ChangeListener() {
-            public void stateChanged(javax.swing.event.ChangeEvent evt) {
-                changeIntoSequenceNumberRadioButtonStateChanged(evt);
+        changeIntoSequenceNumberRadioButton.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                changeIntoSequenceNumberRadioButtonItemStateChanged(evt);
             }
         });
 
         hhIdentifierButtonGroup.add(removeFromSafeFileRadioButton);
         removeFromSafeFileRadioButton.setText("Remove from safe file");
+        removeFromSafeFileRadioButton.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                removeFromSafeFileRadioButtonItemStateChanged(evt);
+            }
+        });
 
         javax.swing.GroupLayout hhIdentifierPanelLayout = new javax.swing.GroupLayout(hhIdentifierPanel);
         hhIdentifierPanel.setLayout(hhIdentifierPanelLayout);
@@ -286,6 +310,11 @@ public class MakeProtectedFileView extends javax.swing.JDialog {
         );
 
         writeRecordRandomOrderCheckBox.setText("Write records in random order");
+        writeRecordRandomOrderCheckBox.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                writeRecordRandomOrderCheckBoxItemStateChanged(evt);
+            }
+        });
 
         cancelButton.setText("Cancel");
         cancelButton.addActionListener(new java.awt.event.ActionListener() {
@@ -302,6 +331,11 @@ public class MakeProtectedFileView extends javax.swing.JDialog {
         });
 
         addRiskToOutputFileCheckBox.setText("Add Risk to Output File ");
+        addRiskToOutputFileCheckBox.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                addRiskToOutputFileCheckBoxItemStateChanged(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -350,46 +384,88 @@ public class MakeProtectedFileView extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void makeFileButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_makeFileButtonActionPerformed
+        this.fileChooser.setFileFilter(new FileNameExtensionFilter("Safefile (*.saf)", "saf"));
         if (this.fileChooser.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
+            //TODO: .saf meegeven
+
             this.model.setNameOfSafeFile(this.fileChooser.getSelectedFile());
+            System.out.println(this.model.getNameOfSafeFile());
         }
         controller.makeFile();
     }//GEN-LAST:event_makeFileButtonActionPerformed
-
-    private void noSuppressionRadioButtonStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_noSuppressionRadioButtonStateChanged
-        this.updateValues();
-    }//GEN-LAST:event_noSuppressionRadioButtonStateChanged
-
-    private void useWeightRadioButtonStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_useWeightRadioButtonStateChanged
-        this.updateValues();
-    }//GEN-LAST:event_useWeightRadioButtonStateChanged
-
-    private void useEntropyRadioButtonStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_useEntropyRadioButtonStateChanged
-        this.updateValues();
-    }//GEN-LAST:event_useEntropyRadioButtonStateChanged
 
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
         this.setVisible(false);
     }//GEN-LAST:event_cancelButtonActionPerformed
 
     private void suppressionWeightSliderStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_suppressionWeightSliderStateChanged
-        this.model.setPriority(selectedRow, suppressionWeightSlider.getValue());
+        this.model.setPriority(this.model.getSelectedRow(), suppressionWeightSlider.getValue());
         updateValues();
     }//GEN-LAST:event_suppressionWeightSliderStateChanged
 
     private void suppressionWeightTableKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_suppressionWeightTableKeyReleased
-        this.selectedRow = suppressionWeightTable.getSelectedRow();
+        this.model.setSelectedRow(this.suppressionWeightTable.getSelectedRow());
         updateValues();
     }//GEN-LAST:event_suppressionWeightTableKeyReleased
 
     private void suppressionWeightTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_suppressionWeightTableMouseClicked
-        this.selectedRow = suppressionWeightTable.getSelectedRow();
+        this.model.setSelectedRow(this.suppressionWeightTable.getSelectedRow());
         updateValues();
     }//GEN-LAST:event_suppressionWeightTableMouseClicked
 
-    private void changeIntoSequenceNumberRadioButtonStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_changeIntoSequenceNumberRadioButtonStateChanged
+    private void useEntropyRadioButtonItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_useEntropyRadioButtonItemStateChanged
+        if (this.useEntropyRadioButton.isSelected()) {
+            this.model.setSuppressionType(this.model.USE_ENTROPY);
+            this.updateValues();
+        }
+    }//GEN-LAST:event_useEntropyRadioButtonItemStateChanged
 
-    }//GEN-LAST:event_changeIntoSequenceNumberRadioButtonStateChanged
+    private void useWeightRadioButtonItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_useWeightRadioButtonItemStateChanged
+        if (this.useWeightRadioButton.isSelected()) {
+            this.model.setSuppressionType(this.model.USE_WEIGHT);
+            this.updateValues();
+        }
+    }//GEN-LAST:event_useWeightRadioButtonItemStateChanged
+
+    private void noSuppressionRadioButtonItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_noSuppressionRadioButtonItemStateChanged
+        if (this.noSuppressionRadioButton.isSelected()) {
+            this.model.setSuppressionType(this.model.NO_SUPPRESSION);
+            this.updateValues();
+        }
+    }//GEN-LAST:event_noSuppressionRadioButtonItemStateChanged
+
+    private void keepInSafeFileRadioButtonItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_keepInSafeFileRadioButtonItemStateChanged
+        if (this.keepInSafeFileRadioButton.isSelected()) {
+            this.model.setHouseholdType(this.model.KEEP_IN_SAFE_FILE);
+            this.updateValues();
+        }
+    }//GEN-LAST:event_keepInSafeFileRadioButtonItemStateChanged
+
+    private void changeIntoSequenceNumberRadioButtonItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_changeIntoSequenceNumberRadioButtonItemStateChanged
+        if (this.changeIntoSequenceNumberRadioButton.isSelected()) {
+            this.model.setHouseholdType(this.model.CHANGE_INTO_SEQUENCE_NUMBER);
+            this.updateValues();
+        }
+    }//GEN-LAST:event_changeIntoSequenceNumberRadioButtonItemStateChanged
+
+    private void removeFromSafeFileRadioButtonItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_removeFromSafeFileRadioButtonItemStateChanged
+        if (this.removeFromSafeFileRadioButton.isSelected()) {
+            this.model.setHouseholdType(this.model.REMOVE_FROM_SAFE_FILE);
+            this.updateValues();
+        }
+    }//GEN-LAST:event_removeFromSafeFileRadioButtonItemStateChanged
+
+    private void addRiskToOutputFileCheckBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_addRiskToOutputFileCheckBoxItemStateChanged
+        this.model.setPrintBHR(this.addRiskToOutputFileCheckBox.isSelected());
+        if (this.addRiskToOutputFileCheckBox.isSelected()) {
+            this.writeRecordRandomOrderCheckBox.setSelected(false);
+        }
+        this.writeRecordRandomOrderCheckBox.setEnabled(!this.addRiskToOutputFileCheckBox.isSelected());
+    }//GEN-LAST:event_addRiskToOutputFileCheckBoxItemStateChanged
+
+    private void writeRecordRandomOrderCheckBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_writeRecordRandomOrderCheckBoxItemStateChanged
+        this.model.setRandomizeOutput(this.writeRecordRandomOrderCheckBox.isSelected());
+    }//GEN-LAST:event_writeRecordRandomOrderCheckBoxItemStateChanged
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

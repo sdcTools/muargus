@@ -9,7 +9,6 @@ import argus.utils.SystemUtils;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 import muargus.MuARGUS;
@@ -27,11 +26,14 @@ public class SelectCombinationsController implements PropertyChangeListener{
     SelectCombinationsModel model;
     SelectCombinationsModel modelClone;
     MetadataMu metadata;
+    MainFrameController controller;
     //ArrayList<String> list;
         
     private static final Logger logger = Logger.getLogger(SelectCombinationsController.class.getName());
 
-    public SelectCombinationsController(java.awt.Frame parentView, MetadataMu metadata, SelectCombinationsModel model) {
+    public SelectCombinationsController(java.awt.Frame parentView, MetadataMu metadata, SelectCombinationsModel model, 
+            MainFrameController controller) {
+        this.controller = controller;
         this.model = model;
         this.getSettings();
         this.modelClone = new SelectCombinationsModel(model);
@@ -61,8 +63,12 @@ public class SelectCombinationsController implements PropertyChangeListener{
      * @throws argus.model.ArgusException
      */
     public void calculateTables() throws ArgusException {
+        this.view.enableCalculateTables(false);
         this.model = this.modelClone;
         saveSettings();
+        if(this.controller.view.getUnsafeCombinationsTable().getRowCount() > 0){
+            this.clearData();
+        }
         TableService service = new TableService();
         service.setPropertyChangeListener(this);
         service.calculateTables(this.model, this.metadata);
@@ -116,5 +122,9 @@ public class SelectCombinationsController implements PropertyChangeListener{
             case "status":
                 view.setVisible(pce.getNewValue() != "done");
         }
+    }
+    
+    public void clearData(){
+        this.controller.clearDataAfterSelectCombinations();
     }
 }

@@ -90,11 +90,11 @@ public class TableService {
                 c.SetSuppressPrior(index, variable.getSuppressweight());
             }
         }
-
+        
         boolean result = c.MakeFileSafe(model.getNameOfSafeFile(), model.isWithPrior(), model.isWithEntropy(),
-                model.getHhOption(), model.isRandomizeOutput(), model.isPrintBHR());
+                model.getHouseholdType(), model.isRandomizeOutput(), model.isPrintBHR());
 
-        // TODO: verander in argusException
+         //TODO: verander in argusException
         if (!result) {
             System.out.println("gefaald");
         } else {

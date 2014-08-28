@@ -142,7 +142,7 @@
             <Property name="text" type="java.lang.String" value="No suppression"/>
           </Properties>
           <Events>
-            <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="noSuppressionRadioButtonStateChanged"/>
+            <EventHandler event="itemStateChanged" listener="java.awt.event.ItemListener" parameters="java.awt.event.ItemEvent" handler="noSuppressionRadioButtonItemStateChanged"/>
           </Events>
         </Component>
         <Component class="javax.swing.JRadioButton" name="useWeightRadioButton">
@@ -153,7 +153,7 @@
             <Property name="text" type="java.lang.String" value="Use weights"/>
           </Properties>
           <Events>
-            <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="useWeightRadioButtonStateChanged"/>
+            <EventHandler event="itemStateChanged" listener="java.awt.event.ItemListener" parameters="java.awt.event.ItemEvent" handler="useWeightRadioButtonItemStateChanged"/>
           </Events>
         </Component>
         <Component class="javax.swing.JRadioButton" name="useEntropyRadioButton">
@@ -165,7 +165,7 @@
             <Property name="text" type="java.lang.String" value="Use entropy"/>
           </Properties>
           <Events>
-            <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="useEntropyRadioButtonStateChanged"/>
+            <EventHandler event="itemStateChanged" listener="java.awt.event.ItemListener" parameters="java.awt.event.ItemEvent" handler="useEntropyRadioButtonItemStateChanged"/>
           </Events>
         </Component>
         <Component class="javax.swing.JSeparator" name="separator">
@@ -181,8 +181,11 @@
           <SubComponents>
             <Component class="javax.swing.JTable" name="suppressionWeightTable">
               <Properties>
-                <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                  <Connection code="new javax.swing.table.DefaultTableModel(&#xa;    new Object [][] {&#xa;        {null, null},&#xa;        {null, null}&#xa;    },&#xa;    new String [] {&#xa;        &quot;Variable&quot;, &quot;Priority&quot;&#xa;    }&#xa;)" type="code"/>
+                <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
+                  <Table columnCount="2" rowCount="2">
+                    <Column editable="false" title="Variables" type="java.lang.Object"/>
+                    <Column editable="false" title="Priority" type="java.lang.Object"/>
+                  </Table>
                 </Property>
               </Properties>
               <Events>
@@ -250,6 +253,9 @@
             <Property name="selected" type="boolean" value="true"/>
             <Property name="text" type="java.lang.String" value="Keep in safe file"/>
           </Properties>
+          <Events>
+            <EventHandler event="itemStateChanged" listener="java.awt.event.ItemListener" parameters="java.awt.event.ItemEvent" handler="keepInSafeFileRadioButtonItemStateChanged"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JRadioButton" name="changeIntoSequenceNumberRadioButton">
           <Properties>
@@ -259,7 +265,7 @@
             <Property name="text" type="java.lang.String" value="Change into sequence number"/>
           </Properties>
           <Events>
-            <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="changeIntoSequenceNumberRadioButtonStateChanged"/>
+            <EventHandler event="itemStateChanged" listener="java.awt.event.ItemListener" parameters="java.awt.event.ItemEvent" handler="changeIntoSequenceNumberRadioButtonItemStateChanged"/>
           </Events>
         </Component>
         <Component class="javax.swing.JRadioButton" name="removeFromSafeFileRadioButton">
@@ -269,6 +275,9 @@
             </Property>
             <Property name="text" type="java.lang.String" value="Remove from safe file"/>
           </Properties>
+          <Events>
+            <EventHandler event="itemStateChanged" listener="java.awt.event.ItemListener" parameters="java.awt.event.ItemEvent" handler="removeFromSafeFileRadioButtonItemStateChanged"/>
+          </Events>
         </Component>
       </SubComponents>
     </Container>
@@ -276,6 +285,9 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="Write records in random order"/>
       </Properties>
+      <Events>
+        <EventHandler event="itemStateChanged" listener="java.awt.event.ItemListener" parameters="java.awt.event.ItemEvent" handler="writeRecordRandomOrderCheckBoxItemStateChanged"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JProgressBar" name="progressbar">
     </Component>
@@ -299,6 +311,9 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="Add Risk to Output File "/>
       </Properties>
+      <Events>
+        <EventHandler event="itemStateChanged" listener="java.awt.event.ItemListener" parameters="java.awt.event.ItemEvent" handler="addRiskToOutputFileCheckBoxItemStateChanged"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>

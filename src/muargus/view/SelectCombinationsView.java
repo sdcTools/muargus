@@ -116,7 +116,11 @@ public class SelectCombinationsView extends javax.swing.JDialog {
             }
         }
 
-        tableModel = new DefaultTableModel(data, columnNames.toArray());
+        tableModel = new DefaultTableModel(data, columnNames.toArray()){
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return false;
+            }
+        };
         table.setModel(tableModel);
 
         // sets the size of each column
@@ -371,7 +375,11 @@ public class SelectCombinationsView extends javax.swing.JDialog {
         );
 
         pack();
-    }// </editor-fold>                        
+    }// </editor-fold>        
+    
+    public void enableCalculateTables(boolean enabled){
+        this.calculateTablesButton.setEnabled(enabled);
+    }
 
     private void calculateTablesButtonActionPerformed(java.awt.event.ActionEvent evt) {
         //TODO: does not work yet
