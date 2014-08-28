@@ -163,7 +163,8 @@ public class GlobalRecodeController {
                 errorPos,
                 warning);
         if (!result) {
-            throw new ArgusException(warning[0]);
+            throw new ArgusException(String.format("Error in recoding; line %d, position %d \nNo recoding done",
+            errorLine[0], errorPos[0]));
         }
         applyRecode();
         recode.setRecoded(true);
@@ -180,14 +181,9 @@ public class GlobalRecodeController {
         if (!result) {
             throw new ArgusException("Error during Apply recode");
         }
-        
         new TableService().getUnsafeCombinations(this.selectCombinationsModel, this.metadata);
-        
-            
-        // TODO add your handling code here:
-    }                                           
-
-    /**
+    }
+     /**
      * 
      */
     public void undo(RecodeMu recode) throws ArgusException {    
@@ -195,15 +191,12 @@ public class GlobalRecodeController {
         c.SetProgressListener(null);
         int index = this.model.getVariables().indexOf(recode.getVariable());
         boolean result = c.UndoRecode(index + 1);
-                if (!result) {
+        if (!result) {
             throw new ArgusException("Error while undoing recode");
         }
-        result = c.ApplyRecode();
-        if (!result) {
-            throw new ArgusException("Error during Apply recode");
-        }
+        applyRecode();
         recode.setRecoded(false);
         recode.setTruncated(false);
-        
+                
    }      
 }
