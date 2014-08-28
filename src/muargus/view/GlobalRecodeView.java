@@ -562,6 +562,10 @@ public class GlobalRecodeView extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_readButtonActionPerformed
 
+    public void showWarning(String warning) {
+        warningTextArea.setText(warning);
+    }
+    
     private void applyButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_applyButtonActionPerformed
         try {
             controller.apply(getSelectedRecode());

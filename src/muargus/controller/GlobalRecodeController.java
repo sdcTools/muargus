@@ -167,19 +167,13 @@ public class GlobalRecodeController {
         }
         applyRecode();
         recode.setRecoded(true);
-
+        view.showWarning(warning[0]); 
         
         
     }
     
     private void applyRecode() throws ArgusException {
         CMuArgCtrl c = MuARGUS.getMuArgCtrl();
-        IProgressListener progressListener = new IProgressListener() {
-            @Override
-            public void UpdateProgress(final int percentage) {
-                ;
-            }
-        };
         c.SetProgressListener(null);
 
         boolean result = c.ApplyRecode();
