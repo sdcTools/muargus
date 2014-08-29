@@ -23,6 +23,7 @@ public class RecodeMu {
     private final String missing_2_original;
     private String missing_1_new;
     private String missing_2_new;
+    private boolean isDirty;
     
 
     public RecodeMu(VariableMu variable) {
@@ -36,6 +37,7 @@ public class RecodeMu {
         this.missing_2_new = "";
         this.missing_1_original = variable.getMissing(0);
         this.missing_2_original = variable.getMissing(1);
+        this.isDirty = false;
     }
 
     public String getGrcFile() {
@@ -44,6 +46,7 @@ public class RecodeMu {
 
     public void setGrcFile(String grcFile) {
         this.grcFile = grcFile;
+        this.isDirty = true;
     }
 
     public String getCodeListFile() {

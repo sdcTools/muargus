@@ -11,16 +11,18 @@ Release 1
     - geef een scherm die vraagt om het aantal getallen voor de truncate
     - check of het aantal getallen voor de truncate geldig is
     - past volgens Anco de VariableMu aan maar ik weet niet precies wat hij hiermee bedoelt
-8. warningTextArea
-    - laat de foutmeldingen zien (gebeurd in de dll)
 9. closeButton:
     - close screen
-    - sla de gegevens op
+    - sla de gegevens op (?)
     - pas het hoofdscherm aan
 10. code opschonen
 11. javadoc schrijven voor de methodes
 12. - aanmaken van de tabel moet naar update values/tables? (werkt nu: R/T worden gezet bij verandering)
 13. kolommen verwisselen uitzetten (onder properties: tableHeader)
+14. bug: cdl file uit variable wordt ten onrechte ingevuld
+15. wijzigingen in grc tekst bij selectie andere variable: vraag om opslaan
+ 
+
 
 Release 2+
 
@@ -67,5 +69,7 @@ Gedaan:                                                                         
     - alleen zichtbaar als de geselecteerde waarde of truncated of recoded is                                Anne
     - voer undo uit met de dllFunctie undoRecode                                                                Anne
     - zet recoded/truncated op false                                                                            Anne
+8. warningTextArea
+    - laat de foutmeldingen zien uit de dll                                                                 Anne
 12. Missing values:
     - zet original values non-editable                                                                      Jeldrik
