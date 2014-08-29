@@ -6,11 +6,12 @@ package muargus.controller;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.File;
 import javax.swing.JRadioButton;
-import muargus.model.ProtectedFile;
 import muargus.model.MetadataMu;
 import muargus.model.Combinations;
 import muargus.view.MakeProtectedFileView;
+import org.apache.commons.io.FilenameUtils;
 
 /**
  *
@@ -48,6 +49,10 @@ public class MakeProtectedFileController implements PropertyChangeListener {
 //        return this.model;
 //    }
 
+    
+    private File getSafeMetaFile(String filename) {
+        return new File(FilenameUtils.removeExtension(filename) + ".rds");
+    }
     /**
      *
      */
@@ -55,6 +60,9 @@ public class MakeProtectedFileController implements PropertyChangeListener {
         TableService service = new TableService();
         service.setPropertyChangeListener(this);
         service.makeProtectedFile(this.metadata);
+        MetadataMu safeMetadata = service.getSafeFileMetadata(this.metadata);
+        File file = getSafeMetaFile(this.metadata.getCombinations().getProtectedFile().getNameOfSafeFile());
+        safeMetadata.write(file);
     }
 
     public Combinations getCombinations() {

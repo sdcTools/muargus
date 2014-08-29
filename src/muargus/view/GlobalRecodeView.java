@@ -268,6 +268,12 @@ public class GlobalRecodeView extends javax.swing.JDialog {
 
         codelistRecodeLabel.setText("Codelist for recode");
 
+        codelistRecodeTextField.addCaretListener(new javax.swing.event.CaretListener() {
+            public void caretUpdate(javax.swing.event.CaretEvent evt) {
+                codelistRecodeTextFieldCaretUpdate(evt);
+            }
+        });
+
         codelistRecodeButton.setText("...");
         codelistRecodeButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -364,6 +370,12 @@ public class GlobalRecodeView extends javax.swing.JDialog {
         });
 
         missing_2_newLabel.setText("2");
+
+        missing_2_newTextField.addCaretListener(new javax.swing.event.CaretListener() {
+            public void caretUpdate(javax.swing.event.CaretEvent evt) {
+                missing_2_newTextFieldCaretUpdate(evt);
+            }
+        });
 
         javax.swing.GroupLayout missingValuesPanelLayout = new javax.swing.GroupLayout(missingValuesPanel);
         missingValuesPanel.setLayout(missingValuesPanelLayout);
@@ -616,6 +628,14 @@ public class GlobalRecodeView extends javax.swing.JDialog {
     private void globalRecodeRecodeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_globalRecodeRecodeButtonActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_globalRecodeRecodeButtonActionPerformed
+
+    private void missing_2_newTextFieldCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_missing_2_newTextFieldCaretUpdate
+        getSelectedRecode().setMissing_2_new(this.missing_2_newTextField.getText());
+    }//GEN-LAST:event_missing_2_newTextFieldCaretUpdate
+
+    private void codelistRecodeTextFieldCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_codelistRecodeTextFieldCaretUpdate
+        getSelectedRecode().setCodeListFile(this.codelistRecodeTextField.getText());
+    }//GEN-LAST:event_codelistRecodeTextFieldCaretUpdate
 
     /**
      *

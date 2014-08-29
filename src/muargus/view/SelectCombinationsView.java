@@ -500,8 +500,12 @@ public class SelectCombinationsView extends javax.swing.JDialog {
             for (VariableMu newVariable : tableMuNew.getVariables()) {
                 if (oldVariable.equals(newVariable)) {
                     numberOfDoubleVariables++;
+                    if (tableMuOld.isRiskModel()) {
+                        return false;
+                    }
                 }
             }
+        }
             if (tableMuNew.getVariables().size() == tableMuOld.getVariables().size()
                     && numberOfDoubleVariables == tableMuNew.getVariables().size()) {
                 int thresholdOld = tableMuOld.getThreshold();
@@ -512,11 +516,11 @@ public class SelectCombinationsView extends javax.swing.JDialog {
                     tableMuNew.setThreshold(thresholdOld);
                 }
                 isValid = false;
-                exit = true;
-            }
-            if (exit) {
-                break;
-            }
+//                exit = true;
+//            }
+//            if (exit) {
+//                break;
+//            }
         }
         return isValid;
     }

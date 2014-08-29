@@ -12,7 +12,6 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.nio.channels.SeekableByteChannel;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.concurrent.ExecutionException;
@@ -26,6 +25,7 @@ import muargus.extern.dataengine.IProgressListener;
 import muargus.model.ProtectedFile;
 import muargus.model.MetadataMu;
 import muargus.model.Combinations;
+import muargus.model.RecodeMu;
 import muargus.model.TableMu;
 import muargus.model.UnsafeCodeInfo;
 import muargus.model.UnsafeInfo;
@@ -71,8 +71,8 @@ public class TableService {
         worker.execute();
     }
 
-    private void makeFileInBackground(final MetadataMu metadata) {
-        ProtectedFile model = metadata.getCombinations().getProtectedFile();
+    private void makeFileInBackground(final MetadataMu metadata) throws ArgusException {
+        ProtectedFile protectedFile = metadata.getCombinations().getProtectedFile();
         IProgressListener progressListener = new IProgressListener() {
             @Override
             public void UpdateProgress(final int percentage) {
@@ -82,21 +82,23 @@ public class TableService {
         };
         c.SetProgressListener(progressListener);
         int index = 0;
-        for (VariableMu variable : getVariables(metadata, metadata.getCombinations())) {
+        for (VariableMu variable : metadata.getVariables()) {
             index++;
-            if (model.getVariables().contains(variable)) {
+            if (protectedFile.getVariables().contains(variable)) {
                 c.SetSuppressPrior(index, variable.getSuppressweight());
             }
         }
         
-        boolean result = c.MakeFileSafe(model.getNameOfSafeFile(), model.isWithPrior(), model.isWithEntropy(),
-                model.getHouseholdType(), model.isRandomizeOutput(), model.isPrintBHR());
+        boolean result = c.MakeFileSafe(protectedFile.getNameOfSafeFile(), 
+                protectedFile.isWithPrior(), 
+                protectedFile.isWithEntropy(),
+                protectedFile.getHouseholdType(), 
+                protectedFile.isRandomizeOutput(), 
+                protectedFile.isPrintBHR());
 
          //TODO: verander in argusException
         if (!result) {
-            System.out.println("gefaald");
-        } else {
-            System.out.println("gelukt");
+            throw new ArgusException("Error during Make protcted file");
         }
     }
 
@@ -191,23 +193,23 @@ public class TableService {
         return nVar;
     }
 
-    private ArrayList<VariableMu> getVariables(MetadataMu metadata, Combinations model) {
-        if (metadata.getDataFileType() != MetadataMu.DATA_FILE_TYPE_FIXED) {
-            return metadata.getVariables();
-        }
-        ArrayList<VariableMu> variables = new ArrayList<>(model.getVariablesInTables());
-        if (model.isRiskModel()) {
-            for (VariableMu weightVar : metadata.getVariables()) {
-                if (weightVar.isWeight()) {
-                    if (!variables.contains(weightVar)) {
-                        variables.add(weightVar);
-                    }
-                    break;
-                }
-            }
-        }
-        return variables;
-    }
+//    private ArrayList<VariableMu> getVariables(MetadataMu metadata, Combinations model) {
+        //if (metadata.getDataFileType() != MetadataMu.DATA_FILE_TYPE_FIXED) {
+//            return metadata.getVariables();
+        //}
+//        ArrayList<VariableMu> variables = new ArrayList<>(model.getVariablesInTables());
+//        if (model.isRiskModel()) {
+//            for (VariableMu weightVar : metadata.getVariables()) {
+//                if (weightVar.isWeight()) {
+//                    if (!variables.contains(weightVar)) {
+//                        variables.add(weightVar);
+//                    }
+//                    break;
+//                }
+//            }
+//        }
+//        return variables;
+//    }
 
     private int getRiskVarIndex(ArrayList<VariableMu> variables) {
         int index = 0;
@@ -222,7 +224,7 @@ public class TableService {
 
     private void calculateInBackground(MetadataMu metadata) throws ArgusException {
         Combinations model = metadata.getCombinations();
-        ArrayList<VariableMu> variables = getVariables(metadata, model);
+        ArrayList<VariableMu> variables = metadata.getVariables();
         boolean result = c.SetNumberVar(variables.size());
         if (!result) {
             throw new ArgusException("Error in SetNumberVar: Insufficient memory");
@@ -313,15 +315,76 @@ public class TableService {
         return 1;
     }
 
+    private void setSafeFileProperties(final int index, final VariableMu variable, MetadataMu metadata) {
+        int[] startPos = new int[1];
+        int[] nPos = new int[1];
+        int[] nSuppressions = new int[1];
+        double[] entropy = new double[1];
+        int[] bandwidth = new int[1];
+        String[] missing1 = new String[1];
+        String[] missing2 = new String[1];
+        int[] nOfCodes = new int[1];
+        int[] nOfMissing = new int[1];
+        c.GetVarProperties(index, startPos, nPos, nSuppressions, entropy, bandwidth, missing1, missing2, nOfCodes, nOfMissing);
+        variable.setStartingPosition(Integer.toString(startPos[0]));
+        variable.setVariableLength(Integer.toString(nPos[0]));
+        variable.setnOfSuppressions(nSuppressions[0]);
+        variable.setEntropy(entropy[0]);
+        variable.setBandwidth(bandwidth[0]);
+        variable.setnOfCodes(nOfCodes[0]);
+        if (nOfMissing[0] > 0)
+            variable.setMissing(0, missing1[0]);
+        if (nOfMissing[0] > 1)
+            variable.setMissing(1, missing2[0]);
+        
+        //Global recode codelist
+        for (RecodeMu recode : metadata.getCombinations().getGlobalRecode().getRecodeMus()) {
+            if (recode.getVariable().equals(variable)) {
+                if (recode.isRecoded() || recode.isTruncated()) {
+                    variable.setCodeListFile(recode.getCodeListFile());
+                    variable.setCodelist(variable.getCodeListFile() != null);
+                }
+                
+            }
+        }
+
+        
+    }
+    public MetadataMu getSafeFileMetadata(MetadataMu metadata) {
+        ProtectedFile protectedFile = metadata.getCombinations().getProtectedFile();
+        MetadataMu safeMeta = new MetadataMu(metadata);
+        for (VariableMu var : safeMeta.getVariables()) {
+            int varIndex = safeMeta.getVariables().indexOf(var) + 1;
+            setSafeFileProperties(varIndex, var, metadata);
+        }
+        return safeMeta;
+    }
+    
+    private String getRecodeCodelistFile(Combinations combinations, VariableMu variable) {
+        for (RecodeMu recode : combinations.getGlobalRecode().getRecodeMus()) {
+            if (recode.getVariable().equals(variable))
+                return recode.getCodeListFile();
+        }
+        return "";
+    }
+    
     public void getUnsafeCombinations(MetadataMu metadata) {
         Combinations model = metadata.getCombinations();
+        boolean hasRecode = (model.getGlobalRecode() != null);
         model.clearUnsafe();
         for (int varIndex = 0; varIndex < model.getVariablesInTables().size(); varIndex++) {
             VariableMu variable = model.getVariablesInTables().get(varIndex);
 
             HashMap<String, String> codelist = new HashMap<>();
-            if (variable.isCodelist()) {
-                readCodelist(codelist, variable.getCodeListFile(), metadata);
+            String codelistFile = "";
+            if (hasRecode) {
+                codelistFile = getRecodeCodelistFile(model, variable);
+            }
+            if ("".equals(codelistFile) && variable.isCodelist()) {
+                codelistFile = variable.getCodeListFile();
+            }
+            if (!"".equals(codelistFile)) {
+                readCodelist(codelist, codelistFile, metadata);
             }
 
             int[] nDims = new int[]{0};
@@ -375,8 +438,9 @@ public class TableService {
             String line;
             while ((line = reader.readLine()) != null) {
                 String[] parts = line.split(",");
-
-                codelist.put(parts[0].trim(), parts[1].trim());
+                if (parts.length > 1) {
+                    codelist.put(parts[0].trim(), parts[1].trim());
+                }
             }
             reader.close();
         } catch (Exception ex) {

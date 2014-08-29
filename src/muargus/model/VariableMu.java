@@ -56,6 +56,14 @@ public class VariableMu {
     private String relatedVariableName = null;
     private VariableMu relatedVariable = null;
     
+    //Only relevant for variables in safe file:
+    //(not included in copy constructor, equals and hashcode)
+    private int nOfSuppressions;
+    private int bandwidth;
+    private int nOfCodes;
+    private double entropy;
+    
+    
     /**
      * Empty constructor
      */
@@ -270,6 +278,38 @@ public class VariableMu {
         this.other = other;
     }
     
+        public int getnOfSuppressions() {
+        return nOfSuppressions;
+    }
+
+    public void setnOfSuppressions(int nOfSuppressions) {
+        this.nOfSuppressions = nOfSuppressions;
+    }
+
+    public int getBandwidth() {
+        return bandwidth;
+    }
+
+    public void setBandwidth(int bandwidth) {
+        this.bandwidth = bandwidth;
+    }
+
+    public int getnOfCodes() {
+        return nOfCodes;
+    }
+
+    public void setnOfCodes(int nOfCodes) {
+        this.nOfCodes = nOfCodes;
+    }
+
+    public double getEntropy() {
+        return entropy;
+    }
+
+    public void setEntropy(double entropy) {
+        this.entropy = entropy;
+    }
+
     public void write(PrintWriter writer, final int dataFileType) {
         writer.print(this.name);
         if (MetadataMu.DATA_FILE_TYPE_FIXED == dataFileType) {
