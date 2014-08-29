@@ -14,7 +14,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import muargus.controller.GlobalRecodeController;
-import muargus.model.GlobalRecodeModel;
+import muargus.model.GlobalRecode;
 import muargus.model.MetadataMu;
 import muargus.model.RecodeMu;
 import muargus.model.VariableMu;
@@ -26,7 +26,7 @@ import muargus.model.VariableMu;
 public class GlobalRecodeView extends javax.swing.JDialog {
 
     GlobalRecodeController controller;
-    GlobalRecodeModel model;
+    GlobalRecode model;
     private MetadataMu metadataMu;  // ik weet niet of we die hier nodig hebben, maar voor de zekerheid heb ik hem er bij gezet
     private TableModel tableModel;
 
@@ -41,15 +41,16 @@ public class GlobalRecodeView extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         this.controller = controller;
-        this.model = this.controller.getModel();
+        //this.model = this.controller.getModel();
         this.setLocationRelativeTo(null);
         this.variablesTable.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        makeVariables();
 
     }
 
     public void setMetadataMu(MetadataMu metadataMu) {
         this.metadataMu = metadataMu;
+        this.model = this.metadataMu.getCombinations().getGlobalRecode();
+        makeVariables();
     }
 
     public void makeVariables() {

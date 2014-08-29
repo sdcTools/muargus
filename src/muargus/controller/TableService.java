@@ -23,9 +23,9 @@ import javax.swing.SwingWorker;
 import muargus.MuARGUS;
 import muargus.extern.dataengine.CMuArgCtrl;
 import muargus.extern.dataengine.IProgressListener;
-import muargus.model.MakeProtectedFileModel;
+import muargus.model.ProtectedFile;
 import muargus.model.MetadataMu;
-import muargus.model.SelectCombinationsModel;
+import muargus.model.Combinations;
 import muargus.model.TableMu;
 import muargus.model.UnsafeCodeInfo;
 import muargus.model.UnsafeInfo;
@@ -43,14 +43,13 @@ public class TableService {
 
     private PropertyChangeListener listener;
 
-    public void makeProtectedFile(final MakeProtectedFileModel model, final MetadataMu metadata,
-            final SelectCombinationsModel selectCombinationsModel) {
+    public void makeProtectedFile(final MetadataMu metadata) {
         final SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
 
             // called in a separate thread...
             @Override
             protected Void doInBackground() throws Exception {
-                makeFileInBackground(model, metadata, selectCombinationsModel);
+                makeFileInBackground(metadata);
                 return null;
             }
 
@@ -72,9 +71,8 @@ public class TableService {
         worker.execute();
     }
 
-    private void makeFileInBackground(final MakeProtectedFileModel model, final MetadataMu metadata,
-            final SelectCombinationsModel selectCombinationsModel) {
-
+    private void makeFileInBackground(final MetadataMu metadata) {
+        ProtectedFile model = metadata.getCombinations().getProtectedFile();
         IProgressListener progressListener = new IProgressListener() {
             @Override
             public void UpdateProgress(final int percentage) {
@@ -84,7 +82,7 @@ public class TableService {
         };
         c.SetProgressListener(progressListener);
         int index = 0;
-        for (VariableMu variable : getVariables(metadata, selectCombinationsModel)) {
+        for (VariableMu variable : getVariables(metadata, metadata.getCombinations())) {
             index++;
             if (model.getVariables().contains(variable)) {
                 c.SetSuppressPrior(index, variable.getSuppressweight());
@@ -102,15 +100,15 @@ public class TableService {
         }
     }
 
-    public void calculateTables(final SelectCombinationsModel model, final MetadataMu metadata) {
+    public void calculateTables(final MetadataMu metadata) {
 
         final SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
 
             // called in a separate thread...
             @Override
             protected Void doInBackground() throws Exception {
-                calculateInBackground(model, metadata);
-                getUnsafeCombinations(model, metadata);
+                calculateInBackground(metadata);
+                getUnsafeCombinations(metadata);
                 return null;
             }
 
@@ -171,7 +169,7 @@ public class TableService {
         //1 + metadata.getVariables().indexOf(variable.getRelatedVariable())); //TODO: handle error
     }
 
-    private int getNVar(SelectCombinationsModel model, MetadataMu metadata) throws ArgusException {
+    private int getNVar(Combinations model, MetadataMu metadata) throws ArgusException {
         //For free format, all variables
         if (metadata.getDataFileType() != MetadataMu.DATA_FILE_TYPE_FIXED) {
             return metadata.getVariables().size();
@@ -193,7 +191,7 @@ public class TableService {
         return nVar;
     }
 
-    private ArrayList<VariableMu> getVariables(MetadataMu metadata, SelectCombinationsModel model) {
+    private ArrayList<VariableMu> getVariables(MetadataMu metadata, Combinations model) {
         if (metadata.getDataFileType() != MetadataMu.DATA_FILE_TYPE_FIXED) {
             return metadata.getVariables();
         }
@@ -222,10 +220,8 @@ public class TableService {
         return 0;
     }
 
-    private void calculateInBackground(
-            SelectCombinationsModel model,
-            MetadataMu metadata) throws ArgusException {
-
+    private void calculateInBackground(MetadataMu metadata) throws ArgusException {
+        Combinations model = metadata.getCombinations();
         ArrayList<VariableMu> variables = getVariables(metadata, model);
         boolean result = c.SetNumberVar(variables.size());
         if (!result) {
@@ -301,7 +297,7 @@ public class TableService {
         }
     }
 
-    private int[] getVarIndices(TableMu table, SelectCombinationsModel model) {
+    private int[] getVarIndices(TableMu table, Combinations model) {
         int[] indices = new int[table.getVariables().size()];
         for (int index = 0; index < indices.length; index++) {
             indices[index] = 1 + model.getVariablesInTables().indexOf(table.getVariables().get(index));
@@ -317,7 +313,8 @@ public class TableService {
         return 1;
     }
 
-    public void getUnsafeCombinations(SelectCombinationsModel model, MetadataMu metadata) {
+    public void getUnsafeCombinations(MetadataMu metadata) {
+        Combinations model = metadata.getCombinations();
         model.clearUnsafe();
         for (int varIndex = 0; varIndex < model.getVariablesInTables().size(); varIndex++) {
             VariableMu variable = model.getVariablesInTables().get(varIndex);

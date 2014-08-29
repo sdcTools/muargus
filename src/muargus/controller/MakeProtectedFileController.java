@@ -7,9 +7,9 @@ package muargus.controller;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import javax.swing.JRadioButton;
-import muargus.model.MakeProtectedFileModel;
+import muargus.model.ProtectedFile;
 import muargus.model.MetadataMu;
-import muargus.model.SelectCombinationsModel;
+import muargus.model.Combinations;
 import muargus.view.MakeProtectedFileView;
 
 /**
@@ -19,9 +19,9 @@ import muargus.view.MakeProtectedFileView;
 public class MakeProtectedFileController implements PropertyChangeListener {
 
     MakeProtectedFileView view;
-    MakeProtectedFileModel model;
+    //MakeProtectedFileModel model;
     MetadataMu metadata;
-    SelectCombinationsModel selectCombinationsModel;
+    //Combinations selectCombinationsModel;
 
     /**
      *
@@ -30,11 +30,10 @@ public class MakeProtectedFileController implements PropertyChangeListener {
      * @param model
      * @param selectCombinationsModel
      */
-    public MakeProtectedFileController(java.awt.Frame parentView, MetadataMu metadata,
-            MakeProtectedFileModel model, SelectCombinationsModel selectCombinationsModel) {
-        this.model = model;
-        this.selectCombinationsModel = selectCombinationsModel;
-        this.model.setRiskModel(this.selectCombinationsModel.isRiskModel());
+    public MakeProtectedFileController(java.awt.Frame parentView, MetadataMu metadata) {
+        //this.model = model;
+        //this.selectCombinationsModel = selectCombinationsModel;
+        //this.model.setRiskModel(this.selectCombinationsModel.isRiskModel());
         this.view = new MakeProtectedFileView(parentView, true, this);
         this.metadata = metadata;
         this.view.setMetadataMu(this.metadata);
@@ -45,9 +44,9 @@ public class MakeProtectedFileController implements PropertyChangeListener {
         this.view.setVisible(true);
     }
 
-    public MakeProtectedFileModel getModel() {
-        return this.model;
-    }
+//    public ProtectedFile getModel() {
+//        return this.model;
+//    }
 
     /**
      *
@@ -55,11 +54,11 @@ public class MakeProtectedFileController implements PropertyChangeListener {
     public void makeFile() {
         TableService service = new TableService();
         service.setPropertyChangeListener(this);
-        service.makeProtectedFile(model, metadata, selectCombinationsModel);
+        service.makeProtectedFile(this.metadata);
     }
 
-    public SelectCombinationsModel getSelectCombinationsModel() {
-        return selectCombinationsModel;
+    public Combinations getCombinations() {
+        return this.metadata.getCombinations();
     }
 
     @Override
@@ -74,7 +73,7 @@ public class MakeProtectedFileController implements PropertyChangeListener {
     }
     
     public JRadioButton getSuppressionRadioButton() {
-        switch (this.model.getSuppressionType()) {
+        switch (getCombinations().getProtectedFile().getSuppressionType()) {
             case (0):
                 return this.view.getNoSuppressionRadioButton();
             case (1):

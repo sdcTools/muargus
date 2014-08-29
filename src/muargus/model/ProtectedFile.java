@@ -11,7 +11,7 @@ import java.util.ArrayList;
  *
  * @author ambargus
  */
-public class MakeProtectedFileModel {
+public class ProtectedFile {
     
     private int suppressionType = 2;
     public final int NO_SUPPRESSION = 0;
@@ -41,7 +41,7 @@ public class MakeProtectedFileModel {
     /**
      *
      */
-    public MakeProtectedFileModel() {
+    public ProtectedFile() {
         this.variables = new ArrayList<>();
         this.columnames = new String[]{"Variables", "Priority"};
     }

@@ -17,10 +17,10 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import muargus.MuARGUS;
 import muargus.extern.dataengine.CMuArgCtrl;
 import muargus.extern.dataengine.IProgressListener;
-import muargus.model.GlobalRecodeModel;
+import muargus.model.GlobalRecode;
 import muargus.model.MetadataMu;
 import muargus.model.RecodeMu;
-import muargus.model.SelectCombinationsModel;
+import muargus.model.Combinations;
 import muargus.view.GlobalRecodeView;
 
 /**
@@ -30,9 +30,9 @@ import muargus.view.GlobalRecodeView;
 public class GlobalRecodeController {
     
     GlobalRecodeView view;
-    GlobalRecodeModel model;
+    //GlobalRecode model;
     MetadataMu metadata;
-    SelectCombinationsModel selectCombinationsModel;
+    //Combinations selectCombinationsModel;
 
     /**
      * 
@@ -41,13 +41,12 @@ public class GlobalRecodeController {
      * @param model 
      * @param selectCombinationsModel 
      */
-    public GlobalRecodeController(java.awt.Frame parentView, MetadataMu metadata, 
-            GlobalRecodeModel model, SelectCombinationsModel selectCombinationsModel) {
-        this.model = model;
+    public GlobalRecodeController(java.awt.Frame parentView, MetadataMu metadata) {
+        //this.model = model;
         this.view = new GlobalRecodeView(parentView, true, this);
         this.metadata = metadata;
         this.view.setMetadataMu(this.metadata);
-        this.selectCombinationsModel = selectCombinationsModel;
+        //this.selectCombinationsModel = selectCombinationsModel;
         //this.view = view;
     }
     
@@ -55,9 +54,9 @@ public class GlobalRecodeController {
         this.view.setVisible(true);
     }
     
-    public GlobalRecodeModel getModel() {
-        return this.model;
-    }
+//    public GlobalRecode getModel() {
+//        return this.model;
+//    }
     
     
     /**
@@ -92,7 +91,7 @@ public class GlobalRecodeController {
      */
     public void truncate(RecodeMu recode) throws ArgusException {  
         CMuArgCtrl c = MuARGUS.getMuArgCtrl();
-        int index = this.model.getVariables().indexOf(recode.getVariable());
+        int index = getGlobalRecode().getVariables().indexOf(recode.getVariable());
         boolean result = c.DoTruncate(index + 1, 1);
         if (!result)
             throw new ArgusException("Error during Truncate");
@@ -100,6 +99,9 @@ public class GlobalRecodeController {
         recode.setTruncated(true);
     }                                              
 
+    private GlobalRecode getGlobalRecode() {
+        return this.metadata.getCombinations().getGlobalRecode();
+    }
     /**
      * 
      */
@@ -149,7 +151,7 @@ public class GlobalRecodeController {
      */
     public void apply(RecodeMu recode) throws ArgusException {
         CMuArgCtrl c = MuARGUS.getMuArgCtrl();
-        int index = this.model.getVariables().indexOf(recode.getVariable());
+        int index = getGlobalRecode().getVariables().indexOf(recode.getVariable());
         int[] errorType = new int[] {0};
         int[] errorLine = new int[] {0};
         int[] errorPos = new int[] {0};
@@ -181,7 +183,7 @@ public class GlobalRecodeController {
         if (!result) {
             throw new ArgusException("Error during Apply recode");
         }
-        new TableService().getUnsafeCombinations(this.selectCombinationsModel, this.metadata);
+        new TableService().getUnsafeCombinations(this.metadata);
     }
      /**
      * 
@@ -189,7 +191,7 @@ public class GlobalRecodeController {
     public void undo(RecodeMu recode) throws ArgusException {    
         CMuArgCtrl c = MuARGUS.getMuArgCtrl();
         c.SetProgressListener(null);
-        int index = this.model.getVariables().indexOf(recode.getVariable());
+        int index = getGlobalRecode().getVariables().indexOf(recode.getVariable());
         boolean result = c.UndoRecode(index + 1);
         if (!result) {
             throw new ArgusException("Error while undoing recode");

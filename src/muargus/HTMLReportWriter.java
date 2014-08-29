@@ -9,9 +9,9 @@ package muargus;
 import java.util.HashSet;
 import javax.swing.text.html.HTMLDocument;
 import muargus.extern.dataengine.CMuArgCtrl;
-import muargus.model.GlobalRecodeModel;
+import muargus.model.GlobalRecode;
 import muargus.model.MetadataMu;
-import muargus.model.SelectCombinationsModel;
+import muargus.model.Combinations;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -27,9 +27,7 @@ public class HTMLReportWriter {
     
     public static void createReportTree(
             Document document, 
-            MetadataMu metadata,
-            SelectCombinationsModel combinations,
-            GlobalRecodeModel globalRecode) 
+            MetadataMu metadata) 
     {
             doc = document;
             Element html = addChildElement(doc, "html");

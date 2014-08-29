@@ -13,7 +13,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import muargus.controller.MakeProtectedFileController;
-import muargus.model.MakeProtectedFileModel;
+import muargus.model.ProtectedFile;
 import muargus.model.MetadataMu;
 
 /**
@@ -23,7 +23,7 @@ import muargus.model.MetadataMu;
 public class MakeProtectedFileView extends javax.swing.JDialog {
 
     MakeProtectedFileController controller;
-    MakeProtectedFileModel model;
+    ProtectedFile model;
     private MetadataMu metadataMu;
     private TableModel tableModel;
 
@@ -38,13 +38,14 @@ public class MakeProtectedFileView extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         this.controller = controller;
-        this.model = this.controller.getModel();
+        //this.model = this.controller.getModel();
         this.setLocationRelativeTo(null);
         this.suppressionWeightTable.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     }
 
     public void setMetadataMu(MetadataMu metadataMu) {
         this.metadataMu = metadataMu;
+        this.model = this.metadataMu.getCombinations().getProtectedFile();
         this.makeVariables();
     }
 

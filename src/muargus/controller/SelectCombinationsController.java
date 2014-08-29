@@ -13,7 +13,7 @@ import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 import muargus.MuARGUS;
 import muargus.model.MetadataMu;
-import muargus.model.SelectCombinationsModel;
+import muargus.model.Combinations;
 import muargus.view.SelectCombinationsView;
 
 /**
@@ -23,24 +23,20 @@ import muargus.view.SelectCombinationsView;
 public class SelectCombinationsController implements PropertyChangeListener{
     
     SelectCombinationsView view;
-    SelectCombinationsModel model;
-    SelectCombinationsModel modelClone;
+    Combinations modelClone;
     MetadataMu metadata;
-    MainFrameController controller;
     //ArrayList<String> list;
         
     private static final Logger logger = Logger.getLogger(SelectCombinationsController.class.getName());
 
-    public SelectCombinationsController(java.awt.Frame parentView, MetadataMu metadata, SelectCombinationsModel model, 
-            MainFrameController controller) {
-        this.controller = controller;
-        this.model = model;
-        this.getSettings();
-        this.modelClone = new SelectCombinationsModel(model);
-
+    public SelectCombinationsController(java.awt.Frame parentView, MetadataMu metadata) {
         this.view = new SelectCombinationsView(parentView, true, this);
         this.metadata = metadata;
-        this.view.setMetadataMu(this.metadata); // clone SelectCombinationsModel
+        
+        getSettings();
+        this.modelClone = new Combinations(this.metadata.getCombinations());
+
+        this.view.setMetadataMu(this.metadata); // clone Combinations
         this.view.setModel(this.modelClone);
     }
     
@@ -55,23 +51,20 @@ public class SelectCombinationsController implements PropertyChangeListener{
         }
     }
     
-    public SelectCombinationsModel getModel() {
-        return this.model;
-    }
     /**
      * 
      * @throws argus.model.ArgusException
      */
     public void calculateTables() throws ArgusException {
         this.view.enableCalculateTables(false);
-        this.model = this.modelClone;
         saveSettings();
-        if(this.controller.view.getUnsafeCombinationsTable().getRowCount() > 0){
-            this.clearData();
+        if(this.metadata.getCombinations().getTables().size() > 0){
+            ;//this.clearData();
         }
+        this.metadata.setCombinations(this.modelClone);
         TableService service = new TableService();
         service.setPropertyChangeListener(this);
-        service.calculateTables(this.model, this.metadata);
+        service.calculateTables(this.metadata);
         //service.getUnsafeCombinations(this.model, this.metadata);
     }
     
@@ -80,15 +73,16 @@ public class SelectCombinationsController implements PropertyChangeListener{
         for (int t=1; t <= MuARGUS.MAXDIMS; t++) {
             thresholds[t-1] = SystemUtils.getRegInteger("general", "threshold" + Integer.toString(t), 1);
         }
-        this.model.setThresholds(thresholds);
+        this.metadata.getCombinations().setThresholds(thresholds);
     }
     
     private void saveSettings() {
-        if (this.model.getThresholds() == null || this.model.getThresholds().length < MuARGUS.MAXDIMS) {
+        int[] thresholds = this.metadata.getCombinations().getThresholds();
+        if (thresholds == null || thresholds.length < MuARGUS.MAXDIMS) {
             return;
         }
         for (int t=1; t <= MuARGUS.MAXDIMS; t++) {
-            SystemUtils.putRegInteger("general", "threshold" + Integer.toString(t), this.model.getThresholds()[t-1]); 
+            SystemUtils.putRegInteger("general", "threshold" + Integer.toString(t), thresholds[t-1]); 
         }
     }
                                                                   
@@ -124,7 +118,7 @@ public class SelectCombinationsController implements PropertyChangeListener{
         }
     }
     
-    public void clearData(){
-        this.controller.clearDataAfterSelectCombinations();
-    }
+//    public void clearData(){
+//        this.controller.clearDataAfterSelectCombinations();
+//    }
 }

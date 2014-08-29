@@ -6,7 +6,7 @@ package muargus.view;
 
 import java.awt.Frame;
 import javax.swing.JOptionPane;
-import muargus.model.SelectCombinationsModel;
+import muargus.model.Combinations;
 
 /**
  *
@@ -14,7 +14,7 @@ import muargus.model.SelectCombinationsModel;
  */
 public class GenerateAutomaticTables extends javax.swing.JDialog {
 
-    SelectCombinationsModel model;
+    private Combinations model; 
     private boolean valid; // is used to continue with the calculation
     private final Frame parent;
     private final int numberOfVariables;
@@ -27,7 +27,8 @@ public class GenerateAutomaticTables extends javax.swing.JDialog {
      * @param model
      * @param numberOfVariables
      */
-    public GenerateAutomaticTables(java.awt.Frame parent, boolean modal, SelectCombinationsModel model, int numberOfVariables) {
+    public GenerateAutomaticTables(java.awt.Frame parent, boolean modal, Combinations model,
+            int numberOfVariables) {
         super(parent, modal);
         this.model = model;
         this.valid = false;

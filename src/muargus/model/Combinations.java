@@ -12,7 +12,7 @@ import muargus.MuARGUS;
  *
  * @author ambargus
  */
-public class SelectCombinationsModel {
+public class Combinations {
 
     private int threshold;
     private boolean riskModel;
@@ -20,6 +20,8 @@ public class SelectCombinationsModel {
     private VariableMu[] variables;
     private int[] thresholds;
     private HashMap<VariableMu, UnsafeInfo> unsafe;
+    private GlobalRecode globalRecode;
+    private ProtectedFile protectedFile;
 
     // tot dit aantal kan die het redelijk goed hebben, maar is die wel +/- 5 seconden aan het rekenen. 
     private final int maximumNumberOfTables = 25000;
@@ -29,12 +31,12 @@ public class SelectCombinationsModel {
     /**
      *
      */
-    public SelectCombinationsModel() {
+    public Combinations() {
         this.threshold = 1;
         this.tables = new ArrayList<>();
     }
 
-    public SelectCombinationsModel(SelectCombinationsModel model) {
+    public Combinations(Combinations model) {
         this.threshold = model.threshold;
         this.thresholds = model.getThresholds();
         this.tables = new ArrayList<>();
@@ -43,6 +45,25 @@ public class SelectCombinationsModel {
         }
     }
 
+    public GlobalRecode getGlobalRecode() {
+        return this.globalRecode;
+    }
+    
+    public void createGlobalRecode() {
+        this.globalRecode = new GlobalRecode();
+        this.globalRecode.setVariables(this.getVariablesInTables());
+    }
+    
+    public ProtectedFile getProtectedFile() {
+        return this.protectedFile;
+    }
+    
+    public void createProtectedFile() {
+        this.protectedFile = new ProtectedFile();
+        this.protectedFile.setVariables(this.getVariablesInTables());
+        this.protectedFile.setRiskModel(this.isRiskModel());
+    }
+    
     public void clearUnsafe() {
         this.unsafe = new HashMap<>();
     }

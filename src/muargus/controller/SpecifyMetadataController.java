@@ -7,7 +7,7 @@ import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
-import muargus.MuARGUS;
+import muargus.model.Combinations;
 import muargus.model.MetadataMu;
 import muargus.view.SpecifyMetadataView;
 
@@ -21,7 +21,6 @@ public class SpecifyMetadataController {
     MetadataMu metadata;
     MetadataMu metadataClone;
     ArrayList<String> list;
-    MainFrameController controller;
 
     private static final Logger logger = Logger.getLogger(SpecifyMetadataController.class.getName());
 
@@ -31,12 +30,11 @@ public class SpecifyMetadataController {
      * @param metadata
      * @param controller
      */
-    public SpecifyMetadataController(java.awt.Frame parentView, MetadataMu metadata, MainFrameController controller) {
+    public SpecifyMetadataController(java.awt.Frame parentView, MetadataMu metadata) {
         this.view = new SpecifyMetadataView(parentView, true, this);
         this.metadata = metadata;
         this.metadataClone = new MetadataMu(metadata);
         this.view.setMetadataMu(this.metadataClone);
-        this.controller = controller;
     }
 
     public void showView() {
@@ -62,6 +60,10 @@ public class SpecifyMetadataController {
         //generate.setVisible(true);
     }
 
+    private boolean areTablesSpecified() {
+        Combinations combinations = this.metadata.getCombinations();
+        return (combinations != null && combinations.getTables().size() > 0);
+    }
     /**
      *
      */
@@ -75,17 +77,20 @@ public class SpecifyMetadataController {
                 return;
             }
 
-            boolean tablesSpecified = this.controller.selectCombinationsModel.getTables().size() > 0;
-            String message;
-            if(tablesSpecified){
+            String message = "";
+            boolean significantDifference = areTablesSpecified() && this.metadata.significantDifference(this.metadataClone);
+            if (significantDifference)
+            {
                 message = "";
                 if (JOptionPane.showConfirmDialog(view, "Changing the Metadata will result in losing already specified tables.\n"
                         + "Do you wish to continue?", "Mu Argus",
                         JOptionPane.YES_NO_OPTION) == JOptionPane.NO_OPTION) {
                     return;
                 }
-                this.controller.clearDataBeforeSelectCombinations();
+                //this.metadata.setCombinations(null);
+                //Not necessary, since the clone doesnt contain the combinations
             } else {
+                this.metadataClone.setCombinations(this.metadata.getCombinations());
                 message = "Metadata has been changed. ";
             }
 

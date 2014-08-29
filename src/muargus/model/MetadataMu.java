@@ -47,6 +47,7 @@ public class MetadataMu {
     private Tokenizer tokenizer;
     private ArrayList<VariableMu> variables;
     private DataFilePair filenames;
+    private Combinations combinations;
 
     public MetadataMu() {
         variables = new ArrayList<>();
@@ -70,8 +71,28 @@ public class MetadataMu {
             logger.log(Level.SEVERE, null, ex);
         }
     }
-            
+    
+    public Combinations getCombinations() {
+        return this.combinations;
+    }
 
+    public void createCombinations() {
+        this.combinations = new Combinations();
+        //TODO: some initialization
+    }
+    
+    public void setCombinations(Combinations combinations) {
+        this.combinations = combinations;
+    }
+
+    public boolean significantDifference(MetadataMu metadata) {
+        //TODO: implemenet
+        //significant changes are for instance changes in field length, variable type, etc
+        //insignificant changes are for instance changes in codelist file
+        //for now, everything is signiicant
+        return true;
+    }
+    
 //    public static ArrayList<VariableMu> makeClone(ArrayList<VariableMu> list) throws CloneNotSupportedException {
 //        ArrayList<VariableMu> clone = new ArrayList<>(list.size());
 //        for (VariableMu item : list) {

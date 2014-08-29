@@ -23,10 +23,10 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import muargus.HTMLReportWriter;
-import muargus.model.GlobalRecodeModel;
-import muargus.model.MakeProtectedFileModel;
+import muargus.model.GlobalRecode;
+import muargus.model.ProtectedFile;
 import muargus.model.MetadataMu;
-import muargus.model.SelectCombinationsModel;
+import muargus.model.Combinations;
 import muargus.view.MainFrameView;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -38,16 +38,15 @@ import org.w3c.dom.Node;
  */
 public class MainFrameController {
 
-    MainFrameView view;
+    private MainFrameView view;
 
-    MetadataMu metadata;
-    SpecifyMetadataController specifyMetadataController;
-    SelectCombinationsModel selectCombinationsModel;
-    GlobalRecodeModel globalRecodeModel;
-    MakeProtectedFileModel makeProtectedFileModel;
+    private MetadataMu metadata;
+    //SpecifyMetadataController specifyMetadataController;
+    //Combinations selectCombinationsModel;
+    //GlobalRecode globalRecodeModel;
+    //MakeProtectedFileModel makeProtectedFileModel;
 
     public enum Action {
-
         OpenMicrodata,
         SpecifyMetadata,
         SpecifyCombinations,
@@ -72,9 +71,9 @@ public class MainFrameController {
      */
     public MainFrameController(MainFrameView view) {
         this.view = view;
-        this.selectCombinationsModel = new SelectCombinationsModel();
-        this.globalRecodeModel = null;
-        this.makeProtectedFileModel = null;
+        //this.selectCombinationsModel = new Combinations();
+        //this.globalRecodeModel = null;
+        //this.makeProtectedFileModel = null;
         this.metadata = new MetadataMu();
     }
 
@@ -88,17 +87,21 @@ public class MainFrameController {
     }
 
     private void organise() {
+        if (this.metadata.getCombinations() == null) {
+            clearDataBeforeSelectCombinations();
+        }
+        
         view.enableAction(Action.SpecifyMetadata, this.metadata != null);
         view.enableAction(Action.SpecifyCombinations, this.metadata != null
                 && this.metadata.getVariables().size() > 0);
 
         boolean tablesCalculated = false;
-        if (this.selectCombinationsModel != null) {
+        if (this.metadata.getCombinations() != null) {
             tablesCalculated = this.metadata != null
-                    && this.selectCombinationsModel.getTables().size() > 0;
+                    && this.metadata.getCombinations().getTables().size() > 0;
         }
         view.enableAction(Action.GlobalRecode, tablesCalculated);
-        view.enableAction(Action.ShowTableCollection, tablesCalculated);
+        //view.enableAction(Action.ShowTableCollection, tablesCalculated);  //Release 2
         view.enableAction(Action.MakeProtectedFile, tablesCalculated);
 
     }
@@ -120,9 +123,9 @@ public class MainFrameController {
      *
      */
     public void specifyMetaData() {
-        this.specifyMetadataController = new SpecifyMetadataController(this.view, this.metadata, this);
-        this.specifyMetadataController.showView();
-        this.metadata = this.specifyMetadataController.getMetadata();
+        SpecifyMetadataController controller = new SpecifyMetadataController(this.view, this.metadata);
+        controller.showView();
+        this.metadata = controller.getMetadata();
         organise();
     }
 
@@ -130,14 +133,14 @@ public class MainFrameController {
      *
      */
     public void specifyCombinations() {
-        if(this.selectCombinationsModel == null){
-            this.selectCombinationsModel = new SelectCombinationsModel();
+        if(this.metadata.getCombinations() == null){
+            this.metadata.createCombinations();
         }
         SelectCombinationsController controller = new SelectCombinationsController(
-                this.view, this.metadata, this.selectCombinationsModel, this);
+                this.view, this.metadata);
         controller.showView();
-        this.selectCombinationsModel = controller.getModel(); // wat doet dit? De model is toch hier al aangemaakt?
-        view.showUnsafeCombinations(this.selectCombinationsModel);
+        //this.selectCombinationsModel = controller.getModel(); // wat doet dit? De model is toch hier al aangemaakt?
+        view.showUnsafeCombinations(this.metadata.getCombinations());
         organise();
     }
 
@@ -152,15 +155,14 @@ public class MainFrameController {
      *
      */
     public void globalRecode() {
-        if (this.globalRecodeModel == null) {
-            this.globalRecodeModel = new GlobalRecodeModel();
-            this.globalRecodeModel.setVariables(this.selectCombinationsModel.getVariablesInTables());
+        if (this.metadata.getCombinations().getGlobalRecode() == null) {
+            this.metadata.getCombinations().createGlobalRecode();
         }
 
         GlobalRecodeController controller = new GlobalRecodeController(
-                this.view, this.metadata, this.globalRecodeModel, this.selectCombinationsModel);
+                this.view, this.metadata);
         controller.showView();
-        view.showUnsafeCombinations(this.selectCombinationsModel);    
+        view.showUnsafeCombinations(this.metadata.getCombinations());    
     }                                                    
 
     /**
@@ -209,13 +211,12 @@ public class MainFrameController {
      *
      */
     public void makeProtectedFile() {
-        if (this.makeProtectedFileModel == null) {
-            this.makeProtectedFileModel = new MakeProtectedFileModel();
-            this.makeProtectedFileModel.setVariables(this.selectCombinationsModel.getVariablesInTables());
+        if (this.metadata.getCombinations().getProtectedFile() == null) {
+            this.metadata.getCombinations().createProtectedFile();
         }
 
         MakeProtectedFileController controller = new MakeProtectedFileController(
-                this.view, this.metadata, this.makeProtectedFileModel, this.selectCombinationsModel);
+                this.view, this.metadata);
         controller.showView();
         
         viewReport();
@@ -240,7 +241,7 @@ public class MainFrameController {
             Document doc = builder.newDocument();
             
             //OutputFormat format = new OutputFormat(doc);
-            HTMLReportWriter.createReportTree(doc, metadata, selectCombinationsModel, globalRecodeModel);
+            HTMLReportWriter.createReportTree(doc, this.metadata);
             Transformer tr = TransformerFactory.newInstance().newTransformer();
             
             tr.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
@@ -302,7 +303,8 @@ public class MainFrameController {
     }
 
     public void clearDataBeforeSelectCombinations() {
-        this.selectCombinationsModel = null;
+        
+                //this.selectCombinationsModel = null;
          for(int i = this.view.getUnsafeCombinationsTable().getColumnCount() -1; i >= 0; i--){
             this.view.getUnsafeCombinationsTable().getColumnModel().removeColumn(this.view.getUnsafeCombinationsTable().getColumnModel().getColumn(i));
         }
@@ -310,12 +312,12 @@ public class MainFrameController {
             this.view.getVariablesTable().getColumnModel().removeColumn(this.view.getVariablesTable().getColumnModel().getColumn(i));
         }
         this.view.setVariableNameLabel("");
-        this.clearDataAfterSelectCombinations();
+        //this.clearDataAfterSelectCombinations();
     }
 
-    public void clearDataAfterSelectCombinations() {
-        this.globalRecodeModel = null;
-        this.makeProtectedFileModel = null;
-    }
+//    public void clearDataAfterSelectCombinations() {
+//        this.globalRecodeModel = null;
+//        this.makeProtectedFileModel = null;
+//    }
 
 }
