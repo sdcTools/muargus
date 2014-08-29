@@ -50,9 +50,6 @@ public class MakeProtectedFileController implements PropertyChangeListener {
 //    }
 
     
-    private File getSafeMetaFile(String filename) {
-        return new File(FilenameUtils.removeExtension(filename) + ".rds");
-    }
     /**
      *
      */
@@ -61,7 +58,7 @@ public class MakeProtectedFileController implements PropertyChangeListener {
         service.setPropertyChangeListener(this);
         service.makeProtectedFile(this.metadata);
         MetadataMu safeMetadata = service.getSafeFileMetadata(this.metadata);
-        File file = getSafeMetaFile(this.metadata.getCombinations().getProtectedFile().getNameOfSafeFile());
+        File file = new File(this.metadata.getCombinations().getProtectedFile().getNameOfSafeMetaFile());
         safeMetadata.write(file);
     }
 

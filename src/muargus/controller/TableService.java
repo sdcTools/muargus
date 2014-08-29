@@ -268,6 +268,7 @@ public class TableService {
         if (!result) {
             throw new ArgusException("Error in ExploreFile");
         }
+        metadata.setRecordCount(c.NumberofRecords());
 
         int x = model.getTables().size();
         result = c.SetNumberTab(x); //this.model.getTables().size());
@@ -338,25 +339,28 @@ public class TableService {
             variable.setMissing(1, missing2[0]);
         
         //Global recode codelist
-        for (RecodeMu recode : metadata.getCombinations().getGlobalRecode().getRecodeMus()) {
-            if (recode.getVariable().equals(variable)) {
-                if (recode.isRecoded() || recode.isTruncated()) {
-                    variable.setCodeListFile(recode.getCodeListFile());
-                    variable.setCodelist(variable.getCodeListFile() != null);
+        if (metadata.getCombinations().getGlobalRecode() != null){
+            for (RecodeMu recode : metadata.getCombinations().getGlobalRecode().getRecodeMus()) {
+                if (recode.getVariable().equals(variable)) {
+                    if (recode.isRecoded() || recode.isTruncated()) {
+                        variable.setCodeListFile(recode.getCodeListFile());
+                        variable.setCodelist(variable.getCodeListFile() != null);
+                    }
+
                 }
-                
             }
         }
 
         
     }
     public MetadataMu getSafeFileMetadata(MetadataMu metadata) {
-        ProtectedFile protectedFile = metadata.getCombinations().getProtectedFile();
+        //ProtectedFile protectedFile = metadata.getCombinations().getProtectedFile();
         MetadataMu safeMeta = new MetadataMu(metadata);
         for (VariableMu var : safeMeta.getVariables()) {
             int varIndex = safeMeta.getVariables().indexOf(var) + 1;
             setSafeFileProperties(varIndex, var, metadata);
         }
+        safeMeta.setRecordCount(c.NumberofRecords());
         return safeMeta;
     }
     

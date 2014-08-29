@@ -6,6 +6,7 @@ package muargus.model;
 
 import java.io.File;
 import java.util.ArrayList;
+import org.apache.commons.io.FilenameUtils;
 
 /**
  *
@@ -118,6 +119,10 @@ public class ProtectedFile {
 
     public String getNameOfSafeFile() {
         return nameOfSafeFile;
+    }
+
+    public String getNameOfSafeMetaFile() {
+        return FilenameUtils.removeExtension(nameOfSafeFile) + ".rds";
     }
 
     public void setNameOfSafeFile(File file) {

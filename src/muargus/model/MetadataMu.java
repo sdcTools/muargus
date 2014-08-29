@@ -48,6 +48,7 @@ public class MetadataMu {
     private ArrayList<VariableMu> variables;
     private DataFilePair filenames;
     private Combinations combinations;
+    private int recordCount;
 
     public MetadataMu() {
         variables = new ArrayList<>();
@@ -91,6 +92,14 @@ public class MetadataMu {
         //insignificant changes are for instance changes in codelist file
         //for now, everything is signiicant
         return true;
+    }
+
+    public int getRecordCount() {
+        return recordCount;
+    }
+
+    public void setRecordCount(int recordCount) {
+        this.recordCount = recordCount;
     }
     
 //    public static ArrayList<VariableMu> makeClone(ArrayList<VariableMu> list) throws CloneNotSupportedException {

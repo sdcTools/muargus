@@ -6,12 +6,10 @@
 
 package muargus;
 
-import java.util.HashSet;
-import javax.swing.text.html.HTMLDocument;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import muargus.extern.dataengine.CMuArgCtrl;
-import muargus.model.GlobalRecode;
 import muargus.model.MetadataMu;
-import muargus.model.Combinations;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -34,7 +32,11 @@ public class HTMLReportWriter {
             html.appendChild(writeHeader());
             Element body = addChildElement(html, "body");
             addChildElement(body, "h1", "µ-ARGUS Report");
-            addChildElement(body, "div", "abc");
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd ', time ' HH:mm:ss");
+            addChildElement(body,"h2", String.format("Safe file created date: %s",
+                   format.format(new Date())));
+            body.appendChild(writeFilesTable(metadata));
+            
 //            el = el.appendChild(doc.createElement("script"));
 //            el.setTextContent("blabla");
 //            el = elm.appendChild(doc.createElement("body"));
@@ -47,6 +49,27 @@ public class HTMLReportWriter {
             
             //el.setTextContent(Integer.toString(this.metadata.getVariables().size()));
 
+    }
+    
+    private static Element writeFilesTable(MetadataMu metadata) {
+        Element p = doc.createElement("p");
+        Element table = addChildElement(p, "table");
+        Element tr = addChildElement(table, "tr");
+        addChildElement(tr, "td", "Original data file");
+        addChildElement(tr, "td", metadata.getFileNames().getDataFileName());
+        tr = addChildElement(table, "tr");
+        addChildElement(tr, "td", "Original meta file");
+        addChildElement(tr, "td", metadata.getFileNames().getMetaFileName());
+        tr = addChildElement(table, "tr");
+        addChildElement(tr, "td", "Number of records");
+        addChildElement(tr, "td", Integer.toString(metadata.getRecordCount()));
+        tr = addChildElement(table, "tr");
+        addChildElement(tr, "td", "Safe data file");
+        addChildElement(tr, "td", metadata.getCombinations().getProtectedFile().getNameOfSafeFile());
+        tr = addChildElement(table, "tr");
+        addChildElement(tr, "td", "Safe meta file");
+        addChildElement(tr, "td", metadata.getCombinations().getProtectedFile().getNameOfSafeMetaFile());
+        return p;
     }
     
     private static Element writeHeader() {
