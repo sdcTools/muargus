@@ -81,6 +81,12 @@ public class TableService {
             }
         };
         c.SetProgressListener(progressListener);
+        
+        c.SetOutFileInfo(metadata.getDataFileType() == MetadataMu.DATA_FILE_TYPE_FIXED,
+                metadata.getSeparator(),
+                "",
+                true
+                );
         int index = 0;
         for (VariableMu variable : metadata.getVariables()) {
             index++;

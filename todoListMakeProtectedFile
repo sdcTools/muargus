@@ -6,7 +6,6 @@ Release 1
 
 10. makeFileButton:
 -   maak html-output                                                                                            Jeldrik
-12. bug dll make safe file freeformat                                                                           Anne
 
 
 
@@ -59,6 +58,7 @@ Gedaan:                                                                         
 -   maak metadatafile                                                                                               Anne
 11. writeRecordRamdomOrderCheckBox
     - alleen mogelijk bij fixed format                                                                              Jeldrik
+12. bug dll make safe file freeformat                                                                               Anne
 13. bug: na cancel button wordt report getoond                                                                      Anne
 14. bug: na cancel button in file chooser komt foutmelding                                                          Anne
 
