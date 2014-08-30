@@ -4,14 +4,15 @@
  */
 package muargus.controller;
 
+import argus.model.ArgusException;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
+import javax.swing.JOptionPane;
 import javax.swing.JRadioButton;
 import muargus.model.MetadataMu;
 import muargus.model.Combinations;
 import muargus.view.MakeProtectedFileView;
-import org.apache.commons.io.FilenameUtils;
 
 /**
  *
@@ -58,10 +59,18 @@ public class MakeProtectedFileController implements PropertyChangeListener {
         TableService service = new TableService();
         service.setPropertyChangeListener(this);
         service.makeProtectedFile(this.metadata);
-        MetadataMu safeMetadata = service.getSafeFileMetadata(this.metadata);
+    }
+    
+    private void saveSafeMeta() {
+        MetadataMu safeMetadata = new TableService().getSafeFileMetadata(this.metadata);
         File file = new File(this.metadata.getCombinations().getProtectedFile().getNameOfSafeMetaFile());
-        safeMetadata.write(file);
-        this.fileCreated = true;
+        try {
+            safeMetadata.write(file);
+            this.fileCreated = true;
+        }
+        catch (ArgusException ex) {
+            JOptionPane.showMessageDialog(null, ex.getMessage());
+        }
     }
 
     public Combinations getCombinations() {
@@ -80,7 +89,10 @@ public class MakeProtectedFileController implements PropertyChangeListener {
                 view.setProgress(pce.getNewValue());
                 break;
             case "status":
-                view.setVisible(pce.getNewValue() != "done");
+                if (pce.getNewValue() == "done") {
+                    saveSafeMeta();
+                    view.setVisible(!this.fileCreated);
+                }
         }
     }
     

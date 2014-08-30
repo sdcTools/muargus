@@ -233,7 +233,7 @@ public class MetadataMu {
     private void writeVariable(Writer w, VariableMu variable) {
     
     }
-    private void write(Writer w) throws IOException, ArgusException {
+    private void write(Writer w) throws IOException {
 // Anco 1.6
 // try with resources verwijderd.        
 //        try (PrintWriter writer = new PrintWriter(w)) {
@@ -260,16 +260,13 @@ public class MetadataMu {
         }
     }
 
-    public void write(File file) {
+    public void write(File file) throws ArgusException {
         try {
             write(new BufferedWriter(new FileWriter(file)));
             this.filenames = new DataFilePair(this.filenames.getDataFileName(), file.getPath());
-// anco 1            
-//        } catch (ArgusException | IOException ex) {
-          } catch (ArgusException ex) {
-            logger.log(Level.SEVERE, null, ex);
           } catch (IOException ex) {
             logger.log(Level.SEVERE, null, ex);
+            throw new ArgusException("Error writing to file. Error message: " + ex.getMessage());
         }
     }
     

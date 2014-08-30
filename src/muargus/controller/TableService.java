@@ -96,9 +96,8 @@ public class TableService {
                 protectedFile.isRandomizeOutput(), 
                 protectedFile.isPrintBHR());
 
-         //TODO: verander in argusException
         if (!result) {
-            throw new ArgusException("Error during Make protcted file");
+            throw new ArgusException("Error during Make protected file");
         }
     }
 

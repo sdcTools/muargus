@@ -99,7 +99,12 @@ public class SpecifyMetadataController {
                     JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
                 JFileChooser fileChooser = new JFileChooser();
                 if (fileChooser.showSaveDialog(view) == JFileChooser.APPROVE_OPTION) {
-                    this.metadata.write(fileChooser.getSelectedFile());
+                    try {
+                        this.metadata.write(fileChooser.getSelectedFile());
+                    }
+                    catch (ArgusException ex) {
+                        JOptionPane.showMessageDialog(null, ex.getMessage());
+                    }
                 }
             }
         }

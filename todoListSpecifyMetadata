@@ -4,12 +4,7 @@ Nog te doen:
                                                                                                   Mee bezig:
 Release 1:
 
-20. Foutafhandeling wanneer geen schrijfrechten zijn (zie beschrijving hieronder)                 Anne
-    Bug: wanneer iets wordt aangepast en vervolgens op Ok wordt geklikt, 
-    dan wordt gevraagd of je het wilt opslaan. Als je het vervolgens wilt opslaan, dan kan je niet opslaan
-    in de default directory omdat daar administrator rechten voor nodig zijn. Er komt dan de volgende foutmelding:
-    java.io.FileNotFoundException: C:\Program Files\MU_ARGUS\data\Demodata.rda (Toegang geweigerd)
-    Dit moet afgevangen worden.
+-
 
 Release 2+:
 
@@ -53,3 +48,9 @@ Gedaan:                                                                         
 13. options for argus + missing + truncation + codelijst: afhankelijk van categorical                       Anne
 17. wanneer tabellen gespecificeerd zijn en de metadata is aangepast, waarschuwing geven dat als men        Jeldrik 
     doorgaat, alle gespecificeerde tabellen opnieuw geinitialiseerd moeten worden
+20. Foutafhandeling wanneer geen schrijfrechten zijn (zie beschrijving hieronder)                           Anne
+    Bug: wanneer iets wordt aangepast en vervolgens op Ok wordt geklikt, 
+    dan wordt gevraagd of je het wilt opslaan. Als je het vervolgens wilt opslaan, dan kan je niet opslaan
+    in de default directory omdat daar administrator rechten voor nodig zijn. Er komt dan de volgende foutmelding:
+    java.io.FileNotFoundException: C:\Program Files\MU_ARGUS\data\Demodata.rda (Toegang geweigerd)
+    Dit moet afgevangen worden.
