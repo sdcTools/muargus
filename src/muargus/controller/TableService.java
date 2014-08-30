@@ -110,7 +110,6 @@ public class TableService {
             @Override
             protected Void doInBackground() throws Exception {
                 calculateInBackground(metadata);
-                getUnsafeCombinations(metadata);
                 return null;
             }
 
@@ -121,6 +120,9 @@ public class TableService {
                 try {
                     get();
                     workerDone();
+                    ArrayList<String> missing = getUnsafeCombinations(metadata);
+                    if (!missing.isEmpty())
+                        JOptionPane.showMessageDialog(null, String.join("\n", missing));
                 } catch (InterruptedException ex) {
                     logger.log(Level.SEVERE, null, ex);
                 } catch (ExecutionException ex) {
@@ -372,7 +374,8 @@ public class TableService {
         return "";
     }
     
-    public void getUnsafeCombinations(MetadataMu metadata) {
+    public ArrayList<String> getUnsafeCombinations(MetadataMu metadata) {
+        ArrayList<String> missingCodelists = new ArrayList<>();
         Combinations model = metadata.getCombinations();
         boolean hasRecode = (model.getGlobalRecode() != null);
         model.clearUnsafe();
@@ -388,7 +391,12 @@ public class TableService {
                 codelistFile = variable.getCodeListFile();
             }
             if (!"".equals(codelistFile)) {
-                readCodelist(codelist, codelistFile, metadata);
+                try {
+                    readCodelist(codelist, codelistFile, metadata);
+                }
+                catch (ArgusException ex) {
+                    missingCodelists.add(ex.getMessage());
+                }
             }
 
             int[] nDims = new int[]{0};
@@ -421,10 +429,10 @@ public class TableService {
             }
             result = c.UnsafeVariableClose(varIndex + 1);
         }
+        return missingCodelists;
     }
 
-    private void readCodelist(HashMap<String, String> codelist, String path, MetadataMu metadata) {
-
+    private void readCodelist(HashMap<String, String> codelist, String path, MetadataMu metadata) throws ArgusException {
         BufferedReader reader = null;
         try {
             File file = new File(path);
@@ -436,7 +444,7 @@ public class TableService {
         } catch (FileNotFoundException ex) {
             System.out.println("file not found");
             logger.log(Level.SEVERE, null, ex);
-            return;
+            throw new ArgusException(String.format("Codelist %s not found", path));
         }
         try {
             String line;
@@ -454,6 +462,7 @@ public class TableService {
             } catch (Exception e) {
                 ;
             }
+            throw new ArgusException(String.format("Error in codelist file (%s)", path));
         }
     }
 
