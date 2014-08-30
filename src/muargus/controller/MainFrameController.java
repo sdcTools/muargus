@@ -218,8 +218,9 @@ public class MainFrameController {
         MakeProtectedFileController controller = new MakeProtectedFileController(
                 this.view, this.metadata);
         controller.showView();
-        
-        viewReport();
+        if (controller.isFileCreated()) {
+            viewReport();
+        }
     }     
    
 

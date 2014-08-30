@@ -387,12 +387,10 @@ public class MakeProtectedFileView extends javax.swing.JDialog {
     private void makeFileButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_makeFileButtonActionPerformed
         this.fileChooser.setFileFilter(new FileNameExtensionFilter("Safefile (*.saf)", "saf"));
         if (this.fileChooser.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
-            //TODO: .saf meegeven
-
             this.model.setNameOfSafeFile(this.fileChooser.getSelectedFile());
             System.out.println(this.model.getNameOfSafeFile());
+            controller.makeFile();
         }
-        controller.makeFile();
     }//GEN-LAST:event_makeFileButtonActionPerformed
 
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed

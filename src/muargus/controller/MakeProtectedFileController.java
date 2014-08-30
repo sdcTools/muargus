@@ -19,11 +19,11 @@ import org.apache.commons.io.FilenameUtils;
  */
 public class MakeProtectedFileController implements PropertyChangeListener {
 
-    MakeProtectedFileView view;
+    private MakeProtectedFileView view;
     //MakeProtectedFileModel model;
-    MetadataMu metadata;
+    private MetadataMu metadata;
     //Combinations selectCombinationsModel;
-
+    private boolean fileCreated;
     /**
      *
      * @param parentView
@@ -38,6 +38,7 @@ public class MakeProtectedFileController implements PropertyChangeListener {
         this.view = new MakeProtectedFileView(parentView, true, this);
         this.metadata = metadata;
         this.view.setMetadataMu(this.metadata);
+        this.fileCreated = false;
 
     }
 
@@ -60,12 +61,18 @@ public class MakeProtectedFileController implements PropertyChangeListener {
         MetadataMu safeMetadata = service.getSafeFileMetadata(this.metadata);
         File file = new File(this.metadata.getCombinations().getProtectedFile().getNameOfSafeMetaFile());
         safeMetadata.write(file);
+        this.fileCreated = true;
     }
 
     public Combinations getCombinations() {
         return this.metadata.getCombinations();
     }
 
+    public boolean isFileCreated() {
+        return fileCreated;
+    }
+
+    
     @Override
     public void propertyChange(PropertyChangeEvent pce) {
         switch (pce.getPropertyName()) {
