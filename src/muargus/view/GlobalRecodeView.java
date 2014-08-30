@@ -27,8 +27,9 @@ public class GlobalRecodeView extends javax.swing.JDialog {
 
     GlobalRecodeController controller;
     GlobalRecode model;
-    private MetadataMu metadataMu;  // ik weet niet of we die hier nodig hebben, maar voor de zekerheid heb ik hem er bij gezet
+    private MetadataMu metadataMu;  
     private TableModel tableModel;
+    private RecodeMu selectedRecodeClone;
 
     /**
      * Creates new form GlobalRecodeView
@@ -54,7 +55,7 @@ public class GlobalRecodeView extends javax.swing.JDialog {
     }
 
     public void makeVariables() {
-        if (this.model.getRecodeMus().size() == 0) {
+        if (this.model.getRecodeMus().isEmpty()) {
             for (VariableMu v : this.model.getVariables()) {
                 RecodeMu recodeMu = new RecodeMu(v);
                 this.model.addRecodeMu(recodeMu);
@@ -63,6 +64,7 @@ public class GlobalRecodeView extends javax.swing.JDialog {
 
         this.updateTable();
         this.variablesTable.getSelectionModel().setSelectionInterval(0, 0);
+        handleSelectionChanged();
         
         this.variablesTable.getColumnModel().getColumn(0).setMinWidth(30);
         this.variablesTable.getColumnModel().getColumn(0).setPreferredWidth(30);
@@ -82,6 +84,7 @@ public class GlobalRecodeView extends javax.swing.JDialog {
         }
 
         this.tableModel = new DefaultTableModel(data, this.model.getColumnNames()){
+            @Override
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return false;
             }
@@ -102,9 +105,14 @@ public class GlobalRecodeView extends javax.swing.JDialog {
         this.codelistRecodeTextField.setText(selected.getCodeListFile());
         this.globalRecodeRecodeTextField.setText(selected.getGrcFile());
         this.truncateButton.setEnabled(selected.getVariable().isTruncable());
-        this.applyButton.setEnabled(this.editTextArea.getText().length() > 0);
+        enableApplyButton();
         this.undoButton.setEnabled(selected.isRecoded() || selected.isTruncated());
         this.editTextArea.setText(selected.getGrcText());
+    }
+    
+    private void enableApplyButton() {
+        boolean equals = getSelectedRecode().equals(selectedRecodeClone);
+        this.applyButton.setEnabled(!equals && (this.editTextArea.getText().length() > 0));
     }
 
     private RecodeMu getSelectedRecode() {
@@ -112,7 +120,7 @@ public class GlobalRecodeView extends javax.swing.JDialog {
         return selected;
     }
 
-        private String askForGrcPath() {
+    private String askForGrcPath() {
         JFileChooser fileChooser = new JFileChooser();
         String hs = SystemUtils.getRegString("general", "datadir", "");
         if (!hs.equals("")){
@@ -606,19 +614,33 @@ public class GlobalRecodeView extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_undoButtonActionPerformed
 
-    private void variablesTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_variablesTableMouseClicked
-
+    private boolean selectionChanged() {
+        return !getSelectedRecode().getVariable().equals(this.selectedRecodeClone.getVariable());
+    }
+    
+    private void handleSelectionChanged() {
+        if (this.selectedRecodeClone != null) {
+            //TODO: see if there are changes
+        }
+        this.selectedRecodeClone = new RecodeMu(getSelectedRecode());
         updateValues();
+    }
+    
+    private void variablesTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_variablesTableMouseClicked
+        if (selectionChanged()) {
+            handleSelectionChanged();
+        }
     }//GEN-LAST:event_variablesTableMouseClicked
 
     private void variablesTableKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_variablesTableKeyReleased
-        // TODO add your handling code here:
-        updateValues();
+        if (selectionChanged()) {
+            handleSelectionChanged();
+        }
     }//GEN-LAST:event_variablesTableKeyReleased
 
     private void editTextAreaCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_editTextAreaCaretUpdate
         getSelectedRecode().setGrcText(this.editTextArea.getText());
-        this.applyButton.setEnabled(this.editTextArea.getText().length() > 0);
+        enableApplyButton();
     }//GEN-LAST:event_editTextAreaCaretUpdate
 
     private void missing_1_newTextFieldCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_missing_1_newTextFieldCaretUpdate

@@ -6,6 +6,9 @@
 package muargus.model;
 
 import java.io.File;
+import java.util.Arrays;
+import java.util.Objects;
+import org.apache.commons.lang3.ObjectUtils;
 
 /**
  *
@@ -23,7 +26,6 @@ public class RecodeMu {
     private final String missing_2_original;
     private String missing_1_new;
     private String missing_2_new;
-    private boolean isDirty;
     
 
     public RecodeMu(VariableMu variable) {
@@ -37,7 +39,21 @@ public class RecodeMu {
         this.missing_2_new = "";
         this.missing_1_original = variable.getMissing(0);
         this.missing_2_original = variable.getMissing(1);
-        this.isDirty = false;
+    }
+    
+    public RecodeMu(RecodeMu recode) {
+        this.variable = recode.variable;
+        this.truncated = recode.truncated;
+        this.recoded = recode.recoded;
+        this.grcFile = recode.grcFile;
+        this.grcText = recode.grcText;
+        this.codeListFile = recode.codeListFile;
+        this.missing_1_new = recode.missing_1_new;
+        this.missing_2_new = recode.missing_2_new;
+        this.missing_1_original = recode.missing_1_original;
+        this.missing_2_original = recode.missing_2_original;
+        
+                
     }
 
     public String getGrcFile() {
@@ -46,9 +62,8 @@ public class RecodeMu {
 
     public void setGrcFile(String grcFile) {
         this.grcFile = grcFile;
-        this.isDirty = true;
     }
-
+    
     public String getCodeListFile() {
         return this.codeListFile;
     }
@@ -127,4 +142,37 @@ public class RecodeMu {
         return row;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        RecodeMu cmp = (RecodeMu)o;
+        if (cmp == null)
+            return false;
+        
+        return (this.recoded == cmp.recoded)
+                && (this.truncated == cmp.truncated)
+                && (this.codeListFile == null ? cmp.codeListFile == null : this.codeListFile.equals(cmp.codeListFile))
+                && (this.grcFile == null ? cmp.grcFile == null : this.grcFile.equals(cmp.grcFile))
+                && (this.grcText == null ? cmp.grcText == null : this.grcText.equals(cmp.grcText))
+                && (this.missing_1_new == null ? cmp.missing_1_new == null : this.missing_1_new.equals(cmp.missing_1_new))
+                && (this.missing_2_new == null ? cmp.missing_2_new == null : this.missing_2_new.equals(cmp.missing_2_new))
+                && (this.missing_1_original == null ? cmp.missing_1_original == null : this.missing_1_original.equals(cmp.missing_1_original))
+                && (this.missing_2_original == null ? cmp.missing_2_original == null : this.missing_2_original.equals(cmp.missing_2_original));
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 41 * hash + Objects.hashCode(this.recoded);
+        hash = 41 * hash + Objects.hashCode(this.truncated);
+        hash = 41 * hash + Objects.hashCode(this.codeListFile);
+        hash = 41 * hash + Objects.hashCode(this.grcFile);
+        hash = 41 * hash + Objects.hashCode(this.grcText);
+        hash = 41 * hash + Objects.hashCode(this.missing_1_new);
+        hash = 41 * hash + Objects.hashCode(this.missing_2_new);
+        hash = 41 * hash + Objects.hashCode(this.missing_1_original);
+        hash = 41 * hash + Objects.hashCode(this.missing_2_original);
+        
+        return hash;
+    }
+    
 }
