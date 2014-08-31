@@ -33,9 +33,14 @@ public class HTMLReportWriter {
             Element body = addChildElement(html, "body");
             addChildElement(body, "h1", "µ-ARGUS Report");
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd ', time ' HH:mm:ss");
-            addChildElement(body,"h2", String.format("Safe file created date: %s",
+            Element p = addChildElement(body,"p");
+            addChildElement(p,"h2", String.format("Safe file created date: %s",
                    format.format(new Date())));
-            body.appendChild(writeFilesTable(metadata));
+            p.appendChild(writeFilesTable(metadata));
+
+            p = addChildElement(body,"p");
+            addChildElement(p,"h2", "Identifying variables used");
+            p.appendChild(writeIdVariablesTable(metadata));
             
 //            el = el.appendChild(doc.createElement("script"));
 //            el.setTextContent("blabla");
@@ -50,10 +55,19 @@ public class HTMLReportWriter {
             //el.setTextContent(Integer.toString(this.metadata.getVariables().size()));
 
     }
-    
+
+    private static Element writeIdVariablesTable(MetadataMu metadata) {
+        Element table = doc.createElement("table");
+        Element tr = addChildElement(table, "tr");
+        addChildElement(tr, "th", "Variable");
+        addChildElement(tr, "th", "No of categories (missings)");
+        addChildElement(tr, "th", "Household var");
+        
+        return table;
+    }
+
     private static Element writeFilesTable(MetadataMu metadata) {
-        Element p = doc.createElement("p");
-        Element table = addChildElement(p, "table");
+        Element table = doc.createElement("table");
         Element tr = addChildElement(table, "tr");
         addChildElement(tr, "td", "Original data file");
         addChildElement(tr, "td", metadata.getFileNames().getDataFileName());
@@ -69,7 +83,7 @@ public class HTMLReportWriter {
         tr = addChildElement(table, "tr");
         addChildElement(tr, "td", "Safe meta file");
         addChildElement(tr, "td", metadata.getCombinations().getProtectedFile().getNameOfSafeMetaFile());
-        return p;
+        return table;
     }
     
     private static Element writeHeader() {
@@ -79,7 +93,7 @@ public class HTMLReportWriter {
         meta.setAttribute("content", "Statistics; Netherlands");
         Element link = addChildElement(elm, "link", "rel", "stylesheet");
         link.setAttribute("type", "text/css");
-        link.setAttribute("href", "file:///blabla.css");    //TODO
+        link.setAttribute("href", "file:///c:/program files/mu_argus/muargus.css");    //TODO
         return elm;
     }
     

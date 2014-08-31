@@ -200,23 +200,23 @@ public class TableService {
         return nVar;
     }
 
-//    private ArrayList<VariableMu> getVariables(MetadataMu metadata, Combinations model) {
-        //if (metadata.getDataFileType() != MetadataMu.DATA_FILE_TYPE_FIXED) {
-//            return metadata.getVariables();
-        //}
-//        ArrayList<VariableMu> variables = new ArrayList<>(model.getVariablesInTables());
-//        if (model.isRiskModel()) {
-//            for (VariableMu weightVar : metadata.getVariables()) {
-//                if (weightVar.isWeight()) {
-//                    if (!variables.contains(weightVar)) {
-//                        variables.add(weightVar);
-//                    }
-//                    break;
-//                }
-//            }
-//        }
-//        return variables;
-//    }
+    private ArrayList<VariableMu> getVariables(MetadataMu metadata) {
+        if (metadata.getDataFileType() != MetadataMu.DATA_FILE_TYPE_FIXED) {
+            return metadata.getVariables();
+        }
+        ArrayList<VariableMu> variables = new ArrayList<>(metadata.getCombinations().getVariablesInTables());
+        if (metadata.getCombinations().isRiskModel()) {
+            for (VariableMu weightVar : metadata.getVariables()) {
+                if (weightVar.isWeight()) {
+                    if (!variables.contains(weightVar)) {
+                        variables.add(weightVar);
+                    }
+                    break;
+                }
+            }
+        }
+        return variables;
+    }
 
     private int getRiskVarIndex(ArrayList<VariableMu> variables) {
         int index = 0;
@@ -231,7 +231,7 @@ public class TableService {
 
     private void calculateInBackground(MetadataMu metadata) throws ArgusException {
         Combinations model = metadata.getCombinations();
-        ArrayList<VariableMu> variables = metadata.getVariables();
+        ArrayList<VariableMu> variables = getVariables(metadata); //metadata.getVariables();
         boolean result = c.SetNumberVar(variables.size());
         if (!result) {
             throw new ArgusException("Error in SetNumberVar: Insufficient memory");
@@ -323,49 +323,56 @@ public class TableService {
         return 1;
     }
 
-    private void setSafeFileProperties(final int index, final VariableMu variable, MetadataMu metadata) {
-        int[] startPos = new int[1];
-        int[] nPos = new int[1];
-        int[] nSuppressions = new int[1];
-        double[] entropy = new double[1];
-        int[] bandwidth = new int[1];
-        String[] missing1 = new String[1];
-        String[] missing2 = new String[1];
-        int[] nOfCodes = new int[1];
-        int[] nOfMissing = new int[1];
-        c.GetVarProperties(index, startPos, nPos, nSuppressions, entropy, bandwidth, missing1, missing2, nOfCodes, nOfMissing);
-        variable.setStartingPosition(Integer.toString(startPos[0]));
-        variable.setVariableLength(Integer.toString(nPos[0]));
-        variable.setnOfSuppressions(nSuppressions[0]);
-        variable.setEntropy(entropy[0]);
-        variable.setBandwidth(bandwidth[0]);
-        variable.setnOfCodes(nOfCodes[0]);
-        if (nOfMissing[0] > 0)
-            variable.setMissing(0, missing1[0]);
-        if (nOfMissing[0] > 1)
-            variable.setMissing(1, missing2[0]);
-        
-        //Global recode codelist
-        if (metadata.getCombinations().getGlobalRecode() != null){
-            for (RecodeMu recode : metadata.getCombinations().getGlobalRecode().getRecodeMus()) {
-                if (recode.getVariable().equals(variable)) {
-                    if (recode.isRecoded() || recode.isTruncated()) {
-                        variable.setCodeListFile(recode.getCodeListFile());
-                        variable.setCodelist(variable.getCodeListFile() != null);
-                    }
+    private int setSafeFileProperties(final int index, final VariableMu variable, MetadataMu metadata, int delta) {
+        if (index == 0) {
+            //Variable was not in dll
+            variable.setStartingPosition(Integer.toString(variable.getStartingPosition() + delta));
+        }
+        else {
+            int[] startPos = new int[1];
+            int[] nPos = new int[1];
+            int[] nSuppressions = new int[1];
+            double[] entropy = new double[1];
+            int[] bandwidth = new int[1];
+            String[] missing1 = new String[1];
+            String[] missing2 = new String[1];
+            int[] nOfCodes = new int[1];
+            int[] nOfMissing = new int[1];
+            c.GetVarProperties(index, startPos, nPos, nSuppressions, entropy, bandwidth, missing1, missing2, nOfCodes, nOfMissing);
+            variable.setStartingPosition(Integer.toString(startPos[0]));
+            delta += nPos[0] - variable.getVariableLength();
+            variable.setVariableLength(Integer.toString(nPos[0]));
+            variable.setnOfSuppressions(nSuppressions[0]);
+            variable.setEntropy(entropy[0]);
+            variable.setBandwidth(bandwidth[0]);
+            variable.setnOfCodes(nOfCodes[0]);
+            if (nOfMissing[0] > 0)
+                variable.setMissing(0, missing1[0]);
+            if (nOfMissing[0] > 1)
+                variable.setMissing(1, missing2[0]);
 
+            //Global recode codelist
+            if (metadata.getCombinations().getGlobalRecode() != null){
+                for (RecodeMu recode : metadata.getCombinations().getGlobalRecode().getRecodeMus()) {
+                    if (recode.getVariable().equals(variable)) {
+                        if (recode.isRecoded() || recode.isTruncated()) {
+                            variable.setCodeListFile(recode.getCodeListFile());
+                            variable.setCodelist(variable.getCodeListFile() != null);
+                        }
+
+                    }
                 }
             }
         }
-
-        
+        return delta;
     }
     public MetadataMu getSafeFileMetadata(MetadataMu metadata) {
-        //ProtectedFile protectedFile = metadata.getCombinations().getProtectedFile();
         MetadataMu safeMeta = new MetadataMu(metadata);
+        ArrayList<VariableMu> variables = getVariables(metadata);
+        int delta = 0;
         for (VariableMu var : safeMeta.getVariables()) {
-            int varIndex = safeMeta.getVariables().indexOf(var) + 1;
-            setSafeFileProperties(varIndex, var, metadata);
+            int varIndex = variables.indexOf(var) + 1;
+            delta = setSafeFileProperties(varIndex, var, metadata, delta);
         }
         safeMeta.setRecordCount(c.NumberofRecords());
         return safeMeta;
