@@ -200,6 +200,8 @@ public class SpecifyMetadataView extends javax.swing.JDialog {
         deleteButton.setEnabled(index != -1);
         moveUpButton.setEnabled(index > 0);
         moveDownButton.setEnabled((index != -1) && (index < variableListModel.getSize() - 1));
+            codelistfileButton.setEnabled(codelistfileCheckBox.isSelected());
+            codelistfileTextField.setEnabled(codelistfileCheckBox.isSelected());
     }
     
     private VariableMu getSelectedVariable(){
@@ -937,6 +939,7 @@ public class SpecifyMetadataView extends javax.swing.JDialog {
 
     private void codelistfileCheckBoxStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_codelistfileCheckBoxStateChanged
         getSelectedVariable().setCodelist(codelistfileCheckBox.isSelected());
+        this.calculateButtonStates();
     }//GEN-LAST:event_codelistfileCheckBoxStateChanged
 
     private void variablesListValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_variablesListValueChanged

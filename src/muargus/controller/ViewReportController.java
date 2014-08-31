@@ -18,7 +18,8 @@ public class ViewReportController {
 
     /**
      * 
-     * @param view 
+     * @param parentView 
+     * @param htmlDoc 
      */
     public ViewReportController(java.awt.Frame parentView, HTMLDocument htmlDoc) {
         this.view = new ViewReportView(parentView, this, true);

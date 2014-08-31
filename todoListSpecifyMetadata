@@ -1,7 +1,9 @@
 niet behandelde opmerkingen/vragen:
 
-Nog te doen:  
-                                                                                                  Mee bezig:
+Nog te doen:                                                                                                Mee bezig:
+- bij regel 327 van MetadataMu heb ik een check ingebouwd die kijkt of een file wel vindbaar is.            Anne
+  Ik twijfel of dit altijd goed werkt en ik denk dat het beter kan. Anne, wil jij daar naar kijken?     
+
 Release 1:
 
 -
@@ -26,6 +28,9 @@ Gedaan:                                                                         
 1a. disable knoppen in main                                                                                 Anne & Jeldrik
 2. codelistfile testen/aanpassen dat files goed gevonden worden                                             Anne
 (dus zowel regio.cdl als volledige path)	
+- Als codelist niet is aangevinkt zou ik het veld en de button '''niet actief maken.                        Jeldrik
+
+- codelijsten moeten wel bestaan. Als je onzin inklopt, vind je het best.
 2a. file open box bij codelist                                                                              Jeldrik
 3. zorgen dat aanpassingen opgeslagen worden                                                                Anne
 3a. name                                                                                                    Jeldrik 
@@ -54,3 +59,8 @@ Gedaan:                                                                         
     in de default directory omdat daar administrator rechten voor nodig zijn. Er komt dan de volgende foutmelding:
     java.io.FileNotFoundException: C:\Program Files\MU_ARGUS\data\Demodata.rda (Toegang geweigerd)
     Dit moet afgevangen worden.
+21. Missing values
+-   Een categorical variabele moet minimaal 1 missing hebben. controleren.                                  Jeldrik
+    Ook mag de missing niet groter zijn dan het veld. Soms controleer je en soms niet (bijv als je op een andere variabele klikt, meld je wel de fout, maar ga je rustig verder.)
+    Alleen missing 2 invullen mag ook niet
+

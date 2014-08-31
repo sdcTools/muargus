@@ -7,6 +7,7 @@ package muargus.model;
 import argus.model.ArgusException;
 import argus.model.DataFilePair;
 import argus.utils.StrUtils;
+import argus.utils.SystemUtils;
 import argus.utils.Tokenizer;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -54,25 +55,24 @@ public class MetadataMu {
         variables = new ArrayList<>();
         filenames = new DataFilePair(null, null);
     }
-    
+
     public MetadataMu(MetadataMu metadata) {
-        this();    
+        this();
 
         this.dataFileType = metadata.dataFileType;
         this.filenames = new DataFilePair(
-                metadata.filenames.getDataFileName(),  metadata.filenames.getMetaFileName());
+                metadata.filenames.getDataFileName(), metadata.filenames.getMetaFileName());
         this.separator = metadata.separator;
         for (VariableMu var : metadata.variables) {
             this.variables.add(new VariableMu(var));
         }
         try {
             linkRelatedVariables();
-        }
-        catch (ArgusException ex) {
+        } catch (ArgusException ex) {
             logger.log(Level.SEVERE, null, ex);
         }
     }
-    
+
     public Combinations getCombinations() {
         return this.combinations;
     }
@@ -81,7 +81,7 @@ public class MetadataMu {
         this.combinations = new Combinations();
         //TODO: some initialization
     }
-    
+
     public void setCombinations(Combinations combinations) {
         this.combinations = combinations;
     }
@@ -101,7 +101,7 @@ public class MetadataMu {
     public void setRecordCount(int recordCount) {
         this.recordCount = recordCount;
     }
-    
+
 //    public static ArrayList<VariableMu> makeClone(ArrayList<VariableMu> list) throws CloneNotSupportedException {
 //        ArrayList<VariableMu> clone = new ArrayList<>(list.size());
 //        for (VariableMu item : list) {
@@ -109,7 +109,6 @@ public class MetadataMu {
 //        }
 //        return clone;
 //    }
-
 //    public static ArrayList<Variables> getClone(){
 //        return cloneData;
 //    }
@@ -127,12 +126,12 @@ public class MetadataMu {
      * @throws ArgusException when verify() of the read model fails
      */
     public void readMetadata() throws ArgusException {
-        if (this.filenames.getMetaFileName().length() == 0)
+        if (this.filenames.getMetaFileName().length() == 0) {
             return;
-        
+        }
+
         dataFileType = DATA_FILE_TYPE_FIXED;
         VariableMu variable = null;
-        
 
         try {
             reader = new BufferedReader(new FileReader(new File(this.filenames.getMetaFileName())));
@@ -153,12 +152,10 @@ public class MetadataMu {
                 variables.add(variable);
                 if (getDataFileType() == DATA_FILE_TYPE_FIXED) {
                     variable.setStartingPosition(tokenizer.nextToken());
-                }
-                else {
+                } else {
                     variable.setStartingPosition("1");  //not relevant, but must be >0
                 }
-                    
-                    
+
                 variable.setVariableLength(tokenizer.nextToken());
 
                 // make fancier
@@ -231,14 +228,16 @@ public class MetadataMu {
     }
 
     private void writeVariable(Writer w, VariableMu variable) {
-    
+
     }
+
     private void write(Writer w) throws IOException {
 // Anco 1.6
 // try with resources verwijderd.        
 //        try (PrintWriter writer = new PrintWriter(w)) {
         PrintWriter writer = null;
-        try {  writer = new PrintWriter(w);
+        try {
+            writer = new PrintWriter(w);
             if (dataFileType == DATA_FILE_TYPE_FREE) {
                 writer.println("   <SEPARATOR> " + StrUtils.quote(separator));
             }
@@ -253,10 +252,10 @@ public class MetadataMu {
             for (VariableMu variable : this.variables) {
                 variable.write(writer, this.dataFileType);
             }
-        }
-        finally {
-            if (writer != null) 
+        } finally {
+            if (writer != null) {
                 writer.close();
+            }
         }
     }
 
@@ -264,61 +263,86 @@ public class MetadataMu {
         try {
             write(new BufferedWriter(new FileWriter(file)));
             this.filenames = new DataFilePair(this.filenames.getDataFileName(), file.getPath());
-          } catch (IOException ex) {
+        } catch (IOException ex) {
             logger.log(Level.SEVERE, null, ex);
             throw new ArgusException("Error writing to file. Error message: " + ex.getMessage());
         }
     }
-    
-    private void linkRelatedVariables() throws ArgusException{
+
+    private void linkRelatedVariables() throws ArgusException {
         for (VariableMu var : variables) {
             var.linkRelatedVariable(variables);
         }
-            
+
     }
-    
-    
+
     // TODO: add a message explaining whats the problem
     public void verify() throws ArgusException {
         for (VariableMu var : variables) {
-            
+
             //Check for duplicate variable names
             for (VariableMu var2 : variables) {
                 if (!var.equals(var2) && var.getName().equalsIgnoreCase(var2.getName())) {
                     throw new ArgusException("Duplicate variable name: " + var.getName());
                 }
             }
-            
+
+            int length = var.getVariableLength();
             //Fixed file checks
             if (dataFileType == DATA_FILE_TYPE_FIXED) {
-                int length = var.getVariableLength();
 
                 //Check if variableLength > 0
-                if (length <= 0)
+                if (length <= 0) {
                     throw new ArgusException("Length of variable " + var.getName() + " must be > 0");
-                
+                }
+
                 //Check for overlap of variables in fixed file
                 int start = var.getStartingPosition();
                 int end = start + length;
                 for (VariableMu var2 : variables) {
                     int start2 = var2.getStartingPosition();
                     int end2 = start2 + var2.getVariableLength();
-                    if (!var.equals(var2) && start2 < end && start < end2)
+                    if (!var.equals(var2) && start2 < end && start < end2) {
                         throw new ArgusException("Variables " + var.getName() + " and " + var2.getName() + " overlap");
+                    }
                 }
-                         
-                //Check if length of missings is correct
-                for (int index=0; index < VariableMu.MAX_NUMBER_OF_MISSINGS; index++) {
-                    String missing = var.getMissing(index);
-                    if (missing != null && missing.length() > length)
-                        throw new ArgusException("Missing value for variable " + var.getName() + " too long");
+            }
+
+            //Check if length of missings is correct
+            for (int index = 0; index < VariableMu.MAX_NUMBER_OF_MISSINGS; index++) {
+                String missing = var.getMissing(index);
+                if (missing != null && missing.length() > length) {
+                    throw new ArgusException("Missing value for variable " + var.getName() + " too long");
                 }
-                    
+
             }
             
-                 
+            //Check if the missing value is not empty when the variable is categorical
+            if (var.isCategorical() && var.getMissing(0).equals("")) {
+                throw new ArgusException("The first missing value for variable " + var.getName() + " can not be empty");
+            }
+
+            //Check if codelistFile is valid
+            //Anne: ik weet niet zeker of deze manier altijd goed werkt. Ik denk dat dit anders moet maar ik weet niet precies hoe.
+            if (var.isCodelist()) {
+                String file = var.getCodeListFile();
+                String reg = SystemUtils.getRegString("general", "datadir", "");
+                reg = reg.substring(0, reg.lastIndexOf("\\") + 1);
+                if (file.length() > reg.length()) {
+                    if (!file.substring(0, reg.length()).equals(reg)) {
+                        file = reg + file;
+                    }
+                } else {
+                    file = reg + file;
+                }
+                try {
+                    reader = new BufferedReader(new FileReader(file));
+                } catch (FileNotFoundException ex) {
+                    throw new ArgusException("Codelist for variable " + var.getName() + " cannot be found");
+                }
+            }
         }
-        
+
 //        for (int i = 0; i < variables.size(); i++) {
 //            VariableMu variable = variables.get(i);
 //            if (dataFileType == DATA_FILE_TYPE_FIXED) {
@@ -411,8 +435,6 @@ public class MetadataMu {
         this.variables = variables;
     }
 
-
-
     @Override
     public int hashCode() {
         int hash = 3;
@@ -424,27 +446,25 @@ public class MetadataMu {
         return hash;
     }
 
-    
-
 //    public static void main (String[] args) throws ArgusException{
 //        MetadataMu t = new MetadataMu();
 //        t.readMetadata(t.getMetadataFile());
 //    }
-   
-
     @Override
     public boolean equals(Object o) {
-        MetadataMu cmp = (MetadataMu)o;
-        if (!this.separator.equals(cmp.separator))
-            return false;
-        if (this.dataFileType != cmp.dataFileType)
-            return false;
-        if (this.filenames.getDataFileName() == null ? cmp.filenames.getDataFileName() != null : 
-                !this.filenames.getDataFileName().equals(cmp.filenames.getDataFileName())) {
+        MetadataMu cmp = (MetadataMu) o;
+        if (!this.separator.equals(cmp.separator)) {
             return false;
         }
-        if (this.filenames.getMetaFileName() == null ? cmp.filenames.getMetaFileName() != null : 
-                !this.filenames.getMetaFileName().equals(cmp.filenames.getMetaFileName())) {
+        if (this.dataFileType != cmp.dataFileType) {
+            return false;
+        }
+        if (this.filenames.getDataFileName() == null ? cmp.filenames.getDataFileName() != null
+                : !this.filenames.getDataFileName().equals(cmp.filenames.getDataFileName())) {
+            return false;
+        }
+        if (this.filenames.getMetaFileName() == null ? cmp.filenames.getMetaFileName() != null
+                : !this.filenames.getMetaFileName().equals(cmp.filenames.getMetaFileName())) {
             return false;
         }
         return this.variables.equals(cmp.variables);
