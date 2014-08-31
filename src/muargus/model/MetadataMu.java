@@ -323,6 +323,7 @@ public class MetadataMu {
             }
 
             //Check if codelistFile is valid
+            //Anne: ik weet niet zeker of deze manier altijd goed werkt. Ik denk dat dit anders moet maar ik weet niet precies hoe.
             if (var.isCodelist()) {
                 String file = var.getCodeListFile();
                 String reg = SystemUtils.getRegString("general", "datadir", "");
