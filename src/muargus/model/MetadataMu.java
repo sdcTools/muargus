@@ -47,6 +47,8 @@ public class MetadataMu {
     private Tokenizer tokenizer;
     private ArrayList<VariableMu> variables;
     private DataFilePair filenames;
+    private Combinations combinations;
+    private int recordCount;
 
     public MetadataMu() {
         variables = new ArrayList<>();
@@ -70,8 +72,36 @@ public class MetadataMu {
             logger.log(Level.SEVERE, null, ex);
         }
     }
-            
+    
+    public Combinations getCombinations() {
+        return this.combinations;
+    }
 
+    public void createCombinations() {
+        this.combinations = new Combinations();
+        //TODO: some initialization
+    }
+    
+    public void setCombinations(Combinations combinations) {
+        this.combinations = combinations;
+    }
+
+    public boolean significantDifference(MetadataMu metadata) {
+        //TODO: implemenet
+        //significant changes are for instance changes in field length, variable type, etc
+        //insignificant changes are for instance changes in codelist file
+        //for now, everything is signiicant
+        return true;
+    }
+
+    public int getRecordCount() {
+        return recordCount;
+    }
+
+    public void setRecordCount(int recordCount) {
+        this.recordCount = recordCount;
+    }
+    
 //    public static ArrayList<VariableMu> makeClone(ArrayList<VariableMu> list) throws CloneNotSupportedException {
 //        ArrayList<VariableMu> clone = new ArrayList<>(list.size());
 //        for (VariableMu item : list) {
@@ -203,7 +233,7 @@ public class MetadataMu {
     private void writeVariable(Writer w, VariableMu variable) {
     
     }
-    private void write(Writer w) throws IOException, ArgusException {
+    private void write(Writer w) throws IOException {
 // Anco 1.6
 // try with resources verwijderd.        
 //        try (PrintWriter writer = new PrintWriter(w)) {
@@ -230,16 +260,13 @@ public class MetadataMu {
         }
     }
 
-    public void write(File file) {
+    public void write(File file) throws ArgusException {
         try {
             write(new BufferedWriter(new FileWriter(file)));
             this.filenames = new DataFilePair(this.filenames.getDataFileName(), file.getPath());
-// anco 1            
-//        } catch (ArgusException | IOException ex) {
-          } catch (ArgusException ex) {
-            logger.log(Level.SEVERE, null, ex);
           } catch (IOException ex) {
             logger.log(Level.SEVERE, null, ex);
+            throw new ArgusException("Error writing to file. Error message: " + ex.getMessage());
         }
     }
     

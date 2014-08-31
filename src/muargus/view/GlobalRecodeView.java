@@ -10,11 +10,13 @@ import java.io.File;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.ListSelectionModel;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import muargus.controller.GlobalRecodeController;
-import muargus.model.GlobalRecodeModel;
+import muargus.model.GlobalRecode;
 import muargus.model.MetadataMu;
 import muargus.model.RecodeMu;
 import muargus.model.VariableMu;
@@ -26,9 +28,11 @@ import muargus.model.VariableMu;
 public class GlobalRecodeView extends javax.swing.JDialog {
 
     GlobalRecodeController controller;
-    GlobalRecodeModel model;
-    private MetadataMu metadataMu;  // ik weet niet of we die hier nodig hebben, maar voor de zekerheid heb ik hem er bij gezet
+    GlobalRecode model;
+    private MetadataMu metadataMu;  
     private TableModel tableModel;
+    private RecodeMu selectedRecode;
+    private RecodeMu selectedRecodeClone;
 
     /**
      * Creates new form GlobalRecodeView
@@ -41,19 +45,20 @@ public class GlobalRecodeView extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         this.controller = controller;
-        this.model = this.controller.getModel();
+        //this.model = this.controller.getModel();
         this.setLocationRelativeTo(null);
         this.variablesTable.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        makeVariables();
 
     }
 
     public void setMetadataMu(MetadataMu metadataMu) {
         this.metadataMu = metadataMu;
+        this.model = this.metadataMu.getCombinations().getGlobalRecode();
+        makeVariables();
     }
 
     public void makeVariables() {
-        if (this.model.getRecodeMus().size() == 0) {
+        if (this.model.getRecodeMus().isEmpty()) {
             for (VariableMu v : this.model.getVariables()) {
                 RecodeMu recodeMu = new RecodeMu(v);
                 this.model.addRecodeMu(recodeMu);
@@ -61,6 +66,15 @@ public class GlobalRecodeView extends javax.swing.JDialog {
         }
 
         this.updateTable();
+        this.variablesTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+
+            @Override
+            public void valueChanged(ListSelectionEvent lse) {
+                if (!lse.getValueIsAdjusting()) {
+                    handleSelectionChanged();
+                }
+            }
+        });        
         this.variablesTable.getSelectionModel().setSelectionInterval(0, 0);
         
         this.variablesTable.getColumnModel().getColumn(0).setMinWidth(30);
@@ -81,6 +95,7 @@ public class GlobalRecodeView extends javax.swing.JDialog {
         }
 
         this.tableModel = new DefaultTableModel(data, this.model.getColumnNames()){
+            @Override
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return false;
             }
@@ -101,17 +116,22 @@ public class GlobalRecodeView extends javax.swing.JDialog {
         this.codelistRecodeTextField.setText(selected.getCodeListFile());
         this.globalRecodeRecodeTextField.setText(selected.getGrcFile());
         this.truncateButton.setEnabled(selected.getVariable().isTruncable());
-        this.applyButton.setEnabled(this.editTextArea.getText().length() > 0);
+        enableApplyButton();
         this.undoButton.setEnabled(selected.isRecoded() || selected.isTruncated());
         this.editTextArea.setText(selected.getGrcText());
     }
-
-    private RecodeMu getSelectedRecode() {
-        RecodeMu selected = model.getRecodeMus().get(variablesTable.getSelectedRow());
-        return selected;
+    
+    private void enableApplyButton() {
+        //boolean equals = getSelectedRecode().equals(selectedRecodeClone);
+        //Only enable apply when there is something in the Grc text box
+        this.applyButton.setEnabled(this.editTextArea.getText().length() > 0);
     }
 
-        private String askForGrcPath() {
+    private RecodeMu getSelectedRecode() {
+        return this.selectedRecode;
+    }
+
+    private String askForGrcPath() {
         JFileChooser fileChooser = new JFileChooser();
         String hs = SystemUtils.getRegString("general", "datadir", "");
         if (!hs.equals("")){
@@ -237,16 +257,6 @@ public class GlobalRecodeView extends javax.swing.JDialog {
             }
         ));
         variablesTable.setDragEnabled(true);
-        variablesTable.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                variablesTableMouseClicked(evt);
-            }
-        });
-        variablesTable.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                variablesTableKeyReleased(evt);
-            }
-        });
         variablesScrollPane.setViewportView(variablesTable);
         if (variablesTable.getColumnModel().getColumnCount() > 0) {
             variablesTable.getColumnModel().getColumn(0).setPreferredWidth(6);
@@ -266,6 +276,12 @@ public class GlobalRecodeView extends javax.swing.JDialog {
         editScrollPane.setViewportView(jScrollPane1);
 
         codelistRecodeLabel.setText("Codelist for recode");
+
+        codelistRecodeTextField.addCaretListener(new javax.swing.event.CaretListener() {
+            public void caretUpdate(javax.swing.event.CaretEvent evt) {
+                codelistRecodeTextFieldCaretUpdate(evt);
+            }
+        });
 
         codelistRecodeButton.setText("...");
         codelistRecodeButton.addActionListener(new java.awt.event.ActionListener() {
@@ -363,6 +379,12 @@ public class GlobalRecodeView extends javax.swing.JDialog {
         });
 
         missing_2_newLabel.setText("2");
+
+        missing_2_newTextField.addCaretListener(new javax.swing.event.CaretListener() {
+            public void caretUpdate(javax.swing.event.CaretEvent evt) {
+                missing_2_newTextFieldCaretUpdate(evt);
+            }
+        });
 
         javax.swing.GroupLayout missingValuesPanelLayout = new javax.swing.GroupLayout(missingValuesPanel);
         missingValuesPanel.setLayout(missingValuesPanelLayout);
@@ -558,6 +580,7 @@ public class GlobalRecodeView extends javax.swing.JDialog {
         if (path != null) {
             try {
                 controller.read(path, this.getSelectedRecode());
+                this.selectedRecodeClone = new RecodeMu(this.selectedRecode);
                 updateValues();
             }
             catch (ArgusException ex) {
@@ -566,6 +589,10 @@ public class GlobalRecodeView extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_readButtonActionPerformed
 
+    public void showWarning(String warning) {
+        warningTextArea.setText(warning);
+    }
+    
     private void applyButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_applyButtonActionPerformed
         try {
             controller.apply(getSelectedRecode());
@@ -589,19 +616,36 @@ public class GlobalRecodeView extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_undoButtonActionPerformed
 
-    private void variablesTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_variablesTableMouseClicked
-
+    private void saveGrcFile() {
+        JFileChooser fileChooser = new JFileChooser();
+        if (fileChooser.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
+            try {
+                this.selectedRecode.write(fileChooser.getSelectedFile());
+            }
+            catch (ArgusException ex) {
+                JOptionPane.showMessageDialog(null, "Error saving grc file: " + ex.getMessage());
+            }
+        }
+    }
+        
+    
+    private void handleSelectionChanged() {
+        if (this.selectedRecodeClone != null) {
+            if (!selectedRecodeClone.equals(getSelectedRecode())) {
+                int result = JOptionPane.showConfirmDialog(null, "Recode information has been changed.\nSave recode file?");
+                if (result == JOptionPane.YES_OPTION) {
+                    saveGrcFile();
+                }
+            }
+        }
+        this.selectedRecode = model.getRecodeMus().get(variablesTable.getSelectedRow());
+        this.selectedRecodeClone = new RecodeMu(getSelectedRecode());
         updateValues();
-    }//GEN-LAST:event_variablesTableMouseClicked
-
-    private void variablesTableKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_variablesTableKeyReleased
-        // TODO add your handling code here:
-        updateValues();
-    }//GEN-LAST:event_variablesTableKeyReleased
-
+    }
+    
     private void editTextAreaCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_editTextAreaCaretUpdate
         getSelectedRecode().setGrcText(this.editTextArea.getText());
-        this.applyButton.setEnabled(this.editTextArea.getText().length() > 0);
+        enableApplyButton();
     }//GEN-LAST:event_editTextAreaCaretUpdate
 
     private void missing_1_newTextFieldCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_missing_1_newTextFieldCaretUpdate
@@ -611,6 +655,14 @@ public class GlobalRecodeView extends javax.swing.JDialog {
     private void globalRecodeRecodeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_globalRecodeRecodeButtonActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_globalRecodeRecodeButtonActionPerformed
+
+    private void missing_2_newTextFieldCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_missing_2_newTextFieldCaretUpdate
+        getSelectedRecode().setMissing_2_new(this.missing_2_newTextField.getText());
+    }//GEN-LAST:event_missing_2_newTextFieldCaretUpdate
+
+    private void codelistRecodeTextFieldCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_codelistRecodeTextFieldCaretUpdate
+        getSelectedRecode().setCodeListFile(this.codelistRecodeTextField.getText());
+    }//GEN-LAST:event_codelistRecodeTextFieldCaretUpdate
 
     /**
      *

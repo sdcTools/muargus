@@ -6,12 +6,10 @@
 
 package muargus;
 
-import java.util.HashSet;
-import javax.swing.text.html.HTMLDocument;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import muargus.extern.dataengine.CMuArgCtrl;
-import muargus.model.GlobalRecodeModel;
 import muargus.model.MetadataMu;
-import muargus.model.SelectCombinationsModel;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -27,16 +25,23 @@ public class HTMLReportWriter {
     
     public static void createReportTree(
             Document document, 
-            MetadataMu metadata,
-            SelectCombinationsModel combinations,
-            GlobalRecodeModel globalRecode) 
+            MetadataMu metadata) 
     {
             doc = document;
             Element html = addChildElement(doc, "html");
             html.appendChild(writeHeader());
             Element body = addChildElement(html, "body");
             addChildElement(body, "h1", "µ-ARGUS Report");
-            addChildElement(body, "div", "abc");
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd ', time ' HH:mm:ss");
+            Element p = addChildElement(body,"p");
+            addChildElement(p,"h2", String.format("Safe file created date: %s",
+                   format.format(new Date())));
+            p.appendChild(writeFilesTable(metadata));
+
+            p = addChildElement(body,"p");
+            addChildElement(p,"h2", "Identifying variables used");
+            p.appendChild(writeIdVariablesTable(metadata));
+            
 //            el = el.appendChild(doc.createElement("script"));
 //            el.setTextContent("blabla");
 //            el = elm.appendChild(doc.createElement("body"));
@@ -50,6 +55,36 @@ public class HTMLReportWriter {
             //el.setTextContent(Integer.toString(this.metadata.getVariables().size()));
 
     }
+
+    private static Element writeIdVariablesTable(MetadataMu metadata) {
+        Element table = doc.createElement("table");
+        Element tr = addChildElement(table, "tr");
+        addChildElement(tr, "th", "Variable");
+        addChildElement(tr, "th", "No of categories (missings)");
+        addChildElement(tr, "th", "Household var");
+        
+        return table;
+    }
+
+    private static Element writeFilesTable(MetadataMu metadata) {
+        Element table = doc.createElement("table");
+        Element tr = addChildElement(table, "tr");
+        addChildElement(tr, "td", "Original data file");
+        addChildElement(tr, "td", metadata.getFileNames().getDataFileName());
+        tr = addChildElement(table, "tr");
+        addChildElement(tr, "td", "Original meta file");
+        addChildElement(tr, "td", metadata.getFileNames().getMetaFileName());
+        tr = addChildElement(table, "tr");
+        addChildElement(tr, "td", "Number of records");
+        addChildElement(tr, "td", Integer.toString(metadata.getRecordCount()));
+        tr = addChildElement(table, "tr");
+        addChildElement(tr, "td", "Safe data file");
+        addChildElement(tr, "td", metadata.getCombinations().getProtectedFile().getNameOfSafeFile());
+        tr = addChildElement(table, "tr");
+        addChildElement(tr, "td", "Safe meta file");
+        addChildElement(tr, "td", metadata.getCombinations().getProtectedFile().getNameOfSafeMetaFile());
+        return table;
+    }
     
     private static Element writeHeader() {
         Element elm = doc.createElement("head");
@@ -58,7 +93,7 @@ public class HTMLReportWriter {
         meta.setAttribute("content", "Statistics; Netherlands");
         Element link = addChildElement(elm, "link", "rel", "stylesheet");
         link.setAttribute("type", "text/css");
-        link.setAttribute("href", "file:///blabla.css");    //TODO
+        link.setAttribute("href", "file:///c:/program files/mu_argus/muargus.css");    //TODO
         return elm;
     }
     

@@ -10,12 +10,12 @@ import java.util.ArrayList;
  *
  * @author ambargus
  */
-public class GlobalRecodeModel {
+public class GlobalRecode {
     private ArrayList<VariableMu> variables;
     private ArrayList<RecodeMu> recodeMus;
     private final String[] columnNames;
 
-    public GlobalRecodeModel() {
+    public GlobalRecode() {
         this.variables = new ArrayList<>();
         this.recodeMus = new ArrayList<>();
         this.columnNames = new String[]{"R", "Variables"};

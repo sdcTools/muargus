@@ -122,10 +122,6 @@
               <TableHeader reorderingAllowed="true" resizingAllowed="true"/>
             </Property>
           </Properties>
-          <Events>
-            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="variablesTableMouseClicked"/>
-            <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="variablesTableKeyReleased"/>
-          </Events>
         </Component>
       </SubComponents>
     </Container>
@@ -164,6 +160,9 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="codelistRecodeTextField">
+      <Events>
+        <EventHandler event="caretUpdate" listener="javax.swing.event.CaretListener" parameters="javax.swing.event.CaretEvent" handler="codelistRecodeTextFieldCaretUpdate"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="codelistRecodeButton">
       <Properties>
@@ -433,6 +432,9 @@
               </Properties>
             </Component>
             <Component class="javax.swing.JTextField" name="missing_2_newTextField">
+              <Events>
+                <EventHandler event="caretUpdate" listener="javax.swing.event.CaretListener" parameters="javax.swing.event.CaretEvent" handler="missing_2_newTextFieldCaretUpdate"/>
+              </Events>
             </Component>
           </SubComponents>
         </Container>

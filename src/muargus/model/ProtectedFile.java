@@ -6,12 +6,13 @@ package muargus.model;
 
 import java.io.File;
 import java.util.ArrayList;
+import org.apache.commons.io.FilenameUtils;
 
 /**
  *
  * @author ambargus
  */
-public class MakeProtectedFileModel {
+public class ProtectedFile {
     
     private int suppressionType = 2;
     public final int NO_SUPPRESSION = 0;
@@ -41,7 +42,7 @@ public class MakeProtectedFileModel {
     /**
      *
      */
-    public MakeProtectedFileModel() {
+    public ProtectedFile() {
         this.variables = new ArrayList<>();
         this.columnames = new String[]{"Variables", "Priority"};
     }
@@ -118,6 +119,10 @@ public class MakeProtectedFileModel {
 
     public String getNameOfSafeFile() {
         return nameOfSafeFile;
+    }
+
+    public String getNameOfSafeMetaFile() {
+        return FilenameUtils.removeExtension(nameOfSafeFile) + ".rds";
     }
 
     public void setNameOfSafeFile(File file) {

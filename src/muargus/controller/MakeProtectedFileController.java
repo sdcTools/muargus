@@ -4,12 +4,14 @@
  */
 package muargus.controller;
 
+import argus.model.ArgusException;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.File;
+import javax.swing.JOptionPane;
 import javax.swing.JRadioButton;
-import muargus.model.MakeProtectedFileModel;
 import muargus.model.MetadataMu;
-import muargus.model.SelectCombinationsModel;
+import muargus.model.Combinations;
 import muargus.view.MakeProtectedFileView;
 
 /**
@@ -18,11 +20,11 @@ import muargus.view.MakeProtectedFileView;
  */
 public class MakeProtectedFileController implements PropertyChangeListener {
 
-    MakeProtectedFileView view;
-    MakeProtectedFileModel model;
-    MetadataMu metadata;
-    SelectCombinationsModel selectCombinationsModel;
-
+    private MakeProtectedFileView view;
+    //MakeProtectedFileModel model;
+    private MetadataMu metadata;
+    //Combinations selectCombinationsModel;
+    private boolean fileCreated;
     /**
      *
      * @param parentView
@@ -30,14 +32,14 @@ public class MakeProtectedFileController implements PropertyChangeListener {
      * @param model
      * @param selectCombinationsModel
      */
-    public MakeProtectedFileController(java.awt.Frame parentView, MetadataMu metadata,
-            MakeProtectedFileModel model, SelectCombinationsModel selectCombinationsModel) {
-        this.model = model;
-        this.selectCombinationsModel = selectCombinationsModel;
-        this.model.setRiskModel(this.selectCombinationsModel.isRiskModel());
+    public MakeProtectedFileController(java.awt.Frame parentView, MetadataMu metadata) {
+        //this.model = model;
+        //this.selectCombinationsModel = selectCombinationsModel;
+        //this.model.setRiskModel(this.selectCombinationsModel.isRiskModel());
         this.view = new MakeProtectedFileView(parentView, true, this);
         this.metadata = metadata;
         this.view.setMetadataMu(this.metadata);
+        this.fileCreated = false;
 
     }
 
@@ -45,23 +47,41 @@ public class MakeProtectedFileController implements PropertyChangeListener {
         this.view.setVisible(true);
     }
 
-    public MakeProtectedFileModel getModel() {
-        return this.model;
-    }
+//    public ProtectedFile getModel() {
+//        return this.model;
+//    }
 
+    
     /**
      *
      */
     public void makeFile() {
         TableService service = new TableService();
         service.setPropertyChangeListener(this);
-        service.makeProtectedFile(model, metadata, selectCombinationsModel);
+        service.makeProtectedFile(this.metadata);
+    }
+    
+    private void saveSafeMeta() {
+        MetadataMu safeMetadata = new TableService().getSafeFileMetadata(this.metadata);
+        File file = new File(this.metadata.getCombinations().getProtectedFile().getNameOfSafeMetaFile());
+        try {
+            safeMetadata.write(file);
+            this.fileCreated = true;
+        }
+        catch (ArgusException ex) {
+            JOptionPane.showMessageDialog(null, ex.getMessage());
+        }
     }
 
-    public SelectCombinationsModel getSelectCombinationsModel() {
-        return selectCombinationsModel;
+    public Combinations getCombinations() {
+        return this.metadata.getCombinations();
     }
 
+    public boolean isFileCreated() {
+        return fileCreated;
+    }
+
+    
     @Override
     public void propertyChange(PropertyChangeEvent pce) {
         switch (pce.getPropertyName()) {
@@ -69,12 +89,15 @@ public class MakeProtectedFileController implements PropertyChangeListener {
                 view.setProgress(pce.getNewValue());
                 break;
             case "status":
-                view.setVisible(pce.getNewValue() != "done");
+                if (pce.getNewValue() == "done") {
+                    saveSafeMeta();
+                    view.setVisible(!this.fileCreated);
+                }
         }
     }
     
     public JRadioButton getSuppressionRadioButton() {
-        switch (this.model.getSuppressionType()) {
+        switch (getCombinations().getProtectedFile().getSuppressionType()) {
             case (0):
                 return this.view.getNoSuppressionRadioButton();
             case (1):

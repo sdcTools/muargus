@@ -12,7 +12,7 @@ import javax.swing.table.TableModel;
 import muargus.VariableNameCellRenderer;
 import muargus.controller.SelectCombinationsController;
 import muargus.model.MetadataMu;
-import muargus.model.SelectCombinationsModel;
+import muargus.model.Combinations;
 import muargus.model.TableMu;
 import muargus.model.VariableMu;
 import muargus.MuARGUS;
@@ -25,7 +25,7 @@ import muargus.CombinationsTableCellRenderer;
 public class SelectCombinationsView extends javax.swing.JDialog {
 
     private final SelectCombinationsController controller;
-    private SelectCombinationsModel model;
+    private Combinations model;
     private MetadataMu metadataMu;
     private DefaultListModel variablesListModel;
     private DefaultListModel variablesSelectedListModel;
@@ -46,14 +46,15 @@ public class SelectCombinationsView extends javax.swing.JDialog {
         this.parent = parent;
         initComponents();
         this.controller = controller;
-        this.model = this.controller.getModel();
+        //this.model = this.controller.getModel();
         this.setLocationRelativeTo(null);
         variablesList.setCellRenderer(new VariableNameCellRenderer());
         variablesSelectedList.setCellRenderer(new VariableNameCellRenderer());
     }
 
-    public void setModel(SelectCombinationsModel model) {
+    public void setModel(Combinations model) {
         this.model = model;
+        makeVariables();
     }
 
     /**
@@ -64,7 +65,6 @@ public class SelectCombinationsView extends javax.swing.JDialog {
      */
     public void setMetadataMu(MetadataMu metadataMu) {
         this.metadataMu = metadataMu;
-        makeVariables();
     }
 
     /**
@@ -99,7 +99,7 @@ public class SelectCombinationsView extends javax.swing.JDialog {
      */
     private void updateValues() {
         this.thresholdTextField.setText(this.model.getThreshold());
-        // gets the tables from SelectCombinationsModel and adds these to a double  array, containing the data
+        // gets the tables from Combinations and adds these to a double  array, containing the data
         ArrayList<TableMu> tables = model.getTables();
         String[][] data = new String[model.getTables().size()][model.getNumberOfColumns()];
 
@@ -500,8 +500,12 @@ public class SelectCombinationsView extends javax.swing.JDialog {
             for (VariableMu newVariable : tableMuNew.getVariables()) {
                 if (oldVariable.equals(newVariable)) {
                     numberOfDoubleVariables++;
+                    if (tableMuOld.isRiskModel()) {
+                        return false;
+                    }
                 }
             }
+        }
             if (tableMuNew.getVariables().size() == tableMuOld.getVariables().size()
                     && numberOfDoubleVariables == tableMuNew.getVariables().size()) {
                 int thresholdOld = tableMuOld.getThreshold();
@@ -512,11 +516,11 @@ public class SelectCombinationsView extends javax.swing.JDialog {
                     tableMuNew.setThreshold(thresholdOld);
                 }
                 isValid = false;
-                exit = true;
-            }
-            if (exit) {
-                break;
-            }
+//                exit = true;
+//            }
+//            if (exit) {
+//                break;
+//            }
         }
         return isValid;
     }

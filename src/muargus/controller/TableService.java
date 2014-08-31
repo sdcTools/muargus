@@ -12,7 +12,6 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.nio.channels.SeekableByteChannel;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.concurrent.ExecutionException;
@@ -23,9 +22,10 @@ import javax.swing.SwingWorker;
 import muargus.MuARGUS;
 import muargus.extern.dataengine.CMuArgCtrl;
 import muargus.extern.dataengine.IProgressListener;
-import muargus.model.MakeProtectedFileModel;
+import muargus.model.ProtectedFile;
 import muargus.model.MetadataMu;
-import muargus.model.SelectCombinationsModel;
+import muargus.model.Combinations;
+import muargus.model.RecodeMu;
 import muargus.model.TableMu;
 import muargus.model.UnsafeCodeInfo;
 import muargus.model.UnsafeInfo;
@@ -43,14 +43,13 @@ public class TableService {
 
     private PropertyChangeListener listener;
 
-    public void makeProtectedFile(final MakeProtectedFileModel model, final MetadataMu metadata,
-            final SelectCombinationsModel selectCombinationsModel) {
+    public void makeProtectedFile(final MetadataMu metadata) {
         final SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
 
             // called in a separate thread...
             @Override
             protected Void doInBackground() throws Exception {
-                makeFileInBackground(model, metadata, selectCombinationsModel);
+                makeFileInBackground(metadata);
                 return null;
             }
 
@@ -72,9 +71,8 @@ public class TableService {
         worker.execute();
     }
 
-    private void makeFileInBackground(final MakeProtectedFileModel model, final MetadataMu metadata,
-            final SelectCombinationsModel selectCombinationsModel) {
-
+    private void makeFileInBackground(final MetadataMu metadata) throws ArgusException {
+        ProtectedFile protectedFile = metadata.getCombinations().getProtectedFile();
         IProgressListener progressListener = new IProgressListener() {
             @Override
             public void UpdateProgress(final int percentage) {
@@ -83,34 +81,40 @@ public class TableService {
             }
         };
         c.SetProgressListener(progressListener);
+        
+        c.SetOutFileInfo(metadata.getDataFileType() == MetadataMu.DATA_FILE_TYPE_FIXED,
+                metadata.getSeparator(),
+                "",
+                true
+                );
         int index = 0;
-        for (VariableMu variable : getVariables(metadata, selectCombinationsModel)) {
+        for (VariableMu variable : metadata.getVariables()) {
             index++;
-            if (model.getVariables().contains(variable)) {
+            if (protectedFile.getVariables().contains(variable)) {
                 c.SetSuppressPrior(index, variable.getSuppressweight());
             }
         }
         
-        boolean result = c.MakeFileSafe(model.getNameOfSafeFile(), model.isWithPrior(), model.isWithEntropy(),
-                model.getHouseholdType(), model.isRandomizeOutput(), model.isPrintBHR());
+        boolean result = c.MakeFileSafe(protectedFile.getNameOfSafeFile(), 
+                protectedFile.isWithPrior(), 
+                protectedFile.isWithEntropy(),
+                protectedFile.getHouseholdType(), 
+                protectedFile.isRandomizeOutput(), 
+                protectedFile.isPrintBHR());
 
-         //TODO: verander in argusException
         if (!result) {
-            System.out.println("gefaald");
-        } else {
-            System.out.println("gelukt");
+            throw new ArgusException("Error during Make protected file");
         }
     }
 
-    public void calculateTables(final SelectCombinationsModel model, final MetadataMu metadata) {
+    public void calculateTables(final MetadataMu metadata) {
 
         final SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
 
             // called in a separate thread...
             @Override
             protected Void doInBackground() throws Exception {
-                calculateInBackground(model, metadata);
-                getUnsafeCombinations(model, metadata);
+                calculateInBackground(metadata);
                 return null;
             }
 
@@ -121,6 +125,9 @@ public class TableService {
                 try {
                     get();
                     workerDone();
+                    ArrayList<String> missing = getUnsafeCombinations(metadata);
+                    if (!missing.isEmpty())
+                        JOptionPane.showMessageDialog(null, String.join("\n", missing));
                 } catch (InterruptedException ex) {
                     logger.log(Level.SEVERE, null, ex);
                 } catch (ExecutionException ex) {
@@ -171,7 +178,7 @@ public class TableService {
         //1 + metadata.getVariables().indexOf(variable.getRelatedVariable())); //TODO: handle error
     }
 
-    private int getNVar(SelectCombinationsModel model, MetadataMu metadata) throws ArgusException {
+    private int getNVar(Combinations model, MetadataMu metadata) throws ArgusException {
         //For free format, all variables
         if (metadata.getDataFileType() != MetadataMu.DATA_FILE_TYPE_FIXED) {
             return metadata.getVariables().size();
@@ -193,12 +200,12 @@ public class TableService {
         return nVar;
     }
 
-    private ArrayList<VariableMu> getVariables(MetadataMu metadata, SelectCombinationsModel model) {
+    private ArrayList<VariableMu> getVariables(MetadataMu metadata) {
         if (metadata.getDataFileType() != MetadataMu.DATA_FILE_TYPE_FIXED) {
             return metadata.getVariables();
         }
-        ArrayList<VariableMu> variables = new ArrayList<>(model.getVariablesInTables());
-        if (model.isRiskModel()) {
+        ArrayList<VariableMu> variables = new ArrayList<>(metadata.getCombinations().getVariablesInTables());
+        if (metadata.getCombinations().isRiskModel()) {
             for (VariableMu weightVar : metadata.getVariables()) {
                 if (weightVar.isWeight()) {
                     if (!variables.contains(weightVar)) {
@@ -222,11 +229,9 @@ public class TableService {
         return 0;
     }
 
-    private void calculateInBackground(
-            SelectCombinationsModel model,
-            MetadataMu metadata) throws ArgusException {
-
-        ArrayList<VariableMu> variables = getVariables(metadata, model);
+    private void calculateInBackground(MetadataMu metadata) throws ArgusException {
+        Combinations model = metadata.getCombinations();
+        ArrayList<VariableMu> variables = getVariables(metadata); //metadata.getVariables();
         boolean result = c.SetNumberVar(variables.size());
         if (!result) {
             throw new ArgusException("Error in SetNumberVar: Insufficient memory");
@@ -270,6 +275,7 @@ public class TableService {
         if (!result) {
             throw new ArgusException("Error in ExploreFile");
         }
+        metadata.setRecordCount(c.NumberofRecords());
 
         int x = model.getTables().size();
         result = c.SetNumberTab(x); //this.model.getTables().size());
@@ -299,10 +305,9 @@ public class TableService {
         if (!result) {
             throw new ArgusException("Error in ComputeTables");
         }
-
     }
 
-    private int[] getVarIndices(TableMu table, SelectCombinationsModel model) {
+    private int[] getVarIndices(TableMu table, Combinations model) {
         int[] indices = new int[table.getVariables().size()];
         for (int index = 0; index < indices.length; index++) {
             indices[index] = 1 + model.getVariablesInTables().indexOf(table.getVariables().get(index));
@@ -318,14 +323,92 @@ public class TableService {
         return 1;
     }
 
-    public void getUnsafeCombinations(SelectCombinationsModel model, MetadataMu metadata) {
+    private int setSafeFileProperties(final int index, final VariableMu variable, MetadataMu metadata, int delta) {
+        if (index == 0) {
+            //Variable was not in dll
+            variable.setStartingPosition(Integer.toString(variable.getStartingPosition() + delta));
+        }
+        else {
+            int[] startPos = new int[1];
+            int[] nPos = new int[1];
+            int[] nSuppressions = new int[1];
+            double[] entropy = new double[1];
+            int[] bandwidth = new int[1];
+            String[] missing1 = new String[1];
+            String[] missing2 = new String[1];
+            int[] nOfCodes = new int[1];
+            int[] nOfMissing = new int[1];
+            c.GetVarProperties(index, startPos, nPos, nSuppressions, entropy, bandwidth, missing1, missing2, nOfCodes, nOfMissing);
+            variable.setStartingPosition(Integer.toString(startPos[0]));
+            delta += nPos[0] - variable.getVariableLength();
+            variable.setVariableLength(Integer.toString(nPos[0]));
+            variable.setnOfSuppressions(nSuppressions[0]);
+            variable.setEntropy(entropy[0]);
+            variable.setBandwidth(bandwidth[0]);
+            variable.setnOfCodes(nOfCodes[0]);
+            if (nOfMissing[0] > 0)
+                variable.setMissing(0, missing1[0]);
+            if (nOfMissing[0] > 1)
+                variable.setMissing(1, missing2[0]);
+
+            //Global recode codelist
+            if (metadata.getCombinations().getGlobalRecode() != null){
+                for (RecodeMu recode : metadata.getCombinations().getGlobalRecode().getRecodeMus()) {
+                    if (recode.getVariable().equals(variable)) {
+                        if (recode.isRecoded() || recode.isTruncated()) {
+                            variable.setCodeListFile(recode.getCodeListFile());
+                            variable.setCodelist(variable.getCodeListFile() != null);
+                        }
+
+                    }
+                }
+            }
+        }
+        return delta;
+    }
+    public MetadataMu getSafeFileMetadata(MetadataMu metadata) {
+        MetadataMu safeMeta = new MetadataMu(metadata);
+        ArrayList<VariableMu> variables = getVariables(metadata);
+        int delta = 0;
+        for (VariableMu var : safeMeta.getVariables()) {
+            int varIndex = variables.indexOf(var) + 1;
+            delta = setSafeFileProperties(varIndex, var, metadata, delta);
+        }
+        safeMeta.setRecordCount(c.NumberofRecords());
+        return safeMeta;
+    }
+    
+    private String getRecodeCodelistFile(Combinations combinations, VariableMu variable) {
+        for (RecodeMu recode : combinations.getGlobalRecode().getRecodeMus()) {
+            if (recode.getVariable().equals(variable))
+                return recode.getCodeListFile();
+        }
+        return "";
+    }
+    
+    public ArrayList<String> getUnsafeCombinations(MetadataMu metadata) {
+        ArrayList<String> missingCodelists = new ArrayList<>();
+        Combinations model = metadata.getCombinations();
+        boolean hasRecode = (model.getGlobalRecode() != null);
         model.clearUnsafe();
         for (int varIndex = 0; varIndex < model.getVariablesInTables().size(); varIndex++) {
             VariableMu variable = model.getVariablesInTables().get(varIndex);
 
             HashMap<String, String> codelist = new HashMap<>();
-            if (variable.isCodelist()) {
-                readCodelist(codelist, variable.getCodeListFile(), metadata);
+            String codelistFile = "";
+            if (hasRecode) {
+                codelistFile = getRecodeCodelistFile(model, variable);
+            }
+            if ("".equals(codelistFile) && variable.isCodelist()) {
+                codelistFile = variable.getCodeListFile();
+            }
+            if (!"".equals(codelistFile)) {
+                try {
+                    readCodelist(codelist, codelistFile, metadata);
+                }
+                catch (ArgusException ex) {
+                    missingCodelists.add(ex.getMessage());
+                }
             }
 
             int[] nDims = new int[]{0};
@@ -358,10 +441,10 @@ public class TableService {
             }
             result = c.UnsafeVariableClose(varIndex + 1);
         }
+        return missingCodelists;
     }
 
-    private void readCodelist(HashMap<String, String> codelist, String path, MetadataMu metadata) {
-
+    private void readCodelist(HashMap<String, String> codelist, String path, MetadataMu metadata) throws ArgusException {
         BufferedReader reader = null;
         try {
             File file = new File(path);
@@ -373,14 +456,15 @@ public class TableService {
         } catch (FileNotFoundException ex) {
             System.out.println("file not found");
             logger.log(Level.SEVERE, null, ex);
-            return;
+            throw new ArgusException(String.format("Codelist %s not found", path));
         }
         try {
             String line;
             while ((line = reader.readLine()) != null) {
                 String[] parts = line.split(",");
-
-                codelist.put(parts[0].trim(), parts[1].trim());
+                if (parts.length > 1) {
+                    codelist.put(parts[0].trim(), parts[1].trim());
+                }
             }
             reader.close();
         } catch (Exception ex) {
@@ -390,6 +474,7 @@ public class TableService {
             } catch (Exception e) {
                 ;
             }
+            throw new ArgusException(String.format("Error in codelist file (%s)", path));
         }
     }
 

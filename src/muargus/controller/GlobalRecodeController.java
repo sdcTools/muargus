@@ -10,16 +10,19 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import muargus.MuARGUS;
 import muargus.extern.dataengine.CMuArgCtrl;
-import muargus.model.GlobalRecodeModel;
+import muargus.extern.dataengine.IProgressListener;
+import muargus.model.GlobalRecode;
 import muargus.model.MetadataMu;
 import muargus.model.RecodeMu;
-import muargus.model.SelectCombinationsModel;
+import muargus.model.Combinations;
 import muargus.view.GlobalRecodeView;
 
 /**
@@ -27,82 +30,85 @@ import muargus.view.GlobalRecodeView;
  * @author ambargus
  */
 public class GlobalRecodeController {
-    
+
     GlobalRecodeView view;
-    GlobalRecodeModel model;
+    //GlobalRecode model;
     MetadataMu metadata;
-    SelectCombinationsModel selectCombinationsModel;
+    //Combinations selectCombinationsModel;
 
     /**
-     * 
+     *
      * @param parentView
-     * @param metadata 
-     * @param model 
-     * @param selectCombinationsModel 
+     * @param metadata
+     * @param model
+     * @param selectCombinationsModel
      */
-    public GlobalRecodeController(java.awt.Frame parentView, MetadataMu metadata, 
-            GlobalRecodeModel model, SelectCombinationsModel selectCombinationsModel) {
-        this.model = model;
+    public GlobalRecodeController(java.awt.Frame parentView, MetadataMu metadata) {
+        //this.model = model;
         this.view = new GlobalRecodeView(parentView, true, this);
         this.metadata = metadata;
         this.view.setMetadataMu(this.metadata);
-        this.selectCombinationsModel = selectCombinationsModel;
+        //this.selectCombinationsModel = selectCombinationsModel;
         //this.view = view;
     }
-    
+
     public void showView() {
         this.view.setVisible(true);
     }
-    
-    public GlobalRecodeModel getModel() {
-        return this.model;
-    }
-    
-    
+
+//    public GlobalRecode getModel() {
+//        return this.model;
+//    }
     /**
-     * 
+     *
      */
-    public void close() {                                            
+    public void close() {
         view.setVisible(false);
-    }                                           
+    }
 
     /**
-     * 
+     *
      */
-    public void codelistRecode() {                                                     
+    public void codelistRecode() {
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setFileFilter(new FileNameExtensionFilter("Codelist (*.cdl)", "cdl"));
         String hs = "C:\\Program Files\\MU_ARGUS\\data";
         File file = new File(hs);
         fileChooser.setCurrentDirectory(file);
         fileChooser.showOpenDialog(null);
-        
+
         String filename;
         File f = fileChooser.getSelectedFile();
-        if(fileChooser.getSelectedFile() == null)
+        if (fileChooser.getSelectedFile() == null) {
             filename = "";
-        else 
-            filename = f.getAbsolutePath();        
+        } else {
+            filename = f.getAbsolutePath();
+        }
         view.setCodelistText(filename);
-    }                                                    
+    }
 
     /**
-     * 
+     *
      */
-    public void truncate(RecodeMu recode) throws ArgusException {  
+    public void truncate(RecodeMu recode) throws ArgusException {
         CMuArgCtrl c = MuARGUS.getMuArgCtrl();
-        int index = this.model.getVariables().indexOf(recode.getVariable());
+        int index = getGlobalRecode().getVariables().indexOf(recode.getVariable());
         boolean result = c.DoTruncate(index + 1, 1);
-        if (!result)
+        if (!result) {
             throw new ArgusException("Error during Truncate");
+        }
         applyRecode();
         recode.setTruncated(true);
-    }                                              
+    }
+
+    private GlobalRecode getGlobalRecode() {
+        return this.metadata.getCombinations().getGlobalRecode();
+    }
 
     /**
-     * 
+     *
      */
-    public void read(String path, RecodeMu recode) throws ArgusException {                                           
+    public void read(String path, RecodeMu recode) throws ArgusException {
         recode.setMissing_1_new(null);
         recode.setMissing_2_new(null);
         recode.setCodeListFile(null);
@@ -117,43 +123,41 @@ public class GlobalRecodeController {
                 if (!token.startsWith("<")) {
                     sb.append(line);
                     sb.append(System.lineSeparator());
-                }
-                else if ("<MISSING>".equals(token)) {
+                } else if ("<MISSING>".equals(token)) {
                     token = tokenizer.nextToken();
                     recode.setMissing_1_new(token);
                     token = tokenizer.nextToken();
-                    if (token != null)
+                    if (token != null) {
                         recode.setMissing_2_new(token);
-                }
-                else if ("<CODELIST>".equals(token)) {
+                    }
+                } else if ("<CODELIST>".equals(token)) {
                     recode.setCodeListFile(tokenizer.nextToken());
-                }
-                else {
+                } else {
                     throw new ArgusException("Error reading file, invalid token: " + token);
                 }
             }
             reader.close();
             recode.setGrcText(sb.toString());
             recode.setGrcFile(path);
-            }
-        catch (IOException ex) {
+        } catch (IOException ex) {
             throw new ArgusException("Error during reading file");
         }
-        
-                
-    }                                          
+
+    }
+    
+    
 
     /**
-     * 
+     *
      */
     public void apply(RecodeMu recode) throws ArgusException {
         CMuArgCtrl c = MuARGUS.getMuArgCtrl();
-        int index = this.model.getVariables().indexOf(recode.getVariable());
-        int[] errorType = new int[] {0};
-        int[] errorLine = new int[] {0};
-        int[] errorPos = new int[] {0};
+        int index = getGlobalRecode().getVariables().indexOf(recode.getVariable());
+        int[] errorType = new int[]{0};
+        int[] errorLine = new int[]{0};
+        int[] errorPos = new int[]{0};
         String[] warning = new String[1];
-        boolean result = c.DoRecode(index+1, 
+        boolean result = c.DoRecode(index + 1,
                 recode.getGrcText(),
                 recode.getMissing_1_new(),
                 recode.getMissing_2_new(),
@@ -162,44 +166,43 @@ public class GlobalRecodeController {
                 errorPos,
                 warning);
         if (!result) {
-            throw new ArgusException(warning[0]);
+            throw new ArgusException(String.format("Error in recoding; line %d, position %d \nNo recoding done",
+                    errorLine[0], errorPos[0]));
         }
         applyRecode();
         recode.setRecoded(true);
+        view.showWarning(warning[0]);
 
-        
-        
     }
-    
+
     private void applyRecode() throws ArgusException {
         CMuArgCtrl c = MuARGUS.getMuArgCtrl();
-        boolean result = true; //c.ApplyRecode();
+        c.SetProgressListener(null);
+
+        boolean result = c.ApplyRecode();
         if (!result) {
             throw new ArgusException("Error during Apply recode");
         }
-        
-        new TableService().getUnsafeCombinations(this.selectCombinationsModel, this.metadata);
-        
-            
-        // TODO add your handling code here:
-    }                                           
+        ArrayList<String> missing = new TableService().getUnsafeCombinations(this.metadata);
+        if (!missing.isEmpty()) {
+            JOptionPane.showMessageDialog(null, String.join("\n", missing));
+        }
+    }
 
     /**
-     * 
+     *
      */
-    public void undo(RecodeMu recode) throws ArgusException {                                           
+    public void undo(RecodeMu recode) throws ArgusException {
         CMuArgCtrl c = MuARGUS.getMuArgCtrl();
-        int index = this.model.getVariables().indexOf(recode.getVariable());
+        c.SetProgressListener(null);
+        int index = getGlobalRecode().getVariables().indexOf(recode.getVariable());
         boolean result = c.UndoRecode(index + 1);
-                if (!result) {
+        if (!result) {
             throw new ArgusException("Error while undoing recode");
         }
-        result = c.ApplyRecode();
-        if (!result) {
-            throw new ArgusException("Error during Apply recode");
-        }
+        applyRecode();
         recode.setRecoded(false);
         recode.setTruncated(false);
-        
-   }      
+
+    }
 }

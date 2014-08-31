@@ -13,7 +13,7 @@ import javax.swing.table.DefaultTableModel;
 import muargus.CodeTableCellRenderer;
 import muargus.controller.MainFrameController;
 import muargus.model.MetadataMu;
-import muargus.model.SelectCombinationsModel;
+import muargus.model.Combinations;
 import muargus.model.UnsafeCodeInfo;
 import muargus.model.UnsafeInfo;
 import muargus.model.VariableMu;
@@ -26,7 +26,7 @@ public class MainFrameView extends javax.swing.JFrame {
     
     //private DataFilePair dataFilePair;
     private MainFrameController controller;
-    private SelectCombinationsModel model;
+    private Combinations model;
 
     /**
      * Creates new form MainFrameView
@@ -740,7 +740,7 @@ public class MainFrameView extends javax.swing.JFrame {
         
     }//GEN-LAST:event_openMicrodataMenuItemActionPerformed
 
-    public void showUnsafeCombinations(SelectCombinationsModel model) {
+    public void showUnsafeCombinations(Combinations model) {
         this.model = model;
         ArrayList<String> columnNames = new ArrayList<>();
         columnNames.add("Variable");

@@ -5,7 +5,7 @@
 package muargus.view;
 
 import javax.swing.JOptionPane;
-import muargus.model.SelectCombinationsModel;
+import muargus.model.Combinations;
 
 /**
  *
@@ -25,7 +25,7 @@ public class ArgusInput extends javax.swing.JDialog {
      * @param model
      * @param isThreshold
      */
-    public ArgusInput(java.awt.Frame parent, boolean modal, SelectCombinationsModel model, boolean isThreshold) {
+    public ArgusInput(java.awt.Frame parent, boolean modal, Combinations model, boolean isThreshold) {
         super(parent, modal);
         this.isThreshold = isThreshold;
         initComponents();
