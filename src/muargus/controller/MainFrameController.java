@@ -89,6 +89,7 @@ public class MainFrameController {
 
     private void organise() {
         view.enableAction(Action.SpecifyMetadata, this.metadata != null);
+        view.enableAction(Action.ViewReport, this.metadata != null);
         view.enableAction(Action.SpecifyCombinations, this.metadata != null
                 && this.metadata.getVariables().size() > 0);
 
@@ -100,7 +101,7 @@ public class MainFrameController {
         view.enableAction(Action.GlobalRecode, tablesCalculated);
         view.enableAction(Action.ShowTableCollection, tablesCalculated);
         view.enableAction(Action.MakeProtectedFile, tablesCalculated);
-
+        
     }
 
     /**

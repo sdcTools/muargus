@@ -17,6 +17,9 @@ public class ViewReportView extends javax.swing.JDialog {
 
     /**
      * Creates new form OutputViewReport
+     * @param parent
+     * @param controller
+     * @param modal
      */
     public ViewReportView(java.awt.Frame parent, ViewReportController controller, boolean modal) {
         super(parent, modal);
@@ -45,6 +48,7 @@ public class ViewReportView extends javax.swing.JDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("View Report");
+        setMinimumSize(new java.awt.Dimension(650, 500));
 
         printButton.setText("Print");
         printButton.addActionListener(new java.awt.event.ActionListener() {
@@ -75,7 +79,7 @@ public class ViewReportView extends javax.swing.JDialog {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addGap(0, 550, Short.MAX_VALUE)
                         .addComponent(printButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(closeButton))
@@ -86,7 +90,7 @@ public class ViewReportView extends javax.swing.JDialog {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 305, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 459, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(printButton)
