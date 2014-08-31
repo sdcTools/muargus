@@ -200,7 +200,7 @@ public class TableService {
         return nVar;
     }
 
-    private ArrayList<VariableMu> getVariables(MetadataMu metadata) {
+    public ArrayList<VariableMu> getVariables(MetadataMu metadata) {
         if (metadata.getDataFileType() != MetadataMu.DATA_FILE_TYPE_FIXED) {
             return metadata.getVariables();
         }

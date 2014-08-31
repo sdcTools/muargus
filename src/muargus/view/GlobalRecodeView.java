@@ -152,6 +152,29 @@ public class GlobalRecodeView extends javax.swing.JDialog {
         }
         return null;
     }
+    
+    private int getTruncatePositions(int varLength) {
+        while (true) {
+            String result = JOptionPane.showInputDialog(null, "Number of Digits");
+            if (result == null || result.length() == 0)
+                return 0;
+            
+            String message = "Illegal input value";
+            Integer positions = 0;
+            try {
+                positions = Integer.parseInt(result);
+                if (positions > 0) {
+                    if (positions < varLength)
+                        return positions;
+                    message = "You cannot truncate more than the width of the field.";
+                }
+            }
+            catch (NumberFormatException ex) {
+                ; //No action needed
+            }
+            JOptionPane.showMessageDialog(null, message);
+        }
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -564,10 +587,13 @@ public class GlobalRecodeView extends javax.swing.JDialog {
 
     private void truncateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_truncateButtonActionPerformed
         try {
-            controller.truncate(getSelectedRecode());
-            int rowIndex = this.model.getVariables().indexOf(getSelectedRecode().getVariable());
-            variablesTable.getModel().setValueAt("T", rowIndex, 0);
-            updateValues();
+            int positions = getTruncatePositions(getSelectedRecode().getVariable().getVariableLength());
+            if (positions > 0) {
+                controller.truncate(getSelectedRecode(), positions);
+                int rowIndex = this.model.getVariables().indexOf(getSelectedRecode().getVariable());
+                variablesTable.getModel().setValueAt("T", rowIndex, 0);
+                updateValues();
+            }
  
         }
         catch (ArgusException ex) {

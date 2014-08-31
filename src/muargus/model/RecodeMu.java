@@ -178,9 +178,10 @@ public class RecodeMu {
         if (cmp == null)
             return false;
         
-        return (this.recoded == cmp.recoded)
-                && (this.truncated == cmp.truncated)
-                && (this.codeListFile == null ? cmp.codeListFile == null : this.codeListFile.equals(cmp.codeListFile))
+        return 
+                //(this.recoded == cmp.recoded) &&
+                //(this.truncated == cmp.truncated) &&
+                (this.codeListFile == null ? cmp.codeListFile == null : this.codeListFile.equals(cmp.codeListFile))
                 && (this.grcFile == null ? cmp.grcFile == null : this.grcFile.equals(cmp.grcFile))
                 && (this.grcText == null ? cmp.grcText == null : this.grcText.equals(cmp.grcText))
                 && (this.missing_1_new == null ? cmp.missing_1_new == null : this.missing_1_new.equals(cmp.missing_1_new))
@@ -192,8 +193,8 @@ public class RecodeMu {
     @Override
     public int hashCode() {
         int hash = 3;
-        hash = 41 * hash + Objects.hashCode(this.recoded);
-        hash = 41 * hash + Objects.hashCode(this.truncated);
+        //hash = 41 * hash + Objects.hashCode(this.recoded);
+        //hash = 41 * hash + Objects.hashCode(this.truncated);
         hash = 41 * hash + Objects.hashCode(this.codeListFile);
         hash = 41 * hash + Objects.hashCode(this.grcFile);
         hash = 41 * hash + Objects.hashCode(this.grcText);

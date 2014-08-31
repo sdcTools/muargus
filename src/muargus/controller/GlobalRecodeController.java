@@ -19,6 +19,7 @@ import muargus.extern.dataengine.CMuArgCtrl;
 import muargus.model.GlobalRecode;
 import muargus.model.MetadataMu;
 import muargus.model.RecodeMu;
+import muargus.model.VariableMu;
 import muargus.view.GlobalRecodeView;
 
 /**
@@ -86,10 +87,10 @@ public class GlobalRecodeController {
     /**
      *
      */
-    public void truncate(RecodeMu recode) throws ArgusException {
+    public void truncate(RecodeMu recode, int positions) throws ArgusException {
         CMuArgCtrl c = MuARGUS.getMuArgCtrl();
-        int index = getGlobalRecode().getVariables().indexOf(recode.getVariable());
-        boolean result = c.DoTruncate(index + 1, 1);
+        int index = getIndexOf(recode.getVariable());
+        boolean result = c.DoTruncate(index, positions);
         if (!result) {
             throw new ArgusException("Error during Truncate");
         }
@@ -141,19 +142,22 @@ public class GlobalRecodeController {
 
     }
     
-    
+    private int getIndexOf(VariableMu variable) {
+        //Get the index (1-based) of the variable in the dll
+        return new TableService().getVariables(this.metadata).indexOf(variable) + 1;
+    }
 
     /**
      *
      */
     public void apply(RecodeMu recode) throws ArgusException {
         CMuArgCtrl c = MuARGUS.getMuArgCtrl();
-        int index = getGlobalRecode().getVariables().indexOf(recode.getVariable());
+        int index = getIndexOf(recode.getVariable());
         int[] errorType = new int[]{0};
         int[] errorLine = new int[]{0};
         int[] errorPos = new int[]{0};
         String[] warning = new String[1];
-        boolean result = c.DoRecode(index + 1,
+        boolean result = c.DoRecode(index,
                 recode.getGrcText(),
                 recode.getMissing_1_new(),
                 recode.getMissing_2_new(),
@@ -191,8 +195,8 @@ public class GlobalRecodeController {
     public void undo(RecodeMu recode) throws ArgusException {
         CMuArgCtrl c = MuARGUS.getMuArgCtrl();
         c.SetProgressListener(null);
-        int index = getGlobalRecode().getVariables().indexOf(recode.getVariable());
-        boolean result = c.UndoRecode(index + 1);
+        int index = getIndexOf(recode.getVariable());
+        boolean result = c.UndoRecode(index);
         if (!result) {
             throw new ArgusException("Error while undoing recode");
         }
