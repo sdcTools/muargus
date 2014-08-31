@@ -280,6 +280,7 @@ public class GlobalRecodeView extends javax.swing.JDialog {
             }
         ));
         variablesTable.setDragEnabled(true);
+        variablesTable.getTableHeader().setReorderingAllowed(false);
         variablesScrollPane.setViewportView(variablesTable);
         if (variablesTable.getColumnModel().getColumnCount() > 0) {
             variablesTable.getColumnModel().getColumn(0).setPreferredWidth(6);

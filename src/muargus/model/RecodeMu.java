@@ -41,7 +41,7 @@ public class RecodeMu {
         this.recoded = false;
         this.grcFile = "";
         this.grcText = "";
-        this.codeListFile = variable.getCodeListFile();
+        this.codeListFile = "";
         this.missing_1_new = "";
         this.missing_2_new = "";
         this.missing_1_original = variable.getMissing(0);
