@@ -1,8 +1,6 @@
 niet behandelde opmerkingen/vragen:
 
 Nog te doen:                                                                                                Mee bezig:
-- bij regel 327 van MetadataMu heb ik een check ingebouwd die kijkt of een file wel vindbaar is.            Anne
-  Ik twijfel of dit altijd goed werkt en ik denk dat het beter kan. Anne, wil jij daar naar kijken?     
 
 Release 1:
 
@@ -63,4 +61,6 @@ Gedaan:                                                                         
 -   Een categorical variabele moet minimaal 1 missing hebben. controleren.                                  Jeldrik
     Ook mag de missing niet groter zijn dan het veld. Soms controleer je en soms niet (bijv als je op een andere variabele klikt, meld je wel de fout, maar ga je rustig verder.)
     Alleen missing 2 invullen mag ook niet
+22. detectie of codelijst-file wel bestaat aanpassen                                                          Anne     
+
 

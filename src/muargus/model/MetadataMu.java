@@ -323,21 +323,13 @@ public class MetadataMu {
             }
 
             //Check if codelistFile is valid
-            //Anne: ik weet niet zeker of deze manier altijd goed werkt. Ik denk dat dit anders moet maar ik weet niet precies hoe.
             if (var.isCodelist()) {
-                String file = var.getCodeListFile();
-                String reg = SystemUtils.getRegString("general", "datadir", "");
-                reg = reg.substring(0, reg.lastIndexOf("\\") + 1);
-                if (file.length() > reg.length()) {
-                    if (!file.substring(0, reg.length()).equals(reg)) {
-                        file = reg + file;
-                    }
-                } else {
-                    file = reg + file;
+                File file = new File(var.getCodeListFile());
+                if (!file.isAbsolute()) {
+                    File dir = new File(this.filenames.getMetaFileName()).getParentFile();
+                    file = new File(dir, var.getCodeListFile());
                 }
-                try {
-                    reader = new BufferedReader(new FileReader(file));
-                } catch (FileNotFoundException ex) {
+                if (!file.exists()) {
                     throw new ArgusException("Codelist for variable " + var.getName() + " cannot be found");
                 }
             }
