@@ -127,7 +127,7 @@ public class TableService {
                     workerDone();
                     ArrayList<String> missing = getUnsafeCombinations(metadata);
                     if (!missing.isEmpty())
-                        JOptionPane.showMessageDialog(null, String.join("\n", missing));
+                        JOptionPane.showMessageDialog(null, "\n" + missing);
                 } catch (InterruptedException ex) {
                     logger.log(Level.SEVERE, null, ex);
                 } catch (ExecutionException ex) {

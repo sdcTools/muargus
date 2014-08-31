@@ -11,18 +11,14 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import muargus.MuARGUS;
 import muargus.extern.dataengine.CMuArgCtrl;
-import muargus.extern.dataengine.IProgressListener;
 import muargus.model.GlobalRecode;
 import muargus.model.MetadataMu;
 import muargus.model.RecodeMu;
-import muargus.model.Combinations;
 import muargus.view.GlobalRecodeView;
 
 /**
@@ -185,7 +181,7 @@ public class GlobalRecodeController {
         }
         ArrayList<String> missing = new TableService().getUnsafeCombinations(this.metadata);
         if (!missing.isEmpty()) {
-            JOptionPane.showMessageDialog(null, String.join("\n", missing));
+            JOptionPane.showMessageDialog(null, "\n" + missing);
         }
     }
 
