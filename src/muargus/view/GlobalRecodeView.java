@@ -554,6 +554,7 @@ public class GlobalRecodeView extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void closeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_closeButtonActionPerformed
+        handleSelectionChanged();
         controller.close();
     }//GEN-LAST:event_closeButtonActionPerformed
 

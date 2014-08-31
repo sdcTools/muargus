@@ -5,22 +5,15 @@ Nog te doen:                                                                    
   
 Release 1
 
-5. applyButton:
-    - maak apply disabled na apply, en weer enabled als gebruiker iets aanpast?                             Anne
 6. truncateButton:
     - geef een scherm die vraagt om het aantal getallen voor de truncate
     - check of het aantal getallen voor de truncate geldig is
     - past volgens Anco de VariableMu aan maar ik weet niet precies wat hij hiermee bedoelt
-9. closeButton:
-    - close screen
-    - sla de gegevens op (?)
-    - pas het hoofdscherm aan
 10. code opschonen
 11. javadoc schrijven voor de methodes
 12. - aanmaken van de tabel moet naar update values/tables? (werkt nu: R/T worden gezet bij verandering)
 13. kolommen verwisselen uitzetten (onder properties: tableHeader)
 14. bug: cdl file uit variable wordt ten onrechte ingevuld
-15. wijzigingen in grc tekst bij selectie andere variable: vraag om opslaan
  
 
 
@@ -61,6 +54,7 @@ Gedaan:                                                                         
     - voeg een R toe bij de variabele en zet deze variabela as isRecoded bij VariableMU                    Anne
     - maak de Undo button klikbaar                                                                            Anne
     - nu wordt bij een klik op read een R toegevoegd, maar dit moet pas bij apply                              Anne
+    - maak apply disabled na apply, en weer enabled als gebruiker iets aanpast?                             Anne
 6. truncateButton:
     - is alleen zichtbaar als de variabele truncatable is                                                   Jeldrik
     - voer truncate uit met de dllFunctie doTruncate                                                        Anne
@@ -71,5 +65,10 @@ Gedaan:                                                                         
     - zet recoded/truncated op false                                                                            Anne
 8. warningTextArea
     - laat de foutmeldingen zien uit de dll                                                                 Anne
+9. closeButton:
+    - close screen                                                                                          Anne
+    - sla de gegevens op                                                                                    Anne
+    - pas het hoofdscherm aan                                                                               Anne
 12. Missing values:
     - zet original values non-editable                                                                      Jeldrik
+15. wijzigingen in grc tekst bij selectie andere variable: vraag om opslaan                                 Anne

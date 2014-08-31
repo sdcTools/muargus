@@ -6,9 +6,15 @@
 package muargus.model;
 
 import argus.model.ArgusException;
+import argus.model.DataFilePair;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Arrays;
 import java.util.Objects;
+import java.util.logging.Level;
 import org.apache.commons.lang3.ObjectUtils;
 
 /**
@@ -144,8 +150,27 @@ public class RecodeMu {
     }
 
     public void write(File file) throws ArgusException {
-        //TODO implement;
+        BufferedWriter w;
+        PrintWriter writer = null;
+        try {
+            w = new BufferedWriter(new FileWriter(file));
+            writer = new PrintWriter(w);
+            writer.println(this.grcText);
+            if (this.missing_1_new.length() > 0 || this.missing_2_new.length() > 0) {
+                writer.println(String.format("<MISSING> %s %s", this.missing_1_new, this.missing_2_new));
+            }
+            if (this.codeListFile != null && !this.codeListFile.equals(this.variable.getCodeListFile())) {
+                writer.println(String.format("<CODELIST> \"%s\"", this.codeListFile));
+            }
+          } catch (IOException ex) {
+            throw new ArgusException("Error writing to file. Error message: " + ex.getMessage());
+        }
+        finally {
+            if (writer != null)
+                writer.close();
+        }
     }
+    
     
     @Override
     public boolean equals(Object o) {
