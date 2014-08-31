@@ -1,0 +1,42 @@
+Deadline releas 2: 1 november
+
+Resterende tijd: 9 weken
+
+Opmerking: Ik heb nu grofweg 1 scherm per week geplaatst maar sommige schermen zijn vrij moeilijk 
+    zoals inidividualRiskSpecification en andere zijn weer vrij simpel (ShowTableCollection). Dit zal in 
+    de praktijk betekenen dat we deze planning niet precies gaan opvolgen.
+
+
+Week 1 (1-7 september): 
+    - laatste puntjes op de i zetten
+    - planning maken tot 1 november
+    - javadocs voor de eerste release schrijven
+    - ShowTableCollection
+
+Week 2 (8-14 september):
+    - PRAMSpecification
+
+Week 3 (15-21 september):
+    - IndividualRiskSpecification
+    - HouseholdRiskSpecifcation  --> lijkt veel op individualRiskSpecification
+
+Week 4 (22-28 september): (Jeldrik afwezig)
+    - ModifyNumericalVariables
+
+Week 5 (29 septembet - 5 oktober): (Jeldrik afwezig)
+    - NumericalMicroAggregation
+
+Week 6 (6-12 oktober):
+    - NumericalRanksSwapping
+
+Week 7 (13-19 oktober):
+    - Contents
+    - News
+    - About
+
+Week 8 (20-26 oktober):
+    - SpecifyMetadata (SPSS & free with meta) 
+
+
+Week 9 (27 oktober - 2 november):
+    - kleine puntjes afwerken
