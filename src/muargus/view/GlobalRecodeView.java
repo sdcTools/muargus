@@ -10,6 +10,8 @@ import java.io.File;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.ListSelectionModel;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
@@ -29,6 +31,7 @@ public class GlobalRecodeView extends javax.swing.JDialog {
     GlobalRecode model;
     private MetadataMu metadataMu;  
     private TableModel tableModel;
+    private RecodeMu selectedRecode;
     private RecodeMu selectedRecodeClone;
 
     /**
@@ -63,8 +66,16 @@ public class GlobalRecodeView extends javax.swing.JDialog {
         }
 
         this.updateTable();
+        this.variablesTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+
+            @Override
+            public void valueChanged(ListSelectionEvent lse) {
+                if (!lse.getValueIsAdjusting()) {
+                    handleSelectionChanged();
+                }
+            }
+        });        
         this.variablesTable.getSelectionModel().setSelectionInterval(0, 0);
-        handleSelectionChanged();
         
         this.variablesTable.getColumnModel().getColumn(0).setMinWidth(30);
         this.variablesTable.getColumnModel().getColumn(0).setPreferredWidth(30);
@@ -111,13 +122,13 @@ public class GlobalRecodeView extends javax.swing.JDialog {
     }
     
     private void enableApplyButton() {
-        boolean equals = getSelectedRecode().equals(selectedRecodeClone);
-        this.applyButton.setEnabled(!equals && (this.editTextArea.getText().length() > 0));
+        //boolean equals = getSelectedRecode().equals(selectedRecodeClone);
+        //Only enable apply when there is something in the Grc text box
+        this.applyButton.setEnabled(this.editTextArea.getText().length() > 0);
     }
 
     private RecodeMu getSelectedRecode() {
-        RecodeMu selected = model.getRecodeMus().get(variablesTable.getSelectedRow());
-        return selected;
+        return this.selectedRecode;
     }
 
     private String askForGrcPath() {
@@ -246,16 +257,6 @@ public class GlobalRecodeView extends javax.swing.JDialog {
             }
         ));
         variablesTable.setDragEnabled(true);
-        variablesTable.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                variablesTableMouseClicked(evt);
-            }
-        });
-        variablesTable.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                variablesTableKeyReleased(evt);
-            }
-        });
         variablesScrollPane.setViewportView(variablesTable);
         if (variablesTable.getColumnModel().getColumnCount() > 0) {
             variablesTable.getColumnModel().getColumn(0).setPreferredWidth(6);
@@ -579,6 +580,7 @@ public class GlobalRecodeView extends javax.swing.JDialog {
         if (path != null) {
             try {
                 controller.read(path, this.getSelectedRecode());
+                this.selectedRecodeClone = new RecodeMu(this.selectedRecode);
                 updateValues();
             }
             catch (ArgusException ex) {
@@ -614,30 +616,33 @@ public class GlobalRecodeView extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_undoButtonActionPerformed
 
-    private boolean selectionChanged() {
-        return !getSelectedRecode().getVariable().equals(this.selectedRecodeClone.getVariable());
+    private void saveGrcFile() {
+        JFileChooser fileChooser = new JFileChooser();
+        if (fileChooser.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
+            try {
+                this.selectedRecode.write(fileChooser.getSelectedFile());
+            }
+            catch (ArgusException ex) {
+                JOptionPane.showMessageDialog(null, "Error saving grc file: " + ex.getMessage());
+            }
+        }
     }
+        
     
     private void handleSelectionChanged() {
         if (this.selectedRecodeClone != null) {
-            //TODO: see if there are changes
+            if (!selectedRecodeClone.equals(getSelectedRecode())) {
+                int result = JOptionPane.showConfirmDialog(null, "Recode information has been changed.\nSave recode file?");
+                if (result == JOptionPane.YES_OPTION) {
+                    saveGrcFile();
+                }
+            }
         }
+        this.selectedRecode = model.getRecodeMus().get(variablesTable.getSelectedRow());
         this.selectedRecodeClone = new RecodeMu(getSelectedRecode());
         updateValues();
     }
     
-    private void variablesTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_variablesTableMouseClicked
-        if (selectionChanged()) {
-            handleSelectionChanged();
-        }
-    }//GEN-LAST:event_variablesTableMouseClicked
-
-    private void variablesTableKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_variablesTableKeyReleased
-        if (selectionChanged()) {
-            handleSelectionChanged();
-        }
-    }//GEN-LAST:event_variablesTableKeyReleased
-
     private void editTextAreaCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_editTextAreaCaretUpdate
         getSelectedRecode().setGrcText(this.editTextArea.getText());
         enableApplyButton();

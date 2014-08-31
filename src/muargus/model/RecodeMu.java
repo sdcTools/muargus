@@ -5,6 +5,7 @@
  */
 package muargus.model;
 
+import argus.model.ArgusException;
 import java.io.File;
 import java.util.Arrays;
 import java.util.Objects;
@@ -32,8 +33,8 @@ public class RecodeMu {
         this.variable = variable;
         this.truncated = false;
         this.recoded = false;
-        this.grcFile = null;
-        this.grcText = null;
+        this.grcFile = "";
+        this.grcText = "";
         this.codeListFile = variable.getCodeListFile();
         this.missing_1_new = "";
         this.missing_2_new = "";
@@ -142,6 +143,10 @@ public class RecodeMu {
         return row;
     }
 
+    public void write(File file) throws ArgusException {
+        //TODO implement;
+    }
+    
     @Override
     public boolean equals(Object o) {
         RecodeMu cmp = (RecodeMu)o;
