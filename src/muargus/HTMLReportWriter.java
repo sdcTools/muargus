@@ -52,10 +52,6 @@ public class HTMLReportWriter {
         addChildElement(p, "h2", "Frequency tables used");
         Element table = addChildElement(p, "table");
         Element tr = addChildElement(table, "tr");
-        addChildElement(tr, "th", "Variable");
-        addChildElement(tr, "th", "No of categories (missings)");
-        addChildElement(tr, "th", "Household var");
-        tr = addChildElement(table, "tr");
         addChildElement(tr, "th", "Threshold");
         int size = metadata.getCombinations().getNumberOfColumns() - 2;
         for (int i = 1; i <= size; i++) {
