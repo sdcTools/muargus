@@ -762,12 +762,25 @@ public class SelectCombinationsView extends javax.swing.JDialog {
         }
     }
 
+    private boolean weightVariableExists() {
+        for (VariableMu variable : this.metadataMu.getVariables()) {
+            if (variable.isWeight()) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
     private void setTableRiskModelButtonActionPerformed(java.awt.event.ActionEvent evt) {
         if (model.getTables().size() > 0) {
 
             try { // afvangen geen tabel geselecteerd
                 int index = table.getSelectedRow();
                 TableMu tableMu = model.getTables().get(index);
+                if (!weightVariableExists()) {
+                    JOptionPane.showMessageDialog(this, "No weight variable has been specified, so the risk-model cannot be applied");
+                    return;
+                }
                 tableMu.setRiskModel(!tableMu.isRiskModel());
 
                 if (tableMu.isRiskModel()) {  //The table is added to the risk model
