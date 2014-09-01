@@ -55,15 +55,18 @@ public class MakeProtectedFileController implements PropertyChangeListener {
     /**
      *
      */
-    public void makeFile() {
+    public void makeFile(File file) {
+        this.metadata.getCombinations().getProtectedFile().initSafeMeta(file, this.metadata);
         TableService service = new TableService();
         service.setPropertyChangeListener(this);
         service.makeProtectedFile(this.metadata);
     }
     
     private void saveSafeMeta() {
-        MetadataMu safeMetadata = new TableService().getSafeFileMetadata(this.metadata);
-        File file = new File(this.metadata.getCombinations().getProtectedFile().getNameOfSafeMetaFile());
+        
+        new TableService().fillSafeFileMetadata(this.metadata);
+        MetadataMu safeMetadata = this.metadata.getCombinations().getProtectedFile().getSafeMeta();
+        File file = new File(safeMetadata.getFileNames().getMetaFileName());
         try {
             safeMetadata.write(file);
             this.fileCreated = true;

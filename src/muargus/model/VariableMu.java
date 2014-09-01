@@ -56,11 +56,11 @@ public class VariableMu {
     private String relatedVariableName = null;
     private VariableMu relatedVariable = null;
     
+    private int nOfCodes;
     //Only relevant for variables in safe file:
     //(not included in copy constructor, equals and hashcode)
     private int nOfSuppressions;
     private int bandwidth;
-    private int nOfCodes;
     private double entropy;
     
     

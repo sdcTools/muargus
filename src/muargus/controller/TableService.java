@@ -95,7 +95,7 @@ public class TableService {
             }
         }
         
-        boolean result = c.MakeFileSafe(protectedFile.getNameOfSafeFile(), 
+        boolean result = c.MakeFileSafe(protectedFile.getSafeMeta().getFileNames().getDataFileName(), 
                 protectedFile.isWithPrior(), 
                 protectedFile.isWithEntropy(),
                 protectedFile.getHouseholdType(), 
@@ -366,8 +366,8 @@ public class TableService {
         }
         return delta;
     }
-    public MetadataMu getSafeFileMetadata(MetadataMu metadata) {
-        MetadataMu safeMeta = new MetadataMu(metadata);
+    public void fillSafeFileMetadata(MetadataMu metadata) {
+        MetadataMu safeMeta = metadata.getCombinations().getProtectedFile().getSafeMeta();
         ArrayList<VariableMu> variables = getVariables(metadata);
         int delta = 0;
         for (VariableMu var : safeMeta.getVariables()) {
@@ -375,7 +375,6 @@ public class TableService {
             delta = setSafeFileProperties(varIndex, var, metadata, delta);
         }
         safeMeta.setRecordCount(c.NumberofRecords());
-        return safeMeta;
     }
     
     private String getRecodeCodelistFile(Combinations combinations, VariableMu variable) {

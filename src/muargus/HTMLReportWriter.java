@@ -10,6 +10,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import muargus.extern.dataengine.CMuArgCtrl;
 import muargus.model.MetadataMu;
+import muargus.model.VariableMu;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -87,7 +88,13 @@ public class HTMLReportWriter {
         return null;
     }
 
+    private static MetadataMu getSafeMeta(MetadataMu metadata) {
+        return metadata.getCombinations().getProtectedFile().getSafeMeta();
+    }
+    
     private static Element writeIdVariablesTable(MetadataMu metadata) {
+        MetadataMu safeMeta = getSafeMeta(metadata);
+
         Element p = doc.createElement("p");
         addChildElement(p,"h2", "Identifying variables used");
         Element table = addChildElement(p, "table");
@@ -95,11 +102,30 @@ public class HTMLReportWriter {
         addChildElement(tr, "th", "Variable");
         addChildElement(tr, "th", "No of categories (missings)");
         addChildElement(tr, "th", "Household var");
-        tr = addChildElement(table, "tr");
+        
+        for (VariableMu variable : metadata.getCombinations().getVariablesInTables()) {
+            VariableMu safeVar = getSafeVar(safeMeta, variable.getName());
+            tr = addChildElement(table, "tr");
+            addChildElement(tr, "td", variable.getName());
+            int missings = (safeVar.getMissing(1) != null && !"".equals(safeVar.getMissing(1))) ? 2 : 1;
+            addChildElement(tr, "td", String.format("%d (%d)", safeVar.getnOfCodes(), missings));
+            addChildElement(tr, "td", variable.isHousehold() ? "HHVar" : "");
+        }
+        
         return p;
     }
 
+    private static VariableMu getSafeVar(MetadataMu safeMeta, String varName) {
+        for (VariableMu variable : safeMeta.getVariables()) {
+            if (variable.getName().equals(varName)) {
+                return variable;
+            }
+        }
+        return null;
+    }
+    
     private static Element writeFilesTable(MetadataMu metadata) {
+        MetadataMu safeMeta = getSafeMeta(metadata);
         Element p = doc.createElement("p");
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd ', time ' HH:mm:ss");
         addChildElement(p,"h2", String.format("Safe file created date: %s",
@@ -116,10 +142,10 @@ public class HTMLReportWriter {
         addChildElement(tr, "td", Integer.toString(metadata.getRecordCount()));
         tr = addChildElement(table, "tr");
         addChildElement(tr, "td", "Safe data file");
-        addChildElement(tr, "td", metadata.getCombinations().getProtectedFile().getNameOfSafeFile());
+        addChildElement(tr, "td", safeMeta.getFileNames().getDataFileName());
         tr = addChildElement(table, "tr");
         addChildElement(tr, "td", "Safe meta file");
-        addChildElement(tr, "td", metadata.getCombinations().getProtectedFile().getNameOfSafeMetaFile());
+        addChildElement(tr, "td", safeMeta.getFileNames().getMetaFileName());
         return p;
     }
     
