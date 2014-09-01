@@ -1,6 +1,9 @@
 // TODO: change the open view methods to one method that takes an argument Classname
 package muargus.controller;
 
+import argus.model.ArgusException;
+import argus.model.DataFilePair;
+import argus.view.DialogOpenMicrodata;
 import java.awt.Desktop;
 import java.io.IOException;
 import java.io.Reader;
@@ -10,6 +13,7 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.html.HTMLDocument;
 import javax.swing.text.html.HTMLEditorKit;
@@ -113,6 +117,20 @@ public class MainFrameController {
      *
      */
     public void openMicrodata() {
+        DataFilePair filenames = view.showOpenMicrodataDialog(this.metadata.getFileNames());
+        if (filenames == null)
+            return;
+        
+        MetadataMu newMetadata = new MetadataMu();
+        newMetadata.setFileNames(filenames);
+        try {
+            newMetadata.readMetadata();
+        }
+        catch (ArgusException ex) {
+            JOptionPane.showMessageDialog(null, "Error reading metadata file: " + ex.getMessage());
+        }
+        this.metadata = newMetadata;
+        organise();
     }
 
     /**

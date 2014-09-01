@@ -701,50 +701,17 @@ public class MainFrameView extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void openMicrodataMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openMicrodataMenuItemActionPerformed
- //         controller.openMicrodata(); 
- //         DataFilePair dataFilePair = new DataFilePair(OpenMicrodataModel.getMicrodataPath(), OpenMicrodataModel.getMetadataPath());
-        DialogOpenMicrodata dialog = new DialogOpenMicrodata(MainFrameView.this, true);
-        DataFilePair filenames = controller.getMetadata().getFileNames();
-        dialog.setDataFileNames(filenames.getDataFileName(), filenames.getMetaFileName());
-            if (dialog.showDialog() == DialogOpenMicrodata.APPROVE_OPTION) {
-                DataFilePair dataFilePair = dialog.getMicrodataFilePair();
-                
-                //System.out.println(dataFilePair.getMetaFileName());
-            
-    
-////
-//                //panelTable.setVisible(false);
-//                //TableService.clearTables();
-//                Application.clearMetadatas();
-                 MetadataMu metadata = new MetadataMu();
-                 metadata.setFileNames(dataFilePair);
-                 try {
-                 metadata.readMetadata();
-                 }
-                 catch (ArgusException ex) {
-                     //TODO: handle error
-                     //log it
-                 }
- //               OpenMicrodataModel.setMicrodataPath(dataFilePair.getDataFileName());
- //               OpenMicrodataModel.setMetadataPath(dataFilePair.getMetaFileName());
-                
-  //              if (!metadata.metaFile.trim().equals(""))
-  //              {
-//                    try {
-//                        metadata.readMicroMetadata();
-//// Anco 1.6                        
-////                    } catch (ArgusException | FileNotFoundException ex) {
-//                    } catch (ArgusException  ex) {
-//                        JOptionPane.showMessageDialog(MainFrameView.this, ex.getMessage());}
-//                      catch ( FileNotFoundException ex) {
-//                        JOptionPane.showMessageDialog(MainFrameView.this, ex.getMessage());  
-//                    } 
-   //             }
-                
-                controller.setMetadata(metadata);            
-            }
-        
+          controller.openMicrodata(); 
     }//GEN-LAST:event_openMicrodataMenuItemActionPerformed
+
+    public DataFilePair showOpenMicrodataDialog(DataFilePair filenames) {
+        DialogOpenMicrodata dialog = new DialogOpenMicrodata(this, true);
+        dialog.setDataFileNames(filenames.getDataFileName(), filenames.getMetaFileName());
+        if (dialog.showDialog() == DialogOpenMicrodata.APPROVE_OPTION) {
+                return dialog.getMicrodataFilePair();
+        }
+        return null;
+    }
 
     public void showUnsafeCombinations(Combinations model, int selectedIndex) {
         this.model = model;
