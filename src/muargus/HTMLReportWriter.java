@@ -32,42 +32,79 @@ public class HTMLReportWriter {
             html.appendChild(writeHeader());
             Element body = addChildElement(html, "body");
             addChildElement(body, "h1", "µ-ARGUS Report");
-            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd ', time ' HH:mm:ss");
-            Element p = addChildElement(body,"p");
-            addChildElement(p,"h2", String.format("Safe file created date: %s",
-                   format.format(new Date())));
-            p.appendChild(writeFilesTable(metadata));
-
-            p = addChildElement(body,"p");
-            addChildElement(p,"h2", "Identifying variables used");
-            p.appendChild(writeIdVariablesTable(metadata));
             
-//            el = el.appendChild(doc.createElement("script"));
-//            el.setTextContent("blabla");
-//            el = elm.appendChild(doc.createElement("body"));
-//              
-//            el = el.appendChild(doc.createElement("div"));
-//            el = el.appendChild(doc.createElement("table"));
-//            el = el.appendChild(doc.createElement("tr"));
-//            el.appendChild(doc.createElement("td")).setTextContent("1");
-//            el.appendChild(doc.createElement("td")).setTextContent("2");
+            body.appendChild(writeFilesTable(metadata));
             
-            //el.setTextContent(Integer.toString(this.metadata.getVariables().size()));
+            body.appendChild(writeIdVariablesTable(metadata));
+            
+            //body.appendChild(writeFrequencyTablesTable(metadata));
 
+            //body.appendChild(writeRelatedVariablesTable(metadata));
+
+            //body.appendChild(writeGlobalRecodeTables(metadata));
+
+            //body.appendChild(writeBaseIndividualRisk(metadata));
+
+            //body.appendChild(writeSuppressionTable(metadata));
+
+            //body.appendChild(writeSafeFileMetaTable(metadata));
+
+            //body.appendChild(writeFooter());
+    }
+    
+    private static Element writeFrequencyTablesTable(MetadataMu metadata) {
+        //TODO
+        return null;
+    }
+
+    private static Element writeRelatedVariablesTable(MetadataMu metadata) {
+        //TODO
+        return null;
+    }
+
+    private static Element writeGlobalRecodeTables(MetadataMu metadata) {
+        //TODO
+        return null;
+    }
+
+    private static Element writeBaseIndividualRisk(MetadataMu metadata) {
+        //TODO
+        return null;
+    }
+
+    private static Element writeSuppressionTable(MetadataMu metadata) {
+        //TODO
+        return null;
+    }
+
+    private static Element writeSafeFileMetaTable(MetadataMu metadata) {
+        //TODO
+        return null;
+    }
+
+    private static Element writeFooter() {
+        //TODO
+        return null;
     }
 
     private static Element writeIdVariablesTable(MetadataMu metadata) {
-        Element table = doc.createElement("table");
+        Element p = doc.createElement("p");
+        addChildElement(p,"h2", "Identifying variables used");
+        Element table = addChildElement(p, "table");
         Element tr = addChildElement(table, "tr");
         addChildElement(tr, "th", "Variable");
         addChildElement(tr, "th", "No of categories (missings)");
         addChildElement(tr, "th", "Household var");
-        
-        return table;
+        tr = addChildElement(table, "tr");
+        return p;
     }
 
     private static Element writeFilesTable(MetadataMu metadata) {
-        Element table = doc.createElement("table");
+        Element p = doc.createElement("p");
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd ', time ' HH:mm:ss");
+        addChildElement(p,"h2", String.format("Safe file created date: %s",
+            format.format(new Date())));
+        Element table = addChildElement(p, "table");
         Element tr = addChildElement(table, "tr");
         addChildElement(tr, "td", "Original data file");
         addChildElement(tr, "td", metadata.getFileNames().getDataFileName());
@@ -83,7 +120,7 @@ public class HTMLReportWriter {
         tr = addChildElement(table, "tr");
         addChildElement(tr, "td", "Safe meta file");
         addChildElement(tr, "td", metadata.getCombinations().getProtectedFile().getNameOfSafeMetaFile());
-        return table;
+        return p;
     }
     
     private static Element writeHeader() {
