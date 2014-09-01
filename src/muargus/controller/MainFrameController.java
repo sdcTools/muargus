@@ -41,6 +41,7 @@ public class MainFrameController {
     private MainFrameView view;
 
     private MetadataMu metadata;
+    private HTMLDocument report;
     //SpecifyMetadataController specifyMetadataController;
     //Combinations selectCombinationsModel;
     //GlobalRecode globalRecodeModel;
@@ -75,6 +76,7 @@ public class MainFrameController {
         //this.globalRecodeModel = null;
         //this.makeProtectedFileModel = null;
         this.metadata = new MetadataMu();
+        this.report = null;
     }
 
     public MetadataMu getMetadata() {
@@ -92,7 +94,7 @@ public class MainFrameController {
         }
         
         view.enableAction(Action.SpecifyMetadata, this.metadata != null);
-        view.enableAction(Action.ViewReport, this.metadata != null);
+        view.enableAction(Action.ViewReport, this.report != null);
         view.enableAction(Action.SpecifyCombinations, this.metadata != null
                 && this.metadata.getVariables().size() > 0);
 
@@ -220,6 +222,7 @@ public class MainFrameController {
                 this.view, this.metadata);
         controller.showView();
         if (controller.isFileCreated()) {
+            this.report = createReport();
             viewReport();
         }
     }     
@@ -229,7 +232,7 @@ public class MainFrameController {
      *
      */
     public void viewReport() {
-        ViewReportController viewReportController = new ViewReportController(this.view, createReport());
+        ViewReportController viewReportController = new ViewReportController(this.view, this.report);
         viewReportController.showView();
     }                                                  
     

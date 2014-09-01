@@ -94,8 +94,8 @@ public class GlobalRecodeController {
         if (!result) {
             throw new ArgusException("Error during Truncate");
         }
-        applyRecode();
         recode.setTruncated(true);
+        applyRecode();
     }
 
     private GlobalRecode getGlobalRecode() {
@@ -169,8 +169,8 @@ public class GlobalRecodeController {
             throw new ArgusException(String.format("Error in recoding; line %d, position %d \nNo recoding done",
                     errorLine[0], errorPos[0]));
         }
-        applyRecode();
         recode.setRecoded(true);
+        applyRecode();
         view.showWarning(warning[0]);
 
     }
@@ -200,9 +200,8 @@ public class GlobalRecodeController {
         if (!result) {
             throw new ArgusException("Error while undoing recode");
         }
-        applyRecode();
         recode.setRecoded(false);
         recode.setTruncated(false);
-
+        applyRecode();
     }
 }

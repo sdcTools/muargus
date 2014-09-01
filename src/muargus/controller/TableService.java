@@ -380,7 +380,7 @@ public class TableService {
     
     private String getRecodeCodelistFile(Combinations combinations, VariableMu variable) {
         for (RecodeMu recode : combinations.getGlobalRecode().getRecodeMus()) {
-            if (recode.getVariable().equals(variable))
+            if (recode.getVariable().equals(variable) && (recode.isRecoded() || recode.isTruncated()))
                 return recode.getCodeListFile();
         }
         return "";
