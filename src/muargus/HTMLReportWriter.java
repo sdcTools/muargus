@@ -152,7 +152,6 @@ public class HTMLReportWriter {
         } else {
             addChildElement(p, "h2", "No global recodings have been applied");
         }
-
         return p;
     }
 
