@@ -318,7 +318,7 @@ public class MetadataMu {
             }
             
             //Check if the missing value is not empty when the variable is categorical
-            if (var.isCategorical() && var.getMissing(0).equals("")) {
+            if (var.isCategorical() &&  var.getMissing(0).equals("")) {
                 throw new ArgusException("The first missing value for variable " + var.getName() + " can not be empty");
             }
 
