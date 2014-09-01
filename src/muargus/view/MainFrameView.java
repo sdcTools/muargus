@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
@@ -396,6 +397,11 @@ public class MainFrameView extends javax.swing.JFrame {
         unsafeCombinationsTable.setShowHorizontalLines(false);
         unsafeCombinationsTable.setShowVerticalLines(false);
         unsafeCombinationsTable.getTableHeader().setReorderingAllowed(false);
+        unsafeCombinationsTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                unsafeCombinationsTableMouseClicked(evt);
+            }
+        });
         unsafeCombinationsScrollPane.setViewportView(unsafeCombinationsTable);
 
         javax.swing.GroupLayout unsafeCombinationsPanelLayout = new javax.swing.GroupLayout(unsafeCombinationsPanel);
@@ -695,52 +701,19 @@ public class MainFrameView extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void openMicrodataMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openMicrodataMenuItemActionPerformed
- //         controller.openMicrodata(); 
- //         DataFilePair dataFilePair = new DataFilePair(OpenMicrodataModel.getMicrodataPath(), OpenMicrodataModel.getMetadataPath());
-        DialogOpenMicrodata dialog = new DialogOpenMicrodata(MainFrameView.this, true);
-        DataFilePair filenames = controller.getMetadata().getFileNames();
-        dialog.setDataFileNames(filenames.getDataFileName(), filenames.getMetaFileName());
-            if (dialog.showDialog() == DialogOpenMicrodata.APPROVE_OPTION) {
-                DataFilePair dataFilePair = dialog.getMicrodataFilePair();
-                
-                //System.out.println(dataFilePair.getMetaFileName());
-            
-    
-////
-//                //panelTable.setVisible(false);
-//                //TableService.clearTables();
-//                Application.clearMetadatas();
-                 MetadataMu metadata = new MetadataMu();
-                 metadata.setFileNames(dataFilePair);
-                 try {
-                 metadata.readMetadata();
-                 }
-                 catch (ArgusException ex) {
-                     //TODO: handle error
-                     //log it
-                 }
- //               OpenMicrodataModel.setMicrodataPath(dataFilePair.getDataFileName());
- //               OpenMicrodataModel.setMetadataPath(dataFilePair.getMetaFileName());
-                
-  //              if (!metadata.metaFile.trim().equals(""))
-  //              {
-//                    try {
-//                        metadata.readMicroMetadata();
-//// Anco 1.6                        
-////                    } catch (ArgusException | FileNotFoundException ex) {
-//                    } catch (ArgusException  ex) {
-//                        JOptionPane.showMessageDialog(MainFrameView.this, ex.getMessage());}
-//                      catch ( FileNotFoundException ex) {
-//                        JOptionPane.showMessageDialog(MainFrameView.this, ex.getMessage());  
-//                    } 
-   //             }
-                
-                controller.setMetadata(metadata);            
-            }
-        
+          controller.openMicrodata(); 
     }//GEN-LAST:event_openMicrodataMenuItemActionPerformed
 
-    public void showUnsafeCombinations(Combinations model) {
+    public DataFilePair showOpenMicrodataDialog(DataFilePair filenames) {
+        DialogOpenMicrodata dialog = new DialogOpenMicrodata(this, true);
+        dialog.setDataFileNames(filenames.getDataFileName(), filenames.getMetaFileName());
+        if (dialog.showDialog() == DialogOpenMicrodata.APPROVE_OPTION) {
+                return dialog.getMicrodataFilePair();
+        }
+        return null;
+    }
+
+    public void showUnsafeCombinations(Combinations model, int selectedIndex) {
         this.model = model;
         ArrayList<String> columnNames = new ArrayList<>();
         columnNames.add("Variable");
@@ -769,7 +742,7 @@ public class MainFrameView extends javax.swing.JFrame {
             }
         });
         
-        this.unsafeCombinationsTable.getSelectionModel().setSelectionInterval(0,0);
+        this.unsafeCombinationsTable.getSelectionModel().setSelectionInterval(selectedIndex, selectedIndex);
     }
     
     private void selectionChanged(javax.swing.event.ListSelectionEvent evt) {
@@ -838,7 +811,7 @@ public class MainFrameView extends javax.swing.JFrame {
     }//GEN-LAST:event_showTableCollectionMenuItemActionPerformed
 
     private void globalRecodeMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_globalRecodeMenuItemActionPerformed
-        controller.globalRecode();
+        controller.globalRecode(this.unsafeCombinationsTable.getSelectionModel().getMinSelectionIndex());
     }//GEN-LAST:event_globalRecodeMenuItemActionPerformed
 
     private void pramSpecificationMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pramSpecificationMenuItemActionPerformed
@@ -897,6 +870,13 @@ public class MainFrameView extends javax.swing.JFrame {
     private void manualMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_manualMenuItemActionPerformed
         controller.manual();
     }//GEN-LAST:event_manualMenuItemActionPerformed
+
+    private void unsafeCombinationsTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_unsafeCombinationsTableMouseClicked
+        // TODO add your handling code here:
+        if (evt.getClickCount() == 2) {
+            controller.globalRecode(this.unsafeCombinationsTable.getSelectionModel().getMinSelectionIndex());
+        }
+    }//GEN-LAST:event_unsafeCombinationsTableMouseClicked
      
     
     /**
