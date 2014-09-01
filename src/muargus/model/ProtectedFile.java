@@ -4,6 +4,7 @@
  */
 package muargus.model;
 
+import argus.model.DataFilePair;
 import java.io.File;
 import java.util.ArrayList;
 import org.apache.commons.io.FilenameUtils;
@@ -34,8 +35,8 @@ public class ProtectedFile {
     private boolean withPrior;
     private boolean withEntropy;
     private boolean randomizeOutput;
-    private boolean printBHR; 
-    private String nameOfSafeFile;
+    private boolean printBHR;
+    private MetadataMu safeMeta;
     
     private int selectedRow = 0;
 
@@ -117,23 +118,30 @@ public class ProtectedFile {
         this.riskModel = riskModel;
     }
 
-    public String getNameOfSafeFile() {
-        return nameOfSafeFile;
+    public void initSafeMeta(File file, MetadataMu meta) {
+        this.safeMeta = new MetadataMu(meta);
+        String path = getNameOfSafeFile(file);
+        DataFilePair pair = new DataFilePair(path, FilenameUtils.removeExtension(path) + ".rds");
+        this.safeMeta.setFileNames(pair);
     }
-
-    public String getNameOfSafeMetaFile() {
-        return FilenameUtils.removeExtension(nameOfSafeFile) + ".rds";
+    
+    public MetadataMu getSafeMeta() {
+        return this.safeMeta;
     }
+    
+//    public String getNameOfSafeFile() {
+//        return nameOfSafeFile;
+//    }
+//
+//    public String getNameOfSafeMetaFile() {
+//        return FilenameUtils.removeExtension(nameOfSafeFile) + ".rds";
+//    }
 
-    public void setNameOfSafeFile(File file) {
-        try {
-            if(file.getPath().contains(".")){
-                this.nameOfSafeFile = file.getPath();
-            } else {
-                this.nameOfSafeFile = file.getPath() + ".saf";
-            }
-        } catch (Exception e){
-            
+    private String getNameOfSafeFile(File file) {
+        if(file.getName().contains(".")){
+            return file.getPath();
+        } else {
+            return file.getPath() + ".saf";
         }
     }
 

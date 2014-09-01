@@ -52,10 +52,18 @@ public class HTMLReportWriter {
         addChildElement(p, "h2", "Frequency tables used");
         Element table = addChildElement(p, "table");
         Element tr = addChildElement(table, "tr");
-        addChildElement(tr, "th", "Variable");
-        addChildElement(tr, "th", "No of categories (missings)");
-        addChildElement(tr, "th", "Household var");
-        tr = addChildElement(table, "tr");
+        addChildElement(tr, "th", "Threshold");
+        int size = metadata.getCombinations().getNumberOfColumns() - 2;
+        for (int i = 1; i <= size; i++) {
+            addChildElement(tr, "th", Integer.toString(i));
+        }
+        for(TableMu t: metadata.getCombinations().getTables()){
+            tr = addChildElement(table, "tr");
+            addChildElement(tr, "td", Integer.toString(t.getThreshold()));
+            for(VariableMu v: t.getVariables()){
+                addChildElement(tr, "td", v.getName());
+            }
+        }
         return p;
     }
 
@@ -112,26 +120,44 @@ public class HTMLReportWriter {
         return null;
     }
 
+    private static MetadataMu getSafeMeta(MetadataMu metadata) {
+        return metadata.getCombinations().getProtectedFile().getSafeMeta();
+    }
+    
     private static Element writeIdVariablesTable(MetadataMu metadata) {
+        MetadataMu safeMeta = getSafeMeta(metadata);
+
         Element p = doc.createElement("p");
         addChildElement(p, "h2", "Frequency tables used");
         Element table = addChildElement(p, "table");
         Element tr = addChildElement(table, "tr");
-        addChildElement(tr, "th", "Threshold");
-        for (int i = 1; i <= metadata.getCombinations().getNumberOfColumns() - 2; i++) {
-            addChildElement(tr, "th", Integer.toString(i));
-        }
-        for (TableMu t : metadata.getCombinations().getTables()) {
+        addChildElement(tr, "th", "Variable");
+        addChildElement(tr, "th", "No of categories (missings)");
+        addChildElement(tr, "th", "Household var");
+        
+        for (VariableMu variable : metadata.getCombinations().getVariablesInTables()) {
+            VariableMu safeVar = getSafeVar(safeMeta, variable.getName());
             tr = addChildElement(table, "tr");
-            addChildElement(tr, "td", Integer.toString(t.getThreshold()));
-            for (VariableMu v : t.getVariables()) {
-                addChildElement(tr, "td", v.getName());
-            }
+            addChildElement(tr, "td", variable.getName());
+            int missings = (safeVar.getMissing(1) != null && !"".equals(safeVar.getMissing(1))) ? 2 : 1;
+            addChildElement(tr, "td", String.format("%d (%d)", safeVar.getnOfCodes(), missings));
+            addChildElement(tr, "td", variable.isHousehold() ? "HHVar" : "");
         }
+        
         return p;
     }
 
+    private static VariableMu getSafeVar(MetadataMu safeMeta, String varName) {
+        for (VariableMu variable : safeMeta.getVariables()) {
+            if (variable.getName().equals(varName)) {
+                return variable;
+            }
+        }
+        return null;
+    }
+    
     private static Element writeFilesTable(MetadataMu metadata) {
+        MetadataMu safeMeta = getSafeMeta(metadata);
         Element p = doc.createElement("p");
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd ', time ' HH:mm:ss");
         addChildElement(p, "h2", String.format("Safe file created date: %s",
@@ -148,10 +174,10 @@ public class HTMLReportWriter {
         addChildElement(tr, "td", Integer.toString(metadata.getRecordCount()));
         tr = addChildElement(table, "tr");
         addChildElement(tr, "td", "Safe data file");
-        addChildElement(tr, "td", metadata.getCombinations().getProtectedFile().getNameOfSafeFile());
+        addChildElement(tr, "td", safeMeta.getFileNames().getDataFileName());
         tr = addChildElement(table, "tr");
         addChildElement(tr, "td", "Safe meta file");
-        addChildElement(tr, "td", metadata.getCombinations().getProtectedFile().getNameOfSafeMetaFile());
+        addChildElement(tr, "td", safeMeta.getFileNames().getMetaFileName());
         return p;
     }
 

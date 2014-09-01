@@ -225,6 +225,7 @@ public class MainFrameController {
             this.report = createReport();
             viewReport();
         }
+        organise();
     }     
    
 
