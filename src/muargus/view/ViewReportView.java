@@ -4,6 +4,8 @@
  */
 package muargus.view;
 
+import java.awt.print.PrinterException;
+import javax.swing.JOptionPane;
 import javax.swing.text.html.HTMLDocument;
 import muargus.controller.ViewReportController;
 
@@ -106,7 +108,12 @@ public class ViewReportView extends javax.swing.JDialog {
     }//GEN-LAST:event_closeButtonActionPerformed
 
     private void printButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_printButtonActionPerformed
-        controller.print();
+        try {
+            htmlPane.print();
+        }
+        catch (PrinterException ex) {
+            JOptionPane.showMessageDialog(null, "Error printing report: " + ex.getMessage());
+        }
     }//GEN-LAST:event_printButtonActionPerformed
 
     /**

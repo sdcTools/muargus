@@ -4,6 +4,7 @@
  */
 package muargus.controller;
 
+import java.awt.print.PrinterJob;
 import javax.swing.text.html.HTMLDocument;
 import muargus.view.ViewReportView;
 
@@ -37,12 +38,5 @@ public class ViewReportController {
     public void close() {                                         
         view.setVisible(false);
     }                                        
-
-    /**
-     * 
-     */
-    public void print() {                                         
-        // TODO add your handling code here:
-    } 
     
 }

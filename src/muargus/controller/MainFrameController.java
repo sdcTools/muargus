@@ -327,7 +327,7 @@ public class MainFrameController {
         }
     }
 
-    public void clearDataBeforeSelectCombinations() {
+    private void clearDataBeforeSelectCombinations() {
         
                 //this.selectCombinationsModel = null;
          for(int i = this.view.getUnsafeCombinationsTable().getColumnCount() -1; i >= 0; i--){
