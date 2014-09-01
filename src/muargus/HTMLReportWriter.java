@@ -39,11 +39,11 @@ public class HTMLReportWriter {
 
         body.appendChild(writeFrequencyTablesTable(metadata));
 
-            //body.appendChild(writeRelatedVariablesTable(metadata));
+        body.appendChild(writeRelatedVariablesTable(metadata));
             //body.appendChild(writeGlobalRecodeTables(metadata));
-            //body.appendChild(writeBaseIndividualRisk(metadata));
-            //body.appendChild(writeSuppressionTable(metadata));
-            //body.appendChild(writeSafeFileMetaTable(metadata));
+        //body.appendChild(writeBaseIndividualRisk(metadata));
+        //body.appendChild(writeSuppressionTable(metadata));
+        //body.appendChild(writeSafeFileMetaTable(metadata));
         //body.appendChild(writeFooter());
     }
 
@@ -60,8 +60,31 @@ public class HTMLReportWriter {
     }
 
     private static Element writeRelatedVariablesTable(MetadataMu metadata) {
-        //TODO
-        return null;
+        boolean isRelated = false;
+        for (VariableMu v : metadata.getVariables()) {
+            if (v.isRelated()) {
+                isRelated = true;
+            }
+        }
+        Element p = doc.createElement("p");
+
+        if (isRelated) {
+            addChildElement(p, "h2", "Related Variables");
+            Element table = addChildElement(p, "table");
+            Element tr = addChildElement(table, "tr");
+            addChildElement(tr, "th", "Variable");
+            addChildElement(tr, "th", "Related to");
+
+            for (VariableMu v : metadata.getVariables()) {
+                if (v.isRelated()) {
+                    tr = addChildElement(table, "tr");
+                    addChildElement(tr, "td", v.getName());
+                    addChildElement(tr, "td", v.getRelatedVariable().getName());
+                }
+            }
+        }
+        return p;
+
     }
 
     private static Element writeGlobalRecodeTables(MetadataMu metadata) {
@@ -91,18 +114,17 @@ public class HTMLReportWriter {
 
     private static Element writeIdVariablesTable(MetadataMu metadata) {
         Element p = doc.createElement("p");
-        addChildElement(p, "h2", "Identifying variables used");
+        addChildElement(p, "h2", "Frequency tables used");
         Element table = addChildElement(p, "table");
         Element tr = addChildElement(table, "tr");
         addChildElement(tr, "th", "Threshold");
-        int size = metadata.getCombinations().getNumberOfColumns() - 2;
-        for (int i = 1; i <= size; i++) {
+        for (int i = 1; i <= metadata.getCombinations().getNumberOfColumns() - 2; i++) {
             addChildElement(tr, "th", Integer.toString(i));
         }
-        for(TableMu t: metadata.getCombinations().getTables()){
+        for (TableMu t : metadata.getCombinations().getTables()) {
             tr = addChildElement(table, "tr");
             addChildElement(tr, "td", Integer.toString(t.getThreshold()));
-            for(VariableMu v: t.getVariables()){
+            for (VariableMu v : t.getVariables()) {
                 addChildElement(tr, "td", v.getName());
             }
         }
