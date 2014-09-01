@@ -24,6 +24,7 @@ import org.apache.commons.lang3.ObjectUtils;
 public class RecodeMu {
 
     private boolean truncated;
+    private String positionsTruncated;
     private boolean recoded;
     private String grcText;
     private final VariableMu variable;
@@ -135,6 +136,14 @@ public class RecodeMu {
         return this.missing_2_original;
     }
 
+    public String getPositionsTruncated() {
+        return positionsTruncated;
+    }
+
+    public void setPositionsTruncated(String positionsTruncated) {
+        this.positionsTruncated = positionsTruncated;
+    }
+    
     public String[] getTableRow() {
         String[] row = new String[2];
         if (this.isRecoded()) {

@@ -146,7 +146,7 @@ public class HTMLReportWriter {
                 } else if (r.isTruncated()) {
                     addChildElement(p, "h2", r.getVariable().getName());
                     //TODO: add number of digits that are truncated
-                    addChildElement(p, "h2", "" + " digit has been truncated");
+                    addChildElement(p, "h2", r.getPositionsTruncated() + " digit has been truncated");
                 }
             }
         } else {

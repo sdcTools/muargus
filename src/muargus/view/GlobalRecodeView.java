@@ -593,6 +593,7 @@ public class GlobalRecodeView extends javax.swing.JDialog {
             int positions = getTruncatePositions(getSelectedRecode().getVariable().getVariableLength());
             if (positions > 0) {
                 controller.truncate(getSelectedRecode(), positions);
+                getSelectedRecode().setPositionsTruncated(Integer.toString(positions));
                 int rowIndex = this.model.getVariables().indexOf(getSelectedRecode().getVariable());
                 variablesTable.getModel().setValueAt("T", rowIndex, 0);
                 updateValues();
