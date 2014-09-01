@@ -1,17 +1,18 @@
 niet behandelde opmerkingen/vragen:
-                                                                                                                
+       
 Nog te doen:                                                                                                    Mee bezig:
 
 Release 1
 
 10. makeFileButton:
-- html-output: suppression overview tabke                                                                       Jeldrik
-- html-output: record description safe file table
-- html-output: footer                                                                                          
-
-
+- html-output: suppression overview table (suppressions en entropy uit dll toevoegen) 
+- writeBaseIndividualRisk aanpassen zodat de titel aanpast als er een household variabele is                                                                     
+- otherModifications toevoegen (gebeurd wanneer de optie change into sequence number wordt gekozen)
+    --> write records in random order zou ik hier ook bij stoppen. (net als het volgende puntje)
+- Variables removed: hhIdentifier --> weergeven aan het eind als gekozen wordt voor remove from safe file
 
 Release 2+
+- writeBaseIndividualRisk: de risk bepalen en toevoegen (geeft nu alleen maar 0.00000) 
 
 
 Behandelde opmerkingen/vragen:                                                                                      Antwoord:
@@ -63,6 +64,8 @@ Gedaan:                                                                         
 -   maak metadatafile                                                                                               Jeldrik                                                                                     Anne
 -   html-output: global recode tables                                                                               Jeldrik
 - html-output: base individual risk                                                                             Jeldrik
+- html-output: record description safe file table
+- html-output: footer    
 11. writeRecordRamdomOrderCheckBox
     - alleen mogelijk bij fixed format                                                                              Jeldrik
 12. bug dll make safe file freeformat                                                                               Anne

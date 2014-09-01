@@ -12,8 +12,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import muargus.controller.TableService;
 import muargus.extern.dataengine.CMuArgCtrl;
 import muargus.model.MetadataMu;
 import muargus.model.RecodeMu;
@@ -49,10 +48,12 @@ public class HTMLReportWriter {
 
         body.appendChild(writeRelatedVariablesTable(metadata));
         body.appendChild(writeGlobalRecodeTables(metadata));
-        body.appendChild(writeBaseIndividualRisk(metadata));
-        //body.appendChild(writeSuppressionTable(metadata));
-        //body.appendChild(writeSafeFileMetaTable(metadata));
-        //body.appendChild(writeFooter());
+        if (metadata.getCombinations().isRiskModel()) {
+            body.appendChild(writeBaseIndividualRisk(metadata));
+        }
+        body.appendChild(writeSuppressionTable(metadata));
+        body.appendChild(writeSafeFileMetaTable(metadata));
+        body.appendChild(writeFooter());
     }
 
     private static Element writeFrequencyTablesTable(MetadataMu metadata) {
@@ -105,60 +106,60 @@ public class HTMLReportWriter {
 
     private static Element writeGlobalRecodeTables(MetadataMu metadata) {
         boolean recoded = false;
-        try{
-        for (RecodeMu r : metadata.getCombinations().getGlobalRecode().getRecodeMus()) {
-            if (r.isRecoded() || r.isTruncated()) {
-                recoded = true;
-            }
-        }
-
-        Element p = doc.createElement("p");
-        if (recoded) {
-            addChildElement(p, "h2", "GlobalRecodings that have been applied:");
+        try {
             for (RecodeMu r : metadata.getCombinations().getGlobalRecode().getRecodeMus()) {
-                if (r.isRecoded()) {
-                    addChildElement(p, "h2", r.getVariable().getName());
-                    Element table = addChildElement(p, "table");
-                    Element tr = addChildElement(table, "tr");
-                    addChildElement(tr, "th", "Code");
-                    addChildElement(tr, "th", "Categories");
-                    try {
-                        File file = new File(r.getGrcFile());
-                        BufferedReader reader = new BufferedReader(new FileReader(file));
-                        Tokenizer tokenizer = new Tokenizer(reader);
-                        String line;
-                        while ((line = tokenizer.nextLine()) != null && !line.substring(0, 1).equals("<")) {
-                            tr = addChildElement(table, "tr");
-                            addChildElement(tr, "td", line.substring(0, line.indexOf(":")));
-                            addChildElement(tr, "td", line.substring(line.indexOf(":") + 1));
-                        }
-                        tr = addChildElement(table, "tr");
-                        addChildElement(tr, "td", r.getMissing_1_new());
-                        addChildElement(tr, "td", "Missing 1");
-                        if (!r.getMissing_2_new().isEmpty()) {
-                            tr = addChildElement(table, "tr");
-                            addChildElement(tr, "td", r.getMissing_2_new());
-                            addChildElement(tr, "td", "Missing 2");
-                        }
-
-                    } catch (FileNotFoundException ex) {
-                        //Logger.getLogger(HTMLReportWriter.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                } else if (r.isTruncated()) {
-                    addChildElement(p, "h2", r.getVariable().getName());
-                    addChildElement(p, "h2", r.getPositionsTruncated() + " digit has been truncated");
+                if (r.isRecoded() || r.isTruncated()) {
+                    recoded = true;
                 }
             }
-        } else {
-            addChildElement(p, "h2", "No global recodings have been applied");
-        }
-        return p;
-        } catch(Exception e){
+
+            Element p = doc.createElement("p");
+            if (recoded) {
+                addChildElement(p, "h2", "GlobalRecodings that have been applied:");
+                for (RecodeMu r : metadata.getCombinations().getGlobalRecode().getRecodeMus()) {
+                    if (r.isRecoded()) {
+                        addChildElement(p, "h2", r.getVariable().getName());
+                        Element table = addChildElement(p, "table");
+                        Element tr = addChildElement(table, "tr");
+                        addChildElement(tr, "th", "Code");
+                        addChildElement(tr, "th", "Categories");
+                        try {
+                            File file = new File(r.getGrcFile());
+                            BufferedReader reader = new BufferedReader(new FileReader(file));
+                            Tokenizer tokenizer = new Tokenizer(reader);
+                            String line;
+                            while ((line = tokenizer.nextLine()) != null && !line.substring(0, 1).equals("<")) {
+                                tr = addChildElement(table, "tr");
+                                addChildElement(tr, "td", line.substring(0, line.indexOf(":")));
+                                addChildElement(tr, "td", line.substring(line.indexOf(":") + 1));
+                            }
+                            tr = addChildElement(table, "tr");
+                            addChildElement(tr, "td", r.getMissing_1_new());
+                            addChildElement(tr, "td", "Missing 1");
+                            if (!r.getMissing_2_new().isEmpty()) {
+                                tr = addChildElement(table, "tr");
+                                addChildElement(tr, "td", r.getMissing_2_new());
+                                addChildElement(tr, "td", "Missing 2");
+                            }
+
+                        } catch (FileNotFoundException ex) {
+                            //Logger.getLogger(HTMLReportWriter.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    } else if (r.isTruncated()) {
+                        addChildElement(p, "h2", r.getVariable().getName());
+                        addChildElement(p, "h2", r.getPositionsTruncated() + " digit has been truncated");
+                    }
+                }
+            } else {
+                addChildElement(p, "h2", "No global recodings have been applied");
+            }
+            return p;
+        } catch (Exception e) {
             Element p = doc.createElement("p");
             addChildElement(p, "h2", "No global recodings have been applied");
             return p;
         }
-        
+
     }
 
     private static Element writeBaseIndividualRisk(MetadataMu metadata) {
@@ -167,10 +168,10 @@ public class HTMLReportWriter {
         for (TableMu t : metadata.getCombinations().getTables()) {
             if (t.isRiskModel()) {
                 String table = "Table: ";
-                for(VariableMu v: t.getVariables()){
+                for (VariableMu v : t.getVariables()) {
                     table = table + v.getName() + " x ";
                 }
-                table = table.substring(0, table.length()-3);
+                table = table.substring(0, table.length() - 3);
                 addChildElement(p, "h2", table);
                 addChildElement(p, "h2", "Ind. risk: 0.000000");
                 addChildElement(p, "h2", "Ind. re-ident rate: 0.000000");
@@ -181,18 +182,66 @@ public class HTMLReportWriter {
     }
 
     private static Element writeSuppressionTable(MetadataMu metadata) {
-        //TODO
-        return null;
+        MetadataMu safeMeta = getSafeMeta(metadata);
+
+        Element p = doc.createElement("p");
+        addChildElement(p, "h2", "Suppression overview ");
+        Element table = addChildElement(p, "table");
+        Element tr = addChildElement(table, "tr");
+        addChildElement(tr, "th", "Name");
+        if (metadata.getCombinations().getProtectedFile().isWithEntropy()) {
+            addChildElement(tr, "th", "Entropy");
+        } else {
+            addChildElement(tr, "th", "Suppression Weight");
+        }
+        addChildElement(tr, "th", "Number of suppressions");
+
+        for (VariableMu v : safeMeta.getVariables()) {
+            tr = addChildElement(table, "tr");
+            addChildElement(tr, "td", v.getName());
+            if (metadata.getCombinations().getProtectedFile().isWithEntropy()) {
+                //TODO: pas aan zodat hier de entropy komt
+                addChildElement(tr, "td", "");
+            } else {
+                addChildElement(tr, "td", Integer.toString(v.getSuppressweight()));
+            }
+            //TODO: pas aan zodat hier het aantal suppressions komt ipv 0
+            addChildElement(tr, "td", "0");
+        }
+        tr = addChildElement(table, "tr");
+        addChildElement(tr, "td", "Total");
+        addChildElement(tr, "td", "");
+        //TODO: pas aan zodat hier het totaal aantal suppressions komt
+        addChildElement(tr, "td", "");
+
+        return p;
     }
 
     private static Element writeSafeFileMetaTable(MetadataMu metadata) {
-        //TODO
-        return null;
+        MetadataMu safeMeta = getSafeMeta(metadata);
+
+        Element p = doc.createElement("p");
+        addChildElement(p, "h2", "Record description safe file");
+        Element table = addChildElement(p, "table");
+        Element tr = addChildElement(table, "tr");
+        addChildElement(tr, "th", "Name");
+        addChildElement(tr, "th", "Starting position");
+        addChildElement(tr, "th", "Length");
+        addChildElement(tr, "th", "Decimal");
+        for (VariableMu v : safeMeta.getVariables()) {
+            tr = addChildElement(table, "tr");
+            addChildElement(tr, "td", v.getName());
+            addChildElement(tr, "td", Integer.toString(v.getStartingPosition()));
+            addChildElement(tr, "td", Integer.toString(v.getVariableLength()));
+            addChildElement(tr, "td", Integer.toString(v.getDecimals()));
+        }
+        return p;
     }
 
     private static Element writeFooter() {
-        //TODO
-        return null;
+        Element p = doc.createElement("p");
+        addChildElement(p, "h2", "μ-ARGUS version: 4.2.0 (build: 1)");
+        return p;
     }
 
     private static MetadataMu getSafeMeta(MetadataMu metadata) {
