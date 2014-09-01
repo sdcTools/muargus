@@ -49,7 +49,7 @@ public class HTMLReportWriter {
 
         body.appendChild(writeRelatedVariablesTable(metadata));
         body.appendChild(writeGlobalRecodeTables(metadata));
-        //body.appendChild(writeBaseIndividualRisk(metadata));
+        body.appendChild(writeBaseIndividualRisk(metadata));
         //body.appendChild(writeSuppressionTable(metadata));
         //body.appendChild(writeSafeFileMetaTable(metadata));
         //body.appendChild(writeFooter());
@@ -105,6 +105,7 @@ public class HTMLReportWriter {
 
     private static Element writeGlobalRecodeTables(MetadataMu metadata) {
         boolean recoded = false;
+        try{
         for (RecodeMu r : metadata.getCombinations().getGlobalRecode().getRecodeMus()) {
             if (r.isRecoded() || r.isTruncated()) {
                 recoded = true;
@@ -152,11 +153,31 @@ public class HTMLReportWriter {
             addChildElement(p, "h2", "No global recodings have been applied");
         }
         return p;
+        } catch(Exception e){
+            Element p = doc.createElement("p");
+            addChildElement(p, "h2", "No global recodings have been applied");
+            return p;
+        }
+        
     }
 
     private static Element writeBaseIndividualRisk(MetadataMu metadata) {
-        //TODO
-        return null;
+        Element p = doc.createElement("p");
+        addChildElement(p, "h2", "Base Individual Risk has been applied:");
+        for (TableMu t : metadata.getCombinations().getTables()) {
+            if (t.isRiskModel()) {
+                String table = "Table: ";
+                for(VariableMu v: t.getVariables()){
+                    table = table + v.getName() + " x ";
+                }
+                table = table.substring(0, table.length()-3);
+                addChildElement(p, "h2", table);
+                addChildElement(p, "h2", "Ind. risk: 0.000000");
+                addChildElement(p, "h2", "Ind. re-ident rate: 0.000000");
+                addChildElement(p, "h2", "");
+            }
+        }
+        return p;
     }
 
     private static Element writeSuppressionTable(MetadataMu metadata) {

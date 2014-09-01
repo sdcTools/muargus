@@ -5,8 +5,7 @@ Nog te doen:                                                                    
 Release 1
 
 10. makeFileButton:
-- html-output: base individual risk                                                                             Jeldrik
-- html-output: suppression overview tabke
+- html-output: suppression overview tabke                                                                       Jeldrik
 - html-output: record description safe file table
 - html-output: footer                                                                                          
 
@@ -63,6 +62,7 @@ Gedaan:                                                                         
 -   html-output: related variables table                                                                            Jeldrik
 -   maak metadatafile                                                                                               Jeldrik                                                                                     Anne
 -   html-output: global recode tables                                                                               Jeldrik
+- html-output: base individual risk                                                                             Jeldrik
 11. writeRecordRamdomOrderCheckBox
     - alleen mogelijk bij fixed format                                                                              Jeldrik
 12. bug dll make safe file freeformat                                                                               Anne
