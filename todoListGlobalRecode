@@ -2,18 +2,22 @@ niet behandelde opmerkingen/vragen:
 
 
 Nog te doen:                                                                                                Mee bezig:
-  
+bug:  Als ik Region hercodeer, krijg ik netjes de nieuwe codes met bijbehorende labels. 
+      Als ik “undo” klik, dan krijg ik wel de juiste codes, maar niet de juiste labels. 
+ 
 Release 1
 
-10. code opschonen
-11. javadoc schrijven voor de methodes
+9.  - als het scherm gesloten wordt (dus ook via het rode kruisje), dan moet in de mainframe dezelfde   
+      variabele geselecteerd worden, als geselecteerd was in de globalRecodeView
 12. - aanmaken van de tabel moet naar update values/tables? (werkt nu: R/T worden gezet bij verandering)
+
 
  
 
 
 Release 2+
-
+10. code opschonen
+11. javadoc schrijven voor de methodes
    
 
 Behandelde opmerkingen/vragen:                                                                              Antwoord:

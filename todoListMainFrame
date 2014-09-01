@@ -4,13 +4,13 @@ niet behandelde opmerkingen/vragen:
 Nog te doen:                                                                                                Mee bezig:
 
 Release 1
+3. als op variabele dubbel wordt geklikt opent global recode en is de variabele geselecteerd die veranderd is.
 
 -
 
 Release 2+
 1. code opschonen
 2. javadoc schrijven voor de methodes
-3. als op variabele dubbel wordt geklikt opent global recode
 4. kolommen klikken en sorteren (RowSorter: http://docs.oracle.com/javase/7/docs/api/javax/swing/RowSorter.html)
 7. kolommen met cijfers rechts uitlijnen
 
