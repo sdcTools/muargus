@@ -5,7 +5,6 @@ Nog te doen:                                                                    
 Release 1
 
 10. makeFileButton:
-- html-output: related variables table                                                                          Jeldrik
 - html-output: global recode tables
 - html-output: base individual risk
 - html-output: suppression overview tabke
@@ -62,6 +61,7 @@ Gedaan:                                                                         
 -   open view report die de ouput weergeeft
 -   html-output: frequency tables table                                                                             Jeldrik
 -   html-output: identifying variables table                                                                      Anne
+-   html-output: related variables table                                                                          Jeldrik
 -   maak metadatafile                                                                                               Anne
 11. writeRecordRamdomOrderCheckBox
     - alleen mogelijk bij fixed format                                                                              Jeldrik
