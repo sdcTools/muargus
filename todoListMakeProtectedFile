@@ -6,8 +6,7 @@ Release 1
 
 10. makeFileButton:
 - html-output: identifying variables table                                                                      Anne
-- html-output: frequency tables table                                                                           Jeldrik
-- html-output: related variables table
+- html-output: related variables table                                                                          Jeldrik
 - html-output: global recode tables
 - html-output: base individual risk
 - html-output: suppression overview tabke
@@ -62,6 +61,7 @@ Gedaan:                                                                         
 -   zet een filter op de filechooser                                                                                Jeldrik
 -   zorg voor een default datatype                                                                                  Jeldrik
 -   open view report die de ouput weergeeft
+-   html-output: frequency tables table                                                                             Jeldrik
 -   maak metadatafile                                                                                               Anne
 11. writeRecordRamdomOrderCheckBox
     - alleen mogelijk bij fixed format                                                                              Jeldrik
