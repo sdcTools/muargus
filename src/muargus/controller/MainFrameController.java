@@ -143,7 +143,7 @@ public class MainFrameController {
                 this.view, this.metadata);
         controller.showView();
         //this.selectCombinationsModel = controller.getModel(); // wat doet dit? De model is toch hier al aangemaakt?
-        view.showUnsafeCombinations(this.metadata.getCombinations());
+        view.showUnsafeCombinations(this.metadata.getCombinations(), 0);
         organise();
     }
 
@@ -157,15 +157,16 @@ public class MainFrameController {
     /**
      *
      */
-    public void globalRecode() {
+    public void globalRecode(int selectedVariableIndex) {
         if (this.metadata.getCombinations().getGlobalRecode() == null) {
             this.metadata.getCombinations().createGlobalRecode();
         }
 
         GlobalRecodeController controller = new GlobalRecodeController(
                 this.view, this.metadata);
-        controller.showView();
-        view.showUnsafeCombinations(this.metadata.getCombinations());    
+        controller.showView(selectedVariableIndex);
+        view.showUnsafeCombinations(this.metadata.getCombinations(), 
+                controller.getSelectedVariableIndex());    
     }                                                    
 
     /**

@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
@@ -396,6 +397,11 @@ public class MainFrameView extends javax.swing.JFrame {
         unsafeCombinationsTable.setShowHorizontalLines(false);
         unsafeCombinationsTable.setShowVerticalLines(false);
         unsafeCombinationsTable.getTableHeader().setReorderingAllowed(false);
+        unsafeCombinationsTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                unsafeCombinationsTableMouseClicked(evt);
+            }
+        });
         unsafeCombinationsScrollPane.setViewportView(unsafeCombinationsTable);
 
         javax.swing.GroupLayout unsafeCombinationsPanelLayout = new javax.swing.GroupLayout(unsafeCombinationsPanel);
@@ -740,7 +746,7 @@ public class MainFrameView extends javax.swing.JFrame {
         
     }//GEN-LAST:event_openMicrodataMenuItemActionPerformed
 
-    public void showUnsafeCombinations(Combinations model) {
+    public void showUnsafeCombinations(Combinations model, int selectedIndex) {
         this.model = model;
         ArrayList<String> columnNames = new ArrayList<>();
         columnNames.add("Variable");
@@ -769,7 +775,7 @@ public class MainFrameView extends javax.swing.JFrame {
             }
         });
         
-        this.unsafeCombinationsTable.getSelectionModel().setSelectionInterval(0,0);
+        this.unsafeCombinationsTable.getSelectionModel().setSelectionInterval(selectedIndex, selectedIndex);
     }
     
     private void selectionChanged(javax.swing.event.ListSelectionEvent evt) {
@@ -838,7 +844,7 @@ public class MainFrameView extends javax.swing.JFrame {
     }//GEN-LAST:event_showTableCollectionMenuItemActionPerformed
 
     private void globalRecodeMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_globalRecodeMenuItemActionPerformed
-        controller.globalRecode();
+        controller.globalRecode(this.unsafeCombinationsTable.getSelectionModel().getMinSelectionIndex());
     }//GEN-LAST:event_globalRecodeMenuItemActionPerformed
 
     private void pramSpecificationMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pramSpecificationMenuItemActionPerformed
@@ -897,6 +903,13 @@ public class MainFrameView extends javax.swing.JFrame {
     private void manualMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_manualMenuItemActionPerformed
         controller.manual();
     }//GEN-LAST:event_manualMenuItemActionPerformed
+
+    private void unsafeCombinationsTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_unsafeCombinationsTableMouseClicked
+        // TODO add your handling code here:
+        if (evt.getClickCount() == 2) {
+            controller.globalRecode(this.unsafeCombinationsTable.getSelectionModel().getMinSelectionIndex());
+        }
+    }//GEN-LAST:event_unsafeCombinationsTableMouseClicked
      
     
     /**

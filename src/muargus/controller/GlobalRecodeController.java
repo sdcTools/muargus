@@ -49,7 +49,8 @@ public class GlobalRecodeController {
         //this.view = view;
     }
 
-    public void showView() {
+    public void showView(int selectedRowIndex) {
+        this.view.setSelectedIndex(selectedRowIndex);
         this.view.setVisible(true);
     }
 
@@ -63,6 +64,9 @@ public class GlobalRecodeController {
         view.setVisible(false);
     }
 
+    public int getSelectedVariableIndex() {
+        return view.getSelectedIndex();
+    }
     /**
      *
      */

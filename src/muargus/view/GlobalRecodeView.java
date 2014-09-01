@@ -75,7 +75,6 @@ public class GlobalRecodeView extends javax.swing.JDialog {
                 }
             }
         });        
-        this.variablesTable.getSelectionModel().setSelectionInterval(0, 0);
         
         this.variablesTable.getColumnModel().getColumn(0).setMinWidth(30);
         this.variablesTable.getColumnModel().getColumn(0).setPreferredWidth(30);
@@ -109,6 +108,9 @@ public class GlobalRecodeView extends javax.swing.JDialog {
         //this.variablesTable.getSelectionModel().setSelectionInterval(variablesTable.getSelectedRow(), variablesTable.getSelectedRow());
 
         RecodeMu selected = this.getSelectedRecode();
+        if (selected == null) {
+            return;
+        }
         this.missing_1_originalTextField.setText(selected.getMissing_1_original());
         this.missing_2_originalTextField.setText(selected.getMissing_2_original());
         this.missing_1_newTextField.setText(selected.getMissing_1_new());
@@ -619,6 +621,14 @@ public class GlobalRecodeView extends javax.swing.JDialog {
 
     public void showWarning(String warning) {
         warningTextArea.setText(warning);
+    }
+    
+    public void setSelectedIndex(int index) {
+        this.variablesTable.getSelectionModel().setSelectionInterval(index, index);
+    }
+    
+    public int getSelectedIndex() {
+        return this.variablesTable.getSelectionModel().getMaxSelectionIndex();
     }
     
     private void applyButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_applyButtonActionPerformed
