@@ -5,10 +5,18 @@
  */
 package muargus;
 
+import argus.utils.Tokenizer;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import muargus.extern.dataengine.CMuArgCtrl;
 import muargus.model.MetadataMu;
+import muargus.model.RecodeMu;
 import muargus.model.TableMu;
 import muargus.model.VariableMu;
 import org.w3c.dom.Document;
@@ -40,7 +48,7 @@ public class HTMLReportWriter {
         body.appendChild(writeFrequencyTablesTable(metadata));
 
         body.appendChild(writeRelatedVariablesTable(metadata));
-            //body.appendChild(writeGlobalRecodeTables(metadata));
+        body.appendChild(writeGlobalRecodeTables(metadata));
         //body.appendChild(writeBaseIndividualRisk(metadata));
         //body.appendChild(writeSuppressionTable(metadata));
         //body.appendChild(writeSafeFileMetaTable(metadata));
@@ -57,10 +65,10 @@ public class HTMLReportWriter {
         for (int i = 1; i <= size; i++) {
             addChildElement(tr, "th", Integer.toString(i));
         }
-        for(TableMu t: metadata.getCombinations().getTables()){
+        for (TableMu t : metadata.getCombinations().getTables()) {
             tr = addChildElement(table, "tr");
             addChildElement(tr, "td", Integer.toString(t.getThreshold()));
-            for(VariableMu v: t.getVariables()){
+            for (VariableMu v : t.getVariables()) {
                 addChildElement(tr, "td", v.getName());
             }
         }
@@ -96,8 +104,54 @@ public class HTMLReportWriter {
     }
 
     private static Element writeGlobalRecodeTables(MetadataMu metadata) {
-        //TODO
-        return null;
+        boolean recoded = false;
+        for (RecodeMu r : metadata.getCombinations().getGlobalRecode().getRecodeMus()) {
+            if (r.isRecoded() || r.isTruncated()) {
+                recoded = true;
+            }
+        }
+
+        Element p = doc.createElement("p");
+        if (recoded) {
+            addChildElement(p, "h2", "GlobalRecodings that have been applied:");
+            for (RecodeMu r : metadata.getCombinations().getGlobalRecode().getRecodeMus()) {
+                if (r.isRecoded()) {
+                    addChildElement(p, "h2", r.getVariable().getName());
+                    Element table = addChildElement(p, "table");
+                    Element tr = addChildElement(table, "tr");
+                    addChildElement(tr, "th", "Code");
+                    addChildElement(tr, "th", "Categories");
+                    try {
+                        File file = new File(r.getGrcFile());
+                        BufferedReader reader = new BufferedReader(new FileReader(file));
+                        Tokenizer tokenizer = new Tokenizer(reader);
+                        String line;
+                        while ((line = tokenizer.nextLine()) != null && !line.substring(0, 1).equals("<")) {
+                            tr = addChildElement(table, "tr");
+                            addChildElement(tr, "td", line.substring(0, line.indexOf(":")));
+                            addChildElement(tr, "td", line.substring(line.indexOf(":") + 1));
+                        }
+                        tr = addChildElement(table, "tr");
+                        addChildElement(tr, "td", r.getMissing_1_new());
+                        addChildElement(tr, "td", "Missing 1");
+                        if (!r.getMissing_2_new().isEmpty()) {
+                            tr = addChildElement(table, "tr");
+                            addChildElement(tr, "td", r.getMissing_2_new());
+                            addChildElement(tr, "td", "Missing 2");
+                        }
+
+                    } catch (FileNotFoundException ex) {
+                        //Logger.getLogger(HTMLReportWriter.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                } else if (r.isTruncated()) {
+                    addChildElement(p, "h2", r.getVariable().getName());
+                    addChildElement(p, "h2", r.getPositionsTruncated() + " digit has been truncated");
+                }
+            }
+        } else {
+            addChildElement(p, "h2", "No global recodings have been applied");
+        }
+        return p;
     }
 
     private static Element writeBaseIndividualRisk(MetadataMu metadata) {
@@ -123,18 +177,18 @@ public class HTMLReportWriter {
     private static MetadataMu getSafeMeta(MetadataMu metadata) {
         return metadata.getCombinations().getProtectedFile().getSafeMeta();
     }
-    
+
     private static Element writeIdVariablesTable(MetadataMu metadata) {
         MetadataMu safeMeta = getSafeMeta(metadata);
 
         Element p = doc.createElement("p");
-        addChildElement(p, "h2", "Frequency tables used");
+        addChildElement(p, "h2", "Identifying variables used");
         Element table = addChildElement(p, "table");
         Element tr = addChildElement(table, "tr");
         addChildElement(tr, "th", "Variable");
         addChildElement(tr, "th", "No of categories (missings)");
         addChildElement(tr, "th", "Household var");
-        
+
         for (VariableMu variable : metadata.getCombinations().getVariablesInTables()) {
             VariableMu safeVar = getSafeVar(safeMeta, variable.getName());
             tr = addChildElement(table, "tr");
@@ -143,7 +197,7 @@ public class HTMLReportWriter {
             addChildElement(tr, "td", String.format("%d (%d)", safeVar.getnOfCodes(), missings));
             addChildElement(tr, "td", variable.isHousehold() ? "HHVar" : "");
         }
-        
+
         return p;
     }
 
@@ -155,7 +209,7 @@ public class HTMLReportWriter {
         }
         return null;
     }
-    
+
     private static Element writeFilesTable(MetadataMu metadata) {
         MetadataMu safeMeta = getSafeMeta(metadata);
         Element p = doc.createElement("p");
