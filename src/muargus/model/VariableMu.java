@@ -73,6 +73,7 @@ public class VariableMu {
     public VariableMu(String name) {
         this();
         this.name = name;
+        Arrays.fill(missing, "");
     }
 
         public VariableMu(VariableMu variable) {

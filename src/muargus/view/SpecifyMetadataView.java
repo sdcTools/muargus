@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.JComponent;
+import javax.swing.JDialog;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import muargus.VariableNameCellRenderer;
 import muargus.model.MetadataMu;
@@ -33,6 +34,7 @@ public class SpecifyMetadataView extends javax.swing.JDialog {
     private MetadataMu metadataMu;
     private String separatorTemp;
     private int dataFileTypeTemp;
+    private VariableMu dummyVar = new VariableMu();
     
     private DefaultListModel variableListModel;
     
@@ -56,6 +58,9 @@ public class SpecifyMetadataView extends javax.swing.JDialog {
     public void setMetadataMu(MetadataMu metadataMu) {
         this.metadataMu = metadataMu;
         makeVariables();
+        if (metadataMu.getVariables().size() == 0) {
+            enableAllControls(false);
+        }
         variablesList.requestFocus();
     }
 
@@ -206,7 +211,7 @@ public class SpecifyMetadataView extends javax.swing.JDialog {
     
     private VariableMu getSelectedVariable(){
         VariableMu selected = (VariableMu) variablesList.getSelectedValue();
-        return selected;
+        return selected == null ? dummyVar : selected;
     }
 
     /**
@@ -494,7 +499,6 @@ public class SpecifyMetadataView extends javax.swing.JDialog {
             }
         });
 
-        categoricalCheckBox.setSelected(true);
         categoricalCheckBox.setText("Categorical");
         categoricalCheckBox.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
@@ -706,7 +710,7 @@ public class SpecifyMetadataView extends javax.swing.JDialog {
 
         relatedToPanel.setText("Related to:");
 
-        relatedToComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        relatedToComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "--none--" }));
         relatedToComboBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 relatedToComboBoxActionPerformed(evt);
@@ -820,13 +824,11 @@ public class SpecifyMetadataView extends javax.swing.JDialog {
     }//GEN-LAST:event_variablesComboBoxActionPerformed
 
     private void newButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newButtonActionPerformed
-        int index = variablesList.getSelectedIndex();
-        if (index == -1) {
-            index = 0;
-        }
+        int index = variablesList.getSelectedIndex() + 1;
         
         VariableMu variable = new VariableMu("New");
         variableListModel.add(index, variable);
+        enableAllControls(true);
         variablesList.setSelectedIndex(index);
         updateValues();
     }//GEN-LAST:event_newButtonActionPerformed
@@ -835,14 +837,23 @@ public class SpecifyMetadataView extends javax.swing.JDialog {
         int index = variablesList.getSelectedIndex();
         // set the selection to an item that still exists after deletion
         // if not done before removal the remove button will loose focus
-        if (index == variableListModel.getSize()- 1) {
+        if (index == variableListModel.getSize() - 1) {
             variablesList.setSelectedIndex(index - 1);
         } else {
             variablesList.setSelectedIndex(index + 1);
         }
-        variableListModel.remove(index);
+        try {
+            variableListModel.remove(index);
+        }
+        catch (Exception ex) {}
         calculateButtonStates();
-        updateValues();
+        if (variablesList.getSelectedIndex() > -1) {
+            updateValues();
+        }
+        else {
+            enableAllControls(false);
+        }
+        
     }//GEN-LAST:event_deleteButtonActionPerformed
 
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
@@ -919,8 +930,18 @@ public class SpecifyMetadataView extends javax.swing.JDialog {
         enableControls(this.optionsArgusPanel, enable);
     }//GEN-LAST:event_categoricalCheckBoxStateChanged
 
+    private void enableAllControls(boolean enable) {
+        categoricalCheckBox.setSelected(false);
+        enableControls(this.attributesPanel, enable);
+        enableControls(this.categoriesPanel, enable);
+        enableControls(this.optionsArgusPanel, enable);
+        enableControls(this.variableTypePanel, enable);
+        enableControls(this.relatedToPanel, enable);
+        enableControls(this.relatedToComboBox, enable);
+    }
+    
     private void enableControls(Component control, boolean enable) {
-        if (!(control instanceof JComponent))
+        if (!(control instanceof JComponent) && !(control instanceof JDialog))
             return;
         control.setEnabled(enable);
         if (control instanceof Container)
@@ -945,6 +966,10 @@ public class SpecifyMetadataView extends javax.swing.JDialog {
     private void variablesListValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_variablesListValueChanged
         if(!evt.getValueIsAdjusting()){
             VariableMu value = (VariableMu) variablesList.getSelectedValue();
+            if (value == null) {
+                enableAllControls(false);
+                return;
+            }
             nameTextField.setText(value.getName());
             calculateButtonStates();
             updateValues();
