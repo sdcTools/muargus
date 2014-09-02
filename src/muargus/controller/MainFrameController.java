@@ -108,7 +108,7 @@ public class MainFrameController {
                     && this.metadata.getCombinations().getTables().size() > 0;
         }
         view.enableAction(Action.GlobalRecode, tablesCalculated);
-        //view.enableAction(Action.ShowTableCollection, tablesCalculated);  //Release 2
+        view.enableAction(Action.ShowTableCollection, tablesCalculated);  //Release 2
         view.enableAction(Action.MakeProtectedFile, tablesCalculated);
         
     }
@@ -169,11 +169,18 @@ public class MainFrameController {
      *
      */
     public void showTableCollection() {
-
+        if (this.metadata.getCombinations().getShowTableCollection() == null) {
+            this.metadata.getCombinations().createShowTableCollection();
+        }
+        
+        ShowTableCollectionController controller = new ShowTableCollectionController(
+                this.view, this.metadata);
+        controller.showView();
     }
 
     /**
      *
+     * @param selectedVariableIndex
      */
     public void globalRecode(int selectedVariableIndex) {
         if (this.metadata.getCombinations().getGlobalRecode() == null) {
