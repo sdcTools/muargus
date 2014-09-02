@@ -4,7 +4,6 @@
  */
 package muargus.model;
 
-import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -16,7 +15,7 @@ public class TableMu {
     
     private boolean riskModel = false;
     private int threshold = 1;
-    private ArrayList<VariableMu> variables = new ArrayList<>();
+    private final ArrayList<VariableMu> variables = new ArrayList<>();
     
     public TableMu(){
         
