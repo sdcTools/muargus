@@ -9,8 +9,7 @@ bug:  De nieuwe missing values van het bestand AGE3.GRC worden gezien als 1 miss
  
 Release 1
 
-9.  - als het scherm gesloten wordt (dus ook via het rode kruisje), dan moet in de mainframe dezelfde   
-      variabele geselecteerd worden, als geselecteerd was in de globalRecodeView
+
 12. - aanmaken van de tabel moet naar update values/tables? (werkt nu: R/T worden gezet bij verandering)
 
 
@@ -72,6 +71,8 @@ Gedaan:                                                                         
     - close screen                                                                                          Anne
     - sla de gegevens op                                                                                    Anne
     - pas het hoofdscherm aan                                                                               Anne
+    - als het scherm gesloten wordt (dus ook via het rode kruisje), dan moet in de mainframe dezelfde   
+      variabele geselecteerd worden, als geselecteerd was in de globalRecodeView
 12. Missing values:
     - zet original values non-editable                                                                      Jeldrik
 13. kolommen verwisselen uitzetten (onder properties: tableHeader)                                          Anne
