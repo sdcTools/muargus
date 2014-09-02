@@ -21,10 +21,12 @@ public class ShowTableCollection {
     private ArrayList<ArrayList<TableMu>> tablesForEachDimension;
     private final String[] columnames;
     private String[][] data;
+    private String[][] subdata;
     private int dimensions;
 
     public ShowTableCollection() {
-        this.columnames = new String[]{"# unsafe cells", "Var 1", "Var 2", "Var 3", "Var 4", "Var 5"};
+        this.columnames = new String[]{"# unsafe cells", "Var 1", "Var 2", "Var 3", 
+            "Var 4", "Var 5", "Var 6", "Var 7", "Var 8", "Var 9", "Var 10"};
         this.originalTables = new ArrayList<>();
         this.tablesForEachDimension = new ArrayList<>();
         this.allTables = new ArrayList<>();
@@ -55,7 +57,7 @@ public class ShowTableCollection {
     }
 
     public ArrayList<TableMu> getAllTables() {
-        if(this.allTables.isEmpty()){
+        if (this.allTables.isEmpty()) {
             this.allTables.addAll(this.tablesForEachDimension.get(0));
             this.allTables.addAll(this.tablesForEachDimension.get(1));
             this.allTables.addAll(this.tablesForEachDimension.get(2));
@@ -74,7 +76,7 @@ public class ShowTableCollection {
 
     public String[] getColumnames() {
         String[] columnNames = new String[dimensions + 1];
-        for(int i = 0; i< columnNames.length; i++){
+        for (int i = 0; i < columnNames.length; i++) {
             columnNames[i] = this.columnames[i];
         }
         return columnNames;
@@ -83,17 +85,45 @@ public class ShowTableCollection {
     public String[][] getData() {
         this.getAllTables();
         if (this.data == null) {
-            this.data = new String[this.allTables.size()][6];
-
-            for (int i = 0; i < allTables.size(); i++) {
-                TableMu t = allTables.get(i);
-                for (int j = 0; j < t.getVariables().size(); j++) {
-                    this.data[i][j + 1] = t.getVariables().get(j).getName();
-                }
-                this.data[i][0] = Integer.toString(i + 1);
-            }
+            this.assignData();
         }
+
+        if (this.selectedVariable.getName().equals("all")) {
+            return this.data;
+        } else {
+            this.assignData();
+        }
+
         return this.data;
+    }
+
+    public void assignData() {
+        ArrayList<TableMu> tables = new ArrayList<>();
+        if (!this.selectedVariable.getName().equals("all")) {
+            for (TableMu t : allTables) {
+                boolean add = false;
+                for (VariableMu v : t.getVariables()) {
+                    if (v.equals(this.selectedVariable)) {
+                        add = true;
+                    }
+                }
+                if(add){
+                    tables.add(t);
+                }
+            }
+        } else {
+            tables = allTables;
+        }
+        this.data = new String[tables.size()][this.dimensions + 1];
+
+        for (int i = 0; i < tables.size(); i++) {
+            TableMu t = tables.get(i);
+            for (int j = 0; j < t.getVariables().size(); j++) {
+                this.data[i][j + 1] = t.getVariables().get(j).getName();
+            }
+            this.data[i][0] = Integer.toString(i + 1);
+        }
+        System.out.println(this.data.length);
     }
 
     public ArrayList<ArrayList<TableMu>> getTablesForEachDimension() {
@@ -140,7 +170,7 @@ public class ShowTableCollection {
             this.tablesForEachDimension.add(dimension_2);
             this.dimensions = 2;
             this.addDimension_3();
-        } 
+        }
     }
 
     public void addDimension_3() {
@@ -170,9 +200,9 @@ public class ShowTableCollection {
             this.tablesForEachDimension.add(dimension_3);
             this.dimensions = 3;
             this.addDimension_4();
-        } 
+        }
     }
-    
+
     public void addDimension_4() {
         ArrayList<VariableMu> variables = new ArrayList<>();
         for (TableMu t : originalTables) {
@@ -200,6 +230,6 @@ public class ShowTableCollection {
             this.tablesForEachDimension.add(dimension_4);
             this.dimensions = 3;
             //this.addDimension_4();
-        } 
+        }
     }
 }

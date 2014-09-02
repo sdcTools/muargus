@@ -41,18 +41,20 @@ public class ShowTableCollectionView extends javax.swing.JDialog {
         this.controller =  controller;
         this.setLocationRelativeTo(null);
         this.table.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        this.selectVariableComboBox.setRenderer(new VariableNameCellRenderer());
     }
     
     public void setMetadataMu(MetadataMu metadataMu) {
         this.metadataMu = metadataMu;
         this.model = this.metadataMu.getCombinations().getShowTableCollection();
         this.initializeData();
-        this.selectVariableComboBox.setRenderer(new VariableNameCellRenderer());
     }
     
     public void initializeData(){
-        variableListModel = new DefaultComboBoxModel<>(); 
-        variableListModel.addElement(new VariableMu("all"));
+        variableListModel = new DefaultComboBoxModel<>();
+        VariableMu all = new VariableMu("all");
+        variableListModel.addElement(all);
+        this.model.setSelectedVariable(all);
         for (VariableMu variable : model.getVariables()) {
             variableListModel.addElement(variable);
         }
@@ -118,6 +120,11 @@ public class ShowTableCollectionView extends javax.swing.JDialog {
         selectVariableLabel.setText("Select variable:");
 
         selectVariableComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        selectVariableComboBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                selectVariableComboBoxActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -162,6 +169,11 @@ public class ShowTableCollectionView extends javax.swing.JDialog {
     private void showAllTablesCheckBoxStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_showAllTablesCheckBoxStateChanged
         this.model.setShowAllTables(!this.model.isShowAllTables());
     }//GEN-LAST:event_showAllTablesCheckBoxStateChanged
+
+    private void selectVariableComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectVariableComboBoxActionPerformed
+        this.model.setSelectedVariable((VariableMu) this.selectVariableComboBox.getSelectedItem());
+        this.updateTable();
+    }//GEN-LAST:event_selectVariableComboBoxActionPerformed
 
 //    /**
 //     * @param args the command line arguments
