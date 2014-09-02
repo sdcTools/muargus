@@ -295,9 +295,13 @@ public class MetadataMu {
                 if (length <= 0) {
                     throw new ArgusException("Length of variable " + var.getName() + " must be > 0");
                 }
+                int start = var.getStartingPosition();
+                //Checkstart if startPosition > 0
+                if (start <= 0) {
+                    throw new ArgusException("Start position of variable " + var.getName() + " must be > 0");
+                }
 
                 //Check for overlap of variables in fixed file
-                int start = var.getStartingPosition();
                 int end = start + length;
                 for (VariableMu var2 : variables) {
                     int start2 = var2.getStartingPosition();

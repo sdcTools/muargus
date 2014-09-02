@@ -273,7 +273,8 @@ public class TableService {
                 lineNumbers,
                 varIndexOut);
         if (!result) {
-            throw new ArgusException("Error in ExploreFile");
+            throw new ArgusException(String.format("Error in ExploreFile:\ncode %d, line %d, variable %s",
+                errorCodes[0], lineNumbers[0]+1, getVariables(metadata).get(varIndexOut[0]).getName()));
         }
         metadata.setRecordCount(c.NumberofRecords());
 

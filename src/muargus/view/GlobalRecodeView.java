@@ -530,7 +530,7 @@ public class GlobalRecodeView extends javax.swing.JDialog {
                 .addComponent(midSectionPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(warningScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 214, Short.MAX_VALUE)
+                    .addComponent(warningScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 290, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(codelistRecodeTextField)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -634,6 +634,7 @@ public class GlobalRecodeView extends javax.swing.JDialog {
     
     private void applyButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_applyButtonActionPerformed
         try {
+            fixGrcReturns(getSelectedRecode());
             controller.apply(getSelectedRecode());
             int rowIndex = this.model.getVariables().indexOf(getSelectedRecode().getVariable());
             variablesTable.getModel().setValueAt("R", rowIndex, 0);
@@ -655,6 +656,10 @@ public class GlobalRecodeView extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_undoButtonActionPerformed
 
+    private void fixGrcReturns(RecodeMu recode) {
+        recode.setGrcText(recode.getGrcText().replace("\r\n", "\n").replace("\n", "\r\n"));
+    }
+    
     private void saveGrcFile() {
         JFileChooser fileChooser = new JFileChooser();
         if (fileChooser.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
