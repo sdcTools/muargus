@@ -5,7 +5,7 @@ Nog te doen:                                                                    
 Release 1
 
 10. makeFileButton:
-- writeBaseIndividualRisk aanpassen zodat de titel aanpast als er een household variabele is                                                                     
+- writeBaseIndividualRisk aanpassen zodat de titel aanpast als er een household variabele is                    Anne                                                               
 - otherModifications toevoegen (gebeurd wanneer de optie change into sequence number wordt gekozen)
     --> write records in random order zou ik hier ook bij stoppen. (net als het volgende puntje)
 - Variables removed: hhIdentifier --> weergeven aan het eind als gekozen wordt voor remove from safe file
