@@ -164,7 +164,8 @@ public class HTMLReportWriter {
 
     private static Element writeBaseIndividualRisk(MetadataMu metadata) {
         Element p = doc.createElement("p");
-        addChildElement(p, "h2", "Base Individual Risk has been applied:");
+        addChildElement(p, "h2", String.format("Base %s Risk has been applied:",
+                metadata.isHouseholdData() ? "Household" : "Individual"));
         for (TableMu t : metadata.getCombinations().getTables()) {
             if (t.isRiskModel()) {
                 String table = "Table: ";
@@ -173,8 +174,14 @@ public class HTMLReportWriter {
                 }
                 table = table.substring(0, table.length() - 3);
                 addChildElement(p, "h2", table);
-                addChildElement(p, "h2", "Ind. risk: 0.000000");
-                addChildElement(p, "h2", "Ind. re-ident rate: 0.000000");
+                if (metadata.isHouseholdData()) {
+                    addChildElement(p, "h2", "Household risk: 0.000000");
+                }
+                else {
+                    addChildElement(p, "h2", "Ind. risk: 0.000000");
+                    addChildElement(p, "h2", "Ind. re-ident rate: 0.000000");
+                }
+                    
                 addChildElement(p, "h2", "");
             }
         }
