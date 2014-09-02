@@ -5,7 +5,6 @@ Nog te doen:                                                                    
 Release 1
 
 10. makeFileButton:
-- html-output: suppression overview table (suppressions en entropy uit dll toevoegen) 
 - writeBaseIndividualRisk aanpassen zodat de titel aanpast als er een household variabele is                                                                     
 - otherModifications toevoegen (gebeurd wanneer de optie change into sequence number wordt gekozen)
     --> write records in random order zou ik hier ook bij stoppen. (net als het volgende puntje)
@@ -66,6 +65,7 @@ Gedaan:                                                                         
 - html-output: base individual risk                                                                             Jeldrik
 - html-output: record description safe file table
 - html-output: footer    
+- html-output: suppression overview table (suppressions en entropy uit dll toevoegen)                           Anne
 11. writeRecordRamdomOrderCheckBox
     - alleen mogelijk bij fixed format                                                                              Jeldrik
 12. bug dll make safe file freeformat                                                                               Anne

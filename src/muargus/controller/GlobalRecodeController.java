@@ -110,9 +110,9 @@ public class GlobalRecodeController {
      *
      */
     public void read(String path, RecodeMu recode) throws ArgusException {
-        recode.setMissing_1_new(null);
-        recode.setMissing_2_new(null);
-        recode.setCodeListFile(null);
+        recode.setMissing_1_new("");
+        recode.setMissing_2_new("");
+        recode.setCodeListFile("");
         File file = new File(path);
         try {
             BufferedReader reader = new BufferedReader(new FileReader(file));

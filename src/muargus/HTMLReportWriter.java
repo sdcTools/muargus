@@ -196,23 +196,22 @@ public class HTMLReportWriter {
         }
         addChildElement(tr, "th", "Number of suppressions");
 
+        int suppressions = 0;
         for (VariableMu v : safeMeta.getVariables()) {
             tr = addChildElement(table, "tr");
             addChildElement(tr, "td", v.getName());
             if (metadata.getCombinations().getProtectedFile().isWithEntropy()) {
-                //TODO: pas aan zodat hier de entropy komt
-                addChildElement(tr, "td", "");
+                addChildElement(tr, "td", String.format("%.2f", v.getEntropy()));
             } else {
                 addChildElement(tr, "td", Integer.toString(v.getSuppressweight()));
             }
-            //TODO: pas aan zodat hier het aantal suppressions komt ipv 0
-            addChildElement(tr, "td", "0");
+            addChildElement(tr, "td", Integer.toString(v.getnOfSuppressions()));
+            suppressions += v.getnOfSuppressions();
         }
         tr = addChildElement(table, "tr");
         addChildElement(tr, "td", "Total");
         addChildElement(tr, "td", "");
-        //TODO: pas aan zodat hier het totaal aantal suppressions komt
-        addChildElement(tr, "td", "");
+        addChildElement(tr, "td", Integer.toString(suppressions));
 
         return p;
     }
@@ -240,7 +239,8 @@ public class HTMLReportWriter {
 
     private static Element writeFooter() {
         Element p = doc.createElement("p");
-        addChildElement(p, "h2", "μ-ARGUS version: 4.2.0 (build: 1)");
+        addChildElement(p, "h2", String.format("μ-ARGUS version: %d.%d.%s (build: %d)",
+            MuARGUS.MAJOR, MuARGUS.MINOR, MuARGUS.REVISION, MuARGUS.BUILD));
         return p;
     }
 
