@@ -4,8 +4,7 @@ niet behandelde opmerkingen/vragen:
 Nog te doen:                                                                                                Mee bezig:
 
 Release 2
-1.  View
-    - namen van de onderdelen veranderen
+
 2.  Table
     - maak tabellen aan voor alle mogelijkheden in de verschillende dimensies
     - voeg het aantal unsafe combinations per tabel toe
@@ -25,6 +24,8 @@ Release 3
 Behandelde opmerkingen/vragen:                                                                              Antwoord:
 
 Gedaan:                                                                                                     Door:
-
+1.  Basis structuur
+    - namen van de onderdelen veranderen                                                                    Jeldrik
+    - model, view en controller klasse maken en basis methoden maken                                        Jeldrik
 
 wishlish:
