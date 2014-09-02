@@ -31,7 +31,7 @@
               <Component id="midSectionPanel" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="warningScrollPane" alignment="0" pref="214" max="32767" attributes="0"/>
+                  <Component id="warningScrollPane" alignment="0" pref="290" max="32767" attributes="0"/>
                   <Group type="102" alignment="1" attributes="0">
                       <Component id="codelistRecodeTextField" max="32767" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
