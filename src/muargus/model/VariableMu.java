@@ -311,7 +311,7 @@ public class VariableMu {
         this.entropy = entropy;
     }
 
-    public void write(PrintWriter writer, final int dataFileType) {
+    public void write(PrintWriter writer, final int dataFileType, boolean all) {
         writer.print(this.name);
         if (MetadataMu.DATA_FILE_TYPE_FIXED == dataFileType) {
             writer.print(" " + this.startingPosition);
@@ -350,8 +350,10 @@ public class VariableMu {
             if (this.truncable) {
                 writer.println("    <TRUNCABLE>");
             }
-            writer.println("    <IDLEVEL> " + this.idLevel);
-            writer.println("    <SUPPRESSWEIGHT> " + this.suppressweight);
+            if (all) {
+                writer.println("    <IDLEVEL> " + this.idLevel);
+                writer.println("    <SUPPRESSWEIGHT> " + this.suppressweight);
+            }
             if (this.codelist) {
                 writer.println("    <CODELIST> " + StrUtils.quote(this.codeListFile));
             }

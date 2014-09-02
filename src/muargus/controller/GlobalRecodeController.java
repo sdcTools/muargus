@@ -5,6 +5,7 @@
 package muargus.controller;
 
 import argus.model.ArgusException;
+import argus.utils.SystemUtils;
 import argus.utils.Tokenizer;
 import java.io.BufferedReader;
 import java.io.File;
@@ -73,9 +74,11 @@ public class GlobalRecodeController {
     public void codelistRecode() {
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setFileFilter(new FileNameExtensionFilter("Codelist (*.cdl)", "cdl"));
-        String hs = "C:\\Program Files\\MU_ARGUS\\data";
-        File file = new File(hs);
-        fileChooser.setCurrentDirectory(file);
+        String hs = SystemUtils.getRegString("general", "datadir", "");
+        if (!hs.equals("")){
+            File file = new File(hs); 
+            fileChooser.setCurrentDirectory(file);
+        }        
         fileChooser.showOpenDialog(null);
 
         String filename;

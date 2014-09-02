@@ -2,6 +2,8 @@
 package muargus.controller;
 
 import argus.model.ArgusException;
+import argus.utils.SystemUtils;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
@@ -98,9 +100,14 @@ public class SpecifyMetadataController {
             if (JOptionPane.showConfirmDialog(view, message + "Save changes?", "Mu Argus",
                     JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
                 JFileChooser fileChooser = new JFileChooser();
+                String hs = SystemUtils.getRegString("general", "datadir", "");
+                if (!hs.equals("")){
+                    File file = new File(hs); 
+                    fileChooser.setCurrentDirectory(file);
+                }
                 if (fileChooser.showSaveDialog(view) == JFileChooser.APPROVE_OPTION) {
                     try {
-                        this.metadata.write(fileChooser.getSelectedFile());
+                        this.metadata.write(fileChooser.getSelectedFile(), true);
                     }
                     catch (ArgusException ex) {
                         JOptionPane.showMessageDialog(null, ex.getMessage());

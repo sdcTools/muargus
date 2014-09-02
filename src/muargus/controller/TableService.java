@@ -355,7 +355,7 @@ public class TableService {
             //Global recode codelist
             if (metadata.getCombinations().getGlobalRecode() != null){
                 for (RecodeMu recode : metadata.getCombinations().getGlobalRecode().getRecodeMus()) {
-                    if (recode.getVariable().equals(variable)) {
+                    if (recode.getVariable().getName().equals(variable.getName())) {
                         if (recode.isRecoded() || recode.isTruncated()) {
                             variable.setCodeListFile(recode.getCodeListFile());
                             variable.setCodelist(variable.getCodeListFile() != null);

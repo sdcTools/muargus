@@ -68,7 +68,7 @@ public class MakeProtectedFileController implements PropertyChangeListener {
         MetadataMu safeMetadata = this.metadata.getCombinations().getProtectedFile().getSafeMeta();
         File file = new File(safeMetadata.getFileNames().getMetaFileName());
         try {
-            safeMetadata.write(file);
+            safeMetadata.write(file, false);
             this.fileCreated = true;
         }
         catch (ArgusException ex) {

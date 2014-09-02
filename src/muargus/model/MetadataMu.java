@@ -231,7 +231,7 @@ public class MetadataMu {
 
     }
 
-    private void write(Writer w) throws IOException {
+    private void write(Writer w, boolean all) throws IOException {
 // Anco 1.6
 // try with resources verwijderd.        
 //        try (PrintWriter writer = new PrintWriter(w)) {
@@ -250,7 +250,7 @@ public class MetadataMu {
 //                writer.println("   <PROTECT> " + StrUtils.quote(protectStatus));
 //            }
             for (VariableMu variable : this.variables) {
-                variable.write(writer, this.dataFileType);
+                variable.write(writer, this.dataFileType, all);
             }
         } finally {
             if (writer != null) {
@@ -259,9 +259,9 @@ public class MetadataMu {
         }
     }
 
-    public void write(File file) throws ArgusException {
+    public void write(File file, boolean all) throws ArgusException {
         try {
-            write(new BufferedWriter(new FileWriter(file)));
+            write(new BufferedWriter(new FileWriter(file)), all);
             this.filenames = new DataFilePair(this.filenames.getDataFileName(), file.getPath());
         } catch (IOException ex) {
             logger.log(Level.SEVERE, null, ex);
