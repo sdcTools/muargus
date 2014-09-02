@@ -25,7 +25,7 @@ public class ShowTableCollection {
     private int dimensions;
 
     public ShowTableCollection() {
-        this.columnames = new String[]{"# unsafe cells", "Var 1", "Var 2", "Var 3", 
+        this.columnames = new String[]{"# unsafe cells", "Var 1", "Var 2", "Var 3",
             "Var 4", "Var 5", "Var 6", "Var 7", "Var 8", "Var 9", "Var 10"};
         this.originalTables = new ArrayList<>();
         this.tablesForEachDimension = new ArrayList<>();
@@ -58,9 +58,12 @@ public class ShowTableCollection {
 
     public ArrayList<TableMu> getAllTables() {
         if (this.allTables.isEmpty()) {
-            this.allTables.addAll(this.tablesForEachDimension.get(0));
-            this.allTables.addAll(this.tablesForEachDimension.get(1));
-            this.allTables.addAll(this.tablesForEachDimension.get(2));
+            for (ArrayList<TableMu> list : tablesForEachDimension) {
+                this.allTables.addAll(list);
+            }
+//            this.allTables.addAll(this.tablesForEachDimension.get(0));
+//            this.allTables.addAll(this.tablesForEachDimension.get(1));
+//            this.allTables.addAll(this.tablesForEachDimension.get(2));
         }
         return allTables;
     }
@@ -84,20 +87,6 @@ public class ShowTableCollection {
 
     public String[][] getData() {
         this.getAllTables();
-        if (this.data == null) {
-            this.assignData();
-        }
-
-        if (this.selectedVariable.getName().equals("all")) {
-            return this.data;
-        } else {
-            this.assignData();
-        }
-
-        return this.data;
-    }
-
-    public void assignData() {
         ArrayList<TableMu> tables = new ArrayList<>();
         if (!this.selectedVariable.getName().equals("all")) {
             for (TableMu t : allTables) {
@@ -107,23 +96,32 @@ public class ShowTableCollection {
                         add = true;
                     }
                 }
-                if(add){
+                if (add) {
                     tables.add(t);
                 }
             }
         } else {
             tables = allTables;
         }
-        this.data = new String[tables.size()][this.dimensions + 1];
+        if (this.data == null) {
+            this.data = new String[tables.size()][this.dimensions + 1];
+            fillData(tables, data);
+            return this.data;
+        } else {
+            this.subdata = new String[tables.size()][this.dimensions + 1];
+            fillData(tables, subdata);
+            return this.subdata;
+        }
+    }
 
+    public void fillData(ArrayList<TableMu> tables, String[][] data) {
         for (int i = 0; i < tables.size(); i++) {
             TableMu t = tables.get(i);
             for (int j = 0; j < t.getVariables().size(); j++) {
-                this.data[i][j + 1] = t.getVariables().get(j).getName();
+                data[i][j + 1] = t.getVariables().get(j).getName();
             }
-            this.data[i][0] = Integer.toString(i + 1);
+            data[i][0] = Integer.toString(i + 1);
         }
-        System.out.println(this.data.length);
     }
 
     public ArrayList<ArrayList<TableMu>> getTablesForEachDimension() {
