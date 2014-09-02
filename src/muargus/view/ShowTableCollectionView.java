@@ -4,10 +4,15 @@
  */
 package muargus.view;
 
+import java.util.ArrayList;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.DefaultListModel;
 import javax.swing.ListSelectionModel;
+import muargus.VariableNameCellRenderer;
 import muargus.controller.ShowTableCollectionController;
 import muargus.model.MetadataMu;
 import muargus.model.ShowTableCollection;
+import muargus.model.VariableMu;
 
 /**
  *
@@ -18,6 +23,8 @@ public class ShowTableCollectionView extends javax.swing.JDialog {
     MetadataMu metadataMu;
     ShowTableCollectionController controller;
     ShowTableCollection model;
+    private ArrayList<VariableMu> selectedVariable;
+    private DefaultComboBoxModel variableListModel;
     
     /**
      * Creates new form ModifyShowTableCollection
@@ -37,9 +44,17 @@ public class ShowTableCollectionView extends javax.swing.JDialog {
         this.metadataMu = metadataMu;
         this.model = this.metadataMu.getCombinations().getShowTableCollection();
         this.initializeData();
+        this.selectVariableComboBox.setRenderer(new VariableNameCellRenderer());
     }
     
     public void initializeData(){
+        variableListModel = new DefaultComboBoxModel<>(); 
+        variableListModel.addElement(new VariableMu("all"));
+        for (VariableMu variable : model.getVariables()) {
+            variableListModel.addElement(variable);
+        }
+        this.selectVariableComboBox.setModel(variableListModel);
+        
         this.updateTable();
     }
     
@@ -126,6 +141,11 @@ public class ShowTableCollectionView extends javax.swing.JDialog {
         scrollPane.setViewportView(table);
 
         showAllTablesCheckBox.setText("Show all tables");
+        showAllTablesCheckBox.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                showAllTablesCheckBoxStateChanged(evt);
+            }
+        });
 
         closeButton.setText("Close");
         closeButton.addActionListener(new java.awt.event.ActionListener() {
@@ -177,6 +197,10 @@ public class ShowTableCollectionView extends javax.swing.JDialog {
     private void closeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_closeButtonActionPerformed
         this.controller.close();
     }//GEN-LAST:event_closeButtonActionPerformed
+
+    private void showAllTablesCheckBoxStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_showAllTablesCheckBoxStateChanged
+        this.model.setShowAllTables(!this.model.isShowAllTables());
+    }//GEN-LAST:event_showAllTablesCheckBoxStateChanged
 
 //    /**
 //     * @param args the command line arguments

@@ -16,6 +16,8 @@ public class ShowTableCollection {
 
     
     private ArrayList<VariableMu> variables;
+    private boolean showAllTables;
+    private VariableMu selectedVariable;
     
     public ShowTableCollection() {
     }
@@ -24,6 +26,24 @@ public class ShowTableCollection {
         this.variables = variables;
     }
     
-    
+    public ArrayList<VariableMu> getVariables(){
+        return this.variables;
+    }
+
+    public boolean isShowAllTables() {
+        return showAllTables;
+    }
+
+    public void setShowAllTables(boolean showAllTables) {
+        this.showAllTables = showAllTables;
+    }
+
+    public VariableMu getSelectedVariable() {
+        return selectedVariable;
+    }
+
+    public void setSelectedVariable(VariableMu selectedVariable) {
+        this.selectedVariable = selectedVariable;
+    }
     
 }
