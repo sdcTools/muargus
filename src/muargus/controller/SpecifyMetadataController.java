@@ -7,7 +7,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
-import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import muargus.model.Combinations;
 import muargus.model.MetadataMu;
@@ -99,20 +98,30 @@ public class SpecifyMetadataController {
             this.metadata = this.metadataClone;
             if (JOptionPane.showConfirmDialog(view, message + "Save changes?", "Mu Argus",
                     JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
-                JFileChooser fileChooser = new JFileChooser();
-                String hs = SystemUtils.getRegString("general", "datadir", "");
-                if (!hs.equals("")){
-                    File file = new File(hs); 
-                    fileChooser.setCurrentDirectory(file);
-                }
-                if (fileChooser.showSaveDialog(view) == JFileChooser.APPROVE_OPTION) {
+                String filePath = view.showFileDialog("Save ARGUS metadata", true, new String[] {"ARGUS metadata file (*.rda)|rda"});
+                if (filePath != null) {
                     try {
-                        this.metadata.write(fileChooser.getSelectedFile(), true);
+                        this.metadata.write(new File(filePath), true);
                     }
                     catch (ArgusException ex) {
-                        JOptionPane.showMessageDialog(null, ex.getMessage());
+                        view.showMessage(ex.getMessage());
                     }
                 }
+
+//                JFileChooser fileChooser = new JFileChooser();
+//                String hs = SystemUtils.getRegString("general", "datadir", "");
+//                if (!hs.equals("")){
+//                    File file = new File(hs); 
+//                    fileChooser.setCurrentDirectory(file);
+//                }
+//                if (fileChooser.showSaveDialog(view) == JFileChooser.APPROVE_OPTION) {
+//                    try {
+//                        this.metadata.write(fileChooser.getSelectedFile(), true);
+//                    }
+//                    catch (ArgusException ex) {
+//                        JOptionPane.showMessageDialog(null, ex.getMessage());
+//                    }
+//                }
             }
         }
         this.view.setVisible(false);

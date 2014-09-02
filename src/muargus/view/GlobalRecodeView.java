@@ -7,12 +7,10 @@ package muargus.view;
 import argus.model.ArgusException;
 import argus.utils.SystemUtils;
 import java.io.File;
-import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import muargus.controller.GlobalRecodeController;
@@ -25,7 +23,7 @@ import muargus.model.VariableMu;
  *
  * @author ambargus
  */
-public class GlobalRecodeView extends javax.swing.JDialog {
+public class GlobalRecodeView extends DialogBase {
 
     GlobalRecodeController controller;
     GlobalRecode model;
@@ -134,25 +132,26 @@ public class GlobalRecodeView extends javax.swing.JDialog {
     }
 
     private String askForGrcPath() {
-        JFileChooser fileChooser = new JFileChooser();
-        String hs = SystemUtils.getRegString("general", "datadir", "");
-        if (!hs.equals("")){
-            File file = new File(hs); 
-            fileChooser.setCurrentDirectory(file);
-        }
-        fileChooser.setDialogTitle("Open Codelist File");
-        fileChooser.setSelectedFile(new File(""));
-        fileChooser.resetChoosableFileFilters();
-        fileChooser.setFileFilter(new FileNameExtensionFilter("Recode files (*.grc)", "grc"));
-        if (fileChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
-            //codelistfileTextField.setText(fileChooser.getSelectedFile().toString());
-            hs = fileChooser.getSelectedFile().getPath();
-            if (!hs.equals("")){
-                SystemUtils.putRegString("general", "datadir", hs);
-            }
-            return fileChooser.getSelectedFile().toString();
-        }
-        return null;
+        return showFileDialog("Open Recode File", false, new String[] { "Recode files (*.grc)|grc" });
+//        JFileChooser fileChooser = new JFileChooser();
+//        String hs = SystemUtils.getRegString("general", "datadir", "");
+//        if (!hs.equals("")){
+//            File file = new File(hs); 
+//            fileChooser.setCurrentDirectory(file);
+//        }
+//        fileChooser.setDialogTitle("Open Codelist File");
+//        fileChooser.setSelectedFile(new File(""));
+//        fileChooser.resetChoosableFileFilters();
+//        fileChooser.setFileFilter(new FileNameExtensionFilter("Recode files (*.grc)", "grc"));
+//        if (fileChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+//            //codelistfileTextField.setText(fileChooser.getSelectedFile().toString());
+//            hs = fileChooser.getSelectedFile().getPath();
+//            if (!hs.equals("")){
+//                SystemUtils.putRegString("general", "datadir", hs);
+//            }
+//            return fileChooser.getSelectedFile().toString();
+//        }
+//        return null;
     }
     
     private int getTruncatePositions(int varLength) {
@@ -585,7 +584,26 @@ public class GlobalRecodeView extends javax.swing.JDialog {
     }//GEN-LAST:event_closeButtonActionPerformed
 
     private void codelistRecodeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_codelistRecodeButtonActionPerformed
-        controller.codelistRecode();
+        String filePath = showFileDialog("Open Codelist File", false, new String[] { "Codelist (*.cdl)|cdl"});
+        if (filePath != null)
+            setCodelistText(filePath);
+//        JFileChooser fileChooser = new JFileChooser();
+//        fileChooser.setFileFilter(new FileNameExtensionFilter("Codelist (*.cdl)", "cdl"));
+//        String hs = SystemUtils.getRegString("general", "datadir", "");
+//        if (!hs.equals("")){
+//            File file = new File(hs); 
+//            fileChooser.setCurrentDirectory(file);
+//        }        
+//        fileChooser.showOpenDialog(null);
+//
+//        String filename;
+//        File f = fileChooser.getSelectedFile();
+//        if (fileChooser.getSelectedFile() == null) {
+//            filename = "";
+//        } else {
+//            filename = f.getAbsolutePath();
+//        }
+//        view.setCodelistText(filename);
     }//GEN-LAST:event_codelistRecodeButtonActionPerformed
 
     private void truncateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_truncateButtonActionPerformed
@@ -661,15 +679,10 @@ public class GlobalRecodeView extends javax.swing.JDialog {
     }
     
     private void saveGrcFile() {
-        JFileChooser fileChooser = new JFileChooser();
-        String hs = SystemUtils.getRegString("general", "datadir", "");
-        if (!hs.equals("")){
-            File file = new File(hs); 
-            fileChooser.setCurrentDirectory(file);
-        }      
-        if (fileChooser.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
+        String filePath = showFileDialog("Save Recode File", true, new String[] {"Recode files (*.grc)|grc" });
+        if (filePath != null) {
             try {
-                this.selectedRecode.write(fileChooser.getSelectedFile());
+                this.selectedRecode.write(new File(filePath));
             }
             catch (ArgusException ex) {
                 JOptionPane.showMessageDialog(null, "Error saving grc file: " + ex.getMessage());
@@ -717,7 +730,7 @@ public class GlobalRecodeView extends javax.swing.JDialog {
      *
      * @param filename
      */
-    public void setCodelistText(String filename) {
+    private void setCodelistText(String filename) {
         codelistRecodeTextField.setText(filename);
     }
 

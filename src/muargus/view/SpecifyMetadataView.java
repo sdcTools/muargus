@@ -24,7 +24,7 @@ import muargus.model.VariableMu;
  *
  * @author ambargus
  */
-public class SpecifyMetadataView extends javax.swing.JDialog {
+public class SpecifyMetadataView extends DialogBase {
     
     SpecifyMetadataController controller;
     private ArrayList<VariableMu> related;
@@ -225,7 +225,6 @@ public class SpecifyMetadataView extends javax.swing.JDialog {
 
         variableTypeButtonGroup1 = new javax.swing.ButtonGroup();
         variableTypeButtonGroup2 = new javax.swing.ButtonGroup();
-        fileChooser = new javax.swing.JFileChooser();
         variablesPanel = new javax.swing.JPanel();
         variablesComboBox = new javax.swing.JComboBox();
         variablesScrollPane = new javax.swing.JScrollPane();
@@ -862,20 +861,24 @@ public class SpecifyMetadataView extends javax.swing.JDialog {
     }//GEN-LAST:event_cancelButtonActionPerformed
 
     private void codelistfileButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_codelistfileButtonActionPerformed
-        String hs = SystemUtils.getRegString("general", "datadir", "");
-        if (!hs.equals("")){
-            File file = new File(hs); 
-            fileChooser.setCurrentDirectory(file);
+        String filePath = showFileDialog("Open Codelist File", false, new String[] {"Codelist (*.cdl)|cdl"});
+        if (filePath != null) {
+            codelistfileTextField.setText(filePath);
         }
-        fileChooser.setDialogTitle("Open Codelist File");
-        fileChooser.setSelectedFile(new File(""));
-        fileChooser.resetChoosableFileFilters();
-        fileChooser.setFileFilter(new FileNameExtensionFilter("Codelist (*.cdl)", "cdl"));
-        if (fileChooser.showOpenDialog(this) == javax.swing.JFileChooser.APPROVE_OPTION) {
-            codelistfileTextField.setText(fileChooser.getSelectedFile().toString());
-            hs = fileChooser.getSelectedFile().getPath();
-            if (!hs.equals("")){SystemUtils.putRegString("general", "datadir", hs);}
-        }
+//        String hs = SystemUtils.getRegString("general", "datadir", "");
+//        if (!hs.equals("")){
+//            File file = new File(hs); 
+//            fileChooser.setCurrentDirectory(file);
+//        }
+//        fileChooser.setDialogTitle("Open Codelist File");
+//        fileChooser.setSelectedFile(new File(""));
+//        fileChooser.resetChoosableFileFilters();
+//        fileChooser.setFileFilter(new FileNameExtensionFilter("Codelist (*.cdl)", "cdl"));
+//        if (fileChooser.showOpenDialog(this) == javax.swing.JFileChooser.APPROVE_OPTION) {
+//            ;
+//            hs = fileChooser.getSelectedFile().getPath();
+//            if (!hs.equals("")){SystemUtils.putRegString("general", "datadir", hs);}
+//        }
     }//GEN-LAST:event_codelistfileButtonActionPerformed
 
     private void moveDownButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_moveDownButtonActionPerformed
@@ -1043,7 +1046,6 @@ public class SpecifyMetadataView extends javax.swing.JDialog {
     private javax.swing.JLabel decimalsLabel;
     private javax.swing.JTextField decimalsTextField;
     private javax.swing.JButton deleteButton;
-    private javax.swing.JFileChooser fileChooser;
     private javax.swing.JButton generateButton;
     private javax.swing.JRadioButton hhIdentifierRadioButton;
     private javax.swing.JRadioButton hhvariableRadioButton;

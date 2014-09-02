@@ -8,10 +8,8 @@ import argus.utils.SystemUtils;
 import java.awt.Color;
 import java.io.File;
 import javax.swing.JCheckBox;
-import javax.swing.JFileChooser;
 import javax.swing.JRadioButton;
 import javax.swing.ListSelectionModel;
-import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import muargus.controller.MakeProtectedFileController;
@@ -22,7 +20,7 @@ import muargus.model.MetadataMu;
  *
  * @author ambargus
  */
-public class MakeProtectedFileView extends javax.swing.JDialog {
+public class MakeProtectedFileView extends DialogBase {
 
     MakeProtectedFileController controller;
     ProtectedFile model;
@@ -135,7 +133,6 @@ public class MakeProtectedFileView extends javax.swing.JDialog {
 
         suppressionButtonGroup = new javax.swing.ButtonGroup();
         hhIdentifierButtonGroup = new javax.swing.ButtonGroup();
-        fileChooser = new javax.swing.JFileChooser();
         suppressionPanel = new javax.swing.JPanel();
         noSuppressionRadioButton = new javax.swing.JRadioButton();
         useWeightRadioButton = new javax.swing.JRadioButton();
@@ -387,17 +384,9 @@ public class MakeProtectedFileView extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void makeFileButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_makeFileButtonActionPerformed
-        this.fileChooser.setFileFilter(new FileNameExtensionFilter("Safefile (*.saf)", "saf"));
-        String hs = SystemUtils.getRegString("general", "datadir", "");
-        if (!hs.equals("")){
-            File file = new File(hs); 
-            fileChooser.setCurrentDirectory(file);
-        }
-        if (this.fileChooser.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
-            //this.model.createSafeMeta(this.fileChooser.getSelectedFile());
-            //this.model.setNameOfSafeFile(this.fileChooser.getSelectedFile());
-            //System.out.println(this.model.getNameOfSafeFile());
-            controller.makeFile(this.fileChooser.getSelectedFile());
+        String filePath = showFileDialog("Make safe micro file" , true, new String[] {"Safefile (*.saf)|saf"});
+        if (filePath != null) {
+            controller.makeFile(new File(filePath));
         }
     }//GEN-LAST:event_makeFileButtonActionPerformed
 
@@ -479,7 +468,6 @@ public class MakeProtectedFileView extends javax.swing.JDialog {
     private javax.swing.JCheckBox addRiskToOutputFileCheckBox;
     private javax.swing.JButton cancelButton;
     private javax.swing.JRadioButton changeIntoSequenceNumberRadioButton;
-    private javax.swing.JFileChooser fileChooser;
     private javax.swing.ButtonGroup hhIdentifierButtonGroup;
     private javax.swing.JPanel hhIdentifierPanel;
     private javax.swing.JRadioButton keepInSafeFileRadioButton;
