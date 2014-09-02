@@ -1,0 +1,30 @@
+niet behandelde opmerkingen/vragen:
+
+
+Nog te doen:                                                                                                Mee bezig:
+
+Release 2
+1.  View
+    - namen van de onderdelen veranderen
+2.  Table
+    - maak tabellen aan voor alle mogelijkheden in de verschillende dimensies
+    - voeg het aantal unsafe combinations per tabel toe
+    - zorg dat het aantal kolommen overeenkomt met de grootste tabel
+3.  ShowAllTablesCheckBox
+    - als dit niet is aangevinkt, dan zijn alleen de tabellen met meer dan 0 unsafe combinations 
+      zichtbaar. Als het is aangevinkt, dan zijn alle tabellen zichtbaar(gesorteerd op grootte)
+4.  SelectVariableComboBox
+    - vul het met alle variabelen waar tabellen van zijn + een waarde 'all'
+      dit gebeurd nu nog met alle variabelen maar dat vind ik niet zo mooi
+    - als een variabele gekozen wordt, dan worden alleen de tabellen met die variabelen laten zien
+5.  CloseButton
+    - sluit het scherm
+
+Release 3
+
+Behandelde opmerkingen/vragen:                                                                              Antwoord:
+
+Gedaan:                                                                                                     Door:
+
+
+wishlish:
