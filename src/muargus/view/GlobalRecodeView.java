@@ -662,6 +662,11 @@ public class GlobalRecodeView extends javax.swing.JDialog {
     
     private void saveGrcFile() {
         JFileChooser fileChooser = new JFileChooser();
+        String hs = SystemUtils.getRegString("general", "datadir", "");
+        if (!hs.equals("")){
+            File file = new File(hs); 
+            fileChooser.setCurrentDirectory(file);
+        }      
         if (fileChooser.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
             try {
                 this.selectedRecode.write(fileChooser.getSelectedFile());

@@ -3,8 +3,9 @@ package muargus.controller;
 
 import argus.model.ArgusException;
 import argus.model.DataFilePair;
-import argus.view.DialogOpenMicrodata;
 import java.awt.Desktop;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
@@ -27,14 +28,10 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import muargus.HTMLReportWriter;
-import muargus.model.GlobalRecode;
-import muargus.model.ProtectedFile;
 import muargus.model.MetadataMu;
-import muargus.model.Combinations;
 import muargus.view.MainFrameView;
+import org.apache.commons.io.FilenameUtils;
 import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
 
 /**
  *
@@ -249,11 +246,26 @@ public class MainFrameController {
         controller.showView();
         if (controller.isFileCreated()) {
             this.report = createReport();
+            saveReport();
             viewReport();
         }
         organise();
     }     
    
+    private void saveReport() {
+        String path = this.metadata.getCombinations().getProtectedFile().getSafeMeta().getFileNames().getDataFileName();
+        String htmlPath = FilenameUtils.removeExtension(path) + ".html";
+        try {
+            FileWriter writer = new FileWriter(new File(htmlPath));
+            HTMLEditorKit kit = new HTMLEditorKit();
+            kit.write(writer, this.report, 0, this.report.getLength());
+            writer.close();
+        }
+        catch (IOException | BadLocationException ex) {
+            ; //TODO handle
+        }
+
+    }
 
     /**
      *

@@ -4,7 +4,9 @@
  */
 package muargus.view;
 
+import argus.utils.SystemUtils;
 import java.awt.Color;
+import java.io.File;
 import javax.swing.JCheckBox;
 import javax.swing.JFileChooser;
 import javax.swing.JRadioButton;
@@ -386,6 +388,11 @@ public class MakeProtectedFileView extends javax.swing.JDialog {
 
     private void makeFileButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_makeFileButtonActionPerformed
         this.fileChooser.setFileFilter(new FileNameExtensionFilter("Safefile (*.saf)", "saf"));
+        String hs = SystemUtils.getRegString("general", "datadir", "");
+        if (!hs.equals("")){
+            File file = new File(hs); 
+            fileChooser.setCurrentDirectory(file);
+        }
         if (this.fileChooser.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
             //this.model.createSafeMeta(this.fileChooser.getSelectedFile());
             //this.model.setNameOfSafeFile(this.fileChooser.getSelectedFile());
