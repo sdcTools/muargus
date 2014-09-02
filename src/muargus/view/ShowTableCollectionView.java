@@ -6,8 +6,9 @@ package muargus.view;
 
 import java.util.ArrayList;
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.DefaultListModel;
 import javax.swing.ListSelectionModel;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 import muargus.VariableNameCellRenderer;
 import muargus.controller.ShowTableCollectionController;
 import muargus.model.MetadataMu;
@@ -23,8 +24,9 @@ public class ShowTableCollectionView extends javax.swing.JDialog {
     MetadataMu metadataMu;
     ShowTableCollectionController controller;
     ShowTableCollection model;
-    private ArrayList<VariableMu> selectedVariable;
+    private ArrayList<VariableMu> variables;
     private DefaultComboBoxModel variableListModel;
+    private TableModel tableModel;
     
     /**
      * Creates new form ModifyShowTableCollection
@@ -54,12 +56,18 @@ public class ShowTableCollectionView extends javax.swing.JDialog {
             variableListModel.addElement(variable);
         }
         this.selectVariableComboBox.setModel(variableListModel);
+        this.model.setTables(this.metadataMu.getCombinations().getTables());
         
         this.updateTable();
     }
     
     public void updateTable(){
-        
+        this.tableModel = new DefaultTableModel(this.model.getData(), this.model.getColumnames()) {
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return false;
+            }
+        };
+        this.table.setModel(tableModel);
     }
 
     /**
@@ -83,54 +91,6 @@ public class ShowTableCollectionView extends javax.swing.JDialog {
 
         table.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
                 {null, null, null, null, null},
                 {null, null, null, null, null}
             },
