@@ -16,12 +16,12 @@ import muargus.view.ShowTableCollectionView;
 public class ShowTableCollectionController {
     
     ShowTableCollectionView view;
-    MetadataMu metadata;
+    MetadataMu metadataMu;
 
     public ShowTableCollectionController(java.awt.Frame parentView, MetadataMu metadata) {
         this.view = new ShowTableCollectionView(parentView, true, this);
-        this.metadata = metadata;
-        this.view.setMetadataMu(this.metadata);
+        this.metadataMu = metadata;
+        this.view.setMetadataMu(this.metadataMu);
     }
     
     public void showView() {
@@ -29,7 +29,7 @@ public class ShowTableCollectionController {
     }
     
     public void close() {
-        view.setVisible(false);
+        this.view.setVisible(false);
     }
     
 }
