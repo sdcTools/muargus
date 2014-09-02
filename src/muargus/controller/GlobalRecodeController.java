@@ -12,9 +12,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
-import javax.swing.filechooser.FileNameExtensionFilter;
 import muargus.MuARGUS;
 import muargus.extern.dataengine.CMuArgCtrl;
 import muargus.model.GlobalRecode;
@@ -71,25 +69,25 @@ public class GlobalRecodeController {
     /**
      *
      */
-    public void codelistRecode() {
-        JFileChooser fileChooser = new JFileChooser();
-        fileChooser.setFileFilter(new FileNameExtensionFilter("Codelist (*.cdl)", "cdl"));
-        String hs = SystemUtils.getRegString("general", "datadir", "");
-        if (!hs.equals("")){
-            File file = new File(hs); 
-            fileChooser.setCurrentDirectory(file);
-        }        
-        fileChooser.showOpenDialog(null);
-
-        String filename;
-        File f = fileChooser.getSelectedFile();
-        if (fileChooser.getSelectedFile() == null) {
-            filename = "";
-        } else {
-            filename = f.getAbsolutePath();
-        }
-        view.setCodelistText(filename);
-    }
+//    public void codelistRecode() {
+//        JFileChooser fileChooser = new JFileChooser();
+//        fileChooser.setFileFilter(new FileNameExtensionFilter("Codelist (*.cdl)", "cdl"));
+//        String hs = SystemUtils.getRegString("general", "datadir", "");
+//        if (!hs.equals("")){
+//            File file = new File(hs); 
+//            fileChooser.setCurrentDirectory(file);
+//        }        
+//        fileChooser.showOpenDialog(null);
+//
+//        String filename;
+//        File f = fileChooser.getSelectedFile();
+//        if (fileChooser.getSelectedFile() == null) {
+//            filename = "";
+//        } else {
+//            filename = f.getAbsolutePath();
+//        }
+//        view.setCodelistText(filename);
+//    }
 
     /**
      *

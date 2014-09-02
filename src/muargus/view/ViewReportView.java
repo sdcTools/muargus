@@ -13,7 +13,7 @@ import muargus.controller.ViewReportController;
  *
  * @author ambargus
  */
-public class ViewReportView extends javax.swing.JDialog {
+public class ViewReportView extends DialogBase {
     
     ViewReportController controller;
 
