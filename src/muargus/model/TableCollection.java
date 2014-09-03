@@ -11,7 +11,7 @@ import java.util.ArrayList;
  *
  * @author ambargus
  */
-public class ShowTableCollection {
+public class TableCollection {
 
     private boolean showAllTables;
     private VariableMu selectedVariable;
@@ -23,7 +23,7 @@ public class ShowTableCollection {
     private String[][] subdata;
     private int dimensions;
 
-    public ShowTableCollection() {
+    public TableCollection() {
         this.originalTables = new ArrayList<>();
         this.allTables = new ArrayList<>();
     }

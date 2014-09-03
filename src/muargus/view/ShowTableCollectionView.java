@@ -11,7 +11,7 @@ import javax.swing.table.TableModel;
 import muargus.VariableNameCellRenderer;
 import muargus.controller.ShowTableCollectionController;
 import muargus.model.MetadataMu;
-import muargus.model.ShowTableCollection;
+import muargus.model.TableCollection;
 import muargus.model.VariableMu;
 
 /**
@@ -22,7 +22,7 @@ public class ShowTableCollectionView extends DialogBase {
 
     MetadataMu metadataMu;
     ShowTableCollectionController controller;
-    ShowTableCollection model;
+    TableCollection model;
     private DefaultComboBoxModel variableListModel;
     private TableModel tableModel;
     

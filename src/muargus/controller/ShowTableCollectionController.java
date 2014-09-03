@@ -8,7 +8,7 @@ package muargus.controller;
 import java.util.ArrayList;
 import muargus.MuARGUS;
 import muargus.model.MetadataMu;
-import muargus.model.ShowTableCollection;
+import muargus.model.TableCollection;
 import muargus.model.TableMu;
 import muargus.view.ShowTableCollectionView;
 
@@ -19,7 +19,7 @@ import muargus.view.ShowTableCollectionView;
 public class ShowTableCollectionController {
 
     ShowTableCollectionView view;
-    ShowTableCollection model;
+    TableCollection model;
     MetadataMu metadataMu;
     CalculationService calculationService;
 
@@ -37,7 +37,7 @@ public class ShowTableCollectionController {
         this.view.setVisible(false);
     }
 
-    public void setModel(ShowTableCollection model) {
+    public void setModel(TableCollection model) {
         this.model = model;
     }
 
