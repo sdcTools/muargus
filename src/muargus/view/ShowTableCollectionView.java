@@ -4,16 +4,14 @@
  */
 package muargus.view;
 
-import java.util.ArrayList;
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import muargus.VariableNameCellRenderer;
 import muargus.controller.ShowTableCollectionController;
 import muargus.model.MetadataMu;
-import muargus.model.ShowTableCollection;
+import muargus.model.TableCollection;
 import muargus.model.VariableMu;
 
 /**
@@ -24,8 +22,7 @@ public class ShowTableCollectionView extends DialogBase {
 
     MetadataMu metadataMu;
     ShowTableCollectionController controller;
-    ShowTableCollection model;
-    private ArrayList<VariableMu> variables;
+    TableCollection model;
     private DefaultComboBoxModel variableListModel;
     private TableModel tableModel;
     
@@ -47,25 +44,32 @@ public class ShowTableCollectionView extends DialogBase {
     public void setMetadataMu(MetadataMu metadataMu) {
         this.metadataMu = metadataMu;
         this.model = this.metadataMu.getCombinations().getShowTableCollection();
+        this.controller.setModel(this.model);
         this.initializeData();
     }
     
     public void initializeData(){
-        variableListModel = new DefaultComboBoxModel<>();
-        VariableMu all = new VariableMu("all");
-        variableListModel.addElement(all);
+        this.model.setOriginalTables(this.metadataMu.getCombinations().getTables());
+        this.model.setShowAllTables(false);
+        
+        this.variableListModel = new DefaultComboBoxModel<>();
+        VariableMu all = new VariableMu("all"); // dummy variable for the option all variables
+        this.variableListModel.addElement(all);
         this.model.setSelectedVariable(all);
         for (VariableMu variable : model.getVariables()) {
-            variableListModel.addElement(variable);
+            this.variableListModel.addElement(variable);
         }
-        this.selectVariableComboBox.setModel(variableListModel);
-        this.model.setTables(this.metadataMu.getCombinations().getTables());
+        this.variableListModel.setSelectedItem(all);
+        this.selectVariableComboBox.setModel(this.variableListModel);
         
+        this.controller.setAllTables();
+        this.model.setData(this.controller.getData(this.model.getAllTables()));
         this.updateTable();
     }
     
     public void updateTable(){
-        this.tableModel = new DefaultTableModel(this.model.getData(), this.model.getColumnames()) {
+        this.controller.setSubData(this.model.isShowAllTables());
+        this.tableModel = new DefaultTableModel(this.model.getSubdata(), this.model.getColumnames()) {
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return false;
             }
@@ -167,7 +171,8 @@ public class ShowTableCollectionView extends DialogBase {
     }//GEN-LAST:event_closeButtonActionPerformed
 
     private void showAllTablesCheckBoxStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_showAllTablesCheckBoxStateChanged
-        this.model.setShowAllTables(!this.model.isShowAllTables());
+        this.model.setShowAllTables(this.showAllTablesCheckBox.isSelected());
+        this.updateTable();
     }//GEN-LAST:event_showAllTablesCheckBoxStateChanged
 
     private void selectVariableComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectVariableComboBoxActionPerformed
@@ -175,47 +180,6 @@ public class ShowTableCollectionView extends DialogBase {
         this.updateTable();
     }//GEN-LAST:event_selectVariableComboBoxActionPerformed
 
-//    /**
-//     * @param args the command line arguments
-//     */
-//    public static void main(String args[]) {
-//        /* Set the Nimbus look and feel */
-//        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-//        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-//         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-//         */
-//        try {
-//            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-//                if ("Nimbus".equals(info.getName())) {
-//                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-//                    break;
-//                }
-//            }
-//        } catch (ClassNotFoundException ex) {
-//            java.util.logging.Logger.getLogger(ShowTableCollectionView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        } catch (InstantiationException ex) {
-//            java.util.logging.Logger.getLogger(ShowTableCollectionView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        } catch (IllegalAccessException ex) {
-//            java.util.logging.Logger.getLogger(ShowTableCollectionView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-//            java.util.logging.Logger.getLogger(ShowTableCollectionView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        }
-//        //</editor-fold>
-//
-//        /* Create and display the dialog */
-//        java.awt.EventQueue.invokeLater(new Runnable() {
-//            public void run() {
-//                ShowTableCollectionView dialog = new ShowTableCollectionView(new javax.swing.JFrame(), true);
-//                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
-//                    @Override
-//                    public void windowClosing(java.awt.event.WindowEvent e) {
-//                        System.exit(0);
-//                    }
-//                });
-//                dialog.setVisible(true);
-//            }
-//        });
-//    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton closeButton;
     private javax.swing.JScrollPane scrollPane;

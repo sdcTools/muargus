@@ -22,7 +22,7 @@ public class Combinations {
     private HashMap<VariableMu, UnsafeInfo> unsafe;
     private GlobalRecode globalRecode;
     private ProtectedFile protectedFile;
-    private ShowTableCollection showTableCollection;
+    private TableCollection showTableCollection;
 
     // tot dit aantal kan die het redelijk goed hebben, maar is die wel +/- 5 seconden aan het rekenen. 
     private final int maximumNumberOfTables = 25000;
@@ -55,12 +55,12 @@ public class Combinations {
         this.globalRecode.setVariables(this.getVariablesInTables());
     }
     
-    public ShowTableCollection getShowTableCollection() {
+    public TableCollection getShowTableCollection() {
         return this.showTableCollection;
     }
     
     public void createShowTableCollection() {
-        this.showTableCollection = new ShowTableCollection();
+        this.showTableCollection = new TableCollection();
         this.showTableCollection.setVariables(this.getVariablesInTables());
     }
     
