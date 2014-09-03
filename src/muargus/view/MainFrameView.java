@@ -5,15 +5,14 @@ import argus.model.DataFilePair;
 import argus.view.DialogOpenMicrodata;
 import java.util.ArrayList;
 import javax.swing.JButton;
-import javax.swing.JLabel;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 import muargus.CodeTableCellRenderer;
+import muargus.MuARGUS;
 import muargus.controller.MainFrameController;
-import muargus.model.MetadataMu;
 import muargus.model.Combinations;
 import muargus.model.UnsafeCodeInfo;
 import muargus.model.UnsafeInfo;
@@ -80,6 +79,10 @@ public class MainFrameView extends javax.swing.JFrame {
 
     public void setVariableNameLabel(String variableNameLabel) {
         this.variableNameLabel.setText(variableNameLabel);
+    }
+    
+    public void showErrorMessage(ArgusException ex) {
+        JOptionPane.showMessageDialog(this, ex.getMessage(), MuARGUS.getMessageTitle(), JOptionPane.ERROR_MESSAGE);
     }
     
     /**
@@ -843,7 +846,7 @@ public class MainFrameView extends javax.swing.JFrame {
     }//GEN-LAST:event_makeProtectedFileMenuItemActionPerformed
 
     private void viewReportMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewReportMenuItemActionPerformed
-        controller.viewReport();
+        controller.viewReport(false);
     }//GEN-LAST:event_viewReportMenuItemActionPerformed
 
     private void contentsMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_contentsMenuItemActionPerformed

@@ -4,9 +4,19 @@
  */
 package muargus.view;
 
+import argus.model.ArgusException;
 import java.awt.print.PrinterException;
+import java.io.IOException;
+import java.io.Reader;
+import java.io.StringReader;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import javax.swing.text.BadLocationException;
 import javax.swing.text.html.HTMLDocument;
+import javax.swing.text.html.HTMLEditorKit;
+import javax.xml.transform.TransformerException;
+import muargus.controller.MainFrameController;
 import muargus.controller.ViewReportController;
 
 /**
@@ -30,8 +40,22 @@ public class ViewReportView extends DialogBase {
         this.setLocationRelativeTo(null);
     }
     
-    public void showReport(HTMLDocument htmlDoc) {
-        htmlPane.setDocument(htmlDoc);
+    public void showReport(String html) {
+
+        try 
+        {
+            Reader stringReader = new StringReader(html);
+            HTMLEditorKit htmlKit = new HTMLEditorKit();
+            
+            HTMLDocument htmlDoc = (HTMLDocument) htmlKit.createDefaultDocument();
+            htmlDoc.putProperty("IgnoreCharsetDirective", new Boolean(true));
+            htmlKit.read(stringReader, htmlDoc, 0);
+            htmlPane.setDocument(htmlDoc);
+        } catch (IOException|BadLocationException ex) {
+            Logger.getLogger(MainFrameController.class.getName()).log(Level.SEVERE, null, ex);
+            showErrorMessage(new ArgusException("Error creating report: " + ex.getMessage()));
+        }
+        
     }
 
     /**
