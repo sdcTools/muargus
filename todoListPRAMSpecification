@@ -1,0 +1,57 @@
+niet behandelde opmerkingen/vragen:
+
+
+Nog te doen:                                                                                                Mee bezig:
+
+Release 2
+1.  Basis structuur
+    - namen van de onderdelen veranderen                                                                    
+    - model, view en controller klasse maken en basis methoden maken
+    - klassen aan koppelen aan de rest van het programma
+2.  variablesTable
+    - vullen met alle categorische variabelen inclusief of ze gePRAMt zijn met of zonder bandwidth
+    - als een waarde gePRAMt is, maak deze dan rood
+    - zorg dat bij zowel klikken op een variabele als het gebruik van de pijltjestoetsen de waardes in de codelist verander
+      (dit gebeurd nog niet in de oude Mu)
+3.  codesTable
+    - vul de eerste kolom met de codes van de geselecteerde variabele uit de variablesTable
+    - vul indien mogelijk de tweede kolom met de codelist van de geselecteerde variabele uit de variablesTable
+    - vul de laatste kolom met de PRAM-probability horende bij de betreffende code (als default is dit 0)
+      deze probability moet ergens opgeslagen worden (Anco/PP: Hoe lang
+4.  codesSlider
+    - koppel dit aan de probabilty van de geselecteerde rij van de codesTable
+5.  applyButton
+    - alleen mogelijk als ten minste 1 probability groter is dan 0, zo niet geef waarschuwing
+    - zet X in de eerste kolom bij de geselecteerde variabele van de variablesTable
+    - zet, als bandwithCheckBox is aangevinkt, in de tweede kolom de waarde van de bandwithComboBox
+6.  undoButton
+    - undo PRAM voor de geselecteerde rij van variablesTable
+7.  PRAM options
+    - kan dit uberhaupt veranderen? 
+8.  defaultProbabilityComboBox
+    - vul met de waardes 0-100
+    - zet standaard op 80
+9.  defaultProbabilityButton 
+    - zet alle probabilities van de codesTable op de default probability van de comboBox
+10. bandwithCheckBox
+    - zet als default unchecked
+    - als checked, maak de bandwithComboBox enabled
+11. bandwithComboBox
+    - vul met de codes uit de codesTable
+    - zet als default op 5 (of als er minder dan 5 zijn de hoogst mogelijke waarde)
+12. closebutton
+    - bereken pram met dll of gebeurd dit ergens anders?
+    - sluit scherm
+13. schrijf javadocs
+14. Refactoren (kijken of alles volgens de MVC is gedaan, het weghalen van overbodige code etc.) 
+
+
+
+Release 3
+
+Behandelde opmerkingen/vragen:                                                                              Antwoord:
+
+Gedaan:                                                                                                     Door:
+
+
+wishlish:
