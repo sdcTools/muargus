@@ -100,9 +100,26 @@ public class CalculationService {
         return warning[0];
     }
     
-    public ArrayList<TableMu> getTableUnsafeCombinations(int Dimensions) {
-        //TODO: call dll
-        return new ArrayList<>();
+    public ArrayList<TableMu> getTableUnsafeCombinations(MetadataMu metadata, int dimensions) {
+        int index=1;
+        boolean[] baseTable = new boolean[1];
+        int[] nUC = new int[1];
+        int[] varList = new int[MuARGUS.MAXDIMS];
+        ArrayList<TableMu> tables = new ArrayList<>();
+        while (true) {
+            boolean result = c.GetTableUC(dimensions, index, baseTable, nUC, varList);
+            if (!result) {
+                return tables;
+            }
+            TableMu table = new TableMu();
+            table.setNrOfUnsafeCombinations(nUC[0]);
+            ArrayList<VariableMu> variables = getVariables(metadata);
+            for (int varIndex=0; varIndex < dimensions; varIndex++) {
+                table.addVariable(variables.get(varList[varIndex]-1));
+            }
+            tables.add(table);
+            index++;
+        }
     }
     
     public void applyRecode(MetadataMu metadata) throws ArgusException {
