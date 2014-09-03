@@ -14,6 +14,7 @@ import java.util.ArrayList;
 public class ShowTableCollection {
 
     private boolean showAllTables;
+    private VariableMu selectedVariable;
     private ArrayList<VariableMu> variables;
     private ArrayList<TableMu> originalTables;
     private ArrayList<TableMu> allTables;
@@ -89,5 +90,13 @@ public class ShowTableCollection {
 
     public String[][] getData() {
         return this.data;
+    }
+
+    public VariableMu getSelectedVariable() {
+        return selectedVariable;
+    }
+
+    public void setSelectedVariable(VariableMu selectedVariable) {
+        this.selectedVariable = selectedVariable;
     }
 }

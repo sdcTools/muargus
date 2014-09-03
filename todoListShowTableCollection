@@ -5,9 +5,6 @@ Nog te doen:                                                                    
 
 Release 2
 
-2.  Table
-    - maak tabellen aan voor alle mogelijkheden in de verschillende dimensies                               Jeldrik: gaat nu tot 4 dimensies. Moet het nog veranderen naar een recursievergelijking
-    - voeg het aantal unsafe combinations per tabel toe
 3.  ShowAllTablesCheckBox
     - als dit niet is aangevinkt, dan zijn alleen de tabellen met meer dan 0 unsafe combinations 
       zichtbaar. Als het is aangevinkt, dan zijn alle tabellen zichtbaar(gesorteerd op grootte)
@@ -23,6 +20,8 @@ Gedaan:                                                                         
     - model, view en controller klasse maken en basis methoden maken                                        Jeldrik
 2.  Table
     - zorg dat het aantal kolommen overeenkomt met de grootste tabel                                        Jeldrik
+    - maak tabellen aan voor alle mogelijkheden in de verschillende dimensies                               Jeldrik
+    - voeg het aantal unsafe combinations per tabel toe                                                     Jeldrik
 4.  SelectVariableComboBox
     - vul het met alle variabelen waar tabellen van zijn + een waarde 'all'                                 Jeldrik
       dit gebeurd nu nog met alle variabelen maar dat vind ik niet zo mooi

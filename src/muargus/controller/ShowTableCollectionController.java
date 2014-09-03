@@ -70,6 +70,7 @@ public class ShowTableCollectionController {
         for (int i = 1; i < columnNames.length; i++) {
             columnNames[i] = "Var " + i;
         }
+        this.model.setColumnNames(columnNames);
     }
     
     public String[][] getData(ArrayList<TableMu> tables) {
@@ -85,15 +86,16 @@ public class ShowTableCollectionController {
     }
     
     public void setSubData(){
-        if (this.view.getSelectVariableComboBox().getName().equals("all")) {
+        if (this.model.getSelectedVariable().getName().equals("all")) {
             this.model.setSubdata(this.model.getData());
         } else {
             ArrayList<TableMu> tables =  new ArrayList<>();
             for (TableMu t : this.model.getAllTables()) {
-                if (t.getVariables().contains(this.view.getSelectVariableComboBox())) {
+                if (t.getVariables().contains(this.model.getSelectedVariable())) {
                     tables.add(t);
                 }
             }
+            
             this.model.setSubdata(this.getData(tables));
         }
     }
