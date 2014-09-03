@@ -56,6 +56,19 @@ public class ShowTableCollection {
         this.selectedVariable = selectedVariable;
     }
 
+    public void setAllTables(ArrayList<TableMu> allTables) {
+        this.allTables = allTables;
+    }
+
+    public int getDimensions() {
+        return dimensions;
+    }
+
+    public void setDimensions(int dimensions) {
+        this.dimensions = dimensions;
+    }
+    
+
     public ArrayList<TableMu> getAllTables() {
         if (this.allTables.isEmpty()) {
             for (ArrayList<TableMu> list : tablesForEachDimension) {
@@ -68,14 +81,18 @@ public class ShowTableCollection {
         return allTables;
     }
 
-    public void setTables(ArrayList<TableMu> tables) {
+    public void setOriginalTables(ArrayList<TableMu> tables) {
         this.originalTables = tables;
-        this.addDimension_1();
+        //this.addDimension_1();
+    }
+    
+    public ArrayList<TableMu> getOriginalTables(){
+        return this.originalTables;
     }
 
-    public void addTable(TableMu table) {
-        this.originalTables.add(table);
-    }
+//    public void addTable(TableMu table) {
+//        this.originalTables.add(table);
+//    }
 
     public String[] getColumnames() {
         String[] columnNames = new String[dimensions + 1];

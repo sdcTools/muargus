@@ -47,10 +47,12 @@ public class ShowTableCollectionView extends DialogBase {
     public void setMetadataMu(MetadataMu metadataMu) {
         this.metadataMu = metadataMu;
         this.model = this.metadataMu.getCombinations().getShowTableCollection();
+        this.controller.setModel(this.model);
         this.initializeData();
     }
     
     public void initializeData(){
+        this.controller.setAllTables();
         variableListModel = new DefaultComboBoxModel<>();
         VariableMu all = new VariableMu("all");
         variableListModel.addElement(all);
@@ -59,7 +61,7 @@ public class ShowTableCollectionView extends DialogBase {
             variableListModel.addElement(variable);
         }
         this.selectVariableComboBox.setModel(variableListModel);
-        this.model.setTables(this.metadataMu.getCombinations().getTables());
+        this.model.setOriginalTables(this.metadataMu.getCombinations().getTables());
         
         this.updateTable();
     }
