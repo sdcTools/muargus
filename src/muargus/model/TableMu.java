@@ -16,6 +16,7 @@ public class TableMu {
     private boolean riskModel = false;
     private int threshold = 1;
     private final ArrayList<VariableMu> variables = new ArrayList<>();
+    private int nrOfUnsafeCombinations;
     
     public TableMu(){
         
@@ -49,6 +50,15 @@ public class TableMu {
         this.threshold = threshold;
     }
 
+    public int getNrOfUnsafeCombinations() {
+        return this.nrOfUnsafeCombinations;
+    }
+
+    public void setNrOfUnsafeCombinations(int nrOfUnsafeCombinations) {
+        this.nrOfUnsafeCombinations = nrOfUnsafeCombinations;
+    }
+
+    
     public ArrayList<VariableMu> getVariables() {
         return variables;
     }

@@ -99,7 +99,12 @@ public class CalculationService {
         }
         return warning[0];
     }
-        
+    
+    public ArrayList<TableMu> getTableUnsafeCombinations(int Dimensions) {
+        //TODO: call dll
+        return new ArrayList<>();
+    }
+    
     public void applyRecode(MetadataMu metadata) throws ArgusException {
         c.SetProgressListener(null);
         boolean result = c.ApplyRecode();
