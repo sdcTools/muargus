@@ -4,34 +4,18 @@ package muargus.controller;
 import argus.model.ArgusException;
 import argus.model.DataFilePair;
 import java.awt.Desktop;
-import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.Reader;
-import java.io.StringReader;
-import java.io.StringWriter;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JOptionPane;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.html.HTMLDocument;
-import javax.swing.text.html.HTMLEditorKit;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.OutputKeys;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
 import muargus.HTMLReportWriter;
 import muargus.MuARGUS;
 import muargus.model.MetadataMu;
 import muargus.view.MainFrameView;
-import org.apache.commons.io.FilenameUtils;
 import org.w3c.dom.Document;
 
 /**
@@ -40,14 +24,10 @@ import org.w3c.dom.Document;
  */
 public class MainFrameController {
 
-    private MainFrameView view;
+    private final MainFrameView view;
 
     private MetadataMu metadata;
-    private HTMLDocument report;
-    //SpecifyMetadataController specifyMetadataController;
-    //Combinations selectCombinationsModel;
-    //GlobalRecode globalRecodeModel;
-    //MakeProtectedFileModel makeProtectedFileModel;
+    private Document report;
 
     public enum Action {
         OpenMicrodata,
@@ -125,8 +105,7 @@ public class MainFrameController {
             newMetadata.readMetadata();
         }
         catch (ArgusException ex) {
-            
-            JOptionPane.showMessageDialog(null, "Error reading metadata file: " + ex.getMessage());
+            this.view.showErrorMessage(new ArgusException("Error reading metadata file: " + ex.getMessage()));
         }
         this.metadata = newMetadata;
         organise();
@@ -240,6 +219,7 @@ public class MainFrameController {
      *
      */
     public void makeProtectedFile() {
+        try {
         if (this.metadata.getCombinations().getProtectedFile() == null) {
             this.metadata.getCombinations().createProtectedFile();
         }
@@ -249,75 +229,51 @@ public class MainFrameController {
         controller.showView();
         if (controller.isFileCreated()) {
             this.report = createReport();
-            saveReport();
-            viewReport();
+            viewReport(true);
         }
         organise();
+        }
+        catch (ArgusException ex) {
+            view.showErrorMessage(ex);
+        }
     }     
    
-    private void saveReport() {
-        String path = this.metadata.getCombinations().getProtectedFile().getSafeMeta().getFileNames().getDataFileName();
-        String htmlPath = FilenameUtils.removeExtension(path) + ".html";
-        try {
-            FileWriter writer = new FileWriter(new File(htmlPath));
-            HTMLEditorKit kit = new HTMLEditorKit();
-            kit.write(writer, this.report, 0, this.report.getLength());
-            writer.close();
-        }
-        catch (IOException | BadLocationException ex) {
-            ; //TODO handle
-        }
-
-    }
-
     /**
      *
      */
-    public void viewReport() {
+    public void viewReport(boolean save) {
+        try {
         ViewReportController viewReportController = new ViewReportController(this.view, this.report);
+        if (save)
+            viewReportController.saveReport(this.metadata);
         viewReportController.showView();
+        }
+        catch (ArgusException ex) {
+            view.showErrorMessage(ex);
+        }
     }                                                  
     
-    private HTMLDocument createReport() {
+    private Document createReport() throws ArgusException {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder;
-        try {
-            
+        
+        try {    
             builder = factory.newDocumentBuilder();
-            
             Document doc = builder.newDocument();
-            
-            //OutputFormat format = new OutputFormat(doc);
+
             HTMLReportWriter.createReportTree(doc, this.metadata);
-            Transformer tr = TransformerFactory.newInstance().newTransformer();
-            
-            tr.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
-            //tr.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
-            StringWriter output = new StringWriter();
-            
-            tr.transform(new DOMSource(doc), new StreamResult(output));
-            
-            
-//            DOMImplementationLS imp = (DOMImplementationLS)doc.getImplementation();
-//            
-//            LSSerializer serializer = imp.createLSSerializer();
-//            String s = serializer.writeToString(doc.getDocumentElement());
-            String s = output.toString();
-            Reader stringReader = new StringReader(s);
-            HTMLEditorKit htmlKit = new HTMLEditorKit();
-            
-            HTMLDocument htmlDoc = (HTMLDocument) htmlKit.createDefaultDocument();
-            htmlDoc.putProperty("IgnoreCharsetDirective", new Boolean(true));
-            htmlKit.read(stringReader, htmlDoc, 0);
-            
-            return htmlDoc;
-        } catch (ParserConfigurationException|IOException|BadLocationException|TransformerException ex) {
-            Logger.getLogger(MainFrameController.class.getName()).log(Level.SEVERE, null, ex);
+
+            return doc;
         }
+        catch (ParserConfigurationException ex) {
+            Logger.getLogger(MainFrameController.class.getName()).log(Level.SEVERE, null, ex);
+            throw new ArgusException("Error creating report");
+        }
+    }
+        
 
         
-        return null;
-    }
+
     /**
      *
      */
