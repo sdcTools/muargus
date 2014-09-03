@@ -6,6 +6,8 @@ package muargus.view;
 
 import java.util.ArrayList;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
@@ -52,27 +54,48 @@ public class ShowTableCollectionView extends DialogBase {
     }
     
     public void initializeData(){
+        this.model.setOriginalTables(this.metadataMu.getCombinations().getTables());
         this.controller.setAllTables();
+        this.model.setData(this.controller.getData(this.model.getAllTables()));
+        //this.controller.setSubData();
+        this.model.setSubdata(this.model.getData());
+        
+        
         variableListModel = new DefaultComboBoxModel<>();
         VariableMu all = new VariableMu("all");
         variableListModel.addElement(all);
-        this.model.setSelectedVariable(all);
+        //this.model.setSelectedVariable(all);
         for (VariableMu variable : model.getVariables()) {
             variableListModel.addElement(variable);
         }
+        this.variableListModel.setSelectedItem(all);
         this.selectVariableComboBox.setModel(variableListModel);
-        this.model.setOriginalTables(this.metadataMu.getCombinations().getTables());
-        
+        //this.selectVariableComboBox.setSelectedIndex(0);
         this.updateTable();
     }
     
     public void updateTable(){
-        this.tableModel = new DefaultTableModel(this.model.getData(), this.model.getColumnames()) {
+        this.tableModel = new DefaultTableModel(this.model.getSubdata(), this.model.getColumnames()) {
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return false;
             }
         };
         this.table.setModel(tableModel);
+    }
+
+    public VariableMu getSelectVariableComboBox() {
+        return (VariableMu) variableListModel.getElementAt(0);
+//        VariableMu test = (VariableMu) selectVariableComboBox.getModel().getSelectedItem();
+//        System.out.println(test.getName());
+//        try{
+//            return (VariableMu) selectVariableComboBox.getModel().getSelectedItem();
+//        } catch (Exception e){
+//            return (VariableMu) this.selectVariableComboBox.getModel().getElementAt(0);
+//        }
+    }
+
+    public boolean isShowAllTablesCheckBox() {
+        return showAllTablesCheckBox.isSelected();
     }
 
     /**
@@ -173,7 +196,7 @@ public class ShowTableCollectionView extends DialogBase {
     }//GEN-LAST:event_showAllTablesCheckBoxStateChanged
 
     private void selectVariableComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectVariableComboBoxActionPerformed
-        this.model.setSelectedVariable((VariableMu) this.selectVariableComboBox.getSelectedItem());
+        //this.model.setSelectedVariable((VariableMu) this.selectVariableComboBox.getSelectedItem());
         this.updateTable();
     }//GEN-LAST:event_selectVariableComboBoxActionPerformed
 

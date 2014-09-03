@@ -23,12 +23,12 @@ public class ShowTableCollectionController {
     ShowTableCollection model;
     MetadataMu metadataMu;
     CalculationService calculationService;
-
+    
     public ShowTableCollectionController(java.awt.Frame parentView, MetadataMu metadata) {
         this.view = new ShowTableCollectionView(parentView, true, this);
         this.metadataMu = metadata;
         this.view.setMetadataMu(this.metadataMu);
-        this.calculationService = MuARGUS.getCalculationService();
+        
     }
     
     public void showView() {
@@ -39,26 +39,63 @@ public class ShowTableCollectionController {
         this.view.setVisible(false);
     }
     
-    public void setModel(ShowTableCollection model){
+    public void setModel(ShowTableCollection model) {
         this.model = model;
     }
     
-    public void setAllTables(){
-        ArrayList<TableMu> tables = new ArrayList<>();
+    public void setAllTables() {
+        ArrayList<TableMu> allTables = new ArrayList<>();
         this.setDimensions();
-        //for(int i = 0; );
-        
-        this.model.setAllTables(tables);
+        this.calculationService = MuARGUS.getCalculationService();
+        for (int i = 1; i <= this.model.getDimensions(); i++) {
+            allTables.addAll(this.calculationService.getTableUnsafeCombinations(metadataMu, i));
+        }
+        this.model.setAllTables(allTables);
     }
     
-    public void setDimensions(){
+    public void setDimensions() {
         int dimensions = 0;
-        for(TableMu t: this.model.getOriginalTables()){
-            if(t.getVariables().size() > dimensions){
+        for (TableMu t : this.model.getOriginalTables()) {
+            if (t.getVariables().size() > dimensions) {
                 dimensions = t.getVariables().size();
             }
         }
         this.model.setDimensions(dimensions);
+        this.setColumnNames();
+    }
+    
+    public void setColumnNames(){
+        String[] columnNames = new String[this.model.getDimensions() + 1];
+        columnNames[0] = "# unsafe cells";
+        for (int i = 1; i < columnNames.length; i++) {
+            columnNames[i] = "Var " + i;
+        }
+    }
+    
+    public String[][] getData(ArrayList<TableMu> tables) {
+        String[][] data = new String[tables.size()][this.model.getDimensions()+1];
+        for (int i = 0; i < tables.size(); i++) {
+            TableMu t = tables.get(i);
+            data[i][0] = Integer.toString(t.getNrOfUnsafeCombinations());
+            for (int j = 0; j < t.getVariables().size(); j++) {
+                data[i][j + 1] = t.getVariables().get(j).getName();
+            }
+        }
+        return data;
+    }
+    
+    public void setSubData(){
+        if (this.view.getSelectVariableComboBox().getName().equals("all")) {
+            this.model.setSubdata(this.model.getData());
+        } else {
+            ArrayList<TableMu> tables =  new ArrayList<>();
+            for (TableMu t : this.model.getAllTables()) {
+                if (t.getVariables().contains(this.view.getSelectVariableComboBox())) {
+                    tables.add(t);
+                }
+            }
+            this.model.setSubdata(this.getData(tables));
+        }
     }
     
 }
