@@ -96,6 +96,10 @@ public class MakeProtectedFileController implements PropertyChangeListener {
                     saveSafeMeta();
                     view.setVisible(!this.fileCreated);
                 }
+                break;
+            case "error":
+                view.showErrorMessage((ArgusException)pce.getNewValue());
+                break;
         }
     }
 }

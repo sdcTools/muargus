@@ -114,14 +114,10 @@ public class SelectCombinationsController implements PropertyChangeListener{
                 break;
             case "result":
                 boolean success = "success".equals(pce.getNewValue()); 
+                this.view.enableCalculateTables(true);
                 if (success) {
-                    ArrayList<String> missing = MuARGUS.getCalculationService().getUnsafeCombinations(metadata);
-                    if (!missing.isEmpty()) {
-                        view.showMessage(String.join("\n", missing));
-                    }
                     this.view.setVisible(false);
                 }
-                this.view.enableCalculateTables(true);
                 break;
             case "error":
                 view.showErrorMessage((ArgusException)pce.getNewValue());

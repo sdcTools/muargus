@@ -7,6 +7,7 @@ import java.awt.Desktop;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.xml.parsers.DocumentBuilder;
@@ -145,9 +146,7 @@ public class MainFrameController {
         SelectCombinationsController controller = new SelectCombinationsController(
                 this.view, this.metadata);
         controller.showView();
-        //this.selectCombinationsModel = controller.getModel(); // wat doet dit? De model is toch hier al aangemaakt?
-        view.showUnsafeCombinations(this.metadata.getCombinations(), 0);
-        organise();
+        showUnsafeCombinations(0);
     }
 
     /**
@@ -175,9 +174,16 @@ public class MainFrameController {
         GlobalRecodeController controller = new GlobalRecodeController(
                 this.view, this.metadata);
         controller.showView(selectedVariableIndex);
-        MuARGUS.getCalculationService().getUnsafeCombinations(this.metadata);
-        view.showUnsafeCombinations(this.metadata.getCombinations(), 
-                controller.getSelectedVariableIndex());    
+        showUnsafeCombinations(controller.getSelectedVariableIndex());
+    }
+    
+    private void showUnsafeCombinations(int variableIndex) {
+        ArrayList<String> missingCodelists = MuARGUS.getCalculationService().getUnsafeCombinations(this.metadata);
+        if (!missingCodelists.isEmpty()) {
+            view.showMessage(String.join("\n", missingCodelists));       
+        }
+        view.showUnsafeCombinations(this.metadata.getCombinations(), variableIndex);
+        organise();
     }                                                    
 
     /**
