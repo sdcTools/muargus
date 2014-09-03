@@ -8,7 +8,7 @@ Opmerking: Ik heb nu grofweg 1 scherm per week geplaatst maar sommige schermen z
 
 
 Week 1 (1-7 september):                                                         Gedaan:
-    - laatste puntjes op de i zetten                                            
+    - laatste puntjes op de i zetten voor release 1                                            
     - planning maken tot 1 november                                             check
     - javadocs voor de eerste release schrijven
     - ShowTableCollection
@@ -23,20 +23,24 @@ Week 3 (15-21 september):
 Week 4 (22-28 september): (Jeldrik afwezig)
     - ModifyNumericalVariables
 
-Week 5 (29 septembet - 5 oktober): (Jeldrik afwezig)
-    - NumericalMicroAggregation
+Week 5 (29 septembet - 5 oktober): (Jeldrik & Anne afwezig)
 
 Week 6 (6-12 oktober):
+    - SpecifyMetadata (SPSS & free with meta) 
     - NumericalRanksSwapping
 
 Week 7 (13-19 oktober):
+    - NumericalMicroAggregation
     - Contents
     - News
     - About
 
 Week 8 (20-26 oktober):
-    - SpecifyMetadata (SPSS & free with meta) 
-
+    - kleine puntjes afwerken
 
 Week 9 (27 oktober - 2 november):
-    - kleine puntjes afwerken
+    - uitloop
+
+
+wishlist:
+    - R-script toevoegen --> duidelijk krijgen hoe en wat.
