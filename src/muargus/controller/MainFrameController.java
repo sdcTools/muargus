@@ -180,7 +180,7 @@ public class MainFrameController {
     private void showUnsafeCombinations(int variableIndex) {
         ArrayList<String> missingCodelists = MuARGUS.getCalculationService().getUnsafeCombinations(this.metadata);
         if (!missingCodelists.isEmpty()) {
-            view.showMessage(String.join("\n", missingCodelists));       
+            view.showMessage("\n" + missingCodelists);       
         }
         view.showUnsafeCombinations(this.metadata.getCombinations(), variableIndex);
         organise();
