@@ -11,7 +11,7 @@ import muargus.model.Combinations;
  *
  * @author ambargus
  */
-public class ArgusInput extends javax.swing.JDialog {
+public class ArgusInput extends DialogBase {
 
     private boolean isThreshold;
     private boolean okButtonPressed = false;

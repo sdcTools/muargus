@@ -8,7 +8,7 @@ package muargus.view;
  *
  * @author ambargus
  */
-public class ModifyIndividualRiskSpecification extends javax.swing.JDialog {
+public class ModifyIndividualRiskSpecification extends DialogBase {
 
     /**
      * Creates new form ModifyIndividualRiskSpecification

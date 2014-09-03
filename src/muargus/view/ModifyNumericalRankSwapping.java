@@ -8,7 +8,7 @@ package muargus.view;
  *
  * @author ambargus
  */
-public class ModifyNumericalRankSwapping extends javax.swing.JDialog {
+public class ModifyNumericalRankSwapping extends DialogBase {
 
     /**
      * Creates new form ModifyNumericalRankSwapping

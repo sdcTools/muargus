@@ -62,7 +62,7 @@ public class SelectCombinationsController implements PropertyChangeListener{
             ;//this.clearData();
         }
         this.metadata.setCombinations(this.modelClone);
-        TableService service = new TableService();
+        CalculationService service = MuARGUS.getCalculationService();
         service.setPropertyChangeListener(this);
         service.calculateTables(this.metadata);
         //service.getUnsafeCombinations(this.model, this.metadata);

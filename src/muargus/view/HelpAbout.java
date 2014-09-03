@@ -8,7 +8,7 @@ package muargus.view;
  *
  * @author ambargus
  */
-public class HelpAbout extends javax.swing.JDialog {
+public class HelpAbout extends DialogBase {
 
     /**
      * Creates new form HelpAbout

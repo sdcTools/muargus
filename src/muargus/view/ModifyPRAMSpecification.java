@@ -8,7 +8,7 @@ package muargus.view;
  *
  * @author ambargus
  */
-public class ModifyPRAMSpecification extends javax.swing.JDialog {
+public class ModifyPRAMSpecification extends DialogBase {
 
     /**
      * Creates new form ModifyPRAMSpecification

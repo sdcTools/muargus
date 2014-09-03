@@ -20,7 +20,7 @@ import muargus.model.VariableMu;
  *
  * @author ambargus
  */
-public class ShowTableCollectionView extends javax.swing.JDialog {
+public class ShowTableCollectionView extends DialogBase {
 
     MetadataMu metadataMu;
     ShowTableCollectionController controller;

@@ -8,7 +8,7 @@ package muargus.view;
  *
  * @author ambargus
  */
-public class ModifyNumericalMicroaggregation extends javax.swing.JDialog {
+public class ModifyNumericalMicroaggregation extends DialogBase {
 
     /**
      * Creates new form ModifyNumericalMicroaggregation

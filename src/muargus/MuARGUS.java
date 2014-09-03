@@ -7,6 +7,7 @@ import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.SplashScreen;
 import java.util.logging.Logger;
+import muargus.controller.CalculationService;
 import muargus.extern.dataengine.CMuArgCtrl;
 import muargus.model.MetadataMu;
 import muargus.view.MainFrameView;
@@ -32,10 +33,11 @@ public class MuARGUS {
         System.loadLibrary("libmuargusdll");
     }
     
-    private static CMuArgCtrl muArgCrtl = new CMuArgCtrl();
+    //private static CMuArgCtrl muArgCrtl = new CMuArgCtrl();
+    private static CalculationService calcService = new CalculationService(new CMuArgCtrl());
     
-    public static CMuArgCtrl getMuArgCtrl() {
-        return muArgCrtl;
+    public static CalculationService getCalculationService() {
+        return calcService;
     }
     
     public static String getFullVersion() {

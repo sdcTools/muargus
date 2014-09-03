@@ -8,7 +8,7 @@ package muargus.view;
  *
  * @author ambargus
  */
-public class GenerateParameters extends javax.swing.JDialog {
+public class GenerateParameters extends DialogBase {
 
     /**
      * Creates new form GenerateParameters

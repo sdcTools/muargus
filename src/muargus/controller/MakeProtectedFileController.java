@@ -10,6 +10,7 @@ import java.beans.PropertyChangeListener;
 import java.io.File;
 import javax.swing.JOptionPane;
 import javax.swing.JRadioButton;
+import muargus.MuARGUS;
 import muargus.model.MetadataMu;
 import muargus.model.Combinations;
 import muargus.view.MakeProtectedFileView;
@@ -25,6 +26,7 @@ public class MakeProtectedFileController implements PropertyChangeListener {
     private MetadataMu metadata;
     //Combinations selectCombinationsModel;
     private boolean fileCreated;
+    private final CalculationService service;
     /**
      *
      * @param parentView
@@ -40,6 +42,7 @@ public class MakeProtectedFileController implements PropertyChangeListener {
         this.metadata = metadata;
         this.view.setMetadataMu(this.metadata);
         this.fileCreated = false;
+        this.service = MuARGUS.getCalculationService();
 
     }
 
@@ -57,14 +60,13 @@ public class MakeProtectedFileController implements PropertyChangeListener {
      */
     public void makeFile(File file) {
         this.metadata.getCombinations().getProtectedFile().initSafeMeta(file, this.metadata);
-        TableService service = new TableService();
-        service.setPropertyChangeListener(this);
-        service.makeProtectedFile(this.metadata);
+        this.service.setPropertyChangeListener(this);
+        this.service.makeProtectedFile(this.metadata);
     }
     
     private void saveSafeMeta() {
         
-        new TableService().fillSafeFileMetadata(this.metadata);
+        this.service.fillSafeFileMetadata(this.metadata);
         MetadataMu safeMetadata = this.metadata.getCombinations().getProtectedFile().getSafeMeta();
         File file = new File(safeMetadata.getFileNames().getMetaFileName());
         try {

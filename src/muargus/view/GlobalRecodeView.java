@@ -611,7 +611,6 @@ public class GlobalRecodeView extends DialogBase {
             int positions = getTruncatePositions(getSelectedRecode().getVariable().getVariableLength());
             if (positions > 0) {
                 controller.truncate(getSelectedRecode(), positions);
-                getSelectedRecode().setPositionsTruncated(Integer.toString(positions));
                 int rowIndex = this.model.getVariables().indexOf(getSelectedRecode().getVariable());
                 variablesTable.getModel().setValueAt("T", rowIndex, 0);
                 updateValues();
@@ -619,7 +618,7 @@ public class GlobalRecodeView extends DialogBase {
  
         }
         catch (ArgusException ex) {
-            ;
+            showMessage(ex.getMessage());
         }
     }//GEN-LAST:event_truncateButtonActionPerformed
 
@@ -633,7 +632,7 @@ public class GlobalRecodeView extends DialogBase {
                 updateValues();
             }
             catch (ArgusException ex) {
-                JOptionPane.showMessageDialog(this, ex.getMessage());
+                showMessage(ex.getMessage());
             }
         }
     }//GEN-LAST:event_readButtonActionPerformed
@@ -659,7 +658,7 @@ public class GlobalRecodeView extends DialogBase {
             updateValues();
         }
         catch (ArgusException ex) {
-                JOptionPane.showMessageDialog(this, ex.getMessage());
+                showMessage(ex.getMessage());
         }
     }//GEN-LAST:event_applyButtonActionPerformed
 
@@ -670,7 +669,7 @@ public class GlobalRecodeView extends DialogBase {
             variablesTable.getModel().setValueAt("", rowIndex, 0);
         }
         catch (ArgusException ex) {
-            ;
+            showMessage(ex.getMessage());
         }
     }//GEN-LAST:event_undoButtonActionPerformed
 

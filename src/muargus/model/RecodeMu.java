@@ -110,6 +110,8 @@ public class RecodeMu {
     
     public void setRecoded(boolean isRecoded) {
         this.recoded = isRecoded;
+        if (isRecoded)
+            this.truncated = false;
     }
 
     public String getMissing_1_new() {

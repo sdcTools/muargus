@@ -35,11 +35,14 @@ import muargus.model.VariableMu;
  *
  * @author pibd05
  */
-public class TableService {
+public class CalculationService {
 
     private static final Logger logger = Logger.getLogger(SelectCombinationsController.class.getName());
+    private final CMuArgCtrl c;
 
-    private final CMuArgCtrl c = MuARGUS.getMuArgCtrl();
+    public CalculationService(final CMuArgCtrl muArgCtrl) {
+        c = muArgCtrl;
+    }
 
     private PropertyChangeListener listener;
 
@@ -69,6 +72,61 @@ public class TableService {
         };
         worker.addPropertyChangeListener(null);
         worker.execute();
+    }
+
+    private int getIndexOf(MetadataMu metadata, VariableMu variable) {
+        //Get the index (1-based) of the variable in the dll
+        return getVariables(metadata).indexOf(variable) + 1;
+    }
+
+    public String doRecode(MetadataMu metadata, RecodeMu recode) throws ArgusException {
+        int index = getIndexOf(metadata, recode.getVariable());
+        int[] errorType = new int[]{0};
+        int[] errorLine = new int[]{0};
+        int[] errorPos = new int[]{0};
+        String[] warning = new String[1];
+        boolean result = c.DoRecode(index,
+                recode.getGrcText(),
+                recode.getMissing_1_new(),
+                recode.getMissing_2_new(),
+                errorType,
+                errorLine,
+                errorPos,
+                warning);
+        if (!result) {
+            throw new ArgusException(String.format("Error in recoding; line %d, position %d \nNo recoding done",
+                    errorLine[0], errorPos[0]));
+        }
+        return warning[0];
+    }
+        
+    public void applyRecode(MetadataMu metadata) throws ArgusException {
+        c.SetProgressListener(null);
+        boolean result = c.ApplyRecode();
+        if (!result) {
+            throw new ArgusException("Error during Apply recode");
+        }
+        //return getUnsafeCombinations(metadata);
+    }
+
+    public void undoRecode(MetadataMu metadata, RecodeMu recode) throws ArgusException {
+        c.SetProgressListener(null);
+        int index = getIndexOf(metadata, recode.getVariable());
+        boolean result = c.UndoRecode(index);
+        if (!result) {
+            throw new ArgusException("Error while undoing recode");
+        }
+        applyRecode(metadata);
+    }
+    
+    public void truncate(MetadataMu metadata, RecodeMu recode, int positions) throws ArgusException {
+        int index = getIndexOf(metadata, recode.getVariable());
+        boolean result = c.DoTruncate(index, positions);
+        if (!result) {
+            throw new ArgusException("Error during Truncate");
+        }
+        recode.setTruncated(true);
+        applyRecode(metadata);
     }
 
     private void makeFileInBackground(final MetadataMu metadata) throws ArgusException {

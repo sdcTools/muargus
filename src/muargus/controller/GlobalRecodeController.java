@@ -31,6 +31,7 @@ public class GlobalRecodeController {
     //GlobalRecode model;
     MetadataMu metadata;
     //Combinations selectCombinationsModel;
+    CalculationService service;
 
     /**
      *
@@ -41,9 +42,11 @@ public class GlobalRecodeController {
      */
     public GlobalRecodeController(java.awt.Frame parentView, MetadataMu metadata) {
         //this.model = model;
+        this.service = MuARGUS.getCalculationService();
         this.view = new GlobalRecodeView(parentView, true, this);
         this.metadata = metadata;
         this.view.setMetadataMu(this.metadata);
+        
         //this.selectCombinationsModel = selectCombinationsModel;
         //this.view = view;
     }
@@ -89,19 +92,6 @@ public class GlobalRecodeController {
 //        view.setCodelistText(filename);
 //    }
 
-    /**
-     *
-     */
-    public void truncate(RecodeMu recode, int positions) throws ArgusException {
-        CMuArgCtrl c = MuARGUS.getMuArgCtrl();
-        int index = getIndexOf(recode.getVariable());
-        boolean result = c.DoTruncate(index, positions);
-        if (!result) {
-            throw new ArgusException("Error during Truncate");
-        }
-        recode.setTruncated(true);
-        applyRecode();
-    }
 
     private GlobalRecode getGlobalRecode() {
         return this.metadata.getCombinations().getGlobalRecode();
@@ -147,66 +137,36 @@ public class GlobalRecodeController {
 
     }
     
-    private int getIndexOf(VariableMu variable) {
-        //Get the index (1-based) of the variable in the dll
-        return new TableService().getVariables(this.metadata).indexOf(variable) + 1;
-    }
 
     /**
      *
      */
     public void apply(RecodeMu recode) throws ArgusException {
-        CMuArgCtrl c = MuARGUS.getMuArgCtrl();
-        int index = getIndexOf(recode.getVariable());
-        int[] errorType = new int[]{0};
-        int[] errorLine = new int[]{0};
-        int[] errorPos = new int[]{0};
-        String[] warning = new String[1];
-        boolean result = c.DoRecode(index,
-                recode.getGrcText(),
-                recode.getMissing_1_new(),
-                recode.getMissing_2_new(),
-                errorType,
-                errorLine,
-                errorPos,
-                warning);
-        if (!result) {
-            throw new ArgusException(String.format("Error in recoding; line %d, position %d \nNo recoding done",
-                    errorLine[0], errorPos[0]));
-        }
+        String warning = this.service.doRecode(this.metadata, recode);
+        view.showWarning(warning);
+        this.service.applyRecode(this.metadata);
+        recode.setTruncated(false);
         recode.setRecoded(true);
-        applyRecode();
-        view.showWarning(warning[0]);
-
     }
 
-    private void applyRecode() throws ArgusException {
-        CMuArgCtrl c = MuARGUS.getMuArgCtrl();
-        c.SetProgressListener(null);
+    public void undo(RecodeMu recode) throws ArgusException {
+        this.service.undoRecode(this.metadata, recode);
+        recode.setRecoded(false);
+        recode.setTruncated(false);
+    }
 
-        boolean result = c.ApplyRecode();
-        if (!result) {
-            throw new ArgusException("Error during Apply recode");
-        }
-        ArrayList<String> missing = new TableService().getUnsafeCombinations(this.metadata);
-        if (!missing.isEmpty()) {
-            JOptionPane.showMessageDialog(null, "\n" + missing);
-        }
+        /**
+     *
+     */
+    public void truncate(RecodeMu recode, int positions) throws ArgusException {
+        this.service.truncate(this.metadata, recode, positions);
+        recode.setRecoded(false);
+        recode.setTruncated(true);
+        recode.setPositionsTruncated(Integer.toString(positions));
     }
 
     /**
      *
      */
-    public void undo(RecodeMu recode) throws ArgusException {
-        CMuArgCtrl c = MuARGUS.getMuArgCtrl();
-        c.SetProgressListener(null);
-        int index = getIndexOf(recode.getVariable());
-        boolean result = c.UndoRecode(index);
-        if (!result) {
-            throw new ArgusException("Error while undoing recode");
-        }
-        recode.setRecoded(false);
-        recode.setTruncated(false);
-        applyRecode();
-    }
+
 }

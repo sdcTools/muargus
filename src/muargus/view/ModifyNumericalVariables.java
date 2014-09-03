@@ -8,7 +8,7 @@ package muargus.view;
  *
  * @author ambargus
  */
-public class ModifyNumericalVariables extends javax.swing.JDialog {
+public class ModifyNumericalVariables extends DialogBase {
 
     /**
      * Creates new form ModifyNumericalVariables

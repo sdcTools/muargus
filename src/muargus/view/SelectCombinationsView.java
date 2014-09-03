@@ -22,7 +22,7 @@ import muargus.CombinationsTableCellRenderer;
  *
  * @author ambargus
  */
-public class SelectCombinationsView extends javax.swing.JDialog {
+public class SelectCombinationsView extends DialogBase {
 
     private final SelectCombinationsController controller;
     private Combinations model;

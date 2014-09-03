@@ -8,7 +8,7 @@ package muargus.view;
  *
  * @author ambargus
  */
-public class Splash extends javax.swing.JDialog {
+public class Splash extends DialogBase {
 
     /**
      * Creates new form Splash

@@ -12,7 +12,7 @@ import muargus.model.Combinations;
  *
  * @author ambargus
  */
-public class GenerateAutomaticTables extends javax.swing.JDialog {
+public class GenerateAutomaticTables extends DialogBase {
 
     private Combinations model; 
     private boolean valid; // is used to continue with the calculation

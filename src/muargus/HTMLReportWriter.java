@@ -12,7 +12,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import muargus.controller.TableService;
+import muargus.controller.CalculationService;
 import muargus.extern.dataengine.CMuArgCtrl;
 import muargus.model.MetadataMu;
 import muargus.model.RecodeMu;
@@ -28,7 +28,6 @@ import org.w3c.dom.Node;
  */
 public class HTMLReportWriter {
 
-    private static CMuArgCtrl c = MuARGUS.getMuArgCtrl();
     private static Document doc;
 
     public static void createReportTree(
