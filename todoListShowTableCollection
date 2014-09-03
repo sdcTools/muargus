@@ -26,5 +26,7 @@ Gedaan:                                                                         
     - als een variabele gekozen wordt, dan worden alleen de tabellen met die variabelen laten zien          Jeldrik
 5.  CloseButton
     - sluit het scherm                                                                                      Jeldrik
+6.  Javadoc schrijven                                                                                       Jeldrik
+7.  Refactoren (kijken of alles volgens de MVC is gedaan en het weghalen van overbodige code)               Jeldrik
 
 wishlish:

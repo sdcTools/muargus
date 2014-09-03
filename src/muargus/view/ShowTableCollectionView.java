@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package muargus.view;
 
 import javax.swing.DefaultComboBoxModel;
@@ -15,6 +11,7 @@ import muargus.model.TableCollection;
 import muargus.model.VariableMu;
 
 /**
+ * The view class of the ShowTableCollection screen.
  *
  * @author ambargus
  */
@@ -25,35 +22,56 @@ public class ShowTableCollectionView extends DialogBase {
     TableCollection model;
     private DefaultComboBoxModel variableListModel;
     private TableModel tableModel;
-    
+
     /**
-     * Creates new form ModifyShowTableCollection
-     * @param parent
+     * Constructor for the ShowTableCollectionView. This constructor will
+     * initialize its components, sets the table to single selection and sets a
+     * renderer to the selectVariableCombobox that will read the names of the
+     * variables.
+     *
+     * @param parent the Frame of the mainFrame.
      * @param modal
-     * @param controller
+     * @param controller the controller of this view.
      */
     public ShowTableCollectionView(java.awt.Frame parent, boolean modal, ShowTableCollectionController controller) {
         super(parent, modal);
-        this.initComponents(); // wil je bij methoden van de eigen klasse wel of geen 'this' ervoor?
-        this.controller =  controller;
-        this.setLocationRelativeTo(null);
+        initComponents();
+        setLocationRelativeTo(null);
+        this.controller = controller;
         this.table.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         this.selectVariableComboBox.setRenderer(new VariableNameCellRenderer());
     }
-    
+
+    /**
+     * Sets the Metadata and the model. This method is called from the
+     * controller. It sets the metadata in this view, sets the model and adds a
+     * this model to the controller. Finally it calls for the initialisation of
+     * the data.
+     *
+     * @param metadataMu the orginal metadata.
+     */
     public void setMetadataMu(MetadataMu metadataMu) {
         this.metadataMu = metadataMu;
         this.model = this.metadataMu.getCombinations().getShowTableCollection();
         this.controller.setModel(this.model);
-        this.initializeData();
+        initializeData();
     }
-    
-    public void initializeData(){
+
+    /**
+     * Initializes the data. This method sets the original tables in the model
+     * and sets the showAllTables to false. The listModel for the
+     * selectVariableComboBox is filled with a dummy variable and the variables
+     * used in the tables. The dummy variable is used if the tables of all
+     * variables should be shown. Finally the controller method for setting all
+     * tables is called, the complete data of these tables is added to the model
+     * and the table is updated.
+     */
+    public void initializeData() {
         this.model.setOriginalTables(this.metadataMu.getCombinations().getTables());
         this.model.setShowAllTables(false);
-        
+
         this.variableListModel = new DefaultComboBoxModel<>();
-        VariableMu all = new VariableMu("all"); // dummy variable for the option all variables
+        VariableMu all = new VariableMu("all");
         this.variableListModel.addElement(all);
         this.model.setSelectedVariable(all);
         for (VariableMu variable : model.getVariables()) {
@@ -61,15 +79,18 @@ public class ShowTableCollectionView extends DialogBase {
         }
         this.variableListModel.setSelectedItem(all);
         this.selectVariableComboBox.setModel(this.variableListModel);
-        
+
         this.controller.setAllTables();
         this.model.setData(this.controller.getData(this.model.getAllTables()));
-        this.updateTable();
+        updateTable();
     }
-    
-    public void updateTable(){
+
+    /**
+     * Updates the values of the Table by resetting the table with new values.
+     */
+    public void updateTable() {
         this.controller.setSubData(this.model.isShowAllTables());
-        this.tableModel = new DefaultTableModel(this.model.getSubdata(), this.model.getColumnames()) {
+        this.tableModel = new DefaultTableModel(this.model.getSubdata(), this.model.getColumnNames()) {
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return false;
             }
@@ -157,8 +178,8 @@ public class ShowTableCollectionView extends DialogBase {
                     .addComponent(selectVariableLabel)
                     .addComponent(selectVariableComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(scrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 232, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(scrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 252, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(closeButton)
                 .addContainerGap())
         );
@@ -172,12 +193,12 @@ public class ShowTableCollectionView extends DialogBase {
 
     private void showAllTablesCheckBoxStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_showAllTablesCheckBoxStateChanged
         this.model.setShowAllTables(this.showAllTablesCheckBox.isSelected());
-        this.updateTable();
+        updateTable();
     }//GEN-LAST:event_showAllTablesCheckBoxStateChanged
 
     private void selectVariableComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectVariableComboBoxActionPerformed
         this.model.setSelectedVariable((VariableMu) this.selectVariableComboBox.getSelectedItem());
-        this.updateTable();
+        updateTable();
     }//GEN-LAST:event_selectVariableComboBoxActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
