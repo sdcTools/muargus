@@ -11,6 +11,7 @@ import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
+import javax.swing.JOptionPane;
 import muargus.MuARGUS;
 import muargus.model.MetadataMu;
 import muargus.model.Combinations;
@@ -65,7 +66,7 @@ public class SelectCombinationsController implements PropertyChangeListener{
         CalculationService service = MuARGUS.getCalculationService();
         service.setPropertyChangeListener(this);
         service.calculateTables(this.metadata);
-        //service.getUnsafeCombinations(this.model, this.metadata);
+        
     }
     
     private void getSettings() {
@@ -113,8 +114,20 @@ public class SelectCombinationsController implements PropertyChangeListener{
             case "progress":
                 view.setProgress(pce.getNewValue());
                 break;
-            case "status":
-                view.setVisible(pce.getNewValue() != "done");
+            case "result":
+                boolean success = "success".equals(pce.getNewValue()); 
+                if (success) {
+                    ArrayList<String> missing = MuARGUS.getCalculationService().getUnsafeCombinations(metadata);
+                    if (!missing.isEmpty()) {
+                        view.showMessage(String.join("\n", missing));
+                    }
+                    this.view.setVisible(false);
+                }
+                this.view.enableCalculateTables(true);
+                break;
+            case "error":
+                view.showErrorMessage((ArgusException)pce.getNewValue());
+                break;
         }
     }
     

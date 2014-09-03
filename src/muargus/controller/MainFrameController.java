@@ -104,8 +104,15 @@ public class MainFrameController {
         try {
             newMetadata.readMetadata();
         }
-        catch (ArgusException ex) {
+        catch (Exception ex) {
             this.view.showErrorMessage(new ArgusException("Error reading metadata file: " + ex.getMessage()));
+            return;
+        }
+        try {
+            newMetadata.verify(); 
+        }
+        catch (ArgusException ex) {
+            this.view.showErrorMessage(new ArgusException("Metadata contains error(s): " + ex.getMessage()));
         }
         this.metadata = newMetadata;
         organise();

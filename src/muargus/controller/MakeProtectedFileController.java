@@ -92,8 +92,8 @@ public class MakeProtectedFileController implements PropertyChangeListener {
             case "progress":
                 view.setProgress(pce.getNewValue());
                 break;
-            case "status":
-                if (pce.getNewValue() == "done") {
+            case "result":
+                if ("success".equals(pce.getNewValue())) {
                     saveSafeMeta();
                     view.setVisible(!this.fileCreated);
                 }

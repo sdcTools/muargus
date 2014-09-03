@@ -17,7 +17,6 @@ import java.util.HashMap;
 import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JOptionPane;
 import javax.swing.SwingWorker;
 import muargus.MuARGUS;
 import muargus.extern.dataengine.CMuArgCtrl;
@@ -62,11 +61,12 @@ public class CalculationService {
                 super.done();
                 try {
                     get();
-                    workerDone();
+                    workerDone(null);
                 } catch (InterruptedException ex) {
                     logger.log(Level.SEVERE, null, ex);
                 } catch (ExecutionException ex) {
-                    JOptionPane.showMessageDialog(null, ex.getCause().getMessage());
+                    //JOptionPane.showMessageDialog(null, ex.getCause().getMessage());
+                    workerDone(ex);
                 }
             }
         };
@@ -204,14 +204,12 @@ public class CalculationService {
                 super.done();
                 try {
                     get();
-                    workerDone();
-                    ArrayList<String> missing = getUnsafeCombinations(metadata);
-                    if (!missing.isEmpty())
-                        JOptionPane.showMessageDialog(null, "\n" + missing);
+                    workerDone(null);
                 } catch (InterruptedException ex) {
                     logger.log(Level.SEVERE, null, ex);
                 } catch (ExecutionException ex) {
-                    JOptionPane.showMessageDialog(null, ex.getCause().getMessage());
+                    //JOptionPane.showMessageDialog(null, ex.getCause().getMessage());
+                    workerDone(ex);
                 }
             }
         };
@@ -219,8 +217,14 @@ public class CalculationService {
         worker.execute();
     }
 
-    private void workerDone() {
-        this.firePropertyChange("status", null, "done");
+    private void workerDone(Exception ex) {
+        if (ex == null) {
+            this.firePropertyChange("result", null, "success");
+        }
+        else {
+            this.firePropertyChange("error", null, ex.getCause());
+            this.firePropertyChange("result", null, "error");
+        }
     }
 
     public void setPropertyChangeListener(PropertyChangeListener listener) {

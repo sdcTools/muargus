@@ -123,7 +123,7 @@ public class MetadataMu {
      * variable it finds and provides the relevant information of this variable
      * (is it recodable, what is it's ID_level etc).
      *
-     * @throws ArgusException when verify() of the read model fails
+     * @throws ArgusException when the file cannot be read
      */
     public void readMetadata() throws ArgusException {
         if (this.filenames.getMetaFileName().length() == 0) {
@@ -224,7 +224,6 @@ public class MetadataMu {
         tokenizer.close();
 
         linkRelatedVariables();
-        verify();
     }
 
     private void writeVariable(Writer w, VariableMu variable) {
