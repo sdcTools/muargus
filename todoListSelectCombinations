@@ -21,6 +21,10 @@ Release 2+
 17. Kijk wat er in de Controller/Model kan en verplaats dat.                                                    ..
 18. code opschonen                                                                                              ..
 19. javadoc schrijven voor de methodes   
+21. bug: bij calculate tables als 0 tabellen rare foutmelding
+22. foutcode bij ExploreFile vervangen door fouttekst
+23. dll crasht soms: proberen te reproduceren
+
 
 
 Behandelde opmerkingen/vragen:                                                                                  Antwoord:
