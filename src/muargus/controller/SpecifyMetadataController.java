@@ -6,8 +6,7 @@ import argus.utils.SystemUtils;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.logging.Logger;
-import javax.swing.DefaultListModel;
-import javax.swing.JOptionPane;
+//import javax.swing.DefaultListModel;
 import muargus.model.Combinations;
 import muargus.model.MetadataMu;
 import muargus.view.SpecifyMetadataView;
@@ -43,14 +42,6 @@ public class SpecifyMetadataController {
 
     }
 
-    public void setList(ArrayList<String> list) {
-        DefaultListModel model1 = new DefaultListModel();
-        for (String s : list) {
-            model1.addElement(s);
-        }
-
-    }
-
     /**
      *
      */
@@ -73,8 +64,7 @@ public class SpecifyMetadataController {
             try {
                 this.metadataClone.verify();
             } catch (ArgusException ex) {
-                JOptionPane.showMessageDialog(view,
-                        ex.getMessage());
+                view.showErrorMessage(ex);
                 return;
             }
 
@@ -83,9 +73,8 @@ public class SpecifyMetadataController {
             if (significantDifference)
             {
                 message = "";
-                if (JOptionPane.showConfirmDialog(view, "Changing the Metadata will result in losing already specified tables.\n"
-                        + "Do you wish to continue?", "Mu Argus",
-                        JOptionPane.YES_NO_OPTION) == JOptionPane.NO_OPTION) {
+                if (!view.showConfirmDialog("Changing the Metadata will result in losing already specified tables.\n"
+                        + "Do you wish to continue?")) {
                     return;
                 }
                 //this.metadata.setCombinations(null);
@@ -96,8 +85,7 @@ public class SpecifyMetadataController {
             }
 
             this.metadata = this.metadataClone;
-            if (JOptionPane.showConfirmDialog(view, message + "Save changes?", "Mu Argus",
-                    JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+            if (view.showConfirmDialog(message + "Save changes?")) {
                 String filePath = view.showFileDialog("Save ARGUS metadata", true, new String[] {"ARGUS metadata file (*.rda)|rda"});
                 if (filePath != null) {
                     try {
@@ -136,8 +124,7 @@ public class SpecifyMetadataController {
      */
     public void cancel() {
         if (!this.metadata.equals(this.metadataClone)) {
-            if (JOptionPane.showConfirmDialog(view, "All changes will be discarded. Are you sure?", "Mu Argus",
-                    JOptionPane.YES_NO_OPTION) == JOptionPane.NO_OPTION) {
+            if (!view.showConfirmDialog("All changes will be discarded. Are you sure?")) {
                 return;
             }
         }

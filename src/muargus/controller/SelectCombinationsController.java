@@ -10,8 +10,6 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.logging.Logger;
-import javax.swing.DefaultListModel;
-import javax.swing.JOptionPane;
 import muargus.MuARGUS;
 import muargus.model.MetadataMu;
 import muargus.model.Combinations;
@@ -45,12 +43,12 @@ public class SelectCombinationsController implements PropertyChangeListener{
         this.view.setVisible(true);
     }
     
-    public void setList(ArrayList<String> list){
-        DefaultListModel model1 = new DefaultListModel();
-        for(String s: list){
-            model1.addElement(s);
-        }
-    }
+//    public void setList(ArrayList<String> list){
+//        DefaultListModel model1 = new DefaultListModel();
+//        for(String s: list){
+//            model1.addElement(s);
+//        }
+//    }
     
     /**
      * 

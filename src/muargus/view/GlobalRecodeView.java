@@ -618,7 +618,7 @@ public class GlobalRecodeView extends DialogBase {
  
         }
         catch (ArgusException ex) {
-            showMessage(ex.getMessage());
+            showErrorMessage(ex);
         }
     }//GEN-LAST:event_truncateButtonActionPerformed
 
@@ -632,7 +632,7 @@ public class GlobalRecodeView extends DialogBase {
                 updateValues();
             }
             catch (ArgusException ex) {
-                showMessage(ex.getMessage());
+                showErrorMessage(ex);
             }
         }
     }//GEN-LAST:event_readButtonActionPerformed
@@ -658,7 +658,7 @@ public class GlobalRecodeView extends DialogBase {
             updateValues();
         }
         catch (ArgusException ex) {
-                showMessage(ex.getMessage());
+            showErrorMessage(ex);
         }
     }//GEN-LAST:event_applyButtonActionPerformed
 
@@ -669,7 +669,7 @@ public class GlobalRecodeView extends DialogBase {
             variablesTable.getModel().setValueAt("", rowIndex, 0);
         }
         catch (ArgusException ex) {
-            showMessage(ex.getMessage());
+            showErrorMessage(ex);
         }
     }//GEN-LAST:event_undoButtonActionPerformed
 

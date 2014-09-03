@@ -54,7 +54,7 @@ public class DialogBase extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     public void showMessage(String message) {
-        JOptionPane.showMessageDialog(null, message);
+        JOptionPane.showMessageDialog(null, message, MuARGUS.getMessageTitle(), JOptionPane.INFORMATION_MESSAGE);
     }
     
     public void showErrorMessage(ArgusException ex) {
@@ -62,7 +62,7 @@ public class DialogBase extends javax.swing.JDialog {
     }
     
     public boolean showConfirmDialog(String message) {
-        return (JOptionPane.showConfirmDialog(null, message) == JOptionPane.YES_OPTION);
+        return (JOptionPane.showConfirmDialog(null, message, MuARGUS.getMessageTitle(), JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION);
     }
     
     public String showFileDialog(String title, boolean forSaving, String[] filter) {

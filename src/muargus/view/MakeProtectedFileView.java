@@ -50,7 +50,7 @@ public class MakeProtectedFileView extends DialogBase {
     }
 
     public final void makeVariables() {
-        this.controller.getSuppressionRadioButton().setSelected(true);
+        this.getSuppressionRadioButton().setSelected(true);
         this.model.setHouseholdData(this.metadataMu.isHouseholdData());
         this.hhIdentifierPanel.setEnabled(this.model.isHouseholdData());
         this.keepInSafeFileRadioButton.setEnabled(this.model.isHouseholdData());
@@ -120,6 +120,18 @@ public class MakeProtectedFileView extends DialogBase {
 
     public JCheckBox getAddRiskToOutputFileCheckBox() {
         return addRiskToOutputFileCheckBox;
+    }
+
+    public JRadioButton getSuppressionRadioButton() {
+        switch (this.model.getSuppressionType()) {
+            case (0):
+                return getNoSuppressionRadioButton();
+            case (1):
+                return getUseWeightRadioButton();
+            case(2):
+                return getUseEntropyRadioButton();
+        }
+        return null;
     }
 
     /**
