@@ -104,7 +104,7 @@ public class SpecifyMetadataController {
                         this.metadata.write(new File(filePath), true);
                     }
                     catch (ArgusException ex) {
-                        view.showMessage(ex.getMessage());
+                        view.showErrorMessage(ex);
                     }
                 }
 

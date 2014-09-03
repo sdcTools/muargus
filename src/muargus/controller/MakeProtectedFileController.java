@@ -8,7 +8,6 @@ import argus.model.ArgusException;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
-import javax.swing.JOptionPane;
 import javax.swing.JRadioButton;
 import muargus.MuARGUS;
 import muargus.model.MetadataMu;
@@ -74,7 +73,7 @@ public class MakeProtectedFileController implements PropertyChangeListener {
             this.fileCreated = true;
         }
         catch (ArgusException ex) {
-            JOptionPane.showMessageDialog(null, ex.getMessage());
+            this.view.showMessage(ex.getMessage());
         }
     }
 

@@ -28,6 +28,7 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import muargus.HTMLReportWriter;
+import muargus.MuARGUS;
 import muargus.model.MetadataMu;
 import muargus.view.MainFrameView;
 import org.apache.commons.io.FilenameUtils;
@@ -124,6 +125,7 @@ public class MainFrameController {
             newMetadata.readMetadata();
         }
         catch (ArgusException ex) {
+            
             JOptionPane.showMessageDialog(null, "Error reading metadata file: " + ex.getMessage());
         }
         this.metadata = newMetadata;
@@ -187,6 +189,7 @@ public class MainFrameController {
         GlobalRecodeController controller = new GlobalRecodeController(
                 this.view, this.metadata);
         controller.showView(selectedVariableIndex);
+        MuARGUS.getCalculationService().getUnsafeCombinations(this.metadata);
         view.showUnsafeCombinations(this.metadata.getCombinations(), 
                 controller.getSelectedVariableIndex());    
     }                                                    

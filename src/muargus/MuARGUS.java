@@ -29,6 +29,8 @@ public class MuARGUS {
     
     public static final int MAXDIMS = 10;
     
+    private static final String messageTitle = "Mu Argus";
+    
     static {
         System.loadLibrary("libmuargusdll");
     }
@@ -49,6 +51,10 @@ public class MuARGUS {
         setTempDir(System.getProperty("java.io.tmpdir"));
     }
             
+    public static String getMessageTitle() {
+        return messageTitle;
+    }
+    
     public static String getTempDir() {
         return MuARGUS.tempDir;
     }
