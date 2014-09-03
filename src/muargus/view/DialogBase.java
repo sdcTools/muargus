@@ -52,17 +52,13 @@ public class DialogBase extends javax.swing.JDialog {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    public void showMessage(String message) {
-        JOptionPane.showMessageDialog(this, message);
-    }
     
     public void showErrorMessage(ArgusException ex) {
-        JOptionPane.showMessageDialog(this, ex.getMessage(), MuARGUS.getMessageTitle(), JOptionPane.ERROR_MESSAGE);
+        JOptionPane.showMessageDialog(null, ex.getMessage(), MuARGUS.getMessageTitle(), JOptionPane.ERROR_MESSAGE);
     }
     
     public boolean showConfirmDialog(String message) {
-        return (JOptionPane.showConfirmDialog(this, message) == JOptionPane.YES_OPTION);
+        return (JOptionPane.showConfirmDialog(null, message, MuARGUS.getMessageTitle(), JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION);
     }
     
     public String showFileDialog(String title, boolean forSaving, String[] filter) {

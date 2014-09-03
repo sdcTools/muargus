@@ -10,7 +10,6 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.logging.Logger;
-import javax.swing.DefaultListModel;
 import muargus.MuARGUS;
 import muargus.model.MetadataMu;
 import muargus.model.Combinations;
@@ -44,12 +43,12 @@ public class SelectCombinationsController implements PropertyChangeListener{
         this.view.setVisible(true);
     }
     
-    public void setList(ArrayList<String> list){
-        DefaultListModel model1 = new DefaultListModel();
-        for(String s: list){
-            model1.addElement(s);
-        }
-    }
+//    public void setList(ArrayList<String> list){
+//        DefaultListModel model1 = new DefaultListModel();
+//        for(String s: list){
+//            model1.addElement(s);
+//        }
+//    }
     
     /**
      * 
@@ -65,7 +64,7 @@ public class SelectCombinationsController implements PropertyChangeListener{
         CalculationService service = MuARGUS.getCalculationService();
         service.setPropertyChangeListener(this);
         service.calculateTables(this.metadata);
-        //service.getUnsafeCombinations(this.model, this.metadata);
+        
     }
     
     private void getSettings() {
@@ -113,8 +112,16 @@ public class SelectCombinationsController implements PropertyChangeListener{
             case "progress":
                 view.setProgress(pce.getNewValue());
                 break;
-            case "status":
-                view.setVisible(pce.getNewValue() != "done");
+            case "result":
+                boolean success = "success".equals(pce.getNewValue()); 
+                this.view.enableCalculateTables(true);
+                if (success) {
+                    this.view.setVisible(false);
+                }
+                break;
+            case "error":
+                view.showErrorMessage((ArgusException)pce.getNewValue());
+                break;
         }
     }
     

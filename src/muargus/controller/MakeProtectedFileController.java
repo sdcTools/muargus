@@ -8,7 +8,6 @@ import argus.model.ArgusException;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
-import javax.swing.JRadioButton;
 import muargus.MuARGUS;
 import muargus.model.MetadataMu;
 import muargus.model.Combinations;
@@ -73,7 +72,7 @@ public class MakeProtectedFileController implements PropertyChangeListener {
             this.fileCreated = true;
         }
         catch (ArgusException ex) {
-            this.view.showMessage(ex.getMessage());
+            this.view.showErrorMessage(ex);
         }
     }
 
@@ -92,23 +91,15 @@ public class MakeProtectedFileController implements PropertyChangeListener {
             case "progress":
                 view.setProgress(pce.getNewValue());
                 break;
-            case "status":
-                if (pce.getNewValue() == "done") {
+            case "result":
+                if ("success".equals(pce.getNewValue())) {
                     saveSafeMeta();
                     view.setVisible(!this.fileCreated);
                 }
+                break;
+            case "error":
+                view.showErrorMessage((ArgusException)pce.getNewValue());
+                break;
         }
-    }
-    
-    public JRadioButton getSuppressionRadioButton() {
-        switch (getCombinations().getProtectedFile().getSuppressionType()) {
-            case (0):
-                return this.view.getNoSuppressionRadioButton();
-            case (1):
-                return this.view.getUseWeightRadioButton();
-            case(2):
-                return this.view.getUseEntropyRadioButton();
-        }
-        return null;
     }
 }

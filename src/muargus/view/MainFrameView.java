@@ -85,6 +85,10 @@ public class MainFrameView extends javax.swing.JFrame {
         JOptionPane.showMessageDialog(this, ex.getMessage(), MuARGUS.getMessageTitle(), JOptionPane.ERROR_MESSAGE);
     }
     
+    public void showMessage(String message) {
+        JOptionPane.showMessageDialog(null, message, MuARGUS.getMessageTitle(), JOptionPane.INFORMATION_MESSAGE);
+    }
+
     /**
      * enables buttons
      */
