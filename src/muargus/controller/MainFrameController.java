@@ -124,6 +124,7 @@ public class MainFrameController {
             newMetadata.readMetadata();
         }
         catch (ArgusException ex) {
+            
             JOptionPane.showMessageDialog(null, "Error reading metadata file: " + ex.getMessage());
         }
         this.metadata = newMetadata;

@@ -6,12 +6,13 @@
 
 package muargus.view;
 
+import argus.model.ArgusException;
 import argus.utils.SystemUtils;
 import java.io.File;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
-import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import muargus.MuARGUS;
 
 /**
  *
@@ -54,6 +55,10 @@ public class DialogBase extends javax.swing.JDialog {
 
     public void showMessage(String message) {
         JOptionPane.showMessageDialog(this, message);
+    }
+    
+    public void showErrorMessage(ArgusException ex) {
+        JOptionPane.showMessageDialog(this, ex.getMessage(), MuARGUS.getMessageTitle(), JOptionPane.ERROR_MESSAGE);
     }
     
     public boolean showConfirmDialog(String message) {
