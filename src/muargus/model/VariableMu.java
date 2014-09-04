@@ -63,6 +63,9 @@ public class VariableMu {
     private int bandwidth;
     private double entropy;
     
+    private final ArrayList<CodeInfo> codeInfos = new ArrayList<>();
+
+    
     
     /**
      * Empty constructor
@@ -121,6 +124,14 @@ public class VariableMu {
         return categorical;
     }
 
+    public void clearCodeInfos() {
+        this.codeInfos.clear();
+    }
+    
+    public void addCodeInfo(CodeInfo codeInfo) {
+        this.codeInfos.add(codeInfo);
+    }
+    
     public void setRecodable(boolean recodable) {
         this.categorical = recodable;
     }
@@ -311,6 +322,10 @@ public class VariableMu {
         this.entropy = entropy;
     }
 
+    public ArrayList<CodeInfo> getCodeInfos() {
+        return this.codeInfos;
+    }
+    
     public void write(PrintWriter writer, final int dataFileType, boolean all) {
         writer.print(this.name);
         if (MetadataMu.DATA_FILE_TYPE_FIXED == dataFileType) {
