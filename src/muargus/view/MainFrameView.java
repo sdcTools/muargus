@@ -15,7 +15,6 @@ import muargus.MuARGUS;
 import muargus.controller.MainFrameController;
 import muargus.model.Combinations;
 import muargus.model.CodeInfo;
-import muargus.model.UnsafeInfo;
 import muargus.model.VariableMu;
 
 /**
@@ -750,7 +749,7 @@ public class MainFrameView extends javax.swing.JFrame {
         Object[][] data = new Object[model.getVariablesInTables().size()][];
         int rowIndex = 0;
         for (VariableMu variable : model.getVariablesInTables()) {
-            data[rowIndex] = model.getUnsafe(variable).toObjectArray(variable, nDims);
+            data[rowIndex] =  toObjectArray(model, variable); //TODO mooier
             rowIndex++;
         }
         DefaultTableModel tableModel = new DefaultTableModel(data, columnNames.toArray()) {
@@ -770,6 +769,19 @@ public class MainFrameView extends javax.swing.JFrame {
         this.unsafeCombinationsTable.getSelectionModel().setSelectionInterval(selectedIndex, selectedIndex);
     }
 
+    
+    private Object[] toObjectArray(Combinations combinations, VariableMu variable) {
+        int nDims = combinations.getMaxDimsInTables();
+        Object[] objArr = new Object[nDims + 1];
+        objArr[0] = variable.getName();
+        for (int dimNr=1; dimNr <= nDims; dimNr++) {
+            objArr[dimNr] = combinations.getUnsafeCombinations(variable).length < dimNr ?
+                    "-" : Integer.toString(combinations.getUnsafeCombinations(variable)[dimNr-1]);
+        }
+        return objArr;
+    }
+    
+
     private void selectionChanged(javax.swing.event.ListSelectionEvent evt) {
         if (evt.getValueIsAdjusting()) {
             return;
@@ -779,7 +791,8 @@ public class MainFrameView extends javax.swing.JFrame {
             return;
         }
         VariableMu variable = this.model.getVariablesInTables().get(j);
-        UnsafeInfo unsafeInfo = this.model.getUnsafe(variable);
+        
+        //UnsafeInfo unsafeInfo = this.model.getUnsafe(variable);
         this.variableNameLabel.setText(variable.getName());
 
         ArrayList<String> columnNames = new ArrayList<>();
@@ -791,9 +804,9 @@ public class MainFrameView extends javax.swing.JFrame {
             columnNames.add("dim " + dimNr);
         }
 
-        Object[][] data = new Object[unsafeInfo.getCodeInfos().size()][];
+        Object[][] data = new Object[variable.getCodeInfos().size()][];
         int rowIndex = 0;
-        for (CodeInfo codeInfo : unsafeInfo.getCodeInfos()) {
+        for (CodeInfo codeInfo : variable.getCodeInfos()) {
             data[rowIndex] = codeInfo.toObjectArray(nDims);
             rowIndex++;
         }

@@ -19,7 +19,8 @@ public class Combinations {
     private ArrayList<TableMu> tables;
     private VariableMu[] variables;
     private int[] thresholds;
-    private HashMap<VariableMu, UnsafeInfo> unsafe;
+    private HashMap<VariableMu, int[]> unsafeCombinations; 
+    //private HashMap<VariableMu, UnsafeInfo> unsafe;
     private GlobalRecode globalRecode;
     private ProtectedFile protectedFile;
     private TableCollection showTableCollection;
@@ -119,17 +120,30 @@ public class Combinations {
         this.numericalRankSwapping = new NumericalRankSwapping();
     }
     
-    public void clearUnsafe() {
-        this.unsafe = new HashMap<>();
+    public void clearUnsafeCombinations() {
+        this.unsafeCombinations = new HashMap<>();
     }
-
-    public void setUnsafe(VariableMu variable, UnsafeInfo unsafe) {
-        this.unsafe.put(variable, unsafe);
+            
+    public int[] getUnsafeCombinations(VariableMu variable) {
+        return this.unsafeCombinations.get(variable);
     }
-
-    public UnsafeInfo getUnsafe(VariableMu variable) {
-        return this.unsafe.get(variable);
+          
+    public void setUnsafeCombinations(VariableMu variable, int[] unsafeCount, int length) {
+        int[] unsafe = new int[length];
+        System.arraycopy( unsafeCount, 0, unsafe, 0, length);
+        this.unsafeCombinations.put(variable, unsafe);
     }
+//    public void clearUnsafe() {
+//        this.unsafe = new HashMap<>();
+//    }
+//
+//    public void setUnsafe(VariableMu variable, UnsafeInfo unsafe) {
+//        this.unsafe.put(variable, unsafe);
+//    }
+//
+//    public UnsafeInfo getUnsafe(VariableMu variable) {
+//        return this.unsafe.get(variable);
+//    }
 
     /**
      *

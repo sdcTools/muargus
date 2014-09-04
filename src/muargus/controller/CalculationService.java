@@ -28,7 +28,7 @@ import muargus.model.RecodeMu;
 import muargus.model.TableMu;
 import muargus.model.CodeInfo;
 import muargus.model.PramVariableSpec;
-import muargus.model.UnsafeInfo;
+//import muargus.model.UnsafeInfo;
 import muargus.model.VariableMu;
 
 /**
@@ -469,7 +469,7 @@ public class CalculationService {
         ArrayList<String> missingCodelists = new ArrayList<>();
         Combinations model = metadata.getCombinations();
         boolean hasRecode = (model.getGlobalRecode() != null);
-        model.clearUnsafe();
+        model.clearUnsafeCombinations();
         for (int varIndex = 0; varIndex < model.getVariablesInTables().size(); varIndex++) {
             VariableMu variable = model.getVariablesInTables().get(varIndex);
 
@@ -491,17 +491,18 @@ public class CalculationService {
             }
 
             int[] nDims = new int[]{0};
-            int[] unsafeCount = new int[model.getVariablesInTables().size()];
+            int[] unsafeCount = new int[model.getMaxDimsInTables()];
             boolean result = c.UnsafeVariable(varIndex + 1, nDims, unsafeCount);
-            UnsafeInfo unsafe = new UnsafeInfo();
-            unsafe.setUnsafeCombinations(nDims[0], unsafeCount);
-            model.setUnsafe(variable, unsafe);
+            //UnsafeInfo unsafe = new UnsafeInfo();
+            model.setUnsafeCombinations(variable, unsafeCount, nDims[0]);
+            //model.setUnsafe(variable, unsafeCount);
 
             int[] nCodes = new int[]{0};
             result = c.UnsafeVariablePrepare(varIndex + 1, nCodes);
             int[] isMissing = new int[]{0};
             int[] freq = new int[]{0};
             String[] code = new String[1];
+            variable.clearCodeInfos();
             for (int codeIndex = 0; codeIndex < nCodes[0]; codeIndex++) {
                 result = c.UnsafeVariableCodes(varIndex + 1,
                         codeIndex + 1,
@@ -516,7 +517,7 @@ public class CalculationService {
                 }
                 codeInfo.setFrequency(freq[0]);
                 codeInfo.setUnsafeCombinations(nDims[0], unsafeCount);
-                unsafe.addCodeInfo(codeInfo);
+                variable.addCodeInfo(codeInfo);
             }
             result = c.UnsafeVariableClose(varIndex + 1);
         }
