@@ -31,6 +31,7 @@ public class MainFrameController {
     private Document report;
 
     public enum Action {
+
         OpenMicrodata,
         SpecifyMetadata,
         SpecifyCombinations,
@@ -75,7 +76,7 @@ public class MainFrameController {
         if (this.metadata.getCombinations() == null) {
             clearDataBeforeSelectCombinations();
         }
-        
+
         view.enableAction(Action.SpecifyMetadata, this.metadata != null);
         view.enableAction(Action.ViewReport, this.report != null);
         view.enableAction(Action.SpecifyCombinations, this.metadata != null
@@ -87,9 +88,16 @@ public class MainFrameController {
                     && this.metadata.getCombinations().getTables().size() > 0;
         }
         view.enableAction(Action.GlobalRecode, tablesCalculated);
-        view.enableAction(Action.ShowTableCollection, tablesCalculated);  //Release 2
         view.enableAction(Action.MakeProtectedFile, tablesCalculated);
-        
+
+        // Release 2
+        view.enableAction(Action.ShowTableCollection, tablesCalculated);
+        view.enableAction(Action.IndividualRiskSpecification, tablesCalculated);
+        view.enableAction(Action.HouseholdRiskSpecification, tablesCalculated);
+        view.enableAction(Action.ModifyNumericalVariables, tablesCalculated);
+        view.enableAction(Action.NumericalMicroAggregation, tablesCalculated);
+        view.enableAction(Action.NumericalRankSwapping, tablesCalculated);
+
     }
 
     /**
@@ -97,22 +105,21 @@ public class MainFrameController {
      */
     public void openMicrodata() {
         DataFilePair filenames = view.showOpenMicrodataDialog(this.metadata.getFileNames());
-        if (filenames == null)
+        if (filenames == null) {
             return;
-        
+        }
+
         MetadataMu newMetadata = new MetadataMu();
         newMetadata.setFileNames(filenames);
         try {
             newMetadata.readMetadata();
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             this.view.showErrorMessage(new ArgusException("Error reading metadata file: " + ex.getMessage()));
             return;
         }
         try {
-            newMetadata.verify(); 
-        }
-        catch (ArgusException ex) {
+            newMetadata.verify();
+        } catch (ArgusException ex) {
             this.view.showErrorMessage(new ArgusException("Metadata contains error(s): " + ex.getMessage()));
         }
         this.metadata = newMetadata;
@@ -140,7 +147,7 @@ public class MainFrameController {
      *
      */
     public void specifyCombinations() {
-        if(this.metadata.getCombinations() == null){
+        if (this.metadata.getCombinations() == null) {
             this.metadata.createCombinations();
         }
         SelectCombinationsController controller = new SelectCombinationsController(
@@ -156,7 +163,7 @@ public class MainFrameController {
         if (this.metadata.getCombinations().getShowTableCollection() == null) {
             this.metadata.getCombinations().createShowTableCollection();
         }
-        
+
         ShowTableCollectionController controller = new ShowTableCollectionController(
                 this.view, this.metadata);
         controller.showView();
@@ -176,20 +183,27 @@ public class MainFrameController {
         controller.showView(selectedVariableIndex);
         showUnsafeCombinations(controller.getSelectedVariableIndex());
     }
-    
+
     private void showUnsafeCombinations(int variableIndex) {
         ArrayList<String> missingCodelists = MuARGUS.getCalculationService().getUnsafeCombinations(this.metadata);
         if (!missingCodelists.isEmpty()) {
-            view.showMessage("\n" + missingCodelists);       
+            view.showMessage("\n" + missingCodelists);
         }
         view.showUnsafeCombinations(this.metadata.getCombinations(), variableIndex);
         organise();
-    }                                                    
+    }
 
     /**
      *
      */
     public void pramSpecification() {
+        if (this.metadata.getCombinations().getPramSpecification() == null) {
+            this.metadata.getCombinations().createPramSpecification();
+        }
+        //PramSpecificationController controller = new PramSpecificationController(
+//                this.view, this.metadata);
+//        controller.showView();
+        showUnsafeCombinations(0);
 
     }
 
@@ -197,35 +211,59 @@ public class MainFrameController {
      *
      */
     public void individualRiskSpecification() {
+        if (this.metadata.getCombinations().getRiskSpecification() == null) {
+            this.metadata.getCombinations().createRiskSpecification();
+        }
 
+        RiskSpecificationController controller = new RiskSpecificationController(
+                this.view, this.metadata);
+        controller.showView();
     }
 
     /**
      *
      */
     public void householdRiskSpecification() {
-
+        individualRiskSpecification();
     }
 
     /**
      *
      */
     public void numericalVariables() {
+        if (this.metadata.getCombinations().getModifyNumericalVariables() == null) {
+            this.metadata.getCombinations().createModifyNumericalVariables();
+        }
 
+        ModifyNumericalVariablesController controller = new ModifyNumericalVariablesController(
+                this.view, this.metadata);
+        controller.showView();
     }
 
     /**
      *
      */
     public void numericalMicroaggregation() {
+        if (this.metadata.getCombinations().getNumericalMicroaggregation() == null) {
+            this.metadata.getCombinations().createNumericalMicroaggregation();
+        }
 
+        NumericalMicroaggregationController controller = new NumericalMicroaggregationController(
+                this.view, this.metadata);
+        controller.showView();
     }
 
     /**
      *
      */
     public void numericalRankSwapping() {
+        if (this.metadata.getCombinations().getNumericalRankSwapping() == null) {
+            this.metadata.getCombinations().createNumericalRankSwapping();
+        }
 
+        NumericalRankSwappingController controller = new NumericalRankSwappingController(
+                this.view, this.metadata);
+        controller.showView();
     }
 
     /**
@@ -233,59 +271,54 @@ public class MainFrameController {
      */
     public void makeProtectedFile() {
         try {
-        if (this.metadata.getCombinations().getProtectedFile() == null) {
-            this.metadata.getCombinations().createProtectedFile();
-        }
+            if (this.metadata.getCombinations().getProtectedFile() == null) {
+                this.metadata.getCombinations().createProtectedFile();
+            }
 
-        MakeProtectedFileController controller = new MakeProtectedFileController(
-                this.view, this.metadata);
-        controller.showView();
-        if (controller.isFileCreated()) {
-            this.report = createReport();
-            viewReport(true);
-        }
-        organise();
-        }
-        catch (ArgusException ex) {
+            MakeProtectedFileController controller = new MakeProtectedFileController(
+                    this.view, this.metadata);
+            controller.showView();
+            if (controller.isFileCreated()) {
+                this.report = createReport();
+                viewReport(true);
+            }
+            organise();
+        } catch (ArgusException ex) {
             view.showErrorMessage(ex);
         }
-    }     
-   
+    }
+
     /**
      *
      */
     public void viewReport(boolean save) {
         try {
-        ViewReportController viewReportController = new ViewReportController(this.view, this.report);
-        if (save)
-            viewReportController.saveReport(this.metadata);
-        viewReportController.showView();
-        }
-        catch (ArgusException ex) {
+            ViewReportController viewReportController = new ViewReportController(this.view, this.report);
+            if (save) {
+                viewReportController.saveReport(this.metadata);
+            }
+            viewReportController.showView();
+        } catch (ArgusException ex) {
             view.showErrorMessage(ex);
         }
-    }                                                  
-    
+    }
+
     private Document createReport() throws ArgusException {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder;
-        
-        try {    
+
+        try {
             builder = factory.newDocumentBuilder();
             Document doc = builder.newDocument();
 
             HTMLReportWriter.createReportTree(doc, this.metadata);
 
             return doc;
-        }
-        catch (ParserConfigurationException ex) {
+        } catch (ParserConfigurationException ex) {
             Logger.getLogger(MainFrameController.class.getName()).log(Level.SEVERE, null, ex);
             throw new ArgusException("Error creating report");
         }
     }
-        
-
-        
 
     /**
      *
@@ -319,12 +352,12 @@ public class MainFrameController {
     }
 
     private void clearDataBeforeSelectCombinations() {
-        
-                //this.selectCombinationsModel = null;
-         for(int i = this.view.getUnsafeCombinationsTable().getColumnCount() -1; i >= 0; i--){
+
+        //this.selectCombinationsModel = null;
+        for (int i = this.view.getUnsafeCombinationsTable().getColumnCount() - 1; i >= 0; i--) {
             this.view.getUnsafeCombinationsTable().getColumnModel().removeColumn(this.view.getUnsafeCombinationsTable().getColumnModel().getColumn(i));
         }
-        for(int i = this.view.getVariablesTable().getColumnCount() -1; i >= 0; i--){
+        for (int i = this.view.getVariablesTable().getColumnCount() - 1; i >= 0; i--) {
             this.view.getVariablesTable().getColumnModel().removeColumn(this.view.getVariablesTable().getColumnModel().getColumn(i));
         }
         this.view.setVariableNameLabel("");
@@ -335,5 +368,4 @@ public class MainFrameController {
 //        this.globalRecodeModel = null;
 //        this.makeProtectedFileModel = null;
 //    }
-
 }

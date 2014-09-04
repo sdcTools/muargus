@@ -23,7 +23,7 @@ import muargus.model.VariableMu;
  * @author ambargus
  */
 public class MainFrameView extends javax.swing.JFrame {
-    
+
     //private DataFilePair dataFilePair;
     private MainFrameController controller;
     private Combinations model;
@@ -34,9 +34,9 @@ public class MainFrameView extends javax.swing.JFrame {
     public MainFrameView() {
         initComponents();
         this.controller = new MainFrameController(this);
-        this.setLocationRelativeTo(null); 
+        this.setLocationRelativeTo(null);
     }
-    
+
     public void enableAction(MainFrameController.Action action, boolean enable) {
         switch (action) {
             case SpecifyMetadata:
@@ -51,6 +51,24 @@ public class MainFrameView extends javax.swing.JFrame {
             case ShowTableCollection:
                 doEnable(showTableCollectionButton, showTableCollectionMenuItem, enable);
                 return;
+            case PramSpecification:
+                doEnable(pramSpecificationButton, pramSpecificationMenuItem, enable);
+                return;
+            case IndividualRiskSpecification:
+                doEnable(individualRiskSpecificationButton, individualRiskSpecificationMenuItem, enable);
+                return;
+            case HouseholdRiskSpecification:
+                doEnable(householdRiskSpecificationButton, householdRiskSpecificationMenuItem, enable);
+                return;
+            case ModifyNumericalVariables:
+                doEnable(modifyNumericalVariablesButton, numericalVariablesMenuItem, enable); //TODO: verander naamgeving voor deze klasses
+                return;
+            case NumericalMicroAggregation:
+                doEnable(numericalMicroaggregationButton, numericalMicroaggregationMenuItem, enable);
+                return;
+            case NumericalRankSwapping:
+                doEnable(numericalRankSwappingButton, numericalRankSwappingMenuItem, enable);
+                return;
             case MakeProtectedFile:
                 doEnable(makeProtectedFileButton, makeProtectedFileMenuItem, enable);
                 return;
@@ -59,7 +77,7 @@ public class MainFrameView extends javax.swing.JFrame {
                 return;
         }
     }
-    
+
     private void doEnable(JButton button, JMenuItem item, boolean enable) {
         if (button != null) {
             button.setEnabled(enable);
@@ -80,11 +98,11 @@ public class MainFrameView extends javax.swing.JFrame {
     public void setVariableNameLabel(String variableNameLabel) {
         this.variableNameLabel.setText(variableNameLabel);
     }
-    
+
     public void showErrorMessage(ArgusException ex) {
         JOptionPane.showMessageDialog(this, ex.getMessage(), MuARGUS.getMessageTitle(), JOptionPane.ERROR_MESSAGE);
     }
-    
+
     public void showMessage(String message) {
         JOptionPane.showMessageDialog(null, message, MuARGUS.getMessageTitle(), JOptionPane.INFORMATION_MESSAGE);
     }
@@ -708,14 +726,14 @@ public class MainFrameView extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void openMicrodataMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openMicrodataMenuItemActionPerformed
-          controller.openMicrodata(); 
+        controller.openMicrodata();
     }//GEN-LAST:event_openMicrodataMenuItemActionPerformed
 
     public DataFilePair showOpenMicrodataDialog(DataFilePair filenames) {
         DialogOpenMicrodata dialog = new DialogOpenMicrodata(this, true);
         dialog.setDataFileNames(filenames.getDataFileName(), filenames.getMetaFileName());
         if (dialog.showDialog() == DialogOpenMicrodata.APPROVE_OPTION) {
-                return dialog.getMicrodataFilePair();
+            return dialog.getMicrodataFilePair();
         }
         return null;
     }
@@ -725,49 +743,51 @@ public class MainFrameView extends javax.swing.JFrame {
         ArrayList<String> columnNames = new ArrayList<>();
         columnNames.add("Variable");
         int nDims = model.getMaxDimsInTables();
-        for (int dimNr=1; dimNr <= nDims; dimNr++) {
+        for (int dimNr = 1; dimNr <= nDims; dimNr++) {
             columnNames.add("dim " + dimNr);
         }
-        
+
         Object[][] data = new Object[model.getVariablesInTables().size()][];
         int rowIndex = 0;
         for (VariableMu variable : model.getVariablesInTables()) {
             data[rowIndex] = model.getUnsafe(variable).toObjectArray(variable, nDims);
             rowIndex++;
         }
-        DefaultTableModel tableModel = new DefaultTableModel(data, columnNames.toArray()){
+        DefaultTableModel tableModel = new DefaultTableModel(data, columnNames.toArray()) {
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return false;
             }
         };
-        this.unsafeCombinationsTable.setModel(tableModel);       
-        
+        this.unsafeCombinationsTable.setModel(tableModel);
+
         this.unsafeCombinationsTable.getSelectionModel().addListSelectionListener(
                 new javax.swing.event.ListSelectionListener() {
-            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
-                selectionChanged(evt);
-            }
-        });
-        
+                    public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+                        selectionChanged(evt);
+                    }
+                });
+
         this.unsafeCombinationsTable.getSelectionModel().setSelectionInterval(selectedIndex, selectedIndex);
     }
-    
+
     private void selectionChanged(javax.swing.event.ListSelectionEvent evt) {
-        if (evt.getValueIsAdjusting())
+        if (evt.getValueIsAdjusting()) {
             return;
-        int j = ((ListSelectionModel)evt.getSource()).getMinSelectionIndex();
-        if (0 > j || j >= this.model.getVariablesInTables().size())
+        }
+        int j = ((ListSelectionModel) evt.getSource()).getMinSelectionIndex();
+        if (0 > j || j >= this.model.getVariablesInTables().size()) {
             return;
+        }
         VariableMu variable = this.model.getVariablesInTables().get(j);
         UnsafeInfo unsafeInfo = this.model.getUnsafe(variable);
         this.variableNameLabel.setText(variable.getName());
-        
+
         ArrayList<String> columnNames = new ArrayList<>();
         columnNames.add("Code");
         columnNames.add("Label");
         columnNames.add("Freq");
         int nDims = model.getMaxDimsInTables();
-        for (int dimNr=1; dimNr <= nDims; dimNr++) {
+        for (int dimNr = 1; dimNr <= nDims; dimNr++) {
             columnNames.add("dim " + dimNr);
         }
 
@@ -778,7 +798,7 @@ public class MainFrameView extends javax.swing.JFrame {
             rowIndex++;
         }
 
-        DefaultTableModel tableModel = new DefaultTableModel(data, columnNames.toArray()){
+        DefaultTableModel tableModel = new DefaultTableModel(data, columnNames.toArray()) {
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return false;
             }
@@ -787,7 +807,7 @@ public class MainFrameView extends javax.swing.JFrame {
         variablesTable.setDefaultRenderer(Object.class, new CodeTableCellRenderer());
 
     }
-    
+
     private void exitMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitMenuItemActionPerformed
         controller.exit();
     }//GEN-LAST:event_exitMenuItemActionPerformed
@@ -862,7 +882,7 @@ public class MainFrameView extends javax.swing.JFrame {
         //this.variablesTable.getColumnModel().removeColumn(this.variablesTable.getColumnModel().getColumn(0));
         //this.variablesTable.updateUI();
         //this.unsafeCombinationsTable.removeAll();
-        
+
         controller.news();
     }//GEN-LAST:event_newsMenuItemActionPerformed
 
@@ -871,7 +891,7 @@ public class MainFrameView extends javax.swing.JFrame {
     }//GEN-LAST:event_aboutMenuItemActionPerformed
 
     private void jMenuHelpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuHelpActionPerformed
-        controller.manual();  
+        controller.manual();
     }//GEN-LAST:event_jMenuHelpActionPerformed
 
     private void manualMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_manualMenuItemActionPerformed
@@ -884,8 +904,7 @@ public class MainFrameView extends javax.swing.JFrame {
             controller.globalRecode(this.unsafeCombinationsTable.getSelectionModel().getMinSelectionIndex());
         }
     }//GEN-LAST:event_unsafeCombinationsTableMouseClicked
-     
-    
+
     /**
      * @param args the command line arguments
      */
@@ -917,7 +936,7 @@ public class MainFrameView extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new MainFrameView().setVisible(true);
-                
+
             }
         });
     }
