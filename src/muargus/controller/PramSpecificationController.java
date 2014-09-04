@@ -5,6 +5,8 @@
  */
 package muargus.controller;
 
+import java.util.ArrayList;
+import muargus.model.CodeInfo;
 import muargus.model.MetadataMu;
 import muargus.model.PramSpecification;
 import muargus.model.PramVariableSpec;
@@ -52,7 +54,7 @@ public class PramSpecificationController {
         this.model = model;
     }
 
-    public PramVariableSpec getSelectedVariable(String variableName) {
+    public PramVariableSpec getSelectedPramVarSpec(String variableName) {
         PramVariableSpec temp = null;
         for (PramVariableSpec p : this.model.getPramVarSpec()) {
             if (p.getVariable().getName().equals(variableName)) {
@@ -60,5 +62,50 @@ public class PramSpecificationController {
             }
         }
         return temp;
+    }
+
+    public void makePramVariableSpecs() {
+        ArrayList<PramVariableSpec> pramVarSpec = new ArrayList<>();
+        for (VariableMu v : this.metadataMu.getVariables()) {
+            if (v.isCategorical()) {
+                PramVariableSpec p = new PramVariableSpec(v);
+                //ArrayList<CodeInfo>
+                //p.setCodeInfo(null);
+                pramVarSpec.add(p);
+            }
+        }
+        this.model.setPramVarSpec(pramVarSpec);
+    }
+
+    public void makeVariablesData() {
+        ArrayList<PramVariableSpec> pramVarSpec = this.model.getPramVarSpec();
+        String[][] variablesData = new String[pramVarSpec.size()][3];
+        int index = 0;
+        for (PramVariableSpec p : pramVarSpec) {
+            variablesData[index][0] = p.getAppliedText();
+            if (p.isApplied() && p.useBandwidth()) {
+                variablesData[index][1] = Integer.toString(p.getBandwidth());
+            } else {
+                variablesData[index][1] = "";
+            }
+            variablesData[index][2] = p.getVariable().getName();
+            index++;
+        }
+        this.model.setVariablesData(variablesData);
+    }
+
+    public void makeCodesData(String variableName) {
+        PramVariableSpec pramVariableSpec = getSelectedPramVarSpec(variableName);
+        ArrayList<CodeInfo> codeInfo = pramVariableSpec.getCodeInfo();
+        String[][] codesData = new String[codeInfo.size()][3];
+        int index = 0;
+        for (CodeInfo c : codeInfo) {
+            codesData[index][0] = c.getCode();
+            codesData[index][1] = c.getLabel();
+            codesData[index][2] = Integer.toString(c.getPramProbability());
+            index++;
+        }
+
+        pramVariableSpec.setCodesData(codesData);
     }
 }

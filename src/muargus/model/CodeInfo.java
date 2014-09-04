@@ -28,6 +28,10 @@ public class CodeInfo {
         this.label = label;
     }
     
+    public String getLabel(){
+        return this.label;
+    }
+    
     public String getCode() {
         return this.code;
     }

@@ -10,7 +10,6 @@ import muargus.controller.PramSpecificationController;
 import muargus.model.MetadataMu;
 import muargus.model.PramSpecification;
 import muargus.model.PramVariableSpec;
-import muargus.model.VariableMu;
 
 /**
  *
@@ -23,6 +22,7 @@ public class PramSpecificationView extends DialogBase {
     PramSpecification model;
     private TableModel variablesTableModel;
     private TableModel codesTableModel;
+    private int[] columnWidth = {30, 30, 70};
 
     /**
      *
@@ -47,14 +47,28 @@ public class PramSpecificationView extends DialogBase {
     public void initializeData() {
         this.pramOptionsPanel.setVisible(false); // this option is available for future options using global recode
         this.bandwidthSpinner.setEnabled(this.bandwidthCheckBox.isSelected());
+        this.controller.makePramVariableSpecs();
+
+        //this.controller.makeVariablesData();
+        //this.controller.makeCodesData(this.model.getPramVarSpec().get(0).getVariable().getName());
         updateValues();
     }
 
     public void updateValues() {
 
+        updateVariablesTable();
+        updateCodesTable();
     }
 
     public void updateVariablesTable() {
+        this.controller.makeVariablesData();
+        int selectedRow;
+        if (this.variablesTable.getSelectedRowCount() > 0) {
+            selectedRow = this.variablesTable.getSelectedRow();
+        } else {
+            selectedRow = 0;
+        }
+
         this.variablesTableModel = new DefaultTableModel(this.model.getVariablesData(), this.model.getColumnNames()) {
             @Override
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -62,19 +76,35 @@ public class PramSpecificationView extends DialogBase {
             }
         };
         this.variablesTable.setModel(this.variablesTableModel);
+
+        for (int i = 0; i < columnWidth.length; i++) {
+            this.variablesTable.getColumnModel().getColumn(i).setMinWidth(columnWidth[i]);
+            this.variablesTable.getColumnModel().getColumn(i).setPreferredWidth(columnWidth[i]);
+        }
+        this.variablesTable.getSelectionModel().setSelectionInterval(selectedRow, selectedRow);
+
     }
-    
-    public void updateCodesTable(){
-        PramVariableSpec selected = this.controller.getSelectedVariable(
+
+    public PramVariableSpec getSelectedPramVariableSpec() {
+        return this.controller.getSelectedPramVarSpec(
                 (String) this.variablesTable.getValueAt(this.variablesTable.getSelectedRow(), 2));
-        
-        this.codesTableModel = new DefaultTableModel(selected.getCodesData(), this.model.getColumnNames()) {
-            @Override
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return false;
-            }
-        };
-        this.variablesTable.setModel(this.codesTableModel);
+    }
+
+    public void updateCodesTable() {
+
+        this.codesTableModel = new DefaultTableModel(
+                getSelectedPramVariableSpec().getCodesData(), this.model.getColumnNames()) {
+                    @Override
+                    public boolean isCellEditable(int rowIndex, int columnIndex) {
+                        return false;
+                    }
+                };
+        this.codesTable.setModel(this.codesTableModel);
+
+        for (int i = 0; i < columnWidth.length; i++) {
+            this.codesTable.getColumnModel().getColumn(i).setMinWidth(columnWidth[i]);
+            this.codesTable.getColumnModel().getColumn(i).setPreferredWidth(columnWidth[i]);
+        }
     }
 
     /**
@@ -87,13 +117,13 @@ public class PramSpecificationView extends DialogBase {
     private void initComponents() {
 
         pramOptionsButtonGroup = new javax.swing.ButtonGroup();
+        leftPanel = new javax.swing.JPanel();
         variablesScrollPane = new javax.swing.JScrollPane();
         variablesTable = new javax.swing.JTable();
-        variablesLabel = new javax.swing.JLabel();
         MiddlePanel = new javax.swing.JPanel();
         CodesPanel = new javax.swing.JPanel();
         codesScrollPane = new javax.swing.JScrollPane();
-        jTable2 = new javax.swing.JTable();
+        codesTable = new javax.swing.JTable();
         codesSlider = new javax.swing.JSlider();
         applyButton = new javax.swing.JButton();
         undoButton = new javax.swing.JButton();
@@ -110,6 +140,8 @@ public class PramSpecificationView extends DialogBase {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("PRAM Specification");
+
+        leftPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Variables"));
 
         variablesTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -176,17 +208,46 @@ public class PramSpecificationView extends DialogBase {
                 return canEdit [columnIndex];
             }
         });
+        variablesTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                variablesTableMouseClicked(evt);
+            }
+        });
+        variablesTable.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                variablesTableKeyReleased(evt);
+            }
+        });
         variablesScrollPane.setViewportView(variablesTable);
         if (variablesTable.getColumnModel().getColumnCount() > 0) {
             variablesTable.getColumnModel().getColumn(0).setPreferredWidth(8);
             variablesTable.getColumnModel().getColumn(1).setPreferredWidth(8);
         }
 
-        variablesLabel.setText("Variables:");
+        javax.swing.GroupLayout leftPanelLayout = new javax.swing.GroupLayout(leftPanel);
+        leftPanel.setLayout(leftPanelLayout);
+        leftPanelLayout.setHorizontalGroup(
+            leftPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 208, Short.MAX_VALUE)
+            .addGroup(leftPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(leftPanelLayout.createSequentialGroup()
+                    .addGap(24, 24, 24)
+                    .addComponent(variablesScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 160, Short.MAX_VALUE)
+                    .addGap(24, 24, 24)))
+        );
+        leftPanelLayout.setVerticalGroup(
+            leftPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+            .addGroup(leftPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(leftPanelLayout.createSequentialGroup()
+                    .addGap(10, 10, 10)
+                    .addComponent(variablesScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 342, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+        );
 
         CodesPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Codes"));
 
-        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+        codesTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null},
                 {null, null, null},
@@ -243,11 +304,11 @@ public class PramSpecificationView extends DialogBase {
                 "Code", "Label", "Prob."
             }
         ));
-        codesScrollPane.setViewportView(jTable2);
-        if (jTable2.getColumnModel().getColumnCount() > 0) {
-            jTable2.getColumnModel().getColumn(0).setPreferredWidth(12);
-            jTable2.getColumnModel().getColumn(1).setPreferredWidth(20);
-            jTable2.getColumnModel().getColumn(2).setPreferredWidth(12);
+        codesScrollPane.setViewportView(codesTable);
+        if (codesTable.getColumnModel().getColumnCount() > 0) {
+            codesTable.getColumnModel().getColumn(0).setPreferredWidth(12);
+            codesTable.getColumnModel().getColumn(1).setPreferredWidth(20);
+            codesTable.getColumnModel().getColumn(2).setPreferredWidth(12);
         }
 
         codesSlider.setMajorTickSpacing(100);
@@ -262,20 +323,26 @@ public class PramSpecificationView extends DialogBase {
             .addGroup(CodesPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(CodesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(codesScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                     .addGroup(CodesPanelLayout.createSequentialGroup()
-                        .addComponent(codesSlider, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(13, Short.MAX_VALUE))
-                    .addComponent(codesScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)))
+                        .addComponent(codesSlider, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                        .addContainerGap())))
         );
         CodesPanelLayout.setVerticalGroup(
             CodesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(CodesPanelLayout.createSequentialGroup()
-                .addComponent(codesScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 256, Short.MAX_VALUE)
+                .addContainerGap()
+                .addComponent(codesScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 262, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(codesSlider, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         applyButton.setText("Apply");
+        applyButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                applyButtonActionPerformed(evt);
+            }
+        });
 
         undoButton.setText("Undo");
 
@@ -284,25 +351,22 @@ public class PramSpecificationView extends DialogBase {
         MiddlePanelLayout.setHorizontalGroup(
             MiddlePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(MiddlePanelLayout.createSequentialGroup()
-                .addComponent(CodesPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
-            .addGroup(MiddlePanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(applyButton)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(undoButton)
-                .addContainerGap())
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 64, Short.MAX_VALUE)
+                .addComponent(undoButton))
+            .addComponent(CodesPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         MiddlePanelLayout.setVerticalGroup(
             MiddlePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(MiddlePanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(CodesPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addGroup(MiddlePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(undoButton)
-                    .addComponent(applyButton))
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(MiddlePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(applyButton)
+                    .addComponent(undoButton))
+                .addContainerGap())
         );
 
         pramOptionsPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("PRAM Options"));
@@ -376,7 +440,7 @@ public class PramSpecificationView extends DialogBase {
             bandwidthPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(bandwidthPanelLayout.createSequentialGroup()
                 .addComponent(bandwidthCheckBox)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addGap(0, 28, Short.MAX_VALUE))
             .addGroup(bandwidthPanelLayout.createSequentialGroup()
                 .addComponent(bandwidthSpinner)
                 .addContainerGap())
@@ -402,20 +466,18 @@ public class PramSpecificationView extends DialogBase {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(variablesLabel)
-                    .addComponent(variablesScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(leftPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(MiddlePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(MiddlePanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(pramOptionsPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(defaultProbabilityPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(bandwidthPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addComponent(closeButton))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(pramOptionsPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(defaultProbabilityPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(bandwidthPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(closeButton)
+                        .addContainerGap())))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -423,20 +485,16 @@ public class PramSpecificationView extends DialogBase {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(leftPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(pramOptionsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(defaultProbabilityPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(bandwidthPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(closeButton))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(variablesLabel)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(variablesScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 342, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addContainerGap())
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 41, Short.MAX_VALUE)
+                        .addComponent(closeButton)
+                        .addContainerGap())))
         );
 
         pack();
@@ -448,7 +506,26 @@ public class PramSpecificationView extends DialogBase {
 
     private void bandwidthCheckBoxStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_bandwidthCheckBoxStateChanged
         this.bandwidthSpinner.setEnabled(this.bandwidthCheckBox.isSelected());
+        getSelectedPramVariableSpec().setUseBandwidth(this.bandwidthCheckBox.isSelected());
     }//GEN-LAST:event_bandwidthCheckBoxStateChanged
+
+    private void variablesTableKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_variablesTableKeyReleased
+        updateValues();
+    }//GEN-LAST:event_variablesTableKeyReleased
+
+    private void variablesTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_variablesTableMouseClicked
+        updateValues();
+    }//GEN-LAST:event_variablesTableMouseClicked
+
+    private void applyButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_applyButtonActionPerformed
+        getSelectedPramVariableSpec().setApplied(!getSelectedPramVariableSpec().isApplied());
+//        if(getSelectedPramVariableSpec().useBandwidth()){
+//            getSelectedPramVariableSpec().setBandwidth((int) this.bandwidthSpinner.getValue());
+//        } else {
+//            
+//        }
+        updateValues();
+    }//GEN-LAST:event_applyButtonActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -461,16 +538,16 @@ public class PramSpecificationView extends DialogBase {
     private javax.swing.JButton closeButton;
     private javax.swing.JScrollPane codesScrollPane;
     private javax.swing.JSlider codesSlider;
+    private javax.swing.JTable codesTable;
     private javax.swing.JButton defaultProbabilityButton;
     private javax.swing.JPanel defaultProbabilityPanel;
     private javax.swing.JSpinner defaultProbabilitySpinner;
     private javax.swing.JRadioButton globalRecodeRadioButton;
     private javax.swing.JRadioButton individualChancesRadioButton;
-    private javax.swing.JTable jTable2;
+    private javax.swing.JPanel leftPanel;
     private javax.swing.ButtonGroup pramOptionsButtonGroup;
     private javax.swing.JPanel pramOptionsPanel;
     private javax.swing.JButton undoButton;
-    private javax.swing.JLabel variablesLabel;
     private javax.swing.JScrollPane variablesScrollPane;
     private javax.swing.JTable variablesTable;
     // End of variables declaration//GEN-END:variables

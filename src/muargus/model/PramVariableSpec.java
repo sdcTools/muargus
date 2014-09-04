@@ -14,9 +14,10 @@ import java.util.ArrayList;
  */
 public class PramVariableSpec {
     private ArrayList<CodeInfo> codeInfo;
-    private boolean useBandwidth;
-    private int bandwidth;
-    private boolean applied;
+    private boolean useBandwidth = false;
+    private int bandwidth = 5;
+    private boolean applied = false;
+    private String appliedText;
     private final VariableMu variable;
     private String[][] codesData;
 
@@ -66,6 +67,15 @@ public class PramVariableSpec {
 
     public void setCodesData(String[][] codesData) {
         this.codesData = codesData;
+    }
+
+    public String getAppliedText() {
+        if(isApplied()){
+            this.appliedText = "X";
+        } else {
+            this.appliedText = "";
+        }
+        return appliedText;
     }
     
 }
