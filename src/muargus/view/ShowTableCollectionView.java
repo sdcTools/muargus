@@ -30,7 +30,7 @@ public class ShowTableCollectionView extends DialogBase {
      * variables.
      *
      * @param parent the Frame of the mainFrame.
-     * @param modal
+     * @param modal boolean to set the modal status
      * @param controller the controller of this view.
      */
     public ShowTableCollectionView(java.awt.Frame parent, boolean modal, ShowTableCollectionController controller) {

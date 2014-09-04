@@ -38,7 +38,7 @@ Release 2
     - zet als default unchecked
     - als checked, maak de bandwithComboBox enabled
 11. bandwithComboBox
-    - vul met de codes uit de codesTable
+    - vul met de codes uit de codesTable (-1)
     - zet als default op 5 (of als er minder dan 5 zijn de hoogst mogelijke waarde)
 12. closebutton
     - bereken pram met dll of gebeurd dit ergens anders?
