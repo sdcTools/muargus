@@ -4,10 +4,7 @@ niet behandelde opmerkingen/vragen:
 Nog te doen:                                                                                                Mee bezig:
 
 Release 2
-1.  Basis structuur
-    - namen van de onderdelen veranderen                                                                    
-    - model, view en controller klasse maken en basis methoden maken
-    - klassen aan koppelen aan de rest van het programma
+
 2.  variablesTable
     - vullen met alle categorische variabelen (zonder variabelen met riskmodel) 
       inclusief of ze gePRAMt zijn met of zonder bandwidth
@@ -27,18 +24,10 @@ Release 2
     - zet, als bandwithCheckBox is aangevinkt, in de tweede kolom de waarde van de bandwithComboBox
 6.  undoButton
     - undo PRAM voor de geselecteerde rij van variablesTable
-7.  PRAM options
-    - kan dit uberhaupt veranderen? 
-8.  defaultProbabilityComboBox
-    - vul met de waardes 0-100
-    - zet standaard op 80
 9.  defaultProbabilityButton 
     - zet alle probabilities van de codesTable op de default probability van de comboBox
-10. bandwithCheckBox
-    - zet als default unchecked
-    - als checked, maak de bandwithComboBox enabled
 11. bandwithComboBox
-    - vul met de codes uit de codesTable
+    - vul met de codes uit de codesTable (-1)
     - zet als default op 5 (of als er minder dan 5 zijn de hoogst mogelijke waarde)
 12. closebutton
     - bereken pram met dll of gebeurd dit ergens anders?
@@ -54,6 +43,17 @@ Release 3
 Behandelde opmerkingen/vragen:                                                                              Antwoord:
 
 Gedaan:                                                                                                     Door:
-
+1.  Basis structuur
+    - namen van de onderdelen veranderen                                                                    
+    - model, view en controller klasse maken en basis methoden maken
+    - klassen aan koppelen aan de rest van het programma
+7.  PRAM options
+    - kan dit uberhaupt veranderen? --> staat nu standaard invisible
+8.  defaultProbabilityComboBox
+    - vul met de waardes 0-100
+    - zet standaard op 80
+10. bandwithCheckBox
+    - zet als default unchecked
+    - als checked, maak de bandwithComboBox enabled
 
 wishlish:

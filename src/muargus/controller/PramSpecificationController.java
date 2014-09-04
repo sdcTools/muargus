@@ -3,11 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package muargus.controller;
 
 import muargus.model.MetadataMu;
 import muargus.model.PramSpecification;
+import muargus.model.PramVariableSpec;
+import muargus.model.VariableMu;
 import muargus.view.PramSpecificationView;
 
 /**
@@ -15,6 +16,7 @@ import muargus.view.PramSpecificationView;
  * @author ambargus
  */
 public class PramSpecificationController {
+
     PramSpecificationView view;
     PramSpecification model;
     MetadataMu metadataMu;
@@ -25,7 +27,7 @@ public class PramSpecificationController {
         this.metadataMu = metadataMu;
         this.view.setMetadataMu(this.metadataMu);
     }
-    
+
     /**
      * Opens the view by setting its visibility to true.
      */
@@ -48,5 +50,15 @@ public class PramSpecificationController {
      */
     public void setModel(PramSpecification model) {
         this.model = model;
+    }
+
+    public PramVariableSpec getSelectedVariable(String variableName) {
+        PramVariableSpec temp = null;
+        for (PramVariableSpec p : this.model.getPramVarSpec()) {
+            if (p.getVariable().getName().equals(variableName)) {
+                temp = p;
+            }
+        }
+        return temp;
     }
 }
