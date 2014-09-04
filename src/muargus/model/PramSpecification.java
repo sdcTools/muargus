@@ -6,11 +6,29 @@
 
 package muargus.model;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author pibd05
  */
 public class PramSpecification {
     
-    private int bandwidth;
+    private boolean useBandwidth;
+    private int defaultProbability;
+    private ArrayList<PramVariableSpec> pramVarSpec;
+    
+    public PramSpecification() {
+        
+    }
+
+    public ArrayList<PramVariableSpec> getPramVarSpec() {
+        return this.pramVarSpec;
+    }
+
+    public void setPramVarSpec(ArrayList<PramVariableSpec> pramVarSpec) {
+        this.pramVarSpec = pramVarSpec;
+    }
+    
+    
 }

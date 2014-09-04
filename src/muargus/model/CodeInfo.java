@@ -65,4 +65,13 @@ public class CodeInfo {
         return objArr;
     }
 
+    public int getPramProbability() {
+        return pramProbability;
+    }
+
+    public void setPramProbability(int pramProbability) {
+        this.pramProbability = pramProbability;
+    }
+
+    
 }
