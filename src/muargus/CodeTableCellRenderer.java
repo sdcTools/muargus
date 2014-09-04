@@ -10,7 +10,7 @@ import java.awt.Color;
 import java.awt.Component;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
-import muargus.model.UnsafeCodeInfo;
+import muargus.model.CodeInfo;
 
 /**
  *
@@ -21,13 +21,13 @@ public class CodeTableCellRenderer extends DefaultTableCellRenderer {
     @Override
      public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
          if (column == 0) {
-             value = ((UnsafeCodeInfo) value).getCode();
+             value = ((CodeInfo) value).getCode();
          }
              
              
           Component cr = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
  
-          if (((UnsafeCodeInfo) table.getValueAt(row, 0)).isMissing()) {
+          if (((CodeInfo) table.getValueAt(row, 0)).isMissing()) {
               setForeground(Color.red);
           }
           else {

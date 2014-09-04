@@ -26,7 +26,7 @@ import muargus.model.MetadataMu;
 import muargus.model.Combinations;
 import muargus.model.RecodeMu;
 import muargus.model.TableMu;
-import muargus.model.UnsafeCodeInfo;
+import muargus.model.CodeInfo;
 import muargus.model.UnsafeInfo;
 import muargus.model.VariableMu;
 
@@ -438,14 +438,10 @@ public class CalculationService {
 
             //Global recode codelist
             if (metadata.getCombinations().getGlobalRecode() != null){
-                for (RecodeMu recode : metadata.getCombinations().getGlobalRecode().getRecodeMus()) {
-                    if (recode.getVariable().getName().equals(variable.getName())) {
-                        if (recode.isRecoded() || recode.isTruncated()) {
-                            variable.setCodeListFile(recode.getCodeListFile());
-                            variable.setCodelist(variable.getCodeListFile() != null);
-                        }
-
-                    }
+                RecodeMu recode = metadata.getCombinations().getGlobalRecode().getRecodeByVariableName(variable.getName());
+                if (recode != null &&  (recode.isRecoded() || recode.isTruncated())) {
+                    variable.setCodeListFile(recode.getCodeListFile());
+                    variable.setCodelist(variable.getCodeListFile() != null);
                 }
             }
         }
@@ -463,11 +459,8 @@ public class CalculationService {
     }
     
     private String getRecodeCodelistFile(Combinations combinations, VariableMu variable) {
-        for (RecodeMu recode : combinations.getGlobalRecode().getRecodeMus()) {
-            if (recode.getVariable().equals(variable) && (recode.isRecoded() || recode.isTruncated()))
-                return recode.getCodeListFile();
-        }
-        return "";
+        RecodeMu recode = combinations.getGlobalRecode().getRecodeByVariableName(variable.getName());
+        return (recode != null && (recode.isRecoded() || recode.isTruncated())) ? recode.getCodeListFile() : "";
     }
     
     public ArrayList<String> getUnsafeCombinations(MetadataMu metadata) {
@@ -515,13 +508,13 @@ public class CalculationService {
                         code,
                         nDims,
                         unsafeCount);
-                UnsafeCodeInfo codeInfo = new UnsafeCodeInfo(code[0], isMissing[0] != 0);
+                CodeInfo codeInfo = new CodeInfo(code[0], isMissing[0] != 0);
                 if (codelist.containsKey(code[0].trim())) {
                     codeInfo.setLabel(codelist.get(code[0].trim()));
                 }
                 codeInfo.setFrequency(freq[0]);
                 codeInfo.setUnsafeCombinations(nDims[0], unsafeCount);
-                unsafe.addUnsafeCodeInfo(codeInfo);
+                unsafe.addCodeInfo(codeInfo);
             }
             result = c.UnsafeVariableClose(varIndex + 1);
         }

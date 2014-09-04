@@ -14,7 +14,7 @@ import muargus.CodeTableCellRenderer;
 import muargus.MuARGUS;
 import muargus.controller.MainFrameController;
 import muargus.model.Combinations;
-import muargus.model.UnsafeCodeInfo;
+import muargus.model.CodeInfo;
 import muargus.model.UnsafeInfo;
 import muargus.model.VariableMu;
 
@@ -771,10 +771,10 @@ public class MainFrameView extends javax.swing.JFrame {
             columnNames.add("dim " + dimNr);
         }
 
-        Object[][] data = new Object[unsafeInfo.getUnsafeCodeInfos().size()][];
+        Object[][] data = new Object[unsafeInfo.getCodeInfos().size()][];
         int rowIndex = 0;
-        for (UnsafeCodeInfo unsafeCode : unsafeInfo.getUnsafeCodeInfos()) {
-            data[rowIndex] = unsafeCode.toObjectArray(nDims);
+        for (CodeInfo codeInfo : unsafeInfo.getCodeInfos()) {
+            data[rowIndex] = codeInfo.toObjectArray(nDims);
             rowIndex++;
         }
 
