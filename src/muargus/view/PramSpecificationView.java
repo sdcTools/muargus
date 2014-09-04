@@ -4,19 +4,46 @@
  */
 package muargus.view;
 
+import muargus.controller.PramSpecificationController;
+import muargus.model.MetadataMu;
+import muargus.model.PramSpecification;
+
 /**
  *
  * @author ambargus
  */
-public class ModifyPRAMSpecification extends DialogBase {
+public class PramSpecificationView extends DialogBase {
 
+    MetadataMu metadataMu;
+    PramSpecificationController controller;
+    PramSpecification model;
+    
     /**
-     * Creates new form ModifyPRAMSpecification
+     * 
+     * @param parent
+     * @param modal
+     * @param controller 
      */
-    public ModifyPRAMSpecification(java.awt.Frame parent, boolean modal) {
+    public PramSpecificationView(java.awt.Frame parent, boolean modal, PramSpecificationController controller) {
         super(parent, modal);
         initComponents();
         this.setLocationRelativeTo(null);
+        this.controller = controller;
+    }
+    
+    public void setMetadataMu(MetadataMu metadataMu) {
+        this.metadataMu = metadataMu;
+        this.model = this.metadataMu.getCombinations().getPramSpecification();
+        this.controller.setModel(this.model);
+        initializeData();
+    }
+    
+    public void initializeData() {
+        updateValues();
+    }
+    
+    public void updateValues(){
+        
     }
 
     /**
@@ -110,8 +137,10 @@ public class ModifyPRAMSpecification extends DialogBase {
             }
         ));
         jScrollPane1.setViewportView(jTable1);
-        jTable1.getColumnModel().getColumn(0).setPreferredWidth(8);
-        jTable1.getColumnModel().getColumn(1).setPreferredWidth(8);
+        if (jTable1.getColumnModel().getColumnCount() > 0) {
+            jTable1.getColumnModel().getColumn(0).setPreferredWidth(8);
+            jTable1.getColumnModel().getColumn(1).setPreferredWidth(8);
+        }
 
         jLabel1.setText("Variables:");
 
@@ -175,9 +204,11 @@ public class ModifyPRAMSpecification extends DialogBase {
             }
         ));
         jScrollPane2.setViewportView(jTable2);
-        jTable2.getColumnModel().getColumn(0).setPreferredWidth(12);
-        jTable2.getColumnModel().getColumn(1).setPreferredWidth(20);
-        jTable2.getColumnModel().getColumn(2).setPreferredWidth(12);
+        if (jTable2.getColumnModel().getColumnCount() > 0) {
+            jTable2.getColumnModel().getColumn(0).setPreferredWidth(12);
+            jTable2.getColumnModel().getColumn(1).setPreferredWidth(20);
+            jTable2.getColumnModel().getColumn(2).setPreferredWidth(12);
+        }
 
         jSlider1.setMajorTickSpacing(100);
         jSlider1.setMinorTickSpacing(5);
@@ -378,47 +409,47 @@ public class ModifyPRAMSpecification extends DialogBase {
         this.setVisible(false);
     }//GEN-LAST:event_jButton4ActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(ModifyPRAMSpecification.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(ModifyPRAMSpecification.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(ModifyPRAMSpecification.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(ModifyPRAMSpecification.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the dialog */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                ModifyPRAMSpecification dialog = new ModifyPRAMSpecification(new javax.swing.JFrame(), true);
-                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
-                    @Override
-                    public void windowClosing(java.awt.event.WindowEvent e) {
-                        System.exit(0);
-                    }
-                });
-                dialog.setVisible(true);
-            }
-        });
-    }
+//    /**
+//     * @param args the command line arguments
+//     */
+//    public static void main(String args[]) {
+//        /* Set the Nimbus look and feel */
+//        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+//        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+//         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+//         */
+//        try {
+//            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+//                if ("Nimbus".equals(info.getName())) {
+//                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+//                    break;
+//                }
+//            }
+//        } catch (ClassNotFoundException ex) {
+//            java.util.logging.Logger.getLogger(PramSpecificationView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        } catch (InstantiationException ex) {
+//            java.util.logging.Logger.getLogger(PramSpecificationView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        } catch (IllegalAccessException ex) {
+//            java.util.logging.Logger.getLogger(PramSpecificationView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+//            java.util.logging.Logger.getLogger(PramSpecificationView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        }
+//        //</editor-fold>
+//
+//        /* Create and display the dialog */
+//        java.awt.EventQueue.invokeLater(new Runnable() {
+//            public void run() {
+//                PramSpecificationView dialog = new PramSpecificationView(new javax.swing.JFrame(), true);
+//                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
+//                    @Override
+//                    public void windowClosing(java.awt.event.WindowEvent e) {
+//                        System.exit(0);
+//                    }
+//                });
+//                dialog.setVisible(true);
+//            }
+//        });
+//    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;

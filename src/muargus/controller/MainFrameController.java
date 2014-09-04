@@ -92,6 +92,7 @@ public class MainFrameController {
 
         // Release 2
         view.enableAction(Action.ShowTableCollection, tablesCalculated);
+        view.enableAction(Action.PramSpecification, tablesCalculated);
         view.enableAction(Action.IndividualRiskSpecification, tablesCalculated);
         view.enableAction(Action.HouseholdRiskSpecification, tablesCalculated);
         view.enableAction(Action.ModifyNumericalVariables, tablesCalculated);
@@ -200,9 +201,9 @@ public class MainFrameController {
         if (this.metadata.getCombinations().getPramSpecification() == null) {
             this.metadata.getCombinations().createPramSpecification();
         }
-        //PramSpecificationController controller = new PramSpecificationController(
-//                this.view, this.metadata);
-//        controller.showView();
+        PramSpecificationController controller = new PramSpecificationController(
+                this.view, this.metadata);
+        controller.showView();
         showUnsafeCombinations(0);
 
     }
