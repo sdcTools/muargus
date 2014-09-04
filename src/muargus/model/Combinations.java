@@ -6,7 +6,7 @@ package muargus.model;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import muargus.MuARGUS;
+//import muargus.MuARGUS;
 
 /**
  *
@@ -24,6 +24,11 @@ public class Combinations {
     private GlobalRecode globalRecode;
     private ProtectedFile protectedFile;
     private TableCollection showTableCollection;
+    private RiskSpecification riskSpecification;
+    private ModifyNumericalVariables modifyNumericalVariables;
+    private NumericalMicroaggregation numericalMicroaggregation;
+    private NumericalRankSwapping numericalRankSwapping;
+    private PramSpecification pramSpecification;
 
     // tot dit aantal kan die het redelijk goed hebben, maar is die wel +/- 5 seconden aan het rekenen. 
     private final int maximumNumberOfTables = 25000;
@@ -73,6 +78,46 @@ public class Combinations {
         this.protectedFile = new ProtectedFile();
         this.protectedFile.setVariables(this.getVariablesInTables());
         this.protectedFile.setRiskModel(this.isRiskModel());
+    }
+
+    public PramSpecification getPramSpecification() {
+        return pramSpecification;
+    }
+
+    public void createPramSpecification() {
+        this.pramSpecification = new PramSpecification();
+    }
+
+    public RiskSpecification getRiskSpecification() {
+        return riskSpecification;
+    }
+
+    public void createRiskSpecification() {
+        this.riskSpecification = new RiskSpecification();
+    }
+
+    public ModifyNumericalVariables getModifyNumericalVariables() {
+        return modifyNumericalVariables;
+    }
+
+    public void createModifyNumericalVariables() {
+        this.modifyNumericalVariables = new ModifyNumericalVariables();
+    }
+
+    public NumericalMicroaggregation getNumericalMicroaggregation() {
+        return numericalMicroaggregation;
+    }
+
+    public void createNumericalMicroaggregation() {
+        this.numericalMicroaggregation = new NumericalMicroaggregation();
+    }
+
+    public NumericalRankSwapping getNumericalRankSwapping() {
+        return numericalRankSwapping;
+    }
+
+    public void createNumericalRankSwapping() {
+        this.numericalRankSwapping = new NumericalRankSwapping();
     }
     
     public void clearUnsafeCombinations() {

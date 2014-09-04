@@ -4,19 +4,46 @@
  */
 package muargus.view;
 
+import muargus.controller.ModifyNumericalVariablesController;
+import muargus.model.MetadataMu;
+import muargus.model.ModifyNumericalVariables;
+
+
 /**
  *
  * @author ambargus
  */
-public class ModifyNumericalVariables extends DialogBase {
+public class ModifyNumericalVariablesView extends DialogBase {
 
+    MetadataMu metadataMu;
+    ModifyNumericalVariablesController controller;
+    ModifyNumericalVariables model;
     /**
-     * Creates new form ModifyNumericalVariables
+     * 
+     * @param parent
+     * @param modal
+     * @param controller 
      */
-    public ModifyNumericalVariables(java.awt.Frame parent, boolean modal) {
+    public ModifyNumericalVariablesView(java.awt.Frame parent, boolean modal, ModifyNumericalVariablesController controller) {
         super(parent, modal);
         initComponents();
-        this.setLocationRelativeTo(null);
+        setLocationRelativeTo(null);
+        this.controller = controller;
+    }
+    
+    public void setMetadataMu(MetadataMu metadataMu) {
+        this.metadataMu = metadataMu;
+        this.model = this.metadataMu.getCombinations().getModifyNumericalVariables();
+        this.controller.setModel(this.model);
+        initializeData();
+    }
+    
+    public void initializeData() {
+        updateValues();
+    }
+    
+    public void updateValues(){
+        
     }
 
     /**
@@ -111,7 +138,9 @@ public class ModifyNumericalVariables extends DialogBase {
             }
         ));
         jScrollPane1.setViewportView(jTable1);
-        jTable1.getColumnModel().getColumn(0).setPreferredWidth(8);
+        if (jTable1.getColumnModel().getColumnCount() > 0) {
+            jTable1.getColumnModel().getColumn(0).setPreferredWidth(8);
+        }
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Bottom Coding"));
 
@@ -294,47 +323,47 @@ public class ModifyNumericalVariables extends DialogBase {
         this.setVisible(false);
     }//GEN-LAST:event_jButton1ActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(ModifyNumericalVariables.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(ModifyNumericalVariables.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(ModifyNumericalVariables.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(ModifyNumericalVariables.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the dialog */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                ModifyNumericalVariables dialog = new ModifyNumericalVariables(new javax.swing.JFrame(), true);
-                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
-                    @Override
-                    public void windowClosing(java.awt.event.WindowEvent e) {
-                        System.exit(0);
-                    }
-                });
-                dialog.setVisible(true);
-            }
-        });
-    }
+//    /**
+//     * @param args the command line arguments
+//     */
+//    public static void main(String args[]) {
+//        /* Set the Nimbus look and feel */
+//        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+//        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+//         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+//         */
+//        try {
+//            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+//                if ("Nimbus".equals(info.getName())) {
+//                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+//                    break;
+//                }
+//            }
+//        } catch (ClassNotFoundException ex) {
+//            java.util.logging.Logger.getLogger(ModifyNumericalVariablesView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        } catch (InstantiationException ex) {
+//            java.util.logging.Logger.getLogger(ModifyNumericalVariablesView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        } catch (IllegalAccessException ex) {
+//            java.util.logging.Logger.getLogger(ModifyNumericalVariablesView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+//            java.util.logging.Logger.getLogger(ModifyNumericalVariablesView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        }
+//        //</editor-fold>
+//
+//        /* Create and display the dialog */
+//        java.awt.EventQueue.invokeLater(new Runnable() {
+//            public void run() {
+//                ModifyNumericalVariablesView dialog = new ModifyNumericalVariablesView(new javax.swing.JFrame(), true);
+//                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
+//                    @Override
+//                    public void windowClosing(java.awt.event.WindowEvent e) {
+//                        System.exit(0);
+//                    }
+//                });
+//                dialog.setVisible(true);
+//            }
+//        });
+//    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;

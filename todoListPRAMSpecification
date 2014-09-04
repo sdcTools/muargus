@@ -9,7 +9,8 @@ Release 2
     - model, view en controller klasse maken en basis methoden maken
     - klassen aan koppelen aan de rest van het programma
 2.  variablesTable
-    - vullen met alle categorische variabelen inclusief of ze gePRAMt zijn met of zonder bandwidth
+    - vullen met alle categorische variabelen (zonder variabelen met riskmodel) 
+      inclusief of ze gePRAMt zijn met of zonder bandwidth
     - als een waarde gePRAMt is, maak deze dan rood
     - zorg dat bij zowel klikken op een variabele als het gebruik van de pijltjestoetsen de waardes in de codelist verander
       (dit gebeurd nog niet in de oude Mu)
@@ -41,6 +42,7 @@ Release 2
     - zet als default op 5 (of als er minder dan 5 zijn de hoogst mogelijke waarde)
 12. closebutton
     - bereken pram met dll of gebeurd dit ergens anders?
+    - waarschuwing geven als dingen zijn aangepast: wil je dit nog toepassen?
     - sluit scherm
 13. schrijf javadocs
 14. Refactoren (kijken of alles volgens de MVC is gedaan, het weghalen van overbodige code etc.) 
