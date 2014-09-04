@@ -27,6 +27,7 @@ import muargus.model.Combinations;
 import muargus.model.RecodeMu;
 import muargus.model.TableMu;
 import muargus.model.CodeInfo;
+import muargus.model.PramVariableSpec;
 import muargus.model.UnsafeInfo;
 import muargus.model.VariableMu;
 
@@ -285,21 +286,22 @@ public class CalculationService {
     }
 
     public ArrayList<VariableMu> getVariables(MetadataMu metadata) {
-        if (metadata.getDataFileType() != MetadataMu.DATA_FILE_TYPE_FIXED) {
-            return metadata.getVariables();
-        }
-        ArrayList<VariableMu> variables = new ArrayList<>(metadata.getCombinations().getVariablesInTables());
-        if (metadata.getCombinations().isRiskModel()) {
-            for (VariableMu weightVar : metadata.getVariables()) {
-                if (weightVar.isWeight()) {
-                    if (!variables.contains(weightVar)) {
-                        variables.add(weightVar);
-                    }
-                    break;
-                }
-            }
-        }
-        return variables;
+        return metadata.getVariables();
+//        if (metadata.getDataFileType() != MetadataMu.DATA_FILE_TYPE_FIXED) {
+//            return metadata.getVariables();
+//        }
+//        ArrayList<VariableMu> variables = new ArrayList<>(metadata.getCombinations().getVariablesInTables());
+//        if (metadata.getCombinations().isRiskModel()) {
+//            for (VariableMu weightVar : metadata.getVariables()) {
+//                if (weightVar.isWeight()) {
+//                    if (!variables.contains(weightVar)) {
+//                        variables.add(weightVar);
+//                    }
+//                    break;
+//                }
+//            }
+//        }
+//        return variables;
     }
 
     private int getRiskVarIndex(ArrayList<VariableMu> variables) {
@@ -521,6 +523,32 @@ public class CalculationService {
         return missingCodelists;
     }
 
+    private void setPramVariable(MetadataMu metadata, PramVariableSpec pramVariable) throws ArgusException {
+        int varIndex = getVariables(metadata).indexOf(pramVariable.getVariable()) + 1;
+        int bandWidth = pramVariable.useBandwidth() ? pramVariable.getBandwidth() : -1;
+        boolean result = c.SetPramVar(varIndex, bandWidth, false);
+        if (!result) {
+            throw new ArgusException("Error during SetPramVar");
+        }
+        for (int codeIndex=0; codeIndex < pramVariable.getCodeInfo().size(); codeIndex++) {
+            result = c.SetPramValue(codeIndex+1, pramVariable.getCodeInfo().get(codeIndex).getPramProbability());
+            if (!result)
+                throw new ArgusException("Error during SetPramValue");
+        }
+        result = c.ClosePramVar(varIndex);
+            if (!result)
+                throw new ArgusException("Error during ClosePramVar");
+    }
+    
+    private void UndoSetPramVariable(MetadataMu metadata, PramVariableSpec pramVariable) throws ArgusException {
+        int varIndex = getVariables(metadata).indexOf(pramVariable.getVariable()) + 1;
+        boolean result = c.SetPramVar(varIndex, -1, true);
+        if (!result) {
+            throw new ArgusException("Error during SetPramVar");
+        }
+    }
+            
+            //TODO: to other class
     private void readCodelist(HashMap<String, String> codelist, String path, MetadataMu metadata) throws ArgusException {
         BufferedReader reader = null;
         try {
