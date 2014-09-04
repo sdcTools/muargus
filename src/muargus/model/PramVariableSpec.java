@@ -18,6 +18,7 @@ public class PramVariableSpec {
     private int bandwidth;
     private boolean applied;
     private final VariableMu variable;
+    private String[][] codesData;
 
     public PramVariableSpec(VariableMu variable) {
         this.variable = variable;
@@ -58,7 +59,13 @@ public class PramVariableSpec {
     public VariableMu getVariable() {
         return this.variable;
     }
-    
-    
 
+    public String[][] getCodesData() {
+        return codesData;
+    }
+
+    public void setCodesData(String[][] codesData) {
+        this.codesData = codesData;
+    }
+    
 }

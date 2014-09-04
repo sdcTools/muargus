@@ -17,10 +17,14 @@ public class PramSpecification {
     private boolean useBandwidth;
     private int defaultProbability;
     private ArrayList<PramVariableSpec> pramVarSpec;
+    private String[] columnNames = {"P", "BW", "Variable"};
+    private String[][] variablesData;
     
     public PramSpecification() {
         
     }
+    
+    
 
     public ArrayList<PramVariableSpec> getPramVarSpec() {
         return this.pramVarSpec;
@@ -29,6 +33,21 @@ public class PramSpecification {
     public void setPramVarSpec(ArrayList<PramVariableSpec> pramVarSpec) {
         this.pramVarSpec = pramVarSpec;
     }
-    
+
+    public String[] getColumnNames() {
+        return columnNames;
+    }
+
+    public void setColumnNames(String[] columnNames) {
+        this.columnNames = columnNames;
+    }
+
+    public String[][] getVariablesData() {
+        return variablesData;
+    }
+
+    public void setVariablesData(String[][] variablesData) {
+        this.variablesData = variablesData;
+    }
     
 }
