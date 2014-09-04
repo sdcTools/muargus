@@ -26,7 +26,7 @@ import muargus.model.MetadataMu;
 import muargus.model.Combinations;
 import muargus.model.RecodeMu;
 import muargus.model.TableMu;
-import muargus.model.UnsafeCodeInfo;
+import muargus.model.CodeInfo;
 import muargus.model.UnsafeInfo;
 import muargus.model.VariableMu;
 
@@ -508,13 +508,13 @@ public class CalculationService {
                         code,
                         nDims,
                         unsafeCount);
-                UnsafeCodeInfo codeInfo = new UnsafeCodeInfo(code[0], isMissing[0] != 0);
+                CodeInfo codeInfo = new CodeInfo(code[0], isMissing[0] != 0);
                 if (codelist.containsKey(code[0].trim())) {
                     codeInfo.setLabel(codelist.get(code[0].trim()));
                 }
                 codeInfo.setFrequency(freq[0]);
                 codeInfo.setUnsafeCombinations(nDims[0], unsafeCount);
-                unsafe.addUnsafeCodeInfo(codeInfo);
+                unsafe.addCodeInfo(codeInfo);
             }
             result = c.UnsafeVariableClose(varIndex + 1);
         }

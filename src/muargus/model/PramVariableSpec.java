@@ -6,10 +6,17 @@
 
 package muargus.model;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author pibd05
  */
 public class PramVariableSpec {
-    
+    private ArrayList<CodeInfo> codeInfo;
+    private boolean useBandwidth;
+    private int bandwidth;
+    private boolean applied;
+
+
 }

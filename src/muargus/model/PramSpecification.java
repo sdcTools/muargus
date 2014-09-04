@@ -12,4 +12,5 @@ package muargus.model;
  */
 public class PramSpecification {
     
+    private int bandwidth;
 }

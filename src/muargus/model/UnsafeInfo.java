@@ -14,24 +14,23 @@ import java.util.ArrayList;
  */
 public class UnsafeInfo {
     
-    private ArrayList<UnsafeCodeInfo> unsafeCodeInfos = new ArrayList<>();
-    //private UnsafeCodeInfo[] missingInfos;
+    private ArrayList<CodeInfo> codeInfos = new ArrayList<>();
     private int[] unsafeCombinations; 
             
     public UnsafeInfo() {
         
     }
     
-    public void clearUnsafeCodeInfos() {
-        this.unsafeCodeInfos = new ArrayList<>();
+    public void clearCodeInfos() {
+        this.codeInfos = new ArrayList<>();
     }
     
-    public void addUnsafeCodeInfo(UnsafeCodeInfo info) {
-        this.unsafeCodeInfos.add(info);
+    public void addCodeInfo(CodeInfo info) {
+            this.codeInfos.add(info);
     }
     
-    public ArrayList<UnsafeCodeInfo> getUnsafeCodeInfos() {
-        return this.unsafeCodeInfos;
+    public ArrayList<CodeInfo> getCodeInfos() {
+        return this.codeInfos;
     }
         
     public void setUnsafeCombinations(int count, int[] unsafe) {

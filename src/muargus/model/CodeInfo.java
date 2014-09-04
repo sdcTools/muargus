@@ -10,15 +10,16 @@ package muargus.model;
  *
  * @author pibd05
  */
-public class UnsafeCodeInfo {
+public class CodeInfo {
 
     private final String code;
     private String label = "";
     private final boolean isMissing;
     private int frequency;
     private int[] unsafeCombinations;
+    private int pramProbability;
     
-    public UnsafeCodeInfo(String code, boolean isMissing) {
+    public CodeInfo(String code, boolean isMissing) {
         this.code = code;
         this.isMissing = isMissing;
     }
