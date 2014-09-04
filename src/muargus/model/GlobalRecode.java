@@ -45,6 +45,15 @@ public class GlobalRecode {
         return columnNames;
     }
     
+    public RecodeMu getRecodeByVariableName(String varName) {
+        for (RecodeMu recode : this.recodeMus) {
+            if (recode.getVariable().getName().equals(varName)) {
+                return recode;
+            }
+        }
+        return null;
+    }
+    
     
     
     

@@ -438,14 +438,10 @@ public class CalculationService {
 
             //Global recode codelist
             if (metadata.getCombinations().getGlobalRecode() != null){
-                for (RecodeMu recode : metadata.getCombinations().getGlobalRecode().getRecodeMus()) {
-                    if (recode.getVariable().getName().equals(variable.getName())) {
-                        if (recode.isRecoded() || recode.isTruncated()) {
-                            variable.setCodeListFile(recode.getCodeListFile());
-                            variable.setCodelist(variable.getCodeListFile() != null);
-                        }
-
-                    }
+                RecodeMu recode = metadata.getCombinations().getGlobalRecode().getRecodeByVariableName(variable.getName());
+                if (recode != null &&  (recode.isRecoded() || recode.isTruncated())) {
+                    variable.setCodeListFile(recode.getCodeListFile());
+                    variable.setCodelist(variable.getCodeListFile() != null);
                 }
             }
         }
@@ -463,11 +459,8 @@ public class CalculationService {
     }
     
     private String getRecodeCodelistFile(Combinations combinations, VariableMu variable) {
-        for (RecodeMu recode : combinations.getGlobalRecode().getRecodeMus()) {
-            if (recode.getVariable().equals(variable) && (recode.isRecoded() || recode.isTruncated()))
-                return recode.getCodeListFile();
-        }
-        return "";
+        RecodeMu recode = combinations.getGlobalRecode().getRecodeByVariableName(variable.getName());
+        return (recode != null && (recode.isRecoded() || recode.isTruncated())) ? recode.getCodeListFile() : "";
     }
     
     public ArrayList<String> getUnsafeCombinations(MetadataMu metadata) {
