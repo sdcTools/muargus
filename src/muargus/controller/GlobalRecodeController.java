@@ -139,13 +139,13 @@ public class GlobalRecodeController {
     public void apply(RecodeMu recode) throws ArgusException {
         String warning = this.service.doRecode(this.metadata, recode);
         view.showWarning(warning);
-        this.service.applyRecode(this.metadata);
+        this.service.applyRecode();
         recode.setTruncated(false);
         recode.setRecoded(true);
     }
 
     public void undo(RecodeMu recode) throws ArgusException {
-        this.service.undoRecode(this.metadata, recode);
+        this.service.undoRecode(recode);
         recode.setRecoded(false);
         recode.setTruncated(false);
     }
@@ -154,7 +154,7 @@ public class GlobalRecodeController {
      *
      */
     public void truncate(RecodeMu recode, int positions) throws ArgusException {
-        this.service.truncate(this.metadata, recode, positions);
+        this.service.truncate(recode, positions);
         recode.setRecoded(false);
         recode.setTruncated(true);
         recode.setPositionsTruncated(Integer.toString(positions));

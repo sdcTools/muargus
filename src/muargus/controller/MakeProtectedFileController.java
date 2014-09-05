@@ -58,13 +58,12 @@ public class MakeProtectedFileController implements PropertyChangeListener {
      */
     public void makeFile(File file) {
         this.metadata.getCombinations().getProtectedFile().initSafeMeta(file, this.metadata);
-        this.service.setPropertyChangeListener(this);
-        this.service.makeProtectedFile(this.metadata);
+        this.service.makeProtectedFile(this);
     }
     
     private void saveSafeMeta() {
         
-        this.service.fillSafeFileMetadata(this.metadata);
+        this.service.fillSafeFileMetadata();
         MetadataMu safeMetadata = this.metadata.getCombinations().getProtectedFile().getSafeMeta();
         File file = new File(safeMetadata.getFileNames().getMetaFileName());
         try {

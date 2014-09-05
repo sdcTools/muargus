@@ -382,11 +382,15 @@ public class SelectCombinationsView extends DialogBase {
     }
 
     private void calculateTablesButtonActionPerformed(java.awt.event.ActionEvent evt) {
-        //TODO: does not work yet
         try {
-            controller.calculateTables();
+            if (this.model.getTables().isEmpty()) {
+                JOptionPane.showMessageDialog(this, "No tables specified");
+            }
+            else {
+                this.controller.calculateTables();
+            }
         } catch (ArgusException ex) {
-            ;
+            showErrorMessage(ex);
         }
     }
 

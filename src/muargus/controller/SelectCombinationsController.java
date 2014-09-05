@@ -57,13 +57,11 @@ public class SelectCombinationsController implements PropertyChangeListener{
     public void calculateTables() throws ArgusException {
         this.view.enableCalculateTables(false);
         saveSettings();
-        if(this.metadata.getCombinations().getTables().size() > 0){
-            ;//this.clearData();
-        }
         this.metadata.setCombinations(this.modelClone);
         CalculationService service = MuARGUS.getCalculationService();
-        service.setPropertyChangeListener(this);
-        service.calculateTables(this.metadata);
+        service.setMetadata(this.metadata);
+        //service.exploreFile(this);
+        service.calculateTables(this);
         
     }
     

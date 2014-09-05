@@ -37,42 +37,25 @@ import muargus.model.VariableMu;
  */
 public class CalculationService {
 
+    private enum BackgroundTask {
+        ExploreFile,
+        CalculateTables,
+        MakeProtectedFile,
+    }
+    
     private static final Logger logger = Logger.getLogger(SelectCombinationsController.class.getName());
     private final CMuArgCtrl c;
+    private MetadataMu metadata;
 
     public CalculationService(final CMuArgCtrl muArgCtrl) {
         c = muArgCtrl;
+        this.metadata = null;
     }
 
     private PropertyChangeListener listener;
 
-    public void makeProtectedFile(final MetadataMu metadata) {
-        final SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
-
-            // called in a separate thread...
-            @Override
-            protected Void doInBackground() throws Exception {
-                makeFileInBackground(metadata);
-                return null;
-            }
-
-            // called on the GUI thread
-            @Override
-            public void done() {
-                super.done();
-                try {
-                    get();
-                    workerDone(null);
-                } catch (InterruptedException ex) {
-                    logger.log(Level.SEVERE, null, ex);
-                } catch (ExecutionException ex) {
-                    //JOptionPane.showMessageDialog(null, ex.getCause().getMessage());
-                    workerDone(ex);
-                }
-            }
-        };
-        worker.addPropertyChangeListener(null);
-        worker.execute();
+    public void makeProtectedFile(PropertyChangeListener listener) {
+        executeSwingWorker(BackgroundTask.MakeProtectedFile, listener);
     }
 
     private int getIndexOf(MetadataMu metadata, VariableMu variable) {
@@ -80,6 +63,11 @@ public class CalculationService {
         return getVariables(metadata).indexOf(variable) + 1;
     }
 
+    public void setMetadata(MetadataMu metadata) {
+        this.metadata = metadata;
+        c.CleanAll();
+    }
+    
     public String doRecode(MetadataMu metadata, RecodeMu recode) throws ArgusException {
         int index = getIndexOf(metadata, recode.getVariable());
         int[] errorType = new int[]{0};
@@ -123,7 +111,7 @@ public class CalculationService {
         }
     }
     
-    public void applyRecode(MetadataMu metadata) throws ArgusException {
+    public void applyRecode() throws ArgusException {
         c.SetProgressListener(null);
         boolean result = c.ApplyRecode();
         if (!result) {
@@ -132,27 +120,27 @@ public class CalculationService {
         //return getUnsafeCombinations(metadata);
     }
 
-    public void undoRecode(MetadataMu metadata, RecodeMu recode) throws ArgusException {
+    public void undoRecode(RecodeMu recode) throws ArgusException {
         c.SetProgressListener(null);
         int index = getIndexOf(metadata, recode.getVariable());
         boolean result = c.UndoRecode(index);
         if (!result) {
             throw new ArgusException("Error while undoing recode");
         }
-        applyRecode(metadata);
+        applyRecode();
     }
     
-    public void truncate(MetadataMu metadata, RecodeMu recode, int positions) throws ArgusException {
+    public void truncate(RecodeMu recode, int positions) throws ArgusException {
         int index = getIndexOf(metadata, recode.getVariable());
         boolean result = c.DoTruncate(index, positions);
         if (!result) {
             throw new ArgusException("Error during Truncate");
         }
         recode.setTruncated(true);
-        applyRecode(metadata);
+        applyRecode();
     }
 
-    private void makeFileInBackground(final MetadataMu metadata) throws ArgusException {
+    private void makeFileInBackground() throws ArgusException {
         ProtectedFile protectedFile = metadata.getCombinations().getProtectedFile();
         IProgressListener progressListener = new IProgressListener() {
             @Override
@@ -188,34 +176,8 @@ public class CalculationService {
         }
     }
 
-    public void calculateTables(final MetadataMu metadata) {
-
-        final SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
-
-            // called in a separate thread...
-            @Override
-            protected Void doInBackground() throws Exception {
-                calculateInBackground(metadata);
-                return null;
-            }
-
-            // called on the GUI thread
-            @Override
-            public void done() {
-                super.done();
-                try {
-                    get();
-                    workerDone(null);
-                } catch (InterruptedException ex) {
-                    logger.log(Level.SEVERE, null, ex);
-                } catch (ExecutionException ex) {
-                    //JOptionPane.showMessageDialog(null, ex.getCause().getMessage());
-                    workerDone(ex);
-                }
-            }
-        };
-        worker.addPropertyChangeListener(null);
-        worker.execute();
+    public void calculateTables(PropertyChangeListener listener) {
+        executeSwingWorker(BackgroundTask.CalculateTables, listener);
     }
 
     private void workerDone(Exception ex) {
@@ -226,10 +188,7 @@ public class CalculationService {
             this.firePropertyChange("error", null, ex.getCause());
             this.firePropertyChange("result", null, "error");
         }
-    }
-
-    public void setPropertyChangeListener(PropertyChangeListener listener) {
-        this.listener = listener;
+        //this.listener = null;
     }
 
     private void firePropertyChange(String propertyName, Object oldValue, Object newValue) {
@@ -315,7 +274,60 @@ public class CalculationService {
         return 0;
     }
 
-    private void calculateInBackground(MetadataMu metadata) throws ArgusException {
+    private void executeInBackground(BackgroundTask taskType) throws ArgusException {
+        switch (taskType) {
+            case CalculateTables:
+                calculateInBackground();
+                break;
+            case ExploreFile:
+                exploreInBackground();
+                break;
+            case MakeProtectedFile:
+                makeFileInBackground();
+                break;
+        }
+            
+    }
+    
+    private void exploreInBackground() throws ArgusException {
+        //TODO implement
+    }
+    
+    public void exploreFile(PropertyChangeListener listener) {
+        executeSwingWorker(BackgroundTask.ExploreFile, listener);
+    }
+    
+    private void executeSwingWorker(final BackgroundTask taskType, PropertyChangeListener listener) {
+        this.listener = listener;
+        SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
+
+            // called in a separate thread...
+            @Override
+            protected Void doInBackground() throws Exception {
+                executeInBackground(taskType);
+                return null;
+            }
+
+            // called on the GUI thread
+            @Override
+            public void done() {
+                super.done();
+                try {
+                    get();
+                    workerDone(null);
+                } catch (InterruptedException ex) {
+                    logger.log(Level.SEVERE, null, ex);
+                } catch (ExecutionException ex) {
+                    workerDone(ex);
+                }
+            }
+        };
+       worker.addPropertyChangeListener(this.listener);
+       worker.execute();
+       
+    }
+    
+    private void calculateInBackground() throws ArgusException {
         Combinations model = metadata.getCombinations();
         ArrayList<VariableMu> variables = getVariables(metadata); //metadata.getVariables();
         boolean result = c.SetNumberVar(variables.size());
@@ -449,7 +461,7 @@ public class CalculationService {
         }
         return delta;
     }
-    public void fillSafeFileMetadata(MetadataMu metadata) {
+    public void fillSafeFileMetadata() {
         MetadataMu safeMeta = metadata.getCombinations().getProtectedFile().getSafeMeta();
         ArrayList<VariableMu> variables = getVariables(metadata);
         int delta = 0;
@@ -465,7 +477,7 @@ public class CalculationService {
         return (recode != null && (recode.isRecoded() || recode.isTruncated())) ? recode.getCodeListFile() : "";
     }
     
-    public ArrayList<String> getUnsafeCombinations(MetadataMu metadata) {
+    public ArrayList<String> getUnsafeCombinations() {
         ArrayList<String> missingCodelists = new ArrayList<>();
         Combinations model = metadata.getCombinations();
         boolean hasRecode = (model.getGlobalRecode() != null);
@@ -524,7 +536,7 @@ public class CalculationService {
         return missingCodelists;
     }
 
-    private void setPramVariable(MetadataMu metadata, PramVariableSpec pramVariable) throws ArgusException {
+    public void setPramVariable(PramVariableSpec pramVariable) throws ArgusException {
         int varIndex = getVariables(metadata).indexOf(pramVariable.getVariable()) + 1;
         int bandWidth = pramVariable.useBandwidth() ? pramVariable.getBandwidth() : -1;
         boolean result = c.SetPramVar(varIndex, bandWidth, false);
@@ -541,7 +553,7 @@ public class CalculationService {
                 throw new ArgusException("Error during ClosePramVar");
     }
     
-    private void UndoSetPramVariable(MetadataMu metadata, PramVariableSpec pramVariable) throws ArgusException {
+    public void UndoSetPramVariable(PramVariableSpec pramVariable) throws ArgusException {
         int varIndex = getVariables(metadata).indexOf(pramVariable.getVariable()) + 1;
         boolean result = c.SetPramVar(varIndex, -1, true);
         if (!result) {
