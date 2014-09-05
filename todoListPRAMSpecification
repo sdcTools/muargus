@@ -6,21 +6,11 @@ Nog te doen:                                                                    
 Release 2
 
 2.  variablesTable
-    - vullen met alle categorische variabelen (zonder variabelen met riskmodel) 
-      inclusief of ze gePRAMt zijn met of zonder bandwidth
     - als een waarde gePRAMt is, maak deze dan rood
-    - zorg dat bij zowel klikken op een variabele als het gebruik van de pijltjestoetsen de waardes in de codelist verander
-      (dit gebeurd nog niet in de oude Mu)
-3.  codesTable
-    - vul de eerste kolom met de codes van de geselecteerde variabele uit de variablesTable
-    - vul indien mogelijk de tweede kolom met de codelist van de geselecteerde variabele uit de variablesTable
-    - vul de laatste kolom met de PRAM-probability horende bij de betreffende code (als default is dit 0)
-      deze probability moet ergens opgeslagen worden (Anco/PP: Hoe lang
 4.  codesSlider
     - koppel dit aan de probabilty van de geselecteerde rij van de codesTable
 5.  applyButton
     - alleen mogelijk als ten minste 1 probability groter is dan 0, zo niet geef waarschuwing
-    - zet X in de eerste kolom bij de geselecteerde variabele van de variablesTable
     - zet, als bandwithCheckBox is aangevinkt, in de tweede kolom de waarde van de bandwithComboBox
 6.  undoButton
     - undo PRAM voor de geselecteerde rij van variablesTable
@@ -47,6 +37,18 @@ Gedaan:                                                                         
     - namen van de onderdelen veranderen                                                                    
     - model, view en controller klasse maken en basis methoden maken
     - klassen aan koppelen aan de rest van het programma
+2.  variablesTable
+    - vullen met alle categorische variabelen (zonder variabelen met riskmodel) 
+      inclusief of ze gePRAMt zijn met of zonder bandwidth
+    - zorg dat bij zowel klikken op een variabele als het gebruik van de pijltjestoetsen de waardes in de codelist verander
+      (dit gebeurd nog niet in de oude Mu)
+3.  codesTable
+    - vul de eerste kolom met de codes van de geselecteerde variabele uit de variablesTable
+    - vul indien mogelijk de tweede kolom met de codelist van de geselecteerde variabele uit de variablesTable
+    - vul de laatste kolom met de PRAM-probability horende bij de betreffende code (als default is dit 0)
+      deze probability moet ergens opgeslagen worden (Anco/PP: Hoe lang
+5.  applyButton
+    - zet X in de eerste kolom bij de geselecteerde variabele van de variablesTable
 7.  PRAM options
     - kan dit uberhaupt veranderen? --> staat nu standaard invisible
 8.  defaultProbabilityComboBox
