@@ -9,6 +9,7 @@ package muargus.controller;
 import java.util.ArrayList;
 import muargus.MuARGUS;
 import muargus.model.MetadataMu;
+import muargus.model.RiskModelClass;
 import muargus.model.RiskSpecification;
 import muargus.model.TableMu;
 import muargus.view.RiskSpecificationView;
@@ -53,14 +54,50 @@ public class RiskSpecificationController {
      * Opens the view by setting its visibility to true.
      */
     public void showView() {
-            
-        double ksi = calculationService.fillHistogramData(this.model.getRiskTable(), 
-                this.model.getClasses());
-        this.model.setKsi(ksi);
-        //TODO: default calculation. can be triggered by the view too
+        boolean init = this.model.getClasses().isEmpty();
+        fillModelHistogramData(false);
+        if (init)
+            initializeRiskThreshold();
+        
+        calculateByRiskThreshold();
+        
         this.view.setVisible(true);
     }
+    
+    public void fillModelHistogramData(boolean cumulative) {
+        double maxReident = calculationService.fillHistogramData(this.model.getRiskTable(), 
+                this.model.getClasses(), cumulative);
+        this.model.setMaxReidentRate(maxReident);
+        
+    }
 
+    private void initializeRiskThreshold() {
+        ArrayList<RiskModelClass> classes = this.model.getClasses();
+        double min = Math.log(classes.get(0).getLeftValue());
+        double max = Math.log(classes.get(classes.size()-1).getRightValue());
+        this.model.setRiskThreshold(Math.exp((min + max)/2));
+    }
+    
+    public void calculateByRiskThreshold() {
+        this.model.setUnsafeRecords(this.calculationService.calculateUnsafe(
+                this.model.getRiskTable(), this.model.getRiskThreshold()));
+        this.model.setReidentRateThreshold(this.calculationService.calculateReidentRate(
+                this.model.getRiskTable(), this.model.getRiskThreshold()));
+    }
+    
+    public void calculateByUnsafeRecords() {
+        this.model.setRiskThreshold(this.calculationService.calculateRiskThreshold(
+                this.model.getRiskTable(), this.model.getUnsafeRecords()));
+        this.model.setReidentRateThreshold(this.calculationService.calculateReidentRate(
+                this.model.getRiskTable(), this.model.getRiskThreshold()));
+        
+    }
+    
+    public void calculateByReidentThreshold() {
+        //TODO: more complicated because of iterations
+    }
+    
+    
     /**
      * Closes the view by setting its visibility to false.
      */

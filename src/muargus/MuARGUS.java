@@ -31,6 +31,7 @@ public class MuARGUS {
     
     private static final String messageTitle = "Mu Argus";
     private static final int nHistogramClasses = 10;
+    private static final int nCumulativeHistogramClasses = 50;
     
     static {
         System.loadLibrary("libmuargusdll");
@@ -56,8 +57,8 @@ public class MuARGUS {
         return messageTitle;
     }
     
-    public static int getNHistogramClasses() {
-        return nHistogramClasses;
+    public static int getNHistogramClasses(boolean cumulative) {
+        return cumulative ? nCumulativeHistogramClasses : nHistogramClasses;
     }
     
     public static String getTempDir() {

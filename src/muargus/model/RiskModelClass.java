@@ -11,10 +11,10 @@ package muargus.model;
  * @author pibd05
  */
 public class RiskModelClass {
-    private double leftValue;
-    private double rightValue;
-    private int frequency;
-    private int hhFrequency;
+    private final double leftValue;
+    private final double rightValue;
+    private final int frequency;
+    private final int hhFrequency;
     
     public RiskModelClass(double leftValue, double rightValue, int frequency, int hhFrequency) {
         this.leftValue = leftValue;
@@ -22,5 +22,23 @@ public class RiskModelClass {
         this.frequency = frequency;
         this.hhFrequency = hhFrequency;
     }
+
+    public double getLeftValue() {
+        return this.leftValue;
+    }
+
+    public double getRightValue() {
+        return this.rightValue;
+    }
+
+    public int getFrequency() {
+        return this.frequency;
+    }
+
+    public int getHhFrequency() {
+        return this.hhFrequency;
+    }
+    
+    
     
 }
