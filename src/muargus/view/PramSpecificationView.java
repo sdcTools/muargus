@@ -22,7 +22,8 @@ public class PramSpecificationView extends DialogBase {
     PramSpecification model;
     private TableModel variablesTableModel;
     private TableModel codesTableModel;
-    private int[] columnWidth = {30, 30, 70};
+    private final int[] variablesColumnWidth = {20, 30, 80};
+    private final int[] codesColumnWidth = {30, 70, 30};
 
     /**
      *
@@ -69,7 +70,7 @@ public class PramSpecificationView extends DialogBase {
             selectedRow = 0;
         }
 
-        this.variablesTableModel = new DefaultTableModel(this.model.getVariablesData(), this.model.getColumnNames()) {
+        this.variablesTableModel = new DefaultTableModel(this.model.getVariablesData(), this.model.getVariablesColumnNames()) {
             @Override
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return false;
@@ -77,9 +78,9 @@ public class PramSpecificationView extends DialogBase {
         };
         this.variablesTable.setModel(this.variablesTableModel);
 
-        for (int i = 0; i < columnWidth.length; i++) {
-            this.variablesTable.getColumnModel().getColumn(i).setMinWidth(columnWidth[i]);
-            this.variablesTable.getColumnModel().getColumn(i).setPreferredWidth(columnWidth[i]);
+        for (int i = 0; i < this.variablesColumnWidth.length; i++) {
+            this.variablesTable.getColumnModel().getColumn(i).setMinWidth(this.variablesColumnWidth[i]);
+            this.variablesTable.getColumnModel().getColumn(i).setPreferredWidth(this.variablesColumnWidth[i]);
         }
         this.variablesTable.getSelectionModel().setSelectionInterval(selectedRow, selectedRow);
 
@@ -91,9 +92,10 @@ public class PramSpecificationView extends DialogBase {
     }
 
     public void updateCodesTable() {
+        this.controller.makeCodesData(getSelectedPramVariableSpec().getVariable().getName());
 
         this.codesTableModel = new DefaultTableModel(
-                getSelectedPramVariableSpec().getCodesData(), this.model.getColumnNames()) {
+                getSelectedPramVariableSpec().getCodesData(), this.model.getCodesColumnNames()) {
                     @Override
                     public boolean isCellEditable(int rowIndex, int columnIndex) {
                         return false;
@@ -101,9 +103,9 @@ public class PramSpecificationView extends DialogBase {
                 };
         this.codesTable.setModel(this.codesTableModel);
 
-        for (int i = 0; i < columnWidth.length; i++) {
-            this.codesTable.getColumnModel().getColumn(i).setMinWidth(columnWidth[i]);
-            this.codesTable.getColumnModel().getColumn(i).setPreferredWidth(columnWidth[i]);
+        for (int i = 0; i < this.codesColumnWidth.length; i++) {
+            this.codesTable.getColumnModel().getColumn(i).setMinWidth(this.codesColumnWidth[i]);
+            this.codesTable.getColumnModel().getColumn(i).setPreferredWidth(this.codesColumnWidth[i]);
         }
     }
 

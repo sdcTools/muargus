@@ -96,7 +96,13 @@ public class PramSpecificationController {
 
     public void makeCodesData(String variableName) {
         PramVariableSpec pramVariableSpec = getSelectedPramVarSpec(variableName);
-        ArrayList<CodeInfo> codeInfo = pramVariableSpec.getCodeInfo();
+        VariableMu variable = null;
+        for(VariableMu v: this.metadataMu.getVariables()){
+            if(v.getName().equals(variableName)){
+                variable = v;
+            }
+        }
+        ArrayList<CodeInfo> codeInfo = variable.getCodeInfos();
         String[][] codesData = new String[codeInfo.size()][3];
         int index = 0;
         for (CodeInfo c : codeInfo) {
