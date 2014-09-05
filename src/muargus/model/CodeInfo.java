@@ -13,7 +13,7 @@ package muargus.model;
 public class CodeInfo {
 
     private final String code;
-    private String label = "";
+    private String label;
     private final boolean isMissing;
     private int frequency;
     private int[] unsafeCombinations;
@@ -22,6 +22,7 @@ public class CodeInfo {
     public CodeInfo(String code, boolean isMissing) {
         this.code = code;
         this.isMissing = isMissing;
+        this.pramProbability = 0;
     }
     
     public void setLabel(String label) {

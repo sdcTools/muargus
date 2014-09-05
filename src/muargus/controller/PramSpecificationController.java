@@ -54,6 +54,11 @@ public class PramSpecificationController {
         this.model = model;
     }
 
+    /**
+     * 
+     * @param variableName
+     * @return 
+     */
     public PramVariableSpec getSelectedPramVarSpec(String variableName) {
         PramVariableSpec temp = null;
         for (PramVariableSpec p : this.model.getPramVarSpec()) {
@@ -64,19 +69,23 @@ public class PramSpecificationController {
         return temp;
     }
 
+    /**
+     * 
+     */
     public void makePramVariableSpecs() {
         ArrayList<PramVariableSpec> pramVarSpec = new ArrayList<>();
         for (VariableMu v : this.metadataMu.getVariables()) {
             if (v.isCategorical()) {
                 PramVariableSpec p = new PramVariableSpec(v);
-                //ArrayList<CodeInfo>
-                //p.setCodeInfo(null);
                 pramVarSpec.add(p);
             }
         }
         this.model.setPramVarSpec(pramVarSpec);
     }
 
+    /**
+     * 
+     */
     public void makeVariablesData() {
         ArrayList<PramVariableSpec> pramVarSpec = this.model.getPramVarSpec();
         String[][] variablesData = new String[pramVarSpec.size()][3];
@@ -94,9 +103,19 @@ public class PramSpecificationController {
         this.model.setVariablesData(variablesData);
     }
 
+    /**
+     * 
+     * @param variableName 
+     */
     public void makeCodesData(String variableName) {
         PramVariableSpec pramVariableSpec = getSelectedPramVarSpec(variableName);
-        ArrayList<CodeInfo> codeInfo = pramVariableSpec.getCodeInfo();
+        VariableMu variable = null;
+        for(VariableMu v: this.metadataMu.getVariables()){
+            if(v.getName().equals(variableName)){
+                variable = v;
+            }
+        }
+        ArrayList<CodeInfo> codeInfo = variable.getCodeInfos();
         String[][] codesData = new String[codeInfo.size()][3];
         int index = 0;
         for (CodeInfo c : codeInfo) {
