@@ -4,6 +4,7 @@
  */
 package muargus.view;
 
+import javax.swing.SpinnerNumberModel;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import muargus.controller.PramSpecificationController;
@@ -41,8 +42,8 @@ public class PramSpecificationView extends DialogBase {
     }
 
     /**
-     * 
-     * @param metadataMu 
+     *
+     * @param metadataMu
      */
     public void setMetadataMu(MetadataMu metadataMu) {
         this.metadataMu = metadataMu;
@@ -52,27 +53,59 @@ public class PramSpecificationView extends DialogBase {
     }
 
     /**
-     * 
+     *
      */
     public void initializeData() {
         this.pramOptionsPanel.setVisible(false); // this option is available for future options using global recode
         this.bandwidthSpinner.setEnabled(this.bandwidthCheckBox.isSelected());
         this.controller.makePramVariableSpecs();
+        
+        for (VariableMu v : this.metadataMu.getVariables()) {
+            if(v.isCategorical()){
+            int max = v.getCodeInfos().size() - v.getNumberOfMissings();
+            int value;
+            if (max > 5) {
+                value = 5;
+            } else {
+                value = max;
+            }
+            System.out.println(value);
+            getPramVariableSpec(v).setBandwidth(value);
+            }
 
+        }
         updateValues();
+
+    }
+
+    public PramVariableSpec getPramVariableSpec(VariableMu variable) {
+        PramVariableSpec temp = null;
+        for (PramVariableSpec p : this.model.getPramVarSpec()) {
+            if (p.getVariable().equals(variable)) {
+                temp = p;
+                break;
+            }
+        }
+        return temp;
     }
 
     /**
-     * 
+     *
      */
     public void updateValues() {
         updateVariablesTable();
         updateCodesTable();
         this.codesSlider.setValue(getSelectedCodeInfo().getPramProbability());
+
+        int value = getSelectedPramVariableSpec().getBandwidth();
+        int max = getSelectedPramVariableSpec().getVariable().getCodeInfos().size();
+        System.out.println("value = " + value + "\nmax = " + max);
+        this.bandwidthSpinner.setModel(new SpinnerNumberModel(value, 1, max, 1));
+        //this.bandwidthSpinner.set
     }
 
     /**
-     * 
+     *
      */
     public void updateVariablesTable() {
         this.controller.makeVariablesData();
@@ -99,28 +132,28 @@ public class PramSpecificationView extends DialogBase {
     }
 
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     public PramVariableSpec getSelectedPramVariableSpec() {
         return this.controller.getSelectedPramVarSpec(
                 (String) this.variablesTable.getValueAt(this.variablesTable.getSelectedRow(), 2));
     }
-    
+
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
-    public CodeInfo getSelectedCodeInfo(){
+    public CodeInfo getSelectedCodeInfo() {
         return getSelectedPramVariableSpec().getVariable().getCodeInfos().get(this.codesTable.getSelectedRow());
     }
-    
-    public CodeInfo getSelectedCodeInfo(VariableMu variable){
+
+    public CodeInfo getSelectedCodeInfo(VariableMu variable) {
         return variable.getCodeInfos().get(this.codesTable.getSelectedRow());
     }
 
     /**
-     * 
+     *
      */
     public void updateCodesTable() {
         int selectedRow;
@@ -129,7 +162,7 @@ public class PramSpecificationView extends DialogBase {
         } else {
             selectedRow = 0;
         }
-        
+
         this.controller.makeCodesData(getSelectedPramVariableSpec().getVariable().getName());
 
         this.codesTableModel = new DefaultTableModel(
@@ -187,54 +220,6 @@ public class PramSpecificationView extends DialogBase {
         variablesTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
                 {null, null, null}
             },
             new String [] {
@@ -290,54 +275,6 @@ public class PramSpecificationView extends DialogBase {
 
         codesTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
                 {null, null, null},
                 {null, null, null}
             },
@@ -586,14 +523,14 @@ public class PramSpecificationView extends DialogBase {
     }//GEN-LAST:event_applyButtonActionPerformed
 
     private void codesSliderStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_codesSliderStateChanged
-        for(VariableMu v: this.metadataMu.getVariables()){
-            if(getSelectedPramVariableSpec().getVariable().equals(v)){
+        for (VariableMu v : this.metadataMu.getVariables()) {
+            if (getSelectedPramVariableSpec().getVariable().equals(v)) {
                 VariableMu variable = v;
                 getSelectedCodeInfo(variable).setPramProbability(this.codesSlider.getValue());
                 break;
             }
         }
-        
+
         updateValues();
     }//GEN-LAST:event_codesSliderStateChanged
 
@@ -607,7 +544,7 @@ public class PramSpecificationView extends DialogBase {
 
     private void defaultProbabilityButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_defaultProbabilityButtonActionPerformed
         int probability = (int) this.defaultProbabilitySpinner.getValue();
-        for(CodeInfo c: getSelectedPramVariableSpec().getVariable().getCodeInfos()){
+        for (CodeInfo c : getSelectedPramVariableSpec().getVariable().getCodeInfos()) {
             c.setPramProbability(probability);
         }
         updateValues();

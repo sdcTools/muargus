@@ -13,9 +13,9 @@ import java.util.ArrayList;
  * @author pibd05
  */
 public class PramVariableSpec {
-    private ArrayList<CodeInfo> codeInfo;
+    //private ArrayList<CodeInfo> codeInfo; // don't use this
     private boolean useBandwidth = false;
-    private int bandwidth = 5;
+    private int bandwidth;
     private boolean applied = false;
     private String appliedText;
     private final VariableMu variable;
@@ -25,13 +25,13 @@ public class PramVariableSpec {
         this.variable = variable;
     }
 
-    public ArrayList<CodeInfo> getCodeInfo() {
-        return this.codeInfo;
-    }
-
-    public void setCodeInfo(ArrayList<CodeInfo> codeInfo) {
-        this.codeInfo = codeInfo;
-    }
+//    public ArrayList<CodeInfo> getCodeInfo() {
+//        return this.codeInfo;
+//    }
+//
+//    public void setCodeInfo(ArrayList<CodeInfo> codeInfo) {
+//        this.codeInfo = codeInfo;
+//    }
 
     public boolean useBandwidth() {
         return this.useBandwidth;

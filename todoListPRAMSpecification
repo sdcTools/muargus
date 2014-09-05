@@ -4,9 +4,11 @@ niet behandelde opmerkingen/vragen:
 Nog te doen:                                                                                                Mee bezig:
 
 Release 2
-
+    - verander sliders naar combobox
 2.  variablesTable
     - als een waarde gePRAMt is, maak deze dan rood
+3.  codesTable
+    - zorg dat er geen missing values in zitten.
 5.  applyButton
     - alleen mogelijk als ten minste 1 probability groter is dan 0, zo niet geef waarschuwing
     - zet, als bandwithCheckBox is aangevinkt, in de tweede kolom de waarde van de bandwithComboBox
