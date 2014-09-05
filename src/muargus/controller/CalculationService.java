@@ -28,6 +28,7 @@ import muargus.model.RecodeMu;
 import muargus.model.TableMu;
 import muargus.model.CodeInfo;
 import muargus.model.PramVariableSpec;
+import muargus.model.RiskModelClass;
 //import muargus.model.UnsafeInfo;
 import muargus.model.VariableMu;
 
@@ -375,7 +376,7 @@ public class CalculationService {
                 errorCodes[0], lineNumbers[0]+1, getVariables().get(varIndexOut[0]).getName()));
         }
         metadata.setRecordCount(c.NumberofRecords());
-
+        
         int x = model.getTables().size();
         result = c.SetNumberTab(x); //this.model.getTables().size());
         if (!result) {
@@ -559,6 +560,32 @@ public class CalculationService {
         if (!result) {
             throw new ArgusException("Error during SetPramVar");
         }
+    }
+    
+    public double fillHistogramData(TableMu table, ArrayList<RiskModelClass> classes) {
+        //TODO: cumulative
+        classes.clear();
+        double[] ksi = new double[1];
+        
+        int tableIndex = this.metadata.getCombinations().getTables().indexOf(table) + 1;
+        int nClasses = MuARGUS.getNHistogramClasses();
+        double[] classLeftValue = new double[nClasses + 1];
+        int[] frequency = new int[nClasses];
+            int[] hhFrequency = new int[nClasses];
+        if (metadata.isHouseholdData()) {
+            c.GetBHRHistogramData(tableIndex, nClasses, classLeftValue, hhFrequency, frequency);
+        }
+        else {
+            c.GetBIRHistogramData(tableIndex, nClasses, classLeftValue, ksi, frequency);
+        }
+        for (int classIndex=0; classIndex < nClasses; classIndex++) {
+            RiskModelClass rmc = new RiskModelClass(classLeftValue[classIndex],
+                    classLeftValue[classIndex+1],
+                    frequency[classIndex],
+                    hhFrequency[classIndex]);
+            classes.add(rmc);
+        }
+        return ksi[0];
     }
             
             //TODO: to other class

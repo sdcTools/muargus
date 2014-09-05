@@ -5,7 +5,6 @@
 package muargus.view;
 
 import argus.model.ArgusException;
-import argus.utils.SystemUtils;
 import java.io.File;
 import javax.swing.JOptionPane;
 import javax.swing.ListSelectionModel;
@@ -13,6 +12,7 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
+import muargus.RecodeTableCellRenderer;
 import muargus.controller.GlobalRecodeController;
 import muargus.model.GlobalRecode;
 import muargus.model.MetadataMu;
@@ -78,6 +78,8 @@ public class GlobalRecodeView extends DialogBase {
         this.variablesTable.getColumnModel().getColumn(0).setPreferredWidth(30);
         this.variablesTable.getColumnModel().getColumn(1).setMinWidth(70);
         this.variablesTable.getColumnModel().getColumn(1).setPreferredWidth(70);
+
+        this.variablesTable.setDefaultRenderer(Object.class, new RecodeTableCellRenderer());
 
         updateValues();
     }
@@ -156,7 +158,7 @@ public class GlobalRecodeView extends DialogBase {
     
     private int getTruncatePositions(int varLength) {
         while (true) {
-            String result = JOptionPane.showInputDialog(null, "Number of Digits");
+            String result = JOptionPane.showInputDialog(null, "Number of Digits", 1);
             if (result == null || result.length() == 0)
                 return 0;
             
@@ -613,6 +615,7 @@ public class GlobalRecodeView extends DialogBase {
                 controller.truncate(getSelectedRecode(), positions);
                 int rowIndex = this.model.getVariables().indexOf(getSelectedRecode().getVariable());
                 variablesTable.getModel().setValueAt("T", rowIndex, 0);
+                variablesTable.getModel().setValueAt(getSelectedRecode().getVariable().getName(), rowIndex, 1);
                 updateValues();
             }
  
@@ -655,6 +658,7 @@ public class GlobalRecodeView extends DialogBase {
             controller.apply(getSelectedRecode());
             int rowIndex = this.model.getVariables().indexOf(getSelectedRecode().getVariable());
             variablesTable.getModel().setValueAt("R", rowIndex, 0);
+            variablesTable.getModel().setValueAt(getSelectedRecode().getVariable().getName(), rowIndex, 1);
             updateValues();
         }
         catch (ArgusException ex) {
@@ -667,6 +671,7 @@ public class GlobalRecodeView extends DialogBase {
             controller.undo(getSelectedRecode());
             int rowIndex = this.model.getVariables().indexOf(getSelectedRecode().getVariable());
             variablesTable.getModel().setValueAt("", rowIndex, 0);
+            variablesTable.getModel().setValueAt(getSelectedRecode().getVariable().getName(), rowIndex, 1);
         }
         catch (ArgusException ex) {
             showErrorMessage(ex);
