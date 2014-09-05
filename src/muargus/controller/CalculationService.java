@@ -58,9 +58,9 @@ public class CalculationService {
         executeSwingWorker(BackgroundTask.MakeProtectedFile, listener);
     }
 
-    private int getIndexOf(MetadataMu metadata, VariableMu variable) {
+    private int getIndexOf(VariableMu variable) {
         //Get the index (1-based) of the variable in the dll
-        return getVariables(metadata).indexOf(variable) + 1;
+        return getVariables().indexOf(variable) + 1;
     }
 
     public void setMetadata(MetadataMu metadata) {
@@ -68,8 +68,8 @@ public class CalculationService {
         c.CleanAll();
     }
     
-    public String doRecode(MetadataMu metadata, RecodeMu recode) throws ArgusException {
-        int index = getIndexOf(metadata, recode.getVariable());
+    public String doRecode(RecodeMu recode) throws ArgusException {
+        int index = getIndexOf(recode.getVariable());
         int[] errorType = new int[]{0};
         int[] errorLine = new int[]{0};
         int[] errorPos = new int[]{0};
@@ -89,7 +89,7 @@ public class CalculationService {
         return warning[0];
     }
     
-    public ArrayList<TableMu> getTableUnsafeCombinations(MetadataMu metadata, int dimensions) {
+    public ArrayList<TableMu> getTableUnsafeCombinations(int dimensions) {
         int index=1;
         boolean[] baseTable = new boolean[1];
         int[] nUC = new int[1];
@@ -102,7 +102,7 @@ public class CalculationService {
             }
             TableMu table = new TableMu();
             table.setNrOfUnsafeCombinations(nUC[0]);
-            ArrayList<VariableMu> variables = getVariables(metadata);
+            ArrayList<VariableMu> variables = getVariables();
             for (int varIndex=0; varIndex < dimensions; varIndex++) {
                 table.addVariable(variables.get(varList[varIndex]-1));
             }
@@ -122,7 +122,7 @@ public class CalculationService {
 
     public void undoRecode(RecodeMu recode) throws ArgusException {
         c.SetProgressListener(null);
-        int index = getIndexOf(metadata, recode.getVariable());
+        int index = getIndexOf(recode.getVariable());
         boolean result = c.UndoRecode(index);
         if (!result) {
             throw new ArgusException("Error while undoing recode");
@@ -131,7 +131,7 @@ public class CalculationService {
     }
     
     public void truncate(RecodeMu recode, int positions) throws ArgusException {
-        int index = getIndexOf(metadata, recode.getVariable());
+        int index = getIndexOf(recode.getVariable());
         boolean result = c.DoTruncate(index, positions);
         if (!result) {
             throw new ArgusException("Error during Truncate");
@@ -244,7 +244,7 @@ public class CalculationService {
         return nVar;
     }
 
-    public ArrayList<VariableMu> getVariables(MetadataMu metadata) {
+    public ArrayList<VariableMu> getVariables() {
         return metadata.getVariables();
 //        if (metadata.getDataFileType() != MetadataMu.DATA_FILE_TYPE_FIXED) {
 //            return metadata.getVariables();
@@ -329,7 +329,7 @@ public class CalculationService {
     
     private void calculateInBackground() throws ArgusException {
         Combinations model = metadata.getCombinations();
-        ArrayList<VariableMu> variables = getVariables(metadata); //metadata.getVariables();
+        ArrayList<VariableMu> variables = getVariables(); 
         boolean result = c.SetNumberVar(variables.size());
         if (!result) {
             throw new ArgusException("Error in SetNumberVar: Insufficient memory");
@@ -372,7 +372,7 @@ public class CalculationService {
                 varIndexOut);
         if (!result) {
             throw new ArgusException(String.format("Error in ExploreFile:\ncode %d, line %d, variable %s",
-                errorCodes[0], lineNumbers[0]+1, getVariables(metadata).get(varIndexOut[0]).getName()));
+                errorCodes[0], lineNumbers[0]+1, getVariables().get(varIndexOut[0]).getName()));
         }
         metadata.setRecordCount(c.NumberofRecords());
 
@@ -463,7 +463,7 @@ public class CalculationService {
     }
     public void fillSafeFileMetadata() {
         MetadataMu safeMeta = metadata.getCombinations().getProtectedFile().getSafeMeta();
-        ArrayList<VariableMu> variables = getVariables(metadata);
+        ArrayList<VariableMu> variables = getVariables();
         int delta = 0;
         for (VariableMu var : safeMeta.getVariables()) {
             int varIndex = variables.indexOf(var) + 1;
@@ -537,7 +537,7 @@ public class CalculationService {
     }
 
     public void setPramVariable(PramVariableSpec pramVariable) throws ArgusException {
-        int varIndex = getVariables(metadata).indexOf(pramVariable.getVariable()) + 1;
+        int varIndex = getVariables().indexOf(pramVariable.getVariable()) + 1;
         int bandWidth = pramVariable.useBandwidth() ? pramVariable.getBandwidth() : -1;
         boolean result = c.SetPramVar(varIndex, bandWidth, false);
         if (!result) {
@@ -554,7 +554,7 @@ public class CalculationService {
     }
     
     public void UndoSetPramVariable(PramVariableSpec pramVariable) throws ArgusException {
-        int varIndex = getVariables(metadata).indexOf(pramVariable.getVariable()) + 1;
+        int varIndex = getVariables().indexOf(pramVariable.getVariable()) + 1;
         boolean result = c.SetPramVar(varIndex, -1, true);
         if (!result) {
             throw new ArgusException("Error during SetPramVar");

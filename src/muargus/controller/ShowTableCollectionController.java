@@ -72,7 +72,7 @@ public class ShowTableCollectionController {
         ArrayList<TableMu> allTables = new ArrayList<>();
         this.calculationService = MuARGUS.getCalculationService();
         for (int i = 1; i <= this.model.getDimensions(); i++) {
-            allTables.addAll(this.calculationService.getTableUnsafeCombinations(metadataMu, i));
+            allTables.addAll(this.calculationService.getTableUnsafeCombinations(i));
         }
         this.model.setAllTables(allTables);
     }

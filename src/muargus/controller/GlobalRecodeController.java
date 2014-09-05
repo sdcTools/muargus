@@ -137,7 +137,7 @@ public class GlobalRecodeController {
      *
      */
     public void apply(RecodeMu recode) throws ArgusException {
-        String warning = this.service.doRecode(this.metadata, recode);
+        String warning = this.service.doRecode(recode);
         view.showWarning(warning);
         this.service.applyRecode();
         recode.setTruncated(false);
