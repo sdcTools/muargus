@@ -7,9 +7,11 @@ package muargus.view;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import muargus.controller.PramSpecificationController;
+import muargus.model.CodeInfo;
 import muargus.model.MetadataMu;
 import muargus.model.PramSpecification;
 import muargus.model.PramVariableSpec;
+import muargus.model.VariableMu;
 
 /**
  *
@@ -38,6 +40,10 @@ public class PramSpecificationView extends DialogBase {
         this.controller = controller;
     }
 
+    /**
+     * 
+     * @param metadataMu 
+     */
     public void setMetadataMu(MetadataMu metadataMu) {
         this.metadataMu = metadataMu;
         this.model = this.metadataMu.getCombinations().getPramSpecification();
@@ -45,22 +51,29 @@ public class PramSpecificationView extends DialogBase {
         initializeData();
     }
 
+    /**
+     * 
+     */
     public void initializeData() {
         this.pramOptionsPanel.setVisible(false); // this option is available for future options using global recode
         this.bandwidthSpinner.setEnabled(this.bandwidthCheckBox.isSelected());
         this.controller.makePramVariableSpecs();
 
-        //this.controller.makeVariablesData();
-        //this.controller.makeCodesData(this.model.getPramVarSpec().get(0).getVariable().getName());
         updateValues();
     }
 
+    /**
+     * 
+     */
     public void updateValues() {
-
         updateVariablesTable();
         updateCodesTable();
+        this.codesSlider.setValue(getSelectedCodeInfo().getPramProbability());
     }
 
+    /**
+     * 
+     */
     public void updateVariablesTable() {
         this.controller.makeVariablesData();
         int selectedRow;
@@ -83,15 +96,40 @@ public class PramSpecificationView extends DialogBase {
             this.variablesTable.getColumnModel().getColumn(i).setPreferredWidth(this.variablesColumnWidth[i]);
         }
         this.variablesTable.getSelectionModel().setSelectionInterval(selectedRow, selectedRow);
-
     }
 
+    /**
+     * 
+     * @return 
+     */
     public PramVariableSpec getSelectedPramVariableSpec() {
         return this.controller.getSelectedPramVarSpec(
                 (String) this.variablesTable.getValueAt(this.variablesTable.getSelectedRow(), 2));
     }
+    
+    /**
+     * 
+     * @return 
+     */
+    public CodeInfo getSelectedCodeInfo(){
+        return getSelectedPramVariableSpec().getVariable().getCodeInfos().get(this.codesTable.getSelectedRow());
+    }
+    
+    public CodeInfo getSelectedCodeInfo(VariableMu variable){
+        return variable.getCodeInfos().get(this.codesTable.getSelectedRow());
+    }
 
+    /**
+     * 
+     */
     public void updateCodesTable() {
+        int selectedRow;
+        if (this.codesTable.getSelectedRowCount() > 0) {
+            selectedRow = this.codesTable.getSelectedRow();
+        } else {
+            selectedRow = 0;
+        }
+        
         this.controller.makeCodesData(getSelectedPramVariableSpec().getVariable().getName());
 
         this.codesTableModel = new DefaultTableModel(
@@ -107,6 +145,7 @@ public class PramSpecificationView extends DialogBase {
             this.codesTable.getColumnModel().getColumn(i).setMinWidth(this.codesColumnWidth[i]);
             this.codesTable.getColumnModel().getColumn(i).setPreferredWidth(this.codesColumnWidth[i]);
         }
+        this.codesTable.getSelectionModel().setSelectionInterval(selectedRow, selectedRow);
     }
 
     /**
@@ -306,6 +345,16 @@ public class PramSpecificationView extends DialogBase {
                 "Code", "Label", "Prob."
             }
         ));
+        codesTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                codesTableMouseClicked(evt);
+            }
+        });
+        codesTable.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                codesTableKeyReleased(evt);
+            }
+        });
         codesScrollPane.setViewportView(codesTable);
         if (codesTable.getColumnModel().getColumnCount() > 0) {
             codesTable.getColumnModel().getColumn(0).setPreferredWidth(12);
@@ -317,6 +366,11 @@ public class PramSpecificationView extends DialogBase {
         codesSlider.setMinorTickSpacing(5);
         codesSlider.setPaintTicks(true);
         codesSlider.setToolTipText("");
+        codesSlider.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                codesSliderStateChanged(evt);
+            }
+        });
 
         javax.swing.GroupLayout CodesPanelLayout = new javax.swing.GroupLayout(CodesPanel);
         CodesPanel.setLayout(CodesPanelLayout);
@@ -404,6 +458,11 @@ public class PramSpecificationView extends DialogBase {
         defaultProbabilitySpinner.setModel(new javax.swing.SpinnerNumberModel(80, 0, 100, 1));
 
         defaultProbabilityButton.setText("<html>\nSet all codes to <br>\n<center>default</center>");
+        defaultProbabilityButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                defaultProbabilityButtonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout defaultProbabilityPanelLayout = new javax.swing.GroupLayout(defaultProbabilityPanel);
         defaultProbabilityPanel.setLayout(defaultProbabilityPanelLayout);
@@ -512,22 +571,47 @@ public class PramSpecificationView extends DialogBase {
     }//GEN-LAST:event_bandwidthCheckBoxStateChanged
 
     private void variablesTableKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_variablesTableKeyReleased
+        this.codesTable.getSelectionModel().setSelectionInterval(0, 0);
         updateValues();
     }//GEN-LAST:event_variablesTableKeyReleased
 
     private void variablesTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_variablesTableMouseClicked
+        this.codesTable.getSelectionModel().setSelectionInterval(0, 0);
         updateValues();
     }//GEN-LAST:event_variablesTableMouseClicked
 
     private void applyButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_applyButtonActionPerformed
         getSelectedPramVariableSpec().setApplied(!getSelectedPramVariableSpec().isApplied());
-//        if(getSelectedPramVariableSpec().useBandwidth()){
-//            getSelectedPramVariableSpec().setBandwidth((int) this.bandwidthSpinner.getValue());
-//        } else {
-//            
-//        }
         updateValues();
     }//GEN-LAST:event_applyButtonActionPerformed
+
+    private void codesSliderStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_codesSliderStateChanged
+        for(VariableMu v: this.metadataMu.getVariables()){
+            if(getSelectedPramVariableSpec().getVariable().equals(v)){
+                VariableMu variable = v;
+                getSelectedCodeInfo(variable).setPramProbability(this.codesSlider.getValue());
+                break;
+            }
+        }
+        
+        updateValues();
+    }//GEN-LAST:event_codesSliderStateChanged
+
+    private void codesTableKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_codesTableKeyReleased
+        updateValues();
+    }//GEN-LAST:event_codesTableKeyReleased
+
+    private void codesTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_codesTableMouseClicked
+        updateValues();
+    }//GEN-LAST:event_codesTableMouseClicked
+
+    private void defaultProbabilityButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_defaultProbabilityButtonActionPerformed
+        int probability = (int) this.defaultProbabilitySpinner.getValue();
+        for(CodeInfo c: getSelectedPramVariableSpec().getVariable().getCodeInfos()){
+            c.setPramProbability(probability);
+        }
+        updateValues();
+    }//GEN-LAST:event_defaultProbabilityButtonActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

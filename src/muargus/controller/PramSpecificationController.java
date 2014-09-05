@@ -55,9 +55,9 @@ public class PramSpecificationController {
     }
 
     /**
-     * 
+     *
      * @param variableName
-     * @return 
+     * @return
      */
     public PramVariableSpec getSelectedPramVarSpec(String variableName) {
         PramVariableSpec temp = null;
@@ -70,7 +70,7 @@ public class PramSpecificationController {
     }
 
     /**
-     * 
+     *
      */
     public void makePramVariableSpecs() {
         ArrayList<PramVariableSpec> pramVarSpec = new ArrayList<>();
@@ -84,7 +84,7 @@ public class PramSpecificationController {
     }
 
     /**
-     * 
+     *
      */
     public void makeVariablesData() {
         ArrayList<PramVariableSpec> pramVarSpec = this.model.getPramVarSpec();
@@ -104,27 +104,29 @@ public class PramSpecificationController {
     }
 
     /**
-     * 
-     * @param variableName 
+     *
+     * @param variableName
      */
     public void makeCodesData(String variableName) {
         PramVariableSpec pramVariableSpec = getSelectedPramVarSpec(variableName);
         VariableMu variable = null;
-        for(VariableMu v: this.metadataMu.getVariables()){
-            if(v.getName().equals(variableName)){
+        for (VariableMu v : this.metadataMu.getVariables()) {
+            if (v.getName().equals(variableName)) {
                 variable = v;
             }
         }
-        ArrayList<CodeInfo> codeInfo = variable.getCodeInfos();
-        String[][] codesData = new String[codeInfo.size()][3];
-        int index = 0;
-        for (CodeInfo c : codeInfo) {
-            codesData[index][0] = c.getCode();
-            codesData[index][1] = c.getLabel();
-            codesData[index][2] = Integer.toString(c.getPramProbability());
-            index++;
-        }
+        if (variable != null) {
+            ArrayList<CodeInfo> codeInfo = variable.getCodeInfos();
+            String[][] codesData = new String[codeInfo.size()][3];
+            int index = 0;
+            for (CodeInfo c : codeInfo) {
+                codesData[index][0] = c.getCode();
+                codesData[index][1] = c.getLabel();
+                codesData[index][2] = Integer.toString(c.getPramProbability());
+                index++;
+            }
 
-        pramVariableSpec.setCodesData(codesData);
+            pramVariableSpec.setCodesData(codesData);
+        }
     }
 }
