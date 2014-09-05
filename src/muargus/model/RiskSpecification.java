@@ -14,14 +14,12 @@ import java.util.ArrayList;
  */
 public class RiskSpecification {
     
-    private double threshold;
-    private double reidentRate;
+    private double riskThreshold;
+    private double reidentRateThreshold;
     private int unsafeRecords;
-    private double maxRisk;
     private double maxReidentRate;
     private ArrayList<RiskModelClass> classes;
     private TableMu riskTable;
-    private double ksi;
     
     public RiskSpecification() {
         //TODO;
@@ -31,6 +29,7 @@ public class RiskSpecification {
         if (!riskTable.equals(this.riskTable)) {
             this.riskTable = riskTable;
             this.classes = new ArrayList<>();
+            this.maxReidentRate = 0;
         }
     }
 
@@ -42,13 +41,44 @@ public class RiskSpecification {
         return this.riskTable;
     }
 
-    public double getKsi() {
-        return this.ksi;
+    public double getMaxRisk() {
+        return this.classes.get(this.classes.size()-1).getRightValue();
     }
 
-    public void setKsi(double ksi) {
-        this.ksi = ksi;
+    public double getMaxReidentRate() {
+        return maxReidentRate;
     }
+
+    public void setMaxReidentRate(double maxReidentRate) {
+        this.maxReidentRate = maxReidentRate;
+    }
+
+    public double getRiskThreshold() {
+        return this.riskThreshold;
+    }
+
+    public void setRiskThreshold(double riskThreshold) {
+        this.riskThreshold = riskThreshold;
+    }
+
+    public double getReidentRateThreshold() {
+        return this.reidentRateThreshold;
+    }
+
+    public void setReidentRateThreshold(double reidentRateThreshold) {
+        this.reidentRateThreshold = reidentRateThreshold;
+    }
+
+    public int getUnsafeRecords() {
+        return unsafeRecords;
+    }
+
+    public void setUnsafeRecords(int unsafeRecords) {
+        this.unsafeRecords = unsafeRecords;
+    }
+    
+    
+
     
     
        

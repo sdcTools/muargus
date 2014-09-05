@@ -93,7 +93,8 @@ public class MainFrameController {
         // Release 2
         view.enableAction(Action.ShowTableCollection, tablesCalculated);
         view.enableAction(Action.PramSpecification, tablesCalculated);
-        view.enableAction(Action.IndividualRiskSpecification, tablesCalculated);
+        view.enableAction(Action.IndividualRiskSpecification, 
+                tablesCalculated && metadata.getCombinations().isRiskModel());
         view.enableAction(Action.HouseholdRiskSpecification, tablesCalculated);
         view.enableAction(Action.ModifyNumericalVariables, tablesCalculated);
         view.enableAction(Action.NumericalMicroAggregation, tablesCalculated);

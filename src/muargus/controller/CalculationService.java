@@ -562,13 +562,36 @@ public class CalculationService {
         }
     }
     
-    public double fillHistogramData(TableMu table, ArrayList<RiskModelClass> classes) {
+    public int calculateUnsafe(TableMu table, double riskThreshold) {
+        int tableIndex = this.metadata.getCombinations().getTables().indexOf(table) + 1;
+        int[] nUnsafe = new int[1];
+        c.SetBirThreshold(tableIndex, Math.log(riskThreshold), nUnsafe);
+        return nUnsafe[0];
+    }
+
+    public double calculateReidentRate(TableMu table, double riskThreshold) {
+        int tableIndex = this.metadata.getCombinations().getTables().indexOf(table) + 1;
+        double[] reidentRate = new double[1];
+        c.ComputeBIRRateThreshold(tableIndex, Math.log(riskThreshold), reidentRate);
+        return Math.exp(reidentRate[0]);
+    }
+
+    public double calculateRiskThreshold(TableMu table, int nUnsafe) {
+        int tableIndex = this.metadata.getCombinations().getTables().indexOf(table) + 1;
+        double[] riskThreshold = new double[1];
+        int[] errorCode = new int[1];
+        c.SetProgressListener(null);
+        c.CalculateBIRFreq(tableIndex, c.NumberofRecords() - nUnsafe, riskThreshold, errorCode);
+        return riskThreshold[0];
+    }
+
+    public double fillHistogramData(TableMu table, ArrayList<RiskModelClass> classes, boolean cumulative) {
         //TODO: cumulative
         classes.clear();
         double[] ksi = new double[1];
         
         int tableIndex = this.metadata.getCombinations().getTables().indexOf(table) + 1;
-        int nClasses = MuARGUS.getNHistogramClasses();
+        int nClasses = MuARGUS.getNHistogramClasses(cumulative);
         double[] classLeftValue = new double[nClasses + 1];
         int[] frequency = new int[nClasses];
             int[] hhFrequency = new int[nClasses];
@@ -578,12 +601,18 @@ public class CalculationService {
         else {
             c.GetBIRHistogramData(tableIndex, nClasses, classLeftValue, ksi, frequency);
         }
+        int sumFreq = 0;
+        int sumHHfreq = 0;
         for (int classIndex=0; classIndex < nClasses; classIndex++) {
-            RiskModelClass rmc = new RiskModelClass(classLeftValue[classIndex],
-                    classLeftValue[classIndex+1],
-                    frequency[classIndex],
-                    hhFrequency[classIndex]);
+            RiskModelClass rmc = new RiskModelClass(Math.exp(classLeftValue[classIndex]),
+                    Math.exp(classLeftValue[classIndex+1]),
+                    sumFreq + frequency[classIndex],
+                    sumHHfreq + hhFrequency[classIndex]);
             classes.add(rmc);
+            if (cumulative) {
+                sumFreq += frequency[classIndex];
+                sumHHfreq += hhFrequency[classIndex];
+            }
         }
         return ksi[0];
     }
