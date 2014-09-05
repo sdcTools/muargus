@@ -253,6 +253,10 @@
                       <TableHeader reorderingAllowed="true" resizingAllowed="true"/>
                     </Property>
                   </Properties>
+                  <Events>
+                    <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="codesTableMouseClicked"/>
+                    <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="codesTableKeyReleased"/>
+                  </Events>
                 </Component>
               </SubComponents>
             </Container>
@@ -263,6 +267,9 @@
                 <Property name="paintTicks" type="boolean" value="true"/>
                 <Property name="toolTipText" type="java.lang.String" value=""/>
               </Properties>
+              <Events>
+                <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="codesSliderStateChanged"/>
+              </Events>
             </Component>
           </SubComponents>
         </Container>
@@ -374,6 +381,9 @@
           <Properties>
             <Property name="text" type="java.lang.String" value="&lt;html&gt;&#xa;Set all codes to &lt;br&gt;&#xa;&lt;center&gt;default&lt;/center&gt;"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="defaultProbabilityButtonActionPerformed"/>
+          </Events>
         </Component>
       </SubComponents>
     </Container>

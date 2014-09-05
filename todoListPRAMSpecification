@@ -7,22 +7,17 @@ Release 2
 
 2.  variablesTable
     - als een waarde gePRAMt is, maak deze dan rood
-4.  codesSlider
-    - koppel dit aan de probabilty van de geselecteerde rij van de codesTable
 5.  applyButton
     - alleen mogelijk als ten minste 1 probability groter is dan 0, zo niet geef waarschuwing
     - zet, als bandwithCheckBox is aangevinkt, in de tweede kolom de waarde van de bandwithComboBox
 6.  undoButton
     - undo PRAM voor de geselecteerde rij van variablesTable
-9.  defaultProbabilityButton 
-    - zet alle probabilities van de codesTable op de default probability van de comboBox
 11. bandwithComboBox
     - vul met de codes uit de codesTable (-1)
     - zet als default op 5 (of als er minder dan 5 zijn de hoogst mogelijke waarde)
-12. closebutton
     - bereken pram met dll of gebeurd dit ergens anders?
     - waarschuwing geven als dingen zijn aangepast: wil je dit nog toepassen?
-    - sluit scherm
+
 13. schrijf javadocs
 14. Refactoren (kijken of alles volgens de MVC is gedaan, het weghalen van overbodige code etc.) 
 
@@ -47,6 +42,8 @@ Gedaan:                                                                         
     - vul indien mogelijk de tweede kolom met de codelist van de geselecteerde variabele uit de variablesTable
     - vul de laatste kolom met de PRAM-probability horende bij de betreffende code (als default is dit 0)
       deze probability moet ergens opgeslagen worden (Anco/PP: Hoe lang
+4.  codesSlider
+    - koppel dit aan de probabilty van de geselecteerde rij van de codesTable
 5.  applyButton
     - zet X in de eerste kolom bij de geselecteerde variabele van de variablesTable
 7.  PRAM options
@@ -54,8 +51,11 @@ Gedaan:                                                                         
 8.  defaultProbabilityComboBox
     - vul met de waardes 0-100
     - zet standaard op 80
+9.  defaultProbabilityButton 
+    - zet alle probabilities van de codesTable op de default probability van de comboBox
 10. bandwithCheckBox
     - zet als default unchecked
     - als checked, maak de bandwithComboBox enabled
-
+12. closebutton
+    - sluit scherm
 wishlish:
