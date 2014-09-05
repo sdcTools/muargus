@@ -30,6 +30,7 @@ public class MuARGUS {
     public static final int MAXDIMS = 10;
     
     private static final String messageTitle = "Mu Argus";
+    private static final int nHistogramClasses = 10;
     
     static {
         System.loadLibrary("libmuargusdll");
@@ -53,6 +54,10 @@ public class MuARGUS {
             
     public static String getMessageTitle() {
         return messageTitle;
+    }
+    
+    public static int getNHistogramClasses() {
+        return nHistogramClasses;
     }
     
     public static String getTempDir() {
