@@ -376,7 +376,7 @@ public class CalculationService {
                 errorCodes[0], lineNumbers[0]+1, getVariables().get(varIndexOut[0]).getName()));
         }
         metadata.setRecordCount(c.NumberofRecords());
-
+        
         int x = model.getTables().size();
         result = c.SetNumberTab(x); //this.model.getTables().size());
         if (!result) {
