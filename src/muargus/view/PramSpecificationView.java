@@ -4,6 +4,7 @@
  */
 package muargus.view;
 
+import javax.swing.JOptionPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -481,11 +482,12 @@ public class PramSpecificationView extends DialogBase {
         if (!this.controller.areAllProbabilitiesZero(getSelectedPramVariableSpec())) {
             getSelectedPramVariableSpec().setApplied(true);
             getSelectedPramVariableSpec().setBandwidth(Integer.parseInt((String) this.bandwidthComboBox.getSelectedItem()));
-            int selectedRow = this.variablesTable.getSelectedRow();
-            this.variablesTable.setValueAt(getSelectedPramVariableSpec().getAppliedText(), selectedRow, 0);
-            this.variablesTable.setValueAt(getSelectedPramVariableSpec().getBandwidthText(this.model.useBandwidth()), selectedRow, 1);
+            int selected = this.variablesTable.getSelectedRow();
+            this.variablesTable.setValueAt(getSelectedPramVariableSpec().getAppliedText(), selected, 0);
+            this.variablesTable.setValueAt(getSelectedPramVariableSpec().getBandwidthText(this.model.useBandwidth()), selected, 1);
         } else {
-            System.out.println("warning");
+            String message = "All probabilities are zero";
+            JOptionPane.showMessageDialog(null, message);
         }
     }//GEN-LAST:event_applyButtonActionPerformed
 
