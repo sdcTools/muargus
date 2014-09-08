@@ -3,18 +3,17 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package muargus.model;
-
-import java.util.ArrayList;
 
 /**
  *
  * @author pibd05
  */
 public class PramVariableSpec {
+
     //private ArrayList<CodeInfo> codeInfo; // don't use this
-    private boolean useBandwidth = false;
+    //private boolean useBandwidth = false;
+
     private int bandwidth;
     private boolean applied = false;
     private String appliedText;
@@ -32,15 +31,13 @@ public class PramVariableSpec {
 //    public void setCodeInfo(ArrayList<CodeInfo> codeInfo) {
 //        this.codeInfo = codeInfo;
 //    }
-
-    public boolean useBandwidth() {
-        return this.useBandwidth;
-    }
-
-    public void setUseBandwidth(boolean useBandwidth) {
-        this.useBandwidth = useBandwidth;
-    }
-
+//    public boolean useBandwidth() {
+//        return this.useBandwidth;
+//    }
+//
+//    public void setUseBandwidth(boolean useBandwidth) {
+//        this.useBandwidth = useBandwidth;
+//    }
     public int getBandwidth() {
         return this.bandwidth;
     }
@@ -70,12 +67,12 @@ public class PramVariableSpec {
     }
 
     public String getAppliedText() {
-        if(isApplied()){
+        if (isApplied()) {
             this.appliedText = "X";
         } else {
             this.appliedText = "";
         }
         return appliedText;
     }
-    
+
 }

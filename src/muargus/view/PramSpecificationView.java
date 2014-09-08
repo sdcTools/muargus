@@ -207,9 +207,11 @@ public class PramSpecificationView extends DialogBase {
         defaultProbabilityPanel = new javax.swing.JPanel();
         defaultProbabilitySpinner = new javax.swing.JSpinner();
         defaultProbabilityButton = new javax.swing.JButton();
+        defaultProbabilityComboBox = new javax.swing.JComboBox();
         bandwidthPanel = new javax.swing.JPanel();
         bandwidthCheckBox = new javax.swing.JCheckBox();
         bandwidthSpinner = new javax.swing.JSpinner();
+        bandwidthComboBox = new javax.swing.JComboBox();
         closeButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -401,6 +403,14 @@ public class PramSpecificationView extends DialogBase {
             }
         });
 
+        String[] numbers = new String[101];
+        for(int i = 0; i< numbers.length; i++){
+            numbers[i] = Integer.toString(i);
+        }
+        defaultProbabilityComboBox.setModel(new javax.swing.DefaultComboBoxModel(numbers)
+        );
+        defaultProbabilityComboBox.getModel().setSelectedItem(numbers[80]);
+
         javax.swing.GroupLayout defaultProbabilityPanelLayout = new javax.swing.GroupLayout(defaultProbabilityPanel);
         defaultProbabilityPanel.setLayout(defaultProbabilityPanelLayout);
         defaultProbabilityPanelLayout.setHorizontalGroup(
@@ -409,13 +419,15 @@ public class PramSpecificationView extends DialogBase {
                 .addContainerGap()
                 .addGroup(defaultProbabilityPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addComponent(defaultProbabilitySpinner)
-                    .addComponent(defaultProbabilityButton))
+                    .addComponent(defaultProbabilityButton)
+                    .addComponent(defaultProbabilityComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         defaultProbabilityPanelLayout.setVerticalGroup(
             defaultProbabilityPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(defaultProbabilityPanelLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(defaultProbabilityComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(defaultProbabilitySpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(defaultProbabilityButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -432,6 +444,8 @@ public class PramSpecificationView extends DialogBase {
 
         bandwidthSpinner.setModel(new javax.swing.SpinnerNumberModel(Integer.valueOf(5), Integer.valueOf(1), null, Integer.valueOf(1)));
 
+        bandwidthComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
         javax.swing.GroupLayout bandwidthPanelLayout = new javax.swing.GroupLayout(bandwidthPanel);
         bandwidthPanel.setLayout(bandwidthPanelLayout);
         bandwidthPanelLayout.setHorizontalGroup(
@@ -440,6 +454,8 @@ public class PramSpecificationView extends DialogBase {
                 .addComponent(bandwidthCheckBox)
                 .addGap(0, 28, Short.MAX_VALUE))
             .addGroup(bandwidthPanelLayout.createSequentialGroup()
+                .addComponent(bandwidthComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(bandwidthSpinner)
                 .addContainerGap())
         );
@@ -448,7 +464,9 @@ public class PramSpecificationView extends DialogBase {
             .addGroup(bandwidthPanelLayout.createSequentialGroup()
                 .addComponent(bandwidthCheckBox)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(bandwidthSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(bandwidthPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(bandwidthSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(bandwidthComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(0, 19, Short.MAX_VALUE))
         );
 
@@ -490,7 +508,7 @@ public class PramSpecificationView extends DialogBase {
                         .addComponent(defaultProbabilityPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(bandwidthPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 41, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 105, Short.MAX_VALUE)
                         .addComponent(closeButton)
                         .addContainerGap())))
         );
@@ -504,7 +522,7 @@ public class PramSpecificationView extends DialogBase {
 
     private void bandwidthCheckBoxStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_bandwidthCheckBoxStateChanged
         this.bandwidthSpinner.setEnabled(this.bandwidthCheckBox.isSelected());
-        getSelectedPramVariableSpec().setUseBandwidth(this.bandwidthCheckBox.isSelected());
+        this.model.setUseBandwidth(this.bandwidthCheckBox.isSelected());
     }//GEN-LAST:event_bandwidthCheckBoxStateChanged
 
     private void variablesTableKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_variablesTableKeyReleased
@@ -543,7 +561,7 @@ public class PramSpecificationView extends DialogBase {
     }//GEN-LAST:event_codesTableMouseClicked
 
     private void defaultProbabilityButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_defaultProbabilityButtonActionPerformed
-        int probability = (int) this.defaultProbabilitySpinner.getValue();
+        int probability = this.defaultProbabilityComboBox.getSelectedIndex();
         for (CodeInfo c : getSelectedPramVariableSpec().getVariable().getCodeInfos()) {
             c.setPramProbability(probability);
         }
@@ -556,6 +574,7 @@ public class PramSpecificationView extends DialogBase {
     private javax.swing.JPanel MiddlePanel;
     private javax.swing.JButton applyButton;
     private javax.swing.JCheckBox bandwidthCheckBox;
+    private javax.swing.JComboBox bandwidthComboBox;
     private javax.swing.JPanel bandwidthPanel;
     private javax.swing.JSpinner bandwidthSpinner;
     private javax.swing.JButton closeButton;
@@ -563,6 +582,7 @@ public class PramSpecificationView extends DialogBase {
     private javax.swing.JSlider codesSlider;
     private javax.swing.JTable codesTable;
     private javax.swing.JButton defaultProbabilityButton;
+    private javax.swing.JComboBox defaultProbabilityComboBox;
     private javax.swing.JPanel defaultProbabilityPanel;
     private javax.swing.JSpinner defaultProbabilitySpinner;
     private javax.swing.JRadioButton globalRecodeRadioButton;
