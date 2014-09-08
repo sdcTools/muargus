@@ -275,7 +275,13 @@ public class VariableMu {
     }
     
     public int getNumberOfMissings(){
-        return missing.length;
+        int numberOfMissings = 0;
+        for(int i = 0; i< MAX_NUMBER_OF_MISSINGS; i++){
+            if(!missing[i].isEmpty()){
+                numberOfMissings++;
+            }
+        }
+        return numberOfMissings;
     }
 
     public String getMissing(int index) {

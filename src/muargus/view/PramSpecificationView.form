@@ -35,14 +35,16 @@
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="pramOptionsPanel" alignment="1" min="-2" max="-2" attributes="0"/>
-                      <Component id="defaultProbabilityPanel" alignment="1" min="-2" max="-2" attributes="0"/>
-                      <Component id="bandwidthPanel" alignment="1" min="-2" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="pramOptionsPanel" alignment="1" min="-2" max="-2" attributes="0"/>
+                          <Component id="defaultProbabilityPanel" alignment="1" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <Group type="102" alignment="1" attributes="0">
+                          <Component id="closeButton" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                      </Group>
                   </Group>
-                  <Group type="102" alignment="1" attributes="0">
-                      <Component id="closeButton" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
-                  </Group>
+                  <Component id="bandwidthPanel" alignment="0" min="-2" max="-2" attributes="0"/>
               </Group>
           </Group>
       </Group>
@@ -58,9 +60,9 @@
                       <Component id="pramOptionsPanel" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="defaultProbabilityPanel" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
                       <Component id="bandwidthPanel" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace pref="105" max="32767" attributes="0"/>
+                      <EmptySpace max="32767" attributes="0"/>
                       <Component id="closeButton" min="-2" max="-2" attributes="0"/>
                       <EmptySpace min="-2" max="-2" attributes="0"/>
                   </Group>
@@ -170,7 +172,7 @@
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="CodesPanel" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace max="32767" attributes="0"/>
+                  <EmptySpace pref="14" max="32767" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="applyButton" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="undoButton" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -285,6 +287,9 @@
           <Properties>
             <Property name="text" type="java.lang.String" value="Undo"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="undoButtonActionPerformed"/>
+          </Events>
         </Component>
       </SubComponents>
     </Container>
@@ -350,10 +355,9 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="1" max="-2" attributes="0">
-                      <Component id="defaultProbabilitySpinner" max="32767" attributes="0"/>
-                      <Component id="defaultProbabilityButton" max="32767" attributes="0"/>
-                      <Component id="defaultProbabilityComboBox" max="32767" attributes="0"/>
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Component id="defaultProbabilityComboBox" min="-2" pref="105" max="-2" attributes="0"/>
+                      <Component id="defaultProbabilityButton" alignment="0" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="32767" attributes="0"/>
               </Group>
@@ -363,8 +367,6 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
                   <Component id="defaultProbabilityComboBox" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace max="32767" attributes="0"/>
-                  <Component id="defaultProbabilitySpinner" min="-2" max="-2" attributes="0"/>
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                   <Component id="defaultProbabilityButton" min="-2" max="-2" attributes="0"/>
               </Group>
@@ -372,13 +374,6 @@
         </DimensionLayout>
       </Layout>
       <SubComponents>
-        <Component class="javax.swing.JSpinner" name="defaultProbabilitySpinner">
-          <Properties>
-            <Property name="model" type="javax.swing.SpinnerModel" editor="org.netbeans.modules.form.editors2.SpinnerModelEditor">
-              <SpinnerModel initial="80" maximum="100" minimum="0" numberType="java.lang.Integer" stepSize="1" type="number"/>
-            </Property>
-          </Properties>
-        </Component>
         <Component class="javax.swing.JButton" name="defaultProbabilityButton">
           <Properties>
             <Property name="text" type="java.lang.String" value="&lt;html&gt;&#xa;Set all codes to &lt;br&gt;&#xa;&lt;center&gt;default&lt;/center&gt;"/>
@@ -412,14 +407,13 @@
       <Layout>
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
-              <Group type="102" attributes="0">
+              <Group type="102" alignment="0" attributes="0">
                   <Component id="bandwidthCheckBox" min="-2" max="-2" attributes="0"/>
                   <EmptySpace min="0" pref="28" max="32767" attributes="0"/>
               </Group>
-              <Group type="102" attributes="0">
-                  <Component id="bandwidthComboBox" min="-2" max="-2" attributes="0"/>
+              <Group type="102" alignment="1" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="bandwidthSpinner" max="32767" attributes="0"/>
+                  <Component id="bandwidthComboBox" max="32767" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>
@@ -429,10 +423,7 @@
               <Group type="102" alignment="0" attributes="0">
                   <Component id="bandwidthCheckBox" min="-2" max="-2" attributes="0"/>
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="bandwidthSpinner" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="bandwidthComboBox" alignment="3" min="-2" max="-2" attributes="0"/>
-                  </Group>
+                  <Component id="bandwidthComboBox" min="-2" max="-2" attributes="0"/>
                   <EmptySpace min="0" pref="19" max="32767" attributes="0"/>
               </Group>
           </Group>
@@ -446,13 +437,6 @@
           <Events>
             <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="bandwidthCheckBoxStateChanged"/>
           </Events>
-        </Component>
-        <Component class="javax.swing.JSpinner" name="bandwidthSpinner">
-          <Properties>
-            <Property name="model" type="javax.swing.SpinnerModel" editor="org.netbeans.modules.form.editors2.SpinnerModelEditor">
-              <SpinnerModel initial="5" minimum="1" numberType="java.lang.Integer" stepSize="1" type="number"/>
-            </Property>
-          </Properties>
         </Component>
         <Component class="javax.swing.JComboBox" name="bandwidthComboBox">
           <Properties>

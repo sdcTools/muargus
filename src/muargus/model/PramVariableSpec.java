@@ -11,27 +11,17 @@ package muargus.model;
  */
 public class PramVariableSpec {
 
-    //private ArrayList<CodeInfo> codeInfo; // don't use this
     //private boolean useBandwidth = false;
 
     private int bandwidth;
     private boolean applied = false;
     private String appliedText;
     private final VariableMu variable;
-    //TODO: haal uit model
-    private String[][] codesData;
 
     public PramVariableSpec(VariableMu variable) {
         this.variable = variable;
     }
 
-//    public ArrayList<CodeInfo> getCodeInfo() {
-//        return this.codeInfo;
-//    }
-//
-//    public void setCodeInfo(ArrayList<CodeInfo> codeInfo) {
-//        this.codeInfo = codeInfo;
-//    }
 //    public boolean useBandwidth() {
 //        return this.useBandwidth;
 //    }
@@ -57,14 +47,6 @@ public class PramVariableSpec {
 
     public VariableMu getVariable() {
         return this.variable;
-    }
-
-    public String[][] getCodesData() {
-        return codesData;
-    }
-
-    public void setCodesData(String[][] codesData) {
-        this.codesData = codesData;
     }
 
     public String getAppliedText() {
