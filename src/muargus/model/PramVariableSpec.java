@@ -18,6 +18,7 @@ public class PramVariableSpec {
     private boolean applied = false;
     private String appliedText;
     private final VariableMu variable;
+    //TODO: haal uit model
     private String[][] codesData;
 
     public PramVariableSpec(VariableMu variable) {
