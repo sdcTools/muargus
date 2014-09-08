@@ -6,13 +6,16 @@
 
 package muargus.controller;
 
+import argus.utils.StrUtils;
 import java.util.ArrayList;
 import muargus.MuARGUS;
 import muargus.model.MetadataMu;
 import muargus.model.RiskModelClass;
 import muargus.model.RiskSpecification;
 import muargus.model.TableMu;
+import muargus.model.VariableMu;
 import muargus.view.RiskSpecificationView;
+import muargus.view.TablePickView;
 
 /**
  *
@@ -20,18 +23,36 @@ import muargus.view.RiskSpecificationView;
  */
 public class RiskSpecificationController {
     
-    RiskSpecificationView view;
-    RiskSpecification model;
-    MetadataMu metadataMu;
-    CalculationService calculationService;
-
+    private RiskSpecificationView view;
+    private RiskSpecification model;
+    private MetadataMu metadataMu;
+    private CalculationService calculationService;
+    private java.awt.Frame parentView; 
+    
     public RiskSpecificationController(java.awt.Frame parentView, MetadataMu metadataMu) {
+        this.parentView = parentView;
         this.view = new RiskSpecificationView(parentView, true, this);
         this.metadataMu = metadataMu;
         this.model = this.metadataMu.getCombinations().getRiskSpecification();
         this.calculationService = MuARGUS.getCalculationService();
     }
     
+    public ArrayList<String> getRiskTableTitles() {
+        ArrayList<String> titles = new ArrayList<>();
+        for (TableMu table : getRiskTables()) {
+            titles.add(getRiskTableTitle(table));
+        }
+        return titles;
+    }
+    
+    public String getRiskTableTitle(TableMu table) {
+        ArrayList<String> names = new ArrayList<>();
+        
+        for (VariableMu variable : table.getVariables()) {
+            names.add(variable.getName());
+        }
+        return StrUtils.join(" x ", names);
+    }
     
     private ArrayList<TableMu> getRiskTables() {
         ArrayList<TableMu> tables = new ArrayList<>();
@@ -48,7 +69,13 @@ public class RiskSpecificationController {
     public void showView() {
         ArrayList<TableMu> riskTables = getRiskTables();
         if (riskTables.size() > 1) {
-            //TODO: choose risk table
+            TablePickView tableView = new TablePickView(this.parentView, true);
+            tableView.setTables(getRiskTableTitles());
+            tableView.setVisible(true);
+            if (tableView.getSelectedIndex() == -1) {
+                return;
+            }
+            this.model.SetRiskTable(riskTables.get(tableView.getSelectedIndex()));
         }
         else {
             this.model.SetRiskTable(riskTables.get(0));

@@ -82,13 +82,9 @@ public class RiskSpecificationView extends DialogBase implements ChartProgressLi
     
     
     public void initializeData() {
-        ArrayList<String> names = new ArrayList<>();
-        for (VariableMu variable : this.model.getRiskTable().getVariables()) {
-            names.add(variable.getName());
-        }
-        this.tableLabel.setText(StrUtils.join(" x ", names));
-        this.maxRiskTextField.setText(formatDouble(this.model.getMaxRisk()));
-        this.maxReidentRateTextField.setText(formatDouble(this.model.getMaxReidentRate()));
+        this.tableLabel.setText(controller.getRiskTableTitle(this.model.getRiskTable())); 
+        //this.maxRiskTextField.setText(formatDouble(this.model.getMaxRisk()));
+        //this.maxReidentRateTextField.setText(formatDoublePrc(100*this.model.getMaxReidentRate()));
         updateValues();
     }
 
@@ -96,12 +92,17 @@ public class RiskSpecificationView extends DialogBase implements ChartProgressLi
         String format = "%." + decimalsCombo.getSelectedItem().toString() + "f";
         return String.format(format, d);
     }
-    
+
+    private String formatDoublePrc(double d) {
+        String format = "%." + (Integer.parseInt(decimalsCombo.getSelectedItem().toString()) - 2) + "f";
+        return String.format(format, d*100);
+    }
+
     public void updateValues(){
         this.maxRiskTextField.setText(formatDouble(this.model.getMaxRisk()));
-        this.maxReidentRateTextField.setText(formatDouble(this.model.getMaxReidentRate()));
+        this.maxReidentRateTextField.setText(formatDoublePrc(this.model.getMaxReidentRate()) + "%");
         this.riskThresholdTextField.setText(formatDouble(this.model.getRiskThreshold()));
-        this.reidentThresholdTextField.setText(formatDouble(this.model.getReidentRateThreshold()));
+        this.reidentThresholdTextField.setText(formatDoublePrc(this.model.getReidentRateThreshold()));
         this.unsafeRecordsTextField.setText(Integer.toString(this.model.getUnsafeRecords()));
         setSliderPosition();
         this.calculating = false;
@@ -297,6 +298,7 @@ public class RiskSpecificationView extends DialogBase implements ChartProgressLi
         });
 
         decimalsCombo.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "3", "4", "5", "6", "7" }));
+        decimalsCombo.setSelectedIndex(2);
         decimalsCombo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 decimalsComboActionPerformed(evt);
@@ -373,7 +375,7 @@ public class RiskSpecificationView extends DialogBase implements ChartProgressLi
                 .addComponent(tableLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(cumulativeCheckbox)
-                .addGap(161, 161, 161))
+                .addGap(74, 74, 74))
             .addGroup(layout.createSequentialGroup()
                 .addGap(27, 27, 27)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -535,17 +537,17 @@ public class RiskSpecificationView extends DialogBase implements ChartProgressLi
     @Override
     public void chartProgress(ChartProgressEvent cpe) {
         if (cpe.getPercent() == 100) {
-            Rectangle2D rect = cp.getChartRenderingInfo().getPlotInfo().getDataArea();
-            this.riskSlider.setLayout(null);
-            this.riskSlider.setBounds(
-                    (int)rect.getX(), 
-                    riskSlider.getY(), 
-                    (int)rect.getWidth(), 
-                    riskSlider.getHeight());
-            //this.riskSlider.setPreferredSize(null);
-            this.riskSlider.getLayout();
-            this.doLayout();
-            //TODO: resize the slider
+//            Rectangle2D rect = cp.getChartRenderingInfo().getPlotInfo().getDataArea();
+//            this.riskSlider.setLayout(null);
+//            this.riskSlider.setBounds(
+//                    (int)rect.getX(), 
+//                    riskSlider.getY(), 
+//                    (int)rect.getWidth(), 
+//                    riskSlider.getHeight());
+//            //this.riskSlider.setPreferredSize(null);
+//            //this.riskSlider.getLayout();
+//            this.doLayout();
+//            //TODO: resize the slider
             ;
         }
     }
