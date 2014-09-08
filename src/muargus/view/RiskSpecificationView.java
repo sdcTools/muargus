@@ -4,9 +4,15 @@
  */
 package muargus.view;
 
+import argus.model.ArgusException;
 import java.awt.BorderLayout;
 import java.awt.geom.Rectangle2D;
+import java.text.NumberFormat;
+import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Locale;
+import javax.print.DocFlavor;
+import javax.swing.JOptionPane;
 import muargus.RiskChartBuilder;
 import muargus.controller.RiskSpecificationController;
 import muargus.model.MetadataMu;
@@ -47,14 +53,16 @@ public class RiskSpecificationView extends DialogBase implements ChartProgressLi
     }
     
     public void showChart() {
-        if (jPanelChart.getComponentCount() == 0) {
+        if (jPanelChart.getComponentCount() > 0) {
+            jPanelChart.remove(cp);
+        }
             RiskChartBuilder builder = new RiskChartBuilder();
             jPanelChart.setLayout(new BorderLayout());
             cp = builder.CreateChart(this.model);
             cp.getChart().addProgressListener(this);
             jPanelChart.add(cp, BorderLayout.CENTER);
             
-        }
+        
     }
     
     
@@ -81,7 +89,8 @@ public class RiskSpecificationView extends DialogBase implements ChartProgressLi
     }
 
     private String formatDouble(double d) {
-        return String.format("%.3f", d);
+        String format = "%." + decimalsSpinner.getValue().toString() + "f";
+        return String.format(format, d);
     }
     
     public void updateValues(){
@@ -92,6 +101,9 @@ public class RiskSpecificationView extends DialogBase implements ChartProgressLi
     }
 
     private void setSliderPosition() {
+        double value = riskSlider.getMaximum() *  Math.log(this.model.getRiskThreshold()/this.model.getMinRisk())/
+                Math.log(this.model.getMaxRisk()/this.model.getMinRisk());
+        this.riskSlider.setValue((int)value);
         //TODO
         ;
     }
@@ -107,7 +119,7 @@ public class RiskSpecificationView extends DialogBase implements ChartProgressLi
 
         jButton5 = new javax.swing.JButton();
         tableLabel = new javax.swing.JLabel();
-        jCheckBox1 = new javax.swing.JCheckBox();
+        cumulativeCheckbox = new javax.swing.JCheckBox();
         jPanel1 = new javax.swing.JPanel();
         maxRiskTextField = new javax.swing.JTextField();
         maxReidentRateTextField = new javax.swing.JTextField();
@@ -118,16 +130,16 @@ public class RiskSpecificationView extends DialogBase implements ChartProgressLi
         jLabel5 = new javax.swing.JLabel();
         reidentThresholdTextField = new javax.swing.JTextField();
         riskThresholdTextField = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
+        riskCalcButton = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jLabel6 = new javax.swing.JLabel();
         unsafeRecordsTextField = new javax.swing.JTextField();
-        jButton3 = new javax.swing.JButton();
+        unsafeCalcButton = new javax.swing.JButton();
         jLabel7 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
         jLabel8 = new javax.swing.JLabel();
-        jSpinner1 = new javax.swing.JSpinner();
-        jButton4 = new javax.swing.JButton();
+        decimalsSpinner = new javax.swing.JSpinner();
+        okButton = new javax.swing.JButton();
         jPanelChart = new javax.swing.JPanel();
         jPanel4 = new javax.swing.JPanel();
         riskSlider = new javax.swing.JSlider();
@@ -139,7 +151,12 @@ public class RiskSpecificationView extends DialogBase implements ChartProgressLi
 
         tableLabel.setText("Dimensions");
 
-        jCheckBox1.setText("Cumulative chart");
+        cumulativeCheckbox.setText("Cumulative chart");
+        cumulativeCheckbox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cumulativeCheckboxActionPerformed(evt);
+            }
+        });
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Maximum levels in file"));
 
@@ -185,13 +202,23 @@ public class RiskSpecificationView extends DialogBase implements ChartProgressLi
 
         jLabel5.setText("<html><P STYLE=\"text-align: right;\">\nre ident rate <br>\nthreshold\n");
 
-        jButton1.setText("Calc");
+        riskCalcButton.setText("Calc");
+        riskCalcButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                riskCalcButtonActionPerformed(evt);
+            }
+        });
 
         jButton2.setText("Calc");
 
         jLabel6.setText("%");
 
-        jButton3.setText("Calc");
+        unsafeCalcButton.setText("Calc");
+        unsafeCalcButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                unsafeCalcButtonActionPerformed(evt);
+            }
+        });
 
         jLabel7.setText("# unsafe records:");
 
@@ -213,14 +240,14 @@ public class RiskSpecificationView extends DialogBase implements ChartProgressLi
                     .addComponent(riskThresholdTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton1)
+                    .addComponent(riskCalcButton)
                     .addComponent(jButton2))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 72, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(unsafeRecordsTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton3))
+                        .addComponent(unsafeCalcButton))
                     .addComponent(jLabel7))
                 .addContainerGap())
         );
@@ -233,7 +260,7 @@ public class RiskSpecificationView extends DialogBase implements ChartProgressLi
                             .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                 .addComponent(riskThresholdTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jButton1)))
+                                .addComponent(riskCalcButton)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -247,7 +274,7 @@ public class RiskSpecificationView extends DialogBase implements ChartProgressLi
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(unsafeRecordsTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButton3))))
+                            .addComponent(unsafeCalcButton))))
                 .addContainerGap())
         );
 
@@ -255,12 +282,12 @@ public class RiskSpecificationView extends DialogBase implements ChartProgressLi
 
         jLabel8.setText("<html>\n# decimals <br>\nshown");
 
-        jSpinner1.setModel(new javax.swing.SpinnerNumberModel(5, 3, 7, 1));
+        decimalsSpinner.setModel(new javax.swing.SpinnerNumberModel(5, 3, 7, 1));
 
-        jButton4.setText("OK");
-        jButton4.addActionListener(new java.awt.event.ActionListener() {
+        okButton.setText("OK");
+        okButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton4ActionPerformed(evt);
+                okButtonActionPerformed(evt);
             }
         });
 
@@ -272,9 +299,9 @@ public class RiskSpecificationView extends DialogBase implements ChartProgressLi
                 .addContainerGap()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jSpinner1, javax.swing.GroupLayout.DEFAULT_SIZE, 54, Short.MAX_VALUE))
+                    .addComponent(decimalsSpinner, javax.swing.GroupLayout.DEFAULT_SIZE, 54, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton4, javax.swing.GroupLayout.DEFAULT_SIZE, 51, Short.MAX_VALUE)
+                .addComponent(okButton, javax.swing.GroupLayout.DEFAULT_SIZE, 51, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
@@ -284,8 +311,8 @@ public class RiskSpecificationView extends DialogBase implements ChartProgressLi
                 .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jSpinner1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton4))
+                    .addComponent(decimalsSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(okButton))
                 .addContainerGap(13, Short.MAX_VALUE))
         );
 
@@ -300,9 +327,15 @@ public class RiskSpecificationView extends DialogBase implements ChartProgressLi
             .addGap(0, 254, Short.MAX_VALUE)
         );
 
-        riskSlider.setMajorTickSpacing(100);
-        riskSlider.setMinorTickSpacing(5);
+        riskSlider.setMajorTickSpacing(1000);
+        riskSlider.setMaximum(1000);
+        riskSlider.setMinorTickSpacing(50);
         riskSlider.setPaintTicks(true);
+        riskSlider.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                riskSliderStateChanged(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -325,7 +358,7 @@ public class RiskSpecificationView extends DialogBase implements ChartProgressLi
                 .addGap(31, 31, 31)
                 .addComponent(tableLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jCheckBox1)
+                .addComponent(cumulativeCheckbox)
                 .addGap(161, 161, 161))
             .addGroup(layout.createSequentialGroup()
                 .addGap(27, 27, 27)
@@ -350,7 +383,7 @@ public class RiskSpecificationView extends DialogBase implements ChartProgressLi
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(tableLabel)
-                    .addComponent(jCheckBox1))
+                    .addComponent(cumulativeCheckbox))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanelChart, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGap(1, 1, 1)
@@ -366,10 +399,47 @@ public class RiskSpecificationView extends DialogBase implements ChartProgressLi
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+    private void okButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okButtonActionPerformed
         this.setVisible(false);
-    }//GEN-LAST:event_jButton4ActionPerformed
+    }//GEN-LAST:event_okButtonActionPerformed
 
+    private void riskCalcButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_riskCalcButtonActionPerformed
+       try {
+            double d = NumberFormat.getInstance(Locale.getDefault()).parse(riskThresholdTextField.getText()).doubleValue();
+            this.model.setRiskThreshold(d);
+            setSliderPosition();
+       }
+       catch (ParseException ex) {
+           showErrorMessage(new ArgusException("Entered value is not valid"));
+       }
+    }//GEN-LAST:event_riskCalcButtonActionPerformed
+
+    private void riskSliderStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_riskSliderStateChanged
+        if (!riskSlider.getValueIsAdjusting()) {
+            double threshold = this.model.getMinRisk() * Math.exp(
+                    (Math.log(this.model.getMaxRisk() / this.model.getMinRisk()))*riskSlider.getValue()/riskSlider.getMaximum());
+            
+            this.model.setRiskThreshold(threshold);
+            controller.calculateByRiskThreshold();
+            updateValues();
+        }
+    }//GEN-LAST:event_riskSliderStateChanged
+
+    private void unsafeCalcButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_unsafeCalcButtonActionPerformed
+        this.model.setUnsafeRecords(Integer.parseInt(unsafeRecordsTextField.getText()));
+        controller.calculateByUnsafeRecords();
+        updateValues();
+    }//GEN-LAST:event_unsafeCalcButtonActionPerformed
+
+    private void cumulativeCheckboxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cumulativeCheckboxActionPerformed
+        showCumulative(this.cumulativeCheckbox.isSelected());
+    }//GEN-LAST:event_cumulativeCheckboxActionPerformed
+
+    private void showCumulative(boolean cumulative) {
+        controller.fillModelHistogramData(cumulative);
+        showChart();
+        
+    }
 //    /**
 //     * @param args the command line arguments
 //     */
@@ -412,12 +482,10 @@ public class RiskSpecificationView extends DialogBase implements ChartProgressLi
 //        });
 //    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
+    private javax.swing.JCheckBox cumulativeCheckbox;
+    private javax.swing.JSpinner decimalsSpinner;
     private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
-    private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -430,13 +498,15 @@ public class RiskSpecificationView extends DialogBase implements ChartProgressLi
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanelChart;
-    private javax.swing.JSpinner jSpinner1;
     private javax.swing.JTextField maxReidentRateTextField;
     private javax.swing.JTextField maxRiskTextField;
+    private javax.swing.JButton okButton;
     private javax.swing.JTextField reidentThresholdTextField;
+    private javax.swing.JButton riskCalcButton;
     private javax.swing.JSlider riskSlider;
     private javax.swing.JTextField riskThresholdTextField;
     private javax.swing.JLabel tableLabel;
+    private javax.swing.JButton unsafeCalcButton;
     private javax.swing.JTextField unsafeRecordsTextField;
     // End of variables declaration//GEN-END:variables
 

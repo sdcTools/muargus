@@ -44,6 +44,10 @@ public class RiskSpecification {
     public double getMaxRisk() {
         return this.classes.get(this.classes.size()-1).getRightValue();
     }
+    
+    public double getMinRisk() {
+        return this.classes.get(0).getLeftValue();
+    }
 
     public double getMaxReidentRate() {
         return maxReidentRate;
