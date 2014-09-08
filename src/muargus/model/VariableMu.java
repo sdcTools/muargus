@@ -273,6 +273,10 @@ public class VariableMu {
     public void setVariableLength(String variableLength) {
         this.variableLength = Integer.parseInt(variableLength);
     }
+    
+    public int getNumberOfMissings(){
+        return missing.length;
+    }
 
     public String getMissing(int index) {
         return missing[index];
