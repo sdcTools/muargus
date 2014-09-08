@@ -3,6 +3,7 @@ package muargus.controller;
 
 import argus.model.ArgusException;
 import argus.model.DataFilePair;
+import argus.utils.StrUtils;
 import java.awt.Desktop;
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -189,8 +190,7 @@ public class MainFrameController {
     private void showUnsafeCombinations(int variableIndex) {
         ArrayList<String> missingCodelists = MuARGUS.getCalculationService().getUnsafeCombinations();
         if (!missingCodelists.isEmpty()) {
-            //TODO: moet dit een join zijn?
-            view.showMessage("\n" + missingCodelists);
+            view.showMessage(StrUtils.join("\n", missingCodelists));
         }
         view.showUnsafeCombinations(this.metadata.getCombinations(), variableIndex);
         organise();

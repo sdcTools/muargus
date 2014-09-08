@@ -573,8 +573,8 @@ public class CalculationService {
     public double calculateReidentRate(TableMu table, double riskThreshold) {
         int tableIndex = this.metadata.getCombinations().getTables().indexOf(table) + 1;
         double[] reidentRate = new double[1];
-        c.ComputeBIRRateThreshold(tableIndex, Math.log(riskThreshold), reidentRate);
-        return Math.exp(reidentRate[0]);
+        c.ComputeBIRRateThreshold(tableIndex, riskThreshold, reidentRate);
+        return reidentRate[0];
     }
 
     public double calculateRiskThreshold(TableMu table, int nUnsafe) {
