@@ -14,16 +14,29 @@ import java.util.ArrayList;
  */
 public class PramSpecification {
     
-    private boolean useBandwidth;
-    private int defaultProbability;
+    private boolean useBandwidth = false;
+    private final int defaultProbability = 80;
     private ArrayList<PramVariableSpec> pramVarSpec;
-    private String[] variablesColumnNames = {"P", "BW", "Variable"};
-    private String[] codesColumnNames = {"Code", "Label", "Prob."};
+    private final String[] variablesColumnNames = {"P", "BW", "Variable"};
+    private final String[] codesColumnNames = {"Code", "Label", "Prob."};
     private String[][] variablesData;
     
     public PramSpecification() {
         
     }
+
+    public boolean useBandwidth() {
+        return useBandwidth;
+    }
+
+    public void setUseBandwidth(boolean useBandwidth) {
+        this.useBandwidth = useBandwidth;
+    }
+
+    public int getDefaultProbability() {
+        return defaultProbability;
+    }
+    
     
     
 

@@ -92,7 +92,7 @@ public class PramSpecificationController {
         int index = 0;
         for (PramVariableSpec p : pramVarSpec) {
             variablesData[index][0] = p.getAppliedText();
-            if (p.isApplied() && p.useBandwidth()) {
+            if (p.isApplied() && this.model.useBandwidth()) {
                 variablesData[index][1] = Integer.toString(p.getBandwidth());
             } else {
                 variablesData[index][1] = "";

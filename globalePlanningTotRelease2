@@ -10,25 +10,26 @@ Opmerking: Ik heb nu grofweg 1 scherm per week geplaatst maar sommige schermen z
 
 
 Week 1 (1-7 september):                                                         Gedaan:
-    - laatste puntjes op de i zetten voor release 1                                            
+    - laatste puntjes op de i zetten voor release 1                             check               
     - planning maken tot 1 november                                             check
     - javadocs voor de eerste release schrijven
     - ShowTableCollection                                                       check
 
 Week 2 (8-14 september):
     - PRAMSpecification
-
-Week 3 (15-21 september):
     - IndividualRiskSpecification
     - HouseholdRiskSpecifcation  --> lijkt veel op individualRiskSpecification
 
-Week 4 (22-28 september): (Jeldrik afwezig)
+Week 3 (15-21 september):
     - ModifyNumericalVariables
+    - SpecifyMetadata (SPSS & free with meta) 
+
+Week 4 (22-28 september): (Jeldrik afwezig)
+
 
 Week 5 (29 septembet - 5 oktober): (Jeldrik & Anne afwezig)
 
 Week 6 (6-12 oktober):
-    - SpecifyMetadata (SPSS & free with meta) 
     - NumericalRanksSwapping
 
 Week 7 (13-19 oktober):
@@ -37,7 +38,7 @@ Week 7 (13-19 oktober):
     - News
     - About
 
-Week 8 (20-26 oktober):
+Week 8 (20-26 oktober): (Anne afwezig)
     - kleine puntjes afwerken
 
 Week 9 (27 oktober - 2 november):
@@ -46,3 +47,4 @@ Week 9 (27 oktober - 2 november):
 
 wishlist:
     - R-script toevoegen --> duidelijk krijgen hoe en wat.
+    - explore file lostrekken
