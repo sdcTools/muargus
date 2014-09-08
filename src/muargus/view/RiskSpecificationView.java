@@ -5,6 +5,7 @@
 package muargus.view;
 
 import argus.model.ArgusException;
+import argus.utils.StrUtils;
 import java.awt.BorderLayout;
 import java.awt.geom.Rectangle2D;
 import java.text.NumberFormat;
@@ -32,6 +33,7 @@ public class RiskSpecificationView extends DialogBase implements ChartProgressLi
     RiskSpecificationController controller;
     RiskSpecification model;
     ChartPanel cp = null;
+    private boolean calculating = false;
     
     /**
      * 
@@ -55,12 +57,14 @@ public class RiskSpecificationView extends DialogBase implements ChartProgressLi
     public void showChart() {
         if (jPanelChart.getComponentCount() > 0) {
             jPanelChart.remove(cp);
+            jPanelChart.revalidate();
         }
             RiskChartBuilder builder = new RiskChartBuilder();
             jPanelChart.setLayout(new BorderLayout());
             cp = builder.CreateChart(this.model);
             cp.getChart().addProgressListener(this);
             jPanelChart.add(cp, BorderLayout.CENTER);
+            jPanelChart.repaint();
             
         
     }
@@ -82,22 +86,25 @@ public class RiskSpecificationView extends DialogBase implements ChartProgressLi
         for (VariableMu variable : this.model.getRiskTable().getVariables()) {
             names.add(variable.getName());
         }
-        this.tableLabel.setText(String.join(" x ", names));
+        this.tableLabel.setText(StrUtils.join(" x ", names));
         this.maxRiskTextField.setText(formatDouble(this.model.getMaxRisk()));
         this.maxReidentRateTextField.setText(formatDouble(this.model.getMaxReidentRate()));
         updateValues();
     }
 
     private String formatDouble(double d) {
-        String format = "%." + decimalsSpinner.getValue().toString() + "f";
+        String format = "%." + decimalsCombo.getSelectedItem().toString() + "f";
         return String.format(format, d);
     }
     
     public void updateValues(){
+        this.maxRiskTextField.setText(formatDouble(this.model.getMaxRisk()));
+        this.maxReidentRateTextField.setText(formatDouble(this.model.getMaxReidentRate()));
         this.riskThresholdTextField.setText(formatDouble(this.model.getRiskThreshold()));
         this.reidentThresholdTextField.setText(formatDouble(this.model.getReidentRateThreshold()));
         this.unsafeRecordsTextField.setText(Integer.toString(this.model.getUnsafeRecords()));
         setSliderPosition();
+        this.calculating = false;
     }
 
     private void setSliderPosition() {
@@ -138,8 +145,8 @@ public class RiskSpecificationView extends DialogBase implements ChartProgressLi
         jLabel7 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
         jLabel8 = new javax.swing.JLabel();
-        decimalsSpinner = new javax.swing.JSpinner();
         okButton = new javax.swing.JButton();
+        decimalsCombo = new javax.swing.JComboBox();
         jPanelChart = new javax.swing.JPanel();
         jPanel4 = new javax.swing.JPanel();
         riskSlider = new javax.swing.JSlider();
@@ -282,12 +289,17 @@ public class RiskSpecificationView extends DialogBase implements ChartProgressLi
 
         jLabel8.setText("<html>\n# decimals <br>\nshown");
 
-        decimalsSpinner.setModel(new javax.swing.SpinnerNumberModel(5, 3, 7, 1));
-
         okButton.setText("OK");
         okButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 okButtonActionPerformed(evt);
+            }
+        });
+
+        decimalsCombo.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "3", "4", "5", "6", "7" }));
+        decimalsCombo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                decimalsComboActionPerformed(evt);
             }
         });
 
@@ -297,11 +309,13 @@ public class RiskSpecificationView extends DialogBase implements ChartProgressLi
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(decimalsSpinner, javax.swing.GroupLayout.DEFAULT_SIZE, 54, Short.MAX_VALUE))
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGap(10, 10, 10)
+                        .addComponent(decimalsCombo, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(okButton, javax.swing.GroupLayout.DEFAULT_SIZE, 51, Short.MAX_VALUE)
+                .addComponent(okButton, javax.swing.GroupLayout.DEFAULT_SIZE, 56, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
@@ -311,8 +325,8 @@ public class RiskSpecificationView extends DialogBase implements ChartProgressLi
                 .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(decimalsSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(okButton))
+                    .addComponent(okButton)
+                    .addComponent(decimalsCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(13, Short.MAX_VALUE))
         );
 
@@ -405,9 +419,11 @@ public class RiskSpecificationView extends DialogBase implements ChartProgressLi
 
     private void riskCalcButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_riskCalcButtonActionPerformed
        try {
+           this.calculating = true;
             double d = NumberFormat.getInstance(Locale.getDefault()).parse(riskThresholdTextField.getText()).doubleValue();
             this.model.setRiskThreshold(d);
-            setSliderPosition();
+            this.controller.calculateByRiskThreshold();
+            updateValues();
        }
        catch (ParseException ex) {
            showErrorMessage(new ArgusException("Entered value is not valid"));
@@ -415,7 +431,8 @@ public class RiskSpecificationView extends DialogBase implements ChartProgressLi
     }//GEN-LAST:event_riskCalcButtonActionPerformed
 
     private void riskSliderStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_riskSliderStateChanged
-        if (!riskSlider.getValueIsAdjusting()) {
+        if (!riskSlider.getValueIsAdjusting() && !this.calculating) {
+            
             double threshold = this.model.getMinRisk() * Math.exp(
                     (Math.log(this.model.getMaxRisk() / this.model.getMinRisk()))*riskSlider.getValue()/riskSlider.getMaximum());
             
@@ -426,6 +443,7 @@ public class RiskSpecificationView extends DialogBase implements ChartProgressLi
     }//GEN-LAST:event_riskSliderStateChanged
 
     private void unsafeCalcButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_unsafeCalcButtonActionPerformed
+        this.calculating = true;
         this.model.setUnsafeRecords(Integer.parseInt(unsafeRecordsTextField.getText()));
         controller.calculateByUnsafeRecords();
         updateValues();
@@ -434,6 +452,10 @@ public class RiskSpecificationView extends DialogBase implements ChartProgressLi
     private void cumulativeCheckboxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cumulativeCheckboxActionPerformed
         showCumulative(this.cumulativeCheckbox.isSelected());
     }//GEN-LAST:event_cumulativeCheckboxActionPerformed
+
+    private void decimalsComboActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_decimalsComboActionPerformed
+        updateValues();
+    }//GEN-LAST:event_decimalsComboActionPerformed
 
     private void showCumulative(boolean cumulative) {
         controller.fillModelHistogramData(cumulative);
@@ -483,7 +505,7 @@ public class RiskSpecificationView extends DialogBase implements ChartProgressLi
 //    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JCheckBox cumulativeCheckbox;
-    private javax.swing.JSpinner decimalsSpinner;
+    private javax.swing.JComboBox decimalsCombo;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton5;
     private javax.swing.JLabel jLabel2;
