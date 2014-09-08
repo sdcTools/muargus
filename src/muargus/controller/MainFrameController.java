@@ -189,6 +189,7 @@ public class MainFrameController {
     private void showUnsafeCombinations(int variableIndex) {
         ArrayList<String> missingCodelists = MuARGUS.getCalculationService().getUnsafeCombinations();
         if (!missingCodelists.isEmpty()) {
+            //TODO: moet dit een join zijn?
             view.showMessage("\n" + missingCodelists);
         }
         view.showUnsafeCombinations(this.metadata.getCombinations(), variableIndex);
