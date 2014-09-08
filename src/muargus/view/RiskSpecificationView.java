@@ -5,20 +5,26 @@
 package muargus.view;
 
 import java.awt.BorderLayout;
+import java.awt.geom.Rectangle2D;
+import javax.swing.JOptionPane;
 import muargus.RiskChartBuilder;
 import muargus.controller.RiskSpecificationController;
 import muargus.model.MetadataMu;
 import muargus.model.RiskSpecification;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.event.ChartProgressEvent;
+import org.jfree.chart.event.ChartProgressListener;
 
 /**
  *
  * @author ambargus
  */
-public class RiskSpecificationView extends DialogBase {
+public class RiskSpecificationView extends DialogBase implements ChartProgressListener {
 
     MetadataMu metadataMu;
     RiskSpecificationController controller;
     RiskSpecification model;
+    ChartPanel cp = null;
     
     /**
      * 
@@ -43,9 +49,24 @@ public class RiskSpecificationView extends DialogBase {
         if (jPanelChart.getComponentCount() == 0) {
             RiskChartBuilder builder = new RiskChartBuilder();
             jPanelChart.setLayout(new BorderLayout());
-            jPanelChart.add(builder.CreateChart(this.model), BorderLayout.CENTER);
+            cp = builder.CreateChart(this.model);
+            cp.getChart().addProgressListener(this);
+            jPanelChart.add(cp, BorderLayout.CENTER);
+            
         }
     }
+    
+    
+
+//    @Override
+//    public void setVisible(boolean bln) {
+//        super.setVisible(bln); //To change body of generated methods, choose Tools | Templates.
+//        Rectangle2D r = cp.getChartRenderingInfo().getPlotInfo().getDataArea();
+//        double min = r.getMinX();
+//        double max = r.getMaxX();
+//        JOptionPane.showMessageDialog(null, min);
+//    }
+    
     
     public void initializeData() {
         updateValues();
@@ -386,4 +407,12 @@ public class RiskSpecificationView extends DialogBase {
     private javax.swing.JTextField jTextField4;
     private javax.swing.JTextField jTextField5;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    public void chartProgress(ChartProgressEvent cpe) {
+        if (cpe.getPercent() == 100) {
+            //TODO: resize the slider
+            ;
+        }
+    }
 }

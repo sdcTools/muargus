@@ -10,6 +10,7 @@ import muargus.model.RiskModelClass;
 import muargus.model.RiskSpecification;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.axis.AxisLocation;
 import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.XYBarRenderer;
@@ -19,6 +20,7 @@ import org.jfree.chart.renderer.xy.StandardXYBarPainter;
 import org.jfree.data.Range;
 import org.jfree.data.xy.XIntervalSeries;
 import org.jfree.data.xy.XIntervalSeriesCollection;
+import org.jfree.ui.RectangleInsets;
 
 public class RiskChartBuilder {
 
@@ -42,12 +44,19 @@ public class RiskChartBuilder {
         domainAxis.setRange(range);
 
         XYPlot mainPlot = new XYPlot(dataset, domainAxis, rangeAxis, renderer);
+        NumberAxis axis2 = new NumberAxis();
+        axis2.setAutoRange(false);
+        axis2.setRange(rangeAxis.getRange());
+        mainPlot.setRangeAxis(1, axis2);
+        mainPlot.setRangeAxisLocation(1, AxisLocation.BOTTOM_OR_RIGHT);
 
+        
         mainPlot.setDomainGridlinesVisible(true);
 
         
         JFreeChart chart = new JFreeChart(null, null, mainPlot, false);
         ChartPanel chartPanel = new ChartPanel(chart);
+        
         
         return chartPanel;
     }
