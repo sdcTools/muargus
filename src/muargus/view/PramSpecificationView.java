@@ -542,10 +542,9 @@ public class PramSpecificationView extends DialogBase {
     }
 
     private void codesSelectionChanged() {
-        if (this.codesTable.getSelectedRow() > 0) {
+        if (this.codesTable.getSelectedRow() >= 0) {
             this.selectedRow = this.codesTable.getSelectedRow();
         }
-        System.out.println(this.selectedRow);
         this.codesSlider.setValue(getSelectedCodeInfo().getPramProbability());
     }
 
