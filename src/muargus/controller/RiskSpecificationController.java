@@ -29,17 +29,9 @@ public class RiskSpecificationController {
         this.view = new RiskSpecificationView(parentView, true, this);
         this.metadataMu = metadataMu;
         this.model = this.metadataMu.getCombinations().getRiskSpecification();
-        this.view.setMetadataMu(this.metadataMu);
         this.calculationService = MuARGUS.getCalculationService();
-        
-        ArrayList<TableMu> riskTables = getRiskTables();
-        if (riskTables.size() > 1) {
-            //TODO: choose risk table
-        }
-        else {
-            this.model.SetRiskTable(riskTables.get(0));
-        }
     }
+    
     
     private ArrayList<TableMu> getRiskTables() {
         ArrayList<TableMu> tables = new ArrayList<>();
@@ -54,6 +46,13 @@ public class RiskSpecificationController {
      * Opens the view by setting its visibility to true.
      */
     public void showView() {
+        ArrayList<TableMu> riskTables = getRiskTables();
+        if (riskTables.size() > 1) {
+            //TODO: choose risk table
+        }
+        else {
+            this.model.SetRiskTable(riskTables.get(0));
+        }
         boolean init = this.model.getClasses().isEmpty();
         fillModelHistogramData(false);
         if (init) {
@@ -61,6 +60,7 @@ public class RiskSpecificationController {
         }
         
         calculateByRiskThreshold();
+        this.view.setMetadataMu(this.metadataMu);
         
         this.view.showChart();
         this.view.setVisible(true);
