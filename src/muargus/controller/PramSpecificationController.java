@@ -115,6 +115,7 @@ public class PramSpecificationController {
                 variable = v;
             }
         }
+        System.out.println(variable.getName());
         
         String[][] codesData = null;
         if (variable != null) {

@@ -82,7 +82,7 @@ public class RiskSpecificationView extends DialogBase implements ChartProgressLi
         for (VariableMu variable : this.model.getRiskTable().getVariables()) {
             names.add(variable.getName());
         }
-        this.tableLabel.setText(String.join(" x ", names));
+        this.tableLabel.setText(" x " + names);
         this.maxRiskTextField.setText(formatDouble(this.model.getMaxRisk()));
         this.maxReidentRateTextField.setText(formatDouble(this.model.getMaxReidentRate()));
         updateValues();

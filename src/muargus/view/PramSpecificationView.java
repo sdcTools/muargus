@@ -24,10 +24,12 @@ public class PramSpecificationView extends DialogBase {
     MetadataMu metadataMu;
     PramSpecificationController controller;
     PramSpecification model;
-    private TableModel variablesTableModel;
+    //private TableModel variablesTableModel;
     private TableModel codesTableModel;
     private final int[] variablesColumnWidth = {20, 30, 80};
     private final int[] codesColumnWidth = {30, 70, 30};
+    private int selectedRowVariablesTable;
+    private int selectedRowCodesTable;
 
     /**
      *
@@ -85,15 +87,15 @@ public class PramSpecificationView extends DialogBase {
                 }
             }
         });
-//        this.codesTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
-//
-//            @Override
-//            public void valueChanged(ListSelectionEvent lse) {
-//                if (!lse.getValueIsAdjusting()) {
-//                    codesSelectionChanged();
-//                }
-//            }
-//        });
+        this.codesTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+
+            @Override
+            public void valueChanged(ListSelectionEvent lse) {
+                if (!lse.getValueIsAdjusting()) {
+                    codesSelectionChanged();
+                }
+            }
+        });
     }
 
     public PramVariableSpec getPramVariableSpec(VariableMu variable) {
@@ -133,27 +135,28 @@ public class PramSpecificationView extends DialogBase {
      */
     public void updateVariablesTable() {
         this.controller.makeVariablesData();
-        int selectedRow;
+        //int selectedRow;
         if (this.variablesTable.getSelectedRowCount() > 0) {
-            selectedRow = this.variablesTable.getSelectedRow();
+            selectedRowVariablesTable = this.variablesTable.getSelectedRow();
         } else {
-            selectedRow = 0;
+            selectedRowVariablesTable = 0;
         }
+;
 
-        this.variablesTableModel = new DefaultTableModel(this.model.getVariablesData(), this.model.getVariablesColumnNames()) {
+         TableModel variablesTableModel = new DefaultTableModel(this.model.getVariablesData(), this.model.getVariablesColumnNames()) {
             @Override
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return false;
             }
         };
-        this.variablesTable.setModel(this.variablesTableModel);
+        this.variablesTable.setModel(variablesTableModel);
 
         for (int i = 0; i < this.variablesColumnWidth.length; i++) {
             this.variablesTable.getColumnModel().getColumn(i).setMinWidth(this.variablesColumnWidth[i]);
             this.variablesTable.getColumnModel().getColumn(i).setPreferredWidth(this.variablesColumnWidth[i]);
         }
 
-        this.variablesTable.getSelectionModel().setSelectionInterval(selectedRow, selectedRow);
+        this.variablesTable.getSelectionModel().setSelectionInterval(selectedRowVariablesTable, selectedRowVariablesTable);
     }
 
     /**
@@ -161,9 +164,12 @@ public class PramSpecificationView extends DialogBase {
      * @return
      */
     public PramVariableSpec getSelectedPramVariableSpec() {
-        System.out.println(this.variablesTable.getSelectedRow());
+        if(this.variablesTable.getSelectedRow() < 0){
+            return this.model.getPramVarSpec().get(selectedRowVariablesTable);
+        } else {
         return this.controller.getSelectedPramVarSpec(
                 (String) this.variablesTable.getValueAt(this.variablesTable.getSelectedRow(), 2));
+        }
     }
 
     /**
@@ -171,22 +177,24 @@ public class PramSpecificationView extends DialogBase {
      * @return
      */
     public CodeInfo getSelectedCodeInfo() {
-        return getSelectedPramVariableSpec().getVariable().getCodeInfos().get(this.codesTable.getSelectedRow());
+        //return getSelectedPramVariableSpec().getVariable().getCodeInfos().get(this.codesTable.getSelectedRow());
+        return getSelectedPramVariableSpec().getVariable().getCodeInfos().get(this.selectedRowCodesTable);
     }
 
     public CodeInfo getSelectedCodeInfo(VariableMu variable) {
-        return variable.getCodeInfos().get(this.codesTable.getSelectedRow());
+        //return variable.getCodeInfos().get(this.codesTable.getSelectedRow());
+        return variable.getCodeInfos().get(this.selectedRowCodesTable);
     }
 
     /**
      *
      */
     public void updateCodesTable() {
-        int selectedRow;
+        //int selectedRowCodesTable;
         if (this.codesTable.getSelectedRowCount() > 0) {
-            selectedRow = this.codesTable.getSelectedRow();
+            selectedRowCodesTable = this.codesTable.getSelectedRow();
         } else {
-            selectedRow = 0;
+            selectedRowCodesTable = 0;
         }
 
         String[][] codesData = this.controller.getCodesData(getSelectedPramVariableSpec().getVariable().getName());
@@ -203,7 +211,7 @@ public class PramSpecificationView extends DialogBase {
             this.codesTable.getColumnModel().getColumn(i).setMinWidth(this.codesColumnWidth[i]);
             this.codesTable.getColumnModel().getColumn(i).setPreferredWidth(this.codesColumnWidth[i]);
         }
-        this.codesTable.getSelectionModel().setSelectionInterval(selectedRow, selectedRow);
+        this.codesTable.getSelectionModel().setSelectionInterval(selectedRowCodesTable, selectedRowCodesTable);
     }
 
     /**
@@ -259,16 +267,6 @@ public class PramSpecificationView extends DialogBase {
                 return canEdit [columnIndex];
             }
         });
-        variablesTable.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                variablesTableMouseClicked(evt);
-            }
-        });
-        variablesTable.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                variablesTableKeyReleased(evt);
-            }
-        });
         variablesScrollPane.setViewportView(variablesTable);
         if (variablesTable.getColumnModel().getColumnCount() > 0) {
             variablesTable.getColumnModel().getColumn(0).setPreferredWidth(8);
@@ -307,16 +305,6 @@ public class PramSpecificationView extends DialogBase {
                 "Code", "Label", "Prob."
             }
         ));
-        codesTable.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                codesTableMouseClicked(evt);
-            }
-        });
-        codesTable.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                codesTableKeyReleased(evt);
-            }
-        });
         codesScrollPane.setViewportView(codesTable);
         if (codesTable.getColumnModel().getColumnCount() > 0) {
             codesTable.getColumnModel().getColumn(0).setPreferredWidth(12);
@@ -549,14 +537,6 @@ public class PramSpecificationView extends DialogBase {
         updateCodesTable();
     }
 
-    private void variablesTableKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_variablesTableKeyReleased
-        //variablesSelectionChanged();
-    }//GEN-LAST:event_variablesTableKeyReleased
-
-    private void variablesTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_variablesTableMouseClicked
-        //variablesSelectionChanged();
-    }//GEN-LAST:event_variablesTableMouseClicked
-
     private void applyButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_applyButtonActionPerformed
         if (!this.controller.areAllProbabilitiesZero(getSelectedPramVariableSpec())) {
             getSelectedPramVariableSpec().setApplied(true);
@@ -590,14 +570,6 @@ public class PramSpecificationView extends DialogBase {
         }
         updateCodesTable();
     }//GEN-LAST:event_defaultProbabilityButtonActionPerformed
-
-    private void codesTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_codesTableMouseClicked
-        codesSelectionChanged();
-    }//GEN-LAST:event_codesTableMouseClicked
-
-    private void codesTableKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_codesTableKeyReleased
-        codesSelectionChanged();
-    }//GEN-LAST:event_codesTableKeyReleased
 
     private void undoButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_undoButtonActionPerformed
         getSelectedPramVariableSpec().setApplied(false);
