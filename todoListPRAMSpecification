@@ -7,8 +7,6 @@ Release 2
 
 2.  variablesTable
     - als een waarde gePRAMt is, maak deze dan rood
-3.  codesTable
-    - verander de listener naar een selectionListener
 5.  applyButton
     - bereken pram met dll
 6.  undoButton
@@ -43,6 +41,7 @@ Gedaan:                                                                         
     - vul de laatste kolom met de PRAM-probability horende bij de betreffende code (als default is dit 0)
       deze probability moet ergens opgeslagen worden (Anco/PP: Hoe lang
     - zorg dat er geen missing values in zitten.
+    - verander de listener naar een selectionListener
 4.  codesSlider
     - koppel dit aan de probabilty van de geselecteerde rij van de codesTable
 5.  applyButton

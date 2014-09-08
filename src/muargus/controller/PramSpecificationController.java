@@ -155,8 +155,6 @@ public class PramSpecificationController {
                 codesData[i][1] = codeInfo.get(i).getLabel();
                 codesData[i][2] = Integer.toString(codeInfo.get(i).getPramProbability());
             }
-
-            //pramVariableSpec.setCodesData(codesData);
         }
         return codesData;
     }
