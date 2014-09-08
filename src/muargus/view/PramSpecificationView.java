@@ -4,6 +4,7 @@
  */
 package muargus.view;
 
+import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
@@ -42,6 +43,8 @@ public class PramSpecificationView extends DialogBase {
         initComponents();
         this.setLocationRelativeTo(null);
         this.controller = controller;
+        this.variablesTable.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        this.codesTable.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     }
 
     /**
@@ -62,88 +65,31 @@ public class PramSpecificationView extends DialogBase {
         this.pramOptionsPanel.setVisible(false); // this option is available for future options using global recode
         this.bandwidthComboBox.setEnabled(this.bandwidthCheckBox.isSelected());
         this.controller.makePramVariableSpecs();
+        this.controller.setBandwidth();
 
-        for (VariableMu v : this.metadataMu.getVariables()) {
-            if (v.isCategorical()) {
-                int max = v.getCodeInfos().size() - v.getNumberOfMissings();
-                int value;
-                if (max > 5) {
-                    value = 5;
-                } else {
-                    value = max;
-                }
-                getPramVariableSpec(v).setBandwidth(value);
-            }
-
-        }
-
-        updateValues();
-        this.variablesTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
-
-            @Override
-            public void valueChanged(ListSelectionEvent lse) {
-                if (!lse.getValueIsAdjusting()) {
-                    variablesSelectionChanged();
-                }
-            }
-        });
-        this.codesTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
-
-            @Override
-            public void valueChanged(ListSelectionEvent lse) {
-                if (!lse.getValueIsAdjusting()) {
-                    codesSelectionChanged();
-                }
-            }
-        });
-    }
-
-    public PramVariableSpec getPramVariableSpec(VariableMu variable) {
-        PramVariableSpec temp = null;
-        for (PramVariableSpec p : this.model.getPramVarSpec()) {
-            if (p.getVariable().equals(variable)) {
-                temp = p;
-                break;
-            }
-        }
-        return temp;
-    }
-
-    /**
-     *
-     */
-    public void updateValues() {
-        updateVariablesTable();
+        makeVariablesTable();
         updateCodesTable();
+        variablesSelectionChanged();
         this.codesSlider.setValue(getSelectedCodeInfo().getPramProbability());
 
-        int value = getSelectedPramVariableSpec().getBandwidth();
-        int max = getSelectedPramVariableSpec().getVariable().getCodeInfos().size() - getSelectedPramVariableSpec().getVariable().getNumberOfMissings();
-        if (value > max) {
-            value = max;
-        }
-        String[] numbers = new String[max];
-        for (int i = 0; i < numbers.length; i++) {
-            numbers[i] = Integer.toString(i + 1);
-        }
-        this.bandwidthComboBox.setModel(new javax.swing.DefaultComboBoxModel(numbers));
-        this.bandwidthComboBox.getModel().setSelectedItem(numbers[value - 1]);
+//        this.codesTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+//
+//            @Override
+//            public void valueChanged(ListSelectionEvent lse) {
+//                if (!lse.getValueIsAdjusting()) {
+//                    codesSelectionChanged();
+//                }
+//            }
+//        });
     }
 
     /**
      *
      */
-    public void updateVariablesTable() {
+    public void makeVariablesTable() {
         this.controller.makeVariablesData();
-        //int selectedRow;
-        if (this.variablesTable.getSelectedRowCount() > 0) {
-            selectedRowVariablesTable = this.variablesTable.getSelectedRow();
-        } else {
-            selectedRowVariablesTable = 0;
-        }
-;
 
-         TableModel variablesTableModel = new DefaultTableModel(this.model.getVariablesData(), this.model.getVariablesColumnNames()) {
+        TableModel variablesTableModel = new DefaultTableModel(this.model.getVariablesData(), this.model.getVariablesColumnNames()) {
             @Override
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return false;
@@ -156,7 +102,16 @@ public class PramSpecificationView extends DialogBase {
             this.variablesTable.getColumnModel().getColumn(i).setPreferredWidth(this.variablesColumnWidth[i]);
         }
 
-        this.variablesTable.getSelectionModel().setSelectionInterval(selectedRowVariablesTable, selectedRowVariablesTable);
+        this.variablesTable.getSelectionModel().setSelectionInterval(0, 0);
+        this.variablesTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+
+            @Override
+            public void valueChanged(ListSelectionEvent lse) {
+                if (!lse.getValueIsAdjusting()) {
+                    variablesSelectionChanged();
+                }
+            }
+        });
     }
 
     /**
@@ -164,12 +119,12 @@ public class PramSpecificationView extends DialogBase {
      * @return
      */
     public PramVariableSpec getSelectedPramVariableSpec() {
-        if(this.variablesTable.getSelectedRow() < 0){
-            return this.model.getPramVarSpec().get(selectedRowVariablesTable);
-        } else {
+//        if(this.variablesTable.getSelectedRow() < 0){
+//            return this.model.getPramVarSpec().get(selectedRowVariablesTable);
+//        } else {
         return this.controller.getSelectedPramVarSpec(
                 (String) this.variablesTable.getValueAt(this.variablesTable.getSelectedRow(), 2));
-        }
+//        }
     }
 
     /**
@@ -177,13 +132,13 @@ public class PramSpecificationView extends DialogBase {
      * @return
      */
     public CodeInfo getSelectedCodeInfo() {
-        //return getSelectedPramVariableSpec().getVariable().getCodeInfos().get(this.codesTable.getSelectedRow());
-        return getSelectedPramVariableSpec().getVariable().getCodeInfos().get(this.selectedRowCodesTable);
+        return getSelectedPramVariableSpec().getVariable().getCodeInfos().get(this.codesTable.getSelectedRow());
+        //return getSelectedPramVariableSpec().getVariable().getCodeInfos().get(this.selectedRowCodesTable);
     }
 
     public CodeInfo getSelectedCodeInfo(VariableMu variable) {
-        //return variable.getCodeInfos().get(this.codesTable.getSelectedRow());
-        return variable.getCodeInfos().get(this.selectedRowCodesTable);
+        return variable.getCodeInfos().get(this.codesTable.getSelectedRow());
+        //return variable.getCodeInfos().get(this.selectedRowCodesTable);
     }
 
     /**
@@ -532,16 +487,13 @@ public class PramSpecificationView extends DialogBase {
         this.model.setUseBandwidth(this.bandwidthCheckBox.isSelected());
     }//GEN-LAST:event_bandwidthCheckBoxStateChanged
 
-    public void variablesSelectionChanged() {
-        this.codesTable.getSelectionModel().setSelectionInterval(0, 0);
-        updateCodesTable();
-    }
-
     private void applyButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_applyButtonActionPerformed
         if (!this.controller.areAllProbabilitiesZero(getSelectedPramVariableSpec())) {
             getSelectedPramVariableSpec().setApplied(true);
-            getSelectedPramVariableSpec().setBandwidth(this.bandwidthComboBox.getSelectedIndex() + 1);
-            updateVariablesTable();
+            getSelectedPramVariableSpec().setBandwidth(Integer.parseInt((String) this.bandwidthComboBox.getSelectedItem()));
+            int selectedRow = this.variablesTable.getSelectedRow();
+            this.variablesTable.setValueAt(getSelectedPramVariableSpec().getAppliedText(), selectedRow, 0);
+            this.variablesTable.setValueAt(getSelectedPramVariableSpec().getBandwidthText(this.model.useBandwidth()), selectedRow, 1);
         } else {
             System.out.println("warning");
         }
@@ -555,27 +507,59 @@ public class PramSpecificationView extends DialogBase {
                 break;
             }
         }
-        updateCodesTable();
-    }//GEN-LAST:event_codesSliderStateChanged
 
-    private void codesSelectionChanged() {
-        this.codesSlider.setValue(getSelectedCodeInfo().getPramProbability());
-        //updateValues();
-    }
+        this.codesTable.setValueAt(this.codesSlider.getValue(), this.codesTable.getSelectedRow(), 2);
+
+        //updateCodesTable();
+    }//GEN-LAST:event_codesSliderStateChanged
 
     private void defaultProbabilityButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_defaultProbabilityButtonActionPerformed
         int probability = this.defaultProbabilityComboBox.getSelectedIndex();
         for (CodeInfo c : getSelectedPramVariableSpec().getVariable().getCodeInfos()) {
             c.setPramProbability(probability);
         }
-        updateCodesTable();
+
+        for (int i = 0; i < this.codesTableModel.getRowCount(); i++) {
+            this.codesTable.setValueAt(Integer.toString(probability), i, 2);
+        }
+        this.codesSlider.setValue(getSelectedCodeInfo().getPramProbability());
+        //updateCodesTable();
     }//GEN-LAST:event_defaultProbabilityButtonActionPerformed
 
     private void undoButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_undoButtonActionPerformed
         getSelectedPramVariableSpec().setApplied(false);
-        updateVariablesTable();
+        int selectedRow = this.variablesTable.getSelectedRow();
+        this.variablesTable.setValueAt("", selectedRow, 0);
+        this.variablesTable.setValueAt("", selectedRow, 1);
     }//GEN-LAST:event_undoButtonActionPerformed
 
+    public void variablesSelectionChanged() {
+        this.codesTable.getSelectionModel().setSelectionInterval(0, 0);
+        this.selectedRowCodesTable = 0;
+        int value = getSelectedPramVariableSpec().getBandwidth();
+        int max = getSelectedPramVariableSpec().getVariable().getCodeInfos().size() - getSelectedPramVariableSpec().getVariable().getNumberOfMissings();
+        if (value > max) {
+            value = max;
+        }
+        String[] numbers = new String[max];
+        for (int i = 0; i < numbers.length; i++) {
+            numbers[i] = Integer.toString(i + 1);
+        }
+        this.bandwidthComboBox.setModel(new javax.swing.DefaultComboBoxModel(numbers));
+        this.bandwidthComboBox.getModel().setSelectedItem(numbers[value - 1]);
+        this.codesSlider.setValue(getSelectedCodeInfo().getPramProbability());
+
+        updateCodesTable();
+    }
+
+    private void codesSelectionChanged() {
+        if (this.codesTable.getSelectedRow() > 0) {
+            this.selectedRowCodesTable = this.codesTable.getSelectedRow();
+        }
+        System.out.println(this.selectedRowCodesTable);
+        this.codesSlider.setValue(getSelectedCodeInfo().getPramProbability());
+        //updateValues();
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel CodesPanel;

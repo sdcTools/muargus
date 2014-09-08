@@ -57,5 +57,13 @@ public class PramVariableSpec {
         }
         return appliedText;
     }
+    
+    public String getBandwidthText(boolean isBandwidth){
+        if(isBandwidth){
+            return Integer.toString(this.bandwidth);
+        } else {
+            return ""; 
+        }
+    }
 
 }

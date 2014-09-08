@@ -7,7 +7,6 @@ Release 2
 
 2.  variablesTable
     - als een waarde gePRAMt is, maak deze dan rood
-    - verander de listener naar een selectionListener
 3.  codesTable
     - verander de listener naar een selectionListener
 5.  applyButton
@@ -37,6 +36,7 @@ Gedaan:                                                                         
       inclusief of ze gePRAMt zijn met of zonder bandwidth
     - zorg dat bij zowel klikken op een variabele als het gebruik van de pijltjestoetsen de waardes in de codelist verander
       (dit gebeurd nog niet in de oude Mu)
+    - verander de listener naar een selectionListener
 3.  codesTable
     - vul de eerste kolom met de codes van de geselecteerde variabele uit de variablesTable
     - vul indien mogelijk de tweede kolom met de codelist van de geselecteerde variabele uit de variablesTable

@@ -103,6 +103,33 @@ public class PramSpecificationController {
         this.model.setVariablesData(variablesData);
     }
 
+    public void setBandwidth() {
+        for (VariableMu v : this.metadataMu.getVariables()) {
+            if (v.isCategorical()) {
+                int max = v.getCodeInfos().size() - v.getNumberOfMissings();
+                int value;
+                if (max > 5) {
+                    value = 5;
+                } else {
+                    value = max;
+                }
+                getPramVariableSpec(v).setBandwidth(value);
+            }
+
+        }
+    }
+
+    public PramVariableSpec getPramVariableSpec(VariableMu variable) {
+        PramVariableSpec temp = null;
+        for (PramVariableSpec p : this.model.getPramVarSpec()) {
+            if (p.getVariable().equals(variable)) {
+                temp = p;
+                break;
+            }
+        }
+        return temp;
+    }
+
     /**
      *
      * @param variableName
@@ -116,29 +143,28 @@ public class PramSpecificationController {
             }
         }
         System.out.println(variable.getName());
-        
+
         String[][] codesData = null;
         if (variable != null) {
             ArrayList<CodeInfo> codeInfo = variable.getCodeInfos();
             int numberOfCodes = codeInfo.size() - variable.getNumberOfMissings();
             codesData = new String[numberOfCodes][3];
-            
-            for(int i = 0; i < numberOfCodes; i++){
+
+            for (int i = 0; i < numberOfCodes; i++) {
                 codesData[i][0] = codeInfo.get(i).getCode();
                 codesData[i][1] = codeInfo.get(i).getLabel();
                 codesData[i][2] = Integer.toString(codeInfo.get(i).getPramProbability());
             }
-            
-            
+
             //pramVariableSpec.setCodesData(codesData);
         }
         return codesData;
     }
-    
-    public boolean areAllProbabilitiesZero(PramVariableSpec pramVariableSpec){
+
+    public boolean areAllProbabilitiesZero(PramVariableSpec pramVariableSpec) {
         boolean valid = true;
-        for(CodeInfo c: pramVariableSpec.getVariable().getCodeInfos()){
-            if(c.getPramProbability() > 0){
+        for (CodeInfo c : pramVariableSpec.getVariable().getCodeInfos()) {
+            if (c.getPramProbability() > 0) {
                 valid = false;
             }
         }
