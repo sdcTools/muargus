@@ -4,6 +4,8 @@
  */
 package muargus.view;
 
+import java.awt.BorderLayout;
+import muargus.RiskChartBuilder;
 import muargus.controller.RiskSpecificationController;
 import muargus.model.MetadataMu;
 import muargus.model.RiskSpecification;
@@ -34,8 +36,15 @@ public class RiskSpecificationView extends DialogBase {
     public void setMetadataMu(MetadataMu metadataMu) {
         this.metadataMu = metadataMu;
         this.model = this.metadataMu.getCombinations().getRiskSpecification();
-        this.controller.setModel(this.model);
         initializeData();
+    }
+    
+    public void showChart() {
+        if (jPanelChart.getComponentCount() == 0) {
+            RiskChartBuilder builder = new RiskChartBuilder();
+            jPanelChart.setLayout(new BorderLayout());
+            jPanelChart.add(builder.CreateChart(this.model), BorderLayout.CENTER);
+        }
     }
     
     public void initializeData() {

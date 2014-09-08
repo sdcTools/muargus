@@ -56,11 +56,13 @@ public class RiskSpecificationController {
     public void showView() {
         boolean init = this.model.getClasses().isEmpty();
         fillModelHistogramData(false);
-        if (init)
+        if (init) {
             initializeRiskThreshold();
+        }
         
         calculateByRiskThreshold();
         
+        this.view.showChart();
         this.view.setVisible(true);
     }
     
@@ -105,15 +107,7 @@ public class RiskSpecificationController {
         this.view.setVisible(false);
     }
 
-    /**
-     * Fuction for setting the model. This function is used by the view after
-     * setting the model itself
-     *
-     * @param model the model class of the ShowTableCollection screen
-     */
-    public void setModel(RiskSpecification model) {
-        this.model = model;
-    }
+
     
     
 }
