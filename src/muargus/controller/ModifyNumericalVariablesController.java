@@ -3,11 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package muargus.controller;
 
+import java.util.ArrayList;
+import muargus.MuARGUS;
 import muargus.model.MetadataMu;
 import muargus.model.ModifyNumericalVariables;
+import muargus.model.VariableMu;
 import muargus.view.ModifyNumericalVariablesView;
 
 /**
@@ -15,6 +17,7 @@ import muargus.view.ModifyNumericalVariablesView;
  * @author ambargus
  */
 public class ModifyNumericalVariablesController {
+
     ModifyNumericalVariablesView view;
     ModifyNumericalVariables model;
     MetadataMu metadataMu;
@@ -24,8 +27,9 @@ public class ModifyNumericalVariablesController {
         this.view = new ModifyNumericalVariablesView(parentView, true, this);
         this.metadataMu = metadataMu;
         this.view.setMetadataMu(this.metadataMu);
+        this.calculationService = MuARGUS.getCalculationService();
     }
-    
+
     /**
      * Opens the view by setting its visibility to true.
      */
@@ -49,5 +53,34 @@ public class ModifyNumericalVariablesController {
     public void setModel(ModifyNumericalVariables model) {
         this.model = model;
     }
+
+    /**
+     *
+     */
+    public void setVariables() {
+        ArrayList<VariableMu> variables = new ArrayList<>();
+        for (VariableMu v : this.metadataMu.getVariables()) {
+            if (v.isNumeric()) {
+                variables.add(v);
+            }
+        }
+        this.model.setVariables(variables);
+    }
+
+    public void setVariablesData() {
+        if (this.model.getVariablesData() == null) {
+            String variablesData[][] = new String[this.model.getVariables().size()][2];
+            int index = 0;
+            for (VariableMu v : this.model.getVariables()) {
+                variablesData[index][0] = "";
+                variablesData[index][1] = v.getName();
+                index++;
+            }
+            this.model.setVariablesData(variablesData);
+        }
+    }
     
+    public void getMinMax(){
+        //this.calculationService.
+    }
 }

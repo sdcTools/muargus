@@ -14,6 +14,7 @@ Release 2
     - waarschuwing geven als dingen zijn aangepast: wil je dit nog toepassen?
 13. schrijf javadocs
 14. Refactoren (kijken of alles volgens de MVC is gedaan, het weghalen van overbodige code etc.) 
+15. report bijwerken
 
 
 
