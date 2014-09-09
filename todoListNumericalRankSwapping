@@ -1,0 +1,44 @@
+niet behandelde opmerkingen/vragen:
+- Is het een idee om de naamgeving van de buttons te verandern in 'apply' en 'close' ipv 'go' en 'ready'?
+
+Nog te doen:                                                                                                Mee bezig:
+
+Release 2
+
+1.  Basis structuur
+    - namen van de onderdelen veranderen                                                                    
+    - model, view en controller klasse maken en basis methoden maken
+    - klassen koppelen aan de rest van het programma
+2.  variablesTable
+    - vullen met alle numerieke variabelen  
+3.  selectedVariablesTable
+    - laat alle geselecteerde variabelen zien
+4.  addButton
+    - voeg alle geselecteerde variabelen van de variablesTable toe aan de selectedVariablesTable
+5.  removeButton
+    - verwijder alle geselecteerde variabelen in de selectedVariablesTable
+6.  moveUpButton
+    - verplaats de geselecteerde variabelen in selectedVariablesTable 1 plek omhoog
+7.  moveDownButton
+    - verplaats de geselecteerde variabelen in selectedVariablesTable 1 plek omlaag
+8.  rankSwappingPercentageTextField
+    - zet op 15?
+9. progressbar
+    - koppelen aan goButton
+10. goButton
+    - bereken numerical rank swapping via de dll
+11. readyButton
+    - sluit het scherm
+12. schrijf javadocs
+13. Refactoren (kijken of alles volgens de MVC is gedaan, het weghalen van overbodige code etc.) 
+
+
+
+Release 3
+
+Behandelde opmerkingen/vragen:                                                                              Antwoord:
+
+Gedaan:                                                                                                     Door:
+
+
+wishlish:
