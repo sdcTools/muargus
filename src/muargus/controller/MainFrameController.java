@@ -206,8 +206,6 @@ public class MainFrameController {
         PramSpecificationController controller = new PramSpecificationController(
                 this.view, this.metadata);
         controller.showView();
-        showUnsafeCombinations(0);
-
     }
 
     /**

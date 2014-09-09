@@ -78,14 +78,16 @@ public class PramSpecificationController {
      *
      */
     public void makePramVariableSpecs() {
-        ArrayList<PramVariableSpec> pramVarSpec = new ArrayList<>();
-        for (VariableMu v : this.metadataMu.getVariables()) {
-            if (v.isCategorical()) {
-                PramVariableSpec p = new PramVariableSpec(v);
-                pramVarSpec.add(p);
+        if (this.model.getPramVarSpec() == null) {
+            ArrayList<PramVariableSpec> pramVarSpec = new ArrayList<>();
+            for (VariableMu v : this.metadataMu.getVariables()) {
+                if (v.isCategorical()) {
+                    PramVariableSpec p = new PramVariableSpec(v);
+                    pramVarSpec.add(p);
+                }
             }
+            this.model.setPramVarSpec(pramVarSpec);
         }
-        this.model.setPramVarSpec(pramVarSpec);
     }
 
     /**
@@ -109,7 +111,7 @@ public class PramSpecificationController {
     }
 
     /**
-     * 
+     *
      */
     public void setBandwidth() {
         for (VariableMu v : this.metadataMu.getVariables()) {
@@ -128,9 +130,9 @@ public class PramSpecificationController {
     }
 
     /**
-     * 
+     *
      * @param variable
-     * @return 
+     * @return
      */
     public PramVariableSpec getPramVariableSpec(VariableMu variable) {
         PramVariableSpec temp = null;
@@ -155,7 +157,6 @@ public class PramSpecificationController {
                 variable = v;
             }
         }
-        System.out.println(variable.getName());
 
         String[][] codesData = null;
         if (variable != null) {
@@ -173,9 +174,9 @@ public class PramSpecificationController {
     }
 
     /**
-     * 
+     *
      * @param pramVariableSpec
-     * @return 
+     * @return
      */
     public boolean areAllProbabilitiesZero(PramVariableSpec pramVariableSpec) {
         boolean valid = true;
@@ -186,19 +187,25 @@ public class PramSpecificationController {
         }
         return valid;
     }
-    
+
+    /**
+     *
+     * @param pramVariableSpec
+     */
     public void apply(PramVariableSpec pramVariableSpec) {
         try {
-            //System.out.println("apply: " + pramVariableSpec.getVariable().getName());
             this.calculationService.setPramVariable(pramVariableSpec);
         } catch (ArgusException ex) {
             Logger.getLogger(PramSpecificationController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
+    /**
+     *
+     * @param pramVariableSpec
+     */
     public void undo(PramVariableSpec pramVariableSpec) {
         try {
-            //System.out.println("apply: " + pramVariableSpec.getVariable().getName());
             this.calculationService.undoSetPramVariable(pramVariableSpec);
         } catch (ArgusException ex) {
             Logger.getLogger(PramSpecificationController.class.getName()).log(Level.SEVERE, null, ex);

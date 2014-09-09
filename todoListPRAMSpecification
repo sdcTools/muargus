@@ -4,13 +4,10 @@ niet behandelde opmerkingen/vragen:
 Nog te doen:                                                                                                Mee bezig:
 
 Release 2
+    - fix dll
 
 2.  variablesTable
     - als een waarde gePRAMt is, maak deze dan rood
-5.  applyButton
-    - bereken pram met dll
-6.  undoButton
-    - undo pram met dll 
 12. closebutton
     - bereken pram met dll of gebeurd dit ergens anders?
     - waarschuwing geven als dingen zijn aangepast: wil je dit nog toepassen?
@@ -48,8 +45,10 @@ Gedaan:                                                                         
     - zet X in de eerste kolom bij de geselecteerde variabele van de variablesTable
     - alleen mogelijk als ten minste 1 probability groter is dan 0, zo niet geef waarschuwing
     - zet, als bandwithCheckBox is aangevinkt, in de tweede kolom de waarde van de bandwithComboBox
+    - bereken pram met dll
 6.  undoButton
     - undo PRAM voor de geselecteerde rij van variablesTable
+    - undo pram met dll 
 7.  PRAM options
     - kan dit uberhaupt veranderen? --> staat nu standaard invisible
 8.  defaultProbabilityComboBox

@@ -22,7 +22,6 @@ public class CodeInfo {
     public CodeInfo(String code, boolean isMissing) {
         this.code = code;
         this.isMissing = isMissing;
-        this.pramProbability = 0;
     }
     
     public void setLabel(String label) {
@@ -71,6 +70,9 @@ public class CodeInfo {
     }
 
     public int getPramProbability() {
+        if(pramProbability < 0){
+            pramProbability = 0;
+        }
         return pramProbability;
     }
 

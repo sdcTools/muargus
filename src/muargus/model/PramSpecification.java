@@ -22,7 +22,6 @@ public class PramSpecification {
     private String[][] variablesData;
     
     public PramSpecification() {
-        
     }
 
     public boolean useBandwidth() {

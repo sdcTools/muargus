@@ -496,8 +496,7 @@ public class PramSpecificationView extends DialogBase {
     private void codesSliderStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_codesSliderStateChanged
         for (VariableMu v : this.metadataMu.getVariables()) {
             if (getSelectedPramVariableSpec().getVariable().equals(v)) {
-                VariableMu variable = v;
-                getSelectedCodeInfo(variable).setPramProbability(this.codesSlider.getValue());
+                getSelectedCodeInfo(v).setPramProbability(this.codesSlider.getValue());
                 break;
             }
         }
@@ -506,7 +505,10 @@ public class PramSpecificationView extends DialogBase {
     }//GEN-LAST:event_codesSliderStateChanged
 
     private void defaultProbabilityButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_defaultProbabilityButtonActionPerformed
-        int probability = this.defaultProbabilityComboBox.getSelectedIndex();
+        setProbability(this.defaultProbabilityComboBox.getSelectedIndex());
+    }//GEN-LAST:event_defaultProbabilityButtonActionPerformed
+
+    public void setProbability(int probability){
         for (CodeInfo c : getSelectedPramVariableSpec().getVariable().getCodeInfos()) {
             c.setPramProbability(probability);
         }
@@ -515,8 +517,8 @@ public class PramSpecificationView extends DialogBase {
             this.codesTable.setValueAt(Integer.toString(probability), i, 2);
         }
         this.codesSlider.setValue(getSelectedCodeInfo().getPramProbability());
-    }//GEN-LAST:event_defaultProbabilityButtonActionPerformed
-
+    }
+    
     private void undoButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_undoButtonActionPerformed
         if (getSelectedPramVariableSpec().isApplied()) {
             getSelectedPramVariableSpec().setApplied(false);
@@ -524,7 +526,8 @@ public class PramSpecificationView extends DialogBase {
             int selected = this.variablesTable.getSelectedRow();
             this.variablesTable.setValueAt("", selected, 0);
             this.variablesTable.setValueAt("", selected, 1);
-            this.controller.undo(getSelectedPramVariableSpec());
+            setProbability(0);
+            //this.controller.undo(getSelectedPramVariableSpec());
         }
     }//GEN-LAST:event_undoButtonActionPerformed
 

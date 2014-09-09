@@ -83,7 +83,7 @@ public class Combinations {
     public PramSpecification getPramSpecification() {
         return pramSpecification;
     }
-
+    
     public void createPramSpecification() {
         this.pramSpecification = new PramSpecification();
     }
