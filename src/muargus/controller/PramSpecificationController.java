@@ -174,7 +174,7 @@ public class PramSpecificationController {
     }
 
     /**
-     *
+     * 
      * @param pramVariableSpec
      * @return
      */
@@ -189,8 +189,12 @@ public class PramSpecificationController {
     }
 
     /**
+     * Apply the pram calculation. This method calls the external dll to apply
+     * the PRAM-calculations
      *
-     * @param pramVariableSpec
+     * @param pramVariableSpec instance of the pramVariableSpec class of one
+     * variable containing the specific information necessary for
+     * PRAM-calculations
      */
     public void apply(PramVariableSpec pramVariableSpec) {
         try {
@@ -201,8 +205,12 @@ public class PramSpecificationController {
     }
 
     /**
+     * Undo the pram calculation. This method calls the external dll to undo the
+     * PRAM-calculations
      *
-     * @param pramVariableSpec
+     * @param pramVariableSpec instance of the pramVariableSpec class of one
+     * variable containing the specific information necessary for
+     * PRAM-calculations
      */
     public void undo(PramVariableSpec pramVariableSpec) {
         try {

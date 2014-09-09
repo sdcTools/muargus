@@ -1,0 +1,44 @@
+niet behandelde opmerkingen/vragen:
+- Is het een idee om een close button toe te voegen en de ok button te veranderen in een apply button?
+
+Nog te doen:                                                                                                Mee bezig:
+
+Release 2
+
+1.  Basis structuur
+    - namen van de onderdelen veranderen                                                                    
+    - model, view en controller klasse maken en basis methoden maken
+    - klassen koppelen aan de rest van het programma
+    - minimum en maximum value label toevoegen
+2.  variablesTable
+    - vullen met alle numerieke variabelen  
+    - zorg dat bij zowel klikken op een variabele als het gebruik van de pijltjestoetsen de waardes veranderen
+      (dit gebeurd nog niet in de oude Mu) --> gebruik een selectionListener
+3.  maximumTextField & minimumTextField
+    - vul de waardes met de maximum/minimum waarde van de geselecteerde numerieke variabele uit de variablesTable
+4.  bottomValueTextField & topValueTextField
+    - 
+5.  ReplacentTextField
+    -
+6.  RoundingBaseTextField
+    -
+7.  WeightNoisePanel
+    - zet alleen enabled als geselecteerde variabele een weightVariabele is
+8.  WeighNoiseTextField
+    -
+9.  okButton
+    - bereken top/bottom coding met dll
+    - sluit scherm
+10. schrijf javadocs
+11. Refactoren (kijken of alles volgens de MVC is gedaan, het weghalen van overbodige code etc.) 
+
+
+
+Release 3
+
+Behandelde opmerkingen/vragen:                                                                              Antwoord:
+
+Gedaan:                                                                                                     Door:
+
+
+wishlish:
