@@ -52,7 +52,6 @@ public class VariableMu {
     private boolean weight = false;
     private boolean house_id = false;
     private boolean household = false;
-    private boolean other = true;
     private String relatedVariableName = null;
     private VariableMu relatedVariable = null;
     
@@ -293,11 +292,15 @@ public class VariableMu {
     }
 
     public boolean isOther() {
-        return other;
+        return !this.house_id && !this.household && !this.weight;
     }
 
     public void setOther(boolean other) {
-        this.other = other;
+        if (other) {
+            this.house_id = false;
+            this.household = false;
+            this.weight = false;
+        }
     }
     
         public int getnOfSuppressions() {
