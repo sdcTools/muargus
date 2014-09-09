@@ -478,62 +478,82 @@ public class CalculationService {
         return (recode != null && (recode.isRecoded() || recode.isTruncated())) ? recode.getCodeListFile() : "";
     }
     
-    public ArrayList<String> getUnsafeCombinations() {
+    public ArrayList<String> getVariableInfo() {
         ArrayList<String> missingCodelists = new ArrayList<>();
         Combinations model = metadata.getCombinations();
         boolean hasRecode = (model.getGlobalRecode() != null);
         model.clearUnsafeCombinations();
-        for (int varIndex = 0; varIndex < model.getVariablesInTables().size(); varIndex++) {
-            VariableMu variable = model.getVariablesInTables().get(varIndex);
-
-            HashMap<String, String> codelist = new HashMap<>();
-            String codelistFile = "";
-            if (hasRecode) {
-                codelistFile = getRecodeCodelistFile(model, variable);
-            }
-            if ("".equals(codelistFile) && variable.isCodelist()) {
-                codelistFile = variable.getCodeListFile();
-            }
-            if (!"".equals(codelistFile)) {
-                try {
-                    readCodelist(codelist, codelistFile, metadata);
+        for (int varIndex = 0; varIndex < getVariables().size(); varIndex++) {
+            VariableMu variable = getVariables().get(varIndex);
+            if (variable.isCategorical()) {
+                HashMap<String, String> codelist = new HashMap<>();
+                String codelistFile = "";
+                if (hasRecode) {
+                    codelistFile = getRecodeCodelistFile(model, variable);
                 }
-                catch (ArgusException ex) {
-                    missingCodelists.add(ex.getMessage());
+                String message = getCodelist(variable, codelistFile, codelist);
+                if (message != null) {
+                    missingCodelists.add(message);
                 }
-            }
-
-            int[] nDims = new int[]{0};
-            int[] unsafeCount = new int[model.getMaxDimsInTables()];
             
-            boolean result = c.UnsafeVariable(getVariables().indexOf(variable) + 1, nDims, unsafeCount);
-            //UnsafeInfo unsafe = new UnsafeInfo();
-            model.setUnsafeCombinations(variable, unsafeCount, nDims[0]);
-            //model.setUnsafe(variable, unsafeCount);
+                if (model.getVariablesInTables().contains(variable)) {
+                    
+                    int[] nDims = new int[]{0};
+                    int[] unsafeCount = new int[model.getMaxDimsInTables()];
 
-            int[] nCodes = new int[]{0};
-            result = c.UnsafeVariablePrepare(varIndex + 1, nCodes);
-            int[] isMissing = new int[]{0};
-            int[] freq = new int[]{0};
-            String[] code = new String[1];
-            variable.clearCodeInfos();
-            for (int codeIndex = 0; codeIndex < nCodes[0]; codeIndex++) {
-                result = c.UnsafeVariableCodes(varIndex + 1,
-                        codeIndex + 1,
-                        isMissing,
-                        freq,
-                        code,
-                        nDims,
-                        unsafeCount);
-                CodeInfo codeInfo = new CodeInfo(code[0], isMissing[0] != 0);
-                if (codelist.containsKey(code[0].trim())) {
-                    codeInfo.setLabel(codelist.get(code[0].trim()));
+                    boolean result = c.UnsafeVariable(varIndex + 1, nDims, unsafeCount);
+                    //UnsafeInfo unsafe = new UnsafeInfo();
+                    model.setUnsafeCombinations(variable, unsafeCount, nDims[0]);
+                    //model.setUnsafe(variable, unsafeCount);
+
+                    int[] nCodes = new int[]{0};
+                    result = c.UnsafeVariablePrepare(varIndex + 1, nCodes);
+                    int[] isMissing = new int[]{0};
+                    int[] freq = new int[]{0};
+                    String[] code = new String[1];
+                    variable.clearCodeInfos();
+                    for (int codeIndex = 0; codeIndex < nCodes[0]; codeIndex++) {
+                        result = c.UnsafeVariableCodes(varIndex + 1,
+                                codeIndex + 1,
+                                isMissing,
+                                freq,
+                                code,
+                                nDims,
+                                unsafeCount);
+                        CodeInfo codeInfo = new CodeInfo(code[0], isMissing[0] != 0);
+                        if (codelist.containsKey(code[0].trim())) {
+                            codeInfo.setLabel(codelist.get(code[0].trim()));
+                        }
+                        codeInfo.setFrequency(freq[0]);
+                        codeInfo.setUnsafeCombinations(nDims[0], unsafeCount);
+                        variable.addCodeInfo(codeInfo);
+                    }
+                    result = c.UnsafeVariableClose(varIndex + 1);
                 }
-                codeInfo.setFrequency(freq[0]);
-                codeInfo.setUnsafeCombinations(nDims[0], unsafeCount);
-                variable.addCodeInfo(codeInfo);
+                else {
+                    variable.clearCodeInfos();
+                    int codeIndex = 0;
+                    while (true) {
+                        codeIndex++;
+                        String[] code = new String[1];
+                        int[] pramPerc = new int[1];
+                        boolean result = c.GetVarCode(varIndex + 1, codeIndex, code, pramPerc); 
+                        if (!result)
+                            break;
+                        CodeInfo codeInfo = new CodeInfo(code[0], false);
+                         if (codelist.containsKey(code[0].trim())) {
+                            codeInfo.setLabel(codelist.get(code[0].trim()));
+                        }
+                        variable.addCodeInfo(codeInfo);
+                    }
+                    for (int i=0; i < 2; i++) {
+                        if (!"".equals(variable.getMissing(i))) {
+                            CodeInfo codeInfo = new CodeInfo(variable.getMissing(i), true);
+                            variable.addCodeInfo(codeInfo);
+                        }
+                    }
+                }
             }
-            result = c.UnsafeVariableClose(varIndex + 1);
         }
         return missingCodelists;
     }
@@ -620,7 +640,21 @@ public class CalculationService {
         }
         return ksi[0];
     }
-            
+
+    private String getCodelist(VariableMu variable, String codelistFile, HashMap<String, String> codelist) {
+        if ("".equals(codelistFile) && variable.isCodelist()) {
+            codelistFile = variable.getCodeListFile();
+        }
+        if (!"".equals(codelistFile)) {
+            try {
+                readCodelist(codelist, codelistFile, metadata);
+            }
+            catch (ArgusException ex) {
+                return ex.getMessage();
+            }
+        }
+        return null;
+    }
             //TODO: to other class
     private void readCodelist(HashMap<String, String> codelist, String path, MetadataMu metadata) throws ArgusException {
         BufferedReader reader = null;
