@@ -410,7 +410,7 @@ public class CalculationService {
     private int[] getVarIndices(TableMu table, Combinations model) {
         int[] indices = new int[table.getVariables().size()];
         for (int index = 0; index < indices.length; index++) {
-            indices[index] = 1 + model.getVariablesInTables().indexOf(table.getVariables().get(index));
+            indices[index] = 1 + getVariables().indexOf(table.getVariables().get(index));
         }
         return indices;
     }
@@ -505,7 +505,8 @@ public class CalculationService {
 
             int[] nDims = new int[]{0};
             int[] unsafeCount = new int[model.getMaxDimsInTables()];
-            boolean result = c.UnsafeVariable(varIndex + 1, nDims, unsafeCount);
+            
+            boolean result = c.UnsafeVariable(getVariables().indexOf(variable) + 1, nDims, unsafeCount);
             //UnsafeInfo unsafe = new UnsafeInfo();
             model.setUnsafeCombinations(variable, unsafeCount, nDims[0]);
             //model.setUnsafe(variable, unsafeCount);

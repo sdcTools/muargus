@@ -95,8 +95,9 @@ public class MainFrameController {
         view.enableAction(Action.ShowTableCollection, tablesCalculated);
         view.enableAction(Action.PramSpecification, tablesCalculated);
         view.enableAction(Action.IndividualRiskSpecification, 
-                tablesCalculated && metadata.getCombinations().isRiskModel());
-        view.enableAction(Action.HouseholdRiskSpecification, tablesCalculated);
+                tablesCalculated && metadata.getCombinations().isRiskModel() && !metadata.isHouseholdData());
+        view.enableAction(Action.HouseholdRiskSpecification, 
+                tablesCalculated && metadata.getCombinations().isRiskModel() && metadata.isHouseholdData());
         view.enableAction(Action.ModifyNumericalVariables, tablesCalculated);
         view.enableAction(Action.NumericalMicroAggregation, tablesCalculated);
         view.enableAction(Action.NumericalRankSwapping, tablesCalculated);
@@ -211,7 +212,7 @@ public class MainFrameController {
     /**
      *
      */
-    public void individualRiskSpecification() {
+    private void riskSpecification(boolean household) {
         if (this.metadata.getCombinations().getRiskSpecification() == null) {
             this.metadata.getCombinations().createRiskSpecification();
         }
@@ -225,7 +226,11 @@ public class MainFrameController {
      *
      */
     public void householdRiskSpecification() {
-        individualRiskSpecification();
+        riskSpecification(true);
+    }
+
+    public void individualRiskSpecification() {
+        riskSpecification(false);
     }
 
     /**
