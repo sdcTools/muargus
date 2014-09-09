@@ -6,6 +6,7 @@
 
 package muargus.controller;
 
+import argus.model.ArgusException;
 import argus.utils.StrUtils;
 import java.util.ArrayList;
 import muargus.MuARGUS;
@@ -22,6 +23,8 @@ import muargus.view.TablePickView;
  * @author ambargus
  */
 public class RiskSpecificationController {
+    
+    private final int MAX_ITERATIONS = 10;
     
     private RiskSpecificationView view;
     private RiskSpecification model;
@@ -122,8 +125,38 @@ public class RiskSpecificationController {
         
     }
     
-    public void calculateByReidentThreshold() {
-        //TODO: more complicated because of iterations
+    public void calculateByReidentThreshold(double soughtValue, int nDecimals) throws ArgusException {
+        if (soughtValue > this.model.getMaxReidentRate() ||
+                soughtValue < 0) {
+            throw new ArgusException("Re ident rate threshold should be between 0 and the maximum rate");
+        }
+        double r0 = 0;
+        double r1 = this.model.getMaxRisk();
+        double t0 = 0;
+        double t1 = this.model.getMaxReidentRate();
+        
+        double value = this.model.getReidentRateThreshold();
+        double risk = this.model.getRiskThreshold();
+        int iteration = 0;
+        double epsilon = Math.exp(-Math.log(10)*nDecimals);
+        while (iteration < MAX_ITERATIONS) {
+            if (Math.abs(value - soughtValue) < epsilon)
+                break;
+            value = this.calculationService.calculateReidentRate(this.model.getRiskTable(), risk);
+            if (value > soughtValue) {
+                r1 = risk;
+                risk = r0 + (risk-r0) * (soughtValue - t0)/(value - t0);
+                t1 = value;
+            }
+            else {
+                r0 = risk;
+                risk = r1 - (r1 - risk) * (t1 - soughtValue)/(t1 - value);
+                t0 = value;
+            }
+            iteration++;
+        }
+        this.model.setReidentRateThreshold(soughtValue);
+        this.model.setRiskThreshold(risk);
     }
     
     
