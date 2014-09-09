@@ -4,7 +4,10 @@
  */
 package muargus.view;
 
-import javax.swing.SpinnerNumberModel;
+import javax.swing.JOptionPane;
+import javax.swing.ListSelectionModel;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import muargus.controller.PramSpecificationController;
@@ -23,10 +26,10 @@ public class PramSpecificationView extends DialogBase {
     MetadataMu metadataMu;
     PramSpecificationController controller;
     PramSpecification model;
-    private TableModel variablesTableModel;
     private TableModel codesTableModel;
     private final int[] variablesColumnWidth = {20, 30, 80};
     private final int[] codesColumnWidth = {30, 70, 30};
+    private int selectedRow;
 
     /**
      *
@@ -39,6 +42,8 @@ public class PramSpecificationView extends DialogBase {
         initComponents();
         this.setLocationRelativeTo(null);
         this.controller = controller;
+        this.variablesTable.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        this.codesTable.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     }
 
     /**
@@ -57,78 +62,44 @@ public class PramSpecificationView extends DialogBase {
      */
     public void initializeData() {
         this.pramOptionsPanel.setVisible(false); // this option is available for future options using global recode
-        this.bandwidthSpinner.setEnabled(this.bandwidthCheckBox.isSelected());
+        this.bandwidthComboBox.setEnabled(this.bandwidthCheckBox.isSelected());
         this.controller.makePramVariableSpecs();
-        
-        for (VariableMu v : this.metadataMu.getVariables()) {
-            if(v.isCategorical()){
-            int max = v.getCodeInfos().size() - v.getNumberOfMissings();
-            int value;
-            if (max > 5) {
-                value = 5;
-            } else {
-                value = max;
-            }
-            System.out.println(value);
-            getPramVariableSpec(v).setBandwidth(value);
-            }
+        this.controller.setBandwidth();
 
-        }
-        updateValues();
-
-    }
-
-    public PramVariableSpec getPramVariableSpec(VariableMu variable) {
-        PramVariableSpec temp = null;
-        for (PramVariableSpec p : this.model.getPramVarSpec()) {
-            if (p.getVariable().equals(variable)) {
-                temp = p;
-                break;
-            }
-        }
-        return temp;
-    }
-
-    /**
-     *
-     */
-    public void updateValues() {
-        updateVariablesTable();
-        updateCodesTable();
+        makeVariablesTable();
+        variablesSelectionChanged();
         this.codesSlider.setValue(getSelectedCodeInfo().getPramProbability());
-
-        int value = getSelectedPramVariableSpec().getBandwidth();
-        int max = getSelectedPramVariableSpec().getVariable().getCodeInfos().size();
-        System.out.println("value = " + value + "\nmax = " + max);
-        this.bandwidthSpinner.setModel(new SpinnerNumberModel(value, 1, max, 1));
-        //this.bandwidthSpinner.set
     }
 
     /**
      *
      */
-    public void updateVariablesTable() {
+    public void makeVariablesTable() {
         this.controller.makeVariablesData();
-        int selectedRow;
-        if (this.variablesTable.getSelectedRowCount() > 0) {
-            selectedRow = this.variablesTable.getSelectedRow();
-        } else {
-            selectedRow = 0;
-        }
 
-        this.variablesTableModel = new DefaultTableModel(this.model.getVariablesData(), this.model.getVariablesColumnNames()) {
+        TableModel variablesTableModel = new DefaultTableModel(this.model.getVariablesData(), this.model.getVariablesColumnNames()) {
             @Override
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return false;
             }
         };
-        this.variablesTable.setModel(this.variablesTableModel);
+        this.variablesTable.setModel(variablesTableModel);
 
         for (int i = 0; i < this.variablesColumnWidth.length; i++) {
             this.variablesTable.getColumnModel().getColumn(i).setMinWidth(this.variablesColumnWidth[i]);
             this.variablesTable.getColumnModel().getColumn(i).setPreferredWidth(this.variablesColumnWidth[i]);
         }
-        this.variablesTable.getSelectionModel().setSelectionInterval(selectedRow, selectedRow);
+
+        this.variablesTable.getSelectionModel().setSelectionInterval(0, 0);
+        this.variablesTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+
+            @Override
+            public void valueChanged(ListSelectionEvent lse) {
+                if (!lse.getValueIsAdjusting()) {
+                    variablesSelectionChanged();
+                }
+            }
+        });
     }
 
     /**
@@ -145,33 +116,31 @@ public class PramSpecificationView extends DialogBase {
      * @return
      */
     public CodeInfo getSelectedCodeInfo() {
-        return getSelectedPramVariableSpec().getVariable().getCodeInfos().get(this.codesTable.getSelectedRow());
+        return getSelectedPramVariableSpec().getVariable().getCodeInfos().get(this.selectedRow);
     }
 
     public CodeInfo getSelectedCodeInfo(VariableMu variable) {
-        return variable.getCodeInfos().get(this.codesTable.getSelectedRow());
+        return variable.getCodeInfos().get(this.selectedRow);
     }
 
     /**
      *
      */
     public void updateCodesTable() {
-        int selectedRow;
         if (this.codesTable.getSelectedRowCount() > 0) {
             selectedRow = this.codesTable.getSelectedRow();
         } else {
             selectedRow = 0;
         }
 
-        this.controller.makeCodesData(getSelectedPramVariableSpec().getVariable().getName());
+        String[][] codesData = this.controller.getCodesData(getSelectedPramVariableSpec().getVariable().getName());
 
-        this.codesTableModel = new DefaultTableModel(
-                getSelectedPramVariableSpec().getCodesData(), this.model.getCodesColumnNames()) {
-                    @Override
-                    public boolean isCellEditable(int rowIndex, int columnIndex) {
-                        return false;
-                    }
-                };
+        this.codesTableModel = new DefaultTableModel(codesData, this.model.getCodesColumnNames()) {
+            @Override
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return false;
+            }
+        };
         this.codesTable.setModel(this.codesTableModel);
 
         for (int i = 0; i < this.codesColumnWidth.length; i++) {
@@ -179,6 +148,16 @@ public class PramSpecificationView extends DialogBase {
             this.codesTable.getColumnModel().getColumn(i).setPreferredWidth(this.codesColumnWidth[i]);
         }
         this.codesTable.getSelectionModel().setSelectionInterval(selectedRow, selectedRow);
+        
+        this.codesTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+
+            @Override
+            public void valueChanged(ListSelectionEvent lse) {
+                if (!lse.getValueIsAdjusting()) {
+                    codesSelectionChanged();
+                }
+            }
+        });
     }
 
     /**
@@ -205,12 +184,10 @@ public class PramSpecificationView extends DialogBase {
         individualChancesRadioButton = new javax.swing.JRadioButton();
         globalRecodeRadioButton = new javax.swing.JRadioButton();
         defaultProbabilityPanel = new javax.swing.JPanel();
-        defaultProbabilitySpinner = new javax.swing.JSpinner();
         defaultProbabilityButton = new javax.swing.JButton();
         defaultProbabilityComboBox = new javax.swing.JComboBox();
         bandwidthPanel = new javax.swing.JPanel();
         bandwidthCheckBox = new javax.swing.JCheckBox();
-        bandwidthSpinner = new javax.swing.JSpinner();
         bandwidthComboBox = new javax.swing.JComboBox();
         closeButton = new javax.swing.JButton();
 
@@ -234,16 +211,6 @@ public class PramSpecificationView extends DialogBase {
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
-            }
-        });
-        variablesTable.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                variablesTableMouseClicked(evt);
-            }
-        });
-        variablesTable.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                variablesTableKeyReleased(evt);
             }
         });
         variablesScrollPane.setViewportView(variablesTable);
@@ -284,16 +251,6 @@ public class PramSpecificationView extends DialogBase {
                 "Code", "Label", "Prob."
             }
         ));
-        codesTable.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                codesTableMouseClicked(evt);
-            }
-        });
-        codesTable.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                codesTableKeyReleased(evt);
-            }
-        });
         codesScrollPane.setViewportView(codesTable);
         if (codesTable.getColumnModel().getColumnCount() > 0) {
             codesTable.getColumnModel().getColumn(0).setPreferredWidth(12);
@@ -340,6 +297,11 @@ public class PramSpecificationView extends DialogBase {
         });
 
         undoButton.setText("Undo");
+        undoButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                undoButtonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout MiddlePanelLayout = new javax.swing.GroupLayout(MiddlePanel);
         MiddlePanel.setLayout(MiddlePanelLayout);
@@ -357,7 +319,7 @@ public class PramSpecificationView extends DialogBase {
             .addGroup(MiddlePanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(CodesPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 14, Short.MAX_VALUE)
                 .addGroup(MiddlePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(applyButton)
                     .addComponent(undoButton))
@@ -394,8 +356,6 @@ public class PramSpecificationView extends DialogBase {
 
         defaultProbabilityPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Default Probability"));
 
-        defaultProbabilitySpinner.setModel(new javax.swing.SpinnerNumberModel(80, 0, 100, 1));
-
         defaultProbabilityButton.setText("<html>\nSet all codes to <br>\n<center>default</center>");
         defaultProbabilityButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -417,18 +377,15 @@ public class PramSpecificationView extends DialogBase {
             defaultProbabilityPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(defaultProbabilityPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(defaultProbabilityPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(defaultProbabilitySpinner)
-                    .addComponent(defaultProbabilityButton)
-                    .addComponent(defaultProbabilityComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(defaultProbabilityPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(defaultProbabilityComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(defaultProbabilityButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         defaultProbabilityPanelLayout.setVerticalGroup(
             defaultProbabilityPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(defaultProbabilityPanelLayout.createSequentialGroup()
                 .addComponent(defaultProbabilityComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(defaultProbabilitySpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(defaultProbabilityButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
@@ -442,8 +399,6 @@ public class PramSpecificationView extends DialogBase {
             }
         });
 
-        bandwidthSpinner.setModel(new javax.swing.SpinnerNumberModel(Integer.valueOf(5), Integer.valueOf(1), null, Integer.valueOf(1)));
-
         bandwidthComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         javax.swing.GroupLayout bandwidthPanelLayout = new javax.swing.GroupLayout(bandwidthPanel);
@@ -453,10 +408,9 @@ public class PramSpecificationView extends DialogBase {
             .addGroup(bandwidthPanelLayout.createSequentialGroup()
                 .addComponent(bandwidthCheckBox)
                 .addGap(0, 28, Short.MAX_VALUE))
-            .addGroup(bandwidthPanelLayout.createSequentialGroup()
-                .addComponent(bandwidthComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(bandwidthSpinner)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, bandwidthPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(bandwidthComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
         bandwidthPanelLayout.setVerticalGroup(
@@ -464,9 +418,7 @@ public class PramSpecificationView extends DialogBase {
             .addGroup(bandwidthPanelLayout.createSequentialGroup()
                 .addComponent(bandwidthCheckBox)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(bandwidthPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(bandwidthSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(bandwidthComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(bandwidthComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 19, Short.MAX_VALUE))
         );
 
@@ -488,12 +440,13 @@ public class PramSpecificationView extends DialogBase {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(pramOptionsPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(defaultProbabilityPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(bandwidthPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(closeButton)
-                        .addContainerGap())))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(pramOptionsPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(defaultProbabilityPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                            .addComponent(closeButton)
+                            .addContainerGap()))
+                    .addComponent(bandwidthPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -506,9 +459,9 @@ public class PramSpecificationView extends DialogBase {
                         .addComponent(pramOptionsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(defaultProbabilityPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(bandwidthPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 105, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(closeButton)
                         .addContainerGap())))
         );
@@ -521,23 +474,21 @@ public class PramSpecificationView extends DialogBase {
     }//GEN-LAST:event_closeButtonActionPerformed
 
     private void bandwidthCheckBoxStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_bandwidthCheckBoxStateChanged
-        this.bandwidthSpinner.setEnabled(this.bandwidthCheckBox.isSelected());
+        this.bandwidthComboBox.setEnabled(this.bandwidthCheckBox.isSelected());
         this.model.setUseBandwidth(this.bandwidthCheckBox.isSelected());
     }//GEN-LAST:event_bandwidthCheckBoxStateChanged
 
-    private void variablesTableKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_variablesTableKeyReleased
-        this.codesTable.getSelectionModel().setSelectionInterval(0, 0);
-        updateValues();
-    }//GEN-LAST:event_variablesTableKeyReleased
-
-    private void variablesTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_variablesTableMouseClicked
-        this.codesTable.getSelectionModel().setSelectionInterval(0, 0);
-        updateValues();
-    }//GEN-LAST:event_variablesTableMouseClicked
-
     private void applyButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_applyButtonActionPerformed
-        getSelectedPramVariableSpec().setApplied(!getSelectedPramVariableSpec().isApplied());
-        updateValues();
+        if (!this.controller.areAllProbabilitiesZero(getSelectedPramVariableSpec())) {
+            getSelectedPramVariableSpec().setApplied(true);
+            getSelectedPramVariableSpec().setBandwidth(Integer.parseInt((String) this.bandwidthComboBox.getSelectedItem()));
+            int selected = this.variablesTable.getSelectedRow();
+            this.variablesTable.setValueAt(getSelectedPramVariableSpec().getAppliedText(), selected, 0);
+            this.variablesTable.setValueAt(getSelectedPramVariableSpec().getBandwidthText(this.model.useBandwidth()), selected, 1);
+        } else {
+            String message = "All probabilities are zero";
+            JOptionPane.showMessageDialog(null, message);
+        }
     }//GEN-LAST:event_applyButtonActionPerformed
 
     private void codesSliderStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_codesSliderStateChanged
@@ -549,25 +500,53 @@ public class PramSpecificationView extends DialogBase {
             }
         }
 
-        updateValues();
+        this.codesTable.setValueAt(this.codesSlider.getValue(), this.codesTable.getSelectedRow(), 2);
     }//GEN-LAST:event_codesSliderStateChanged
-
-    private void codesTableKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_codesTableKeyReleased
-        updateValues();
-    }//GEN-LAST:event_codesTableKeyReleased
-
-    private void codesTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_codesTableMouseClicked
-        updateValues();
-    }//GEN-LAST:event_codesTableMouseClicked
 
     private void defaultProbabilityButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_defaultProbabilityButtonActionPerformed
         int probability = this.defaultProbabilityComboBox.getSelectedIndex();
         for (CodeInfo c : getSelectedPramVariableSpec().getVariable().getCodeInfos()) {
             c.setPramProbability(probability);
         }
-        updateValues();
+
+        for (int i = 0; i < this.codesTableModel.getRowCount(); i++) {
+            this.codesTable.setValueAt(Integer.toString(probability), i, 2);
+        }
+        this.codesSlider.setValue(getSelectedCodeInfo().getPramProbability());
     }//GEN-LAST:event_defaultProbabilityButtonActionPerformed
 
+    private void undoButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_undoButtonActionPerformed
+        getSelectedPramVariableSpec().setApplied(false);
+        int selectedRow = this.variablesTable.getSelectedRow();
+        this.variablesTable.setValueAt("", selectedRow, 0);
+        this.variablesTable.setValueAt("", selectedRow, 1);
+    }//GEN-LAST:event_undoButtonActionPerformed
+
+    public void variablesSelectionChanged() {
+        this.codesTable.getSelectionModel().setSelectionInterval(0, 0);
+        this.selectedRow = 0;
+        int value = getSelectedPramVariableSpec().getBandwidth();
+        int max = getSelectedPramVariableSpec().getVariable().getCodeInfos().size() - getSelectedPramVariableSpec().getVariable().getNumberOfMissings();
+        if (value > max) {
+            value = max;
+        }
+        String[] numbers = new String[max];
+        for (int i = 0; i < numbers.length; i++) {
+            numbers[i] = Integer.toString(i + 1);
+        }
+        this.bandwidthComboBox.setModel(new javax.swing.DefaultComboBoxModel(numbers));
+        this.bandwidthComboBox.getModel().setSelectedItem(numbers[value - 1]);
+        this.codesSlider.setValue(getSelectedCodeInfo().getPramProbability());
+
+        updateCodesTable();
+    }
+
+    private void codesSelectionChanged() {
+        if (this.codesTable.getSelectedRow() >= 0) {
+            this.selectedRow = this.codesTable.getSelectedRow();
+        }
+        this.codesSlider.setValue(getSelectedCodeInfo().getPramProbability());
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel CodesPanel;
@@ -576,7 +555,6 @@ public class PramSpecificationView extends DialogBase {
     private javax.swing.JCheckBox bandwidthCheckBox;
     private javax.swing.JComboBox bandwidthComboBox;
     private javax.swing.JPanel bandwidthPanel;
-    private javax.swing.JSpinner bandwidthSpinner;
     private javax.swing.JButton closeButton;
     private javax.swing.JScrollPane codesScrollPane;
     private javax.swing.JSlider codesSlider;
@@ -584,7 +562,6 @@ public class PramSpecificationView extends DialogBase {
     private javax.swing.JButton defaultProbabilityButton;
     private javax.swing.JComboBox defaultProbabilityComboBox;
     private javax.swing.JPanel defaultProbabilityPanel;
-    private javax.swing.JSpinner defaultProbabilitySpinner;
     private javax.swing.JRadioButton globalRecodeRadioButton;
     private javax.swing.JRadioButton individualChancesRadioButton;
     private javax.swing.JPanel leftPanel;

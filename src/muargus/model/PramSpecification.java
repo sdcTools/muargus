@@ -36,9 +36,6 @@ public class PramSpecification {
     public int getDefaultProbability() {
         return defaultProbability;
     }
-    
-    
-    
 
     public ArrayList<PramVariableSpec> getPramVarSpec() {
         return this.pramVarSpec;

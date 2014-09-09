@@ -4,22 +4,16 @@ niet behandelde opmerkingen/vragen:
 Nog te doen:                                                                                                Mee bezig:
 
 Release 2
-    - verander sliders naar combobox
+
 2.  variablesTable
     - als een waarde gePRAMt is, maak deze dan rood
-3.  codesTable
-    - zorg dat er geen missing values in zitten.
 5.  applyButton
-    - alleen mogelijk als ten minste 1 probability groter is dan 0, zo niet geef waarschuwing
-    - zet, als bandwithCheckBox is aangevinkt, in de tweede kolom de waarde van de bandwithComboBox
+    - bereken pram met dll
 6.  undoButton
-    - undo PRAM voor de geselecteerde rij van variablesTable
-11. bandwithComboBox
-    - vul met de codes uit de codesTable (-1)
-    - zet als default op 5 (of als er minder dan 5 zijn de hoogst mogelijke waarde)
+    - undo pram met dll 
+12. closebutton
     - bereken pram met dll of gebeurd dit ergens anders?
     - waarschuwing geven als dingen zijn aangepast: wil je dit nog toepassen?
-
 13. schrijf javadocs
 14. Refactoren (kijken of alles volgens de MVC is gedaan, het weghalen van overbodige code etc.) 
 
@@ -34,20 +28,28 @@ Gedaan:                                                                         
     - namen van de onderdelen veranderen                                                                    
     - model, view en controller klasse maken en basis methoden maken
     - klassen aan koppelen aan de rest van het programma
+    - verander sliders naar combobox
 2.  variablesTable
     - vullen met alle categorische variabelen (zonder variabelen met riskmodel) 
       inclusief of ze gePRAMt zijn met of zonder bandwidth
     - zorg dat bij zowel klikken op een variabele als het gebruik van de pijltjestoetsen de waardes in de codelist verander
       (dit gebeurd nog niet in de oude Mu)
+    - verander de listener naar een selectionListener
 3.  codesTable
     - vul de eerste kolom met de codes van de geselecteerde variabele uit de variablesTable
     - vul indien mogelijk de tweede kolom met de codelist van de geselecteerde variabele uit de variablesTable
     - vul de laatste kolom met de PRAM-probability horende bij de betreffende code (als default is dit 0)
       deze probability moet ergens opgeslagen worden (Anco/PP: Hoe lang
+    - zorg dat er geen missing values in zitten.
+    - verander de listener naar een selectionListener
 4.  codesSlider
     - koppel dit aan de probabilty van de geselecteerde rij van de codesTable
 5.  applyButton
     - zet X in de eerste kolom bij de geselecteerde variabele van de variablesTable
+    - alleen mogelijk als ten minste 1 probability groter is dan 0, zo niet geef waarschuwing
+    - zet, als bandwithCheckBox is aangevinkt, in de tweede kolom de waarde van de bandwithComboBox
+6.  undoButton
+    - undo PRAM voor de geselecteerde rij van variablesTable
 7.  PRAM options
     - kan dit uberhaupt veranderen? --> staat nu standaard invisible
 8.  defaultProbabilityComboBox
@@ -58,6 +60,10 @@ Gedaan:                                                                         
 10. bandwithCheckBox
     - zet als default unchecked
     - als checked, maak de bandwithComboBox enabled
+11. bandwithComboBox
+    - vul met de codes uit de codesTable (-1)
+    - zet als default op 5 (of als er minder dan 5 zijn de hoogst mogelijke waarde)
+
 12. closebutton
     - sluit scherm
 wishlish:

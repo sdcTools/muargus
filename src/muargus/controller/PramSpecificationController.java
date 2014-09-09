@@ -103,11 +103,38 @@ public class PramSpecificationController {
         this.model.setVariablesData(variablesData);
     }
 
+    public void setBandwidth() {
+        for (VariableMu v : this.metadataMu.getVariables()) {
+            if (v.isCategorical()) {
+                int max = v.getCodeInfos().size() - v.getNumberOfMissings();
+                int value;
+                if (max > 5) {
+                    value = 5;
+                } else {
+                    value = max;
+                }
+                getPramVariableSpec(v).setBandwidth(value);
+            }
+
+        }
+    }
+
+    public PramVariableSpec getPramVariableSpec(VariableMu variable) {
+        PramVariableSpec temp = null;
+        for (PramVariableSpec p : this.model.getPramVarSpec()) {
+            if (p.getVariable().equals(variable)) {
+                temp = p;
+                break;
+            }
+        }
+        return temp;
+    }
+
     /**
      *
      * @param variableName
      */
-    public void makeCodesData(String variableName) {
+    public String[][] getCodesData(String variableName) {
         PramVariableSpec pramVariableSpec = getSelectedPramVarSpec(variableName);
         VariableMu variable = null;
         for (VariableMu v : this.metadataMu.getVariables()) {
@@ -115,18 +142,30 @@ public class PramSpecificationController {
                 variable = v;
             }
         }
+        System.out.println(variable.getName());
+
+        String[][] codesData = null;
         if (variable != null) {
             ArrayList<CodeInfo> codeInfo = variable.getCodeInfos();
-            String[][] codesData = new String[codeInfo.size()][3];
-            int index = 0;
-            for (CodeInfo c : codeInfo) {
-                codesData[index][0] = c.getCode();
-                codesData[index][1] = c.getLabel();
-                codesData[index][2] = Integer.toString(c.getPramProbability());
-                index++;
-            }
+            int numberOfCodes = codeInfo.size() - variable.getNumberOfMissings();
+            codesData = new String[numberOfCodes][3];
 
-            pramVariableSpec.setCodesData(codesData);
+            for (int i = 0; i < numberOfCodes; i++) {
+                codesData[i][0] = codeInfo.get(i).getCode();
+                codesData[i][1] = codeInfo.get(i).getLabel();
+                codesData[i][2] = Integer.toString(codeInfo.get(i).getPramProbability());
+            }
         }
+        return codesData;
+    }
+
+    public boolean areAllProbabilitiesZero(PramVariableSpec pramVariableSpec) {
+        boolean valid = true;
+        for (CodeInfo c : pramVariableSpec.getVariable().getCodeInfos()) {
+            if (c.getPramProbability() > 0) {
+                valid = false;
+            }
+        }
+        return valid;
     }
 }
