@@ -6,9 +6,9 @@ Nog te doen:                                                                    
 Release 2
 -OK button: moet er nog iets gebeuren?
 -OK button: staat op onhandige plek
--Lijnen tussen de Calc controls (a la oude Mu)?
 -Calc obv Reindent Rate threshold
 -Cumulatief: geen schuine lijnen, is dit erg?
+-Gaps slider aanpassen?
 
 
 
@@ -43,6 +43,7 @@ Release 2
     - sluit scherm
 9.  cancelButton
     - sluit scherm
+10. Lijnen tussen de Calc controls (a la oude Mu)
 
 
 
