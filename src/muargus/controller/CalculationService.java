@@ -539,8 +539,7 @@ public class CalculationService {
 
     public void setPramVariable(PramVariableSpec pramVariable) throws ArgusException {
         int varIndex = getVariables().indexOf(pramVariable.getVariable()) + 1;
-        // TODO: kijk nog goed hoe en waar bandwidth nodig is
-        int bandWidth = this.metadata.getCombinations().getPramSpecification().useBandwidth() ? pramVariable.getBandwidth() : -1;
+        int bandWidth = pramVariable.useBandwidth() ? pramVariable.getBandwidth() : -1;
         boolean result = c.SetPramVar(varIndex, bandWidth, false);
         if (!result) {
             throw new ArgusException("Error during SetPramVar");
@@ -555,7 +554,7 @@ public class CalculationService {
                 throw new ArgusException("Error during ClosePramVar");
     }
     
-    public void UndoSetPramVariable(PramVariableSpec pramVariable) throws ArgusException {
+    public void undoSetPramVariable(PramVariableSpec pramVariable) throws ArgusException {
         int varIndex = getVariables().indexOf(pramVariable.getVariable()) + 1;
         boolean result = c.SetPramVar(varIndex, -1, true);
         if (!result) {

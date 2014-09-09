@@ -11,7 +11,7 @@ package muargus.model;
  */
 public class PramVariableSpec {
 
-    //private boolean useBandwidth = false;
+    private boolean useBandwidth = false;
 
     private int bandwidth;
     private boolean applied = false;
@@ -22,13 +22,14 @@ public class PramVariableSpec {
         this.variable = variable;
     }
 
-//    public boolean useBandwidth() {
-//        return this.useBandwidth;
-//    }
-//
-//    public void setUseBandwidth(boolean useBandwidth) {
-//        this.useBandwidth = useBandwidth;
-//    }
+    public boolean useBandwidth() {
+        return this.useBandwidth;
+    }
+
+    public void setUseBandwidth(boolean useBandwidth) {
+        this.useBandwidth = useBandwidth;
+    }
+    
     public int getBandwidth() {
         return this.bandwidth;
     }

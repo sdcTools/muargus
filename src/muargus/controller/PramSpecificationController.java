@@ -5,7 +5,11 @@
  */
 package muargus.controller;
 
+import argus.model.ArgusException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import muargus.MuARGUS;
 import muargus.model.CodeInfo;
 import muargus.model.MetadataMu;
 import muargus.model.PramSpecification;
@@ -28,6 +32,7 @@ public class PramSpecificationController {
         this.view = new PramSpecificationView(parentView, true, this);
         this.metadataMu = metadataMu;
         this.view.setMetadataMu(this.metadataMu);
+        this.calculationService = MuARGUS.getCalculationService();
     }
 
     /**
@@ -103,6 +108,9 @@ public class PramSpecificationController {
         this.model.setVariablesData(variablesData);
     }
 
+    /**
+     * 
+     */
     public void setBandwidth() {
         for (VariableMu v : this.metadataMu.getVariables()) {
             if (v.isCategorical()) {
@@ -119,6 +127,11 @@ public class PramSpecificationController {
         }
     }
 
+    /**
+     * 
+     * @param variable
+     * @return 
+     */
     public PramVariableSpec getPramVariableSpec(VariableMu variable) {
         PramVariableSpec temp = null;
         for (PramVariableSpec p : this.model.getPramVarSpec()) {
@@ -159,6 +172,11 @@ public class PramSpecificationController {
         return codesData;
     }
 
+    /**
+     * 
+     * @param pramVariableSpec
+     * @return 
+     */
     public boolean areAllProbabilitiesZero(PramVariableSpec pramVariableSpec) {
         boolean valid = true;
         for (CodeInfo c : pramVariableSpec.getVariable().getCodeInfos()) {
@@ -167,5 +185,23 @@ public class PramSpecificationController {
             }
         }
         return valid;
+    }
+    
+    public void apply(PramVariableSpec pramVariableSpec) {
+        try {
+            //System.out.println("apply: " + pramVariableSpec.getVariable().getName());
+            this.calculationService.setPramVariable(pramVariableSpec);
+        } catch (ArgusException ex) {
+            Logger.getLogger(PramSpecificationController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    public void undo(PramVariableSpec pramVariableSpec) {
+        try {
+            //System.out.println("apply: " + pramVariableSpec.getVariable().getName());
+            this.calculationService.undoSetPramVariable(pramVariableSpec);
+        } catch (ArgusException ex) {
+            Logger.getLogger(PramSpecificationController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 }

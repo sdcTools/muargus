@@ -148,7 +148,7 @@ public class PramSpecificationView extends DialogBase {
             this.codesTable.getColumnModel().getColumn(i).setPreferredWidth(this.codesColumnWidth[i]);
         }
         this.codesTable.getSelectionModel().setSelectionInterval(selectedRow, selectedRow);
-        
+
         this.codesTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
 
             @Override
@@ -482,9 +482,11 @@ public class PramSpecificationView extends DialogBase {
         if (!this.controller.areAllProbabilitiesZero(getSelectedPramVariableSpec())) {
             getSelectedPramVariableSpec().setApplied(true);
             getSelectedPramVariableSpec().setBandwidth(Integer.parseInt((String) this.bandwidthComboBox.getSelectedItem()));
+            getSelectedPramVariableSpec().setUseBandwidth(this.bandwidthCheckBox.isSelected());
             int selected = this.variablesTable.getSelectedRow();
             this.variablesTable.setValueAt(getSelectedPramVariableSpec().getAppliedText(), selected, 0);
             this.variablesTable.setValueAt(getSelectedPramVariableSpec().getBandwidthText(this.model.useBandwidth()), selected, 1);
+            this.controller.apply(getSelectedPramVariableSpec());
         } else {
             String message = "All probabilities are zero";
             JOptionPane.showMessageDialog(null, message);
@@ -516,10 +518,14 @@ public class PramSpecificationView extends DialogBase {
     }//GEN-LAST:event_defaultProbabilityButtonActionPerformed
 
     private void undoButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_undoButtonActionPerformed
-        getSelectedPramVariableSpec().setApplied(false);
-        int selectedRow = this.variablesTable.getSelectedRow();
-        this.variablesTable.setValueAt("", selectedRow, 0);
-        this.variablesTable.setValueAt("", selectedRow, 1);
+        if (getSelectedPramVariableSpec().isApplied()) {
+            getSelectedPramVariableSpec().setApplied(false);
+            getSelectedPramVariableSpec().setUseBandwidth(false);
+            int selected = this.variablesTable.getSelectedRow();
+            this.variablesTable.setValueAt("", selected, 0);
+            this.variablesTable.setValueAt("", selected, 1);
+            this.controller.undo(getSelectedPramVariableSpec());
+        }
     }//GEN-LAST:event_undoButtonActionPerformed
 
     public void variablesSelectionChanged() {
