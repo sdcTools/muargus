@@ -546,9 +546,12 @@ public class CalculationService {
             throw new ArgusException("Error during SetPramVar");
         }
         for (int codeIndex=0; codeIndex < pramVariable.getVariable().getCodeInfos().size(); codeIndex++) {
-            result = c.SetPramValue(codeIndex+1, pramVariable.getVariable().getCodeInfos().get(codeIndex).getPramProbability());
-            if (!result)
-                throw new ArgusException("Error during SetPramValue");
+            CodeInfo codeInfo = pramVariable.getVariable().getCodeInfos().get(codeIndex);
+            if (!codeInfo.isMissing()) {
+                result = c.SetPramValue(codeIndex+1,  codeInfo.getPramProbability());
+                if (!result)
+                    throw new ArgusException("Error during SetPramValue");
+            }
         }
         result = c.ClosePramVar(varIndex);
             if (!result)
