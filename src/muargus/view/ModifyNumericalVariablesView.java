@@ -50,7 +50,10 @@ public class ModifyNumericalVariablesView extends DialogBase {
     }
 
     public void updateValues() {
-
+        double[] min_max = this.controller.getMinMax(this.model.getVariables().get(this.variablesTable.getSelectedRow()));
+        this.minimumTextField.setText(Double.toString(min_max[0]));
+        this.maximumTextField.setText(Double.toString(min_max[1]));
+        
     }
 
     /**
@@ -85,6 +88,7 @@ public class ModifyNumericalVariablesView extends DialogBase {
     }
 
     public void variablesSelectionChanged() {
+        updateValues();
 
     }
 

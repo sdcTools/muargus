@@ -26,8 +26,8 @@ public class ModifyNumericalVariablesController {
     public ModifyNumericalVariablesController(java.awt.Frame parentView, MetadataMu metadataMu) {
         this.view = new ModifyNumericalVariablesView(parentView, true, this);
         this.metadataMu = metadataMu;
-        this.view.setMetadataMu(this.metadataMu);
         this.calculationService = MuARGUS.getCalculationService();
+        this.view.setMetadataMu(this.metadataMu);
     }
 
     /**
@@ -80,7 +80,8 @@ public class ModifyNumericalVariablesController {
         }
     }
     
-    public void getMinMax(){
-        //this.calculationService.
+    public double[] getMinMax(VariableMu variable){
+        double[] min_max = this.calculationService.getMinMax(variable);
+        return min_max;
     }
 }
