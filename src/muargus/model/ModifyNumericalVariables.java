@@ -13,19 +13,19 @@ import java.util.ArrayList;
  */
 public class ModifyNumericalVariables {
 
-    private ArrayList<VariableMu> variables;
+    private ArrayList<ModifyNumericalVariablesSpec> modifyNumericalVariablesSpec;
     private String[][] variablesData;
     private final String[] variablesColumnNames = {"Modified", "Variable"};
 
     public ModifyNumericalVariables() {
     }
 
-    public ArrayList<VariableMu> getVariables() {
-        return variables;
+    public ArrayList<ModifyNumericalVariablesSpec> getModifyNumericalVariablesSpec() {
+        return modifyNumericalVariablesSpec;
     }
 
-    public void setVariables(ArrayList<VariableMu> variables) {
-        this.variables = variables;
+    public void setModifyNumericalVariablesSpec(ArrayList<ModifyNumericalVariablesSpec> modifyNumericalVariablesSpec) {
+        this.modifyNumericalVariablesSpec = modifyNumericalVariablesSpec;
     }
 
     public void setVariablesData(String[][] variablesData) {

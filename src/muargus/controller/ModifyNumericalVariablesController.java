@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import muargus.MuARGUS;
 import muargus.model.MetadataMu;
 import muargus.model.ModifyNumericalVariables;
+import muargus.model.ModifyNumericalVariablesSpec;
 import muargus.model.VariableMu;
 import muargus.view.ModifyNumericalVariablesView;
 
@@ -57,31 +58,56 @@ public class ModifyNumericalVariablesController {
     /**
      *
      */
-    public void setVariables() {
-        ArrayList<VariableMu> variables = new ArrayList<>();
+    public void setModifyNumericalVariablesSpecs() {
+        ArrayList<ModifyNumericalVariablesSpec> specs = new ArrayList<>();
         for (VariableMu v : this.metadataMu.getVariables()) {
             if (v.isNumeric()) {
-                variables.add(v);
+                ModifyNumericalVariablesSpec spec = new ModifyNumericalVariablesSpec(v);
+                specs.add(spec);
             }
         }
-        this.model.setVariables(variables);
+        this.model.setModifyNumericalVariablesSpec(specs);
     }
 
     public void setVariablesData() {
         if (this.model.getVariablesData() == null) {
-            String variablesData[][] = new String[this.model.getVariables().size()][2];
+            String variablesData[][] = new String[this.model.getModifyNumericalVariablesSpec().size()][2];
             int index = 0;
-            for (VariableMu v : this.model.getVariables()) {
-                variablesData[index][0] = "";
-                variablesData[index][1] = v.getName();
+            for (ModifyNumericalVariablesSpec m : this.model.getModifyNumericalVariablesSpec()) {
+                variablesData[index][0] = (m.isModified() ? "X" : "");
+                variablesData[index][1] = m.getVariable().getName();
                 index++;
             }
             this.model.setVariablesData(variablesData);
         }
     }
-    
-    public double[] getMinMax(VariableMu variable){
+
+    public double[] getMinMax(VariableMu variable) {
         double[] min_max = this.calculationService.getMinMax(variable);
         return min_max;
+    }
+
+    public String getMin(ModifyNumericalVariablesSpec selected) {
+        double min_double = selected.getMin();
+        String min_String;
+        if ((min_double == Math.floor(min_double)) && !Double.isInfinite(min_double)) {
+            int min_int = (int) min_double;
+            min_String = Integer.toString(min_int);
+        } else {
+            min_String = Double.toString(min_double);
+        }
+        return min_String;
+    }
+
+    public String getMax(ModifyNumericalVariablesSpec selected) {
+        double max_double = selected.getMin();
+        String max_String;
+        if ((max_double == Math.floor(max_double)) && !Double.isInfinite(max_double)) {
+            int max_int = (int) max_double;
+            max_String = Integer.toString(max_int);
+        } else {
+            max_String = Double.toString(max_double);
+        }
+        return max_String;
     }
 }
