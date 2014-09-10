@@ -6,6 +6,7 @@ bug:  Als ik Region hercodeer, krijg ik netjes de nieuwe codes met bijbehorende 
       Als ik “undo” klik, dan krijg ik wel de juiste codes, maar niet de juiste labels. 
 bug:  het programma crashed als je het bestand voor MARSTAT inleest en vervolgens op apply drukt
 bug:  De nieuwe missing values van het bestand AGE3.GRC worden gezien als 1 missing value
+bug dll: Bij (bijv) recode 1-2:3 crasht de dll
  
 Release 1
 
