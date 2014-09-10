@@ -22,11 +22,13 @@ import org.jfree.ui.RectangleEdge;
 public class LogarithmicNumberAxis extends NumberAxis {
     private final double offset;
     private final double mult;
+    private final int decimals;
     
-    public LogarithmicNumberAxis(double offset, double mult) {
+    public LogarithmicNumberAxis(double offset, double mult, int decimals) {
         super("");
         this.offset = offset;
         this.mult = mult;
+        this.decimals = decimals;
     }
     
     @Override
@@ -45,8 +47,7 @@ public class LogarithmicNumberAxis extends NumberAxis {
     }
     
     private String transformString(Number value) {
-        int nDecimals = 4;
-        String format = "%." + Integer.toString(nDecimals) + "f";
+        String format = "%." + Integer.toString(decimals) + "f";
         return String.format(format, Math.exp(offset + mult*value.doubleValue()));
     }
     

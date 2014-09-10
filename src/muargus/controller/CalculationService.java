@@ -632,8 +632,8 @@ public class CalculationService {
         int tableIndex = this.metadata.getCombinations().getTables().indexOf(table) + 1;
         int nClasses = MuARGUS.getNHistogramClasses(cumulative);
         double[] classLeftValue = new double[nClasses + 1];
-        int[] frequency = new int[nClasses];
-        int[] hhFrequency = new int[nClasses];
+        int[] frequency = new int[nClasses+1];
+        int[] hhFrequency = new int[nClasses+1];
         if (metadata.isHouseholdData()) {
             int[] errorCode = new int[1];
             c.SetProgressListener(null);

@@ -24,12 +24,12 @@ import org.jfree.ui.RectangleInsets;
 
 public class RiskChartBuilder {
 
-    public ChartPanel CreateChart(RiskSpecification riskSpec) {
+    public ChartPanel CreateChart(RiskSpecification riskSpec, int decimals) {
 
         RiskModelClass first = riskSpec.getClasses().get(0);
         double offset = Math.log(first.getLeftValue());
         double mult = Math.log(first.getRightValue()/first.getLeftValue());
-        LogarithmicNumberAxis domainAxis      = new LogarithmicNumberAxis(offset, mult);
+        LogarithmicNumberAxis domainAxis      = new LogarithmicNumberAxis(offset, mult, decimals);
         NumberAxis rangeAxis     = new NumberAxis("Freq");
         XYBarRenderer renderer   = new XYBarRenderer(0);
         XYDataset dataset        = getDataset(riskSpec);
