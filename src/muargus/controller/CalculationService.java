@@ -84,8 +84,10 @@ public class CalculationService {
                 errorPos,
                 warning);
         if (!result) {
-            throw new ArgusException(String.format("Error in recoding; line %d, position %d \nNo recoding done",
-                    errorLine[0], errorPos[0]));
+            String[] error = new String[1];
+            c.GetErrorString(errorType[0], error);
+            throw new ArgusException(String.format("Error in recoding: %s\nline %d, position %d \nNo recoding done",
+                    error[0], errorLine[0], errorPos[0]));
         }
         return warning[0];
     }
@@ -372,8 +374,12 @@ public class CalculationService {
                 lineNumbers,
                 varIndexOut);
         if (!result) {
-            throw new ArgusException(String.format("Error in ExploreFile:\ncode %d, line %d, variable %s",
-                errorCodes[0], lineNumbers[0]+1, getVariables().get(varIndexOut[0]).getName()));
+            String[] error = new String[1];
+            c.GetErrorString(errorCodes[0], error);
+            String var = (varIndexOut[0] > 0) ? 
+                    ", variable " + getVariables().get(varIndexOut[0]-1).getName() : "";
+            throw new ArgusException(String.format("Error in ExploreFile: %s\nLine %d%s",
+                error[0], lineNumbers[0]+1, var));
         }
         metadata.setRecordCount(c.NumberofRecords());
         
