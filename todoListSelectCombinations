@@ -3,17 +3,12 @@ niet behandelde opmerkingen/vragen:
 
 Nog te doen:                                                                                                    Mee bezig:
     
-Release 1
-
-
-Release 2+
+Release 2
 
 6. table: - constanten bovenaan zetten, niet in de code --> 
     - geselecteerde rij visable 
     - kolommen klikken en sorteren (RowSorter: http://docs.oracle.com/javase/7/docs/api/javax/swing/RowSorter.html)
     - kolombreedte fixen (rij 1 en 2 zijn te groot)
-14. calculateTablesButton   
-    - bug: als geen tabellen zijn gespecificeerd en dan geklikt wordt gaat het fout
 15. progressbar
     - checken of hier nog iets aan gedaan moet worden bij heel veel tabellen?
     - moet deze ook gekoppeld worden aan automatic generate tables? Ik denk dat het beter is om in plaats 
@@ -21,8 +16,10 @@ Release 2+
 17. Kijk wat er in de Controller/Model kan en verplaats dat.                                                    ..
 18. code opschonen                                                                                              ..
 19. javadoc schrijven voor de methodes   
-22. foutcode bij ExploreFile vervangen door fouttekst
 23. dll crasht soms: proberen te reproduceren
+24. bij fout worden ten onrechte toch de nieuwe unsafe combinations getoond
+
+Release 3+:
 
 
 
@@ -97,6 +94,7 @@ Gedaan:                                                                         
     - codelijst relatief pad: altijd t.o.v. pad naar metadata file?                                             Anne
     - foutafhandeling                                                                                           Anne
     - zorgen dan de berekening ook gedaan kan worden het riskmodel wordt gebruikt                               Anne
+    - bug: als geen tabellen zijn gespecificeerd en dan geklikt wordt gaat het fout                             Anne
 15. progressbar
     - link dit aan de calculateTablesButton                                                                     Anne
     - laat label zien als hij bezig is (nog zoeken wat er moet staan)                                           Anne
@@ -108,7 +106,9 @@ Gedaan:                                                                         
     - method isRiskModel
     - method setRiskModel
 20. bug CalculateTables: free format crasht                                                                     Anne
-21. bug: bij calculate tables als 0 tabellen rare foutmelding
+21. bug: bij calculate tables als 0 tabellen rare foutmelding                                                   Anne
+22. foutcode bij ExploreFile vervangen door fouttekst                                                           Anne
+
 
 
     - method getVariables
