@@ -4,6 +4,8 @@
  */
 package muargus.view;
 
+import javax.swing.JOptionPane;
+import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
@@ -23,6 +25,7 @@ public class ModifyNumericalVariablesView extends DialogBase {
     ModifyNumericalVariablesController controller;
     ModifyNumericalVariables model;
     private final int[] variablesColumnWidth = {20, 80};
+    private int selectedRow = 0;
 
     /**
      *
@@ -35,6 +38,7 @@ public class ModifyNumericalVariablesView extends DialogBase {
         initComponents();
         setLocationRelativeTo(null);
         this.controller = controller;
+        this.variablesTable.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     }
 
     public void setMetadataMu(MetadataMu metadataMu) {
@@ -53,12 +57,24 @@ public class ModifyNumericalVariablesView extends DialogBase {
     public void updateValues() {
         double[] min_max = this.controller.getMinMax(
                 this.model.getModifyNumericalVariablesSpec().get(this.variablesTable.getSelectedRow()).getVariable());
-        
-        ModifyNumericalVariablesSpec selected = this.model.getModifyNumericalVariablesSpec().get(this.variablesTable.getSelectedRow());
+
+        ModifyNumericalVariablesSpec selected = this.model.getModifyNumericalVariablesSpec().get(this.selectedRow);
         selected.setMin_max(min_max);
         this.minimumTextField.setText(this.controller.getMin(selected));
         this.maximumTextField.setText(this.controller.getMax(selected));
-        
+        this.weightNoisePanel.setEnabled(selected.getVariable().isWeight());
+        this.percentageLabel.setEnabled(selected.getVariable().isWeight());
+        this.percentageTextField.setEnabled(selected.getVariable().isWeight());
+
+        if (selected.isModified()) {
+            System.out.println("modified");
+            this.bottomValueTextField.setText(this.controller.getBottomValue(selected));
+            this.bottomCodingReplacementTextField.setText(selected.getBottomReplacement());
+            this.topValueTextField.setText(this.controller.getTopValue(selected));
+            this.topCodingReplacementTextField.setText(selected.getTopReplacement());
+            this.roundingBaseTextField.setText(this.controller.getRoundingBase(selected));
+            this.percentageTextField.setText(this.controller.getWeightNoisePercentage(selected));
+        }
     }
 
     /**
@@ -93,8 +109,54 @@ public class ModifyNumericalVariablesView extends DialogBase {
     }
 
     public void variablesSelectionChanged() {
+        //int newSelectedRow = this.variablesTable.getSelectedRow();
         updateValues();
+        if (valueEntered()) {
+            ModifyNumericalVariablesSpec selected = this.model.getModifyNumericalVariablesSpec().get(this.selectedRow);
+            String message = this.controller.setValues(selected, this.bottomValueTextField.getText(), this.topValueTextField.getText(),
+                    this.bottomCodingReplacementTextField.getText(), this.topCodingReplacementTextField.getText(),
+                    this.roundingBaseTextField.getText(), this.percentageTextField.getText());
+            if (!message.equals("")) {
+                JOptionPane.showMessageDialog(null, message);
+                this.variablesTable.getSelectionModel().setSelectionInterval(this.selectedRow, this.selectedRow);
+            } else {
+                setModified(true);
+                this.selectedRow = this.variablesTable.getSelectedRow();
+            }
+        } else {
+            setModified(false);
+            this.selectedRow = this.variablesTable.getSelectedRow();
+        }
 
+    }
+
+    public void setModified(boolean modified) {
+        this.model.setModified(this.selectedRow, modified);
+        String modifiedText = this.model.getModifiedText(this.selectedRow, this.model.isModified(this.selectedRow));
+        this.variablesTable.setValueAt(modifiedText, this.selectedRow, 0);
+    }
+
+    public boolean valueEntered() {
+        boolean valueEntered = false;
+        if (!this.bottomValueTextField.getText().equals("")) {
+            valueEntered = true;
+        }
+        if (!this.bottomCodingReplacementTextField.getText().equals("")) {
+            valueEntered = true;
+        }
+        if (!this.topValueTextField.getText().equals("")) {
+            valueEntered = true;
+        }
+        if (!this.topCodingReplacementTextField.getText().equals("")) {
+            valueEntered = true;
+        }
+        if (!this.roundingBaseTextField.getText().equals("")) {
+            valueEntered = true;
+        }
+        if (!this.percentageTextField.getText().equals("")) {
+            valueEntered = true;
+        }
+        return valueEntered;
     }
 
     /**
@@ -152,6 +214,8 @@ public class ModifyNumericalVariablesView extends DialogBase {
 
         minimumLabel.setText("Minimum:");
 
+        minimumTextField.setEnabled(false);
+
         bottomValueLabel.setText("Bottom Value:");
 
         bottomCodingReplacementLabel.setText("Replacement");
@@ -191,6 +255,8 @@ public class ModifyNumericalVariablesView extends DialogBase {
         topCodingPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Top Coding"));
 
         maximumLabel.setText("Maximum:");
+
+        maximumTextField.setEnabled(false);
 
         topValueLabel.setText("Top Value:");
 
@@ -346,54 +412,19 @@ public class ModifyNumericalVariablesView extends DialogBase {
     }//GEN-LAST:event_closeButtonActionPerformed
 
     private void applyButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_applyButtonActionPerformed
-        this.model.setModified(this.variablesTable.getSelectedRow(),
-                !this.model.isModified(this.variablesTable.getSelectedRow()));
-        String modified = this.model.getModifiedText(this.variablesTable.getSelectedRow(),
-                this.model.isModified(this.variablesTable.getSelectedRow()));
-        this.variablesTable.setValueAt(modified, this.variablesTable.getSelectedRow(), 0);
+        variablesSelectionChanged();
+//        ModifyNumericalVariablesSpec selected = this.model.getModifyNumericalVariablesSpec().get(this.previousSelected);
+//        String message = this.controller.setValues(selected, this.bottomValueTextField.getText(), this.topValueTextField.getText(),
+//                this.bottomCodingReplacementTextField.getText(), this.topCodingReplacementTextField.getText(),
+//                this.roundingBaseTextField.getText(), this.percentageTextField.getText());
+//        if (!message.equals("")) {
+//            JOptionPane.showMessageDialog(null, message);
+//        } else {
+//            setModified();
+//        }
     }//GEN-LAST:event_applyButtonActionPerformed
 
-//    /**
-//     * @param args the command line arguments
-//     */
-//    public static void main(String args[]) {
-//        /* Set the Nimbus look and feel */
-//        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-//        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-//         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-//         */
-//        try {
-//            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-//                if ("Nimbus".equals(info.getName())) {
-//                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-//                    break;
-//                }
-//            }
-//        } catch (ClassNotFoundException ex) {
-//            java.util.logging.Logger.getLogger(ModifyNumericalVariablesView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        } catch (InstantiationException ex) {
-//            java.util.logging.Logger.getLogger(ModifyNumericalVariablesView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        } catch (IllegalAccessException ex) {
-//            java.util.logging.Logger.getLogger(ModifyNumericalVariablesView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-//            java.util.logging.Logger.getLogger(ModifyNumericalVariablesView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        }
-//        //</editor-fold>
-//
-//        /* Create and display the dialog */
-//        java.awt.EventQueue.invokeLater(new Runnable() {
-//            public void run() {
-//                ModifyNumericalVariablesView dialog = new ModifyNumericalVariablesView(new javax.swing.JFrame(), true);
-//                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
-//                    @Override
-//                    public void windowClosing(java.awt.event.WindowEvent e) {
-//                        System.exit(0);
-//                    }
-//                });
-//                dialog.setVisible(true);
-//            }
-//        });
-//    }
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton applyButton;
     private javax.swing.JPanel bottomCodingPanel;

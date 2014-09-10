@@ -161,6 +161,9 @@
           </Properties>
         </Component>
         <Component class="javax.swing.JTextField" name="minimumTextField">
+          <Properties>
+            <Property name="enabled" type="boolean" value="false"/>
+          </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="bottomValueLabel">
           <Properties>
@@ -235,6 +238,9 @@
           </Properties>
         </Component>
         <Component class="javax.swing.JTextField" name="maximumTextField">
+          <Properties>
+            <Property name="enabled" type="boolean" value="false"/>
+          </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="topValueLabel">
           <Properties>

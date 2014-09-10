@@ -7,29 +7,13 @@ Nog te doen:                                                                    
 Release 2
 
 2.  variablesTable
-    - vullen met alle numerieke variabelen  
-    - zorg dat bij zowel klikken op een variabele als het gebruik van de pijltjestoetsen de waardes veranderen
-      (dit gebeurd nog niet in de oude Mu) --> gebruik een selectionListener
     - als een andere variabele wordt geselecteerd, dan komt dezelfde functie als bij apply
-    - zorg dat maar 1 rij tegelijkertijd aangeklikt kan worden.
-3.  maximumTextField & minimumTextField
-    - vul de waardes met de maximum/minimum waarde van de geselecteerde numerieke variabele uit de variablesTable
-4.  bottomValueTextField & topValueTextField
-    - minimum <= waarde <= maximum --> zo niet, geef waarschuwing
-    - moet ingevuld zijn als bijbehorende replacementvalue ingevuld is
-5.  ReplacentTextField
-    - moet ingevuld zijn als bijbehorende top/bottumvalue ingevuld is
-6.  RoundingBaseTextField
-    - moet getal zijn groter dan 0
-7.  WeightNoisePanel
-    - zet alleen enabled als geselecteerde variabele een weightVariabele is
-8.  WeighNoiseTextField
-    - moet een waarde groter dan 0 zijn
-9.  okButton
+9.  applyButton
     - bereken top/bottom coding met dll
+10. closeButton
     - sluit scherm
-10. schrijf javadocs
-11. Refactoren (kijken of alles volgens de MVC is gedaan, het weghalen van overbodige code etc.) 
+11. schrijf javadocs
+12. Refactoren (kijken of alles volgens de MVC is gedaan, het weghalen van overbodige code etc.) 
 
 
 
@@ -45,5 +29,23 @@ Gedaan:                                                                         
     - minimum en maximum value label toevoegen
 2.  variablesTable
     - vullen met alle numerieke variabelen  
+    - vullen met alle numerieke variabelen  
+    - zorg dat bij zowel klikken op een variabele als het gebruik van de pijltjestoetsen de waardes veranderen
+      (dit gebeurd nog niet in de oude Mu) --> gebruik een selectionListener
+    - zorg dat maar 1 rij tegelijkertijd aangeklikt kan worden.
+3.  maximumTextField & minimumTextField
+    - vul de waardes met de maximum/minimum waarde van de geselecteerde numerieke variabele uit de variablesTable
+    - zorg dat het scherm non-editable is
+4.  bottomValueTextField & topValueTextField
+    - minimum <= waarde <= maximum --> zo niet, geef waarschuwing
+    - moet ingevuld zijn als bijbehorende replacementvalue ingevuld is
+5.  ReplacentTextField
+    - moet ingevuld zijn als bijbehorende top/bottumvalue ingevuld is
+6.  RoundingBaseTextField
+    - moet getal zijn groter dan 0
+7.  WeightNoisePanel
+    - zet alleen enabled als geselecteerde variabele een weightVariabele is
+8.  WeighNoiseTextField
+    - moet een waarde groter dan 0 zijn
 
 wishlish:
