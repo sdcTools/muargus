@@ -41,9 +41,11 @@ public class RiskSpecificationView extends DialogBase implements ChartProgressLi
      * @param modal
      * @param controller 
      */
-    public RiskSpecificationView(java.awt.Frame parent, boolean modal, RiskSpecificationController controller) {
+    public RiskSpecificationView(java.awt.Frame parent, boolean modal, RiskSpecificationController controller,
+            boolean isHousehold) {
         super(parent, modal);
         initComponents();
+        setHouseholdComponents(isHousehold);
         setLocationRelativeTo(null);
         this.controller = controller;
     }
@@ -69,6 +71,14 @@ public class RiskSpecificationView extends DialogBase implements ChartProgressLi
         
     }
     
+    private void setHouseholdComponents(boolean isHousehold) {
+        this.reidentCalcButton.setVisible(!isHousehold);
+        this.reidentThresholdTextField.setVisible(!isHousehold);
+        this.maxReidentRateTextField.setVisible(!isHousehold);
+        this.maxReidentLabel.setVisible(!isHousehold);
+        this.reidentPercLabel.setVisible(!isHousehold);
+        this.reidentThresholdLabel.setVisible(!isHousehold);
+    } 
     
 
 //    @Override
@@ -132,15 +142,15 @@ public class RiskSpecificationView extends DialogBase implements ChartProgressLi
         maxRiskTextField = new javax.swing.JTextField();
         maxReidentRateTextField = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
+        maxReidentLabel = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
+        reidentThresholdLabel = new javax.swing.JLabel();
         reidentThresholdTextField = new javax.swing.JTextField();
         riskThresholdTextField = new javax.swing.JTextField();
         riskCalcButton = new javax.swing.JButton();
         reidentCalcButton = new javax.swing.JButton();
-        jLabel6 = new javax.swing.JLabel();
+        reidentPercLabel = new javax.swing.JLabel();
         unsafeRecordsTextField = new javax.swing.JTextField();
         unsafeCalcButton = new javax.swing.JButton();
         jLabel7 = new javax.swing.JLabel();
@@ -175,7 +185,7 @@ public class RiskSpecificationView extends DialogBase implements ChartProgressLi
 
         jLabel2.setText("ind. risk");
 
-        jLabel3.setText("re ident rate");
+        maxReidentLabel.setText("re ident rate");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -184,7 +194,7 @@ public class RiskSpecificationView extends DialogBase implements ChartProgressLi
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(maxReidentLabel, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -202,14 +212,14 @@ public class RiskSpecificationView extends DialogBase implements ChartProgressLi
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(maxReidentRateTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel3)))
+                    .addComponent(maxReidentLabel)))
         );
 
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Threshold setting"));
 
         jLabel4.setText("<html><P STYLE=\"text-align: right;\">\nind. risk<br>\nthreshold");
 
-        jLabel5.setText("<html><P STYLE=\"text-align: right;\">\nre ident rate <br>\nthreshold\n");
+        reidentThresholdLabel.setText("<html><P STYLE=\"text-align: right;\">\nre ident rate <br>\nthreshold\n");
 
         riskCalcButton.setText("Calc");
         riskCalcButton.addActionListener(new java.awt.event.ActionListener() {
@@ -225,7 +235,7 @@ public class RiskSpecificationView extends DialogBase implements ChartProgressLi
             }
         });
 
-        jLabel6.setText("%");
+        reidentPercLabel.setText("%");
 
         unsafeCalcButton.setText("Calc");
         unsafeCalcButton.addActionListener(new java.awt.event.ActionListener() {
@@ -246,13 +256,13 @@ public class RiskSpecificationView extends DialogBase implements ChartProgressLi
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(reidentThresholdLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(10, 10, 10)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(reidentThresholdTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel6))
+                        .addComponent(reidentPercLabel))
                     .addComponent(riskThresholdTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -283,11 +293,11 @@ public class RiskSpecificationView extends DialogBase implements ChartProgressLi
                                         .addComponent(riskCalcButton)))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(reidentThresholdLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                         .addComponent(reidentThresholdTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addComponent(reidentCalcButton)
-                                        .addComponent(jLabel6))))
+                                        .addComponent(reidentPercLabel))))
                             .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addGap(1, 1, 1)
                                 .addComponent(jLabel7)
@@ -540,10 +550,7 @@ public class RiskSpecificationView extends DialogBase implements ChartProgressLi
     private javax.swing.JButton jButton5;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
@@ -551,10 +558,13 @@ public class RiskSpecificationView extends DialogBase implements ChartProgressLi
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanelChart;
+    private javax.swing.JLabel maxReidentLabel;
     private javax.swing.JTextField maxReidentRateTextField;
     private javax.swing.JTextField maxRiskTextField;
     private javax.swing.JButton okButton;
     private javax.swing.JButton reidentCalcButton;
+    private javax.swing.JLabel reidentPercLabel;
+    private javax.swing.JLabel reidentThresholdLabel;
     private javax.swing.JTextField reidentThresholdTextField;
     private javax.swing.JButton riskCalcButton;
     private javax.swing.JSlider riskSlider;

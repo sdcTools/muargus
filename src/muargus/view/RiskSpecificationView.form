@@ -111,7 +111,7 @@
               <Group type="102" attributes="0">
                   <EmptySpace max="32767" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="jLabel3" alignment="1" min="-2" max="-2" attributes="0"/>
+                      <Component id="maxReidentLabel" alignment="1" min="-2" max="-2" attributes="0"/>
                       <Component id="jLabel2" alignment="1" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
@@ -134,7 +134,7 @@
                   <EmptySpace max="32767" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="maxReidentRateTextField" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="jLabel3" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="maxReidentLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
               </Group>
           </Group>
@@ -156,7 +156,7 @@
             <Property name="text" type="java.lang.String" value="ind. risk"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JLabel" name="jLabel3">
+        <Component class="javax.swing.JLabel" name="maxReidentLabel">
           <Properties>
             <Property name="text" type="java.lang.String" value="re ident rate"/>
           </Properties>
@@ -179,14 +179,14 @@
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="1" attributes="0">
                       <Component id="jLabel4" min="-2" max="-2" attributes="0"/>
-                      <Component id="jLabel5" min="-2" max="-2" attributes="0"/>
+                      <Component id="reidentThresholdLabel" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" attributes="0">
                           <Component id="reidentThresholdTextField" min="-2" pref="48" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="jLabel6" min="-2" max="-2" attributes="0"/>
+                          <Component id="reidentPercLabel" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <Component id="riskThresholdTextField" min="-2" pref="65" max="-2" attributes="0"/>
                   </Group>
@@ -226,11 +226,11 @@
                                   </Group>
                                   <EmptySpace max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="1" attributes="0">
-                                      <Component id="jLabel5" min="-2" max="-2" attributes="0"/>
+                                      <Component id="reidentThresholdLabel" min="-2" max="-2" attributes="0"/>
                                       <Group type="103" groupAlignment="3" attributes="0">
                                           <Component id="reidentThresholdTextField" alignment="3" min="-2" max="-2" attributes="0"/>
                                           <Component id="reidentCalcButton" alignment="3" min="-2" max="-2" attributes="0"/>
-                                          <Component id="jLabel6" alignment="3" min="-2" max="-2" attributes="0"/>
+                                          <Component id="reidentPercLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                                       </Group>
                                   </Group>
                               </Group>
@@ -259,7 +259,7 @@
             <Property name="text" type="java.lang.String" value="&lt;html&gt;&lt;P STYLE=&quot;text-align: right;&quot;&gt;&#xa;ind. risk&lt;br&gt;&#xa;threshold"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JLabel" name="jLabel5">
+        <Component class="javax.swing.JLabel" name="reidentThresholdLabel">
           <Properties>
             <Property name="text" type="java.lang.String" value="&lt;html&gt;&lt;P STYLE=&quot;text-align: right;&quot;&gt;&#xa;re ident rate &lt;br&gt;&#xa;threshold&#xa;"/>
           </Properties>
@@ -284,7 +284,7 @@
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="reidentCalcButtonActionPerformed"/>
           </Events>
         </Component>
-        <Component class="javax.swing.JLabel" name="jLabel6">
+        <Component class="javax.swing.JLabel" name="reidentPercLabel">
           <Properties>
             <Property name="text" type="java.lang.String" value="%"/>
           </Properties>
