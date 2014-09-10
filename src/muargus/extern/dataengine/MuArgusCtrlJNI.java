@@ -63,6 +63,7 @@ public class MuArgusCtrlJNI {
   public final static native boolean CMuArgCtrl_ExploreFile(long jarg1, CMuArgCtrl jarg1_, String jarg2, int[] jarg3, int[] jarg4, int[] jarg5);
   public final static native boolean CMuArgCtrl_SetVariable(long jarg1, CMuArgCtrl jarg1_, int jarg2, int jarg3, int jarg4, int jarg5, String jarg6, String jarg7, boolean jarg8, boolean jarg9, boolean jarg10, boolean jarg11, boolean jarg12, int jarg13);
   public final static native boolean CMuArgCtrl_SetNumberVar(long jarg1, CMuArgCtrl jarg1_, int jarg2);
+  public final static native boolean CMuArgCtrl_GetErrorString(long jarg1, CMuArgCtrl jarg1_, int jarg2, String[] jarg3);
 
   public static void SwigDirector_IProgressListener_UpdateProgress(IProgressListener self, int perc) {
     self.UpdateProgress(perc);

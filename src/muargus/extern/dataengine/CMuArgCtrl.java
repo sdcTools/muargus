@@ -227,4 +227,8 @@ public class CMuArgCtrl {
     return MuArgusCtrlJNI.CMuArgCtrl_SetNumberVar(swigCPtr, this, nvar);
   }
 
+  public boolean GetErrorString(int ErrorCode, String[] ErrorString) {
+    return MuArgusCtrlJNI.CMuArgCtrl_GetErrorString(swigCPtr, this, ErrorCode, ErrorString);
+  }
+
 }
