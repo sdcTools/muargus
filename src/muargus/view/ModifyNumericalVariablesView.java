@@ -11,6 +11,7 @@ import javax.swing.table.TableModel;
 import muargus.controller.ModifyNumericalVariablesController;
 import muargus.model.MetadataMu;
 import muargus.model.ModifyNumericalVariables;
+import muargus.model.ModifyNumericalVariablesSpec;
 
 /**
  *
@@ -44,13 +45,20 @@ public class ModifyNumericalVariablesView extends DialogBase {
     }
 
     public void initializeData() {
-        this.controller.setVariables();
+        this.controller.setModifyNumericalVariablesSpecs();
         makeVariablesTable();
         updateValues();
     }
 
     public void updateValues() {
-
+        double[] min_max = this.controller.getMinMax(
+                this.model.getModifyNumericalVariablesSpec().get(this.variablesTable.getSelectedRow()).getVariable());
+        
+        ModifyNumericalVariablesSpec selected = this.model.getModifyNumericalVariablesSpec().get(this.variablesTable.getSelectedRow());
+        selected.setMin_max(min_max);
+        this.minimumTextField.setText(this.controller.getMin(selected));
+        this.maximumTextField.setText(this.controller.getMax(selected));
+        
     }
 
     /**
@@ -85,6 +93,7 @@ public class ModifyNumericalVariablesView extends DialogBase {
     }
 
     public void variablesSelectionChanged() {
+        updateValues();
 
     }
 

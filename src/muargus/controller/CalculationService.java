@@ -592,6 +592,15 @@ public class CalculationService {
         }
     }
     
+    public double[] getMinMax(VariableMu variable){
+        int varIndex = getVariables().indexOf(variable) + 1;
+        double[] min = new double[1];
+        double[] max = new double[1];
+        c.GetMinMaxValue(varIndex, min, max);
+        double[] min_max = {min[0],max[0]};
+        return min_max;
+    }
+    
     public int calculateUnsafe(TableMu table, double riskThreshold) {
         int tableIndex = this.metadata.getCombinations().getTables().indexOf(table) + 1;
         int[] nUnsafe = new int[1];
