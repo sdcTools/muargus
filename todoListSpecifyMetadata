@@ -2,18 +2,18 @@ niet behandelde opmerkingen/vragen:
 
 Nog te doen:                                                                                                Mee bezig:
 
-Release 1:
+Release 2:
 
--
-
-Release 2+:
-
-5.  Bug bij new button (geeft een nullpointerException wanneer op de knop wordt gedrukt)
-14. Functionaliteit generate (SSPS) 
+14. generate knop 
 15. inlezen free format with data
 16. inlezen SPSS
 18. code opschonen
 19. javadoc schrijven voor de methodes
+23. geen missing bij niet-categoriale variabelen: a la oude Mu (spaties) of foutmelding
+24. inhoudelijke fout in ingelezen metadata: wat doen? knoppen uitzetten?
+ 
+
+Release 3+:
 
 
 Behandelde opmerkingen/vragen:                                                                              Antwoord:
@@ -37,6 +37,7 @@ Gedaan:                                                                         
 3d. weight                                                                                                  Jeldrik					         
 4. check of iets is verandert inbouwen                                                                      Anne
 5. functionaliteit new button                                                                               Jeldrik
+   Bug bij new button (geeft een nullpointerException wanneer op de knop wordt gedrukt)                     Anne
 6. functionaliteit delete button                                                                            Jeldrik
 7. functionaliteit move up/down button                                                                      Jeldrik
 8. functionaliteit cancel button                                                                            Jeldrik

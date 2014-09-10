@@ -34,7 +34,7 @@ public class RiskSpecificationController {
     
     public RiskSpecificationController(java.awt.Frame parentView, MetadataMu metadataMu) {
         this.parentView = parentView;
-        this.view = new RiskSpecificationView(parentView, true, this);
+        this.view = new RiskSpecificationView(parentView, true, this, metadataMu.isHouseholdData());
         this.metadataMu = metadataMu;
         this.model = this.metadataMu.getCombinations().getRiskSpecification();
         this.calculationService = MuARGUS.getCalculationService();
@@ -97,9 +97,14 @@ public class RiskSpecificationController {
     }
     
     public void fillModelHistogramData(boolean cumulative) {
+        try {
         double maxReident = calculationService.fillHistogramData(this.model.getRiskTable(), 
                 this.model.getClasses(), cumulative);
         this.model.setMaxReidentRate(maxReident);
+        }
+        catch (ArgusException ex) {
+            view.showErrorMessage(ex);
+        }
         
     }
 

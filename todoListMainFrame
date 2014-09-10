@@ -3,24 +3,18 @@ niet behandelde opmerkingen/vragen:
 
 Nog te doen:                                                                                                Mee bezig:
 
-Release 1
 
--
-
-Release 2+
+Release 2:
 1. code opschonen
 2. javadoc schrijven voor de methodes
 4. kolommen klikken en sorteren (RowSorter: http://docs.oracle.com/javase/7/docs/api/javax/swing/RowSorter.html)
 7. kolommen met cijfers rechts uitlijnen
-
-Algemene puntjes
-8. verschil JDialog en JFrame uitzoeken
-9. kijken welke schermen wel en welke niet gemaximaliseerd mogen worden.
+8. kijken welke schermen wel en welke niet gemaximaliseerd mogen worden.
 9. warning messages checken
 10. wat doen met knoppen tijdens achtergrondprocessen?
 11. de extensies bij open microdata komen niet overeen met oude mu
 
-
+Release 3+:
 
 
 

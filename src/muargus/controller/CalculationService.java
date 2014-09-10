@@ -343,7 +343,7 @@ public class CalculationService {
             index++;
             result = addVariable(variable, index);
             if (!result) {
-                throw new ArgusException(String.format("Error in SetVariable: variable %d", index));
+                throw new ArgusException(String.format("Error in SetVariable: variable %s", variable.getName()));
             }
         }
 
@@ -624,17 +624,23 @@ public class CalculationService {
         return riskThreshold[0];
     }
 
-    public double fillHistogramData(TableMu table, ArrayList<RiskModelClass> classes, boolean cumulative) {
-        //TODO: cumulative
+    public double fillHistogramData(TableMu table, ArrayList<RiskModelClass> classes, boolean cumulative) throws ArgusException {
         classes.clear();
         double[] ksi = new double[1];
+        
         
         int tableIndex = this.metadata.getCombinations().getTables().indexOf(table) + 1;
         int nClasses = MuARGUS.getNHistogramClasses(cumulative);
         double[] classLeftValue = new double[nClasses + 1];
-        int[] frequency = new int[nClasses];
-            int[] hhFrequency = new int[nClasses];
+        int[] frequency = new int[nClasses+1];
+        int[] hhFrequency = new int[nClasses+1];
         if (metadata.isHouseholdData()) {
+            int[] errorCode = new int[1];
+            c.SetProgressListener(null);
+            boolean result = c.CalculateBaseHouseholdRisk(errorCode);
+            if (!result) {
+                throw new ArgusException("Error calculating base household risk");
+            }
             c.GetBHRHistogramData(tableIndex, nClasses, classLeftValue, hhFrequency, frequency);
         }
         else {

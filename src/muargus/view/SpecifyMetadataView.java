@@ -929,6 +929,9 @@ public class SpecifyMetadataView extends DialogBase {
         boolean enable = categoricalCheckBox.isSelected();
         enableControls(this.categoriesPanel, enable);
         enableControls(this.optionsArgusPanel, enable);
+        if (!getSelectedVariable().isWeight() && !getSelectedVariable().isHouse_id()) {
+            enableControls(this.missingsPanel, true);
+        }
     }//GEN-LAST:event_categoricalCheckBoxStateChanged
 
     private void enableAllControls(boolean enable) {
