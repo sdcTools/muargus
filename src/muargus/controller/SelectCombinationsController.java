@@ -24,6 +24,7 @@ public class SelectCombinationsController implements PropertyChangeListener{
     SelectCombinationsView view;
     Combinations modelClone;
     MetadataMu metadata;
+    private String stepName = "";
     //ArrayList<String> list;
         
     private static final Logger logger = Logger.getLogger(SelectCombinationsController.class.getName());
@@ -60,9 +61,7 @@ public class SelectCombinationsController implements PropertyChangeListener{
         this.metadata.setCombinations(this.modelClone);
         CalculationService service = MuARGUS.getCalculationService();
         service.setMetadata(this.metadata);
-        //service.exploreFile(this);
-        service.calculateTables(this);
-        
+        service.exploreFile(this);        
     }
     
     private void getSettings() {
@@ -93,7 +92,10 @@ public class SelectCombinationsController implements PropertyChangeListener{
         //het zou mooier zijn als de berekening niet in de view zou gebeuren
     }                                                            
 
-
+    private void setCurrentStepName(String stepName) {
+        this.stepName = stepName;
+        view.setStepName(this.stepName);
+    }
     /**
      * 
      */
@@ -105,16 +107,21 @@ public class SelectCombinationsController implements PropertyChangeListener{
     public void propertyChange(PropertyChangeEvent pce) {
         switch (pce.getPropertyName()) {
             case "stepName":
-                view.setStepName(pce.getNewValue());
+                setCurrentStepName(pce.getNewValue().toString()); 
                 break;                
             case "progress":
                 view.setProgress(pce.getNewValue());
                 break;
             case "result":
-                boolean success = "success".equals(pce.getNewValue()); 
-                this.view.enableCalculateTables(true);
-                if (success) {
-                    this.view.setVisible(false);
+                boolean success = "success".equals(pce.getNewValue());
+                if (success && this.stepName.equals("ExploreFile")) {
+                    MuARGUS.getCalculationService().calculateTables(this);
+                }
+                else {
+                    this.view.enableCalculateTables(true);
+                    if (success) {
+                        this.view.setVisible(false);
+                    }
                 }
                 break;
             case "error":
