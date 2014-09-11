@@ -204,13 +204,12 @@ public class ModifyNumericalVariablesController {
             }
 
             if (bottomValue) {
-                selected.setBottomValue(Double.toString(bottomValue_double));
+                selected.setBottomValue(getIntIfPossibel(bottomValue_double));
                 selected.setBottomReplacement(bottomReplacement);
-                System.out.println(Double.toString(bottomValue_double));
             }
 
             if (topValue) {
-                selected.setTopValue(Double.toString(topValue_double));
+                selected.setTopValue(getIntIfPossibel(topValue_double));
                 selected.setTopReplacement(topReplacement);
             }
 
@@ -220,7 +219,7 @@ public class ModifyNumericalVariablesController {
             try {
                 double roundingBase_double = StrUtils.toDouble(roundingBase_String);
                 if (roundingBase_double > 0) {
-                    selected.setRoundingBase(Double.toString(roundingBase_double));
+                    selected.setRoundingBase(getIntIfPossibel(roundingBase_double));
                 } else {
                     warningMessage += "Illegal Value for rounding";
                 }
@@ -234,7 +233,7 @@ public class ModifyNumericalVariablesController {
             try {
                 double weightNoisePercentage_double = StrUtils.toDouble(weightNoisePercentage_String);
                 if (weightNoisePercentage_double > 0) {
-                    selected.setRoundingBase(Double.toString(weightNoisePercentage_double));
+                    selected.setWeightNoisePercentage(getIntIfPossibel(weightNoisePercentage_double));
                 } else {
                     warningMessage += "Illegal Value for the weight noise percentage";
                 }
