@@ -13,17 +13,18 @@ package muargus.model;
 public class ModifyNumericalVariablesSpec {
     
     private final VariableMu variable;
-    private boolean modified = false;
+    private boolean modified;
     private double[] min_max;
-    private double bottomValue;
-    private double topValue;
+    private String bottomValue;
+    private String topValue;
     private String bottomReplacement;
     private String topReplacement;
-    private double roundingBase;
-    private double weightNoisePercentage;
+    private String roundingBase;
+    private String weightNoisePercentage;
 
     public ModifyNumericalVariablesSpec(VariableMu variable) {
         this.variable = variable;
+        this.modified = false;
     }
 
     public VariableMu getVariable() {
@@ -50,19 +51,19 @@ public class ModifyNumericalVariablesSpec {
         this.min_max = min_max;
     }
 
-    public double getBottomValue() {
+    public String getBottomValue() {
         return bottomValue;
     }
 
-    public void setBottomValue(double bottomValue) {
+    public void setBottomValue(String bottomValue) {
         this.bottomValue = bottomValue;
     }
 
-    public double getTopValue() {
+    public String getTopValue() {
         return topValue;
     }
 
-    public void setTopValue(double topValue) {
+    public void setTopValue(String topValue) {
         this.topValue = topValue;
     }
 
@@ -82,19 +83,19 @@ public class ModifyNumericalVariablesSpec {
         this.topReplacement = topReplacement;
     }
 
-    public double getRoundingBase() {
+    public String getRoundingBase() {
         return roundingBase;
     }
 
-    public void setRoundingBase(double roundingBase) {
+    public void setRoundingBase(String roundingBase) {
         this.roundingBase = roundingBase;
     }
 
-    public double getWeightNoisePercentage() {
+    public String getWeightNoisePercentage() {
         return weightNoisePercentage;
     }
 
-    public void setWeightNoisePercentage(double weightNoisePercentage) {
+    public void setWeightNoisePercentage(String weightNoisePercentage) {
         this.weightNoisePercentage = weightNoisePercentage;
     }
     

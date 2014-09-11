@@ -92,11 +92,11 @@ public class ModifyNumericalVariablesController {
     }
 
     public String getMin(ModifyNumericalVariablesSpec selected) {
-        if(selected.getMin() == 0){
+        if (selected.getMin() == 0) {
             System.out.println("test");
             return "";
         } else {
-        return getIntIfPossibel(selected.getMin());
+            return getIntIfPossibel(selected.getMin());
         }
     }
 
@@ -104,21 +104,40 @@ public class ModifyNumericalVariablesController {
         return getIntIfPossibel(selected.getMax());
     }
 
-    public String getBottomValue(ModifyNumericalVariablesSpec selected) {
-        return getIntIfPossibel(selected.getBottomValue());
-    }
-
-    public String getTopValue(ModifyNumericalVariablesSpec selected) {
-        return getIntIfPossibel(selected.getTopValue());
-    }
-
-    public String getRoundingBase(ModifyNumericalVariablesSpec selected) {
-        return getIntIfPossibel(selected.getRoundingBase());
-    }
-
-    public String getWeightNoisePercentage(ModifyNumericalVariablesSpec selected) {
-        return getIntIfPossibel(selected.getWeightNoisePercentage());
-    }
+//    public String getBottomValue(ModifyNumericalVariablesSpec selected) {
+//        String temp = this.view.getBottomValueTextField();
+//        if(!selected.getBottomValue().isNaN()){
+//            temp = getIntIfPossibel(selected.getBottomValue());
+//        }
+//        return temp;
+//    }
+//
+//    public String getTopValue(ModifyNumericalVariablesSpec selected) {
+//        String temp = this.view.getTopValueTextField();
+//        if(!selected.getBottomValue().isNaN()){
+//            temp = getIntIfPossibel(selected.getTopValue());
+//        }
+//        return temp;
+//    }
+//
+//    public String getRoundingBase(ModifyNumericalVariablesSpec selected) {
+//        String temp = this.view.getRoundingBaseTextField();
+//        if(selected.isModified()){
+//            
+//        }
+//        if(!selected.getBottomValue().isNaN()){
+//            temp = getIntIfPossibel(selected.getRoundingBase());
+//        }
+//        return temp;
+//    }
+//
+//    public String getWeightNoisePercentage(ModifyNumericalVariablesSpec selected) {
+//        String temp = this.view.getPercentageTextField();
+//        if(!selected.getBottomValue().isNaN()){
+//            temp = getIntIfPossibel(selected.getWeightNoisePercentage());
+//        }
+//        return temp;
+//    }
 
     public String setValues(ModifyNumericalVariablesSpec selected, String bottomValue_String, String topValue_String,
             String bottomReplacement, String topReplacement, String roundingBase_String, String weightNoisePercentage_String) {
@@ -145,8 +164,8 @@ public class ModifyNumericalVariablesController {
                 }
             }
         }
-        
-        if(!bottomReplacement.equals("") && bottomValue_String.equals("") ){
+
+        if (!bottomReplacement.equals("") && bottomValue_String.equals("")) {
             warningMessage += "Bottom value cannot be empty\n";
             bottomValue = false;
         }
@@ -171,8 +190,8 @@ public class ModifyNumericalVariablesController {
                 }
             }
         }
-        
-        if(!topReplacement.equals("") && topValue_String.equals("") ){
+
+        if (!topReplacement.equals("") && topValue_String.equals("")) {
             warningMessage += "Top value cannot be empty\n";
             topValue = false;
         }
@@ -185,22 +204,22 @@ public class ModifyNumericalVariablesController {
             }
 
             if (bottomValue) {
-                selected.setBottomValue(bottomValue_double);
+                selected.setBottomValue(Double.toString(bottomValue_double));
                 selected.setBottomReplacement(bottomReplacement);
             }
 
             if (topValue) {
-                selected.setTopValue(topValue_double);
+                selected.setTopValue(Double.toString(topValue_double));
                 selected.setTopReplacement(topReplacement);
             }
 
         }
-        
-        if(!roundingBase_String.equals("")){
+
+        if (!roundingBase_String.equals("")) {
             try {
                 double roundingBase_double = StrUtils.toDouble(roundingBase_String);
-                if(roundingBase_double >0){
-                    selected.setRoundingBase(roundingBase_double);
+                if (roundingBase_double > 0) {
+                    selected.setRoundingBase(Double.toString(roundingBase_double));
                 } else {
                     warningMessage += "Illegal Value for rounding";
                 }
@@ -209,12 +228,12 @@ public class ModifyNumericalVariablesController {
                 //Logger.getLogger(ModifyNumericalVariablesController.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-        
-        if(!weightNoisePercentage_String.equals("")){
+
+        if (!weightNoisePercentage_String.equals("")) {
             try {
                 double weightNoisePercentage_double = StrUtils.toDouble(weightNoisePercentage_String);
-                if(weightNoisePercentage_double >0){
-                    selected.setRoundingBase(weightNoisePercentage_double);
+                if (weightNoisePercentage_double > 0) {
+                    selected.setRoundingBase(Double.toString(weightNoisePercentage_double));
                 } else {
                     warningMessage += "Illegal Value for the weight noise percentage";
                 }
@@ -223,7 +242,7 @@ public class ModifyNumericalVariablesController {
                 //Logger.getLogger(ModifyNumericalVariablesController.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-        
+
         return warningMessage;
     }
 
