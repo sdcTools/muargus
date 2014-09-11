@@ -5,6 +5,7 @@
 package muargus.view;
 
 import javax.swing.JOptionPane;
+import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -49,7 +50,10 @@ public class ModifyNumericalVariablesView extends DialogBase {
     }
 
     public void initializeData() {
-        this.controller.setModifyNumericalVariablesSpecs();
+        if (this.metadataMu.getCombinations().getModifyNumericalVariables().getModifyNumericalVariablesSpec() == null) {
+            this.controller.setModifyNumericalVariablesSpecs();
+        }
+        //}
         makeVariablesTable();
         updateValues();
     }
@@ -58,23 +62,19 @@ public class ModifyNumericalVariablesView extends DialogBase {
         double[] min_max = this.controller.getMinMax(
                 this.model.getModifyNumericalVariablesSpec().get(this.variablesTable.getSelectedRow()).getVariable());
 
-        ModifyNumericalVariablesSpec selected = this.model.getModifyNumericalVariablesSpec().get(this.selectedRow);
+        ModifyNumericalVariablesSpec selected = this.model.getModifyNumericalVariablesSpec().get(this.variablesTable.getSelectedRow());
         selected.setMin_max(min_max);
         this.minimumTextField.setText(this.controller.getMin(selected));
         this.maximumTextField.setText(this.controller.getMax(selected));
         this.weightNoisePanel.setEnabled(selected.getVariable().isWeight());
         this.percentageLabel.setEnabled(selected.getVariable().isWeight());
         this.percentageTextField.setEnabled(selected.getVariable().isWeight());
-
-        if (selected.isModified()) {
-            System.out.println("modified");
-            this.bottomValueTextField.setText(this.controller.getBottomValue(selected));
-            this.bottomCodingReplacementTextField.setText(selected.getBottomReplacement());
-            this.topValueTextField.setText(this.controller.getTopValue(selected));
-            this.topCodingReplacementTextField.setText(selected.getTopReplacement());
-            this.roundingBaseTextField.setText(this.controller.getRoundingBase(selected));
-            this.percentageTextField.setText(this.controller.getWeightNoisePercentage(selected));
-        }
+        this.bottomValueTextField.setText(selected.getBottomValue());
+        this.bottomCodingReplacementTextField.setText(selected.getBottomReplacement());
+        this.topValueTextField.setText(selected.getTopValue());
+        this.topCodingReplacementTextField.setText(selected.getTopReplacement());
+        this.roundingBaseTextField.setText(selected.getRoundingBase());
+        this.percentageTextField.setText(selected.getWeightNoisePercentage());
     }
 
     /**
@@ -109,8 +109,14 @@ public class ModifyNumericalVariablesView extends DialogBase {
     }
 
     public void variablesSelectionChanged() {
-        //int newSelectedRow = this.variablesTable.getSelectedRow();
+        if (this.variablesTable.getSelectedRow() != this.selectedRow) {
+            checkValidAnswer();
+        }
         updateValues();
+    }
+
+    public void checkValidAnswer() {
+        setTextFields();
         if (valueEntered()) {
             ModifyNumericalVariablesSpec selected = this.model.getModifyNumericalVariablesSpec().get(this.selectedRow);
             String message = this.controller.setValues(selected, this.bottomValueTextField.getText(), this.topValueTextField.getText(),
@@ -127,13 +133,24 @@ public class ModifyNumericalVariablesView extends DialogBase {
             setModified(false);
             this.selectedRow = this.variablesTable.getSelectedRow();
         }
-
     }
 
     public void setModified(boolean modified) {
         this.model.setModified(this.selectedRow, modified);
         String modifiedText = this.model.getModifiedText(this.selectedRow, this.model.isModified(this.selectedRow));
         this.variablesTable.setValueAt(modifiedText, this.selectedRow, 0);
+    }
+
+    public void setTextFields() {
+        ModifyNumericalVariablesSpec selected = this.model.getModifyNumericalVariablesSpec().get(this.selectedRow);
+
+        selected.setBottomValue(this.bottomValueTextField.getText());
+        selected.setBottomReplacement(this.bottomCodingReplacementTextField.getText());
+        selected.setTopValue(this.topValueTextField.getText());
+        selected.setTopReplacement(this.topCodingReplacementTextField.getText());
+        selected.setRoundingBase(this.roundingBaseTextField.getText());
+        selected.setWeightNoisePercentage(this.percentageTextField.getText());
+
     }
 
     public boolean valueEntered() {
@@ -412,17 +429,25 @@ public class ModifyNumericalVariablesView extends DialogBase {
     }//GEN-LAST:event_closeButtonActionPerformed
 
     private void applyButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_applyButtonActionPerformed
-        variablesSelectionChanged();
-//        ModifyNumericalVariablesSpec selected = this.model.getModifyNumericalVariablesSpec().get(this.previousSelected);
-//        String message = this.controller.setValues(selected, this.bottomValueTextField.getText(), this.topValueTextField.getText(),
-//                this.bottomCodingReplacementTextField.getText(), this.topCodingReplacementTextField.getText(),
-//                this.roundingBaseTextField.getText(), this.percentageTextField.getText());
-//        if (!message.equals("")) {
-//            JOptionPane.showMessageDialog(null, message);
-//        } else {
-//            setModified();
-//        }
+        checkValidAnswer();
+        updateValues();
     }//GEN-LAST:event_applyButtonActionPerformed
+
+    public String getBottomValueTextField() {
+        return bottomValueTextField.getText();
+    }
+
+    public String getPercentageTextField() {
+        return percentageTextField.getText();
+    }
+
+    public String getRoundingBaseTextField() {
+        return roundingBaseTextField.getText();
+    }
+
+    public String getTopValueTextField() {
+        return topValueTextField.getText();
+    }
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

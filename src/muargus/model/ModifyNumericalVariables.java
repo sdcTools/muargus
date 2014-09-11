@@ -13,11 +13,12 @@ import java.util.ArrayList;
  */
 public class ModifyNumericalVariables {
 
-    private ArrayList<ModifyNumericalVariablesSpec> modifyNumericalVariablesSpec;
+    private ArrayList<ModifyNumericalVariablesSpec> modifyNumericalVariablesSpec =  null;
     private String[][] variablesData;
     private final String[] variablesColumnNames = {"Modified", "Variable"};
 
     public ModifyNumericalVariables() {
+        System.out.println("Model");
     }
 
     public ArrayList<ModifyNumericalVariablesSpec> getModifyNumericalVariablesSpec() {
@@ -37,10 +38,11 @@ public class ModifyNumericalVariables {
     }
     
     public boolean isModified(int index){
-        return this.variablesData[index][0].equals("X");
+        return this.modifyNumericalVariablesSpec.get(index).isModified();
     }
     
     public void setModified(int index, boolean modified) {
+        this.modifyNumericalVariablesSpec.get(index).setModified(modified);
         this.variablesData[index][0] = (modified? "X": "");
     }
     
