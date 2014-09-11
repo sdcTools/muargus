@@ -478,46 +478,34 @@ public class CalculationService {
         }
         safeMeta.setRecordCount(c.NumberofRecords());
     }
-    
-    private String getRecodeCodelistFile(Combinations combinations, VariableMu variable) {
-        RecodeMu recode = combinations.getGlobalRecode().getRecodeByVariableName(variable.getName());
-        return (recode != null && (recode.isRecoded() || recode.isTruncated())) ? recode.getCodeListFile() : "";
-    }
-    
-    public ArrayList<String> getVariableInfo() {
-        ArrayList<String> missingCodelists = new ArrayList<>();
+        
+    public void getVariableInfo() throws ArgusException {
         Combinations model = metadata.getCombinations();
         boolean hasRecode = (model.getGlobalRecode() != null);
         model.clearUnsafeCombinations();
         for (int varIndex = 0; varIndex < getVariables().size(); varIndex++) {
             VariableMu variable = getVariables().get(varIndex);
+                    variable.clearCodeInfos();
             if (variable.isCategorical()) {
-                HashMap<String, String> codelist = new HashMap<>();
-                String codelistFile = "";
-                if (hasRecode) {
-                    codelistFile = getRecodeCodelistFile(model, variable);
-                }
-                String message = getCodelist(variable, codelistFile, codelist);
-                if (message != null) {
-                    missingCodelists.add(message);
-                }
-            
                 if (model.getVariablesInTables().contains(variable)) {
-                    
-                    int[] nDims = new int[]{0};
+                    //If the variable is in one of the specified tables, get the unsafe combinations 
+                    int[] nDims = new int[1];                    
                     int[] unsafeCount = new int[model.getMaxDimsInTables()];
-
                     boolean result = c.UnsafeVariable(varIndex + 1, nDims, unsafeCount);
-                    //UnsafeInfo unsafe = new UnsafeInfo();
+                    if (!result) {
+                        throw new ArgusException("Error is UnsafeVariable");
+                    }
                     model.setUnsafeCombinations(variable, unsafeCount, nDims[0]);
-                    //model.setUnsafe(variable, unsafeCount);
 
                     int[] nCodes = new int[]{0};
                     result = c.UnsafeVariablePrepare(varIndex + 1, nCodes);
-                    int[] isMissing = new int[]{0};
-                    int[] freq = new int[]{0};
+                    if (!result) {
+                        throw new ArgusException("Error in UnsafeVariablePrepare");
+                    }
+                        
+                    int[] isMissing = new int[1];
+                    int[] freq = new int[1];
                     String[] code = new String[1];
-                    variable.clearCodeInfos();
                     for (int codeIndex = 0; codeIndex < nCodes[0]; codeIndex++) {
                         result = c.UnsafeVariableCodes(varIndex + 1,
                                 codeIndex + 1,
@@ -526,18 +514,21 @@ public class CalculationService {
                                 code,
                                 nDims,
                                 unsafeCount);
-                        CodeInfo codeInfo = new CodeInfo(code[0], isMissing[0] != 0);
-                        if (codelist.containsKey(code[0].trim())) {
-                            codeInfo.setLabel(codelist.get(code[0].trim()));
+                        if (!result) {
+                            throw new ArgusException("Error in UnsafeVariableCodes");
                         }
+                        CodeInfo codeInfo = new CodeInfo(code[0], isMissing[0] != 0);
                         codeInfo.setFrequency(freq[0]);
                         codeInfo.setUnsafeCombinations(nDims[0], unsafeCount);
                         variable.addCodeInfo(codeInfo);
                     }
                     result = c.UnsafeVariableClose(varIndex + 1);
+                    if (!result) {
+                        throw new ArgusException("Error in UnsafeVariableClose");
+                    }
                 }
                 else {
-                    variable.clearCodeInfos();
+                    //If the variable is not in the specified tables, just get the codelist
                     int codeIndex = 0;
                     while (true) {
                         codeIndex++;
@@ -546,12 +537,9 @@ public class CalculationService {
                         boolean result = c.GetVarCode(varIndex + 1, codeIndex, code, pramPerc); 
                         if (!result)
                             break;
-                        CodeInfo codeInfo = new CodeInfo(code[0], false);
-                         if (codelist.containsKey(code[0].trim())) {
-                            codeInfo.setLabel(codelist.get(code[0].trim()));
-                        }
-                        variable.addCodeInfo(codeInfo);
+                        variable.addCodeInfo(new CodeInfo(code[0], false));
                     }
+                    //Add the missings
                     for (int i=0; i < 2; i++) {
                         if (!"".equals(variable.getMissing(i))) {
                             CodeInfo codeInfo = new CodeInfo(variable.getMissing(i), true);
@@ -561,7 +549,6 @@ public class CalculationService {
                 }
             }
         }
-        return missingCodelists;
     }
 
     public void setPramVariable(PramVariableSpec pramVariable) throws ArgusException {
@@ -662,53 +649,5 @@ public class CalculationService {
         return ksi[0];
     }
 
-    private String getCodelist(VariableMu variable, String codelistFile, HashMap<String, String> codelist) {
-        if ("".equals(codelistFile) && variable.isCodelist()) {
-            codelistFile = variable.getCodeListFile();
-        }
-        if (!"".equals(codelistFile)) {
-            try {
-                readCodelist(codelist, codelistFile, metadata);
-            }
-            catch (ArgusException ex) {
-                return ex.getMessage();
-            }
-        }
-        return null;
-    }
-            //TODO: to other class
-    private void readCodelist(HashMap<String, String> codelist, String path, MetadataMu metadata) throws ArgusException {
-        BufferedReader reader = null;
-        try {
-            File file = new File(path);
-            if (!file.isAbsolute()) {
-                File dir = new File(metadata.getFileNames().getMetaFileName()).getParentFile();
-                file = new File(dir, path);
-            }
-            reader = new BufferedReader(new FileReader(file));
-        } catch (FileNotFoundException ex) {
-            System.out.println("file not found");
-            logger.log(Level.SEVERE, null, ex);
-            throw new ArgusException(String.format("Codelist %s not found", path));
-        }
-        try {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                String[] parts = line.split(",");
-                if (parts.length > 1) {
-                    codelist.put(parts[0].trim(), parts[1].trim());
-                }
-            }
-            reader.close();
-        } catch (Exception ex) {
-            logger.log(Level.SEVERE, null, ex);
-            try {
-                reader.close();
-            } catch (Exception e) {
-                ;
-            }
-            throw new ArgusException(String.format("Error in codelist file (%s)", path));
-        }
-    }
 
 }

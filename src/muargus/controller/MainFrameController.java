@@ -5,10 +5,15 @@ import argus.model.ArgusException;
 import argus.model.DataFilePair;
 import argus.utils.StrUtils;
 import java.awt.Desktop;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.xml.parsers.DocumentBuilder;
@@ -16,7 +21,11 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import muargus.HTMLReportWriter;
 import muargus.MuARGUS;
+import muargus.model.CodeInfo;
+import muargus.model.Combinations;
 import muargus.model.MetadataMu;
+import muargus.model.RecodeMu;
+import muargus.model.VariableMu;
 import muargus.view.MainFrameView;
 import org.w3c.dom.Document;
 
@@ -94,9 +103,9 @@ public class MainFrameController {
         // Release 2
         view.enableAction(Action.ShowTableCollection, tablesCalculated);
         view.enableAction(Action.PramSpecification, tablesCalculated);
-        view.enableAction(Action.IndividualRiskSpecification, 
+        view.enableAction(Action.IndividualRiskSpecification,
                 tablesCalculated && metadata.getCombinations().isRiskModel() && !metadata.isHouseholdData());
-        view.enableAction(Action.HouseholdRiskSpecification, 
+        view.enableAction(Action.HouseholdRiskSpecification,
                 tablesCalculated && metadata.getCombinations().isRiskModel() && metadata.isHouseholdData());
         view.enableAction(Action.ModifyNumericalVariables, tablesCalculated);
         view.enableAction(Action.NumericalMicroAggregation, tablesCalculated);
@@ -189,12 +198,155 @@ public class MainFrameController {
     }
 
     private void showUnsafeCombinations(int variableIndex) {
-        ArrayList<String> missingCodelists = MuARGUS.getCalculationService().getVariableInfo();
-        if (!missingCodelists.isEmpty()) {
-            view.showMessage(StrUtils.join("\n", missingCodelists));
+        try {
+            MuARGUS.getCalculationService().getVariableInfo();
+            ArrayList<String> missingCodelists = addCodelistInfo();
+            if (!missingCodelists.isEmpty()) {
+                view.showMessage(StrUtils.join("\n", missingCodelists));
+            }
+            view.showUnsafeCombinations(this.metadata.getCombinations(), variableIndex);
+            organise();
+        } catch (ArgusException ex) {
+            view.showErrorMessage(ex);
         }
-        view.showUnsafeCombinations(this.metadata.getCombinations(), variableIndex);
-        organise();
+    }
+
+    public ArrayList<String> addCodelistInfo() {
+        ArrayList<String> missingCodelists = new ArrayList<>();
+        Combinations model = this.metadata.getCombinations();
+        boolean hasRecode = (model.getGlobalRecode() != null);
+        for (VariableMu variable : this.metadata.getVariables()) {
+            if (variable.isCategorical()) {
+                String codelistFile = "";
+                if (hasRecode) {
+                    RecodeMu recode = model.getGlobalRecode().getRecodeByVariableName(variable.getName());
+                    if (recode != null && (recode.isRecoded() || recode.isTruncated())) {
+                        codelistFile = recode.getCodeListFile();
+                    }
+                }
+                if ("".equals(codelistFile) && variable.isCodelist()) {
+                    codelistFile = variable.getCodeListFile();
+                }
+                if (!"".equals(codelistFile)) {
+                    try {
+                        HashMap<String, String> codelist = readCodelist(codelistFile);
+                        for (CodeInfo codeInfo : variable.getCodeInfos()) {
+                            if (codelist.containsKey(codeInfo.getCode().trim())) {
+                                codeInfo.setLabel(codelist.get(codeInfo.getCode().trim()));
+                            }
+                        }
+                    } catch (ArgusException ex) {
+                        missingCodelists.add(ex.getMessage());
+                    }
+                }
+            }
+        }
+        return missingCodelists;
+    }
+//                
+//                    String message = getCodelist(variable, codelistFile, codelist);
+//                    if (message != null) {
+//                        missingCodelists.add(message);
+//                    }
+//                }
+//                }
+//            
+//                if (model.getVariablesInTables().contains(variable)) {
+//                    
+//                    int[] nDims = new int[]{0};
+//                    int[] unsafeCount = new int[model.getMaxDimsInTables()];
+//
+//                    boolean result = c.UnsafeVariable(varIndex + 1, nDims, unsafeCount);
+//                    //UnsafeInfo unsafe = new UnsafeInfo();
+//                    model.setUnsafeCombinations(variable, unsafeCount, nDims[0]);
+//                    //model.setUnsafe(variable, unsafeCount);
+//
+//                    int[] nCodes = new int[]{0};
+//                    result = c.UnsafeVariablePrepare(varIndex + 1, nCodes);
+//                    int[] isMissing = new int[]{0};
+//                    int[] freq = new int[]{0};
+//                    String[] code = new String[1];
+//                    variable.clearCodeInfos();
+//                    for (int codeIndex = 0; codeIndex < nCodes[0]; codeIndex++) {
+//                        result = c.UnsafeVariableCodes(varIndex + 1,
+//                                codeIndex + 1,
+//                                isMissing,
+//                                freq,
+//                                code,
+//                                nDims,
+//                                unsafeCount);
+//                        CodeInfo codeInfo = new CodeInfo(code[0], isMissing[0] != 0);
+//                        if (codelist.containsKey(code[0].trim())) {
+//                            codeInfo.setLabel(codelist.get(code[0].trim()));
+//                        }
+//                        codeInfo.setFrequency(freq[0]);
+//                        codeInfo.setUnsafeCombinations(nDims[0], unsafeCount);
+//                        variable.addCodeInfo(codeInfo);
+//                    }
+//                    result = c.UnsafeVariableClose(varIndex + 1);
+//                }
+//                else {
+//                    variable.clearCodeInfos();
+//                    int codeIndex = 0;
+//                    while (true) {
+//                        codeIndex++;
+//                        String[] code = new String[1];
+//                        int[] pramPerc = new int[1];
+//                        boolean result = c.GetVarCode(varIndex + 1, codeIndex, code, pramPerc); 
+//                        if (!result)
+//                            break;
+//                        CodeInfo codeInfo = new CodeInfo(code[0], false);
+//                         if (codelist.containsKey(code[0].trim())) {
+//                            codeInfo.setLabel(codelist.get(code[0].trim()));
+//                        }
+//                        variable.addCodeInfo(codeInfo);
+//                    }
+//                    for (int i=0; i < 2; i++) {
+//                        if (!"".equals(variable.getMissing(i))) {
+//                            CodeInfo codeInfo = new CodeInfo(variable.getMissing(i), true);
+//                            variable.addCodeInfo(codeInfo);
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//        return missingCodelists;
+//    }
+
+    private HashMap<String, String> readCodelist(String path) throws ArgusException {
+        BufferedReader reader = null;
+        try {
+            File file = new File(path);
+            if (!file.isAbsolute()) {
+                File dir = new File(this.metadata.getFileNames().getMetaFileName()).getParentFile();
+                file = new File(dir, path);
+            }
+            reader = new BufferedReader(new FileReader(file));
+        } catch (FileNotFoundException ex) {
+            System.out.println("file not found");
+            //logger.log(Level.SEVERE, null, ex);
+            throw new ArgusException(String.format("Codelist %s not found", path));
+        }
+        HashMap<String, String> codelist = new HashMap<>();
+        try {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(",");
+                if (parts.length > 1) {
+                    codelist.put(parts[0].trim(), StrUtils.unQuote(parts[1].trim()));
+                }
+            }
+            reader.close();
+        } catch (Exception ex) {
+            //logger.log(Level.SEVERE, null, ex);
+            try {
+                reader.close();
+            } catch (Exception e) {
+                ;
+            }
+            throw new ArgusException(String.format("Error in codelist file (%s)", path));
+        }
+        return codelist;
     }
 
     /**
