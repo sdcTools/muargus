@@ -206,6 +206,7 @@ public class ModifyNumericalVariablesController {
             if (bottomValue) {
                 selected.setBottomValue(Double.toString(bottomValue_double));
                 selected.setBottomReplacement(bottomReplacement);
+                System.out.println(Double.toString(bottomValue_double));
             }
 
             if (topValue) {

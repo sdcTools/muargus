@@ -1,11 +1,6 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package muargus.view;
 
 import javax.swing.JOptionPane;
-import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -115,7 +110,8 @@ public class ModifyNumericalVariablesView extends DialogBase {
         updateValues();
     }
 
-    public void checkValidAnswer() {
+    public boolean checkValidAnswer() {
+        boolean valid = false;
         setTextFields();
         if (valueEntered()) {
             ModifyNumericalVariablesSpec selected = this.model.getModifyNumericalVariablesSpec().get(this.selectedRow);
@@ -126,6 +122,7 @@ public class ModifyNumericalVariablesView extends DialogBase {
                 JOptionPane.showMessageDialog(null, message);
                 this.variablesTable.getSelectionModel().setSelectionInterval(this.selectedRow, this.selectedRow);
             } else {
+                valid = true;
                 setModified(true);
                 this.selectedRow = this.variablesTable.getSelectedRow();
             }
@@ -133,6 +130,7 @@ public class ModifyNumericalVariablesView extends DialogBase {
             setModified(false);
             this.selectedRow = this.variablesTable.getSelectedRow();
         }
+        return valid;
     }
 
     public void setModified(boolean modified) {
@@ -174,6 +172,30 @@ public class ModifyNumericalVariablesView extends DialogBase {
             valueEntered = true;
         }
         return valueEntered;
+    }
+
+    public boolean valueChanged() {
+        ModifyNumericalVariablesSpec selected = this.model.getModifyNumericalVariablesSpec().get(this.selectedRow);
+        boolean valueChanged = false;
+        if (!this.bottomValueTextField.getText().equals(selected.getBottomValue())) {
+            valueChanged = true;
+        }
+        if (!this.bottomCodingReplacementTextField.getText().equals(selected.getBottomReplacement())) {
+            valueChanged = true;
+        }
+        if (!this.topValueTextField.getText().equals(selected.getTopValue())) {
+            valueChanged = true;
+        }
+        if (!this.topCodingReplacementTextField.getText().equals(selected.getTopReplacement())) {
+            valueChanged = true;
+        }
+        if (!this.roundingBaseTextField.getText().equals(selected.getRoundingBase())) {
+            valueChanged = true;
+        }
+        if (!this.percentageTextField.getText().equals(selected.getWeightNoisePercentage())) {
+            valueChanged = true;
+        }
+        return valueChanged;
     }
 
     /**
@@ -425,7 +447,17 @@ public class ModifyNumericalVariablesView extends DialogBase {
     }// </editor-fold>//GEN-END:initComponents
 
     private void closeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_closeButtonActionPerformed
-        this.controller.close();
+        if (valueEntered() && valueChanged()) {
+            if (JOptionPane.showConfirmDialog(this, "Do you want to apply?", "Mu Argus", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+                if (checkValidAnswer()) {
+                    this.controller.close();
+                }
+            } else {
+                this.controller.close();
+            }
+        } else {
+            this.controller.close();
+        }
     }//GEN-LAST:event_closeButtonActionPerformed
 
     private void applyButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_applyButtonActionPerformed

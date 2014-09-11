@@ -6,12 +6,13 @@ Nog te doen:                                                                    
 
 Release 2
 
+dll functies:
+    - SetRound
+    - SetCodingTop
+    - SetCodingBottom  
+    - SetWeightNoise
 2.  variablesTable
-    - als een andere variabele wordt geselecteerd, dan komt dezelfde functie als bij apply
-9.  applyButton
-    - bereken top/bottom coding met dll
-10. closeButton
-    - sluit scherm
+    - maak de regels die zijn veranderd rood in de tabel
 11. schrijf javadocs
 12. Refactoren (kijken of alles volgens de MVC is gedaan, het weghalen van overbodige code etc.) 
 
@@ -33,6 +34,7 @@ Gedaan:                                                                         
     - zorg dat bij zowel klikken op een variabele als het gebruik van de pijltjestoetsen de waardes veranderen
       (dit gebeurd nog niet in de oude Mu) --> gebruik een selectionListener
     - zorg dat maar 1 rij tegelijkertijd aangeklikt kan worden.
+    - als een andere variabele wordt geselecteerd, dan komt dezelfde functie als bij apply
 3.  maximumTextField & minimumTextField
     - vul de waardes met de maximum/minimum waarde van de geselecteerde numerieke variabele uit de variablesTable
     - zorg dat het scherm non-editable is
@@ -47,5 +49,10 @@ Gedaan:                                                                         
     - zet alleen enabled als geselecteerde variabele een weightVariabele is
 8.  WeighNoiseTextField
     - moet een waarde groter dan 0 zijn
+9.  applyButton
+    - foe de apply functionaliteit
+10. closeButton
+    - sluit scherm
+    - geef ook een waarschuwing als al een keer applied is en een verandering is gemaakt.
 
 wishlish:
