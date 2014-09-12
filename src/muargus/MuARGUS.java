@@ -6,10 +6,11 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.SplashScreen;
+import java.util.Locale;
 import java.util.logging.Logger;
+import javax.swing.UnsupportedLookAndFeelException;
 import muargus.controller.CalculationService;
 import muargus.extern.dataengine.CMuArgCtrl;
-import muargus.model.MetadataMu;
 import muargus.view.MainFrameView;
 import org.apache.commons.io.FilenameUtils;
 
@@ -31,7 +32,9 @@ public class MuARGUS {
     
     private static final String messageTitle = "Mu Argus";
     private static final int nHistogramClasses = 10;
-    private static final int nCumulativeHistogramClasses = 50;
+    private static final int nCumulativeHistogramClasses = 100;
+    
+    private static final String lookAndFeel = "Windows";
     
     static {
         System.loadLibrary("libmuargusdll");
@@ -59,6 +62,10 @@ public class MuARGUS {
     
     public static int getNHistogramClasses(boolean cumulative) {
         return cumulative ? nCumulativeHistogramClasses : nHistogramClasses;
+    }
+    
+    public static Locale getLocale() {
+        return Locale.ENGLISH;
     }
     
     public static String getTempDir() {
@@ -108,21 +115,15 @@ public class MuARGUS {
      * @param args the command line arguments
      */
     public static void main(String[] args) {    
-                /* Set the Windows Classic look and feel */
+                /* Set the  look and feel */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Windows".equals(info.getName())) {
+                if (lookAndFeel.equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
                 }
             }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(MainFrameView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(MainFrameView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(MainFrameView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(MainFrameView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
