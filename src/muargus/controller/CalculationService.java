@@ -28,6 +28,7 @@ import muargus.model.RecodeMu;
 import muargus.model.TableMu;
 import muargus.model.CodeInfo;
 import muargus.model.PramVariableSpec;
+import muargus.model.ReplacementFile;
 import muargus.model.RiskModelClass;
 //import muargus.model.UnsafeInfo;
 import muargus.model.VariableMu;
@@ -86,6 +87,26 @@ public class CalculationService {
         c.CleanAll();
     }
 
+    public void fillReplacementFile(ReplacementFile replacement) throws ArgusException {
+        int[] errorCode = new int[1];
+        boolean result = c.WriteVariablesInFile(
+                this.metadata.getFileNames().getDataFileName(),
+                replacement.getInputFilePath(),
+                replacement.getVariables().size(),
+                getVarIndicesInFile(replacement.getVariables()),
+                MuARGUS.getDefaultSeparator(),
+                errorCode);
+        if (!result) {
+            throw new ArgusException("Error creating temporary replacement file: " + getErrorString(errorCode[0]));
+        }
+    }
+    
+    private String getErrorString(int errorType) {
+            String[] error = new String[1];
+            c.GetErrorString(errorType, error);
+            return error[0];
+    }
+
     public String doRecode(RecodeMu recode) throws ArgusException {
         int index = getIndexOf(recode.getVariable());
         int[] errorType = new int[]{0};
@@ -101,10 +122,8 @@ public class CalculationService {
                 errorPos,
                 warning);
         if (!result) {
-            String[] error = new String[1];
-            c.GetErrorString(errorType[0], error);
             throw new ArgusException(String.format("Error in recoding: %s\nline %d, position %d \nNo recoding done",
-                    error[0], errorLine[0], errorPos[0]));
+                    getErrorString(errorType[0]), errorLine[0], errorPos[0]));
         }
         return warning[0];
     }
@@ -341,12 +360,10 @@ public class CalculationService {
                 lineNumbers,
                 varIndexOut);
         if (!result) {
-            String[] error = new String[1];
-            c.GetErrorString(errorCodes[0], error);
             String var = (varIndexOut[0] > 0)
                     ? ", variable " + getVariables().get(varIndexOut[0] - 1).getName() : "";
             throw new ArgusException(String.format("Error in ExploreFile: %s\nLine %d%s",
-                    error[0], lineNumbers[0] + 1, var));
+                    getErrorString(errorCodes[0]), lineNumbers[0] + 1, var));
         }
         metadata.setRecordCount(c.NumberofRecords());
     }
@@ -402,7 +419,7 @@ public class CalculationService {
                     index,
                     table.getThreshold(),
                     table.getVariables().size(),
-                    getVarIndices(table, model),
+                    getVarIndicesInTable(table, model),
                     table.isRiskModel(),
                     riskVarIndex);
             if (!result) {
@@ -415,13 +432,22 @@ public class CalculationService {
         int[] tableIndex = new int[1];
         result = c.ComputeTables(errorCodes, tableIndex);
         if (!result) {
-            String[] errorString = new String[1];
-            result = c.GetErrorString(errorCodes[0], errorString);
-            throw new ArgusException(String.format("Error in ComputeTables: %s\nTable %d", errorString[0], tableIndex[0]));
+            String table = (tableIndex[0] > 0)
+                    ? "\nTable " + Integer.toString(tableIndex[0]) : "";
+            throw new ArgusException(String.format("Error in ComputeTables: %s%s", 
+                    getErrorString(errorCodes[0]), table));
         }
     }
 
-    private int[] getVarIndices(TableMu table, Combinations model) {
+    private int[] getVarIndicesInFile(ArrayList<VariableMu> variables) {
+        int[] indices = new int[variables.size()];
+        for (int index = 0; index < indices.length; index++) {
+            indices[index] = 1 + metadata.getVariables().indexOf(variables.get(index));
+        }
+        return indices;
+    }
+
+    private int[] getVarIndicesInTable(TableMu table, Combinations model) {
         int[] indices = new int[table.getVariables().size()];
         for (int index = 0; index < indices.length; index++) {
             indices[index] = 1 + getVariables().indexOf(table.getVariables().get(index));

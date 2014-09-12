@@ -16,18 +16,24 @@ import java.util.ArrayList;
  * @author pibd05
  */
 public class ReplacementFile {
-    private final File file;
+    private final File inputFile;
+    private final File outputFile;
     private final ArrayList<VariableMu> variables;
     private final String replacementType;
     
     public ReplacementFile(String replacementType) throws ArgusException {
         this.replacementType = replacementType;
-        this.file = createFile();
+        this.inputFile = createFile();
+        this.outputFile = createFile();
         this.variables = new ArrayList<>();
     }
 
-    public String getFilePath() {
-        return this.file.getPath();
+    public String getInputFilePath() {
+        return this.inputFile.getPath();
+    }
+
+    public String getOutputFilePath() {
+        return this.outputFile.getPath();
     }
 
     public ArrayList<VariableMu> getVariables() {

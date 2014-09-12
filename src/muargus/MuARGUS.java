@@ -33,6 +33,7 @@ public class MuARGUS {
     private static final String messageTitle = "Mu Argus";
     private static final int nHistogramClasses = 10;
     private static final int nCumulativeHistogramClasses = 100;
+    private static final String defaultSeparator = ",";
     
     private static final String lookAndFeel = "Windows";
     
@@ -66,6 +67,10 @@ public class MuARGUS {
     
     public static Locale getLocale() {
         return Locale.ENGLISH;
+    }
+    
+    public static String getDefaultSeparator() {
+        return defaultSeparator;
     }
     
     public static String getTempDir() {

@@ -103,6 +103,11 @@ public class MetadataMu {
         this.recordCount = recordCount;
     }
 
+    public ArrayList<ReplacementFile> getReplacementFiles() {
+        return replacementFiles;
+    }
+
+    
 //    public static ArrayList<VariableMu> makeClone(ArrayList<VariableMu> list) throws CloneNotSupportedException {
 //        ArrayList<VariableMu> clone = new ArrayList<>(list.size());
 //        for (VariableMu item : list) {

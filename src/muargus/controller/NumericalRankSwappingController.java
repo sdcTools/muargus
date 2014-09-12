@@ -6,8 +6,13 @@
 
 package muargus.controller;
 
+import argus.model.ArgusException;
+import java.util.ArrayList;
+import muargus.MuARGUS;
 import muargus.model.MetadataMu;
 import muargus.model.NumericalRankSwapping;
+import muargus.model.ReplacementFile;
+import muargus.model.VariableMu;
 import muargus.view.NumericalRankSwappingView;
 
 /**
@@ -24,6 +29,7 @@ public class NumericalRankSwappingController {
         this.view = new NumericalRankSwappingView(parentView, true, this);
         this.metadataMu = metadataMu;
         this.view.setMetadataMu(this.metadataMu);
+        this.calculationService = MuARGUS.getCalculationService();
     }
     
     /**
@@ -48,5 +54,35 @@ public class NumericalRankSwappingController {
      */
     public void setModel(NumericalRankSwapping model) {
         this.model = model;
+    }
+    
+    public void apply() {
+        ArrayList<VariableMu> selectedVariables = view.getSelectedVariables();
+        if (variablesAreUsed(selectedVariables)) {
+            if (!view.showConfirmDialog("One or more of the variables are already modified. Continue?")) {
+                return;
+            }
+        }
+        try {
+            ReplacementFile replacement = new ReplacementFile("RankSwapping");
+            replacement.getVariables().addAll(selectedVariables);
+            calculationService.fillReplacementFile(replacement);
+            this.metadataMu.getReplacementFiles().add(replacement);
+            //TODO: de catalaan
+        }
+        catch (ArgusException ex) {
+            view.showErrorMessage(ex);
+        }
+    }
+    
+    private boolean variablesAreUsed(ArrayList<VariableMu> variables) {
+        for (VariableMu variable : variables) {
+            for (ReplacementFile replacement : this.metadataMu.getReplacementFiles()) {
+                if (replacement.getVariables().contains(variable)) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }

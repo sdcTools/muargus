@@ -6,10 +6,14 @@
 
 package muargus.model;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author ambargus
  */
 public class NumericalRankSwapping {
+    private ArrayList<VariableMu> variables;
+    private ReplacementFile replacementFile;
     
 }

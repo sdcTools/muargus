@@ -4,9 +4,11 @@
  */
 package muargus.view;
 
+import java.util.ArrayList;
 import muargus.controller.NumericalRankSwappingController;
 import muargus.model.MetadataMu;
 import muargus.model.NumericalRankSwapping;
+import muargus.model.VariableMu;
 
 
 /**
@@ -46,6 +48,10 @@ public class NumericalRankSwappingView extends DialogBase {
         
     }
 
+    public ArrayList<VariableMu> getSelectedVariables() {
+        //TODO implement
+        return null;
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
