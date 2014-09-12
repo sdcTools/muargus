@@ -4,7 +4,6 @@
  */
 package muargus.view;
 
-import argus.utils.SystemUtils;
 import java.awt.Color;
 import java.io.File;
 import javax.swing.JCheckBox;
@@ -24,7 +23,6 @@ public class MakeProtectedFileView extends DialogBase {
 
     MakeProtectedFileController controller;
     ProtectedFile model;
-    private MetadataMu metadataMu;
     private TableModel tableModel;
 
     /**
@@ -43,21 +41,17 @@ public class MakeProtectedFileView extends DialogBase {
         this.suppressionWeightTable.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     }
 
-    public void setMetadataMu(MetadataMu metadataMu) {
-        this.metadataMu = metadataMu;
-        this.model = this.metadataMu.getCombinations().getProtectedFile();
-        this.makeVariables();
-    }
-
-    public final void makeVariables() {
+    @Override
+    public void initializeData() {
+        this.model = getMetadata().getCombinations().getProtectedFile();
         this.getSuppressionRadioButton().setSelected(true);
-        this.model.setHouseholdData(this.metadataMu.isHouseholdData());
+        this.model.setHouseholdData(getMetadata().isHouseholdData());
         this.hhIdentifierPanel.setEnabled(this.model.isHouseholdData());
         this.keepInSafeFileRadioButton.setEnabled(this.model.isHouseholdData());
         this.changeIntoSequenceNumberRadioButton.setEnabled(this.model.isHouseholdData());
         this.removeFromSafeFileRadioButton.setEnabled(this.model.isHouseholdData());
         this.addRiskToOutputFileCheckBox.setVisible(this.model.isRiskModel());
-        this.writeRecordRandomOrderCheckBox.setEnabled(metadataMu.getDataFileType() == MetadataMu.DATA_FILE_TYPE_FIXED);
+        this.writeRecordRandomOrderCheckBox.setEnabled(getMetadata().getDataFileType() == MetadataMu.DATA_FILE_TYPE_FIXED);
         this.updateValues();
     }
 
@@ -77,6 +71,7 @@ public class MakeProtectedFileView extends DialogBase {
 
         // makes it impossible to change values in the table (during usage)
         this.tableModel = new DefaultTableModel(this.model.getData(), this.model.getColumnames()) {
+            @Override
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return false;
             }
@@ -86,8 +81,9 @@ public class MakeProtectedFileView extends DialogBase {
         this.suppressionWeightSlider.setValue(Integer.parseInt(this.model.getData()[this.model.getSelectedRow()][1]));
     }
 
-    public void setProgress(Object value) {
-        this.progressbar.setValue((Integer) value);
+    @Override
+    public void setProgress(int progress) {
+        this.progressbar.setValue(progress);
     }
 
     public JRadioButton getChangeIntoSequenceNumberRadioButton() {

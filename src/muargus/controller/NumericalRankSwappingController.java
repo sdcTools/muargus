@@ -7,6 +7,8 @@
 package muargus.controller;
 
 import argus.model.ArgusException;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import muargus.MuARGUS;
 import muargus.model.MetadataMu;
@@ -19,17 +21,19 @@ import muargus.view.NumericalRankSwappingView;
  *
  * @author ambargus
  */
-public class NumericalRankSwappingController {
+public class NumericalRankSwappingController extends ControllerBase {
     NumericalRankSwappingView view;
-    NumericalRankSwapping model;
+    //NumericalRankSwapping model;
     MetadataMu metadataMu;
     CalculationService calculationService;
 
     public NumericalRankSwappingController(java.awt.Frame parentView, MetadataMu metadataMu) {
         this.view = new NumericalRankSwappingView(parentView, true, this);
+        super.setView(this.view);
         this.metadataMu = metadataMu;
         this.view.setMetadataMu(this.metadataMu);
         this.calculationService = MuARGUS.getCalculationService();
+        
     }
     
     /**
@@ -45,18 +49,8 @@ public class NumericalRankSwappingController {
     public void close() {
         this.view.setVisible(false);
     }
-
-    /**
-     * Fuction for setting the model. This function is used by the view after
-     * setting the model itself
-     *
-     * @param model the model class of the ShowTableCollection screen
-     */
-    public void setModel(NumericalRankSwapping model) {
-        this.model = model;
-    }
     
-    public void apply() {
+    public void calculate() {
         ArrayList<VariableMu> selectedVariables = view.getSelectedVariables();
         if (variablesAreUsed(selectedVariables)) {
             if (!view.showConfirmDialog("One or more of the variables are already modified. Continue?")) {
@@ -64,10 +58,13 @@ public class NumericalRankSwappingController {
             }
         }
         try {
+            NumericalRankSwapping rankSwapping = new NumericalRankSwapping(view.getPercentage());
+            rankSwapping.getVariables().addAll(selectedVariables);
+            
             ReplacementFile replacement = new ReplacementFile("RankSwapping");
             replacement.getVariables().addAll(selectedVariables);
-            calculationService.fillReplacementFile(replacement);
             this.metadataMu.getReplacementFiles().add(replacement);
+            this.calculationService.makeReplacementFile(this);
             //TODO: de catalaan
         }
         catch (ArgusException ex) {
@@ -85,4 +82,7 @@ public class NumericalRankSwappingController {
         }
         return false;
     }
+
+    
+    
 }

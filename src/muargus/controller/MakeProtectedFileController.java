@@ -17,11 +17,11 @@ import muargus.view.MakeProtectedFileView;
  *
  * @author ambargus
  */
-public class MakeProtectedFileController implements PropertyChangeListener {
+public class MakeProtectedFileController extends ControllerBase {
 
-    private MakeProtectedFileView view;
+    //private MakeProtectedFileView view;
     //MakeProtectedFileModel model;
-    private MetadataMu metadata;
+    private final MetadataMu metadata;
     //Combinations selectCombinationsModel;
     private boolean fileCreated;
     private final CalculationService service;
@@ -36,16 +36,16 @@ public class MakeProtectedFileController implements PropertyChangeListener {
         //this.model = model;
         //this.selectCombinationsModel = selectCombinationsModel;
         //this.model.setRiskModel(this.selectCombinationsModel.isRiskModel());
-        this.view = new MakeProtectedFileView(parentView, true, this);
+        this.setView(new MakeProtectedFileView(parentView, true, this));
         this.metadata = metadata;
-        this.view.setMetadataMu(this.metadata);
+        this.getView().setMetadata(this.metadata);
         this.fileCreated = false;
         this.service = MuARGUS.getCalculationService();
 
     }
 
     public void showView() {
-        this.view.setVisible(true);
+        this.getView().setVisible(true);
     }
 
 //    public ProtectedFile getModel() {
@@ -71,7 +71,7 @@ public class MakeProtectedFileController implements PropertyChangeListener {
             this.fileCreated = true;
         }
         catch (ArgusException ex) {
-            this.view.showErrorMessage(ex);
+            this.getView().showErrorMessage(ex);
         }
     }
 
@@ -83,22 +83,11 @@ public class MakeProtectedFileController implements PropertyChangeListener {
         return fileCreated;
     }
 
-    
     @Override
-    public void propertyChange(PropertyChangeEvent pce) {
-        switch (pce.getPropertyName()) {
-            case "progress":
-                view.setProgress(pce.getNewValue());
-                break;
-            case "result":
-                if ("success".equals(pce.getNewValue())) {
-                    saveSafeMeta();
-                    view.setVisible(!this.fileCreated);
-                }
-                break;
-            case "error":
-                view.showErrorMessage((ArgusException)pce.getNewValue());
-                break;
-        }
+    protected void doNextStep() {
+        saveSafeMeta();
+        this.getView().setVisible(!this.fileCreated);
     }
+
+  
 }

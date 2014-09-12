@@ -60,6 +60,7 @@ public class CalculationService {
         ExploreFile,
         CalculateTables,
         MakeProtectedFile,
+        MakeReplacementFile
     }
 
     private static final Logger logger = Logger.getLogger(SelectCombinationsController.class.getName());
@@ -87,7 +88,12 @@ public class CalculationService {
         c.CleanAll();
     }
 
-    public void fillReplacementFile(ReplacementFile replacement) throws ArgusException {
+    public void makeReplacementFile(PropertyChangeListener listener) {
+        executeSwingWorker(BackgroundTask.MakeReplacementFile, listener);
+    }
+    
+    private void makeReplacementFileInBackground() throws ArgusException {
+        ReplacementFile replacement = this.metadata.getReplacementFiles().get(this.metadata.getReplacementFiles().size()-1);
         int[] errorCode = new int[1];
         boolean result = c.WriteVariablesInFile(
                 this.metadata.getFileNames().getDataFileName(),
@@ -322,6 +328,9 @@ public class CalculationService {
                 break;
             case MakeProtectedFile:
                 makeFileInBackground();
+                break;
+            case MakeReplacementFile:
+                makeReplacementFileInBackground();
                 break;
         }
 

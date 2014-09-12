@@ -55,6 +55,7 @@ public class MetadataMu {
     public MetadataMu() {
         variables = new ArrayList<>();
         filenames = new DataFilePair(null, null);
+        replacementFiles = new ArrayList<>();
     }
 
     public MetadataMu(MetadataMu metadata) {
