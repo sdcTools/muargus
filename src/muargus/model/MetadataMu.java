@@ -50,6 +50,7 @@ public class MetadataMu {
     private DataFilePair filenames;
     private Combinations combinations;
     private int recordCount;
+    private ArrayList<ReplacementFile> replacementFiles;
 
     public MetadataMu() {
         variables = new ArrayList<>();

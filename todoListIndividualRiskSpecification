@@ -4,10 +4,9 @@ niet behandelde opmerkingen/vragen:
 Nog te doen:                                                                                                Mee bezig:
 
 Release 2
--Cancel-knop nog nodig?
+-Is Cancel-knop nog nodig?
 -OK button: staat op onhandige plek
--Gaps slider aanpassen
-
+-Bug: HH risks geven andere waarden dan oude Mu
 
 
 Release 3+
@@ -50,5 +49,6 @@ Gedaan:                                                                         
 10. Lijnen tussen de Calc controls (a la oude Mu)
 -Calc obv Reindent Rate threshold
 -Cumulatief: geen schuine lijnen, is dit erg?
+-Gaps slider aanpassen
 
 wishlish:
