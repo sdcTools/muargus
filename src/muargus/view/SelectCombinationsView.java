@@ -26,7 +26,6 @@ public class SelectCombinationsView extends DialogBase {
 
     private final SelectCombinationsController controller;
     private Combinations model;
-    private MetadataMu metadataMu;
     private DefaultListModel variablesListModel;
     private DefaultListModel variablesSelectedListModel;
     private TableModel tableModel;
@@ -58,23 +57,13 @@ public class SelectCombinationsView extends DialogBase {
     }
 
     /**
-     * Sets the metadata and calls the method to fill the variableList
-     *
-     * @param metadataMu Metadata Class containing all the metadata (variables
-     * etc)
-     */
-    public void setMetadataMu(MetadataMu metadataMu) {
-        this.metadataMu = metadataMu;
-    }
-
-    /**
      * Fills the selecCombinationsScreen with it's default values
      */
     public void makeVariables() {
         // make listModels and add the variables that are categorical
         variablesListModel = new DefaultListModel<>();
         variablesSelectedListModel = new DefaultListModel<>();
-        for (VariableMu variable : metadataMu.getVariables()) {
+        for (VariableMu variable : getMetadata().getVariables()) {
             if (variable.isCategorical()) {
                 variablesListModel.addElement(variable);
             }
@@ -117,6 +106,7 @@ public class SelectCombinationsView extends DialogBase {
         }
 
         tableModel = new DefaultTableModel(data, columnNames.toArray()){
+            @Override
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return false;
             }
@@ -652,12 +642,14 @@ public class SelectCombinationsView extends DialogBase {
         }
     }
 
-    public void setProgress(Object value) {
-        this.progressbar.setValue((Integer) value);
+    @Override
+    public void setProgress(int progress) {
+        this.progressbar.setValue(progress);
     }
 
-    public void setStepName(Object value) {
-        this.progressLabel.setText(value.toString());
+    @Override
+    public void showStepName(String value) {
+        this.progressLabel.setText(value);
     }
 
     public void calculateTablesForDimensions(ArrayList<VariableMu> data, int dimensions) {
@@ -767,7 +759,7 @@ public class SelectCombinationsView extends DialogBase {
     }
 
     private boolean weightVariableExists() {
-        for (VariableMu variable : this.metadataMu.getVariables()) {
+        for (VariableMu variable : getMetadata().getVariables()) {
             if (variable.isWeight()) {
                 return true;
             }

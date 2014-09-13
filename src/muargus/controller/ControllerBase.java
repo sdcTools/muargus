@@ -9,7 +9,6 @@ package muargus.controller;
 import argus.model.ArgusException;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import muargus.MuARGUS;
 import muargus.view.DialogBase;
 
 /**
@@ -35,9 +34,7 @@ public class ControllerBase implements PropertyChangeListener {
                 break;
             case "result":
                 boolean success = "success".equals(pce.getNewValue());
-                if (success) {
-                    doNextStep();
-                }
+                doNextStep(success);
                 break;
             case "error":
                 //the new value always contains an ArgusException with the error details
@@ -54,7 +51,7 @@ public class ControllerBase implements PropertyChangeListener {
         return this.viewBase;
     }
     
-    protected void doNextStep() {
+    protected void doNextStep(boolean success) {
         //Base class implementation is empty
     }
     
@@ -62,7 +59,9 @@ public class ControllerBase implements PropertyChangeListener {
         this.stepName = stepName;
         viewBase.showStepName(this.stepName);
     }
-        
-        
-    
+
+    protected String getStepName() {
+        return stepName;
+    }
+
 }

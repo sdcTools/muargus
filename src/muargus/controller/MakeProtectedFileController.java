@@ -38,10 +38,10 @@ public class MakeProtectedFileController extends ControllerBase {
         //this.model.setRiskModel(this.selectCombinationsModel.isRiskModel());
         this.setView(new MakeProtectedFileView(parentView, true, this));
         this.metadata = metadata;
-        this.getView().setMetadata(this.metadata);
         this.fileCreated = false;
         this.service = MuARGUS.getCalculationService();
 
+        getView().setMetadata(this.metadata);
     }
 
     public void showView() {
@@ -84,9 +84,13 @@ public class MakeProtectedFileController extends ControllerBase {
     }
 
     @Override
-    protected void doNextStep() {
-        saveSafeMeta();
-        this.getView().setVisible(!this.fileCreated);
+    protected void doNextStep(boolean success) {
+        if (success) {
+            saveSafeMeta();
+            if (fileCreated) {
+                this.getView().setVisible(false);
+            }
+        }
     }
 
   

@@ -25,7 +25,7 @@ public class DialogBase extends javax.swing.JDialog {
     /**
      * Creates new form DialogBase
      */
-    public DialogBase(java.awt.Frame parent, boolean modal) {
+    public DialogBase(final java.awt.Frame parent, final boolean modal) {
         super(parent, modal);
         initComponents();
     }
