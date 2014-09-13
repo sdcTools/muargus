@@ -5,12 +5,13 @@
 package muargus.controller;
 
 import argus.model.ArgusException;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.io.File;
+import java.util.ArrayList;
 import muargus.MuARGUS;
 import muargus.model.MetadataMu;
 import muargus.model.Combinations;
+import muargus.model.ReplacementFile;
+import muargus.model.VariableMu;
 import muargus.view.MakeProtectedFileView;
 
 /**
@@ -29,8 +30,6 @@ public class MakeProtectedFileController extends ControllerBase {
      *
      * @param parentView
      * @param metadata
-     * @param model
-     * @param selectCombinationsModel
      */
     public MakeProtectedFileController(java.awt.Frame parentView, MetadataMu metadata) {
         //this.model = model;
@@ -55,10 +54,35 @@ public class MakeProtectedFileController extends ControllerBase {
     
     /**
      *
+     * @param file
      */
     public void makeFile(File file) {
         this.metadata.getCombinations().getProtectedFile().initSafeMeta(file, this.metadata);
+        removeRedundentReplacementFiles();
         this.service.makeProtectedFile(this);
+    }
+    
+    private void removeRedundentReplacementFiles() {
+        ArrayList<ReplacementFile> toRemove = new ArrayList<>();
+        int index = 0;
+        for (ReplacementFile replacement : this.metadata.getReplacementFiles()) {
+            ArrayList<VariableMu> variablesFound = new ArrayList<>();
+            for (int index2 = index+1; index < this.metadata.getReplacementFiles().size(); index2++) {
+                ReplacementFile replacement2 = this.metadata.getReplacementFiles().get(index2);
+                for (VariableMu variable : replacement2.getVariables()) {
+                    if (replacement.getVariables().contains(variable) && !variablesFound.contains(variable)) {
+                        variablesFound.add(variable);
+                    }
+                }
+            }
+            if (variablesFound.size() == replacement.getVariables().size()) {
+                toRemove.add(replacement);
+            }
+            index++;
+        }
+        for (ReplacementFile replacement : toRemove) {
+            this.metadata.getReplacementFiles().remove(replacement);
+        }
     }
     
     private void saveSafeMeta() {

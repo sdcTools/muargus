@@ -36,7 +36,8 @@ public class RiskSpecificationView extends DialogBase implements ChartProgressLi
      * 
      * @param parent
      * @param modal
-     * @param controller 
+     * @param controller
+     * @param isHousehold
      */
     public RiskSpecificationView(java.awt.Frame parent, boolean modal, RiskSpecificationController controller,
             boolean isHousehold) {
@@ -122,8 +123,6 @@ public class RiskSpecificationView extends DialogBase implements ChartProgressLi
         double value = riskSlider.getMaximum() *  Math.log(this.model.getRiskThreshold()/this.model.getMinRisk())/
                 Math.log(this.model.getMaxRisk()/this.model.getMinRisk());
         this.riskSlider.setValue((int)value);
-        //TODO
-        ;
     }
     
     /**
@@ -166,7 +165,7 @@ public class RiskSpecificationView extends DialogBase implements ChartProgressLi
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Risk Specification");
-        setMinimumSize(new java.awt.Dimension(716, 300));
+        setMinimumSize(new java.awt.Dimension(725, 300));
 
         tableLabel.setText("Dimensions");
 
@@ -368,7 +367,7 @@ public class RiskSpecificationView extends DialogBase implements ChartProgressLi
                 .addComponent(riskSlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
-        okButton.setText("OK");
+        okButton.setText("Done");
         okButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 okButtonActionPerformed(evt);
@@ -385,10 +384,7 @@ public class RiskSpecificationView extends DialogBase implements ChartProgressLi
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(cumulativeCheckbox)
                 .addGap(74, 74, 74))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(0, 0, 0)
-                .addComponent(jPanelChart, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(0, 0, 0))
+            .addComponent(jPanelChart, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(27, 27, 27)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -575,28 +571,6 @@ public class RiskSpecificationView extends DialogBase implements ChartProgressLi
                         .addComponent(riskSlider)
                         .addContainerGap(gapRight, gapRight));
             sliderPanel.setLayout(groupLayout);
-            //LayoutManager l2 = riskSlider.getLayout();
-            //FlowLayout flowLayout = new FlowLayout();
-            //BorderLayout b;
-            //flowLayout.setHgap(10);
-            //sliderPanel.setLayout(flowLayout);
-            //sliderPanel.setLayout(flowLayout);
-            //riskSlider.setLayout(flowLayout);
-            //sliderPanel.setSize(200,50);
-            //riskSlider.setLocation(10, 0);
-            //riskSlider.setSize((int)rect.getWidth(), riskSlider.getSize().height);
-            //sliderPanel.add(riskSlider);
-//            this.riskSlider.setLayout(null);
-//            this.riskSlider.setBounds(
-//                    (int)rect.getX(), 
-//                    riskSlider.getY(), 
-//                    (int)rect.getWidth(), 
-//                    riskSlider.getHeight());
-//            //this.riskSlider.setPreferredSize(null);
-//            //this.riskSlider.getLayout();
-//            this.doLayout();
-//            //TODO: resize the slider
-            ;
         }
     }
 }

@@ -8,12 +8,7 @@ package muargus.controller;
 import argus.model.ArgusException;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -185,7 +180,27 @@ public class CalculationService {
         applyRecode();
     }
 
+    private void doChangeFiles() throws ArgusException {
+        boolean result = c.SetNumberOfChangeFiles(this.metadata.getReplacementFiles().size());
+        if (!result) {
+            throw new ArgusException("Error during SetNumberOfChangeFiles");
+        }
+        int index = 0;
+        for (ReplacementFile replacement : this.metadata.getReplacementFiles()) {
+            index++;
+            result = c.SetChangeFile(index, 
+                    replacement.getOutputFilePath(), 
+                    replacement.getVariables().size(),
+                    getVarIndicesInFile(replacement.getVariables()),
+                    MuARGUS.getDefaultSeparator());
+            if (!result) {
+                throw new ArgusException(String.format("Error during SetChangeFile for replacement file %d", index));
+            }
+        }
+    }
+    
     private void makeFileInBackground() throws ArgusException {
+        doChangeFiles();
         ProtectedFile protectedFile = metadata.getCombinations().getProtectedFile();
         c.SetProgressListener(new ProgressListener(this));
 
