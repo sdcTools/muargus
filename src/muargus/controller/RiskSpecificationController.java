@@ -22,21 +22,21 @@ import muargus.view.TablePickView;
  *
  * @author ambargus
  */
-public class RiskSpecificationController {
+public class RiskSpecificationController extends ControllerBase {
     
     private final int MAX_ITERATIONS = 10;
     
-    private RiskSpecificationView view;
-    private RiskSpecification model;
-    private MetadataMu metadataMu;
-    private CalculationService calculationService;
-    private java.awt.Frame parentView; 
+    //private RiskSpecificationView view;
+    private final RiskSpecification model;
+    private final MetadataMu metadata;
+    private final CalculationService calculationService;
+    private final java.awt.Frame parentView; 
     
-    public RiskSpecificationController(java.awt.Frame parentView, MetadataMu metadataMu) {
+    public RiskSpecificationController(java.awt.Frame parentView, MetadataMu metadata) {
         this.parentView = parentView;
-        this.view = new RiskSpecificationView(parentView, true, this, metadataMu.isHouseholdData());
-        this.metadataMu = metadataMu;
-        this.model = this.metadataMu.getCombinations().getRiskSpecification();
+        super.setView(new RiskSpecificationView(parentView, true, this, metadata.isHouseholdData()));
+        this.metadata = metadata;
+        this.model = this.metadata.getCombinations().getRiskSpecification();
         this.calculationService = MuARGUS.getCalculationService();
     }
     
@@ -59,7 +59,7 @@ public class RiskSpecificationController {
     
     private ArrayList<TableMu> getRiskTables() {
         ArrayList<TableMu> tables = new ArrayList<>();
-        for (TableMu tableMu : this.metadataMu.getCombinations().getTables()) {
+        for (TableMu tableMu : this.metadata.getCombinations().getTables()) {
             if (tableMu.isRiskModel()) {
                 tables.add(tableMu);
             }
@@ -90,10 +90,9 @@ public class RiskSpecificationController {
         }
         
         calculateByRiskThreshold();
-        this.view.setMetadataMu(this.metadataMu);
+        this.getView().setMetadata(this.metadata);
         
-        this.view.showChart();
-        this.view.setVisible(true);
+        this.getView().setVisible(true);
     }
     
     public void fillModelHistogramData(boolean cumulative) {
@@ -103,7 +102,7 @@ public class RiskSpecificationController {
         this.model.setMaxReidentRate(maxReident);
         }
         catch (ArgusException ex) {
-            view.showErrorMessage(ex);
+            getView().showErrorMessage(ex);
         }
         
     }
@@ -169,7 +168,7 @@ public class RiskSpecificationController {
      * Closes the view by setting its visibility to false.
      */
     public void close() {
-        this.view.setVisible(false);
+        getView().setVisible(false);
     }
 
 

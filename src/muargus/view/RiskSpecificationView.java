@@ -6,8 +6,6 @@ package muargus.view;
 
 import argus.model.ArgusException;
 import java.awt.BorderLayout;
-import java.awt.FlowLayout;
-import java.awt.LayoutManager;
 import java.awt.geom.Rectangle2D;
 import java.text.NumberFormat;
 import java.text.ParseException;
@@ -15,7 +13,6 @@ import javax.swing.GroupLayout;
 import muargus.MuARGUS;
 import muargus.RiskChartBuilder;
 import muargus.controller.RiskSpecificationController;
-import muargus.model.MetadataMu;
 import muargus.model.RiskSpecification;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.event.ChartProgressEvent;
@@ -27,14 +24,14 @@ import org.jfree.chart.event.ChartProgressListener;
  */
 public class RiskSpecificationView extends DialogBase implements ChartProgressListener {
 
-    MetadataMu metadataMu;
+    //MetadataMu metadataMu;
     RiskSpecificationController controller;
     RiskSpecification model;
     ChartPanel cp = null;
     private boolean calculating = false;
     
-    
     private final int SLIDERKNOBSIZE = 16;
+
     /**
      * 
      * @param parent
@@ -50,13 +47,7 @@ public class RiskSpecificationView extends DialogBase implements ChartProgressLi
         this.controller = controller;
     }
     
-    public void setMetadataMu(MetadataMu metadataMu) {
-        this.metadataMu = metadataMu;
-        this.model = this.metadataMu.getCombinations().getRiskSpecification();
-        initializeData();
-    }
-    
-    public void showChart() {
+    private void showChart() {
         if (jPanelChart.getComponentCount() > 0) {
             jPanelChart.remove(cp);
             jPanelChart.revalidate();
@@ -94,11 +85,14 @@ public class RiskSpecificationView extends DialogBase implements ChartProgressLi
 //    }
     
     
+    @Override
     public void initializeData() {
+        this.model = getMetadata().getCombinations().getRiskSpecification();
         this.tableLabel.setText(controller.getRiskTableTitle(this.model.getRiskTable())); 
         //this.maxRiskTextField.setText(formatDouble(this.model.getMaxRisk()));
         //this.maxReidentRateTextField.setText(formatDoublePrc(100*this.model.getMaxReidentRate()));
         updateValues();
+        showChart();
     }
     
     private int getDecimals() {
