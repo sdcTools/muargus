@@ -67,7 +67,7 @@ public class MakeProtectedFileController extends ControllerBase {
         int index = 0;
         for (ReplacementFile replacement : this.metadata.getReplacementFiles()) {
             ArrayList<VariableMu> variablesFound = new ArrayList<>();
-            for (int index2 = index+1; index < this.metadata.getReplacementFiles().size(); index2++) {
+            for (int index2 = index+1; index2 < this.metadata.getReplacementFiles().size(); index2++) {
                 ReplacementFile replacement2 = this.metadata.getReplacementFiles().get(index2);
                 for (VariableMu variable : replacement2.getVariables()) {
                     if (replacement.getVariables().contains(variable) && !variablesFound.contains(variable)) {

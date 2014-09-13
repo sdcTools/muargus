@@ -7,8 +7,8 @@
 package muargus.controller;
 
 import argus.model.ArgusException;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import muargus.MuARGUS;
 import muargus.model.MetadataMu;
@@ -16,65 +16,80 @@ import muargus.model.NumericalRankSwapping;
 import muargus.model.ReplacementFile;
 import muargus.model.VariableMu;
 import muargus.view.NumericalRankSwappingView;
+import org.apache.commons.io.FileUtils;
 
 /**
  *
  * @author ambargus
  */
 public class NumericalRankSwappingController extends ControllerBase {
-    NumericalRankSwappingView view;
+    //NumericalRankSwappingView view;
     //NumericalRankSwapping model;
-    MetadataMu metadataMu;
+    MetadataMu metadata;
     CalculationService calculationService;
 
-    public NumericalRankSwappingController(java.awt.Frame parentView, MetadataMu metadataMu) {
-        this.view = new NumericalRankSwappingView(parentView, true, this);
-        super.setView(this.view);
-        this.metadataMu = metadataMu;
-        this.view.setMetadataMu(this.metadataMu);
+    public NumericalRankSwappingController(java.awt.Frame parentView, MetadataMu metadata) {
+        super.setView(new NumericalRankSwappingView(parentView, true, this));
+        this.metadata = metadata;
         this.calculationService = MuARGUS.getCalculationService();
-        
+        getView().setMetadata(metadata);
     }
     
     /**
      * Opens the view by setting its visibility to true.
      */
     public void showView() {
-        this.view.setVisible(true);
+        getView().setVisible(true);
     }
 
     /**
      * Closes the view by setting its visibility to false.
      */
     public void close() {
-        this.view.setVisible(false);
+        getView().setVisible(false);
+    }
+
+    @Override
+    protected void doNextStep(boolean success) {
+            //TODO: de catalaan
+            //for now: just copy the file
+            ReplacementFile replacement = this.metadata.getReplacementFiles().get(this.metadata.getReplacementFiles().size()-1);
+            try {
+                FileUtils.copyFile(new File(replacement.getInputFilePath()), new File(replacement.getOutputFilePath()));
+            }
+            catch (IOException ex) {
+                getView().showErrorMessage(new ArgusException(ex.getMessage()));
+            }
+    }
+    
+    private NumericalRankSwappingView getNumericalRankSwappingView() {
+        return (NumericalRankSwappingView)getView();
     }
     
     public void calculate() {
-        ArrayList<VariableMu> selectedVariables = view.getSelectedVariables();
+        ArrayList<VariableMu> selectedVariables = getNumericalRankSwappingView().getSelectedVariables();
         if (variablesAreUsed(selectedVariables)) {
-            if (!view.showConfirmDialog("One or more of the variables are already modified. Continue?")) {
+            if (!getView().showConfirmDialog("One or more of the variables are already modified. Continue?")) {
                 return;
             }
         }
         try {
-            NumericalRankSwapping rankSwapping = new NumericalRankSwapping(view.getPercentage());
+            NumericalRankSwapping rankSwapping = new NumericalRankSwapping(getNumericalRankSwappingView().getPercentage());
             rankSwapping.getVariables().addAll(selectedVariables);
             
             ReplacementFile replacement = new ReplacementFile("RankSwapping");
             replacement.getVariables().addAll(selectedVariables);
-            this.metadataMu.getReplacementFiles().add(replacement);
+            this.metadata.getReplacementFiles().add(replacement);
             this.calculationService.makeReplacementFile(this);
-            //TODO: de catalaan
         }
         catch (ArgusException ex) {
-            view.showErrorMessage(ex);
+            getView().showErrorMessage(ex);
         }
     }
     
     private boolean variablesAreUsed(ArrayList<VariableMu> variables) {
         for (VariableMu variable : variables) {
-            for (ReplacementFile replacement : this.metadataMu.getReplacementFiles()) {
+            for (ReplacementFile replacement : this.metadata.getReplacementFiles()) {
                 if (replacement.getVariables().contains(variable)) {
                     return true;
                 }

@@ -20,7 +20,7 @@ import muargus.model.VariableMu;
  */
 public class NumericalRankSwappingView extends DialogBase {
 
-    MetadataMu metadataMu;
+    //MetadataMu metadataMu;
     NumericalRankSwappingController controller;
     NumericalRankSwapping model;
     /**
@@ -37,17 +37,12 @@ public class NumericalRankSwappingView extends DialogBase {
         this.variableList.setCellRenderer(new VariableNameCellRenderer());
         this.selecedVariableList.setCellRenderer(new VariableNameCellRenderer());
     }
-    
-    public void setMetadataMu(MetadataMu metadataMu) {
-        this.metadataMu = metadataMu;
-        this.model = this.metadataMu.getCombinations().getNumericalRankSwapping();
-        //this.controller.setModel(this.model);
-        initializeData();
-    }
-    
+        
+    @Override
     public void initializeData() {
+        this.model = getMetadata().getCombinations().getNumericalRankSwapping();
         DefaultListModel variableListModel = new DefaultListModel();
-        for (VariableMu variable : this.metadataMu.getVariables()) {
+        for (VariableMu variable : getMetadata().getVariables()) {
             if (variable.isNumeric()) {
                 variableListModel.addElement(variable);
             }

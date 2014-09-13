@@ -64,6 +64,7 @@ public class CalculationService {
 
     public CalculationService(final CMuArgCtrl muArgCtrl) {
         c = muArgCtrl;
+        c.SetProgressListener(new ProgressListener(this));
         this.metadata = null;
     }
 
@@ -202,7 +203,6 @@ public class CalculationService {
     private void makeFileInBackground() throws ArgusException {
         doChangeFiles();
         ProtectedFile protectedFile = metadata.getCombinations().getProtectedFile();
-        c.SetProgressListener(new ProgressListener(this));
 
         c.SetOutFileInfo(metadata.getDataFileType() == MetadataMu.DATA_FILE_TYPE_FIXED,
                 metadata.getSeparator(),
@@ -370,7 +370,6 @@ public class CalculationService {
         int[] errorCodes = new int[1];
         int[] lineNumbers = new int[1];
         int[] varIndexOut = new int[1];
-        c.SetProgressListener(new ProgressListener(this));
 
         result = c.SetInFileInfo(metadata.getDataFileType() == MetadataMu.DATA_FILE_TYPE_FIXED,
                 metadata.getSeparator(),
