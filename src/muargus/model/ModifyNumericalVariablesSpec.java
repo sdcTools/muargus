@@ -3,15 +3,16 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package muargus.model;
+
+import argus.utils.StrUtils;
 
 /**
  *
  * @author ambargus
  */
 public class ModifyNumericalVariablesSpec {
-    
+
     private final VariableMu variable;
     private boolean modified;
     private double[] min_max;
@@ -42,7 +43,7 @@ public class ModifyNumericalVariablesSpec {
     public double getMin() {
         return min_max[0];
     }
-    
+
     public double getMax() {
         return min_max[1];
     }
@@ -55,12 +56,31 @@ public class ModifyNumericalVariablesSpec {
         return bottomValue;
     }
 
+    public Double getBottomValueDouble() {
+        
+        try {
+            return StrUtils.toDouble(bottomValue);
+        } catch (Exception e) {
+            return Double.NaN;
+        }
+    }
+
     public void setBottomValue(String bottomValue) {
         this.bottomValue = bottomValue;
     }
 
     public String getTopValue() {
         return topValue;
+    }
+
+    public Double getTopValueDouble() {
+        System.out.println(topValue);
+        System.out.println(Double.parseDouble(topValue));
+        try {
+            return StrUtils.toDouble(topValue);
+        } catch (Exception e) {
+            return Double.NaN;
+        }
     }
 
     public void setTopValue(String topValue) {
@@ -87,6 +107,14 @@ public class ModifyNumericalVariablesSpec {
         return roundingBase;
     }
 
+    public Double getRoundingBaseDouble() {
+        try {
+            return StrUtils.toDouble(roundingBase);
+        } catch (Exception e) {
+            return Double.NaN;
+        }
+    }
+
     public void setRoundingBase(String roundingBase) {
         this.roundingBase = roundingBase;
     }
@@ -95,8 +123,16 @@ public class ModifyNumericalVariablesSpec {
         return weightNoisePercentage;
     }
 
+    public Double getWeightNoisePercentageDouble() {
+        try {
+            return StrUtils.toDouble(weightNoisePercentage);
+        } catch (Exception e) {
+            return Double.NaN;
+        }
+    }
+
     public void setWeightNoisePercentage(String weightNoisePercentage) {
         this.weightNoisePercentage = weightNoisePercentage;
     }
-    
+
 }

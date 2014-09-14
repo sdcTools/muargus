@@ -1,4 +1,4 @@
-package muargus.model.resources.i18n;
+package muargus.unusedClasses.i18n;
 
 public enum Names{
     Microdata("Microdata"),

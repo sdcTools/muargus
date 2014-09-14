@@ -130,7 +130,12 @@ public class ModifyNumericalVariablesView extends DialogBase {
             setModified(false);
             this.selectedRow = this.variablesTable.getSelectedRow();
         }
+        
+        if(valid){
+            this.controller.apply(this.model.getModifyNumericalVariablesSpec().get(this.selectedRow));
+        }
         return valid;
+        
     }
 
     public void setModified(boolean modified) {

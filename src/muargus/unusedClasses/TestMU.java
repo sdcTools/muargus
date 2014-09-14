@@ -1,4 +1,4 @@
-package muargus;
+package muargus.unusedClasses;
 
 public class TestMU {
 

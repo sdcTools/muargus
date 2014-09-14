@@ -4,6 +4,8 @@
  */
 package muargus.model;
 
+import muargus.unusedClasses.Model;
+
 /**
  *
  * @author ambargus

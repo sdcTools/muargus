@@ -6,11 +6,9 @@ Nog te doen:                                                                    
 
 Release 2
 
-dll functies:
-    - SetRound
-    - SetCodingTop
-    - SetCodingBottom  
-    - SetWeightNoise
+
+    - dll functies werkend krijgen
+    - variabelen omzetten naar doubles
 2.  variablesTable
     - maak de regels die zijn veranderd rood in de tabel
 11. schrijf javadocs

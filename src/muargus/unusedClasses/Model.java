@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package muargus.model;
+package muargus.unusedClasses;
 
 import java.util.Locale;
 import java.util.ResourceBundle;

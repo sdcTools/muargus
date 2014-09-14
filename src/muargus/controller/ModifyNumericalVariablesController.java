@@ -138,7 +138,6 @@ public class ModifyNumericalVariablesController {
 //        }
 //        return temp;
 //    }
-
     public String setValues(ModifyNumericalVariablesSpec selected, String bottomValue_String, String topValue_String,
             String bottomReplacement, String topReplacement, String roundingBase_String, String weightNoisePercentage_String) {
 
@@ -247,14 +246,44 @@ public class ModifyNumericalVariablesController {
     }
 
     public String getIntIfPossibel(double value) {
-        double value_double = value;
-        String value_String;
-        if ((value_double == Math.floor(value_double)) && !Double.isInfinite(value_double)) {
-            int value_int = (int) value_double;
-            value_String = Integer.toString(value_int);
-        } else {
-            value_String = Double.toString(value_double);
+        double value_double;
+        String value_String = null;
+        try {
+            value_double = StrUtils.toDouble(Double.toString(value));
+            if ((value_double == Math.floor(value_double)) && !Double.isInfinite(value_double)) {
+                int value_int = (int) value_double;
+                value_String = Integer.toString(value_int);
+            } else {
+                value_String = Double.toString(value_double);
+            }
+        } catch (ArgusException ex) {
+            System.out.println("warning");
+            //Logger.getLogger(ModifyNumericalVariablesController.class.getName()).log(Level.SEVERE, null, ex);
         }
         return value_String;
+    }
+
+    public void apply(ModifyNumericalVariablesSpec selected) {
+        try {
+            if (!selected.getRoundingBaseDouble().isNaN()) {
+                this.calculationService.setRounding(selected.getVariable(), selected.getRoundingBaseDouble(), selected.getVariable().getDecimals());
+                System.out.println("rounding");
+            }
+            System.out.println(selected.getTopValueDouble());
+            if (!selected.getTopValueDouble().isNaN()) {
+                this.calculationService.setTopBottomCoding(selected.getVariable(), true, selected.getTopValueDouble(), selected.getTopReplacement());
+                System.out.println("topValue");
+            }
+            if (!selected.getBottomValueDouble().isNaN()) {
+                this.calculationService.setTopBottomCoding(selected.getVariable(), false, selected.getBottomValueDouble(), selected.getBottomReplacement());
+                System.out.println("bottomValue");
+            }
+            if (!selected.getWeightNoisePercentageDouble().isNaN()) {
+                this.calculationService.setWeightNoise(selected.getVariable(), selected.getWeightNoisePercentageDouble());
+                System.out.println("percentage");
+            }
+        } catch (ArgusException ex) {
+            Logger.getLogger(ModifyNumericalVariablesController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 }

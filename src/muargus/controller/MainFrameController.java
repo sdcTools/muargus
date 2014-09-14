@@ -173,8 +173,8 @@ public class MainFrameController {
      *
      */
     public void showTableCollection() {
-        if (this.metadata.getCombinations().getShowTableCollection() == null) {
-            this.metadata.getCombinations().createShowTableCollection();
+        if (this.metadata.getCombinations().getTableCollection() == null) {
+            this.metadata.getCombinations().createTableCollection();
         }
 
         ShowTableCollectionController controller = new ShowTableCollectionController(

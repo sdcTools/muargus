@@ -52,7 +52,7 @@ public class ShowTableCollectionView extends DialogBase {
      */
     public void setMetadataMu(MetadataMu metadataMu) {
         this.metadataMu = metadataMu;
-        this.model = this.metadataMu.getCombinations().getShowTableCollection();
+        this.model = this.metadataMu.getCombinations().getTableCollection();
         this.controller.setModel(this.model);
         initializeData();
     }

@@ -6,6 +6,7 @@
 package muargus.model;
 
 import java.util.ArrayList;
+import muargus.model.ModifyNumericalVariablesSpec;
 
 /**
  *
@@ -18,7 +19,6 @@ public class ModifyNumericalVariables {
     private final String[] variablesColumnNames = {"Modified", "Variable"};
 
     public ModifyNumericalVariables() {
-        System.out.println("Model");
     }
 
     public ArrayList<ModifyNumericalVariablesSpec> getModifyNumericalVariablesSpec() {
