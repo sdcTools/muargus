@@ -184,7 +184,7 @@ public class Combinations {
      * 
      */
     public void createNumericalRankSwapping() {
-        this.numericalRankSwapping = new NumericalRankSwapping();
+        //this.numericalRankSwapping = new NumericalRankSwapping();
     }
 
     /**

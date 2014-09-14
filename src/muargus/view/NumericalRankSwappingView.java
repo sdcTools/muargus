@@ -4,9 +4,11 @@
  */
 package muargus.view;
 
+import java.util.ArrayList;
+import javax.swing.DefaultListModel;
+import muargus.VariableNameCellRenderer;
 import muargus.controller.NumericalRankSwappingController;
-import muargus.model.MetadataMu;
-import muargus.model.NumericalRankSwapping;
+import muargus.model.VariableMu;
 
 
 /**
@@ -15,9 +17,11 @@ import muargus.model.NumericalRankSwapping;
  */
 public class NumericalRankSwappingView extends DialogBase {
 
-    MetadataMu metadataMu;
-    NumericalRankSwappingController controller;
-    NumericalRankSwapping model;
+    private final NumericalRankSwappingController controller;
+    //private NumericalRankSwapping model;
+    private DefaultListModel<VariableMu> variableListModel;
+    private DefaultListModel<VariableMu> selectedListModel;
+    
     /**
      * 
      * @param parent
@@ -29,16 +33,23 @@ public class NumericalRankSwappingView extends DialogBase {
         initComponents();
         setLocationRelativeTo(null);
         this.controller = controller;
+        this.variableList.setCellRenderer(new VariableNameCellRenderer());
+        this.selectedVariableList.setCellRenderer(new VariableNameCellRenderer());
     }
-    
-    public void setMetadataMu(MetadataMu metadataMu) {
-        this.metadataMu = metadataMu;
-        this.model = this.metadataMu.getCombinations().getNumericalRankSwapping();
-        this.controller.setModel(this.model);
-        initializeData();
-    }
-    
+        
+    @Override
     public void initializeData() {
+        //this.model = getMetadata().getCombinations().getNumericalRankSwapping();
+        this.variableListModel = new DefaultListModel();
+        for (VariableMu variable : getMetadata().getVariables()) {
+            if (variable.isNumeric()) {
+                this.variableListModel.addElement(variable);
+            }
+        }
+        variableList.setModel(this.variableListModel);
+        this.selectedListModel = new DefaultListModel<>();
+        selectedVariableList.setModel(this.selectedListModel);
+        variableList.setSelectedIndex(0);
         updateValues();
     }
     
@@ -46,6 +57,29 @@ public class NumericalRankSwappingView extends DialogBase {
         
     }
 
+    public ArrayList<VariableMu> getSelectedVariables() {
+        ArrayList<VariableMu> selected = new ArrayList<>();
+        for (Object variable : ((DefaultListModel)selectedVariableList.getModel()).toArray()) {
+            selected.add((VariableMu) variable);
+        }
+        return selected;
+    }
+    
+    public double getPercentage() {
+        return Double.parseDouble(percentageTextField.getText());
+    }
+    
+    @Override
+    public void setProgress(int progress) {
+        progressBar.setValue(progress);
+    }
+
+    @Override
+    public void showStepName(String stepName) {
+        stepNameLabel.setText(stepName);
+    }
+    
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -57,34 +91,30 @@ public class NumericalRankSwappingView extends DialogBase {
 
         jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jList1 = new javax.swing.JList();
+        variableList = new javax.swing.JList();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jList2 = new javax.swing.JList();
-        jToggleButton1 = new javax.swing.JToggleButton();
-        jToggleButton2 = new javax.swing.JToggleButton();
-        jButton3 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        selectedVariableList = new javax.swing.JList();
+        upButton = new javax.swing.JButton();
+        downButton = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        percentageTextField = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
-        jProgressBar1 = new javax.swing.JProgressBar();
-        jButton5 = new javax.swing.JButton();
-        jButton6 = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
+        progressBar = new javax.swing.JProgressBar();
+        okButton = new javax.swing.JButton();
+        calculateButton = new javax.swing.JButton();
+        cancelButton = new javax.swing.JButton();
+        toSelectedButton = new javax.swing.JButton();
+        fromSelectedButton = new javax.swing.JButton();
+        stepNameLabel = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Numerical Rank Swapping");
 
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Variable"));
 
-        jList1.setModel(new javax.swing.AbstractListModel() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public Object getElementAt(int i) { return strings[i]; }
-        });
-        jScrollPane1.setViewportView(jList1);
+        jScrollPane1.setViewportView(variableList);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -103,12 +133,8 @@ public class NumericalRankSwappingView extends DialogBase {
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Selected"));
 
-        jList2.setModel(new javax.swing.AbstractListModel() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public Object getElementAt(int i) { return strings[i]; }
-        });
-        jScrollPane2.setViewportView(jList2);
+        selectedVariableList.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        jScrollPane2.setViewportView(selectedVariableList);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -121,19 +147,25 @@ public class NumericalRankSwappingView extends DialogBase {
             .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 118, Short.MAX_VALUE)
         );
 
-        jToggleButton1.setText("<");
+        upButton.setText("↑");
+        upButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                upButtonActionPerformed(evt);
+            }
+        });
 
-        jToggleButton2.setText(">");
-
-        jButton3.setText("↑");
-
-        jButton2.setText("↓");
+        downButton.setText("↓");
+        downButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                downButtonActionPerformed(evt);
+            }
+        });
 
         jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
 
         jLabel2.setText("<html>\nRank Swapping<br>percentage");
 
-        jTextField1.setText("15");
+        percentageTextField.setText("15");
 
         jLabel1.setText("%");
 
@@ -145,7 +177,7 @@ public class NumericalRankSwappingView extends DialogBase {
                 .addContainerGap()
                 .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(percentageTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel1)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -156,22 +188,43 @@ public class NumericalRankSwappingView extends DialogBase {
                 .addGap(21, 21, 21)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(percentageTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jLabel1))
                     .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jButton5.setText("OK");
-        jButton5.addActionListener(new java.awt.event.ActionListener() {
+        okButton.setText("OK");
+        okButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton5ActionPerformed(evt);
+                okButtonActionPerformed(evt);
             }
         });
 
-        jButton6.setText("Calculate");
+        calculateButton.setText("Calculate");
+        calculateButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                calculateButtonActionPerformed(evt);
+            }
+        });
 
-        jButton1.setText("Cancel");
+        cancelButton.setText("Cancel");
+
+        toSelectedButton.setText("→");
+        toSelectedButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                toSelectedButtonActionPerformed(evt);
+            }
+        });
+
+        fromSelectedButton.setText("←");
+        fromSelectedButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                fromSelectedButtonActionPerformed(evt);
+            }
+        });
+
+        stepNameLabel.setText(" ");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -181,30 +234,33 @@ public class NumericalRankSwappingView extends DialogBase {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jButton1)
+                        .addComponent(cancelButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(okButton, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(jProgressBar1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(layout.createSequentialGroup()
+                            .addGap(10, 10, 10)
+                            .addComponent(stepNameLabel)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(calculateButton))
+                        .addComponent(progressBar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(layout.createSequentialGroup()
                             .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                 .addGroup(layout.createSequentialGroup()
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                        .addComponent(jToggleButton2)
-                                        .addComponent(jToggleButton1))
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(toSelectedButton, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(fromSelectedButton))
                                     .addGap(10, 10, 10)
                                     .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(jButton2)
-                                        .addComponent(jButton3)))
+                                        .addComponent(downButton)
+                                        .addComponent(upButton)))
                                 .addGroup(layout.createSequentialGroup()
                                     .addGap(42, 42, 42)
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(jButton6)
-                                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))))
+                                    .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -218,33 +274,83 @@ public class NumericalRankSwappingView extends DialogBase {
                             .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(42, 42, 42)
-                                .addComponent(jToggleButton2)
+                                .addComponent(toSelectedButton)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jToggleButton1))
+                                .addComponent(fromSelectedButton))
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(46, 46, 46)
-                                .addComponent(jButton3)
+                                .addComponent(upButton)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jButton2)))
+                                .addComponent(downButton)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton6)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(calculateButton)
+                    .addComponent(stepNameLabel))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jProgressBar1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(progressBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 17, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton5)
-                    .addComponent(jButton1))
+                    .addComponent(okButton)
+                    .addComponent(cancelButton))
                 .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+    private void okButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okButtonActionPerformed
         this.setVisible(false);
-    }//GEN-LAST:event_jButton5ActionPerformed
+    }//GEN-LAST:event_okButtonActionPerformed
+
+    private void toSelectedButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_toSelectedButtonActionPerformed
+        boolean added = false;
+        for (Object variable : variableList.getSelectedValuesList()) {
+            if (!selectedListModel.contains(variable)) {
+                selectedListModel.addElement((VariableMu)variable);
+                added = true;
+            }
+        }
+        if (added) {
+            //Change selection of variables list
+            for (int index=0; index < variableListModel.getSize(); index++) {
+                if (!selectedListModel.contains(variableListModel.getElementAt(index))) {
+                    variableList.setSelectedIndex(index);
+                    return;
+                }
+            }
+            variableList.setSelectedIndex(0);
+        }
+    }//GEN-LAST:event_toSelectedButtonActionPerformed
+
+    private void fromSelectedButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fromSelectedButtonActionPerformed
+        for (Object variable : selectedVariableList.getSelectedValuesList()) {
+            selectedListModel.removeElement((VariableMu)variable);
+        }
+    }//GEN-LAST:event_fromSelectedButtonActionPerformed
+
+    private void calculateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_calculateButtonActionPerformed
+        controller.calculate();
+    }//GEN-LAST:event_calculateButtonActionPerformed
+
+    private void upButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_upButtonActionPerformed
+        int index = selectedVariableList.getSelectedIndex();
+        if (index > 0) {
+            VariableMu variable = selectedListModel.remove(index);
+            selectedListModel.add(index-1, variable);
+            selectedVariableList.setSelectedIndex(index-1);
+        }
+    }//GEN-LAST:event_upButtonActionPerformed
+
+    private void downButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_downButtonActionPerformed
+        int index = selectedVariableList.getSelectedIndex();
+        if (index > -1 && index < selectedListModel.getSize() - 1) {
+            VariableMu variable = selectedListModel.remove(index);
+            selectedListModel.add(index+1, variable);
+            selectedVariableList.setSelectedIndex(index+1);
+        }
+    }//GEN-LAST:event_downButtonActionPerformed
 
 //    /**
 //     * @param args the command line arguments
@@ -288,23 +394,24 @@ public class NumericalRankSwappingView extends DialogBase {
 //        });
 //    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton5;
-    private javax.swing.JButton jButton6;
+    private javax.swing.JButton calculateButton;
+    private javax.swing.JButton cancelButton;
+    private javax.swing.JButton downButton;
+    private javax.swing.JButton fromSelectedButton;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JList jList1;
-    private javax.swing.JList jList2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
-    private javax.swing.JProgressBar jProgressBar1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JToggleButton jToggleButton1;
-    private javax.swing.JToggleButton jToggleButton2;
+    private javax.swing.JButton okButton;
+    private javax.swing.JTextField percentageTextField;
+    private javax.swing.JProgressBar progressBar;
+    private javax.swing.JList selectedVariableList;
+    private javax.swing.JLabel stepNameLabel;
+    private javax.swing.JButton toSelectedButton;
+    private javax.swing.JButton upButton;
+    private javax.swing.JList variableList;
     // End of variables declaration//GEN-END:variables
 }

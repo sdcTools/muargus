@@ -19,29 +19,30 @@ import muargus.view.SelectCombinationsView;
  *
  * @author ambargus
  */
-public class SelectCombinationsController implements PropertyChangeListener{
+public class SelectCombinationsController extends  ControllerBase {
     
-    SelectCombinationsView view;
     Combinations modelClone;
     MetadataMu metadata;
-    private String stepName = "";
-    //ArrayList<String> list;
         
     private static final Logger logger = Logger.getLogger(SelectCombinationsController.class.getName());
 
     public SelectCombinationsController(java.awt.Frame parentView, MetadataMu metadata) {
-        this.view = new SelectCombinationsView(parentView, true, this);
+        super.setView(new SelectCombinationsView(parentView, true, this));
         this.metadata = metadata;
         
         getSettings();
         this.modelClone = new Combinations(this.metadata.getCombinations());
 
-        this.view.setMetadataMu(this.metadata); // clone Combinations
-        this.view.setModel(this.modelClone);
+        getView().setMetadata(this.metadata); 
+        getSelectCombinationsView().setModel(this.modelClone); // the view gets a copy of the current Combinations
     }
     
     public void showView() {
-        this.view.setVisible(true);
+        getView().setVisible(true);
+    }
+    
+    private SelectCombinationsView getSelectCombinationsView() {
+        return (SelectCombinationsView)getView();
     }
     
 //    public void setList(ArrayList<String> list){
@@ -56,7 +57,7 @@ public class SelectCombinationsController implements PropertyChangeListener{
      * @throws argus.model.ArgusException
      */
     public void calculateTables() throws ArgusException {
-        this.view.enableCalculateTables(false);
+        getSelectCombinationsView().enableCalculateTables(false);
         saveSettings();
         this.metadata.setCombinations(this.modelClone);
         CalculationService service = MuARGUS.getCalculationService();
@@ -92,44 +93,26 @@ public class SelectCombinationsController implements PropertyChangeListener{
         //het zou mooier zijn als de berekening niet in de view zou gebeuren
     }                                                            
 
-    private void setCurrentStepName(String stepName) {
-        this.stepName = stepName;
-        view.setStepName(this.stepName);
-    }
     /**
      * 
      */
     public void cancel() {                                             
-        view.setVisible(false);
+        getView().setVisible(false);
     } 
- 
+
     @Override
-    public void propertyChange(PropertyChangeEvent pce) {
-        switch (pce.getPropertyName()) {
-            case "stepName":
-                setCurrentStepName(pce.getNewValue().toString()); 
-                break;                
-            case "progress":
-                view.setProgress(pce.getNewValue());
-                break;
-            case "result":
-                boolean success = "success".equals(pce.getNewValue());
-                if (success && this.stepName.equals("ExploreFile")) {
-                    MuARGUS.getCalculationService().calculateTables(this);
-                }
-                else {
-                    this.view.enableCalculateTables(true);
-                    if (success) {
-                        this.view.setVisible(false);
-                    }
-                }
-                break;
-            case "error":
-                view.showErrorMessage((ArgusException)pce.getNewValue());
-                break;
+    protected void doNextStep(boolean success) {
+        if (success && getStepName().equals("ExploreFile")) {
+            MuARGUS.getCalculationService().calculateTables(this);
+        }
+        else {
+            getSelectCombinationsView().enableCalculateTables(true);
+            if (success) {
+                getView().setVisible(false);
+            }
         }
     }
-    
+ 
 //    public void clearData(){
 //        this.controller.clearDataAfterSelectCombinations();
 //    }

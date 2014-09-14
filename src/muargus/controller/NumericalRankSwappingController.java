@@ -6,47 +6,101 @@
 
 package muargus.controller;
 
+import argus.model.ArgusException;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import muargus.MuARGUS;
 import muargus.model.MetadataMu;
 import muargus.model.NumericalRankSwapping;
+import muargus.model.ReplacementFile;
+import muargus.model.VariableMu;
 import muargus.view.NumericalRankSwappingView;
+import org.apache.commons.io.FileUtils;
 
 /**
  *
  * @author ambargus
  */
-public class NumericalRankSwappingController {
-    NumericalRankSwappingView view;
-    NumericalRankSwapping model;
-    MetadataMu metadataMu;
+public class NumericalRankSwappingController extends ControllerBase {
+    //NumericalRankSwappingView view;
+    //NumericalRankSwapping model;
+    MetadataMu metadata;
     CalculationService calculationService;
 
-    public NumericalRankSwappingController(java.awt.Frame parentView, MetadataMu metadataMu) {
-        this.view = new NumericalRankSwappingView(parentView, true, this);
-        this.metadataMu = metadataMu;
-        this.view.setMetadataMu(this.metadataMu);
+    public NumericalRankSwappingController(java.awt.Frame parentView, MetadataMu metadata) {
+        super.setView(new NumericalRankSwappingView(parentView, true, this));
+        this.metadata = metadata;
+        this.calculationService = MuARGUS.getCalculationService();
+        getView().setMetadata(metadata);
     }
     
     /**
      * Opens the view by setting its visibility to true.
      */
     public void showView() {
-        this.view.setVisible(true);
+        getView().setVisible(true);
     }
 
     /**
      * Closes the view by setting its visibility to false.
      */
     public void close() {
-        this.view.setVisible(false);
+        getView().setVisible(false);
     }
 
-    /**
-     * Fuction for setting the model. This function is used by the view after
-     * setting the model itself
-     *
-     * @param model the model class of the ShowTableCollection screen
-     */
-    public void setModel(NumericalRankSwapping model) {
-        this.model = model;
+    @Override
+    protected void doNextStep(boolean success) {
+            //TODO: de catalaan
+            //for now: just copy the file
+            ReplacementFile replacement = this.metadata.getReplacementFiles().get(this.metadata.getReplacementFiles().size()-1);
+            try {
+                FileUtils.copyFile(new File(replacement.getInputFilePath()), new File(replacement.getOutputFilePath()));
+                getView().showMessage("RankSwapping successfully completed");
+                getView().setProgress(0);
+                getView().showStepName("");
+            }
+            catch (IOException ex) {
+                getView().showErrorMessage(new ArgusException(ex.getMessage()));
+            }
     }
+    
+    private NumericalRankSwappingView getNumericalRankSwappingView() {
+        return (NumericalRankSwappingView)getView();
+    }
+    
+    public void calculate() {
+        ArrayList<VariableMu> selectedVariables = getNumericalRankSwappingView().getSelectedVariables();
+        if (variablesAreUsed(selectedVariables)) {
+            if (!getView().showConfirmDialog("One or more of the variables are already modified. Continue?")) {
+                return;
+            }
+        }
+        try {
+            NumericalRankSwapping rankSwapping = new NumericalRankSwapping(getNumericalRankSwappingView().getPercentage());
+            rankSwapping.getVariables().addAll(selectedVariables);
+            
+            ReplacementFile replacement = new ReplacementFile("RankSwapping");
+            replacement.getVariables().addAll(selectedVariables);
+            this.metadata.getReplacementFiles().add(replacement);
+            this.calculationService.makeReplacementFile(this);
+        }
+        catch (ArgusException ex) {
+            getView().showErrorMessage(ex);
+        }
+    }
+    
+    private boolean variablesAreUsed(ArrayList<VariableMu> variables) {
+        for (VariableMu variable : variables) {
+            for (ReplacementFile replacement : this.metadata.getReplacementFiles()) {
+                if (replacement.getVariables().contains(variable)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    
+    
 }

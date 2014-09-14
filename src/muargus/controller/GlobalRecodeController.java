@@ -20,12 +20,9 @@ import muargus.view.GlobalRecodeView;
  *
  * @author ambargus
  */
-public class GlobalRecodeController {
+public class GlobalRecodeController extends ControllerBase {
 
-    GlobalRecodeView view;
-    //GlobalRecode model;
     MetadataMu metadata;
-    //Combinations selectCombinationsModel;
     CalculationService service;
 
     /**
@@ -36,19 +33,18 @@ public class GlobalRecodeController {
      * @param selectCombinationsModel
      */
     public GlobalRecodeController(java.awt.Frame parentView, MetadataMu metadata) {
-        //this.model = model;
-        this.service = MuARGUS.getCalculationService();
-        this.view = new GlobalRecodeView(parentView, true, this);
+        super.setView(new GlobalRecodeView(parentView, true, this));
         this.metadata = metadata;
-        this.view.setMetadataMu(this.metadata);
+        this.service = MuARGUS.getCalculationService();
+        getView().setMetadata(metadata);
         
         //this.selectCombinationsModel = selectCombinationsModel;
         //this.view = view;
     }
 
     public void showView(int selectedRowIndex) {
-        this.view.setSelectedIndex(selectedRowIndex);
-        this.view.setVisible(true);
+        getGlobalRecodeView().setSelectedIndex(selectedRowIndex);
+        getView().setVisible(true);
     }
 
 //    public GlobalRecode getModel() {
@@ -58,11 +54,15 @@ public class GlobalRecodeController {
      *
      */
     public void close() {
-        view.setVisible(false);
+        getView().setVisible(false);
     }
 
     public int getSelectedVariableIndex() {
-        return view.getSelectedIndex();
+        return getGlobalRecodeView().getSelectedIndex();
+    }
+    
+    private GlobalRecodeView getGlobalRecodeView() {
+        return (GlobalRecodeView)getView();
     }
     /**
      *
@@ -138,7 +138,7 @@ public class GlobalRecodeController {
      */
     public void apply(RecodeMu recode) throws ArgusException {
         String warning = this.service.doRecode(recode);
-        view.showWarning(warning);
+        getGlobalRecodeView().showWarning(warning);
         this.service.applyRecode();
         recode.setTruncated(false);
         recode.setRecoded(true);

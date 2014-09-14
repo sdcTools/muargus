@@ -13,6 +13,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import muargus.MuARGUS;
+import muargus.model.MetadataMu;
 
 /**
  *
@@ -20,14 +21,28 @@ import muargus.MuARGUS;
  */
 public class DialogBase extends javax.swing.JDialog {
 
+    private MetadataMu metadata;
     /**
      * Creates new form DialogBase
      */
-    public DialogBase(java.awt.Frame parent, boolean modal) {
+    public DialogBase(final java.awt.Frame parent, final boolean modal) {
         super(parent, modal);
         initComponents();
     }
+    
+    public void setMetadata(MetadataMu metadata) {
+        this.metadata = metadata;
+        initializeData();
+    }
 
+    protected MetadataMu getMetadata() {
+        return this.metadata;
+    }
+    
+    protected void initializeData() {
+        //Base class implementation is empty
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -59,6 +74,10 @@ public class DialogBase extends javax.swing.JDialog {
     
     public boolean showConfirmDialog(String message) {
         return (JOptionPane.showConfirmDialog(null, message, MuARGUS.getMessageTitle(), JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION);
+    }
+    
+    public void showMessage(String message) {
+        JOptionPane.showMessageDialog(null, message, MuARGUS.getMessageTitle(), JOptionPane.INFORMATION_MESSAGE);
     }
     
     public String showFileDialog(String title, boolean forSaving, String[] filter) {
@@ -131,6 +150,14 @@ public class DialogBase extends javax.swing.JDialog {
                 dialog.setVisible(true);
             }
         });
+    }
+
+    public void showStepName(String stepName) {
+        //Base class implementation is empty
+    }
+
+    public void setProgress(int progress) {
+        //Base class implementation is empty
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

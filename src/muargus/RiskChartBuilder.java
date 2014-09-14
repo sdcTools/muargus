@@ -20,7 +20,6 @@ import org.jfree.chart.renderer.xy.StandardXYBarPainter;
 import org.jfree.data.Range;
 import org.jfree.data.xy.XIntervalSeries;
 import org.jfree.data.xy.XIntervalSeriesCollection;
-import org.jfree.ui.RectangleInsets;
 
 public class RiskChartBuilder {
 
@@ -29,11 +28,10 @@ public class RiskChartBuilder {
         RiskModelClass first = riskSpec.getClasses().get(0);
         double offset = Math.log(first.getLeftValue());
         double mult = Math.log(first.getRightValue()/first.getLeftValue());
-        LogarithmicNumberAxis domainAxis      = new LogarithmicNumberAxis(offset, mult, decimals);
-        NumberAxis rangeAxis     = new NumberAxis("Freq");
-        XYBarRenderer renderer   = new XYBarRenderer(0);
-        XYDataset dataset        = getDataset(riskSpec);
-
+        LogarithmicNumberAxis domainAxis = new LogarithmicNumberAxis(offset, mult, decimals);
+        NumberAxis rangeAxisLeft = new NumberAxis("Frequency");
+        XYBarRenderer renderer = new XYBarRenderer(0);
+        XYDataset dataset = getDataset(riskSpec);
         renderer.setShadowVisible(false);
         renderer.setBarPainter(new StandardXYBarPainter());
         domainAxis.setMinorTickMarksVisible(false);
@@ -42,14 +40,16 @@ public class RiskChartBuilder {
         //domainAxis.setNumberFormatOverride(new Numberformatter());
         domainAxis.setAutoRange(false);
         domainAxis.setRange(range);
+        rangeAxisLeft.setStandardTickUnits(NumberAxis.createStandardTickUnits(MuARGUS.getLocale()));
 
-        XYPlot mainPlot = new XYPlot(dataset, domainAxis, rangeAxis, renderer);
-        NumberAxis axis2 = new NumberAxis();
-        axis2.setAutoRange(false);
-        axis2.setRange(rangeAxis.getRange());
-        mainPlot.setRangeAxis(1, axis2);
+        XYPlot mainPlot = new XYPlot(dataset, domainAxis, rangeAxisLeft, renderer);
+        NumberAxis rangeAxisRight = new NumberAxis();
+        rangeAxisRight.setAutoRange(false);
+        rangeAxisRight.setRange(rangeAxisLeft.getRange());
+        rangeAxisRight.setStandardTickUnits(NumberAxis.createStandardTickUnits(MuARGUS.getLocale()));
+        mainPlot.setRangeAxis(1, rangeAxisRight);
         mainPlot.setRangeAxisLocation(1, AxisLocation.BOTTOM_OR_RIGHT);
-
+        
         
         mainPlot.setDomainGridlinesVisible(true);
 

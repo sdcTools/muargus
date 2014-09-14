@@ -87,29 +87,33 @@ public class MainFrameController {
             clearDataBeforeSelectCombinations();
         }
 
+        boolean tablesCalculated = false;
+        if (this.metadata.getCombinations() != null) {
+            tablesCalculated = this.metadata != null && this.metadata.getCombinations().getTables().size() > 0;
+        }
+        boolean hasNumericalaVariables = false;
+        for (VariableMu variableMu : this.metadata.getVariables()) {
+            if (variableMu.isNumeric()) {
+                hasNumericalaVariables = true;
+                break;
+            }
+        }
+        
         view.enableAction(Action.SpecifyMetadata, this.metadata != null);
         view.enableAction(Action.ViewReport, this.report != null);
         view.enableAction(Action.SpecifyCombinations, this.metadata != null
                 && this.metadata.getVariables().size() > 0);
-
-        boolean tablesCalculated = false;
-        if (this.metadata.getCombinations() != null) {
-            tablesCalculated = this.metadata != null
-                    && this.metadata.getCombinations().getTables().size() > 0;
-        }
         view.enableAction(Action.GlobalRecode, tablesCalculated);
         view.enableAction(Action.MakeProtectedFile, tablesCalculated);
-
-        // Release 2
         view.enableAction(Action.ShowTableCollection, tablesCalculated);
         view.enableAction(Action.PramSpecification, tablesCalculated);
         view.enableAction(Action.IndividualRiskSpecification,
                 tablesCalculated && metadata.getCombinations().isRiskModel() && !metadata.isHouseholdData());
         view.enableAction(Action.HouseholdRiskSpecification,
                 tablesCalculated && metadata.getCombinations().isRiskModel() && metadata.isHouseholdData());
-        view.enableAction(Action.ModifyNumericalVariables, tablesCalculated);
-        view.enableAction(Action.NumericalMicroAggregation, tablesCalculated);
-        view.enableAction(Action.NumericalRankSwapping, tablesCalculated);
+        view.enableAction(Action.ModifyNumericalVariables, tablesCalculated && hasNumericalaVariables);
+        view.enableAction(Action.NumericalMicroAggregation, tablesCalculated && hasNumericalaVariables);
+        view.enableAction(Action.NumericalRankSwapping, tablesCalculated && hasNumericalaVariables);
 
     }
 

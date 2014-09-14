@@ -50,10 +50,12 @@ public class MetadataMu {
     private DataFilePair filenames;
     private Combinations combinations;
     private int recordCount;
+    private ArrayList<ReplacementFile> replacementFiles;
 
     public MetadataMu() {
         variables = new ArrayList<>();
         filenames = new DataFilePair(null, null);
+        replacementFiles = new ArrayList<>();
     }
 
     public MetadataMu(MetadataMu metadata) {
@@ -102,6 +104,11 @@ public class MetadataMu {
         this.recordCount = recordCount;
     }
 
+    public ArrayList<ReplacementFile> getReplacementFiles() {
+        return replacementFiles;
+    }
+
+    
 //    public static ArrayList<VariableMu> makeClone(ArrayList<VariableMu> list) throws CloneNotSupportedException {
 //        ArrayList<VariableMu> clone = new ArrayList<>(list.size());
 //        for (VariableMu item : list) {

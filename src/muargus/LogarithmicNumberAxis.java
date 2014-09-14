@@ -48,7 +48,7 @@ public class LogarithmicNumberAxis extends NumberAxis {
     
     private String transformString(Number value) {
         String format = "%." + Integer.toString(decimals) + "f";
-        return String.format(format, Math.exp(offset + mult*value.doubleValue()));
+        return String.format(MuARGUS.getLocale(), format, Math.exp(offset + mult*value.doubleValue()));
     }
     
 }

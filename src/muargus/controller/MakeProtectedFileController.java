@@ -5,23 +5,24 @@
 package muargus.controller;
 
 import argus.model.ArgusException;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.io.File;
+import java.util.ArrayList;
 import muargus.MuARGUS;
 import muargus.model.MetadataMu;
 import muargus.model.Combinations;
+import muargus.model.ReplacementFile;
+import muargus.model.VariableMu;
 import muargus.view.MakeProtectedFileView;
 
 /**
  *
  * @author ambargus
  */
-public class MakeProtectedFileController implements PropertyChangeListener {
+public class MakeProtectedFileController extends ControllerBase {
 
-    private MakeProtectedFileView view;
+    //private MakeProtectedFileView view;
     //MakeProtectedFileModel model;
-    private MetadataMu metadata;
+    private final MetadataMu metadata;
     //Combinations selectCombinationsModel;
     private boolean fileCreated;
     private final CalculationService service;
@@ -29,23 +30,21 @@ public class MakeProtectedFileController implements PropertyChangeListener {
      *
      * @param parentView
      * @param metadata
-     * @param model
-     * @param selectCombinationsModel
      */
     public MakeProtectedFileController(java.awt.Frame parentView, MetadataMu metadata) {
         //this.model = model;
         //this.selectCombinationsModel = selectCombinationsModel;
         //this.model.setRiskModel(this.selectCombinationsModel.isRiskModel());
-        this.view = new MakeProtectedFileView(parentView, true, this);
+        this.setView(new MakeProtectedFileView(parentView, true, this));
         this.metadata = metadata;
-        this.view.setMetadataMu(this.metadata);
         this.fileCreated = false;
         this.service = MuARGUS.getCalculationService();
 
+        getView().setMetadata(this.metadata);
     }
 
     public void showView() {
-        this.view.setVisible(true);
+        this.getView().setVisible(true);
     }
 
 //    public ProtectedFile getModel() {
@@ -55,10 +54,35 @@ public class MakeProtectedFileController implements PropertyChangeListener {
     
     /**
      *
+     * @param file
      */
     public void makeFile(File file) {
         this.metadata.getCombinations().getProtectedFile().initSafeMeta(file, this.metadata);
+        removeRedundentReplacementFiles();
         this.service.makeProtectedFile(this);
+    }
+    
+    private void removeRedundentReplacementFiles() {
+        ArrayList<ReplacementFile> toRemove = new ArrayList<>();
+        int index = 0;
+        for (ReplacementFile replacement : this.metadata.getReplacementFiles()) {
+            ArrayList<VariableMu> variablesFound = new ArrayList<>();
+            for (int index2 = index+1; index2 < this.metadata.getReplacementFiles().size(); index2++) {
+                ReplacementFile replacement2 = this.metadata.getReplacementFiles().get(index2);
+                for (VariableMu variable : replacement2.getVariables()) {
+                    if (replacement.getVariables().contains(variable) && !variablesFound.contains(variable)) {
+                        variablesFound.add(variable);
+                    }
+                }
+            }
+            if (variablesFound.size() == replacement.getVariables().size()) {
+                toRemove.add(replacement);
+            }
+            index++;
+        }
+        for (ReplacementFile replacement : toRemove) {
+            this.metadata.getReplacementFiles().remove(replacement);
+        }
     }
     
     private void saveSafeMeta() {
@@ -71,7 +95,7 @@ public class MakeProtectedFileController implements PropertyChangeListener {
             this.fileCreated = true;
         }
         catch (ArgusException ex) {
-            this.view.showErrorMessage(ex);
+            this.getView().showErrorMessage(ex);
         }
     }
 
@@ -83,22 +107,15 @@ public class MakeProtectedFileController implements PropertyChangeListener {
         return fileCreated;
     }
 
-    
     @Override
-    public void propertyChange(PropertyChangeEvent pce) {
-        switch (pce.getPropertyName()) {
-            case "progress":
-                view.setProgress(pce.getNewValue());
-                break;
-            case "result":
-                if ("success".equals(pce.getNewValue())) {
-                    saveSafeMeta();
-                    view.setVisible(!this.fileCreated);
-                }
-                break;
-            case "error":
-                view.showErrorMessage((ArgusException)pce.getNewValue());
-                break;
+    protected void doNextStep(boolean success) {
+        if (success) {
+            saveSafeMeta();
+            if (fileCreated) {
+                this.getView().setVisible(false);
+            }
         }
     }
+
+  
 }

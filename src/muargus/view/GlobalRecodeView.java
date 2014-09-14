@@ -15,7 +15,6 @@ import javax.swing.table.TableModel;
 import muargus.RecodeTableCellRenderer;
 import muargus.controller.GlobalRecodeController;
 import muargus.model.GlobalRecode;
-import muargus.model.MetadataMu;
 import muargus.model.RecodeMu;
 import muargus.model.VariableMu;
 
@@ -25,9 +24,8 @@ import muargus.model.VariableMu;
  */
 public class GlobalRecodeView extends DialogBase {
 
-    GlobalRecodeController controller;
-    GlobalRecode model;
-    private MetadataMu metadataMu;  
+    private GlobalRecodeController controller;
+    private GlobalRecode model;
     private TableModel tableModel;
     private RecodeMu selectedRecode;
     private RecodeMu selectedRecodeClone;
@@ -48,14 +46,9 @@ public class GlobalRecodeView extends DialogBase {
         this.variablesTable.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
     }
-
-    public void setMetadataMu(MetadataMu metadataMu) {
-        this.metadataMu = metadataMu;
-        this.model = this.metadataMu.getCombinations().getGlobalRecode();
-        makeVariables();
-    }
-
-    public void makeVariables() {
+    
+    public void initializeData() {
+        this.model = getMetadata().getCombinations().getGlobalRecode();
         if (this.model.getRecodeMus().isEmpty()) {
             for (VariableMu v : this.model.getVariables()) {
                 RecodeMu recodeMu = new RecodeMu(v);
