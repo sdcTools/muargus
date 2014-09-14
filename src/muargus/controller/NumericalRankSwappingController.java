@@ -56,6 +56,9 @@ public class NumericalRankSwappingController extends ControllerBase {
             ReplacementFile replacement = this.metadata.getReplacementFiles().get(this.metadata.getReplacementFiles().size()-1);
             try {
                 FileUtils.copyFile(new File(replacement.getInputFilePath()), new File(replacement.getOutputFilePath()));
+                getView().showMessage("RankSwapping successfully completed");
+                getView().setProgress(0);
+                getView().showStepName("");
             }
             catch (IOException ex) {
                 getView().showErrorMessage(new ArgusException(ex.getMessage()));

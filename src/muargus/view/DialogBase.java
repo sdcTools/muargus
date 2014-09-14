@@ -76,6 +76,10 @@ public class DialogBase extends javax.swing.JDialog {
         return (JOptionPane.showConfirmDialog(null, message, MuARGUS.getMessageTitle(), JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION);
     }
     
+    public void showMessage(String message) {
+        JOptionPane.showMessageDialog(null, message, MuARGUS.getMessageTitle(), JOptionPane.INFORMATION_MESSAGE);
+    }
+    
     public String showFileDialog(String title, boolean forSaving, String[] filter) {
         JFileChooser fileChooser = new JFileChooser();
         String hs = SystemUtils.getRegString("general", "datadir", "");

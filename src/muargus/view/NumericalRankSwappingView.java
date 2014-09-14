@@ -6,11 +6,8 @@ package muargus.view;
 
 import java.util.ArrayList;
 import javax.swing.DefaultListModel;
-import javax.swing.ListModel;
 import muargus.VariableNameCellRenderer;
 import muargus.controller.NumericalRankSwappingController;
-import muargus.model.MetadataMu;
-import muargus.model.NumericalRankSwapping;
 import muargus.model.VariableMu;
 
 
@@ -20,9 +17,11 @@ import muargus.model.VariableMu;
  */
 public class NumericalRankSwappingView extends DialogBase {
 
-    //MetadataMu metadataMu;
-    NumericalRankSwappingController controller;
-    NumericalRankSwapping model;
+    private final NumericalRankSwappingController controller;
+    //private NumericalRankSwapping model;
+    private DefaultListModel<VariableMu> variableListModel;
+    private DefaultListModel<VariableMu> selectedListModel;
+    
     /**
      * 
      * @param parent
@@ -35,20 +34,22 @@ public class NumericalRankSwappingView extends DialogBase {
         setLocationRelativeTo(null);
         this.controller = controller;
         this.variableList.setCellRenderer(new VariableNameCellRenderer());
-        this.selecedVariableList.setCellRenderer(new VariableNameCellRenderer());
+        this.selectedVariableList.setCellRenderer(new VariableNameCellRenderer());
     }
         
     @Override
     public void initializeData() {
-        this.model = getMetadata().getCombinations().getNumericalRankSwapping();
-        DefaultListModel variableListModel = new DefaultListModel();
+        //this.model = getMetadata().getCombinations().getNumericalRankSwapping();
+        this.variableListModel = new DefaultListModel();
         for (VariableMu variable : getMetadata().getVariables()) {
             if (variable.isNumeric()) {
-                variableListModel.addElement(variable);
+                this.variableListModel.addElement(variable);
             }
         }
-        variableList.setModel(variableListModel);
-        selecedVariableList.setModel(new DefaultListModel());
+        variableList.setModel(this.variableListModel);
+        this.selectedListModel = new DefaultListModel<>();
+        selectedVariableList.setModel(this.selectedListModel);
+        variableList.setSelectedIndex(0);
         updateValues();
     }
     
@@ -58,7 +59,7 @@ public class NumericalRankSwappingView extends DialogBase {
 
     public ArrayList<VariableMu> getSelectedVariables() {
         ArrayList<VariableMu> selected = new ArrayList<>();
-        for (Object variable : ((DefaultListModel)selecedVariableList.getModel()).toArray()) {
+        for (Object variable : ((DefaultListModel)selectedVariableList.getModel()).toArray()) {
             selected.add((VariableMu) variable);
         }
         return selected;
@@ -93,8 +94,8 @@ public class NumericalRankSwappingView extends DialogBase {
         variableList = new javax.swing.JList();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        selecedVariableList = new javax.swing.JList();
-        upBUtton = new javax.swing.JButton();
+        selectedVariableList = new javax.swing.JList();
+        upButton = new javax.swing.JButton();
         downButton = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
@@ -132,7 +133,8 @@ public class NumericalRankSwappingView extends DialogBase {
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Selected"));
 
-        jScrollPane2.setViewportView(selecedVariableList);
+        selectedVariableList.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        jScrollPane2.setViewportView(selectedVariableList);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -145,9 +147,19 @@ public class NumericalRankSwappingView extends DialogBase {
             .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 118, Short.MAX_VALUE)
         );
 
-        upBUtton.setText("↑");
+        upButton.setText("↑");
+        upButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                upButtonActionPerformed(evt);
+            }
+        });
 
         downButton.setText("↓");
+        downButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                downButtonActionPerformed(evt);
+            }
+        });
 
         jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
 
@@ -245,7 +257,7 @@ public class NumericalRankSwappingView extends DialogBase {
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                         .addComponent(downButton)
-                                        .addComponent(upBUtton)))
+                                        .addComponent(upButton)))
                                 .addGroup(layout.createSequentialGroup()
                                     .addGap(42, 42, 42)
                                     .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))))
@@ -267,7 +279,7 @@ public class NumericalRankSwappingView extends DialogBase {
                                 .addComponent(fromSelectedButton))
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(46, 46, 46)
-                                .addComponent(upBUtton)
+                                .addComponent(upButton)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(downButton)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -293,19 +305,52 @@ public class NumericalRankSwappingView extends DialogBase {
     }//GEN-LAST:event_okButtonActionPerformed
 
     private void toSelectedButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_toSelectedButtonActionPerformed
+        boolean added = false;
         for (Object variable : variableList.getSelectedValuesList()) {
-            ((DefaultListModel)variableList.getModel()).removeElement(variable);
-            ((DefaultListModel)selecedVariableList.getModel()).addElement(variable);
+            if (!selectedListModel.contains(variable)) {
+                selectedListModel.addElement((VariableMu)variable);
+                added = true;
+            }
+        }
+        if (added) {
+            //Change selection of variables list
+            for (int index=0; index < variableListModel.getSize(); index++) {
+                if (!selectedListModel.contains(variableListModel.getElementAt(index))) {
+                    variableList.setSelectedIndex(index);
+                    return;
+                }
+            }
+            variableList.setSelectedIndex(0);
         }
     }//GEN-LAST:event_toSelectedButtonActionPerformed
 
     private void fromSelectedButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fromSelectedButtonActionPerformed
-        // TODO add your handling code here:
+        for (Object variable : selectedVariableList.getSelectedValuesList()) {
+            selectedListModel.removeElement((VariableMu)variable);
+        }
     }//GEN-LAST:event_fromSelectedButtonActionPerformed
 
     private void calculateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_calculateButtonActionPerformed
         controller.calculate();
     }//GEN-LAST:event_calculateButtonActionPerformed
+
+    private void upButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_upButtonActionPerformed
+        int index = selectedVariableList.getSelectedIndex();
+        if (index > 0) {
+            VariableMu variable = selectedListModel.remove(index);
+            selectedListModel.add(index-1, variable);
+            selectedVariableList.setSelectedIndex(index-1);
+        }
+    }//GEN-LAST:event_upButtonActionPerformed
+
+    private void downButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_downButtonActionPerformed
+        int index = selectedVariableList.getSelectedIndex();
+        if (index > -1 && index < selectedListModel.getSize() - 1) {
+            VariableMu variable = selectedListModel.remove(index);
+            selectedListModel.add(index+1, variable);
+            selectedVariableList.setSelectedIndex(index+1);
+        }
+    }//GEN-LAST:event_downButtonActionPerformed
 
 //    /**
 //     * @param args the command line arguments
@@ -363,10 +408,10 @@ public class NumericalRankSwappingView extends DialogBase {
     private javax.swing.JButton okButton;
     private javax.swing.JTextField percentageTextField;
     private javax.swing.JProgressBar progressBar;
-    private javax.swing.JList selecedVariableList;
+    private javax.swing.JList selectedVariableList;
     private javax.swing.JLabel stepNameLabel;
     private javax.swing.JButton toSelectedButton;
-    private javax.swing.JButton upBUtton;
+    private javax.swing.JButton upButton;
     private javax.swing.JList variableList;
     // End of variables declaration//GEN-END:variables
 }
