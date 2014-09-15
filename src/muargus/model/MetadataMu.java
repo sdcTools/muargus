@@ -1,13 +1,9 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package muargus.model;
 
 import argus.model.ArgusException;
 import argus.model.DataFilePair;
 import argus.utils.StrUtils;
-import argus.utils.SystemUtils;
+//import argus.utils.SystemUtils;
 import argus.utils.Tokenizer;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -42,8 +38,6 @@ public class MetadataMu {
     //default
     private int dataFileType = DATA_FILE_TYPE_FIXED;
     private boolean householdData = false;
-
-    // default value
     private String separator = ";";
 
     private BufferedReader reader;
@@ -55,17 +49,21 @@ public class MetadataMu {
     private ArrayList<ReplacementFile> replacementFiles;
 
     /**
-     * 
+     * Constructor of the model class MetadataMu. Initializes the DataFilePair
+     * and makes empty arraylists for the variables and the RecodeMu's.
      */
     public MetadataMu() {
         variables = new ArrayList<>();
-        filenames = new DataFilePair(null, null);
         replacementFiles = new ArrayList<>();
+        filenames = new DataFilePair(null, null);
     }
 
     /**
-     * 
-     * @param metadata 
+     * Constructor of the model class MetadataMu using existing metadata as
+     * input. This constructor is used when metadata already exists to either
+     * make a clone of the metadata or to make the safe metadata.
+     *
+     * @param metadata MetadataMu instance containing the original metadata.
      */
     public MetadataMu(MetadataMu metadata) {
         this();
@@ -85,15 +83,16 @@ public class MetadataMu {
     }
 
     /**
-     * 
-     * @return 
+     * Gets the model class of the selectCombinations screen.
+     *
+     * @return Returns the Combinations model class.
      */
     public Combinations getCombinations() {
         return this.combinations;
     }
 
     /**
-     * 
+     * Creates a new instance of the Combinations model class.
      */
     public void createCombinations() {
         this.combinations = new Combinations();
@@ -101,45 +100,54 @@ public class MetadataMu {
     }
 
     /**
-     * 
-     * @param combinations 
+     * Sets the model class of the selectCombinations screen.
+     *
+     * @param combinations The Combinations model class.
      */
     public void setCombinations(Combinations combinations) {
         this.combinations = combinations;
     }
 
     /**
-     * 
-     * @param metadata
-     * @return 
+     * Checks whether the changes in the metadata are of significant importance.
+     * If the changes are significant, this will mean that already specified
+     * tables should be removed.
+     *
+     * @param metadata MetadataMu instance containing a clone of the original
+     * metadata.
+     * @return Boolean stating whether the change is significant or not.
      */
     public boolean significantDifference(MetadataMu metadata) {
         //TODO: implemenet
         //significant changes are for instance changes in field length, variable type, etc
         //insignificant changes are for instance changes in codelist file
-        //for now, everything is signiicant
+        //for now, everything is significant
         return true;
     }
 
     /**
-     * 
-     * @return 
+     * Gets the number of records in the data file.
+     *
+     * @return Integer containing the number of records in the data file.
      */
     public int getRecordCount() {
         return recordCount;
     }
 
     /**
-     * 
-     * @param recordCount 
+     * Sets the number of records that are in the data file.
+     *
+     * @param recordCount Integer containing the number of records in the data
+     * file.
      */
     public void setRecordCount(int recordCount) {
         this.recordCount = recordCount;
     }
 
     /**
-     * 
-     * @return 
+     * Gets the ArrayList containing all the ReplacementFiles.
+     *
+     * @return ArrayList containing all the ReplacementFiles.
      */
     public ArrayList<ReplacementFile> getReplacementFiles() {
         return replacementFiles;
@@ -161,12 +169,13 @@ public class MetadataMu {
 //        System.out.println(cloneData.get(1).getName());
 //    }
     /**
-     * Reads the entire variables of the metafile This method reads the
-     * metadatafile line for line. It makes a new variable object for each
+     * Reads the entire metafile and initalizes the variables. This method reads
+     * the metadatafile line for line. It makes a new variable object for each
      * variable it finds and provides the relevant information of this variable
      * (is it recodable, what is it's ID_level etc).
      *
-     * @throws ArgusException when the file cannot be read
+     * @throws ArgusException Throws an ArgusException when the file cannot be
+     * read.
      */
     public void readMetadata() throws ArgusException {
         if (this.filenames.getMetaFileName().length() == 0) {
@@ -198,27 +207,20 @@ public class MetadataMu {
                 } else {
                     variable.setStartingPosition("1");  //not relevant, but must be >0
                 }
-
                 variable.setVariableLength(tokenizer.nextToken());
-
-                // make fancier
                 variable.setMissing(0, tokenizer.nextToken());
                 variable.setMissing(1, tokenizer.nextToken());
             } else if (variable == null) {
                 switch (value) {
                     case "<SEPARATOR>":
                         setDataFileType(DATA_FILE_TYPE_FREE);
-                        //setFree(true);
-                        //if(!tokenizer.nextToken().equals(""))
                         setSeparator(tokenizer.nextToken());
                         break;
                     case "<SPSS>":
                         setDataFileType(DATA_FILE_TYPE_SPSS);
-                        //setSpss(true);
                         break;
                     case "<NAMESINFRONT>":
                         setDataFileType(DATA_FILE_TYPE_FREE_WITH_META);
-                        //setFreeWithMeta(true);
                         break;
                 }
             } else {
@@ -269,54 +271,48 @@ public class MetadataMu {
         linkRelatedVariables();
     }
 
+//    /**
+//     *
+//     * @param w
+//     * @param variable
+//     */
+//    private void writeVariable(Writer w, VariableMu variable) {
+//
+//    }
     /**
-     * 
-     * @param w
-     * @param variable 
+     * Writes the metadata to a .rda file when a BufferdWritier has been
+     * initialized.
+     *
+     * @param w BufferedWriter already initiated with the neede file.
+     * @param all Boolean variable stating whether all metadata needs to be
+     * written. When writing the safe metadata, the suppressionweight is for
+     * example not necessary.
+     * @throws IOException Throws an IOException when an error occurs during
+     * writing.
      */
-    private void writeVariable(Writer w, VariableMu variable) {
-
-    }
-
-    /**
-     * 
-     * @param w
-     * @param all
-     * @throws IOException 
-     */
-    private void write(Writer w, boolean all) throws IOException {
-// Anco 1.6
-// try with resources verwijderd.        
-//        try (PrintWriter writer = new PrintWriter(w)) {
-        PrintWriter writer = null;
-        try {
-            writer = new PrintWriter(w);
+    private void write(BufferedWriter w, boolean all) throws IOException {
+        try (
+                PrintWriter writer = new PrintWriter(w)) {
             if (dataFileType == DATA_FILE_TYPE_FREE) {
                 writer.println("   <SEPARATOR> " + StrUtils.quote(separator));
             }
             if (dataFileType == DATA_FILE_TYPE_SPSS) {
                 writer.println("   <SPSS>");
             }
-//            if (dataOrigin != DATA_ORIGIN_MICRO) {
-//                writer.println("   <SAFE> " + StrUtils.quote(safeStatus));
-//                writer.println("   <UNSAFE> " + StrUtils.quote(unSafeStatus));
-//                writer.println("   <PROTECT> " + StrUtils.quote(protectStatus));
-//            }
             for (VariableMu variable : this.variables) {
                 variable.write(writer, this.dataFileType, all);
-            }
-        } finally {
-            if (writer != null) {
-                writer.close();
             }
         }
     }
 
     /**
-     * 
-     * @param file
-     * @param all
-     * @throws ArgusException 
+     * Writes the metadata to a .rda file.
+     *
+     * @param file File containing the metadata.
+     * @param all all metadata wegschrijven ja of nee? --> safe metadata neemt
+     * niet alles mee (suppressionweight)
+     * @throws ArgusException Throws an ArgusException when an error occurs
+     * during writing.
      */
     public void write(File file, boolean all) throws ArgusException {
         try {
@@ -329,20 +325,27 @@ public class MetadataMu {
     }
 
     /**
-     * 
-     * @throws ArgusException 
+     * Links variables to each other if this is specified.
+     *
+     * @throws ArgusException Throws an ArgusException when a variable is
+     * related to a non-specified variable.
      */
     private void linkRelatedVariables() throws ArgusException {
         for (VariableMu var : variables) {
             var.linkRelatedVariable(variables);
         }
-
     }
 
     // TODO: add a message explaining whats the problem
     /**
-     * 
-     * @throws ArgusException 
+     * Verifies for each variable if they are valid. This method checks if the
+     * there are duplicate variable names, if the length of the missing values
+     * are correct, if the correct amount of missing values are given and if the
+     * codelist file is valid. If the datatype is fixed, the variable length,
+     * startingpostion and overlap is also checeked.
+     *
+     * @throws ArgusException Throws an ArgusException if some values are not
+     * valid.
      */
     public void verify() throws ArgusException {
         for (VariableMu var : variables) {
@@ -363,6 +366,7 @@ public class MetadataMu {
                     throw new ArgusException("Length of variable " + var.getName() + " must be > 0");
                 }
                 int start = var.getStartingPosition();
+
                 //Checkstart if startPosition > 0
                 if (start <= 0) {
                     throw new ArgusException("Start position of variable " + var.getName() + " must be > 0");
@@ -439,64 +443,82 @@ public class MetadataMu {
 //        return metadataFile;
 //    }
     /**
-     * 
-     * @return 
+     * Gets the type of the data file. There are four different data types:
+     * fixed, free, free with meta and SPSS.
+     *
+     * @return Integer containing the type of the data file. The integers
+     * correspont to the DATA_FILE_TYPE constants: DATA_FILE_TYPE_FIXED = 1;
+     * DATA_FILE_TYPE_FREE = 2; DATA_FILE_TYPE_FREE_WITH_META = 3;
+     * DATA_FILE_TYPE_SPSS = 4;
      */
     public int getDataFileType() {
         return this.dataFileType;
     }
 
     /**
-     * 
-     * @param dataFileType 
+     * Sets the type of the data file. There are four different data types:
+     * fixed, free, free with meta and SPSS.
+     *
+     * @param dataFileType Integer containing the type of the data file. The
+     * integers correspont to the DATA_FILE_TYPE constants: DATA_FILE_TYPE_FIXED
+     * = 1; DATA_FILE_TYPE_FREE = 2; DATA_FILE_TYPE_FREE_WITH_META = 3;
+     * DATA_FILE_TYPE_SPSS = 4;
      */
     public void setDataFileType(int dataFileType) {
         this.dataFileType = dataFileType;
     }
 
     /**
-     * 
-     * @return 
+     * Gets the separator used in free format data file types.
+     *
+     * @return String containing the separator.
      */
     public String getSeparator() {
         return separator;
     }
 
     /**
-     * 
-     * @param separator 
+     * Sets the separator used in free format data file types.
+     *
+     * @param separator String containing the separator.
      */
     public void setSeparator(String separator) {
         this.separator = separator;
     }
 
     /**
-     * 
-     * @return 
+     * Gets the file names of both the metadata file and the data file
+     *
+     * @return DataFilePair instance containing two String with the path of the
+     * metadata file and the data file.
      */
     public DataFilePair getFileNames() {
         return this.filenames;
     }
 
     /**
-     * 
-     * @param filenames 
+     * Sets the file names of both the metadata file and the data file
+     *
+     * @param filenames DataFilePair instance containing two String with the
+     * path of the metadata file and the data file.
      */
     public void setFileNames(DataFilePair filenames) {
         this.filenames = filenames;
     }
 
     /**
-     * 
-     * @return 
+     * Returns whether the data is Household data.
+     *
+     * @return Boolean stating whether the data is Household data.
      */
     public boolean isHouseholdData() {
         return householdData;
     }
 
     /**
-     * 
-     * @param householdData 
+     * Sets whether the data is Household data.
+     *
+     * @param householdData Boolean stating whether the data is Household data.
      */
     public void setHouseholdData(boolean householdData) {
         this.householdData = householdData;
@@ -524,26 +546,31 @@ public class MetadataMu {
 //        } catch (Exception e) {
 //        }
 //    }
-
     /**
-     * 
-     * @return 
+     * Gets an ArrayList containing all the Variables in the Metadata.
+     *
+     * @return ArrayList containing all the Variables in the Metadata.
      */
     public ArrayList<VariableMu> getVariables() {
         return variables;
     }
 
     /**
-     * 
-     * @param variables 
+     * Sets an ArrayList containing all the Variables in the Metadata.
+     *
+     * @param variables ArrayList containing all the Variables in the Metadata.
      */
     public void setVariables(ArrayList<VariableMu> variables) {
         this.variables = variables;
     }
 
+    //TODO: Anne kan jij dit mooi uitleggen. 
     /**
-     * 
-     * @return 
+     * Gets the hashcode. The hashcode is calculated as a addition of the
+     * hashcodes from the individual components: separator, dataFileType,
+     * dataFileName, metaFileName and the ArrayList of variables.
+     *
+     * @return Integer containing the hashcode.
      */
     @Override
     public int hashCode() {
@@ -560,11 +587,11 @@ public class MetadataMu {
 //        MetadataMu t = new MetadataMu();
 //        t.readMetadata(t.getMetadataFile());
 //    }
-    
     /**
-     * 
-     * @param o
-     * @return 
+     * Returns if the metadata is equal to its clone.
+     *
+     * @param o Object containing the Metadata.
+     * @return Boolean stating whether the metadata is equal to its clone.
      */
     @Override
     public boolean equals(Object o) {
