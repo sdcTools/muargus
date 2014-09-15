@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import javax.swing.DefaultListModel;
 import muargus.VariableNameCellRenderer;
 import muargus.controller.NumericalRankSwappingController;
+import muargus.model.NumericalRankSwapping;
 import muargus.model.VariableMu;
 
 
@@ -18,7 +19,7 @@ import muargus.model.VariableMu;
 public class NumericalRankSwappingView extends DialogBase {
 
     private final NumericalRankSwappingController controller;
-    //private NumericalRankSwapping model;
+    private NumericalRankSwapping model;
     private DefaultListModel<VariableMu> variableListModel;
     private DefaultListModel<VariableMu> selectedListModel;
     

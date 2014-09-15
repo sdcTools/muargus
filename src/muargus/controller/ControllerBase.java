@@ -43,6 +43,10 @@ public class ControllerBase implements PropertyChangeListener {
         }
     }
     
+    protected CalculationService getCalculationService() {
+        return muargus.MuARGUS.getCalculationService();
+    }
+    
     protected void setView(DialogBase view) {
         this.viewBase = view;
     }

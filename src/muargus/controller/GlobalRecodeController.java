@@ -23,7 +23,6 @@ import muargus.view.GlobalRecodeView;
 public class GlobalRecodeController extends ControllerBase {
 
     MetadataMu metadata;
-    CalculationService service;
 
     /**
      *
@@ -35,7 +34,6 @@ public class GlobalRecodeController extends ControllerBase {
     public GlobalRecodeController(java.awt.Frame parentView, MetadataMu metadata) {
         super.setView(new GlobalRecodeView(parentView, true, this));
         this.metadata = metadata;
-        this.service = MuARGUS.getCalculationService();
         getView().setMetadata(metadata);
         
         //this.selectCombinationsModel = selectCombinationsModel;
@@ -137,15 +135,15 @@ public class GlobalRecodeController extends ControllerBase {
      *
      */
     public void apply(RecodeMu recode) throws ArgusException {
-        String warning = this.service.doRecode(recode);
+        String warning = getCalculationService().doRecode(recode);
         getGlobalRecodeView().showWarning(warning);
-        this.service.applyRecode();
+        getCalculationService().applyRecode();
         recode.setTruncated(false);
         recode.setRecoded(true);
     }
 
     public void undo(RecodeMu recode) throws ArgusException {
-        this.service.undoRecode(recode);
+        getCalculationService().undoRecode(recode);
         recode.setRecoded(false);
         recode.setTruncated(false);
     }
@@ -154,7 +152,7 @@ public class GlobalRecodeController extends ControllerBase {
      *
      */
     public void truncate(RecodeMu recode, int positions) throws ArgusException {
-        this.service.truncate(recode, positions);
+        getCalculationService().truncate(recode, positions);
         recode.setRecoded(false);
         recode.setTruncated(true);
         recode.setPositionsTruncated(Integer.toString(positions));

@@ -9,7 +9,6 @@ import argus.model.ArgusException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import muargus.MuARGUS;
 import muargus.model.CodeInfo;
 import muargus.model.MetadataMu;
 import muargus.model.PramSpecification;
@@ -21,42 +20,30 @@ import muargus.view.PramSpecificationView;
  *
  * @author ambargus
  */
-public class PramSpecificationController {
+public class PramSpecificationController extends ControllerBase {
 
-    PramSpecificationView view;
     PramSpecification model;
-    MetadataMu metadataMu;
-    CalculationService calculationService;
+    MetadataMu metadata;
 
-    public PramSpecificationController(java.awt.Frame parentView, MetadataMu metadataMu) {
-        this.view = new PramSpecificationView(parentView, true, this);
-        this.metadataMu = metadataMu;
-        this.view.setMetadataMu(this.metadataMu);
-        this.calculationService = MuARGUS.getCalculationService();
+    public PramSpecificationController(java.awt.Frame parentView, MetadataMu metadata) {
+        super.setView(new PramSpecificationView(parentView, true, this));
+        this.metadata = metadata;
+        this.model = this.metadata.getCombinations().getPramSpecification();
+        getView().setMetadata(this.metadata);
     }
 
     /**
      * Opens the view by setting its visibility to true.
      */
     public void showView() {
-        this.view.setVisible(true);
+        getView().setVisible(true);
     }
 
     /**
      * Closes the view by setting its visibility to false.
      */
     public void close() {
-        this.view.setVisible(false);
-    }
-
-    /**
-     * Fuction for setting the model. This function is used by the view after
-     * setting the model itself
-     *
-     * @param model the model class of the ShowTableCollection screen
-     */
-    public void setModel(PramSpecification model) {
-        this.model = model;
+        getView().setVisible(false);
     }
 
     /**
@@ -80,7 +67,7 @@ public class PramSpecificationController {
     public void makePramVariableSpecs() {
         if (this.model.getPramVarSpec() == null) {
             ArrayList<PramVariableSpec> pramVarSpec = new ArrayList<>();
-            for (VariableMu v : this.metadataMu.getVariables()) {
+            for (VariableMu v : this.metadata.getVariables()) {
                 if (v.isCategorical()) {
                     PramVariableSpec p = new PramVariableSpec(v);
                     pramVarSpec.add(p);
@@ -114,7 +101,7 @@ public class PramSpecificationController {
      *
      */
     public void setBandwidth() {
-        for (VariableMu v : this.metadataMu.getVariables()) {
+        for (VariableMu v : this.metadata.getVariables()) {
             if (v.isCategorical()) {
                 int max = v.getCodeInfos().size() - v.getNumberOfMissings();
                 int value;
@@ -151,13 +138,8 @@ public class PramSpecificationController {
      */
     public String[][] getCodesData(String variableName) {
         PramVariableSpec pramVariableSpec = getSelectedPramVarSpec(variableName);
-        VariableMu variable = null;
-        for (VariableMu v : this.metadataMu.getVariables()) {
-            if (v.getName().equals(variableName)) {
-                variable = v;
-            }
-        }
-
+        VariableMu variable = pramVariableSpec.getVariable();
+        
         String[][] codesData = null;
         if (variable != null) {
             ArrayList<CodeInfo> codeInfo = variable.getCodeInfos();
@@ -198,7 +180,7 @@ public class PramSpecificationController {
      */
     public void apply(PramVariableSpec pramVariableSpec) {
         try {
-            this.calculationService.setPramVariable(pramVariableSpec);
+            getCalculationService().setPramVariable(pramVariableSpec);
         } catch (ArgusException ex) {
             Logger.getLogger(PramSpecificationController.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -214,7 +196,7 @@ public class PramSpecificationController {
      */
     public void undo(PramVariableSpec pramVariableSpec) {
         try {
-            this.calculationService.undoSetPramVariable(pramVariableSpec);
+            getCalculationService().undoSetPramVariable(pramVariableSpec);
         } catch (ArgusException ex) {
             Logger.getLogger(PramSpecificationController.class.getName()).log(Level.SEVERE, null, ex);
         }

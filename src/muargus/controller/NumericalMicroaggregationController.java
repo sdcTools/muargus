@@ -14,39 +14,27 @@ import muargus.view.NumericalMicroaggregationView;
  *
  * @author ambargus
  */
-public class NumericalMicroaggregationController {
-    NumericalMicroaggregationView view;
+public class NumericalMicroaggregationController extends ControllerBase {
     NumericalMicroaggregation model;
-    MetadataMu metadataMu;
-    CalculationService calculationService;
+    MetadataMu metadata;
 
-    public NumericalMicroaggregationController(java.awt.Frame parentView, MetadataMu metadataMu) {
-        this.view = new NumericalMicroaggregationView(parentView, true, this);
-        this.metadataMu = metadataMu;
-        this.view.setMetadataMu(this.metadataMu);
+    public NumericalMicroaggregationController(java.awt.Frame parentView, MetadataMu metadata) {
+        super.setView(new NumericalMicroaggregationView(parentView, true, this));
+        this.metadata = metadata;
+        getView().setMetadata(this.metadata);
     }
     
     /**
      * Opens the view by setting its visibility to true.
      */
     public void showView() {
-        this.view.setVisible(true);
+        getView().setVisible(true);
     }
 
     /**
      * Closes the view by setting its visibility to false.
      */
     public void close() {
-        this.view.setVisible(false);
-    }
-
-    /**
-     * Fuction for setting the model. This function is used by the view after
-     * setting the model itself
-     *
-     * @param model the model class of the ShowTableCollection screen
-     */
-    public void setModel(NumericalMicroaggregation model) {
-        this.model = model;
+        getView().setVisible(false);
     }
 }
