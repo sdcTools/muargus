@@ -12,10 +12,9 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import muargus.controller.CalculationService;
-import muargus.extern.dataengine.CMuArgCtrl;
 import muargus.model.MetadataMu;
 import muargus.model.RecodeMu;
+import muargus.model.RiskSpecification;
 import muargus.model.TableMu;
 import muargus.model.VariableMu;
 import org.w3c.dom.Document;
@@ -105,12 +104,14 @@ public class HTMLReportWriter {
 
     private static Element writeGlobalRecodeTables(MetadataMu metadata) {
         boolean recoded = false;
-        try {
+//        try {
+        if (metadata.getCombinations().getGlobalRecode() != null) {
             for (RecodeMu r : metadata.getCombinations().getGlobalRecode().getRecodeMus()) {
                 if (r.isRecoded() || r.isTruncated()) {
                     recoded = true;
                 }
             }
+        }
 
             Element p = doc.createElement("p");
             if (recoded) {
@@ -153,12 +154,17 @@ public class HTMLReportWriter {
                 addChildElement(p, "h2", "No global recodings have been applied");
             }
             return p;
-        } catch (Exception e) {
-            Element p = doc.createElement("p");
-            addChildElement(p, "h2", "No global recodings have been applied");
-            return p;
-        }
+//        } catch (Exception e) {
+//            Element p = doc.createElement("p");
+//            addChildElement(p, "h2", "No global recodings have been applied");
+//            return p;
+//        }
 
+    }
+
+    private static String formatDouble(double d, int decimals) {
+        String format = "%." + decimals + "f";
+        return String.format(MuARGUS.getLocale(), format, d);
     }
 
     private static Element writeBaseIndividualRisk(MetadataMu metadata) {
@@ -173,12 +179,13 @@ public class HTMLReportWriter {
                 }
                 table = table.substring(0, table.length() - 3);
                 addChildElement(p, "h2", table);
+                RiskSpecification riskSpec = metadata.getCombinations().getRiskSpecification();
                 if (metadata.isHouseholdData()) {
-                    addChildElement(p, "h2", "Household risk: 0.000000");
+                    addChildElement(p, "h2", "Household risk: " + formatDouble(riskSpec.getRiskThreshold(), 5));
                 }
                 else {
-                    addChildElement(p, "h2", "Ind. risk: 0.000000");
-                    addChildElement(p, "h2", "Ind. re-ident rate: 0.000000");
+                    addChildElement(p, "h2", "Ind. risk: " + formatDouble(riskSpec.getRiskThreshold(), 3));
+                    addChildElement(p, "h2", "Ind. re-ident rate: " + formatDouble(riskSpec.getReidentRateThreshold()*100, 5) + " %");
                 }
                     
                 addChildElement(p, "h2", "");
