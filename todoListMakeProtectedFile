@@ -1,4 +1,5 @@
 niet behandelde opmerkingen/vragen:
+-wat als risktabel maar nog geen risk gekozen? dan wel Risk has been applied met 0.000?
        
 Nog te doen:                                                                                                    Mee bezig:
 
@@ -8,12 +9,13 @@ Release 2:
 - otherModifications toevoegen (gebeurd wanneer de optie change into sequence number wordt gekozen)
     --> write records in random order zou ik hier ook bij stoppen. (net als het volgende puntje)
 - Variables removed: hhIdentifier --> weergeven aan het eind als gekozen wordt voor remove from safe file
-- writeBaseIndividualRisk: de risk bepalen en toevoegen (geeft nu alleen maar 0.00000)
-- writeBaseHHRisk: de risk bepalen en toevoegen (geeft nu alleen maar 0.00000)
 - Pram in rapport tonen
 - Gegevens numerical variables scherm in rapport tonen
 - Gegevens microaggregatie in rapport tonen
 - Gegevens rank swapping in rapport tonen
+- writeBaseIndividualRisk: risk van meerdere tabellen wordt nog niet getoond
+- writeBaseHHRisk: risk van meerdere tabellen wordt nog niet getoond
+
    
 15. html viewer vervangen: de html/css wordt nu brak getoond
 -Scherm resizable maken en minimale grootte scherm instellen 

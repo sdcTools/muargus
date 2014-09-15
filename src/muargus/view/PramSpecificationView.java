@@ -10,6 +10,7 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
+import muargus.HighlightTableCellRenderer;
 import muargus.controller.PramSpecificationController;
 import muargus.model.CodeInfo;
 import muargus.model.PramSpecification;
@@ -147,6 +148,8 @@ public class PramSpecificationView extends DialogBase {
                 }
             }
         });
+        
+        this.variablesTable.setDefaultRenderer(Object.class, new HighlightTableCellRenderer());
     }
 
     /**
@@ -475,6 +478,7 @@ public class PramSpecificationView extends DialogBase {
             int selected = this.variablesTable.getSelectedRow();
             this.variablesTable.setValueAt(getSelectedPramVariableSpec().getAppliedText(), selected, 0);
             this.variablesTable.setValueAt(getSelectedPramVariableSpec().getBandwidthText(), selected, 1);
+            this.variablesTable.setValueAt(getSelectedPramVariableSpec().getVariable().getName(), selected, 2);
             this.controller.apply(getSelectedPramVariableSpec());
         } else {
             String message = "All probabilities are zero";

@@ -29,7 +29,6 @@ public class RiskSpecificationController extends ControllerBase {
     //private RiskSpecificationView view;
     private final RiskSpecification model;
     private final MetadataMu metadata;
-    private final CalculationService calculationService;
     private final java.awt.Frame parentView; 
     
     public RiskSpecificationController(java.awt.Frame parentView, MetadataMu metadata) {
@@ -37,7 +36,6 @@ public class RiskSpecificationController extends ControllerBase {
         super.setView(new RiskSpecificationView(parentView, true, this, metadata.isHouseholdData()));
         this.metadata = metadata;
         this.model = this.metadata.getCombinations().getRiskSpecification();
-        this.calculationService = MuARGUS.getCalculationService();
     }
     
     public ArrayList<String> getRiskTableTitles() {
@@ -97,7 +95,7 @@ public class RiskSpecificationController extends ControllerBase {
     
     public void fillModelHistogramData(boolean cumulative) {
         try {
-            double maxReident = calculationService.fillHistogramData(this.model.getRiskTable(), 
+            double maxReident = getCalculationService().fillHistogramData(this.model.getRiskTable(), 
                     this.model.getClasses(), cumulative);
             this.model.setMaxReidentRate(maxReident);
         }
@@ -116,9 +114,9 @@ public class RiskSpecificationController extends ControllerBase {
     
     public void calculateByRiskThreshold() {
         try {
-            this.model.setUnsafeRecords(this.calculationService.calculateUnsafe(
+            this.model.setUnsafeRecords(getCalculationService().calculateUnsafe(
                     this.model.getRiskTable(), this.model.getRiskThreshold(), this.metadata.isHouseholdData()));
-            this.model.setReidentRateThreshold(this.calculationService.calculateReidentRate(
+            this.model.setReidentRateThreshold(getCalculationService().calculateReidentRate(
                     this.model.getRiskTable(), this.model.getRiskThreshold()));
         }
         catch (ArgusException ex) {
@@ -128,9 +126,9 @@ public class RiskSpecificationController extends ControllerBase {
     
     public void calculateByUnsafeRecords() {
         try {
-            this.model.setRiskThreshold(this.calculationService.calculateRiskThreshold(
+            this.model.setRiskThreshold(getCalculationService().calculateRiskThreshold(
                     this.model.getRiskTable(), this.model.getUnsafeRecords(), this.metadata.isHouseholdData()));
-            this.model.setReidentRateThreshold(this.calculationService.calculateReidentRate(
+            this.model.setReidentRateThreshold(getCalculationService().calculateReidentRate(
                     this.model.getRiskTable(), this.model.getRiskThreshold()));
         }
         catch (ArgusException ex) {
@@ -156,7 +154,7 @@ public class RiskSpecificationController extends ControllerBase {
         while (iteration < MAX_ITERATIONS) {
             if (Math.abs(value - soughtValue) < epsilon)
                 break;
-            value = this.calculationService.calculateReidentRate(this.model.getRiskTable(), risk);
+            value = getCalculationService().calculateReidentRate(this.model.getRiskTable(), risk);
             if (value > soughtValue) {
                 r1 = risk;
                 risk = r0 + (risk-r0) * (soughtValue - t0)/(value - t0);

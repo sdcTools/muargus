@@ -12,7 +12,7 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
-import muargus.RecodeTableCellRenderer;
+import muargus.HighlightTableCellRenderer;
 import muargus.controller.GlobalRecodeController;
 import muargus.model.GlobalRecode;
 import muargus.model.RecodeMu;
@@ -72,7 +72,7 @@ public class GlobalRecodeView extends DialogBase {
         this.variablesTable.getColumnModel().getColumn(1).setMinWidth(70);
         this.variablesTable.getColumnModel().getColumn(1).setPreferredWidth(70);
 
-        this.variablesTable.setDefaultRenderer(Object.class, new RecodeTableCellRenderer());
+        this.variablesTable.setDefaultRenderer(Object.class, new HighlightTableCellRenderer());
 
         updateValues();
     }
