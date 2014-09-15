@@ -525,10 +525,10 @@ public class SelectCombinationsView extends DialogBase {
                 }
                 for (int i = selectedRows.length - 1; i > -1; i--) {
                     model.removeTable(selectedRows[i]);
-                    model.setNumberOfRows(model.getNumberOfRows() - 1);
+                    //model.setNumberOfRows(model.getNumberOfRows() - 1);
                 }
             } catch (Exception e) {
-                model.setNumberOfRows(model.getNumberOfRows() - 1);
+                //model.setNumberOfRows(model.getNumberOfRows() - 1);
                 model.removeTable(model.getNumberOfRows());
             }
             if (model.getNumberOfRows() == 0) {

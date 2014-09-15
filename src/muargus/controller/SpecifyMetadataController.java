@@ -85,7 +85,7 @@ public class SpecifyMetadataController {
             }
 
             this.metadata = this.metadataClone;
-            if (view.showConfirmDialog(message + "Save changes?")) {
+            if (view.showConfirmDialog(message + "Save changes to file?")) {
                 String filePath = view.showFileDialog("Save ARGUS metadata", true, new String[] {"ARGUS metadata file (*.rda)|rda"});
                 if (filePath != null) {
                     try {

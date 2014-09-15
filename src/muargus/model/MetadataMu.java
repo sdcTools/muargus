@@ -24,8 +24,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
+ * Model class of the SpecifyMetadata screen. This model class contains all
+ * information on the metadata.
  *
- * @author ambargus
+ * @author Statistics Netherlands
  */
 public class MetadataMu {
 
@@ -52,12 +54,19 @@ public class MetadataMu {
     private int recordCount;
     private ArrayList<ReplacementFile> replacementFiles;
 
+    /**
+     * 
+     */
     public MetadataMu() {
         variables = new ArrayList<>();
         filenames = new DataFilePair(null, null);
         replacementFiles = new ArrayList<>();
     }
 
+    /**
+     * 
+     * @param metadata 
+     */
     public MetadataMu(MetadataMu metadata) {
         this();
 
@@ -75,19 +84,35 @@ public class MetadataMu {
         }
     }
 
+    /**
+     * 
+     * @return 
+     */
     public Combinations getCombinations() {
         return this.combinations;
     }
 
+    /**
+     * 
+     */
     public void createCombinations() {
         this.combinations = new Combinations();
         //TODO: some initialization
     }
 
+    /**
+     * 
+     * @param combinations 
+     */
     public void setCombinations(Combinations combinations) {
         this.combinations = combinations;
     }
 
+    /**
+     * 
+     * @param metadata
+     * @return 
+     */
     public boolean significantDifference(MetadataMu metadata) {
         //TODO: implemenet
         //significant changes are for instance changes in field length, variable type, etc
@@ -96,19 +121,30 @@ public class MetadataMu {
         return true;
     }
 
+    /**
+     * 
+     * @return 
+     */
     public int getRecordCount() {
         return recordCount;
     }
 
+    /**
+     * 
+     * @param recordCount 
+     */
     public void setRecordCount(int recordCount) {
         this.recordCount = recordCount;
     }
 
+    /**
+     * 
+     * @return 
+     */
     public ArrayList<ReplacementFile> getReplacementFiles() {
         return replacementFiles;
     }
 
-    
 //    public static ArrayList<VariableMu> makeClone(ArrayList<VariableMu> list) throws CloneNotSupportedException {
 //        ArrayList<VariableMu> clone = new ArrayList<>(list.size());
 //        for (VariableMu item : list) {
@@ -233,10 +269,21 @@ public class MetadataMu {
         linkRelatedVariables();
     }
 
+    /**
+     * 
+     * @param w
+     * @param variable 
+     */
     private void writeVariable(Writer w, VariableMu variable) {
 
     }
 
+    /**
+     * 
+     * @param w
+     * @param all
+     * @throws IOException 
+     */
     private void write(Writer w, boolean all) throws IOException {
 // Anco 1.6
 // try with resources verwijderd.        
@@ -265,6 +312,12 @@ public class MetadataMu {
         }
     }
 
+    /**
+     * 
+     * @param file
+     * @param all
+     * @throws ArgusException 
+     */
     public void write(File file, boolean all) throws ArgusException {
         try {
             write(new BufferedWriter(new FileWriter(file)), all);
@@ -275,6 +328,10 @@ public class MetadataMu {
         }
     }
 
+    /**
+     * 
+     * @throws ArgusException 
+     */
     private void linkRelatedVariables() throws ArgusException {
         for (VariableMu var : variables) {
             var.linkRelatedVariable(variables);
@@ -283,6 +340,10 @@ public class MetadataMu {
     }
 
     // TODO: add a message explaining whats the problem
+    /**
+     * 
+     * @throws ArgusException 
+     */
     public void verify() throws ArgusException {
         for (VariableMu var : variables) {
 
@@ -326,9 +387,9 @@ public class MetadataMu {
                 }
 
             }
-            
+
             //Check if the first missing value is not empty when the variable is categorical
-            if (var.isCategorical() &&  var.getMissing(0).equals("")) {
+            if (var.isCategorical() && var.getMissing(0).equals("")) {
                 throw new ArgusException("The first missing value for variable " + var.getName() + " can not be empty");
             }
 
@@ -377,66 +438,113 @@ public class MetadataMu {
 //        }
 //        return metadataFile;
 //    }
+    /**
+     * 
+     * @return 
+     */
     public int getDataFileType() {
         return this.dataFileType;
     }
 
+    /**
+     * 
+     * @param dataFileType 
+     */
     public void setDataFileType(int dataFileType) {
         this.dataFileType = dataFileType;
     }
 
+    /**
+     * 
+     * @return 
+     */
     public String getSeparator() {
         return separator;
     }
 
+    /**
+     * 
+     * @param separator 
+     */
     public void setSeparator(String separator) {
         this.separator = separator;
     }
 
+    /**
+     * 
+     * @return 
+     */
     public DataFilePair getFileNames() {
         return this.filenames;
     }
 
+    /**
+     * 
+     * @param filenames 
+     */
     public void setFileNames(DataFilePair filenames) {
         this.filenames = filenames;
     }
 
+    /**
+     * 
+     * @return 
+     */
     public boolean isHouseholdData() {
         return householdData;
     }
 
+    /**
+     * 
+     * @param householdData 
+     */
     public void setHouseholdData(boolean householdData) {
         this.householdData = householdData;
     }
 
-    // TODO: remove after testing
-    public void testPrintAll() {
-        try {
-            for (VariableMu v : variables) {
-                System.out.println("Variable name: " + v.getName());
-                System.out.println("\tRecodable is " + v.isRecodable());
-                System.out.println("\tCodelist is " + v.isCodelist() + " " + v.getCodeListFile());
-                System.out.println("\tIDLevel is " + v.getIdLevel());
-                System.out.println("\tTruncable is " + v.isTruncable());
-                System.out.println("\tNumeric is " + v.isNumeric());
-                System.out.println("\tWeight is " + v.isWeight());
-                System.out.println("\tHouse_ID is " + v.isHouse_id());
-                System.out.println("\tHousehold is " + v.isHousehold());
-                System.out.println("\tSuppressWeight is " + v.getSuppressweight());
-                //System.out.println("\tRelatedVariable is " + v.getRelatedVariable().getName());
-            }
-        } catch (Exception e) {
-        }
-    }
+//    // TODO: remove after testing
+//    /**
+//     * 
+//     */
+//    public void testPrintAll() {
+//        try {
+//            for (VariableMu v : variables) {
+//                System.out.println("Variable name: " + v.getName());
+//                System.out.println("\tRecodable is " + v.isRecodable());
+//                System.out.println("\tCodelist is " + v.isCodelist() + " " + v.getCodeListFile());
+//                System.out.println("\tIDLevel is " + v.getIdLevel());
+//                System.out.println("\tTruncable is " + v.isTruncable());
+//                System.out.println("\tNumeric is " + v.isNumeric());
+//                System.out.println("\tWeight is " + v.isWeight());
+//                System.out.println("\tHouse_ID is " + v.isHouse_id());
+//                System.out.println("\tHousehold is " + v.isHousehold());
+//                System.out.println("\tSuppressWeight is " + v.getSuppressweight());
+//                //System.out.println("\tRelatedVariable is " + v.getRelatedVariable().getName());
+//            }
+//        } catch (Exception e) {
+//        }
+//    }
 
+    /**
+     * 
+     * @return 
+     */
     public ArrayList<VariableMu> getVariables() {
         return variables;
     }
 
+    /**
+     * 
+     * @param variables 
+     */
     public void setVariables(ArrayList<VariableMu> variables) {
         this.variables = variables;
     }
 
+    /**
+     * 
+     * @return 
+     */
     @Override
     public int hashCode() {
         int hash = 3;
@@ -452,6 +560,12 @@ public class MetadataMu {
 //        MetadataMu t = new MetadataMu();
 //        t.readMetadata(t.getMetadataFile());
 //    }
+    
+    /**
+     * 
+     * @param o
+     * @return 
+     */
     @Override
     public boolean equals(Object o) {
         MetadataMu cmp = (MetadataMu) o;
