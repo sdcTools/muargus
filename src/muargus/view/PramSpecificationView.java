@@ -474,7 +474,7 @@ public class PramSpecificationView extends DialogBase {
             getSelectedPramVariableSpec().setUseBandwidth(this.bandwidthCheckBox.isSelected());
             int selected = this.variablesTable.getSelectedRow();
             this.variablesTable.setValueAt(getSelectedPramVariableSpec().getAppliedText(), selected, 0);
-            this.variablesTable.setValueAt(getSelectedPramVariableSpec().getBandwidthText(this.model.useBandwidth()), selected, 1);
+            this.variablesTable.setValueAt(getSelectedPramVariableSpec().getBandwidthText(), selected, 1);
             this.controller.apply(getSelectedPramVariableSpec());
         } else {
             String message = "All probabilities are zero";

@@ -91,11 +91,10 @@ public class PramVariableSpec {
     
     /**
      * 
-     * @param isBandwidth
      * @return 
      */
-    public String getBandwidthText(boolean isBandwidth){
-        if(isBandwidth){
+    public String getBandwidthText(){
+        if(isApplied() && useBandwidth()){
             return Integer.toString(this.bandwidth);
         } else {
             return ""; 

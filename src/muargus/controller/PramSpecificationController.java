@@ -86,7 +86,8 @@ public class PramSpecificationController extends ControllerBase {
         int index = 0;
         for (PramVariableSpec p : pramVarSpec) {
             variablesData[index][0] = p.getAppliedText();
-            if (p.isApplied() && this.model.useBandwidth()) {
+            variablesData[index][1] = p.getBandwidthText();
+            if (p.isApplied() && p.useBandwidth()) {
                 variablesData[index][1] = Integer.toString(p.getBandwidth());
             } else {
                 variablesData[index][1] = "";
