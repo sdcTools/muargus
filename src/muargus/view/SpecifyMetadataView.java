@@ -63,9 +63,9 @@ public class SpecifyMetadataView extends DialogBase {
     }
 
     public void makeVariables(){
-        if(metadataMu == null){
-            this.metadataMu = new MetadataMu();
-        }
+//        if(metadataMu == null){
+//            this.metadataMu = new MetadataMu();
+//        }
 
         separatorTemp = metadataMu.getSeparator();
         dataFileTypeTemp = metadataMu.getDataFileType();
