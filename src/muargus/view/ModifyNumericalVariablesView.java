@@ -48,16 +48,19 @@ public class ModifyNumericalVariablesView extends DialogBase {
         if (this.metadataMu.getCombinations().getModifyNumericalVariables().getModifyNumericalVariablesSpec() == null) {
             this.controller.setModifyNumericalVariablesSpecs();
         }
-        //}
         makeVariablesTable();
         updateValues();
     }
+    
+    public ModifyNumericalVariablesSpec getModifyNumericalVariablesSpec(){
+        ModifyNumericalVariablesSpec selected = this.model.getModifyNumericalVariablesSpec().get(this.variablesTable.getSelectedRow());
+        return selected;
+    }
 
     public void updateValues() {
-        double[] min_max = this.controller.getMinMax(
-                this.model.getModifyNumericalVariablesSpec().get(this.variablesTable.getSelectedRow()).getVariable());
+        double[] min_max = this.controller.getMinMax(getModifyNumericalVariablesSpec().getVariable());
 
-        ModifyNumericalVariablesSpec selected = this.model.getModifyNumericalVariablesSpec().get(this.variablesTable.getSelectedRow());
+        ModifyNumericalVariablesSpec selected = getModifyNumericalVariablesSpec();
         selected.setMin_max(min_max);
         this.minimumTextField.setText(this.controller.getMin(selected));
         this.maximumTextField.setText(this.controller.getMax(selected));
@@ -114,10 +117,13 @@ public class ModifyNumericalVariablesView extends DialogBase {
         boolean valid = false;
         setTextFields();
         if (valueEntered()) {
-            ModifyNumericalVariablesSpec selected = this.model.getModifyNumericalVariablesSpec().get(this.selectedRow);
-            String message = this.controller.setValues(selected, this.bottomValueTextField.getText(), this.topValueTextField.getText(),
-                    this.bottomCodingReplacementTextField.getText(), this.topCodingReplacementTextField.getText(),
-                    this.roundingBaseTextField.getText(), this.percentageTextField.getText());
+            String message = this.controller.setValues(getModifyNumericalVariablesSpec(), 
+                    this.bottomValueTextField.getText(), 
+                    this.topValueTextField.getText(), 
+                    this.bottomCodingReplacementTextField.getText(), 
+                    this.topCodingReplacementTextField.getText(),
+                    this.roundingBaseTextField.getText(), 
+                    this.percentageTextField.getText());
             if (!message.equals("")) {
                 JOptionPane.showMessageDialog(null, message);
                 this.variablesTable.getSelectionModel().setSelectionInterval(this.selectedRow, this.selectedRow);
@@ -132,20 +138,20 @@ public class ModifyNumericalVariablesView extends DialogBase {
         }
         
         if(valid){
-            this.controller.apply(this.model.getModifyNumericalVariablesSpec().get(this.selectedRow));
+            this.controller.apply(getModifyNumericalVariablesSpec());
         }
         return valid;
         
     }
 
     public void setModified(boolean modified) {
-        this.model.setModified(this.selectedRow, modified);
-        String modifiedText = this.model.getModifiedText(this.selectedRow, this.model.isModified(this.selectedRow));
+        getModifyNumericalVariablesSpec().setModified(modified);
+        String modifiedText = getModifyNumericalVariablesSpec().getModifiedText();
         this.variablesTable.setValueAt(modifiedText, this.selectedRow, 0);
     }
 
     public void setTextFields() {
-        ModifyNumericalVariablesSpec selected = this.model.getModifyNumericalVariablesSpec().get(this.selectedRow);
+        ModifyNumericalVariablesSpec selected = getModifyNumericalVariablesSpec();
 
         selected.setBottomValue(this.bottomValueTextField.getText());
         selected.setBottomReplacement(this.bottomCodingReplacementTextField.getText());
@@ -180,7 +186,7 @@ public class ModifyNumericalVariablesView extends DialogBase {
     }
 
     public boolean valueChanged() {
-        ModifyNumericalVariablesSpec selected = this.model.getModifyNumericalVariablesSpec().get(this.selectedRow);
+        ModifyNumericalVariablesSpec selected = getModifyNumericalVariablesSpec();
         boolean valueChanged = false;
         if (!this.bottomValueTextField.getText().equals(selected.getBottomValue())) {
             valueChanged = true;
