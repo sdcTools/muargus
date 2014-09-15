@@ -18,6 +18,7 @@ Release 2
 19. javadoc schrijven voor de methodes   
 23. dll crasht soms: proberen te reproduceren
 24. bij fout worden ten onrechte toch de nieuwe unsafe combinations getoond
+-minimale grootte scherm instellen
 
 Release 3+:
 

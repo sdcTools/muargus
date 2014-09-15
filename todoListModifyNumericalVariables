@@ -15,6 +15,7 @@ dll functies:
     - maak de regels die zijn veranderd rood in de tabel
 11. schrijf javadocs
 12. Refactoren (kijken of alles volgens de MVC is gedaan, het weghalen van overbodige code etc.) 
+-Minimale grootte scherm instellen
 
 
 

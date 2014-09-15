@@ -2,17 +2,24 @@ niet behandelde opmerkingen/vragen:
        
 Nog te doen:                                                                                                    Mee bezig:
 
-Release 1
+Release 2:
 
 10. makeFileButton:
 - otherModifications toevoegen (gebeurd wanneer de optie change into sequence number wordt gekozen)
     --> write records in random order zou ik hier ook bij stoppen. (net als het volgende puntje)
 - Variables removed: hhIdentifier --> weergeven aan het eind als gekozen wordt voor remove from safe file
+- writeBaseIndividualRisk: de risk bepalen en toevoegen (geeft nu alleen maar 0.00000)
+- writeBaseHHRisk: de risk bepalen en toevoegen (geeft nu alleen maar 0.00000)
+- Pram in rapport tonen
+- Gegevens numerical variables scherm in rapport tonen
+- Gegevens microaggregatie in rapport tonen
+- Gegevens rank swapping in rapport tonen
+   
+15. html viewer vervangen: de html/css wordt nu brak getoond
+-Scherm resizable maken en minimale grootte scherm instellen 
 
-Release 2+
-10. makeFileButton:
-- writeBaseIndividualRisk: de risk bepalen en toevoegen (geeft nu alleen maar 0.00000) 
-15. html viewer vervangen: de html/css wordt nu brak getoond 
+Release 3+
+
 
 Behandelde opmerkingen/vragen:                                                                                      Antwoord:
 - wat zijn de regels omtrend het vinkje: add Riks to Output File                                                    random write file kan niet samen met dit

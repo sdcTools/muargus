@@ -1,5 +1,6 @@
 niet behandelde opmerkingen/vragen:
 - willen we explore file apart trekken?
+10. wat doen met knoppen tijdens achtergrondprocessen?
 
 Nog te doen:                                                                                                Mee bezig:
 
@@ -10,9 +11,9 @@ Release 2:
 4. kolommen klikken en sorteren (RowSorter: http://docs.oracle.com/javase/7/docs/api/javax/swing/RowSorter.html)
 7. kolommen met cijfers rechts uitlijnen
 8. kijken welke schermen wel en welke niet gemaximaliseerd mogen worden.
-9. warning messages checken
-10. wat doen met knoppen tijdens achtergrondprocessen?
+9. warning messages checken (wat wordt hiermee bedoeld?)
 11. de extensies bij open microdata komen niet overeen met oude mu
+-minimale grootte scherm instellen
 
 Release 3+:
 

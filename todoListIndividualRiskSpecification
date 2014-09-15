@@ -1,13 +1,11 @@
 niet behandelde opmerkingen/vragen:
+-Is Cancel-knop nog nodig?
 
 
 Nog te doen:                                                                                                Mee bezig:
 
 Release 2
--Is Cancel-knop nog nodig?
--OK button: staat op onhandige plek
--Bug: HH risks geven andere waarden dan oude Mu
-
+javadoc schrijven
 
 Release 3+
 
@@ -50,5 +48,8 @@ Gedaan:                                                                         
 -Calc obv Reindent Rate threshold
 -Cumulatief: geen schuine lijnen, is dit erg?
 -Gaps slider aanpassen
+-OK button: staat op onhandige plek
+-Bug: HH risks geven andere waarden dan oude Mu
+
 
 wishlish:
