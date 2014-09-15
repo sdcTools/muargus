@@ -23,7 +23,7 @@ import org.jfree.data.xy.XIntervalSeriesCollection;
 
 public class RiskChartBuilder {
 
-    public ChartPanel CreateChart(RiskSpecification riskSpec, int decimals) {
+    public ChartPanel CreateChart(RiskSpecification riskSpec, int decimals, boolean household) {
 
         RiskModelClass first = riskSpec.getClasses().get(0);
         double offset = Math.log(first.getLeftValue());
@@ -31,7 +31,7 @@ public class RiskChartBuilder {
         LogarithmicNumberAxis domainAxis = new LogarithmicNumberAxis(offset, mult, decimals);
         NumberAxis rangeAxisLeft = new NumberAxis("Frequency");
         XYBarRenderer renderer = new XYBarRenderer(0);
-        XYDataset dataset = getDataset(riskSpec);
+        XYDataset dataset = getDataset(riskSpec, household);
         renderer.setShadowVisible(false);
         renderer.setBarPainter(new StandardXYBarPainter());
         domainAxis.setMinorTickMarksVisible(false);
@@ -61,11 +61,11 @@ public class RiskChartBuilder {
         return chartPanel;
     }
 
-    private XYDataset getDataset(RiskSpecification spec) {
+    private XYDataset getDataset(RiskSpecification spec, boolean household) {
         XIntervalSeries series = new XIntervalSeries("1");
         int index=0;
         for (RiskModelClass cl : spec.getClasses()) {
-            series.add(index, index+1, index, cl.getFrequency());
+            series.add(index, index+1, index, household ? cl.getHhFrequency() : cl.getFrequency());
             index++;
         }
         XIntervalSeriesCollection dataset = new XIntervalSeriesCollection();

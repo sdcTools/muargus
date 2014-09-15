@@ -6,7 +6,7 @@ niet behandelde opmerkingen/vragen:
 Nog te doen:                                                                                                Mee bezig:
 
 Release 2
-    - fix dll
+    - fix dll (wat betekent dit?)
 
 2.  variablesTable
     - als een waarde gePRAMt is, maak deze dan rood
@@ -15,6 +15,7 @@ Release 2
 13. schrijf javadocs
 14. Refactoren (kijken of alles volgens de MVC is gedaan, het weghalen van overbodige code etc.) 
 15. report bijwerken
+-minimale grootte scherm instellen
 
 
 

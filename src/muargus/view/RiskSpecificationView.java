@@ -55,7 +55,7 @@ public class RiskSpecificationView extends DialogBase implements ChartProgressLi
         }
         RiskChartBuilder builder = new RiskChartBuilder();
         jPanelChart.setLayout(new BorderLayout());
-        cp = builder.CreateChart(this.model, getDecimals());
+        cp = builder.CreateChart(this.model, getDecimals(), getMetadata().isHouseholdData());
         cp.getChart().addProgressListener(this);
         jPanelChart.add(cp, BorderLayout.CENTER);
         jPanelChart.repaint();

@@ -688,26 +688,39 @@ public class CalculationService {
         return min_max;
     }
 
-    public int calculateUnsafe(TableMu table, double riskThreshold) {
+    public int calculateUnsafe(TableMu table, double riskThreshold, boolean household) throws ArgusException {
         int tableIndex = this.metadata.getCombinations().getTables().indexOf(table) + 1;
         int[] nUnsafe = new int[1];
-        c.SetBirThreshold(tableIndex, Math.log(riskThreshold), nUnsafe);
+        int[] dummy = new int[1];
+        boolean result =  household ?
+            c.SetBHRThreshold(tableIndex, Math.log(riskThreshold), nUnsafe, dummy) :
+            c.SetBirThreshold(tableIndex, Math.log(riskThreshold), nUnsafe);
+        if (!result) {
+            throw new ArgusException("Error calculating number of unsafe records");
+        }
         return nUnsafe[0];
     }
 
-    public double calculateReidentRate(TableMu table, double riskThreshold) {
+    public double calculateReidentRate(TableMu table, double riskThreshold) throws ArgusException {
         int tableIndex = this.metadata.getCombinations().getTables().indexOf(table) + 1;
         double[] reidentRate = new double[1];
-        c.ComputeBIRRateThreshold(tableIndex, riskThreshold, reidentRate);
+        if (!c.ComputeBIRRateThreshold(tableIndex, riskThreshold, reidentRate)) {
+            throw new ArgusException("Error calculating reident rate");
+        }
         return reidentRate[0];
     }
 
-    public double calculateRiskThreshold(TableMu table, int nUnsafe) {
+    public double calculateRiskThreshold(TableMu table, int nUnsafe, boolean household) throws ArgusException {
         int tableIndex = this.metadata.getCombinations().getTables().indexOf(table) + 1;
         double[] riskThreshold = new double[1];
         int[] errorCode = new int[1];
         c.SetProgressListener(null);
-        c.CalculateBIRFreq(tableIndex, c.NumberofRecords() - nUnsafe, riskThreshold, errorCode);
+        boolean result = household ?
+            c.CalculateBHRFreq(tableIndex, true, c.NumberofRecords() - nUnsafe,c.NumberofRecords() - nUnsafe, riskThreshold, errorCode) :
+            c.CalculateBIRFreq(tableIndex, c.NumberofRecords() - nUnsafe, riskThreshold, errorCode);
+        if (!result) {
+            throw new ArgusException("Error calculating frequency"); 
+        }
         return riskThreshold[0];
     }
 

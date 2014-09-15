@@ -1,4 +1,5 @@
 niet behandelde opmerkingen/vragen:
+24. inhoudelijke fout in ingelezen metadata: wat doen? knoppen uitzetten?
 
 Nog te doen:                                                                                                Mee bezig:
 
@@ -9,8 +10,7 @@ Release 2:
 16. inlezen SPSS
 18. code opschonen
 19. javadoc schrijven voor de methodes
-23. geen missing bij niet-categoriale variabelen: a la oude Mu (spaties) of foutmelding
-24. inhoudelijke fout in ingelezen metadata: wat doen? knoppen uitzetten?
+-minimale grootte scherm instellen
  
 
 Release 3+:
@@ -63,5 +63,6 @@ Gedaan:                                                                         
     Ook mag de missing niet groter zijn dan het veld. Soms controleer je en soms niet (bijv als je op een andere variabele klikt, meld je wel de fout, maar ga je rustig verder.)
     Alleen missing 2 invullen mag ook niet
 22. detectie of codelijst-file wel bestaat aanpassen                                                          Anne     
+23. geen missing bij niet-categoriale variabelen: a la oude Mu (spaties) of foutmelding                      Anne
 
 
