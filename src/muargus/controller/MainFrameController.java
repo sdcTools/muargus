@@ -170,7 +170,9 @@ public class MainFrameController {
         SelectCombinationsController controller = new SelectCombinationsController(
                 this.view, this.metadata);
         controller.showView();
-        showUnsafeCombinations(0);
+        if (!this.metadata.getCombinations().getTables().isEmpty()) {
+            showUnsafeCombinations(0);
+        }
     }
 
     /**
