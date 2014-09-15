@@ -6,7 +6,6 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import muargus.VariableNameCellRenderer;
 import muargus.controller.ShowTableCollectionController;
-import muargus.model.MetadataMu;
 import muargus.model.TableCollection;
 import muargus.model.VariableMu;
 
@@ -17,7 +16,6 @@ import muargus.model.VariableMu;
  */
 public class ShowTableCollectionView extends DialogBase {
 
-    MetadataMu metadataMu;
     ShowTableCollectionController controller;
     TableCollection model;
     private DefaultComboBoxModel variableListModel;
@@ -43,21 +41,6 @@ public class ShowTableCollectionView extends DialogBase {
     }
 
     /**
-     * Sets the Metadata and the model. This method is called from the
-     * controller. It sets the metadata in this view, sets the model and adds a
-     * this model to the controller. Finally it calls for the initialisation of
-     * the data.
-     *
-     * @param metadataMu the orginal metadata.
-     */
-    public void setMetadataMu(MetadataMu metadataMu) {
-        this.metadataMu = metadataMu;
-        this.model = this.metadataMu.getCombinations().getTableCollection();
-        this.controller.setModel(this.model);
-        initializeData();
-    }
-
-    /**
      * Initializes the data. This method sets the original tables in the model
      * and sets the showAllTables to false. The listModel for the
      * selectVariableComboBox is filled with a dummy variable and the variables
@@ -66,8 +49,10 @@ public class ShowTableCollectionView extends DialogBase {
      * tables is called, the complete data of these tables is added to the model
      * and the table is updated.
      */
+    @Override
     public void initializeData() {
-        this.model.setOriginalTables(this.metadataMu.getCombinations().getTables());
+        this.model = getMetadata().getCombinations().getTableCollection();
+        this.model.setOriginalTables(getMetadata().getCombinations().getTables());
         this.model.setShowAllTables(false);
 
         this.variableListModel = new DefaultComboBoxModel<>();
@@ -91,6 +76,7 @@ public class ShowTableCollectionView extends DialogBase {
     public void updateTable() {
         this.controller.setSubData(this.model.isShowAllTables());
         this.tableModel = new DefaultTableModel(this.model.getSubdata(), this.model.getColumnNames()) {
+            @Override
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return false;
             }

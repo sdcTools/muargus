@@ -153,7 +153,7 @@ public class CalculationService {
     }
 
     public void applyRecode() throws ArgusException {
-        c.SetProgressListener(null);
+        //c.SetProgressListener(null);
         boolean result = c.ApplyRecode();
         if (!result) {
             throw new ArgusException("Error during Apply recode");
@@ -162,7 +162,7 @@ public class CalculationService {
     }
 
     public void undoRecode(RecodeMu recode) throws ArgusException {
-        c.SetProgressListener(null);
+        //c.SetProgressListener(null);
         int index = getIndexOf(recode.getVariable());
         boolean result = c.UndoRecode(index);
         if (!result) {
@@ -714,7 +714,7 @@ public class CalculationService {
         int tableIndex = this.metadata.getCombinations().getTables().indexOf(table) + 1;
         double[] riskThreshold = new double[1];
         int[] errorCode = new int[1];
-        c.SetProgressListener(null);
+        //c.SetProgressListener(null);
         boolean result = household ?
             c.CalculateBHRFreq(tableIndex, true, c.NumberofRecords() - nUnsafe,c.NumberofRecords() - nUnsafe, riskThreshold, errorCode) :
             c.CalculateBIRFreq(tableIndex, c.NumberofRecords() - nUnsafe, riskThreshold, errorCode);
@@ -735,7 +735,7 @@ public class CalculationService {
         int[] hhFrequency = new int[nClasses + 1];
         if (metadata.isHouseholdData()) {
             int[] errorCode = new int[1];
-            c.SetProgressListener(null);
+            //c.SetProgressListener(null);
             boolean result = c.CalculateBaseHouseholdRisk(errorCode);
             if (!result) {
                 throw new ArgusException("Error calculating base household risk");

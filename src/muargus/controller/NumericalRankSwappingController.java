@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import muargus.MuARGUS;
 import muargus.model.MetadataMu;
 import muargus.model.NumericalRankSwapping;
+import muargus.model.RankSwappingSpec;
 import muargus.model.ReplacementFile;
 import muargus.model.VariableMu;
 import muargus.view.NumericalRankSwappingView;
@@ -23,8 +24,7 @@ import org.apache.commons.io.FileUtils;
  * @author ambargus
  */
 public class NumericalRankSwappingController extends ControllerBase {
-    //NumericalRankSwappingView view;
-    //NumericalRankSwapping model;
+    NumericalRankSwapping model;
     MetadataMu metadata;
     CalculationService calculationService;
 
@@ -32,6 +32,7 @@ public class NumericalRankSwappingController extends ControllerBase {
         super.setView(new NumericalRankSwappingView(parentView, true, this));
         this.metadata = metadata;
         this.calculationService = MuARGUS.getCalculationService();
+        this.model = metadata.getCombinations().getNumericalRankSwapping();
         getView().setMetadata(metadata);
     }
     
@@ -77,9 +78,9 @@ public class NumericalRankSwappingController extends ControllerBase {
             }
         }
         try {
-            NumericalRankSwapping rankSwapping = new NumericalRankSwapping(getNumericalRankSwappingView().getPercentage());
+            RankSwappingSpec rankSwapping = new RankSwappingSpec(getNumericalRankSwappingView().getPercentage());
             rankSwapping.getVariables().addAll(selectedVariables);
-            
+            this.model.getRankSwappings().add(rankSwapping);
             ReplacementFile replacement = new ReplacementFile("RankSwapping");
             replacement.getVariables().addAll(selectedVariables);
             this.metadata.getReplacementFiles().add(replacement);

@@ -1,5 +1,4 @@
 niet behandelde opmerkingen/vragen:
-- bug: specificeer tabellen en klik dan op het kruisje rechtsboven om het scherm te sluiten. Dan crashed die.
 
 Nog te doen:                                                                                                    Mee bezig:
     
@@ -110,6 +109,7 @@ Gedaan:                                                                         
 20. bug CalculateTables: free format crasht                                                                     Anne
 21. bug: bij calculate tables als 0 tabellen rare foutmelding                                                   Anne
 22. foutcode bij ExploreFile vervangen door fouttekst                                                           Anne
+- bug: specificeer tabellen en klik dan op het kruisje rechtsboven om het scherm te sluiten. Dan crashed die.   Anne
 
 
 

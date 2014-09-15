@@ -20,12 +20,8 @@ import muargus.view.MakeProtectedFileView;
  */
 public class MakeProtectedFileController extends ControllerBase {
 
-    //private MakeProtectedFileView view;
-    //MakeProtectedFileModel model;
     private final MetadataMu metadata;
-    //Combinations selectCombinationsModel;
     private boolean fileCreated;
-    private final CalculationService service;
     /**
      *
      * @param parentView
@@ -38,7 +34,6 @@ public class MakeProtectedFileController extends ControllerBase {
         this.setView(new MakeProtectedFileView(parentView, true, this));
         this.metadata = metadata;
         this.fileCreated = false;
-        this.service = MuARGUS.getCalculationService();
 
         getView().setMetadata(this.metadata);
     }
@@ -59,7 +54,7 @@ public class MakeProtectedFileController extends ControllerBase {
     public void makeFile(File file) {
         this.metadata.getCombinations().getProtectedFile().initSafeMeta(file, this.metadata);
         removeRedundentReplacementFiles();
-        this.service.makeProtectedFile(this);
+        getCalculationService().makeProtectedFile(this);
     }
     
     private void removeRedundentReplacementFiles() {
@@ -87,7 +82,7 @@ public class MakeProtectedFileController extends ControllerBase {
     
     private void saveSafeMeta() {
         
-        this.service.fillSafeFileMetadata();
+        getCalculationService().fillSafeFileMetadata();
         MetadataMu safeMetadata = this.metadata.getCombinations().getProtectedFile().getSafeMeta();
         File file = new File(safeMetadata.getFileNames().getMetaFileName());
         try {

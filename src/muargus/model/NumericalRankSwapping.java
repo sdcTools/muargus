@@ -14,29 +14,18 @@ import java.util.ArrayList;
  */
 public class NumericalRankSwapping {
     private final ArrayList<VariableMu> variables;
-    private ReplacementFile replacementFile;
-    private final double percentage;
+    private final ArrayList<RankSwappingSpec> rankSwappings;
     
-    public NumericalRankSwapping(double percentage) {
+    public NumericalRankSwapping() {
         this.variables = new ArrayList<>();
-        this.percentage = percentage;
+        this.rankSwappings = new ArrayList<>();
     }
 
     public ArrayList<VariableMu> getVariables() {
-        return variables;
+        return this.variables;
     }
 
-    public ReplacementFile getReplacementFile() {
-        return replacementFile;
-    }
-
-    public void setReplacementFile(ReplacementFile replacementFile) {
-        this.replacementFile = replacementFile;
-    }
-
-    public double getPercentage() {
-        return percentage;
-    }
-    
-    
+    public ArrayList<RankSwappingSpec> getRankSwappings() {
+        return this.rankSwappings;
+    }    
 }

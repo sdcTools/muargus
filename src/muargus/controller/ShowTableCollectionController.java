@@ -12,12 +12,10 @@ import muargus.view.ShowTableCollectionView;
  *
  * @author ambargus
  */
-public class ShowTableCollectionController {
+public class ShowTableCollectionController extends ControllerBase {
 
-    ShowTableCollectionView view;
-    TableCollection model;
-    MetadataMu metadataMu;
-    CalculationService calculationService;
+    private TableCollection model;
+    private MetadataMu metadata;
 
     /**
      * Constructor for the ShowTableCollectionController. This constructor makes
@@ -28,33 +26,24 @@ public class ShowTableCollectionController {
      * @param metadata the orginal metadata.
      */
     public ShowTableCollectionController(java.awt.Frame parentView, MetadataMu metadata) {
-        this.view = new ShowTableCollectionView(parentView, true, this);
-        this.metadataMu = metadata;
-        this.view.setMetadataMu(this.metadataMu);
+        super.setView(new ShowTableCollectionView(parentView, true, this));
+        this.metadata = metadata;
+        this.model = metadata.getCombinations().getTableCollection();
+        getView().setMetadata(this.metadata);
     }
 
     /**
      * Opens the view by setting its visibility to true.
      */
     public void showView() {
-        this.view.setVisible(true);
+        getView().setVisible(true);
     }
 
     /**
      * Closes the view by setting its visibility to false.
      */
     public void close() {
-        this.view.setVisible(false);
-    }
-
-    /**
-     * Fuction for setting the model. This function is used by the view after
-     * setting the model itself
-     *
-     * @param model the model class of the ShowTableCollection screen
-     */
-    public void setModel(TableCollection model) {
-        this.model = model;
+        getView().setVisible(false);
     }
 
     /**
@@ -70,9 +59,8 @@ public class ShowTableCollectionController {
         setColumnNames();
 
         ArrayList<TableMu> allTables = new ArrayList<>();
-        this.calculationService = MuARGUS.getCalculationService();
         for (int i = 1; i <= this.model.getDimensions(); i++) {
-            allTables.addAll(this.calculationService.getTableUnsafeCombinations(i));
+            allTables.addAll(getCalculationService().getTableUnsafeCombinations(i));
         }
         this.model.setAllTables(allTables);
     }

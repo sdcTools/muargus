@@ -12,7 +12,6 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import muargus.controller.PramSpecificationController;
 import muargus.model.CodeInfo;
-import muargus.model.MetadataMu;
 import muargus.model.PramSpecification;
 import muargus.model.PramVariableSpec;
 import muargus.model.VariableMu;
@@ -23,7 +22,6 @@ import muargus.model.VariableMu;
  */
 public class PramSpecificationView extends DialogBase {
 
-    MetadataMu metadataMu;
     PramSpecificationController controller;
     PramSpecification model;
     private TableModel codesTableModel;
@@ -48,19 +46,10 @@ public class PramSpecificationView extends DialogBase {
 
     /**
      *
-     * @param metadataMu
      */
-    public void setMetadataMu(MetadataMu metadataMu) {
-        this.metadataMu = metadataMu;
-        this.model = this.metadataMu.getCombinations().getPramSpecification();
-        this.controller.setModel(this.model);
-        initializeData();
-    }
-
-    /**
-     *
-     */
+    @Override
     public void initializeData() {
+        this.model = getMetadata().getCombinations().getPramSpecification();
         this.pramOptionsPanel.setVisible(false); // this option is available for future options using global recode
         this.bandwidthComboBox.setEnabled(this.bandwidthCheckBox.isSelected());
         this.controller.makePramVariableSpecs();
@@ -485,7 +474,7 @@ public class PramSpecificationView extends DialogBase {
             getSelectedPramVariableSpec().setUseBandwidth(this.bandwidthCheckBox.isSelected());
             int selected = this.variablesTable.getSelectedRow();
             this.variablesTable.setValueAt(getSelectedPramVariableSpec().getAppliedText(), selected, 0);
-            this.variablesTable.setValueAt(getSelectedPramVariableSpec().getBandwidthText(this.model.useBandwidth()), selected, 1);
+            this.variablesTable.setValueAt(getSelectedPramVariableSpec().getBandwidthText(), selected, 1);
             this.controller.apply(getSelectedPramVariableSpec());
         } else {
             String message = "All probabilities are zero";
@@ -494,7 +483,7 @@ public class PramSpecificationView extends DialogBase {
     }//GEN-LAST:event_applyButtonActionPerformed
 
     private void codesSliderStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_codesSliderStateChanged
-        for (VariableMu v : this.metadataMu.getVariables()) {
+        for (VariableMu v : getMetadata().getVariables()) {
             if (getSelectedPramVariableSpec().getVariable().equals(v)) {
                 getSelectedCodeInfo(v).setPramProbability(this.codesSlider.getValue());
                 break;

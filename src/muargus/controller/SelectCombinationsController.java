@@ -6,9 +6,6 @@ package muargus.controller;
 
 import argus.model.ArgusException;
 import argus.utils.SystemUtils;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.util.ArrayList;
 import java.util.logging.Logger;
 import muargus.MuARGUS;
 import muargus.model.MetadataMu;

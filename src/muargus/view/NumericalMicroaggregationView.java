@@ -5,9 +5,7 @@
 package muargus.view;
 
 import muargus.controller.NumericalMicroaggregationController;
-import muargus.model.MetadataMu;
 import muargus.model.NumericalMicroaggregation;
-
 
 /**
  *
@@ -15,7 +13,6 @@ import muargus.model.NumericalMicroaggregation;
  */
 public class NumericalMicroaggregationView extends DialogBase {
 
-    MetadataMu metadataMu;
     NumericalMicroaggregationController controller;
     NumericalMicroaggregation model;
     /**
@@ -30,15 +27,10 @@ public class NumericalMicroaggregationView extends DialogBase {
         setLocationRelativeTo(null);
         this.controller = controller;
     }
-    
-    public void setMetadataMu(MetadataMu metadataMu) {
-        this.metadataMu = metadataMu;
-        this.model = this.metadataMu.getCombinations().getNumericalMicroaggregation();
-        this.controller.setModel(this.model);
-        initializeData();
-    }
-    
+        
+    @Override
     public void initializeData() {
+        this.model = getMetadata().getCombinations().getNumericalMicroaggregation();
         updateValues();
     }
     

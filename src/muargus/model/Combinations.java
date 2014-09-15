@@ -191,7 +191,7 @@ public class Combinations {
      * Creates a new instance of the NumericalRankSwapping class.
      */
     public void createNumericalRankSwapping() {
-        //this.numericalRankSwapping = new NumericalRankSwapping();
+        this.numericalRankSwapping = new NumericalRankSwapping();
     }
 
     /**
