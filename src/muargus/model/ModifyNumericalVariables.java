@@ -1,56 +1,76 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package muargus.model;
 
 import java.util.ArrayList;
-import muargus.model.ModifyNumericalVariablesSpec;
 
 /**
+ * Model class of the ModifyNumbericalVariables screen. Only a single instance
+ * of this class will exist.
  *
- * @author ambargus
+ * @author Statistics Netherlands
  */
 public class ModifyNumericalVariables {
 
-    private ArrayList<ModifyNumericalVariablesSpec> modifyNumericalVariablesSpec =  null;
+    private ArrayList<ModifyNumericalVariablesSpec> modifyNumericalVariablesSpec;
     private String[][] variablesData;
-    private final String[] variablesColumnNames = {"Modified", "Variable"};
+    private final String[] variablesColumnNames;
 
+    /**
+     * Constructor of the model class ModifyNumericalVariables. Initializes the
+     * column names and makes an empty arraylist for the
+     * modifyNumericalVariablesSpec.
+     */
     public ModifyNumericalVariables() {
+        this.modifyNumericalVariablesSpec = null; //TODO: change to new ArrayList and remove the setter
+        this.variablesColumnNames = new String[]{"Modified", "Variable"};
     }
 
+    /**
+     * Gets the ArrayList containing all ModifyNumericalVariablesSpec. The
+     * ModifyNumericalVariablesSpec contain all relevant information for
+     * modifying the relevant variable.
+     *
+     * @return ArrayList containing all ModifyNumericalVariablesSpec.
+     */
     public ArrayList<ModifyNumericalVariablesSpec> getModifyNumericalVariablesSpec() {
         return modifyNumericalVariablesSpec;
     }
 
+    //TODO: remove
+    /**
+     *
+     * @param modifyNumericalVariablesSpec
+     */
     public void setModifyNumericalVariablesSpec(ArrayList<ModifyNumericalVariablesSpec> modifyNumericalVariablesSpec) {
         this.modifyNumericalVariablesSpec = modifyNumericalVariablesSpec;
     }
 
+    /**
+     * Sets the data for the table containing the modified text and the variable
+     * name of each numerical variable.
+     *
+     * @param variablesData Double Array of Strings containing the modified text
+     * and the variable name of each numerical variable.
+     */
     public void setVariablesData(String[][] variablesData) {
         this.variablesData = variablesData;
     }
 
+    /**
+     * gets the data for the table containing the modified text and the variable
+     * name of each numerical variable.
+     *
+     * @return Double Array of Strings containing the modified text and the
+     * variable name of each numerical variable.
+     */
     public String[][] getVariablesData() {
         return variablesData;
     }
-    
-    public boolean isModified(int index){
-        return this.modifyNumericalVariablesSpec.get(index).isModified();
-    }
-    
-    public void setModified(int index, boolean modified) {
-        this.modifyNumericalVariablesSpec.get(index).setModified(modified);
-        this.variablesData[index][0] = (modified? "X": "");
-    }
-    
-    public String getModifiedText(int index, boolean modified){
-        this.variablesData[index][0] = (modified? "X": "");
-        return this.variablesData[index][0];
-    }
 
+    /**
+     * Gets an Array containing the column names.
+     *
+     * @return Array of Strings containing the column names.
+     */
     public String[] getVariablesColumnNames() {
         return variablesColumnNames;
     }
