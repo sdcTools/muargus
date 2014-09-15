@@ -97,9 +97,9 @@ public class RiskSpecificationController extends ControllerBase {
     
     public void fillModelHistogramData(boolean cumulative) {
         try {
-        double maxReident = calculationService.fillHistogramData(this.model.getRiskTable(), 
-                this.model.getClasses(), cumulative);
-        this.model.setMaxReidentRate(maxReident);
+            double maxReident = calculationService.fillHistogramData(this.model.getRiskTable(), 
+                    this.model.getClasses(), cumulative);
+            this.model.setMaxReidentRate(maxReident);
         }
         catch (ArgusException ex) {
             getView().showErrorMessage(ex);
@@ -115,17 +115,27 @@ public class RiskSpecificationController extends ControllerBase {
     }
     
     public void calculateByRiskThreshold() {
-        this.model.setUnsafeRecords(this.calculationService.calculateUnsafe(
-                this.model.getRiskTable(), this.model.getRiskThreshold()));
-        this.model.setReidentRateThreshold(this.calculationService.calculateReidentRate(
-                this.model.getRiskTable(), this.model.getRiskThreshold()));
+        try {
+            this.model.setUnsafeRecords(this.calculationService.calculateUnsafe(
+                    this.model.getRiskTable(), this.model.getRiskThreshold(), this.metadata.isHouseholdData()));
+            this.model.setReidentRateThreshold(this.calculationService.calculateReidentRate(
+                    this.model.getRiskTable(), this.model.getRiskThreshold()));
+        }
+        catch (ArgusException ex) {
+            getView().showErrorMessage(ex);
+        }
     }
     
     public void calculateByUnsafeRecords() {
-        this.model.setRiskThreshold(this.calculationService.calculateRiskThreshold(
-                this.model.getRiskTable(), this.model.getUnsafeRecords()));
-        this.model.setReidentRateThreshold(this.calculationService.calculateReidentRate(
-                this.model.getRiskTable(), this.model.getRiskThreshold()));
+        try {
+            this.model.setRiskThreshold(this.calculationService.calculateRiskThreshold(
+                    this.model.getRiskTable(), this.model.getUnsafeRecords(), this.metadata.isHouseholdData()));
+            this.model.setReidentRateThreshold(this.calculationService.calculateReidentRate(
+                    this.model.getRiskTable(), this.model.getRiskThreshold()));
+        }
+        catch (ArgusException ex) {
+            getView().showErrorMessage(ex);
+        }
         
     }
     
