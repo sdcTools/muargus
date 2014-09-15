@@ -11,12 +11,11 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import muargus.VariableNameCellRenderer;
 import muargus.controller.SelectCombinationsController;
-import muargus.model.MetadataMu;
 import muargus.model.Combinations;
 import muargus.model.TableMu;
 import muargus.model.VariableMu;
 import muargus.MuARGUS;
-import muargus.CombinationsTableCellRenderer;
+import muargus.HighlightTableCellRenderer;
 
 /**
  *
@@ -77,7 +76,8 @@ public class SelectCombinationsView extends DialogBase {
 
         // set the default values and the size of the first two colums
         table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-        table.setDefaultRenderer(Object.class, new CombinationsTableCellRenderer());
+        //table.setDefaultRenderer(Object.class, new CombinationsTableCellRenderer());
+        table.setDefaultRenderer(Object.class, new HighlightTableCellRenderer());
         
     }
 
