@@ -78,7 +78,7 @@ public class ModifyNumericalVariablesController {
             String variablesData[][] = new String[this.model.getModifyNumericalVariablesSpec().size()][2];
             int index = 0;
             for (ModifyNumericalVariablesSpec m : this.model.getModifyNumericalVariablesSpec()) {
-                variablesData[index][0] = (m.isModified() ? "X" : "");
+                variablesData[index][0] = m.getModifiedText();
                 variablesData[index][1] = m.getVariable().getName();
                 index++;
             }
@@ -104,40 +104,6 @@ public class ModifyNumericalVariablesController {
         return getIntIfPossibel(selected.getMax());
     }
 
-//    public String getBottomValue(ModifyNumericalVariablesSpec selected) {
-//        String temp = this.view.getBottomValueTextField();
-//        if(!selected.getBottomValue().isNaN()){
-//            temp = getIntIfPossibel(selected.getBottomValue());
-//        }
-//        return temp;
-//    }
-//
-//    public String getTopValue(ModifyNumericalVariablesSpec selected) {
-//        String temp = this.view.getTopValueTextField();
-//        if(!selected.getBottomValue().isNaN()){
-//            temp = getIntIfPossibel(selected.getTopValue());
-//        }
-//        return temp;
-//    }
-//
-//    public String getRoundingBase(ModifyNumericalVariablesSpec selected) {
-//        String temp = this.view.getRoundingBaseTextField();
-//        if(selected.isModified()){
-//            
-//        }
-//        if(!selected.getBottomValue().isNaN()){
-//            temp = getIntIfPossibel(selected.getRoundingBase());
-//        }
-//        return temp;
-//    }
-//
-//    public String getWeightNoisePercentage(ModifyNumericalVariablesSpec selected) {
-//        String temp = this.view.getPercentageTextField();
-//        if(!selected.getBottomValue().isNaN()){
-//            temp = getIntIfPossibel(selected.getWeightNoisePercentage());
-//        }
-//        return temp;
-//    }
     public String setValues(ModifyNumericalVariablesSpec selected, String bottomValue_String, String topValue_String,
             String bottomReplacement, String topReplacement, String roundingBase_String, String weightNoisePercentage_String) {
 
