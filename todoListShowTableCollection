@@ -4,7 +4,6 @@ niet behandelde opmerkingen/vragen:
 Nog te doen:                                                                                                Mee bezig:
 
 Release 2
--minimale grootte scherm instellen
 
 Release 3
 
@@ -29,6 +28,8 @@ Gedaan:                                                                         
     - sluit het scherm                                                                                      Jeldrik
 6.  Javadoc schrijven                                                                                       Jeldrik
 7.  Refactoren (kijken of alles volgens de MVC is gedaan, het weghalen van overbodige code etc.)            Jeldrik
+8.  Overige
+    - minimale grootte scherm instellen
 
 wishlish:
 

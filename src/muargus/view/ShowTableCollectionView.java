@@ -102,6 +102,8 @@ public class ShowTableCollectionView extends DialogBase {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Table Collection");
+        setMinimumSize(new java.awt.Dimension(420, 350));
+        setPreferredSize(new java.awt.Dimension(420, 350));
 
         table.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
