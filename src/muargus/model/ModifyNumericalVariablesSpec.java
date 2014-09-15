@@ -15,6 +15,7 @@ public class ModifyNumericalVariablesSpec {
 
     private final VariableMu variable;
     private boolean modified;
+    private String modifiedText;
     private double[] min_max;
     private String bottomValue;
     private String topValue;
@@ -26,6 +27,7 @@ public class ModifyNumericalVariablesSpec {
     public ModifyNumericalVariablesSpec(VariableMu variable) {
         this.variable = variable;
         this.modified = false;
+        this.modifiedText = "";
     }
 
     public VariableMu getVariable() {
@@ -38,6 +40,15 @@ public class ModifyNumericalVariablesSpec {
 
     public void setModified(boolean modified) {
         this.modified = modified;
+        setModifiedText();
+    }
+
+    public String getModifiedText() {
+        return modifiedText;
+    }
+
+    public void setModifiedText() {
+        this.modifiedText = (this.modified ? "X" : "");;
     }
 
     public double getMin() {
