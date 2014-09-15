@@ -6,15 +6,13 @@ niet behandelde opmerkingen/vragen:
 Nog te doen:                                                                                                Mee bezig:
 
 Release 2
-    - fix dll (wat betekent dit?)
 
 2.  variablesTable
     - als een waarde gePRAMt is, maak deze dan rood
 12. closebutton
     - waarschuwing geven als dingen zijn aangepast: wil je dit nog toepassen?
-13. schrijf javadocs
+13. schrijf javadocs                                                                                        Jeldrik
 14. Refactoren (kijken of alles volgens de MVC is gedaan, het weghalen van overbodige code etc.) 
-15. report bijwerken
 -minimale grootte scherm instellen
 
 
@@ -49,6 +47,8 @@ Gedaan:                                                                         
     - alleen mogelijk als ten minste 1 probability groter is dan 0, zo niet geef waarschuwing
     - zet, als bandwithCheckBox is aangevinkt, in de tweede kolom de waarde van de bandwithComboBox
     - bereken pram met dll
+    - fix dll (wat betekent dit?) --> in het begin werkte de dll niet doordat er iets veranderd moest 
+      worden wat volgens mij ook bij calculate unsafe combinations veranderd was.  
 6.  undoButton
     - undo PRAM voor de geselecteerde rij van variablesTable
     - undo pram met dll 

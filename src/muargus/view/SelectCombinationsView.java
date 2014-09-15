@@ -31,7 +31,7 @@ public class SelectCombinationsView extends DialogBase {
     private TableModel tableModel;
     private final Frame parent;
     private long numberOfTables;
-    private final int[] columnWidth = new int[]{30,50,70}; // gives the width of column 1, 2 and the final value is the width of all the other columns
+    private final int[] columnWidth = new int[]{30,45,65}; // gives the width of column 1, 2 and the final value is the width of all the other columns
     
 
     /**
