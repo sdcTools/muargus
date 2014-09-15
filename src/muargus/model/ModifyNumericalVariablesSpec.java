@@ -5,6 +5,7 @@
  */
 package muargus.model;
 
+import argus.model.ArgusException;
 import argus.utils.StrUtils;
 
 /**
@@ -16,26 +17,30 @@ public class ModifyNumericalVariablesSpec {
     private final VariableMu variable;
     private boolean modified;
     private String modifiedText;
-    private double[] min_max;
-    private String bottomValue;
-    private String topValue;
+    private Double[] min_max;
+    private Double bottomValue;
+    private Double topValue;
     private String bottomReplacement;
     private String topReplacement;
-    private String roundingBase;
-    private String weightNoisePercentage;
+    private Double roundingBase;
+    private Double weightNoisePercentage;
 
     public ModifyNumericalVariablesSpec(VariableMu variable) {
         this.variable = variable;
         this.modified = false;
         this.modifiedText = "";
+        this.bottomValue = Double.NaN;
+        this.topValue = Double.NaN;
+        this.roundingBase = Double.NaN;
+        this.weightNoisePercentage = Double.NaN;
     }
 
     public VariableMu getVariable() {
-        return variable;
+        return this.variable;
     }
 
     public boolean isModified() {
-        return modified;
+        return this.modified;
     }
 
     public void setModified(boolean modified) {
@@ -44,62 +49,59 @@ public class ModifyNumericalVariablesSpec {
     }
 
     public String getModifiedText() {
-        return modifiedText;
+        return this.modifiedText;
     }
 
     public void setModifiedText() {
         this.modifiedText = (this.modified ? "X" : "");;
     }
 
-    public double getMin() {
-        return min_max[0];
+    public Double getMin() {
+        return this.min_max[0];
     }
 
-    public double getMax() {
-        return min_max[1];
+    public Double getMax() {
+        return this.min_max[1];
     }
 
-    public void setMin_max(double[] min_max) {
+    public void setMin_max(Double[] min_max) {
         this.min_max = min_max;
     }
 
-    public String getBottomValue() {
-        return bottomValue;
+    public Double getBottomValue() {
+        return this.bottomValue;
     }
-
-    public Double getBottomValueDouble() {
-        
+    
+    public void setBottomValue(String bottomValue) {
         try {
-            return StrUtils.toDouble(bottomValue);
-        } catch (Exception e) {
-            return Double.NaN;
+            this.bottomValue = StrUtils.toDouble(bottomValue);
+        } catch (ArgusException e) {
+            this.bottomValue = Double.NaN;
         }
     }
-
-    public void setBottomValue(String bottomValue) {
+    
+    public void setBottomValue(Double bottomValue){
         this.bottomValue = bottomValue;
     }
 
-    public String getTopValue() {
-        return topValue;
-    }
-
-    public Double getTopValueDouble() {
-        System.out.println(topValue);
-        System.out.println(Double.parseDouble(topValue));
-        try {
-            return StrUtils.toDouble(topValue);
-        } catch (Exception e) {
-            return Double.NaN;
-        }
+    public Double getTopValue() {
+        return this.topValue;
     }
 
     public void setTopValue(String topValue) {
+        try {
+            this.topValue = StrUtils.toDouble(topValue);
+        } catch (ArgusException e) {
+            this.topValue = Double.NaN;
+        }
+    }
+    
+    public void setTopValue(Double topValue) {
         this.topValue = topValue;
     }
 
     public String getBottomReplacement() {
-        return bottomReplacement;
+        return this.bottomReplacement;
     }
 
     public void setBottomReplacement(String bottomReplacement) {
@@ -107,42 +109,42 @@ public class ModifyNumericalVariablesSpec {
     }
 
     public String getTopReplacement() {
-        return topReplacement;
+        return this.topReplacement;
     }
 
     public void setTopReplacement(String topReplacement) {
         this.topReplacement = topReplacement;
     }
 
-    public String getRoundingBase() {
-        return roundingBase;
-    }
-
-    public Double getRoundingBaseDouble() {
-        try {
-            return StrUtils.toDouble(roundingBase);
-        } catch (Exception e) {
-            return Double.NaN;
-        }
+    public Double getRoundingBase() {
+        return this.roundingBase;
     }
 
     public void setRoundingBase(String roundingBase) {
+        try {
+            this.roundingBase = StrUtils.toDouble(roundingBase);
+        } catch (ArgusException e) {
+            this.roundingBase = Double.NaN;
+        }
+    }
+    
+    public void setRoundingBase(Double roundingBase) {
         this.roundingBase = roundingBase;
     }
 
-    public String getWeightNoisePercentage() {
-        return weightNoisePercentage;
-    }
-
-    public Double getWeightNoisePercentageDouble() {
-        try {
-            return StrUtils.toDouble(weightNoisePercentage);
-        } catch (Exception e) {
-            return Double.NaN;
-        }
+    public Double getWeightNoisePercentage() {
+        return this.weightNoisePercentage;
     }
 
     public void setWeightNoisePercentage(String weightNoisePercentage) {
+        try {
+            this.weightNoisePercentage = StrUtils.toDouble(weightNoisePercentage);
+        } catch (ArgusException e) {
+            this.weightNoisePercentage = Double.NaN;
+        }
+    }
+    
+    public void setWeightNoisePercentage(Double weightNoisePercentage){
         this.weightNoisePercentage = weightNoisePercentage;
     }
 

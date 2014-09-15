@@ -1,27 +1,27 @@
 niet behandelde opmerkingen/vragen:
-- Is het een idee om een close button toe te voegen en de ok button te veranderen in een apply button?
-- checken wanneer de dll uitgevoerd wordt (oude mu is volgens mij pas bij makeSafeFile
+Undo button toevoegen?
 
 Nog te doen:                                                                                                Mee bezig:
 
 Release 2
 
-
-    - dll functies werkend krijgen                                                                          Jeldrik
-    - variabelen omzetten naar doubles                                                                      Jeldrik
 2.  variablesTable
     - maak de regels die zijn veranderd rood in de tabel
 11. schrijf javadocs                                                                                        Jeldrik
 12. Refactoren (kijken of alles volgens de MVC is gedaan, het weghalen van overbodige code etc.) 
--Minimale grootte scherm instellen
 
 
 
 Release 3
 
 Behandelde opmerkingen/vragen:                                                                              Antwoord:
+- checken wanneer de dll uitgevoerd wordt (oude mu is volgens mij pas bij makeSafeFile                      Gebeurd nu bij apply
+- Is het een idee om een close button toe te voegen en de ok button te veranderen in een apply button?      Ja
+
 
 Gedaan:                                                                                                     Door:
+    - dll functies werkend krijgen                                                                          Jeldrik
+    - variabelen omzetten naar doubles                                                                      Jeldrik
 1.  Basis structuur
     - namen van de onderdelen veranderen                                                                    Jeldrik
     - model, view en controller klasse maken en basis methoden maken
@@ -53,5 +53,7 @@ Gedaan:                                                                         
 10. closeButton
     - sluit scherm
     - geef ook een waarschuwing als al een keer applied is en een verandering is gemaakt.
+13. Overig
+    - Minimale grootte scherm instellen
 
 wishlish:

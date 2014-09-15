@@ -86,8 +86,8 @@ public class ModifyNumericalVariablesController {
         }
     }
 
-    public double[] getMinMax(VariableMu variable) {
-        double[] min_max = this.calculationService.getMinMax(variable);
+    public Double[] getMinMax(VariableMu variable) {
+        Double[] min_max = this.calculationService.getMinMax(variable);
         return min_max;
     }
 
@@ -104,108 +104,80 @@ public class ModifyNumericalVariablesController {
         return getIntIfPossibel(selected.getMax());
     }
 
-    public String setValues(ModifyNumericalVariablesSpec selected, String bottomValue_String, String topValue_String,
-            String bottomReplacement, String topReplacement, String roundingBase_String, String weightNoisePercentage_String) {
+    public String setValues(ModifyNumericalVariablesSpec selected, Double bottomValue, Double topValue,
+            String bottomReplacement, String topReplacement, Double roundingBase, Double weightNoisePercentage) {
 
         String warningMessage = "";
 
-        Double bottomValue_double = null;
-        boolean bottomValue = false;
-        if (!bottomValue_String.equals("")) {
+        boolean bottom = false;
+        if (!bottomValue.equals(Double.NaN)) {
             if (bottomReplacement.equals("")) {
                 warningMessage += "Bottom replacement value cannot be empty\n";
             } else {
-                try {
-                    bottomValue_double = StrUtils.toDouble(bottomValue_String);
-                    bottomValue = true;
-                    if (bottomValue_double < selected.getMin() || bottomValue_double > selected.getMax()) {
+                    bottom = true;
+                    if (bottomValue < selected.getMin() || bottomValue > selected.getMax()) {
                         warningMessage += "Bottom Value needs to be in the range between the minimum and maximum value\n";
-                        bottomValue = false;
+                        bottom = false;
                     }
-                } catch (ArgusException ex) {
-                    warningMessage += "illegal bottom value\n";
-                    bottomValue = false;
-                    //Logger.getLogger(ModifyNumericalVariablesController.class.getName()).log(Level.SEVERE, null, ex);
-                }
             }
         }
 
-        if (!bottomReplacement.equals("") && bottomValue_String.equals("")) {
+        if (!bottomReplacement.equals("") && bottomValue.equals(Double.NaN)) {
             warningMessage += "Bottom value cannot be empty\n";
-            bottomValue = false;
+            bottom = false;
         }
 
-        Double topValue_double = null;
-        boolean topValue = false;
-        if (!topValue_String.equals("")) {
+        boolean top = false;
+        if (!topValue.equals(Double.NaN)) {
             if (topReplacement.equals("")) {
                 warningMessage += "Top replacement value cannot be empty\n";
             } else {
-                try {
-                    topValue_double = StrUtils.toDouble(topValue_String);
-                    topValue = true;
-                    if (topValue_double < selected.getMin() || topValue_double > selected.getMax()) {
+                    top = true;
+                    if (topValue < selected.getMin() || topValue > selected.getMax()) {
                         warningMessage += "Top Value needs to be in the range between the minimum and maximum value\n";
-                        topValue = false;
+                        top = false;
                     }
-                } catch (ArgusException ex) {
-                    warningMessage += "illegal top value\n";
-                    topValue = false;
-                    //Logger.getLogger(ModifyNumericalVariablesController.class.getName()).log(Level.SEVERE, null, ex);
-                }
             }
         }
 
-        if (!topReplacement.equals("") && topValue_String.equals("")) {
+        if (!topReplacement.equals("") && topValue.equals(Double.NaN)) {
             warningMessage += "Top value cannot be empty\n";
-            topValue = false;
+            top = false;
         }
 
-        if (topValue && bottomValue) {
-            if (topValue_double <= bottomValue_double) {
+        if (top && bottom) {
+            if (topValue <= bottomValue) {
                 warningMessage += "Top value needs to be larger than the bottom value\n";
-                topValue = false;
-                bottomValue = false;
+                top = false;
+                bottom = false;
             }
 
-            if (bottomValue) {
-                selected.setBottomValue(getIntIfPossibel(bottomValue_double));
+            if (bottom) {
+                selected.setBottomValue(getIntIfPossibel(bottomValue));
                 selected.setBottomReplacement(bottomReplacement);
             }
 
-            if (topValue) {
-                selected.setTopValue(getIntIfPossibel(topValue_double));
+            if (top) {
+                selected.setTopValue(getIntIfPossibel(topValue));
                 selected.setTopReplacement(topReplacement);
             }
 
         }
 
-        if (!roundingBase_String.equals("")) {
-            try {
-                double roundingBase_double = StrUtils.toDouble(roundingBase_String);
-                if (roundingBase_double > 0) {
-                    selected.setRoundingBase(getIntIfPossibel(roundingBase_double));
+        if (!roundingBase.equals(Double.NaN)) {
+                if (roundingBase > 0) {
+                    selected.setRoundingBase(getIntIfPossibel(roundingBase));
                 } else {
                     warningMessage += "Illegal Value for rounding";
                 }
-            } catch (ArgusException ex) {
-                warningMessage += "Illegal Value for rounding";
-                //Logger.getLogger(ModifyNumericalVariablesController.class.getName()).log(Level.SEVERE, null, ex);
-            }
         }
 
-        if (!weightNoisePercentage_String.equals("")) {
-            try {
-                double weightNoisePercentage_double = StrUtils.toDouble(weightNoisePercentage_String);
-                if (weightNoisePercentage_double > 0) {
-                    selected.setWeightNoisePercentage(getIntIfPossibel(weightNoisePercentage_double));
+        if (!weightNoisePercentage.equals(Double.NaN)) {
+                if (weightNoisePercentage > 0) {
+                    selected.setWeightNoisePercentage(getIntIfPossibel(weightNoisePercentage));
                 } else {
                     warningMessage += "Illegal Value for the weight noise percentage";
                 }
-            } catch (ArgusException ex) {
-                warningMessage += "Illegal Value for the weight noise percentage";
-                //Logger.getLogger(ModifyNumericalVariablesController.class.getName()).log(Level.SEVERE, null, ex);
-            }
         }
 
         return warningMessage;
@@ -231,25 +203,21 @@ public class ModifyNumericalVariablesController {
 
     public void apply(ModifyNumericalVariablesSpec selected) {
         try {
-            if (!selected.getRoundingBaseDouble().isNaN()) {
-                this.calculationService.setRounding(selected.getVariable(), selected.getRoundingBaseDouble(), selected.getVariable().getDecimals());
-                System.out.println("rounding");
+            if (!selected.getRoundingBase().equals(Double.NaN)) {
+                this.calculationService.setRounding(selected.getVariable(), selected.getRoundingBase(), selected.getVariable().getDecimals());
             }
-            System.out.println(selected.getTopValueDouble());
-            if (!selected.getTopValueDouble().isNaN()) {
-                this.calculationService.setTopBottomCoding(selected.getVariable(), true, selected.getTopValueDouble(), selected.getTopReplacement());
-                System.out.println("topValue");
+            if (!selected.getTopValue().equals(Double.NaN)) {
+                this.calculationService.setTopBottomCoding(selected.getVariable(), true, selected.getTopValue(), selected.getTopReplacement());
             }
-            if (!selected.getBottomValueDouble().isNaN()) {
-                this.calculationService.setTopBottomCoding(selected.getVariable(), false, selected.getBottomValueDouble(), selected.getBottomReplacement());
-                System.out.println("bottomValue");
+            if (!selected.getBottomValue().equals(Double.NaN)) {
+                this.calculationService.setTopBottomCoding(selected.getVariable(), false, selected.getBottomValue(), selected.getBottomReplacement());
             }
-            if (!selected.getWeightNoisePercentageDouble().isNaN()) {
-                this.calculationService.setWeightNoise(selected.getVariable(), selected.getWeightNoisePercentageDouble());
-                System.out.println("percentage");
+            if (!selected.getWeightNoisePercentage().equals(Double.NaN)) {
+                this.calculationService.setWeightNoise(selected.getVariable(), selected.getWeightNoisePercentage());
             }
         } catch (ArgusException ex) {
-            Logger.getLogger(ModifyNumericalVariablesController.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("error");
+            //Logger.getLogger(ModifyNumericalVariablesController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 }
