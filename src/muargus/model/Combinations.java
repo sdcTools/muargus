@@ -2,6 +2,7 @@ package muargus.model;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 //import muargus.MuARGUS;
 
 /**
@@ -17,14 +18,14 @@ public class Combinations {
     private ArrayList<TableMu> tables;
     //private VariableMu[] variables;
     private int[] thresholds;
-    private HashMap<VariableMu, int[]> unsafeCombinations;
+    private final HashMap<VariableMu, int[]> unsafeCombinations;
     //private HashMap<VariableMu, UnsafeInfo> unsafe;
 
     // Model classes that need info from this model class
     private GlobalRecode globalRecode;
     private ProtectedFile protectedFile;
     private TableCollection tableCollection;
-    private RiskSpecification riskSpecification;
+    private final HashMap<TableMu, RiskSpecification> riskSpecifications;
     private ModifyNumericalVariables modifyNumericalVariables;
     private NumericalMicroaggregation numericalMicroaggregation;
     private NumericalRankSwapping numericalRankSwapping;
@@ -42,6 +43,8 @@ public class Combinations {
     public Combinations() {
         this.threshold = 1;
         this.tables = new ArrayList<>();
+        this.riskSpecifications = new HashMap<>();
+        this.unsafeCombinations = new HashMap<>();
     }
 
     /**
@@ -51,9 +54,9 @@ public class Combinations {
      * @param model The original Combinations model.
      */
     public Combinations(Combinations model) {
+        this();
         this.threshold = model.threshold;
         this.thresholds = model.getThresholds();
-        this.tables = new ArrayList<>();
         for (TableMu table : model.tables) {
             this.tables.add(new TableMu(table));
         }
@@ -135,17 +138,15 @@ public class Combinations {
      *
      * @return Returns the RiskSpecification model class.
      */
-    public RiskSpecification getRiskSpecification() {
-        return riskSpecification;
+    public HashMap<TableMu, RiskSpecification> getRiskSpecifications() {
+        return riskSpecifications;
     }
 
-    /**
-     * Creates a new instance of the RiskSpecification class.
-     */
-    public void createRiskSpecification() {
-        this.riskSpecification = new RiskSpecification();
+    public void fillRiskSpecifications() {
+        for (TableMu table : this.getTables()) {
+            this.riskSpecifications.put(table, new RiskSpecification());
+        }
     }
-
     /**
      * Gets the model class of the ModifyNumericalVariables screen.
      *
@@ -194,12 +195,12 @@ public class Combinations {
         this.numericalRankSwapping = new NumericalRankSwapping();
     }
 
-    /**
-     * Clearing the unsafeCombinations by assinging a new HashMap.
-     */
-    public void clearUnsafeCombinations() {
-        this.unsafeCombinations = new HashMap<>();
-    }
+//    /**
+//     * Clearing the unsafeCombinations by assinging a new HashMap.
+//     */
+//    public void clearUnsafeCombinations() {
+//        this.unsafeCombinations = new HashMap<>();
+//    }
 
     /**
      * Gets an array of integers containing the unsafeCombinations for each
@@ -210,10 +211,12 @@ public class Combinations {
      * @return Array of integers containing the number of unsafe combinations
      * per dimension.
      */
-    public int[] getUnsafeCombinations(VariableMu variable) {
-        return this.unsafeCombinations.get(variable);
+    //public int[] getUnsafeCombinations(VariableMu variable) {
+    //    return this.unsafeCombinations.get(variable);
+    //}
+    public HashMap<VariableMu, int[]> getUnsafeCombinations() {
+        return this.unsafeCombinations;
     }
-
     /**
      * Sets the number of unsafe combinations
      *

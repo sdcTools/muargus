@@ -9,7 +9,6 @@ package muargus.controller;
 import argus.model.ArgusException;
 import argus.utils.StrUtils;
 import java.util.ArrayList;
-import muargus.MuARGUS;
 import muargus.model.MetadataMu;
 import muargus.model.RiskModelClass;
 import muargus.model.RiskSpecification;
@@ -26,7 +25,6 @@ public class RiskSpecificationController extends ControllerBase {
     
     private final int MAX_ITERATIONS = 10;
     
-    //private RiskSpecificationView view;
     private final RiskSpecification model;
     private final MetadataMu metadata;
     private final java.awt.Frame parentView; 
@@ -35,10 +33,13 @@ public class RiskSpecificationController extends ControllerBase {
         this.parentView = parentView;
         super.setView(new RiskSpecificationView(parentView, true, this, metadata.isHouseholdData()));
         this.metadata = metadata;
-        this.model = this.metadata.getCombinations().getRiskSpecification();
+        this.model = pickRiskSpecification();
+        init();
+        ((RiskSpecificationView)this.getView()).setRiskTable(this.model.getRiskTable());
+        this.getView().setMetadata(this.metadata);
     }
     
-    public ArrayList<String> getRiskTableTitles() {
+    private ArrayList<String> getRiskTableTitles() {
         ArrayList<String> titles = new ArrayList<>();
         for (TableMu table : getRiskTables()) {
             titles.add(getRiskTableTitle(table));
@@ -65,34 +66,30 @@ public class RiskSpecificationController extends ControllerBase {
         return tables;
     }
     
-    /**
-     * Opens the view by setting its visibility to true.
-     */
-    @Override
-    public void showView() {
-        ArrayList<TableMu> riskTables = getRiskTables();
-        if (riskTables.size() > 1) {
+    private RiskSpecification pickRiskSpecification() {
+        if (getRiskTables().size() > 1) {
             TablePickView tableView = new TablePickView(this.parentView, true);
             tableView.setTables(getRiskTableTitles());
             tableView.setVisible(true);
             if (tableView.getSelectedIndex() == -1) {
-                return;
+                return null;
             }
-            this.model.SetRiskTable(riskTables.get(tableView.getSelectedIndex()));
+            return getModel(tableView.getSelectedIndex());
         }
         else {
-            this.model.SetRiskTable(riskTables.get(0));
+            return getModel(0);
+            
         }
-        boolean init = this.model.getClasses().isEmpty();
+    }
+
+    private void init() {
+        boolean initialize = this.model.getClasses().isEmpty();
         fillModelHistogramData(false);
-        if (init) {
+        if (initialize) {
             initializeRiskThreshold();
         }
         
         calculateByRiskThreshold();
-        this.getView().setMetadata(this.metadata);
-        
-        this.getView().setVisible(true);
     }
     
     public void fillModelHistogramData(boolean cumulative) {
@@ -107,6 +104,12 @@ public class RiskSpecificationController extends ControllerBase {
         
     }
 
+    private RiskSpecification getModel(int index) {
+        RiskSpecification riskSpec = this.metadata.getCombinations().getRiskSpecifications().get(getRiskTables().get(index));
+        riskSpec.SetRiskTable(getRiskTables().get(index));
+        return riskSpec;
+    }
+    
     private void initializeRiskThreshold() {
         ArrayList<RiskModelClass> classes = this.model.getClasses();
         double min = Math.log(classes.get(0).getLeftValue());

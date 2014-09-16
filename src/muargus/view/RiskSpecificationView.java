@@ -14,6 +14,7 @@ import muargus.MuARGUS;
 import muargus.RiskChartBuilder;
 import muargus.controller.RiskSpecificationController;
 import muargus.model.RiskSpecification;
+import muargus.model.TableMu;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.event.ChartProgressEvent;
 import org.jfree.chart.event.ChartProgressListener;
@@ -24,10 +25,10 @@ import org.jfree.chart.event.ChartProgressListener;
  */
 public class RiskSpecificationView extends DialogBase implements ChartProgressListener {
 
-    //MetadataMu metadataMu;
-    RiskSpecificationController controller;
-    RiskSpecification model;
-    ChartPanel cp = null;
+    private RiskSpecificationController controller;
+    private RiskSpecification model;
+    private TableMu riskTable;
+    private ChartPanel cp = null;
     private boolean calculating = false;
     
     private final int SLIDERKNOBSIZE = 16;
@@ -88,12 +89,16 @@ public class RiskSpecificationView extends DialogBase implements ChartProgressLi
     
     @Override
     public void initializeData() {
-        this.model = getMetadata().getCombinations().getRiskSpecification();
-        this.tableLabel.setText(controller.getRiskTableTitle(this.model.getRiskTable())); 
+        this.model = getMetadata().getCombinations().getRiskSpecifications().get(this.riskTable);
+        this.tableLabel.setText(controller.getRiskTableTitle(this.riskTable)); 
         //this.maxRiskTextField.setText(formatDouble(this.model.getMaxRisk()));
         //this.maxReidentRateTextField.setText(formatDoublePrc(100*this.model.getMaxReidentRate()));
         updateValues();
         showChart();
+    }
+    
+    public void setRiskTable(TableMu table) {
+        this.riskTable = table;
     }
     
     private int getDecimals() {

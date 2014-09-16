@@ -179,13 +179,13 @@ public class HTMLReportWriter {
                 }
                 table = table.substring(0, table.length() - 3);
                 addChildElement(p, "h2", table);
-                RiskSpecification riskSpec = metadata.getCombinations().getRiskSpecification();
+                RiskSpecification riskSpec = metadata.getCombinations().getRiskSpecifications().get(t);
                 if (metadata.isHouseholdData()) {
                     addChildElement(p, "h2", "Household risk: " + formatDouble(riskSpec.getRiskThreshold(), 5));
                 }
                 else {
-                    addChildElement(p, "h2", "Ind. risk: " + formatDouble(riskSpec.getRiskThreshold(), 3));
-                    addChildElement(p, "h2", "Ind. re-ident rate: " + formatDouble(riskSpec.getReidentRateThreshold()*100, 5) + " %");
+                    addChildElement(p, "h2", "Ind. risk: " + formatDouble(riskSpec.getRiskThreshold(), 5));
+                    addChildElement(p, "h2", "Ind. re-ident rate: " + formatDouble(riskSpec.getReidentRateThreshold()*100, 3) + " %");
                 }
                     
                 addChildElement(p, "h2", "");

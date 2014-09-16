@@ -580,7 +580,7 @@ public class CalculationService {
     public void getVariableInfo() throws ArgusException {
         Combinations model = metadata.getCombinations();
         boolean hasRecode = (model.getGlobalRecode() != null);
-        model.clearUnsafeCombinations();
+        model.getUnsafeCombinations().clear();
         for (int varIndex = 0; varIndex < getVariables().size(); varIndex++) {
             VariableMu variable = getVariables().get(varIndex);
             variable.clearCodeInfos();

@@ -7,6 +7,7 @@
 package muargus.controller;
 
 import argus.model.ArgusException;
+import argus.utils.StrUtils;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -32,8 +33,19 @@ public class NumericalRankSwappingController extends ControllerBase {
         super.setView(new NumericalRankSwappingView(parentView, true, this));
         this.metadata = metadata;
         this.calculationService = MuARGUS.getCalculationService();
-        this.model = metadata.getCombinations().getNumericalRankSwapping();
+        setModel();
         getView().setMetadata(metadata);
+    }
+    
+    private void setModel() {
+        this.model = metadata.getCombinations().getNumericalRankSwapping();
+        if (this.model.getVariables().isEmpty()) {
+            for (VariableMu variable : this.metadata.getVariables()) {
+                if (variable.isNumeric()) {
+                    this.model.getVariables().add(variable);
+                }
+            }
+        }
     }
     
     /**
@@ -53,6 +65,7 @@ public class NumericalRankSwappingController extends ControllerBase {
                 getView().showMessage("RankSwapping successfully completed");
                 getView().setProgress(0);
                 getView().showStepName("");
+                getNumericalRankSwappingView().updateVariableRows(this.model.getRankSwappings().get(this.model.getRankSwappings().size()-1));
             }
             catch (IOException ex) {
                 getView().showErrorMessage(new ArgusException(ex.getMessage()));
@@ -61,6 +74,39 @@ public class NumericalRankSwappingController extends ControllerBase {
     
     private NumericalRankSwappingView getNumericalRankSwappingView() {
         return (NumericalRankSwappingView)getView();
+    }
+    
+    private String printVariableNames(ArrayList<VariableMu> list) {
+        StringBuilder b = new StringBuilder(list.get(0).getName());
+        for (int i=1; i < list.size(); i++) {
+            b.append(", ");
+            b.append(list.get(i).getName());
+        }
+        return b.toString();
+    }
+    
+    public void undo() {
+        ArrayList<VariableMu> selected = getNumericalRankSwappingView().getSelectedVariables();
+        if (selected.isEmpty()) {
+            return;
+        }
+        if (!getView().showConfirmDialog(String.format("The rank swapping involving %s will be removed. Continue?",
+                printVariableNames(selected)))) {
+            return;
+        }
+        ArrayList<RankSwappingSpec> swappingsToUndo = new ArrayList<>();
+        for (VariableMu variable : selected) {
+            for (RankSwappingSpec swapping : this.model.getRankSwappings()) {
+                if (swapping.getVariables().contains(variable) && !swappingsToUndo.contains(swapping)) {
+                    swappingsToUndo.add(swapping);
+                }
+            }
+        }
+        for (RankSwappingSpec swapping : swappingsToUndo) {
+            this.model.getRankSwappings().remove(swapping);
+            getNumericalRankSwappingView().updateVariableRows(swapping);
+            //TODO: remove temporary files?
+        }
     }
     
     public void calculate() {

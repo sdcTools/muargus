@@ -18,17 +18,16 @@ public class RiskSpecification {
     private double reidentRateThreshold;
     private int unsafeRecords;
     private double maxReidentRate;
-    private ArrayList<RiskModelClass> classes;
+    private final ArrayList<RiskModelClass> classes;
     private TableMu riskTable;
     
     public RiskSpecification() {
-        //TODO;
+        this.classes = new ArrayList<>();
     }
     
     public void SetRiskTable(TableMu riskTable) {
         if (!riskTable.equals(this.riskTable)) {
             this.riskTable = riskTable;
-            this.classes = new ArrayList<>();
             this.maxReidentRate = 0;
         }
     }

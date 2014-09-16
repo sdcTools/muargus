@@ -371,8 +371,8 @@ public class MainFrameController {
      *
      */
     private void riskSpecification(boolean household) {
-        if (this.metadata.getCombinations().getRiskSpecification() == null) {
-            this.metadata.getCombinations().createRiskSpecification();
+        if (this.metadata.getCombinations().getRiskSpecifications().isEmpty()) {
+            this.metadata.getCombinations().fillRiskSpecifications();
         }
 
         RiskSpecificationController controller = new RiskSpecificationController(

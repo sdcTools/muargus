@@ -6,10 +6,23 @@
 
 package muargus.model;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author ambargus
  */
 public class NumericalMicroaggregation {
+    
+    private final ArrayList<MicroaggregationSpec> microaggregations;
+    
+    public NumericalMicroaggregation() {
+        this.microaggregations = new ArrayList<>();
+    }
+            
+    
+     public ArrayList<MicroaggregationSpec> getMicroaggregations() {
+         return microaggregations;
+     }   
     
 }

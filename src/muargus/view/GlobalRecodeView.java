@@ -24,9 +24,8 @@ import muargus.model.VariableMu;
  */
 public class GlobalRecodeView extends DialogBase {
 
-    private GlobalRecodeController controller;
+    private final GlobalRecodeController controller;
     private GlobalRecode model;
-    private TableModel tableModel;
     private RecodeMu selectedRecode;
     private RecodeMu selectedRecodeClone;
 
@@ -47,6 +46,7 @@ public class GlobalRecodeView extends DialogBase {
 
     }
     
+    @Override
     public void initializeData() {
         this.model = getMetadata().getCombinations().getGlobalRecode();
         if (this.model.getRecodeMus().isEmpty()) {
@@ -86,13 +86,13 @@ public class GlobalRecodeView extends DialogBase {
             index++;
         }
 
-        this.tableModel = new DefaultTableModel(data, this.model.getColumnNames()){
+        TableModel tableModel = new DefaultTableModel(data, this.model.getColumnNames()){
             @Override
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return false;
             }
         };
-        this.variablesTable.setModel(this.tableModel);
+        this.variablesTable.setModel(tableModel);
     }
 
     public void updateValues() {

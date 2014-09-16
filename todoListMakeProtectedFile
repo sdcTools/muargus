@@ -13,8 +13,6 @@ Release 2:
 - Gegevens numerical variables scherm in rapport tonen
 - Gegevens microaggregatie in rapport tonen
 - Gegevens rank swapping in rapport tonen
-- writeBaseIndividualRisk: risk van meerdere tabellen wordt nog niet getoond
-- writeBaseHHRisk: risk van meerdere tabellen wordt nog niet getoond
 
    
 15. html viewer vervangen: de html/css wordt nu brak getoond
@@ -82,6 +80,8 @@ Gedaan:                                                                         
 12. bug dll make safe file freeformat                                                                               Anne
 13. bug: na cancel button wordt report getoond                                                                      Anne
 14. bug: na cancel button in file chooser komt foutmelding                                                          Anne
+- writeBaseIndividualRisk: risk van meerdere tabellen wordt nog niet getoond
+- writeBaseHHRisk: risk van meerdere tabellen wordt nog niet getoond
 
 Whishlist:
 -   weights automatisch bepalen door middel van entropie? Ik weet niet precies hoe dit zou moeten maar hierdoor
