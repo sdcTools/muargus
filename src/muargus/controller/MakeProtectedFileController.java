@@ -9,7 +9,10 @@ import java.io.File;
 import java.util.ArrayList;
 import muargus.model.MetadataMu;
 import muargus.model.Combinations;
+import muargus.model.MicroaggregationSpec;
+import muargus.model.RankSwappingSpec;
 import muargus.model.ReplacementFile;
+import muargus.model.ReplacementSpec;
 import muargus.model.VariableMu;
 import muargus.view.MakeProtectedFileView;
 
@@ -44,17 +47,17 @@ public class MakeProtectedFileController extends ControllerBase {
      */
     public void makeFile(File file) {
         this.metadata.getCombinations().getProtectedFile().initSafeMeta(file, this.metadata);
-        removeRedundentReplacementFiles();
+        removeRedundentReplacementSpecs();
         getCalculationService().makeProtectedFile(this);
     }
     
-    private void removeRedundentReplacementFiles() {
-        ArrayList<ReplacementFile> toRemove = new ArrayList<>();
+    private void removeRedundentReplacementSpecs() {
+        ArrayList<ReplacementSpec> toRemove = new ArrayList<>();
         int index = 0;
-        for (ReplacementFile replacement : this.metadata.getReplacementFiles()) {
+        for (ReplacementSpec replacement : this.metadata.getReplacementSpecs()) {
             ArrayList<VariableMu> variablesFound = new ArrayList<>();
-            for (int index2 = index+1; index2 < this.metadata.getReplacementFiles().size(); index2++) {
-                ReplacementFile replacement2 = this.metadata.getReplacementFiles().get(index2);
+            for (int index2 = index+1; index2 < this.metadata.getReplacementSpecs().size(); index2++) {
+                ReplacementSpec replacement2 = this.metadata.getReplacementSpecs().get(index2);
                 for (VariableMu variable : replacement2.getVariables()) {
                     if (replacement.getVariables().contains(variable) && !variablesFound.contains(variable)) {
                         variablesFound.add(variable);
@@ -66,8 +69,13 @@ public class MakeProtectedFileController extends ControllerBase {
             }
             index++;
         }
-        for (ReplacementFile replacement : toRemove) {
-            this.metadata.getReplacementFiles().remove(replacement);
+        for (ReplacementSpec replacement : toRemove) {
+            if (replacement instanceof RankSwappingSpec) {
+                this.metadata.getCombinations().getNumericalRankSwapping().getRankSwappings().remove((RankSwappingSpec)replacement);
+            }
+            else {
+                this.metadata.getCombinations().getNumericalMicroaggregation().getMicroaggregations().remove((MicroaggregationSpec)replacement);
+            }
         }
     }
     

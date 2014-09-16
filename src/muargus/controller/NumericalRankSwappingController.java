@@ -15,6 +15,7 @@ import muargus.model.MetadataMu;
 import muargus.model.NumericalRankSwapping;
 import muargus.model.RankSwappingSpec;
 import muargus.model.ReplacementFile;
+import muargus.model.ReplacementSpec;
 import muargus.model.VariableMu;
 import muargus.view.NumericalRankSwappingView;
 import org.apache.commons.io.FileUtils;
@@ -56,9 +57,10 @@ public class NumericalRankSwappingController extends ControllerBase {
     protected void doNextStep(boolean success) {
             //TODO: de catalaan
             //for now: just copy the file
-            ReplacementFile replacement = this.metadata.getReplacementFiles().get(this.metadata.getReplacementFiles().size()-1);
+            RankSwappingSpec swapping = this.model.getRankSwappings().get(this.model.getRankSwappings().size()-1);
             try {
-                FileUtils.copyFile(new File(replacement.getInputFilePath()), new File(replacement.getOutputFilePath()));
+                FileUtils.copyFile(new File(swapping.getReplacementFile().getInputFilePath()), 
+                        new File(swapping.getReplacementFile().getOutputFilePath()));
                 getView().showMessage("RankSwapping successfully completed");
                 getView().setProgress(0);
                 getView().showStepName("");
@@ -101,6 +103,7 @@ public class NumericalRankSwappingController extends ControllerBase {
         }
         for (RankSwappingSpec swapping : swappingsToUndo) {
             this.model.getRankSwappings().remove(swapping);
+            this.metadata.getReplacementSpecs().remove(swapping);
             getNumericalRankSwappingView().updateVariableRows(swapping);
             //TODO: remove temporary files?
         }
@@ -116,10 +119,9 @@ public class NumericalRankSwappingController extends ControllerBase {
         try {
             RankSwappingSpec rankSwapping = new RankSwappingSpec(getNumericalRankSwappingView().getPercentage());
             rankSwapping.getVariables().addAll(selectedVariables);
+            rankSwapping.setReplacementFile(new ReplacementFile("RankSwapping"));
             this.model.getRankSwappings().add(rankSwapping);
-            ReplacementFile replacement = new ReplacementFile("RankSwapping");
-            replacement.getVariables().addAll(selectedVariables);
-            this.metadata.getReplacementFiles().add(replacement);
+            this.metadata.getReplacementSpecs().add(rankSwapping);
             getCalculationService().makeReplacementFile(this);
         }
         catch (ArgusException ex) {
@@ -129,7 +131,7 @@ public class NumericalRankSwappingController extends ControllerBase {
     
     private boolean variablesAreUsed(ArrayList<VariableMu> variables) {
         for (VariableMu variable : variables) {
-            for (ReplacementFile replacement : this.metadata.getReplacementFiles()) {
+            for (ReplacementSpec replacement : this.metadata.getReplacementSpecs()) {
                 if (replacement.getVariables().contains(variable)) {
                     return true;
                 }
@@ -137,7 +139,5 @@ public class NumericalRankSwappingController extends ControllerBase {
         }
         return false;
     }
-
-    
     
 }

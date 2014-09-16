@@ -773,11 +773,10 @@ public class SpecifyMetadataView extends DialogBase {
     }//GEN-LAST:event_generateButtonActionPerformed
 
     private void updateMetadata() {
-        ArrayList<VariableMu> list = new ArrayList<>();
+        getMetadata().getVariables().clear();
         for (Object o : variableListModel.toArray()) {
-            list.add((VariableMu) o);
+            getMetadata().getVariables().add((VariableMu) o);
         }
-        getMetadata().setVariables(list);
         getMetadata().setSeparator(separatorTemp);
         getMetadata().setDataFileType(dataFileTypeTemp);
     }

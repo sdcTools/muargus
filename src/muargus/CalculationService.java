@@ -13,7 +13,6 @@ import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.SwingWorker;
-import muargus.MuARGUS;
 import muargus.controller.SelectCombinationsController;
 import muargus.extern.dataengine.CMuArgCtrl;
 import muargus.extern.dataengine.IProgressListener;
@@ -25,6 +24,7 @@ import muargus.model.TableMu;
 import muargus.model.CodeInfo;
 import muargus.model.PramVariableSpec;
 import muargus.model.ReplacementFile;
+import muargus.model.ReplacementSpec;
 import muargus.model.RiskModelClass;
 //import muargus.model.UnsafeInfo;
 import muargus.model.VariableMu;
@@ -90,11 +90,11 @@ public class CalculationService {
     }
     
     private void makeReplacementFileInBackground() throws ArgusException {
-        ReplacementFile replacement = this.metadata.getReplacementFiles().get(this.metadata.getReplacementFiles().size()-1);
+        ReplacementSpec replacement = this.metadata.getReplacementSpecs().get(this.metadata.getReplacementSpecs().size()-1);
         int[] errorCode = new int[1];
         boolean result = c.WriteVariablesInFile(
                 this.metadata.getFileNames().getDataFileName(),
-                replacement.getInputFilePath(),
+                replacement.getReplacementFile().getInputFilePath(),
                 replacement.getVariables().size(),
                 getVarIndicesInFile(replacement.getVariables()),
                 MuARGUS.getDefaultSeparator(),
@@ -183,15 +183,15 @@ public class CalculationService {
     }
 
     private void doChangeFiles() throws ArgusException {
-        boolean result = c.SetNumberOfChangeFiles(this.metadata.getReplacementFiles().size());
+        boolean result = c.SetNumberOfChangeFiles(this.metadata.getReplacementSpecs().size());
         if (!result) {
             throw new ArgusException("Error during SetNumberOfChangeFiles");
         }
         int index = 0;
-        for (ReplacementFile replacement : this.metadata.getReplacementFiles()) {
+        for (ReplacementSpec replacement : this.metadata.getReplacementSpecs()) {
             index++;
             result = c.SetChangeFile(index, 
-                    replacement.getOutputFilePath(), 
+                    replacement.getReplacementFile().getOutputFilePath(), 
                     replacement.getVariables().size(),
                     getVarIndicesInFile(replacement.getVariables()),
                     MuARGUS.getDefaultSeparator());

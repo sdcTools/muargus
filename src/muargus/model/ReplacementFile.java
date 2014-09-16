@@ -18,14 +18,12 @@ import java.util.ArrayList;
 public class ReplacementFile {
     private final File inputFile;
     private final File outputFile;
-    private final ArrayList<VariableMu> variables;
     private final String replacementType;
     
     public ReplacementFile(String replacementType) throws ArgusException {
         this.replacementType = replacementType;
         this.inputFile = createFile();
         this.outputFile = createFile();
-        this.variables = new ArrayList<>();
     }
 
     public String getInputFilePath() {
@@ -34,10 +32,6 @@ public class ReplacementFile {
 
     public String getOutputFilePath() {
         return this.outputFile.getPath();
-    }
-
-    public ArrayList<VariableMu> getVariables() {
-        return variables;
     }
 
     public String getReplacementType() {

@@ -2,7 +2,6 @@ package muargus.model;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 //import muargus.MuARGUS;
 
 /**
@@ -77,7 +76,7 @@ public class Combinations {
      */
     public void createGlobalRecode() {
         this.globalRecode = new GlobalRecode();
-        this.globalRecode.setVariables(this.getVariablesInTables());
+        this.globalRecode.getVariables().addAll(this.getVariablesInTables());
     }
 
     /**

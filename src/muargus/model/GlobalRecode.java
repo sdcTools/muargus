@@ -14,7 +14,7 @@ import java.util.ArrayList;
  */
 public class GlobalRecode {
 
-    private ArrayList<VariableMu> variables;
+    private final ArrayList<VariableMu> variables;
     private final ArrayList<RecodeMu> recodeMus;
     private final String[] columnNames;
 
@@ -26,17 +26,6 @@ public class GlobalRecode {
         this.variables = new ArrayList<>();
         this.recodeMus = new ArrayList<>();
         this.columnNames = new String[]{"R", "Variables"};
-    }
-
-    /**
-     * Sets the ArrayList containing all the variables as being specified in the
-     * selectCombinations screen.
-     *
-     * @param variables Arraylist containing all the variables as being
-     * specified in the selectCombinations screen.
-     */
-    public void setVariables(ArrayList<VariableMu> variables) {
-        this.variables = variables;
     }
 
     /**

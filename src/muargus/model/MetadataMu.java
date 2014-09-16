@@ -40,11 +40,11 @@ public class MetadataMu {
 
     private BufferedReader reader;
     private Tokenizer tokenizer;
-    private ArrayList<VariableMu> variables;
+    private final ArrayList<VariableMu> variables;
     private DataFilePair filenames;
     private Combinations combinations;
     private int recordCount;
-    private ArrayList<ReplacementFile> replacementFiles;
+    private final ArrayList<ReplacementSpec> replacementSpecs;
 
     /**
      * Constructor of the model class MetadataMu. Initializes the DataFilePair
@@ -52,7 +52,7 @@ public class MetadataMu {
      */
     public MetadataMu() {
         variables = new ArrayList<>();
-        replacementFiles = new ArrayList<>();
+        replacementSpecs = new ArrayList<>();
         filenames = new DataFilePair(null, null);
     }
 
@@ -142,25 +142,19 @@ public class MetadataMu {
         this.recordCount = recordCount;
     }
 
-    /**
-     * Gets the ArrayList containing all the ReplacementFiles.
-     *
-     * @return ArrayList containing all the ReplacementFiles.
-     */
-    public ArrayList<ReplacementFile> getReplacementFiles() {
-        return replacementFiles;
-    }
+//    /**
+//     * Gets the ArrayList containing all the ReplacementFiles.
+//     *
+//     * @return ArrayList containing all the ReplacementFiles.
+//     */
+//    public ArrayList<ReplacementFile> getReplacementFiles() {
+//        return replacementFiles;
+//    }
 
     public ArrayList<ReplacementSpec> getReplacementSpecs() {
-        ArrayList<ReplacementSpec> specs = new ArrayList<>();
-        for (RankSwappingSpec spec : this.getCombinations().getNumericalRankSwapping().getRankSwappings()) {
-            specs.add(spec);
-        }
-        for (MicroaggregationSpec spec : this.getCombinations().getNumericalMicroaggregation().getMicroaggregations()) {
-            specs.add(spec);
-        }
-        return specs;
+        return this.replacementSpecs;
     }
+    
 //    public static ArrayList<VariableMu> makeClone(ArrayList<VariableMu> list) throws CloneNotSupportedException {
 //        ArrayList<VariableMu> clone = new ArrayList<>(list.size());
 //        for (VariableMu item : list) {
@@ -563,14 +557,14 @@ public class MetadataMu {
         return variables;
     }
 
-    /**
-     * Sets an ArrayList containing all the Variables in the Metadata.
-     *
-     * @param variables ArrayList containing all the Variables in the Metadata.
-     */
-    public void setVariables(ArrayList<VariableMu> variables) {
-        this.variables = variables;
-    }
+//    /**
+//     * Sets an ArrayList containing all the Variables in the Metadata.
+//     *
+//     * @param variables ArrayList containing all the Variables in the Metadata.
+//     */
+//    public void setVariables(ArrayList<VariableMu> variables) {
+//        this.variables = variables;
+//    }
 
     //TODO: Anne kan jij dit mooi uitleggen. 
     /**
