@@ -49,15 +49,12 @@ public class ViewReportController {
     public void saveReport(MetadataMu metadata) throws ArgusException {
         String path = metadata.getCombinations().getProtectedFile().getSafeMeta().getFileNames().getDataFileName();
         String htmlPath = FilenameUtils.removeExtension(path) + ".html";
-        try {
-            FileWriter writer = new FileWriter(new File(htmlPath));
+        try (FileWriter writer = new FileWriter(new File(htmlPath))) {
             writer.write(html);
-            writer.close();
         }
         catch (IOException ex) {
             throw new ArgusException("Error saving report: " + ex.getMessage());
         }
-
     }
 
     /**

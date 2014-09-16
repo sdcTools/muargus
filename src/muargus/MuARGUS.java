@@ -9,7 +9,6 @@ import java.awt.SplashScreen;
 import java.util.Locale;
 import java.util.logging.Logger;
 import javax.swing.UnsupportedLookAndFeelException;
-import muargus.controller.CalculationService;
 import muargus.extern.dataengine.CMuArgCtrl;
 import muargus.view.MainFrameView;
 import org.apache.commons.io.FilenameUtils;

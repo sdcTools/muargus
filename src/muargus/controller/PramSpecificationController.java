@@ -22,8 +22,8 @@ import muargus.view.PramSpecificationView;
  */
 public class PramSpecificationController extends ControllerBase {
 
-    PramSpecification model;
-    MetadataMu metadata;
+    private final PramSpecification model;
+    private final MetadataMu metadata;
 
     public PramSpecificationController(java.awt.Frame parentView, MetadataMu metadata) {
         super.setView(new PramSpecificationView(parentView, true, this));

@@ -7,7 +7,6 @@ package muargus.controller;
 import argus.model.ArgusException;
 import java.io.File;
 import java.util.ArrayList;
-import muargus.MuARGUS;
 import muargus.model.MetadataMu;
 import muargus.model.Combinations;
 import muargus.model.ReplacementFile;

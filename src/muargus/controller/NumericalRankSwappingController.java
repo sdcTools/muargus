@@ -7,7 +7,6 @@
 package muargus.controller;
 
 import argus.model.ArgusException;
-import argus.utils.StrUtils;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -25,14 +24,12 @@ import org.apache.commons.io.FileUtils;
  * @author ambargus
  */
 public class NumericalRankSwappingController extends ControllerBase {
-    NumericalRankSwapping model;
-    MetadataMu metadata;
-    CalculationService calculationService;
+    private NumericalRankSwapping model;
+    private MetadataMu metadata;
 
     public NumericalRankSwappingController(java.awt.Frame parentView, MetadataMu metadata) {
         super.setView(new NumericalRankSwappingView(parentView, true, this));
         this.metadata = metadata;
-        this.calculationService = MuARGUS.getCalculationService();
         setModel();
         getView().setMetadata(metadata);
     }
@@ -123,7 +120,7 @@ public class NumericalRankSwappingController extends ControllerBase {
             ReplacementFile replacement = new ReplacementFile("RankSwapping");
             replacement.getVariables().addAll(selectedVariables);
             this.metadata.getReplacementFiles().add(replacement);
-            this.calculationService.makeReplacementFile(this);
+            getCalculationService().makeReplacementFile(this);
         }
         catch (ArgusException ex) {
             getView().showErrorMessage(ex);

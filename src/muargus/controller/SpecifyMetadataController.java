@@ -2,9 +2,7 @@
 package muargus.controller;
 
 import argus.model.ArgusException;
-import argus.utils.SystemUtils;
 import java.io.File;
-import java.util.ArrayList;
 import java.util.logging.Logger;
 //import javax.swing.DefaultListModel;
 import muargus.model.Combinations;
@@ -18,9 +16,8 @@ import muargus.view.SpecifyMetadataView;
 public class SpecifyMetadataController extends ControllerBase {
 
     //SpecifyMetadataView view;
-    MetadataMu metadata;
-    MetadataMu metadataClone;
-    ArrayList<String> list;
+    private MetadataMu metadata;
+    private final MetadataMu metadataClone;
 
     private static final Logger logger = Logger.getLogger(SpecifyMetadataController.class.getName());
 
@@ -62,7 +59,7 @@ public class SpecifyMetadataController extends ControllerBase {
                 return;
             }
 
-            String message = "";
+            String message;
             boolean significantDifference = areTablesSpecified() && this.metadata.significantDifference(this.metadataClone);
             if (significantDifference)
             {

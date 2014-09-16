@@ -4,6 +4,7 @@
  */
 package muargus.controller;
 
+import muargus.CalculationService;
 import argus.model.ArgusException;
 import argus.utils.SystemUtils;
 import java.util.logging.Logger;
@@ -18,8 +19,8 @@ import muargus.view.SelectCombinationsView;
  */
 public class SelectCombinationsController extends  ControllerBase {
     
-    Combinations modelClone;
-    MetadataMu metadata;
+    private final Combinations modelClone;
+    private final MetadataMu metadata;
         
     private static final Logger logger = Logger.getLogger(SelectCombinationsController.class.getName());
 

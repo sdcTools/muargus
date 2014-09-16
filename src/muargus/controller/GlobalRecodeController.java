@@ -21,7 +21,7 @@ import muargus.view.GlobalRecodeView;
  */
 public class GlobalRecodeController extends ControllerBase {
 
-    MetadataMu metadata;
+    private final MetadataMu metadata;
 
     /**
      *

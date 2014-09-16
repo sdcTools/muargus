@@ -8,7 +8,6 @@ package muargus;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import muargus.controller.CalculationService;
 import muargus.extern.dataengine.IProgressListener;
 
 /**

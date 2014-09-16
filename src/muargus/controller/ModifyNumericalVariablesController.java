@@ -8,9 +8,6 @@ package muargus.controller;
 import argus.model.ArgusException;
 import argus.utils.StrUtils;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import muargus.MuARGUS;
 import muargus.model.MetadataMu;
 import muargus.model.ModifyNumericalVariables;
 import muargus.model.ModifyNumericalVariablesSpec;
@@ -23,8 +20,8 @@ import muargus.view.ModifyNumericalVariablesView;
  */
 public class ModifyNumericalVariablesController extends ControllerBase {
 
-    ModifyNumericalVariables model;
-    MetadataMu metadata;
+    private ModifyNumericalVariables model;
+    private MetadataMu metadata;
 
     public ModifyNumericalVariablesController(java.awt.Frame parentView, MetadataMu metadata) {
         super.setView(new ModifyNumericalVariablesView(parentView, true, this));
@@ -77,12 +74,12 @@ public class ModifyNumericalVariablesController extends ControllerBase {
             System.out.println("test");
             return "";
         } else {
-            return getIntIfPossibel(selected.getMin());
+            return getIntIfPossible(selected.getMin());
         }
     }
 
     public String getMax(ModifyNumericalVariablesSpec selected) {
-        return getIntIfPossibel(selected.getMax());
+        return getIntIfPossible(selected.getMax());
     }
 
     public String setValues(ModifyNumericalVariablesSpec selected, Double bottomValue, Double topValue,
@@ -134,12 +131,12 @@ public class ModifyNumericalVariablesController extends ControllerBase {
             }
 
             if (bottom) {
-                selected.setBottomValue(getIntIfPossibel(bottomValue));
+                selected.setBottomValue(getIntIfPossible(bottomValue));
                 selected.setBottomReplacement(bottomReplacement);
             }
 
             if (top) {
-                selected.setTopValue(getIntIfPossibel(topValue));
+                selected.setTopValue(getIntIfPossible(topValue));
                 selected.setTopReplacement(topReplacement);
             }
 
@@ -147,7 +144,7 @@ public class ModifyNumericalVariablesController extends ControllerBase {
 
         if (!roundingBase.equals(Double.NaN)) {
                 if (roundingBase > 0) {
-                    selected.setRoundingBase(getIntIfPossibel(roundingBase));
+                    selected.setRoundingBase(getIntIfPossible(roundingBase));
                 } else {
                     warningMessage += "Illegal Value for rounding";
                 }
@@ -155,7 +152,7 @@ public class ModifyNumericalVariablesController extends ControllerBase {
 
         if (!weightNoisePercentage.equals(Double.NaN)) {
                 if (weightNoisePercentage > 0) {
-                    selected.setWeightNoisePercentage(getIntIfPossibel(weightNoisePercentage));
+                    selected.setWeightNoisePercentage(getIntIfPossible(weightNoisePercentage));
                 } else {
                     warningMessage += "Illegal Value for the weight noise percentage";
                 }
@@ -164,7 +161,7 @@ public class ModifyNumericalVariablesController extends ControllerBase {
         return warningMessage;
     }
 
-    public String getIntIfPossibel(double value) {
+    public String getIntIfPossible(double value) {
         double value_double;
         String value_String = null;
         try {
