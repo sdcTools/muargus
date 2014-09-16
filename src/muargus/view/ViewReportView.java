@@ -15,7 +15,6 @@ import javax.swing.JOptionPane;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.html.HTMLDocument;
 import javax.swing.text.html.HTMLEditorKit;
-import javax.xml.transform.TransformerException;
 import muargus.controller.MainFrameController;
 import muargus.controller.ViewReportController;
 
@@ -23,10 +22,8 @@ import muargus.controller.ViewReportController;
  *
  * @author ambargus
  */
-public class ViewReportView extends DialogBase {
+public class ViewReportView extends DialogBase<ViewReportController> {
     
-    ViewReportController controller;
-
     /**
      * Creates new form OutputViewReport
      * @param parent
@@ -34,8 +31,7 @@ public class ViewReportView extends DialogBase {
      * @param modal
      */
     public ViewReportView(java.awt.Frame parent, ViewReportController controller, boolean modal) {
-        super(parent, modal);
-        this.controller = controller;
+        super(parent, modal, controller);
         initComponents();
         this.setLocationRelativeTo(null);
     }
@@ -128,7 +124,7 @@ public class ViewReportView extends DialogBase {
     }// </editor-fold>//GEN-END:initComponents
 
     private void closeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_closeButtonActionPerformed
-        controller.close();
+        getController().close();
     }//GEN-LAST:event_closeButtonActionPerformed
 
     private void printButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_printButtonActionPerformed
@@ -136,7 +132,7 @@ public class ViewReportView extends DialogBase {
             htmlPane.print();
         }
         catch (PrinterException ex) {
-            JOptionPane.showMessageDialog(null, "Error printing report: " + ex.getMessage());
+            showMessage("Error printing report: " + ex.getMessage());
         }
     }//GEN-LAST:event_printButtonActionPerformed
 

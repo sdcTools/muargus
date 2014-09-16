@@ -20,15 +20,14 @@ import muargus.view.PramSpecificationView;
  *
  * @author ambargus
  */
-public class PramSpecificationController extends ControllerBase {
+public class PramSpecificationController extends ControllerBase<PramSpecification> {
 
-    private final PramSpecification model;
     private final MetadataMu metadata;
 
     public PramSpecificationController(java.awt.Frame parentView, MetadataMu metadata) {
         super.setView(new PramSpecificationView(parentView, true, this));
         this.metadata = metadata;
-        this.model = this.metadata.getCombinations().getPramSpecification();
+        setModel(this.metadata.getCombinations().getPramSpecification());
         getView().setMetadata(this.metadata);
     }
 
@@ -46,7 +45,7 @@ public class PramSpecificationController extends ControllerBase {
      */
     public PramVariableSpec getSelectedPramVarSpec(String variableName) {
         PramVariableSpec temp = null;
-        for (PramVariableSpec p : this.model.getPramVarSpec()) {
+        for (PramVariableSpec p : getModel().getPramVarSpec()) {
             if (p.getVariable().getName().equals(variableName)) {
                 temp = p;
             }
@@ -58,7 +57,7 @@ public class PramSpecificationController extends ControllerBase {
      *
      */
     public void makePramVariableSpecs() {
-        if (this.model.getPramVarSpec() == null) {
+        if (getModel().getPramVarSpec() == null) {
             ArrayList<PramVariableSpec> pramVarSpec = new ArrayList<>();
             for (VariableMu v : this.metadata.getVariables()) {
                 if (v.isCategorical()) {
@@ -66,7 +65,7 @@ public class PramSpecificationController extends ControllerBase {
                     pramVarSpec.add(p);
                 }
             }
-            this.model.setPramVarSpec(pramVarSpec);
+            getModel().setPramVarSpec(pramVarSpec);
         }
     }
 
@@ -74,7 +73,7 @@ public class PramSpecificationController extends ControllerBase {
      *
      */
     public void makeVariablesData() {
-        ArrayList<PramVariableSpec> pramVarSpec = this.model.getPramVarSpec();
+        ArrayList<PramVariableSpec> pramVarSpec = getModel().getPramVarSpec();
         String[][] variablesData = new String[pramVarSpec.size()][3];
         int index = 0;
         for (PramVariableSpec p : pramVarSpec) {
@@ -88,7 +87,7 @@ public class PramSpecificationController extends ControllerBase {
             variablesData[index][2] = p.getVariable().getName();
             index++;
         }
-        this.model.setVariablesData(variablesData);
+        getModel().setVariablesData(variablesData);
     }
 
     /**
@@ -117,7 +116,7 @@ public class PramSpecificationController extends ControllerBase {
      */
     public PramVariableSpec getPramVariableSpec(VariableMu variable) {
         PramVariableSpec temp = null;
-        for (PramVariableSpec p : this.model.getPramVarSpec()) {
+        for (PramVariableSpec p : getModel().getPramVarSpec()) {
             if (p.getVariable().equals(variable)) {
                 temp = p;
                 break;

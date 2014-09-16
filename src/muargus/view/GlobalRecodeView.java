@@ -22,9 +22,8 @@ import muargus.model.VariableMu;
  *
  * @author ambargus
  */
-public class GlobalRecodeView extends DialogBase {
+public class GlobalRecodeView extends DialogBase<GlobalRecodeController> {
 
-    private final GlobalRecodeController controller;
     private GlobalRecode model;
     private RecodeMu selectedRecode;
     private RecodeMu selectedRecodeClone;
@@ -37,9 +36,8 @@ public class GlobalRecodeView extends DialogBase {
      * @param controller
      */
     public GlobalRecodeView(java.awt.Frame parent, boolean modal, GlobalRecodeController controller) {
-        super(parent, modal);
+        super(parent, modal, controller);
         initComponents();
-        this.controller = controller;
         //this.model = this.controller.getModel();
         this.setLocationRelativeTo(null);
         this.variablesTable.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -168,7 +166,7 @@ public class GlobalRecodeView extends DialogBase {
             catch (NumberFormatException ex) {
                 ; //No action needed
             }
-            JOptionPane.showMessageDialog(null, message);
+            showMessage(message);
         }
     }
 
@@ -575,7 +573,7 @@ public class GlobalRecodeView extends DialogBase {
 
     private void closeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_closeButtonActionPerformed
         handleSelectionChanged();
-        controller.close();
+        getController().close();
     }//GEN-LAST:event_closeButtonActionPerformed
 
     private void codelistRecodeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_codelistRecodeButtonActionPerformed
@@ -605,7 +603,7 @@ public class GlobalRecodeView extends DialogBase {
         try {
             int positions = getTruncatePositions(getSelectedRecode().getVariable().getVariableLength());
             if (positions > 0) {
-                controller.truncate(getSelectedRecode(), positions);
+                getController().truncate(getSelectedRecode(), positions);
                 int rowIndex = this.model.getVariables().indexOf(getSelectedRecode().getVariable());
                 variablesTable.getModel().setValueAt("T", rowIndex, 0);
                 variablesTable.getModel().setValueAt(getSelectedRecode().getVariable().getName(), rowIndex, 1);
@@ -623,7 +621,7 @@ public class GlobalRecodeView extends DialogBase {
         String path = askForGrcPath();
         if (path != null) {
             try {
-                controller.read(path, this.getSelectedRecode());
+                getController().read(path, this.getSelectedRecode());
                 this.selectedRecodeClone = new RecodeMu(this.selectedRecode);
                 updateValues();
             }
@@ -648,7 +646,7 @@ public class GlobalRecodeView extends DialogBase {
     private void applyButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_applyButtonActionPerformed
         try {
             fixGrcReturns(getSelectedRecode());
-            controller.apply(getSelectedRecode());
+            getController().apply(getSelectedRecode());
             int rowIndex = this.model.getVariables().indexOf(getSelectedRecode().getVariable());
             variablesTable.getModel().setValueAt("R", rowIndex, 0);
             variablesTable.getModel().setValueAt(getSelectedRecode().getVariable().getName(), rowIndex, 1);
@@ -661,7 +659,7 @@ public class GlobalRecodeView extends DialogBase {
 
     private void undoButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_undoButtonActionPerformed
         try {
-            controller.undo(getSelectedRecode());
+            getController().undo(getSelectedRecode());
             int rowIndex = this.model.getVariables().indexOf(getSelectedRecode().getVariable());
             variablesTable.getModel().setValueAt("", rowIndex, 0);
             variablesTable.getModel().setValueAt(getSelectedRecode().getVariable().getName(), rowIndex, 1);
@@ -682,7 +680,7 @@ public class GlobalRecodeView extends DialogBase {
                 this.selectedRecode.write(new File(filePath));
             }
             catch (ArgusException ex) {
-                JOptionPane.showMessageDialog(null, "Error saving grc file: " + ex.getMessage());
+                showErrorMessage(ex);
             }
         }
     }
@@ -691,8 +689,7 @@ public class GlobalRecodeView extends DialogBase {
     private void handleSelectionChanged() {
         if (this.selectedRecodeClone != null) {
             if (!selectedRecodeClone.equals(getSelectedRecode())) {
-                int result = JOptionPane.showConfirmDialog(null, "Recode information has been changed.\nSave recode file?");
-                if (result == JOptionPane.YES_OPTION) {
+                if (showConfirmDialog("Recode information has been changed.\nSave recode file?")) {
                     saveGrcFile();
                 }
             }

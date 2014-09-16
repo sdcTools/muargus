@@ -14,7 +14,7 @@ public class Splash extends DialogBase {
      * Creates new form Splash
      */
     public Splash(java.awt.Frame parent, boolean modal) {
-        super(parent, modal);
+        super(parent, modal, null);
         initComponents();
         this.setLocationRelativeTo(null);
     }

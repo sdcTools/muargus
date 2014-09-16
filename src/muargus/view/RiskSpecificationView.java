@@ -23,9 +23,8 @@ import org.jfree.chart.event.ChartProgressListener;
  *
  * @author ambargus
  */
-public class RiskSpecificationView extends DialogBase implements ChartProgressListener {
+public class RiskSpecificationView extends DialogBase<RiskSpecificationController> implements ChartProgressListener {
 
-    private RiskSpecificationController controller;
     private RiskSpecification model;
     private TableMu riskTable;
     private ChartPanel cp = null;
@@ -42,11 +41,10 @@ public class RiskSpecificationView extends DialogBase implements ChartProgressLi
      */
     public RiskSpecificationView(java.awt.Frame parent, boolean modal, RiskSpecificationController controller,
             boolean isHousehold) {
-        super(parent, modal);
+        super(parent, modal, controller);
         initComponents();
         setHouseholdComponents(isHousehold);
         setLocationRelativeTo(null);
-        this.controller = controller;
     }
     
     private void showChart() {
@@ -90,7 +88,7 @@ public class RiskSpecificationView extends DialogBase implements ChartProgressLi
     @Override
     public void initializeData() {
         this.model = getMetadata().getCombinations().getRiskSpecifications().get(this.riskTable);
-        this.tableLabel.setText(controller.getRiskTableTitle(this.riskTable)); 
+        this.tableLabel.setText(getController().getRiskTableTitle(this.riskTable)); 
         //this.maxRiskTextField.setText(formatDouble(this.model.getMaxRisk()));
         //this.maxReidentRateTextField.setText(formatDoublePrc(100*this.model.getMaxReidentRate()));
         updateValues();
@@ -439,7 +437,7 @@ public class RiskSpecificationView extends DialogBase implements ChartProgressLi
                     (Math.log(this.model.getMaxRisk() / this.model.getMinRisk()))*riskSlider.getValue()/riskSlider.getMaximum());
             
             this.model.setRiskThreshold(threshold);
-            controller.calculateByRiskThreshold();
+            getController().calculateByRiskThreshold();
             updateValues();
         }
     }//GEN-LAST:event_riskSliderStateChanged
@@ -456,7 +454,7 @@ public class RiskSpecificationView extends DialogBase implements ChartProgressLi
     private void unsafeCalcButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_unsafeCalcButtonActionPerformed
         this.calculating = true;
         this.model.setUnsafeRecords(Integer.parseInt(unsafeRecordsTextField.getText()));
-        controller.calculateByUnsafeRecords();
+        getController().calculateByUnsafeRecords();
         updateValues();
     }//GEN-LAST:event_unsafeCalcButtonActionPerformed
 
@@ -464,7 +462,7 @@ public class RiskSpecificationView extends DialogBase implements ChartProgressLi
         this.calculating = true;
         try {
             double d = NumberFormat.getInstance(MuARGUS.getLocale()).parse(reidentThresholdTextField.getText()).doubleValue();
-            controller.calculateByReidentThreshold(d/100, getDecimals());
+            getController().calculateByReidentThreshold(d/100, getDecimals());
         }
         catch (ParseException ex) {
             showErrorMessage(new ArgusException("Entered value is not valid"));
@@ -480,7 +478,7 @@ public class RiskSpecificationView extends DialogBase implements ChartProgressLi
             this.calculating = true;
             double d = NumberFormat.getInstance(MuARGUS.getLocale()).parse(riskThresholdTextField.getText()).doubleValue();
             this.model.setRiskThreshold(d);
-            this.controller.calculateByRiskThreshold();
+            getController().calculateByRiskThreshold();
             updateValues();
         }
         catch (ParseException ex) {
@@ -489,7 +487,7 @@ public class RiskSpecificationView extends DialogBase implements ChartProgressLi
     }//GEN-LAST:event_riskCalcButtonActionPerformed
 
     private void showCumulative(boolean cumulative) {
-        controller.fillModelHistogramData(cumulative);
+        getController().fillModelHistogramData(cumulative);
         showChart();
         
     }

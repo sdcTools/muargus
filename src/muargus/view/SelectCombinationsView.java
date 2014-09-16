@@ -21,9 +21,8 @@ import muargus.HighlightTableCellRenderer;
  *
  * @author ambargus
  */
-public class SelectCombinationsView extends DialogBase {
+public class SelectCombinationsView extends DialogBase<SelectCombinationsController> {
     
-    private final SelectCombinationsController controller;
     private Combinations model;
     private DefaultListModel variablesListModel;
     private DefaultListModel variablesSelectedListModel;
@@ -41,10 +40,9 @@ public class SelectCombinationsView extends DialogBase {
      * @param controller
      */
     public SelectCombinationsView(java.awt.Frame parent, boolean modal, SelectCombinationsController controller) {
-        super(parent, modal);
+        super(parent, modal, controller);
         this.parent = parent;
         initComponents();
-        this.controller = controller;
         this.setLocationRelativeTo(null);
         variablesList.setCellRenderer(new VariableNameCellRenderer());
         variablesSelectedList.setCellRenderer(new VariableNameCellRenderer());
@@ -368,10 +366,10 @@ public class SelectCombinationsView extends DialogBase {
     private void calculateTablesButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_calculateTablesButtonActionPerformed
         try {
             if (this.model.getTables().isEmpty()) {
-                JOptionPane.showMessageDialog(this, "No tables specified");
+                showMessage("No tables specified");
              }
             else {
-                this.controller.calculateTables();
+                getController().calculateTables();
             }
         } 
         catch (ArgusException ex) {
@@ -770,10 +768,11 @@ public class SelectCombinationsView extends DialogBase {
         if (model.getTables().size() > 0) {
             
             try { // afvangen geen tabel geselecteerd
+                //TODO: geen try catch 
                 int index = table.getSelectedRow();
                 TableMu tableMu = model.getTables().get(index);
                 if (!weightVariableExists()) {
-                    JOptionPane.showMessageDialog(this, "No weight variable has been specified, so the risk-model cannot be applied");
+                    showMessage("No weight variable has been specified, so the risk-model cannot be applied");
                     return;
                 }                
                 tableMu.setRiskModel(!tableMu.isRiskModel());
@@ -787,14 +786,14 @@ public class SelectCombinationsView extends DialogBase {
                 updateValues();
                 table.getSelectionModel().setSelectionInterval(index, index);
             } catch (Exception e) {
-                JOptionPane.showMessageDialog(this, "No table is selected");
+                showMessage("No table is selected");
             }
         }
     }//GEN-LAST:event_setTableRiskModelButtonActionPerformed
 
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
         this.clear();
-        controller.cancel();
+        getController().cancel();
     }//GEN-LAST:event_cancelButtonActionPerformed
 
     private void thresholdTextFieldCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_thresholdTextFieldCaretUpdate

@@ -21,9 +21,8 @@ import muargus.model.VariableMu;
  *
  * @author ambargus
  */
-public class SpecifyMetadataView extends DialogBase {
+public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
     
-    SpecifyMetadataController controller;
     private ArrayList<VariableMu> related;
     private final String[] idLevel = {"0","1","2","3","4","5"};
     private final String[] format = {"Fixed format", "Free format", "Free with meta", "SPSS system file" }; // maak hier enum van
@@ -39,9 +38,8 @@ public class SpecifyMetadataView extends DialogBase {
      * Creates new form SpecifyMetadataView
      */
     public SpecifyMetadataView(java.awt.Frame parent, boolean modal, SpecifyMetadataController controller) {
-        super(parent, modal);
+        super(parent, modal, controller);
         initComponents();
-        this.controller = controller;
         this.setLocationRelativeTo(null);
         variablesList.setSelectionModel(new SingleListSelectionModel());
         variablesList.setCellRenderer(new VariableNameCellRenderer());
@@ -769,7 +767,7 @@ public class SpecifyMetadataView extends DialogBase {
     }// </editor-fold>//GEN-END:initComponents
 
     private void generateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generateButtonActionPerformed
-        controller.generate();
+        getController().generate();
     }//GEN-LAST:event_generateButtonActionPerformed
 
     private void updateMetadata() {
@@ -782,7 +780,7 @@ public class SpecifyMetadataView extends DialogBase {
     }
     private void okButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okButtonActionPerformed
         updateMetadata();
-        controller.ok();
+        getController().ok();
     }//GEN-LAST:event_okButtonActionPerformed
 
     private void moveUpButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_moveUpButtonActionPerformed
@@ -844,7 +842,7 @@ public class SpecifyMetadataView extends DialogBase {
 
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
         updateMetadata();
-        controller.cancel();
+        getController().cancel();
     }//GEN-LAST:event_cancelButtonActionPerformed
 
     private void codelistfileButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_codelistfileButtonActionPerformed

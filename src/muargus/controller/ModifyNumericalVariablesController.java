@@ -17,15 +17,14 @@ import muargus.view.ModifyNumericalVariablesView;
  *
  * @author ambargus
  */
-public class ModifyNumericalVariablesController extends ControllerBase {
+public class ModifyNumericalVariablesController extends ControllerBase<ModifyNumericalVariables> {
 
-    private final ModifyNumericalVariables model;
     private final MetadataMu metadata;
 
     public ModifyNumericalVariablesController(java.awt.Frame parentView, MetadataMu metadata) {
         super.setView(new ModifyNumericalVariablesView(parentView, true, this));
         this.metadata = metadata;
-        this.model = metadata.getCombinations().getModifyNumericalVariables();
+        setModel(metadata.getCombinations().getModifyNumericalVariables());
         getView().setMetadata(this.metadata);
     }
 
@@ -43,21 +42,21 @@ public class ModifyNumericalVariablesController extends ControllerBase {
         for (VariableMu v : this.metadata.getVariables()) {
             if (v.isNumeric()) {
                 ModifyNumericalVariablesSpec spec = new ModifyNumericalVariablesSpec(v);
-                this.model.getModifyNumericalVariablesSpec().add(spec);
+                getModel().getModifyNumericalVariablesSpec().add(spec);
             }
         }
     }
 
     public void setVariablesData() {
-        if (this.model.getVariablesData() == null) {
-            String variablesData[][] = new String[this.model.getModifyNumericalVariablesSpec().size()][2];
+        if (getModel().getVariablesData() == null) {
+            String variablesData[][] = new String[getModel().getModifyNumericalVariablesSpec().size()][2];
             int index = 0;
-            for (ModifyNumericalVariablesSpec m : this.model.getModifyNumericalVariablesSpec()) {
+            for (ModifyNumericalVariablesSpec m : getModel().getModifyNumericalVariablesSpec()) {
                 variablesData[index][0] = m.getModifiedText();
                 variablesData[index][1] = m.getVariable().getName();
                 index++;
             }
-            this.model.setVariablesData(variablesData);
+            getModel().setVariablesData(variablesData);
         }
     }
 

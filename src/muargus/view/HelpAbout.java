@@ -14,7 +14,7 @@ public class HelpAbout extends DialogBase {
      * Creates new form HelpAbout
      */
     public HelpAbout(java.awt.Frame parent, boolean modal) {
-        super(parent, modal);
+        super(parent, modal, null);
         initComponents();
         this.setLocationRelativeTo(null);
     }

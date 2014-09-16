@@ -19,7 +19,7 @@ import muargus.view.GlobalRecodeView;
  *
  * @author ambargus
  */
-public class GlobalRecodeController extends ControllerBase {
+public class GlobalRecodeController extends ControllerBase<GlobalRecode> {
 
     private final MetadataMu metadata;
 
@@ -83,11 +83,6 @@ public class GlobalRecodeController extends ControllerBase {
 //        }
 //        view.setCodelistText(filename);
 //    }
-
-
-    private GlobalRecode getGlobalRecode() {
-        return this.metadata.getCombinations().getGlobalRecode();
-    }
 
     /**
      *

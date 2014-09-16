@@ -16,12 +16,21 @@ import muargus.view.DialogBase;
  *
  * @author pibd05
  */
-public class ControllerBase implements PropertyChangeListener {
+public class ControllerBase<T> implements PropertyChangeListener {
 
     private DialogBase viewBase;
     private String stepName;
+    private T model;
     
     public ControllerBase() {
+    }
+    
+    protected T getModel() {
+        return model;
+    }
+    
+    protected void setModel(T model) {
+        this.model = model;
     }
     
     @Override

@@ -11,9 +11,8 @@ import muargus.model.NumericalMicroaggregation;
  *
  * @author ambargus
  */
-public class NumericalMicroaggregationView extends DialogBase {
+public class NumericalMicroaggregationView extends DialogBase<NumericalMicroaggregationController> {
 
-    NumericalMicroaggregationController controller;
     NumericalMicroaggregation model;
     /**
      * 
@@ -22,10 +21,9 @@ public class NumericalMicroaggregationView extends DialogBase {
      * @param controller 
      */
     public NumericalMicroaggregationView(java.awt.Frame parent, boolean modal, NumericalMicroaggregationController controller) {
-        super(parent, modal);
+        super(parent, modal, controller);
         initComponents();
         setLocationRelativeTo(null);
-        this.controller = controller;
     }
         
     @Override

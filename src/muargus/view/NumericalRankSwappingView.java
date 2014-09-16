@@ -19,9 +19,8 @@ import muargus.model.VariableMu;
  *
  * @author ambargus
  */
-public class NumericalRankSwappingView extends DialogBase {
+public class NumericalRankSwappingView extends DialogBase<NumericalRankSwappingController> {
 
-    private final NumericalRankSwappingController controller;
     private NumericalRankSwapping model;
     private DefaultListModel<VariableMu> selectedListModel;
     
@@ -32,10 +31,9 @@ public class NumericalRankSwappingView extends DialogBase {
      * @param controller 
      */
     public NumericalRankSwappingView(java.awt.Frame parent, boolean modal, NumericalRankSwappingController controller) {
-        super(parent, modal);
+        super(parent, modal, controller);
         initComponents();
         setLocationRelativeTo(null);
-        this.controller = controller;
         this.variablesTable.setDefaultRenderer(Object.class, new HighlightTableCellRenderer());
         this.selectedVariableList.setCellRenderer(new VariableNameCellRenderer());
     }
@@ -385,7 +383,7 @@ public class NumericalRankSwappingView extends DialogBase {
     }//GEN-LAST:event_fromSelectedButtonActionPerformed
 
     private void calculateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_calculateButtonActionPerformed
-        controller.calculate();
+        getController().calculate();
     }//GEN-LAST:event_calculateButtonActionPerformed
 
     private void upButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_upButtonActionPerformed
@@ -407,7 +405,7 @@ public class NumericalRankSwappingView extends DialogBase {
     }//GEN-LAST:event_downButtonActionPerformed
 
     private void undoButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_undoButtonActionPerformed
-        controller.undo();
+        getController().undo();
         // TODO add your handling code here:
     }//GEN-LAST:event_undoButtonActionPerformed
 

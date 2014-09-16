@@ -29,7 +29,7 @@ public class GenerateAutomaticTables extends DialogBase {
      */
     public GenerateAutomaticTables(java.awt.Frame parent, boolean modal, Combinations model,
             int numberOfVariables) {
-        super(parent, modal);
+        super(parent, modal, null);
         this.model = model;
         this.valid = false;
         this.parent = parent;

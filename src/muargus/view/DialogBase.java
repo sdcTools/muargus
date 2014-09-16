@@ -19,14 +19,17 @@ import muargus.model.MetadataMu;
  *
  * @author pibd05
  */
-public class DialogBase extends javax.swing.JDialog {
+public class DialogBase<T> extends javax.swing.JDialog {
 
     private MetadataMu metadata;
+    private final T controller;
+    
     /**
      * Creates new form DialogBase
      */
-    public DialogBase(final java.awt.Frame parent, final boolean modal) {
+    public DialogBase(java.awt.Frame parent, boolean modal, T controller) {
         super(parent, modal);
+        this.controller = controller;
         initComponents();
     }
     
@@ -140,7 +143,7 @@ public class DialogBase extends javax.swing.JDialog {
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                DialogBase dialog = new DialogBase(new javax.swing.JFrame(), true);
+                DialogBase dialog = new DialogBase(new javax.swing.JFrame(), true, null);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {
@@ -160,6 +163,9 @@ public class DialogBase extends javax.swing.JDialog {
         //Base class implementation is empty
     }
 
+    protected T getController() {
+        return this.controller;
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     // End of variables declaration//GEN-END:variables
 }

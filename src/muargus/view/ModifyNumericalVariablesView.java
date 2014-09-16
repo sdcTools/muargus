@@ -1,14 +1,11 @@
 package muargus.view;
 
-import javax.swing.JOptionPane;
-import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import muargus.controller.ModifyNumericalVariablesController;
-import muargus.model.MetadataMu;
 import muargus.model.ModifyNumericalVariables;
 import muargus.model.ModifyNumericalVariablesSpec;
 
@@ -16,9 +13,8 @@ import muargus.model.ModifyNumericalVariablesSpec;
  *
  * @author ambargus
  */
-public class ModifyNumericalVariablesView extends DialogBase {
+public class ModifyNumericalVariablesView extends DialogBase<ModifyNumericalVariablesController> {
 
-    ModifyNumericalVariablesController controller;
     ModifyNumericalVariables model;
     private final int[] variablesColumnWidth = {20, 80};
     private int selectedRow = 0;
@@ -30,10 +26,9 @@ public class ModifyNumericalVariablesView extends DialogBase {
      * @param controller
      */
     public ModifyNumericalVariablesView(java.awt.Frame parent, boolean modal, ModifyNumericalVariablesController controller) {
-        super(parent, modal);
+        super(parent, modal, controller);
         initComponents();
         setLocationRelativeTo(null);
-        this.controller = controller;
         this.variablesTable.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     }
 
@@ -44,7 +39,7 @@ public class ModifyNumericalVariablesView extends DialogBase {
     public void initializeData() {
         this.model = getMetadata().getCombinations().getModifyNumericalVariables();
         if (this.model.getModifyNumericalVariablesSpec().isEmpty()) {
-            this.controller.setModifyNumericalVariablesSpecs();
+            getController().setModifyNumericalVariablesSpecs();
         }
         makeVariablesTable();
         updateValues();
@@ -63,13 +58,13 @@ public class ModifyNumericalVariablesView extends DialogBase {
      *
      */
     public void updateValues() {
-        double[] min_max = this.controller.getMinMax(
+        double[] min_max = getController().getMinMax(
                 this.model.getModifyNumericalVariablesSpec().get(this.variablesTable.getSelectedRow()).getVariable());
 
         ModifyNumericalVariablesSpec selected = this.model.getModifyNumericalVariablesSpec().get(this.variablesTable.getSelectedRow());
         selected.setMin_max(min_max);
-        this.minimumTextField.setText(this.controller.getMin(selected));
-        this.maximumTextField.setText(this.controller.getMax(selected));
+        this.minimumTextField.setText(getController().getMin(selected));
+        this.maximumTextField.setText(getController().getMax(selected));
         this.weightNoisePanel.setEnabled(selected.getVariable().isWeight());
         this.percentageLabel.setEnabled(selected.getVariable().isWeight());
         this.percentageTextField.setEnabled(selected.getVariable().isWeight());
@@ -105,7 +100,7 @@ public class ModifyNumericalVariablesView extends DialogBase {
      *
      */
     public void makeVariablesTable() {
-        this.controller.setVariablesData();
+        getController().setVariablesData();
 
         TableModel variablesTableModel = new DefaultTableModel(this.model.getVariablesData(), this.model.getVariablesColumnNames()) {
             @Override
@@ -158,7 +153,7 @@ public class ModifyNumericalVariablesView extends DialogBase {
         setValuesInModel();
         if (valueEntered()) {
             ModifyNumericalVariablesSpec selected = getModifyNumericalVariablesSpec();
-            String message = this.controller.getWarningMessage(selected,
+            String message = getController().getWarningMessage(selected,
                     this.bottomValueTextField.getText(),
                     this.topValueTextField.getText(),
                     this.bottomCodingReplacementTextField.getText(),
@@ -166,12 +161,12 @@ public class ModifyNumericalVariablesView extends DialogBase {
                     this.roundingBaseTextField.getText(),
                     this.percentageTextField.getText());
             if (!message.equals("")) {
-                JOptionPane.showMessageDialog(null, message);
+                showMessage(message);
                 this.variablesTable.getSelectionModel().setSelectionInterval(this.selectedRow, this.selectedRow);
             } else {
                 valid = true;
                 setModified(true);
-                this.controller.apply(getModifyNumericalVariablesSpec());
+                getController().apply(getModifyNumericalVariablesSpec());
                 this.selectedRow = this.variablesTable.getSelectedRow();
             }
         } else {
@@ -514,16 +509,11 @@ public class ModifyNumericalVariablesView extends DialogBase {
 
     private void closeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_closeButtonActionPerformed
         if (valueEntered() && valueChanged()) {
-            if (JOptionPane.showConfirmDialog(this, "Do you want to apply?", "Mu Argus", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
-                if (checkValidAnswer()) {
-                    this.controller.close();
-                }
-            } else {
-                this.controller.close();
+            if (showConfirmDialog("Do you want to apply?")) {
+                checkValidAnswer();
             }
-        } else {
-            this.controller.close();
         }
+        getController().close();
     }//GEN-LAST:event_closeButtonActionPerformed
 
     private void applyButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_applyButtonActionPerformed

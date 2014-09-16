@@ -14,9 +14,8 @@ import muargus.model.VariableMu;
  *
  * @author ambargus
  */
-public class ShowTableCollectionView extends DialogBase {
+public class ShowTableCollectionView extends DialogBase<ShowTableCollectionController> {
 
-    ShowTableCollectionController controller;
     TableCollection model;
     private DefaultComboBoxModel variableListModel;
     private TableModel tableModel;
@@ -32,10 +31,9 @@ public class ShowTableCollectionView extends DialogBase {
      * @param controller the controller of this view.
      */
     public ShowTableCollectionView(java.awt.Frame parent, boolean modal, ShowTableCollectionController controller) {
-        super(parent, modal);
+        super(parent, modal, controller);
         initComponents();
         setLocationRelativeTo(null);
-        this.controller = controller;
         this.table.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         this.selectVariableComboBox.setRenderer(new VariableNameCellRenderer());
     }
@@ -65,8 +63,8 @@ public class ShowTableCollectionView extends DialogBase {
         this.variableListModel.setSelectedItem(all);
         this.selectVariableComboBox.setModel(this.variableListModel);
 
-        this.controller.setAllTables();
-        this.model.setData(this.controller.getData(this.model.getAllTables()));
+        getController().setAllTables();
+        this.model.setData(getController().getData(this.model.getAllTables()));
         updateTable();
     }
 
@@ -74,7 +72,7 @@ public class ShowTableCollectionView extends DialogBase {
      * Updates the values of the Table by resetting the table with new values.
      */
     public void updateTable() {
-        this.controller.setSubData(this.model.isShowAllTables());
+        getController().setSubData(this.model.isShowAllTables());
         this.tableModel = new DefaultTableModel(this.model.getSubdata(), this.model.getColumnNames()) {
             @Override
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -176,7 +174,7 @@ public class ShowTableCollectionView extends DialogBase {
     }// </editor-fold>//GEN-END:initComponents
 
     private void closeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_closeButtonActionPerformed
-        this.controller.close();
+        getController().close();
     }//GEN-LAST:event_closeButtonActionPerformed
 
     private void showAllTablesCheckBoxStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_showAllTablesCheckBoxStateChanged

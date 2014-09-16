@@ -19,9 +19,8 @@ import muargus.model.MetadataMu;
  *
  * @author ambargus
  */
-public class MakeProtectedFileView extends DialogBase {
+public class MakeProtectedFileView extends DialogBase<MakeProtectedFileController> {
 
-    MakeProtectedFileController controller;
     ProtectedFile model;
     private TableModel tableModel;
 
@@ -33,9 +32,8 @@ public class MakeProtectedFileView extends DialogBase {
      * @param controller
      */
     public MakeProtectedFileView(java.awt.Frame parent, boolean modal, MakeProtectedFileController controller) {
-        super(parent, modal);
+        super(parent, modal, controller);
         initComponents();
-        this.controller = controller;
         //this.model = this.controller.getModel();
         this.setLocationRelativeTo(null);
         this.suppressionWeightTable.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -394,7 +392,7 @@ public class MakeProtectedFileView extends DialogBase {
     private void makeFileButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_makeFileButtonActionPerformed
         String filePath = showFileDialog("Make safe micro file" , true, new String[] {"Safefile (*.saf)|saf"});
         if (filePath != null) {
-            controller.makeFile(new File(filePath));
+            getController().makeFile(new File(filePath));
         }
     }//GEN-LAST:event_makeFileButtonActionPerformed
 

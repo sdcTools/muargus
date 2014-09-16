@@ -4,7 +4,6 @@
  */
 package muargus.view;
 
-import javax.swing.JOptionPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -21,10 +20,9 @@ import muargus.model.VariableMu;
  *
  * @author ambargus
  */
-public class PramSpecificationView extends DialogBase {
+public class PramSpecificationView extends DialogBase<PramSpecificationController> {
 
-    PramSpecificationController controller;
-    PramSpecification model;
+    private PramSpecification model;
     private TableModel codesTableModel;
     private final int[] variablesColumnWidth = {20, 30, 80};
     private final int[] codesColumnWidth = {30, 70, 30};
@@ -37,10 +35,9 @@ public class PramSpecificationView extends DialogBase {
      * @param controller
      */
     public PramSpecificationView(java.awt.Frame parent, boolean modal, PramSpecificationController controller) {
-        super(parent, modal);
+        super(parent, modal, controller);
         initComponents();
         this.setLocationRelativeTo(null);
-        this.controller = controller;
         this.variablesTable.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         this.codesTable.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     }
@@ -53,8 +50,8 @@ public class PramSpecificationView extends DialogBase {
         this.model = getMetadata().getCombinations().getPramSpecification();
         this.pramOptionsPanel.setVisible(false); // this option is available for future options using global recode
         this.bandwidthComboBox.setEnabled(this.bandwidthCheckBox.isSelected());
-        this.controller.makePramVariableSpecs();
-        this.controller.setBandwidth();
+        getController().makePramVariableSpecs();
+        getController().setBandwidth();
 
         makeVariablesTable();
         variablesSelectionChanged();
@@ -65,7 +62,7 @@ public class PramSpecificationView extends DialogBase {
      *
      */
     public void makeVariablesTable() {
-        this.controller.makeVariablesData();
+        getController().makeVariablesData();
 
         TableModel variablesTableModel = new DefaultTableModel(this.model.getVariablesData(), this.model.getVariablesColumnNames()) {
             @Override
@@ -97,7 +94,7 @@ public class PramSpecificationView extends DialogBase {
      * @return
      */
     public PramVariableSpec getSelectedPramVariableSpec() {
-        return this.controller.getSelectedPramVarSpec(
+        return getController().getSelectedPramVarSpec(
                 (String) this.variablesTable.getValueAt(this.variablesTable.getSelectedRow(), 2));
     }
 
@@ -123,7 +120,7 @@ public class PramSpecificationView extends DialogBase {
             selectedRow = 0;
         }
 
-        String[][] codesData = this.controller.getCodesData(getSelectedPramVariableSpec().getVariable().getName());
+        String[][] codesData = getController().getCodesData(getSelectedPramVariableSpec().getVariable().getName());
 
         this.codesTableModel = new DefaultTableModel(codesData, this.model.getCodesColumnNames()) {
             @Override
@@ -462,7 +459,7 @@ public class PramSpecificationView extends DialogBase {
     }// </editor-fold>//GEN-END:initComponents
 
     private void closeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_closeButtonActionPerformed
-        this.controller.close();
+        getController().close();
     }//GEN-LAST:event_closeButtonActionPerformed
 
     private void bandwidthCheckBoxStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_bandwidthCheckBoxStateChanged
@@ -471,7 +468,7 @@ public class PramSpecificationView extends DialogBase {
     }//GEN-LAST:event_bandwidthCheckBoxStateChanged
 
     private void applyButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_applyButtonActionPerformed
-        if (!this.controller.areAllProbabilitiesZero(getSelectedPramVariableSpec())) {
+        if (!getController().areAllProbabilitiesZero(getSelectedPramVariableSpec())) {
             getSelectedPramVariableSpec().setApplied(true);
             getSelectedPramVariableSpec().setBandwidth(Integer.parseInt((String) this.bandwidthComboBox.getSelectedItem()));
             getSelectedPramVariableSpec().setUseBandwidth(this.bandwidthCheckBox.isSelected());
@@ -479,10 +476,9 @@ public class PramSpecificationView extends DialogBase {
             this.variablesTable.setValueAt(getSelectedPramVariableSpec().getAppliedText(), selected, 0);
             this.variablesTable.setValueAt(getSelectedPramVariableSpec().getBandwidthText(), selected, 1);
             this.variablesTable.setValueAt(getSelectedPramVariableSpec().getVariable().getName(), selected, 2);
-            this.controller.apply(getSelectedPramVariableSpec());
+            getController().apply(getSelectedPramVariableSpec());
         } else {
-            String message = "All probabilities are zero";
-            JOptionPane.showMessageDialog(null, message);
+            showMessage("All probabilities are zero");
         }
     }//GEN-LAST:event_applyButtonActionPerformed
 

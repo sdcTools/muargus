@@ -14,7 +14,7 @@ public class GenerateParameters extends DialogBase {
      * Creates new form GenerateParameters
      */
     public GenerateParameters(java.awt.Frame parent, boolean modal) {
-        super(parent, modal);
+        super(parent, modal, null);
         initComponents();
         this.setLocationRelativeTo(null);
     }

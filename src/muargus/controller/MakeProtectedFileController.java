@@ -10,8 +10,8 @@ import java.util.ArrayList;
 import muargus.model.MetadataMu;
 import muargus.model.Combinations;
 import muargus.model.MicroaggregationSpec;
+import muargus.model.ProtectedFile;
 import muargus.model.RankSwappingSpec;
-import muargus.model.ReplacementFile;
 import muargus.model.ReplacementSpec;
 import muargus.model.VariableMu;
 import muargus.view.MakeProtectedFileView;
@@ -20,7 +20,7 @@ import muargus.view.MakeProtectedFileView;
  *
  * @author ambargus
  */
-public class MakeProtectedFileController extends ControllerBase {
+public class MakeProtectedFileController extends ControllerBase<ProtectedFile> {
 
     private final MetadataMu metadata;
     private boolean fileCreated;

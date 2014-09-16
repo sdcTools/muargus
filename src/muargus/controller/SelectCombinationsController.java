@@ -17,9 +17,8 @@ import muargus.view.SelectCombinationsView;
  *
  * @author ambargus
  */
-public class SelectCombinationsController extends  ControllerBase {
+public class SelectCombinationsController extends  ControllerBase<Combinations> {
     
-    private final Combinations modelClone;
     private final MetadataMu metadata;
         
     private static final Logger logger = Logger.getLogger(SelectCombinationsController.class.getName());
@@ -29,10 +28,10 @@ public class SelectCombinationsController extends  ControllerBase {
         this.metadata = metadata;
         
         getSettings();
-        this.modelClone = new Combinations(this.metadata.getCombinations());
+        setModel(new Combinations(this.metadata.getCombinations()));
 
         getView().setMetadata(this.metadata); 
-        getSelectCombinationsView().setModel(this.modelClone); // the view gets a copy of the current Combinations
+        getSelectCombinationsView().setModel(getModel()); // the view gets a copy of the current Combinations
     }
     
     private SelectCombinationsView getSelectCombinationsView() {
@@ -53,7 +52,7 @@ public class SelectCombinationsController extends  ControllerBase {
     public void calculateTables() throws ArgusException {
         getSelectCombinationsView().enableCalculateTables(false);
         saveSettings();
-        this.metadata.setCombinations(this.modelClone);
+        this.metadata.setCombinations(getModel());
         CalculationService service = MuARGUS.getCalculationService();
         service.setMetadata(this.metadata);
         service.exploreFile(this);        

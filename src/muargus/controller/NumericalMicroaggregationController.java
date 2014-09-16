@@ -14,8 +14,7 @@ import muargus.view.NumericalMicroaggregationView;
  *
  * @author ambargus
  */
-public class NumericalMicroaggregationController extends ControllerBase {
-    private NumericalMicroaggregation model;
+public class NumericalMicroaggregationController extends ControllerBase<NumericalMicroaggregation> {
     private MetadataMu metadata;
 
     public NumericalMicroaggregationController(java.awt.Frame parentView, MetadataMu metadata) {

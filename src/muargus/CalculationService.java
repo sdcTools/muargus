@@ -680,12 +680,12 @@ public class CalculationService {
         }
     }
 
-    public Double[] getMinMax(VariableMu variable) {
+    public double[] getMinMax(VariableMu variable) {
         int varIndex = getVariables().indexOf(variable) + 1;
         double[] min = new double[1];
         double[] max = new double[1];
         c.GetMinMaxValue(varIndex, min, max);
-        Double[] min_max = {min[0], max[0]};
+        double[] min_max = {min[0], max[0]};
         return min_max;
     }
 

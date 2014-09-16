@@ -10,7 +10,6 @@ import argus.model.ArgusException;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import muargus.MuARGUS;
 import muargus.model.MetadataMu;
 import muargus.model.NumericalRankSwapping;
 import muargus.model.RankSwappingSpec;
@@ -24,26 +23,26 @@ import org.apache.commons.io.FileUtils;
  *
  * @author ambargus
  */
-public class NumericalRankSwappingController extends ControllerBase {
-    private NumericalRankSwapping model;
-    private MetadataMu metadata;
+public class NumericalRankSwappingController extends ControllerBase<NumericalRankSwapping> {
+    private final MetadataMu metadata;
 
     public NumericalRankSwappingController(java.awt.Frame parentView, MetadataMu metadata) {
         super.setView(new NumericalRankSwappingView(parentView, true, this));
         this.metadata = metadata;
-        setModel();
+        fillModel();
         getView().setMetadata(metadata);
     }
     
-    private void setModel() {
-        this.model = metadata.getCombinations().getNumericalRankSwapping();
-        if (this.model.getVariables().isEmpty()) {
+    private void fillModel() {
+        NumericalRankSwapping model = metadata.getCombinations().getNumericalRankSwapping();
+        if (model.getVariables().isEmpty()) {
             for (VariableMu variable : this.metadata.getVariables()) {
                 if (variable.isNumeric()) {
-                    this.model.getVariables().add(variable);
+                    model.getVariables().add(variable);
                 }
             }
         }
+        setModel(model);
     }
     
     /**
@@ -57,14 +56,14 @@ public class NumericalRankSwappingController extends ControllerBase {
     protected void doNextStep(boolean success) {
             //TODO: de catalaan
             //for now: just copy the file
-            RankSwappingSpec swapping = this.model.getRankSwappings().get(this.model.getRankSwappings().size()-1);
+            RankSwappingSpec swapping = getModel().getRankSwappings().get(getModel().getRankSwappings().size()-1);
             try {
                 FileUtils.copyFile(new File(swapping.getReplacementFile().getInputFilePath()), 
                         new File(swapping.getReplacementFile().getOutputFilePath()));
                 getView().showMessage("RankSwapping successfully completed");
                 getView().setProgress(0);
                 getView().showStepName("");
-                getNumericalRankSwappingView().updateVariableRows(this.model.getRankSwappings().get(this.model.getRankSwappings().size()-1));
+                getNumericalRankSwappingView().updateVariableRows(getModel().getRankSwappings().get(getModel().getRankSwappings().size()-1));
             }
             catch (IOException ex) {
                 getView().showErrorMessage(new ArgusException(ex.getMessage()));
@@ -95,14 +94,14 @@ public class NumericalRankSwappingController extends ControllerBase {
         }
         ArrayList<RankSwappingSpec> swappingsToUndo = new ArrayList<>();
         for (VariableMu variable : selected) {
-            for (RankSwappingSpec swapping : this.model.getRankSwappings()) {
+            for (RankSwappingSpec swapping : getModel().getRankSwappings()) {
                 if (swapping.getVariables().contains(variable) && !swappingsToUndo.contains(swapping)) {
                     swappingsToUndo.add(swapping);
                 }
             }
         }
         for (RankSwappingSpec swapping : swappingsToUndo) {
-            this.model.getRankSwappings().remove(swapping);
+            getModel().getRankSwappings().remove(swapping);
             this.metadata.getReplacementSpecs().remove(swapping);
             getNumericalRankSwappingView().updateVariableRows(swapping);
             //TODO: remove temporary files?
@@ -120,7 +119,7 @@ public class NumericalRankSwappingController extends ControllerBase {
             RankSwappingSpec rankSwapping = new RankSwappingSpec(getNumericalRankSwappingView().getPercentage());
             rankSwapping.getVariables().addAll(selectedVariables);
             rankSwapping.setReplacementFile(new ReplacementFile("RankSwapping"));
-            this.model.getRankSwappings().add(rankSwapping);
+            getModel().getRankSwappings().add(rankSwapping);
             this.metadata.getReplacementSpecs().add(rankSwapping);
             getCalculationService().makeReplacementFile(this);
         }

@@ -13,10 +13,8 @@ import muargus.view.SpecifyMetadataView;
  *
  * @author ambargus
  */
-public class SpecifyMetadataController extends ControllerBase {
+public class SpecifyMetadataController extends ControllerBase<MetadataMu> {
 
-    //SpecifyMetadataView view;
-    private MetadataMu metadata;
     private final MetadataMu metadataClone;
 
     private static final Logger logger = Logger.getLogger(SpecifyMetadataController.class.getName());
@@ -28,7 +26,7 @@ public class SpecifyMetadataController extends ControllerBase {
      */
     public SpecifyMetadataController(java.awt.Frame parentView, MetadataMu metadata) {
         super.setView(new SpecifyMetadataView(parentView, true, this));
-        this.metadata = metadata;
+        setModel(metadata);
         this.metadataClone = new MetadataMu(metadata);
         getView().setMetadata(this.metadataClone);
     }
@@ -44,14 +42,14 @@ public class SpecifyMetadataController extends ControllerBase {
     }
 
     private boolean areTablesSpecified() {
-        Combinations combinations = this.metadata.getCombinations();
+        Combinations combinations = getModel().getCombinations();
         return (combinations != null && combinations.getTables().size() > 0);
     }
     /**
      *
      */
     public void ok() {
-        if (!this.metadata.equals(this.metadataClone)) {
+        if (!getModel().equals(this.metadataClone)) {
             try {
                 this.metadataClone.verify();
             } catch (ArgusException ex) {
@@ -60,7 +58,7 @@ public class SpecifyMetadataController extends ControllerBase {
             }
 
             String message;
-            boolean significantDifference = areTablesSpecified() && this.metadata.significantDifference(this.metadataClone);
+            boolean significantDifference = areTablesSpecified() && getModel().significantDifference(this.metadataClone);
             if (significantDifference)
             {
                 message = "";
@@ -71,16 +69,16 @@ public class SpecifyMetadataController extends ControllerBase {
                 //this.metadata.setCombinations(null);
                 //Not necessary, since the clone doesnt contain the combinations
             } else {
-                this.metadataClone.setCombinations(this.metadata.getCombinations());
+                this.metadataClone.setCombinations(getModel().getCombinations());
                 message = "Metadata has been changed. ";
             }
 
-            this.metadata = this.metadataClone;
+            setModel(this.metadataClone);
             if (getView().showConfirmDialog(message + "Save changes to file?")) {
                 String filePath = getView().showFileDialog("Save ARGUS metadata", true, new String[] {"ARGUS metadata file (*.rda)|rda"});
                 if (filePath != null) {
                     try {
-                        this.metadata.write(new File(filePath), true);
+                        getModel().write(new File(filePath), true);
                     }
                     catch (ArgusException ex) {
                         getView().showErrorMessage(ex);
@@ -107,14 +105,14 @@ public class SpecifyMetadataController extends ControllerBase {
     }
 
     public MetadataMu getMetadata() {
-        return this.metadata;
+        return getModel();
     }
 
     /**
      *
      */
     public void cancel() {
-        if (!this.metadata.equals(this.metadataClone)) {
+        if (!getMetadata().equals(this.metadataClone)) {
             if (!getView().showConfirmDialog("All changes will be discarded. Are you sure?")) {
                 return;
             }

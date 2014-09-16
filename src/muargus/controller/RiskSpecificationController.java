@@ -21,11 +21,10 @@ import muargus.view.TablePickView;
  *
  * @author ambargus
  */
-public class RiskSpecificationController extends ControllerBase {
+public class RiskSpecificationController extends ControllerBase<RiskSpecification> {
     
     private final int MAX_ITERATIONS = 10;
     
-    private final RiskSpecification model;
     private final MetadataMu metadata;
     private final java.awt.Frame parentView; 
     
@@ -33,9 +32,9 @@ public class RiskSpecificationController extends ControllerBase {
         this.parentView = parentView;
         super.setView(new RiskSpecificationView(parentView, true, this, metadata.isHouseholdData()));
         this.metadata = metadata;
-        this.model = pickRiskSpecification();
+        setModel(pickRiskSpecification());
         init();
-        ((RiskSpecificationView)this.getView()).setRiskTable(this.model.getRiskTable());
+        ((RiskSpecificationView)this.getView()).setRiskTable(getModel().getRiskTable());
         this.getView().setMetadata(this.metadata);
     }
     
@@ -83,7 +82,7 @@ public class RiskSpecificationController extends ControllerBase {
     }
 
     private void init() {
-        boolean initialize = this.model.getClasses().isEmpty();
+        boolean initialize = getModel().getClasses().isEmpty();
         fillModelHistogramData(false);
         if (initialize) {
             initializeRiskThreshold();
@@ -94,9 +93,9 @@ public class RiskSpecificationController extends ControllerBase {
     
     public void fillModelHistogramData(boolean cumulative) {
         try {
-            double maxReident = getCalculationService().fillHistogramData(this.model.getRiskTable(), 
-                    this.model.getClasses(), cumulative);
-            this.model.setMaxReidentRate(maxReident);
+            double maxReident = getCalculationService().fillHistogramData(getModel().getRiskTable(), 
+                    getModel().getClasses(), cumulative);
+            getModel().setMaxReidentRate(maxReident);
         }
         catch (ArgusException ex) {
             getView().showErrorMessage(ex);
@@ -111,18 +110,18 @@ public class RiskSpecificationController extends ControllerBase {
     }
     
     private void initializeRiskThreshold() {
-        ArrayList<RiskModelClass> classes = this.model.getClasses();
+        ArrayList<RiskModelClass> classes = getModel().getClasses();
         double min = Math.log(classes.get(0).getLeftValue());
         double max = Math.log(classes.get(classes.size()-1).getRightValue());
-        this.model.setRiskThreshold(Math.exp((min + max)/2));
+        getModel().setRiskThreshold(Math.exp((min + max)/2));
     }
     
     public void calculateByRiskThreshold() {
         try {
-            this.model.setUnsafeRecords(getCalculationService().calculateUnsafe(
-                    this.model.getRiskTable(), this.model.getRiskThreshold(), this.metadata.isHouseholdData()));
-            this.model.setReidentRateThreshold(getCalculationService().calculateReidentRate(
-                    this.model.getRiskTable(), this.model.getRiskThreshold()));
+            getModel().setUnsafeRecords(getCalculationService().calculateUnsafe(
+                    getModel().getRiskTable(), getModel().getRiskThreshold(), this.metadata.isHouseholdData()));
+            getModel().setReidentRateThreshold(getCalculationService().calculateReidentRate(
+                    getModel().getRiskTable(), getModel().getRiskThreshold()));
         }
         catch (ArgusException ex) {
             getView().showErrorMessage(ex);
@@ -131,10 +130,10 @@ public class RiskSpecificationController extends ControllerBase {
     
     public void calculateByUnsafeRecords() {
         try {
-            this.model.setRiskThreshold(getCalculationService().calculateRiskThreshold(
-                    this.model.getRiskTable(), this.model.getUnsafeRecords(), this.metadata.isHouseholdData()));
-            this.model.setReidentRateThreshold(getCalculationService().calculateReidentRate(
-                    this.model.getRiskTable(), this.model.getRiskThreshold()));
+            getModel().setRiskThreshold(getCalculationService().calculateRiskThreshold(
+                    getModel().getRiskTable(), getModel().getUnsafeRecords(), this.metadata.isHouseholdData()));
+            getModel().setReidentRateThreshold(getCalculationService().calculateReidentRate(
+                    getModel().getRiskTable(), getModel().getRiskThreshold()));
         }
         catch (ArgusException ex) {
             getView().showErrorMessage(ex);
@@ -143,23 +142,23 @@ public class RiskSpecificationController extends ControllerBase {
     }
     
     public void calculateByReidentThreshold(double soughtValue, int nDecimals) throws ArgusException {
-        if (soughtValue > this.model.getMaxReidentRate() ||
+        if (soughtValue > getModel().getMaxReidentRate() ||
                 soughtValue < 0) {
             throw new ArgusException("Re ident rate threshold should be between 0 and the maximum rate");
         }
         double r0 = 0;
-        double r1 = this.model.getMaxRisk();
+        double r1 = getModel().getMaxRisk();
         double t0 = 0;
-        double t1 = this.model.getMaxReidentRate();
+        double t1 = getModel().getMaxReidentRate();
         
-        double value = this.model.getReidentRateThreshold();
-        double risk = this.model.getRiskThreshold();
+        double value = getModel().getReidentRateThreshold();
+        double risk = getModel().getRiskThreshold();
         int iteration = 0;
         double epsilon = Math.exp(-Math.log(10)*nDecimals);
         while (iteration < MAX_ITERATIONS) {
             if (Math.abs(value - soughtValue) < epsilon)
                 break;
-            value = getCalculationService().calculateReidentRate(this.model.getRiskTable(), risk);
+            value = getCalculationService().calculateReidentRate(getModel().getRiskTable(), risk);
             if (value > soughtValue) {
                 r1 = risk;
                 risk = r0 + (risk-r0) * (soughtValue - t0)/(value - t0);
@@ -172,8 +171,8 @@ public class RiskSpecificationController extends ControllerBase {
             }
             iteration++;
         }
-        this.model.setReidentRateThreshold(soughtValue);
-        this.model.setRiskThreshold(risk);
+        getModel().setReidentRateThreshold(soughtValue);
+        getModel().setRiskThreshold(risk);
     }
     
     

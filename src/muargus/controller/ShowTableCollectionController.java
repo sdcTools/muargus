@@ -11,9 +11,8 @@ import muargus.view.ShowTableCollectionView;
  *
  * @author ambargus
  */
-public class ShowTableCollectionController extends ControllerBase {
+public class ShowTableCollectionController extends ControllerBase<TableCollection> {
 
-    private final TableCollection model;
     private final MetadataMu metadata;
 
     /**
@@ -27,7 +26,7 @@ public class ShowTableCollectionController extends ControllerBase {
     public ShowTableCollectionController(java.awt.Frame parentView, MetadataMu metadata) {
         super.setView(new ShowTableCollectionView(parentView, true, this));
         this.metadata = metadata;
-        this.model = metadata.getCombinations().getTableCollection();
+        setModel(metadata.getCombinations().getTableCollection());
         getView().setMetadata(this.metadata);
     }
 
@@ -51,10 +50,10 @@ public class ShowTableCollectionController extends ControllerBase {
         setColumnNames();
 
         ArrayList<TableMu> allTables = new ArrayList<>();
-        for (int i = 1; i <= this.model.getDimensions(); i++) {
+        for (int i = 1; i <= getModel().getDimensions(); i++) {
             allTables.addAll(getCalculationService().getTableUnsafeCombinations(i));
         }
-        this.model.setAllTables(allTables);
+        getModel().setAllTables(allTables);
     }
 
     /**
@@ -64,12 +63,12 @@ public class ShowTableCollectionController extends ControllerBase {
      */
     public void setDimensions() {
         int dimensions = 0;
-        for (TableMu t : this.model.getOriginalTables()) {
+        for (TableMu t : getModel().getOriginalTables()) {
             if (t.getVariables().size() > dimensions) {
                 dimensions = t.getVariables().size();
             }
         }
-        this.model.setDimensions(dimensions);
+        getModel().setDimensions(dimensions);
     }
 
     /**
@@ -77,12 +76,12 @@ public class ShowTableCollectionController extends ControllerBase {
      * column names for each dimension and sets this in the model.
      */
     public void setColumnNames() {
-        String[] columnNames = new String[this.model.getDimensions() + 1];
+        String[] columnNames = new String[getModel().getDimensions() + 1];
         columnNames[0] = "# unsafe cells";
         for (int i = 1; i < columnNames.length; i++) {
             columnNames[i] = "Var " + i;
         }
-        this.model.setColumnNames(columnNames);
+        getModel().setColumnNames(columnNames);
     }
 
     /**
@@ -98,7 +97,7 @@ public class ShowTableCollectionController extends ControllerBase {
      * table
      */
     public String[][] getData(ArrayList<TableMu> tables) {
-        String[][] data = new String[tables.size()][this.model.getColumnNames().length];
+        String[][] data = new String[tables.size()][getModel().getColumnNames().length];
         for (int i = 0; i < tables.size(); i++) {
             TableMu t = tables.get(i);
             data[i][0] = Integer.toString(t.getNrOfUnsafeCombinations());
@@ -121,16 +120,16 @@ public class ShowTableCollectionController extends ControllerBase {
      * be shown or only the tables that have unsafe combinations (!= 0)
      */
     public void setSubData(boolean showAllTables) {
-        if (this.model.getSelectedVariable().getName().equals("all") && showAllTables) {
-            this.model.setSubdata(this.model.getData());
+        if (getModel().getSelectedVariable().getName().equals("all") && showAllTables) {
+            getModel().setSubdata(getModel().getData());
         } else {
             ArrayList<TableMu> tables = new ArrayList<>();
-            for (TableMu t : this.model.getAllTables()) {
-                if (this.model.getSelectedVariable().getName().equals("all")) {
+            for (TableMu t : getModel().getAllTables()) {
+                if (getModel().getSelectedVariable().getName().equals("all")) {
                     if (t.getNrOfUnsafeCombinations() > 0) {
                         tables.add(t);
                     }
-                } else if (t.getVariables().contains(this.model.getSelectedVariable())) {
+                } else if (t.getVariables().contains(getModel().getSelectedVariable())) {
                     if (showAllTables) {
                         tables.add(t);
                     } else {
@@ -140,7 +139,7 @@ public class ShowTableCollectionController extends ControllerBase {
                     }
                 }
             }
-            this.model.setSubdata(getData(tables));
+            getModel().setSubdata(getData(tables));
         }
     }
 }

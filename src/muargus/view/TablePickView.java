@@ -22,7 +22,7 @@ public class TablePickView extends DialogBase {
      * Creates new form TablePickView
      */
     public TablePickView(java.awt.Frame parent, boolean modal) {
-        super(parent, modal);
+        super(parent, modal, null);
         setLocationRelativeTo(null);
         initComponents();
     }

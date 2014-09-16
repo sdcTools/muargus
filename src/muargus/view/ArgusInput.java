@@ -26,7 +26,7 @@ public class ArgusInput extends DialogBase {
      * @param isThreshold
      */
     public ArgusInput(java.awt.Frame parent, boolean modal, Combinations model, boolean isThreshold) {
-        super(parent, modal);
+        super(parent, modal, null);
         this.isThreshold = isThreshold;
         initComponents();
         textField.setText(model.getThreshold());
