@@ -43,6 +43,13 @@ public class ControllerBase implements PropertyChangeListener {
         }
     }
     
+    /**
+     * Opens the view by setting its visibility to true.
+     */
+    public void showView() {
+        getView().setVisible(true);
+    }
+    
     protected CalculationService getCalculationService() {
         return muargus.MuARGUS.getCalculationService();
     }

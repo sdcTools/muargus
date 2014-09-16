@@ -38,14 +38,6 @@ public class MakeProtectedFileController extends ControllerBase {
         getView().setMetadata(this.metadata);
     }
 
-    public void showView() {
-        this.getView().setVisible(true);
-    }
-
-//    public ProtectedFile getModel() {
-//        return this.model;
-//    }
-
     
     /**
      *

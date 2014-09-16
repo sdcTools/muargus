@@ -34,10 +34,6 @@ public class SelectCombinationsController extends  ControllerBase {
         getSelectCombinationsView().setModel(this.modelClone); // the view gets a copy of the current Combinations
     }
     
-    public void showView() {
-        getView().setVisible(true);
-    }
-    
     private SelectCombinationsView getSelectCombinationsView() {
         return (SelectCombinationsView)getView();
     }

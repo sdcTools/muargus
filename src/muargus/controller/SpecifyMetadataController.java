@@ -15,9 +15,9 @@ import muargus.view.SpecifyMetadataView;
  *
  * @author ambargus
  */
-public class SpecifyMetadataController {
+public class SpecifyMetadataController extends ControllerBase {
 
-    SpecifyMetadataView view;
+    //SpecifyMetadataView view;
     MetadataMu metadata;
     MetadataMu metadataClone;
     ArrayList<String> list;
@@ -28,18 +28,12 @@ public class SpecifyMetadataController {
      *
      * @param parentView
      * @param metadata
-     * @param controller
      */
     public SpecifyMetadataController(java.awt.Frame parentView, MetadataMu metadata) {
-        this.view = new SpecifyMetadataView(parentView, true, this);
+        super.setView(new SpecifyMetadataView(parentView, true, this));
         this.metadata = metadata;
         this.metadataClone = new MetadataMu(metadata);
-        this.view.setMetadataMu(this.metadataClone);
-    }
-
-    public void showView() {
-        this.view.setVisible(true);
-
+        getView().setMetadata(this.metadataClone);
     }
 
     /**
@@ -64,7 +58,7 @@ public class SpecifyMetadataController {
             try {
                 this.metadataClone.verify();
             } catch (ArgusException ex) {
-                view.showErrorMessage(ex);
+                getView().showErrorMessage(ex);
                 return;
             }
 
@@ -73,7 +67,7 @@ public class SpecifyMetadataController {
             if (significantDifference)
             {
                 message = "";
-                if (!view.showConfirmDialog("Changing the Metadata will result in losing already specified tables.\n"
+                if (!getView().showConfirmDialog("Changing the Metadata will result in losing already specified tables.\n"
                         + "Do you wish to continue?")) {
                     return;
                 }
@@ -85,14 +79,14 @@ public class SpecifyMetadataController {
             }
 
             this.metadata = this.metadataClone;
-            if (view.showConfirmDialog(message + "Save changes to file?")) {
-                String filePath = view.showFileDialog("Save ARGUS metadata", true, new String[] {"ARGUS metadata file (*.rda)|rda"});
+            if (getView().showConfirmDialog(message + "Save changes to file?")) {
+                String filePath = getView().showFileDialog("Save ARGUS metadata", true, new String[] {"ARGUS metadata file (*.rda)|rda"});
                 if (filePath != null) {
                     try {
                         this.metadata.write(new File(filePath), true);
                     }
                     catch (ArgusException ex) {
-                        view.showErrorMessage(ex);
+                        getView().showErrorMessage(ex);
                     }
                 }
 
@@ -112,7 +106,7 @@ public class SpecifyMetadataController {
 //                }
             }
         }
-        this.view.setVisible(false);
+        this.getView().setVisible(false);
     }
 
     public MetadataMu getMetadata() {
@@ -124,11 +118,11 @@ public class SpecifyMetadataController {
      */
     public void cancel() {
         if (!this.metadata.equals(this.metadataClone)) {
-            if (!view.showConfirmDialog("All changes will be discarded. Are you sure?")) {
+            if (!getView().showConfirmDialog("All changes will be discarded. Are you sure?")) {
                 return;
             }
         }
-        this.view.setVisible(false);
+        getView().setVisible(false);
     }
 
 }

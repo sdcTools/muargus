@@ -21,42 +21,23 @@ import muargus.view.ModifyNumericalVariablesView;
  *
  * @author ambargus
  */
-public class ModifyNumericalVariablesController {
+public class ModifyNumericalVariablesController extends ControllerBase {
 
-    ModifyNumericalVariablesView view;
     ModifyNumericalVariables model;
-    MetadataMu metadataMu;
-    CalculationService calculationService;
+    MetadataMu metadata;
 
-    public ModifyNumericalVariablesController(java.awt.Frame parentView, MetadataMu metadataMu) {
-        this.view = new ModifyNumericalVariablesView(parentView, true, this);
-        this.metadataMu = metadataMu;
-        this.calculationService = MuARGUS.getCalculationService();
-        this.view.setMetadataMu(this.metadataMu);
-    }
-
-    /**
-     * Opens the view by setting its visibility to true.
-     */
-    public void showView() {
-        this.view.setVisible(true);
+    public ModifyNumericalVariablesController(java.awt.Frame parentView, MetadataMu metadata) {
+        super.setView(new ModifyNumericalVariablesView(parentView, true, this));
+        this.metadata = metadata;
+        this.model = metadata.getCombinations().getModifyNumericalVariables();
+        getView().setMetadata(this.metadata);
     }
 
     /**
      * Closes the view by setting its visibility to false.
      */
     public void close() {
-        this.view.setVisible(false);
-    }
-
-    /**
-     * Fuction for setting the model. This function is used by the view after
-     * setting the model itself
-     *
-     * @param model the model class of the ShowTableCollection screen
-     */
-    public void setModel(ModifyNumericalVariables model) {
-        this.model = model;
+        getView().setVisible(false);
     }
 
     /**
@@ -64,7 +45,7 @@ public class ModifyNumericalVariablesController {
      */
     public void setModifyNumericalVariablesSpecs() {
         ArrayList<ModifyNumericalVariablesSpec> specs = new ArrayList<>();
-        for (VariableMu v : this.metadataMu.getVariables()) {
+        for (VariableMu v : this.metadata.getVariables()) {
             if (v.isNumeric()) {
                 ModifyNumericalVariablesSpec spec = new ModifyNumericalVariablesSpec(v);
                 specs.add(spec);
@@ -87,7 +68,7 @@ public class ModifyNumericalVariablesController {
     }
 
     public Double[] getMinMax(VariableMu variable) {
-        Double[] min_max = this.calculationService.getMinMax(variable);
+        Double[] min_max = getCalculationService().getMinMax(variable);
         return min_max;
     }
 
@@ -204,19 +185,20 @@ public class ModifyNumericalVariablesController {
     public void apply(ModifyNumericalVariablesSpec selected) {
         try {
             if (!selected.getRoundingBase().equals(Double.NaN)) {
-                this.calculationService.setRounding(selected.getVariable(), selected.getRoundingBase(), selected.getVariable().getDecimals());
+                getCalculationService().setRounding(selected.getVariable(), selected.getRoundingBase(), selected.getVariable().getDecimals());
             }
             if (!selected.getTopValue().equals(Double.NaN)) {
-                this.calculationService.setTopBottomCoding(selected.getVariable(), true, selected.getTopValue(), selected.getTopReplacement());
+                getCalculationService().setTopBottomCoding(selected.getVariable(), true, selected.getTopValue(), selected.getTopReplacement());
             }
             if (!selected.getBottomValue().equals(Double.NaN)) {
-                this.calculationService.setTopBottomCoding(selected.getVariable(), false, selected.getBottomValue(), selected.getBottomReplacement());
+                getCalculationService().setTopBottomCoding(selected.getVariable(), false, selected.getBottomValue(), selected.getBottomReplacement());
             }
             if (!selected.getWeightNoisePercentage().equals(Double.NaN)) {
-                this.calculationService.setWeightNoise(selected.getVariable(), selected.getWeightNoisePercentage());
+                getCalculationService().setWeightNoise(selected.getVariable(), selected.getWeightNoisePercentage());
             }
         } catch (ArgusException ex) {
             System.out.println("error");
+            getView().showErrorMessage(ex);
             //Logger.getLogger(ModifyNumericalVariablesController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

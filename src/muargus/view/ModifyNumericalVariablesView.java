@@ -1,7 +1,5 @@
 package muargus.view;
 
-import java.lang.reflect.Array;
-import java.util.Arrays;
 import javax.swing.JOptionPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
@@ -19,7 +17,7 @@ import muargus.model.ModifyNumericalVariablesSpec;
  */
 public class ModifyNumericalVariablesView extends DialogBase {
 
-    MetadataMu metadataMu;
+    //MetadataMu metadataMu;
     ModifyNumericalVariablesController controller;
     ModifyNumericalVariables model;
     private final int[] variablesColumnWidth = {20, 80};
@@ -39,15 +37,10 @@ public class ModifyNumericalVariablesView extends DialogBase {
         this.variablesTable.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     }
 
-    public void setMetadataMu(MetadataMu metadataMu) {
-        this.metadataMu = metadataMu;
-        this.model = this.metadataMu.getCombinations().getModifyNumericalVariables();
-        this.controller.setModel(this.model);
-        initializeData();
-    }
-
+    @Override
     public void initializeData() {
-        if (this.metadataMu.getCombinations().getModifyNumericalVariables().getModifyNumericalVariablesSpec() == null) {
+        this.model = getMetadata().getCombinations().getModifyNumericalVariables();
+        if (this.model.getModifyNumericalVariablesSpec() == null) {
             this.controller.setModifyNumericalVariablesSpecs();
         }
         makeVariablesTable();
