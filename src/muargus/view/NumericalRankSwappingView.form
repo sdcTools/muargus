@@ -37,6 +37,8 @@
                           <EmptySpace min="10" pref="10" max="-2" attributes="0"/>
                           <Component id="stepNameLabel" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="32767" attributes="0"/>
+                          <Component id="undoButton" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace type="separate" max="-2" attributes="0"/>
                           <Component id="calculateButton" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <Component id="progressBar" max="32767" attributes="0"/>
@@ -99,6 +101,7 @@
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="calculateButton" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="stepNameLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="undoButton" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
               <Component id="progressBar" min="-2" max="-2" attributes="0"/>
@@ -145,10 +148,13 @@
 
           <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
           <SubComponents>
-            <Component class="javax.swing.JList" name="variableList">
+            <Component class="javax.swing.JTable" name="variablesTable">
               <Properties>
-                <Property name="model" type="javax.swing.ListModel" editor="org.netbeans.modules.form.editors2.ListModelEditor">
-                  <StringArray count="0"/>
+                <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
+                  <Table columnCount="2" rowCount="0">
+                    <Column editable="false" title="Modified" type="java.lang.Object"/>
+                    <Column editable="false" title="Variable" type="java.lang.Object"/>
+                  </Table>
                 </Property>
               </Properties>
             </Component>
@@ -310,6 +316,14 @@
       <Properties>
         <Property name="text" type="java.lang.String" value=" "/>
       </Properties>
+    </Component>
+    <Component class="javax.swing.JButton" name="undoButton">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Undo"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="undoButtonActionPerformed"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>

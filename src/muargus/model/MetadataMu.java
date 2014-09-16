@@ -151,6 +151,16 @@ public class MetadataMu {
         return replacementFiles;
     }
 
+    public ArrayList<ReplacementSpec> getReplacementSpecs() {
+        ArrayList<ReplacementSpec> specs = new ArrayList<>();
+        for (RankSwappingSpec spec : this.getCombinations().getNumericalRankSwapping().getRankSwappings()) {
+            specs.add(spec);
+        }
+        for (MicroaggregationSpec spec : this.getCombinations().getNumericalMicroaggregation().getMicroaggregations()) {
+            specs.add(spec);
+        }
+        return specs;
+    }
 //    public static ArrayList<VariableMu> makeClone(ArrayList<VariableMu> list) throws CloneNotSupportedException {
 //        ArrayList<VariableMu> clone = new ArrayList<>(list.size());
 //        for (VariableMu item : list) {

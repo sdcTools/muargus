@@ -10,6 +10,6 @@ package muargus.model;
  *
  * @author pibd05
  */
-public class MicroaggregationSpec {
+public class MicroaggregationSpec extends ReplacementSpec {
     
 }
