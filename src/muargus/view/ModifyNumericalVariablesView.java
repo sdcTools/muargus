@@ -1,6 +1,7 @@
 package muargus.view;
 
 import javax.swing.JOptionPane;
+import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -17,7 +18,6 @@ import muargus.model.ModifyNumericalVariablesSpec;
  */
 public class ModifyNumericalVariablesView extends DialogBase {
 
-    //MetadataMu metadataMu;
     ModifyNumericalVariablesController controller;
     ModifyNumericalVariables model;
     private final int[] variablesColumnWidth = {20, 80};
@@ -37,24 +37,33 @@ public class ModifyNumericalVariablesView extends DialogBase {
         this.variablesTable.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     }
 
+    /**
+     *
+     */
     @Override
     public void initializeData() {
         this.model = getMetadata().getCombinations().getModifyNumericalVariables();
-        if (this.model.getModifyNumericalVariablesSpec() == null) {
+        if (this.model.getModifyNumericalVariablesSpec().isEmpty()) {
             this.controller.setModifyNumericalVariablesSpecs();
         }
         makeVariablesTable();
         updateValues();
     }
 
+    /**
+     *
+     * @return
+     */
     public ModifyNumericalVariablesSpec getModifyNumericalVariablesSpec() {
         ModifyNumericalVariablesSpec selected = this.model.getModifyNumericalVariablesSpec().get(this.selectedRow);
         return selected;
     }
 
+    /**
+     *
+     */
     public void updateValues() {
-        
-        Double[] min_max = this.controller.getMinMax(
+        double[] min_max = this.controller.getMinMax(
                 this.model.getModifyNumericalVariablesSpec().get(this.variablesTable.getSelectedRow()).getVariable());
 
         ModifyNumericalVariablesSpec selected = this.model.getModifyNumericalVariablesSpec().get(this.variablesTable.getSelectedRow());
@@ -73,20 +82,20 @@ public class ModifyNumericalVariablesView extends DialogBase {
         this.bottomCodingReplacementTextField.setText(selected.getBottomReplacement());
         if (!selected.getTopValue().equals(Double.NaN)) {
             this.topValueTextField.setText(Double.toString(selected.getTopValue()));
-        }else {
+        } else {
             this.topValueTextField.setText("");
             selected.setTopValue(Double.NaN);
         }
         this.topCodingReplacementTextField.setText(selected.getTopReplacement());
         if (!selected.getRoundingBase().equals(Double.NaN)) {
             this.roundingBaseTextField.setText(Double.toString(selected.getRoundingBase()));
-        }else {
+        } else {
             this.roundingBaseTextField.setText("");
             selected.setRoundingBase(Double.NaN);
         }
         if (!selected.getWeightNoisePercentage().equals(Double.NaN)) {
             this.percentageTextField.setText(Double.toString(selected.getWeightNoisePercentage()));
-        }else {
+        } else {
             this.percentageTextField.setText("");
             selected.setWeightNoisePercentage(Double.NaN);
         }
@@ -123,6 +132,11 @@ public class ModifyNumericalVariablesView extends DialogBase {
         });
     }
 
+    /**
+     * Event handler when the selected variable has changed.
+     * If a different variable is selected, the entered values are checked and
+     * the visible values are updated.
+     */
     public void variablesSelectionChanged() {
         if (this.variablesTable.getSelectedRow() != this.selectedRow) {
             checkValidAnswer();
@@ -130,24 +144,33 @@ public class ModifyNumericalVariablesView extends DialogBase {
         updateValues();
     }
 
+    /**
+     * Checks whether the answers entered are valid. It is checked if values are
+     * entered. If values are entered, the controller is called to check if the
+     * values are valid and return warning message(s) if values are not valid.
+     * If all values are valid the numerical variable is modified through the
+     * apply method of the controller.
+     *
+     * @return Boolean indicating whether the answers entered are valid.
+     */
     public boolean checkValidAnswer() {
         boolean valid = false;
-        setTextFields();
+        setValuesInModel();
         if (valueEntered()) {
             ModifyNumericalVariablesSpec selected = getModifyNumericalVariablesSpec();
-            String message = this.controller.setValues(selected,
-                    selected.getBottomValue(),
-                    selected.getTopValue(),
+            String message = this.controller.getWarningMessage(selected,
+                    this.bottomValueTextField.getText(),
+                    this.topValueTextField.getText(),
                     this.bottomCodingReplacementTextField.getText(),
                     this.topCodingReplacementTextField.getText(),
-                    selected.getRoundingBase(),
-                    selected.getWeightNoisePercentage());
+                    this.roundingBaseTextField.getText(),
+                    this.percentageTextField.getText());
             if (!message.equals("")) {
                 JOptionPane.showMessageDialog(null, message);
                 this.variablesTable.getSelectionModel().setSelectionInterval(this.selectedRow, this.selectedRow);
             } else {
                 valid = true;
-                setModified(true);                
+                setModified(true);
                 this.controller.apply(getModifyNumericalVariablesSpec());
                 this.selectedRow = this.variablesTable.getSelectedRow();
             }
@@ -155,23 +178,25 @@ public class ModifyNumericalVariablesView extends DialogBase {
             setModified(false);
             this.selectedRow = this.variablesTable.getSelectedRow();
         }
-
-        if (valid) {
-            
-        }
         return valid;
-
     }
 
+    /**
+     * Sets whether this variable has been modified.
+     *
+     * @param modified Boolean indicating whether this variable has been
+     * modified.
+     */
     public void setModified(boolean modified) {
         getModifyNumericalVariablesSpec().setModified(modified);
-        String modifiedText = getModifyNumericalVariablesSpec().getModifiedText();
-        this.variablesTable.setValueAt(modifiedText, this.selectedRow, 0);
+        this.variablesTable.setValueAt(getModifyNumericalVariablesSpec().getModifiedText(), this.selectedRow, 0);
     }
 
-    public void setTextFields() {
+    /**
+     * Sets the values in the model.
+     */
+    public void setValuesInModel() {
         ModifyNumericalVariablesSpec selected = getModifyNumericalVariablesSpec();
-
         selected.setBottomValue(this.bottomValueTextField.getText());
         selected.setBottomReplacement(this.bottomCodingReplacementTextField.getText());
         selected.setTopValue(this.topValueTextField.getText());
@@ -180,6 +205,11 @@ public class ModifyNumericalVariablesView extends DialogBase {
         selected.setWeightNoisePercentage(this.percentageTextField.getText());
     }
 
+    /**
+     * Checks whether a value has been entered.
+     *
+     * @return Boolean indicating whether at least one value has been entered.
+     */
     public boolean valueEntered() {
         boolean valueEntered = false;
         if (!this.bottomValueTextField.getText().equals("")) {
@@ -203,6 +233,11 @@ public class ModifyNumericalVariablesView extends DialogBase {
         return valueEntered;
     }
 
+    /**
+     * Checks for all input if the value is changed.
+     *
+     * @return Boolean indicating whether a value has changed.
+     */
     public boolean valueChanged() {
         ModifyNumericalVariablesSpec selected = getModifyNumericalVariablesSpec();
         boolean valueChanged = false;
@@ -495,23 +530,6 @@ public class ModifyNumericalVariablesView extends DialogBase {
         checkValidAnswer();
         updateValues();
     }//GEN-LAST:event_applyButtonActionPerformed
-
-    public String getBottomValueTextField() {
-        return bottomValueTextField.getText();
-    }
-
-    public String getPercentageTextField() {
-        return percentageTextField.getText();
-    }
-
-    public String getRoundingBaseTextField() {
-        return roundingBaseTextField.getText();
-    }
-
-    public String getTopValueTextField() {
-        return topValueTextField.getText();
-    }
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton applyButton;

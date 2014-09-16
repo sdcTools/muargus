@@ -7,7 +7,6 @@ package muargus.controller;
 
 import argus.model.ArgusException;
 import argus.utils.StrUtils;
-import java.util.ArrayList;
 import muargus.model.MetadataMu;
 import muargus.model.ModifyNumericalVariables;
 import muargus.model.ModifyNumericalVariablesSpec;
@@ -20,8 +19,8 @@ import muargus.view.ModifyNumericalVariablesView;
  */
 public class ModifyNumericalVariablesController extends ControllerBase {
 
-    private ModifyNumericalVariables model;
-    private MetadataMu metadata;
+    private final ModifyNumericalVariables model;
+    private final MetadataMu metadata;
 
     public ModifyNumericalVariablesController(java.awt.Frame parentView, MetadataMu metadata) {
         super.setView(new ModifyNumericalVariablesView(parentView, true, this));
@@ -41,14 +40,12 @@ public class ModifyNumericalVariablesController extends ControllerBase {
      *
      */
     public void setModifyNumericalVariablesSpecs() {
-        ArrayList<ModifyNumericalVariablesSpec> specs = new ArrayList<>();
         for (VariableMu v : this.metadata.getVariables()) {
             if (v.isNumeric()) {
                 ModifyNumericalVariablesSpec spec = new ModifyNumericalVariablesSpec(v);
-                specs.add(spec);
+                this.model.getModifyNumericalVariablesSpec().add(spec);
             }
         }
-        this.model.setModifyNumericalVariablesSpec(specs);
     }
 
     public void setVariablesData() {
@@ -64,8 +61,8 @@ public class ModifyNumericalVariablesController extends ControllerBase {
         }
     }
 
-    public Double[] getMinMax(VariableMu variable) {
-        Double[] min_max = getCalculationService().getMinMax(variable);
+    public double[] getMinMax(VariableMu variable) {
+        double[] min_max = getCalculationService().getMinMax(variable);
         return min_max;
     }
 
@@ -82,80 +79,70 @@ public class ModifyNumericalVariablesController extends ControllerBase {
         return getIntIfPossible(selected.getMax());
     }
 
-    public String setValues(ModifyNumericalVariablesSpec selected, Double bottomValue, Double topValue,
-            String bottomReplacement, String topReplacement, Double roundingBase, Double weightNoisePercentage) {
+    public String getWarningMessage(ModifyNumericalVariablesSpec selected, String bottomValue, String topValue,
+            String bottomReplacement, String topReplacement, String roundingBase, String weightNoisePercentage) {
 
         String warningMessage = "";
 
         boolean bottom = false;
-        if (!bottomValue.equals(Double.NaN)) {
+        if (!selected.getBottomValue().isNaN()) {
             if (bottomReplacement.equals("")) {
                 warningMessage += "Bottom replacement value cannot be empty\n";
             } else {
-                    bottom = true;
-                    if (bottomValue < selected.getMin() || bottomValue > selected.getMax()) {
-                        warningMessage += "Bottom Value needs to be in the range between the minimum and maximum value\n";
-                        bottom = false;
-                    }
+                bottom = true;
+                if (selected.getBottomValue() < selected.getMin() || selected.getBottomValue() > selected.getMax()) {
+                    warningMessage += "Bottom Value needs to be in the range between the minimum and maximum value\n";
+                    bottom = false;
+                }
             }
-        }
-
-        if (!bottomReplacement.equals("") && bottomValue.equals(Double.NaN)) {
+        } else if (!bottomValue.equals("")) {
+            warningMessage += "Illegal value for the bottom value\n";
+            bottom = false;
+        } else if (!bottomReplacement.equals("")) {
             warningMessage += "Bottom value cannot be empty\n";
             bottom = false;
         }
 
         boolean top = false;
-        if (!topValue.equals(Double.NaN)) {
+        if (!selected.getTopValue().isNaN()) {
             if (topReplacement.equals("")) {
                 warningMessage += "Top replacement value cannot be empty\n";
             } else {
-                    top = true;
-                    if (topValue < selected.getMin() || topValue > selected.getMax()) {
-                        warningMessage += "Top Value needs to be in the range between the minimum and maximum value\n";
-                        top = false;
-                    }
+                top = true;
+                if (selected.getTopValue() < selected.getMin() || selected.getTopValue() > selected.getMax()) {
+                    warningMessage += "Top Value needs to be in the range between the minimum and maximum value\n";
+                    top = false;
+                }
             }
-        }
-
-        if (!topReplacement.equals("") && topValue.equals(Double.NaN)) {
+        } else if (!topValue.equals("")) {
+            warningMessage += "Illegal value for the top value\n";
+            top = false;
+        } else if (!topReplacement.equals("")) {
             warningMessage += "Top value cannot be empty\n";
             top = false;
         }
 
         if (top && bottom) {
-            if (topValue <= bottomValue) {
+            if (selected.getTopValue() <= selected.getBottomValue()) {
                 warningMessage += "Top value needs to be larger than the bottom value\n";
-                top = false;
-                bottom = false;
             }
-
-            if (bottom) {
-                selected.setBottomValue(getIntIfPossible(bottomValue));
-                selected.setBottomReplacement(bottomReplacement);
-            }
-
-            if (top) {
-                selected.setTopValue(getIntIfPossible(topValue));
-                selected.setTopReplacement(topReplacement);
-            }
-
         }
 
-        if (!roundingBase.equals(Double.NaN)) {
-                if (roundingBase > 0) {
-                    selected.setRoundingBase(getIntIfPossible(roundingBase));
-                } else {
-                    warningMessage += "Illegal Value for rounding";
-                }
+        if (!selected.getRoundingBase().isNaN()) {
+            if (selected.getRoundingBase() <= 0) {
+                warningMessage += "Illegal Value for rounding\n";
+            }
+        } else if (!roundingBase.equals("")) {
+            warningMessage += "Illegal value for the rounding base\n";
         }
 
-        if (!weightNoisePercentage.equals(Double.NaN)) {
-                if (weightNoisePercentage > 0) {
-                    selected.setWeightNoisePercentage(getIntIfPossible(weightNoisePercentage));
-                } else {
-                    warningMessage += "Illegal Value for the weight noise percentage";
-                }
+        if (!selected.getWeightNoisePercentage().isNaN()) {
+            if (selected.getWeightNoisePercentage() <= 0 || selected.getWeightNoisePercentage() > 100) {
+                warningMessage += "Illegal Value for the weight noise percentage\n"
+                        + "Percentage needs to be a number larger than 0 and smaller than or equal to 100";
+            }
+        } else if (!weightNoisePercentage.equals("")) {
+            warningMessage += "Illegal value for the weight noise percentage\n";
         }
 
         return warningMessage;
