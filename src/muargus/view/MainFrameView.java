@@ -24,7 +24,7 @@ import muargus.model.VariableMu;
 public class MainFrameView extends javax.swing.JFrame {
 
     //private DataFilePair dataFilePair;
-    private MainFrameController controller;
+    private final MainFrameController controller;
     private Combinations model;
 
     /**
@@ -775,8 +775,8 @@ public class MainFrameView extends javax.swing.JFrame {
         Object[] objArr = new Object[nDims + 1];
         objArr[0] = variable.getName();
         for (int dimNr=1; dimNr <= nDims; dimNr++) {
-            objArr[dimNr] = combinations.getUnsafeCombinations(variable).length < dimNr ?
-                    "-" : Integer.toString(combinations.getUnsafeCombinations(variable)[dimNr-1]);
+            objArr[dimNr] = combinations.getUnsafeCombinations().get(variable).length < dimNr ?
+                    "-" : Integer.toString(combinations.getUnsafeCombinations().get(variable)[dimNr-1]);
         }
         return objArr;
     }
