@@ -10,7 +10,7 @@ import java.util.ArrayList;
  */
 public class ModifyNumericalVariables {
 
-    private ArrayList<ModifyNumericalVariablesSpec> modifyNumericalVariablesSpec;
+    private final ArrayList<ModifyNumericalVariablesSpec> modifyNumericalVariablesSpec;
     private String[][] variablesData;
     private final String[] variablesColumnNames;
 
@@ -20,28 +20,20 @@ public class ModifyNumericalVariables {
      * modifyNumericalVariablesSpec.
      */
     public ModifyNumericalVariables() {
-        this.modifyNumericalVariablesSpec = null; //TODO: change to new ArrayList and remove the setter
+        this.modifyNumericalVariablesSpec = new ArrayList<>();
         this.variablesColumnNames = new String[]{"Modified", "Variable"};
     }
 
     /**
-     * Gets the ArrayList containing all ModifyNumericalVariablesSpec. The
-     * ModifyNumericalVariablesSpec contain all relevant information for
-     * modifying the relevant variable.
+     * Gets the ArrayList containing ModifyNumericalVariablesSpec's. The
+     * ModifyNumericalVariablesSpec contains all relevant information for
+     * modifying the relevant variable. If the ArrayList is empty, use this
+     * method to add ModifyNumericalVariablesSpec's.
      *
-     * @return ArrayList containing all ModifyNumericalVariablesSpec.
+     * @return ArrayList containing ModifyNumericalVariablesSpec's.
      */
     public ArrayList<ModifyNumericalVariablesSpec> getModifyNumericalVariablesSpec() {
         return modifyNumericalVariablesSpec;
-    }
-
-    //TODO: remove
-    /**
-     *
-     * @param modifyNumericalVariablesSpec
-     */
-    public void setModifyNumericalVariablesSpec(ArrayList<ModifyNumericalVariablesSpec> modifyNumericalVariablesSpec) {
-        this.modifyNumericalVariablesSpec = modifyNumericalVariablesSpec;
     }
 
     /**
