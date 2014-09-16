@@ -5,7 +5,6 @@
 package muargus.view;
 
 import argus.utils.SingleListSelectionModel;
-import argus.utils.SystemUtils;
 import java.awt.Component;
 import java.awt.Container;
 import java.util.ArrayList;
@@ -26,13 +25,13 @@ public class SpecifyMetadataView extends DialogBase {
     
     SpecifyMetadataController controller;
     private ArrayList<VariableMu> related;
-    private String[] idLevel = {"0","1","2","3","4","5"};
-    private String[] format = {"Fixed format", "Free format", "Free with meta", "SPSS system file" }; // maak hier enum van
-    private String[] suppressionWeight = new String[101];
-    private MetadataMu metadataMu;
+    private final String[] idLevel = {"0","1","2","3","4","5"};
+    private final String[] format = {"Fixed format", "Free format", "Free with meta", "SPSS system file" }; // maak hier enum van
+    private final String[] suppressionWeight = new String[101];
+    //private MetadataMu metadataMu;
     private String separatorTemp;
     private int dataFileTypeTemp;
-    private VariableMu dummyVar = new VariableMu();
+    private final VariableMu dummyVar = new VariableMu();
     
     private DefaultListModel variableListModel;
     
@@ -49,29 +48,14 @@ public class SpecifyMetadataView extends DialogBase {
         relatedToComboBox.setRenderer(new VariableNameCellRenderer());
     }
 
-    public MetadataMu getMetadataMu() {
-        return metadataMu;
-    }
+    @Override
+    public void initializeData(){
 
-    public void setMetadataMu(MetadataMu metadataMu) {
-        this.metadataMu = metadataMu;
-        makeVariables();
-        if (metadataMu.getVariables().size() == 0) {
-            enableAllControls(false);
-        }
-        variablesList.requestFocus();
-    }
-
-    public void makeVariables(){
-//        if(metadataMu == null){
-//            this.metadataMu = new MetadataMu();
-//        }
-
-        separatorTemp = metadataMu.getSeparator();
-        dataFileTypeTemp = metadataMu.getDataFileType();
+        separatorTemp = getMetadata().getSeparator();
+        dataFileTypeTemp = getMetadata().getDataFileType();
         
         variableListModel = new DefaultListModel<>(); 
-        for (VariableMu variable : metadataMu.getVariables()) {
+        for (VariableMu variable : getMetadata().getVariables()) {
             variableListModel.addElement(variable);
         }
         variablesList.setModel(variableListModel);
@@ -88,7 +72,7 @@ public class SpecifyMetadataView extends DialogBase {
         variablesComboBox.setModel(new DefaultComboBoxModel(format));
         
         // check the format and set the appropriate settings
-        switch(metadataMu.getDataFileType()){
+        switch(getMetadata().getDataFileType()){
             case MetadataMu.DATA_FILE_TYPE_FIXED:
                 setFixed();
                 break;
@@ -107,6 +91,12 @@ public class SpecifyMetadataView extends DialogBase {
             variablesList.setSelectedIndex(0);
         }
         calculateButtonStates();
+        
+        if (getMetadata().getVariables().isEmpty()) {
+            enableAllControls(false);
+        }
+        variablesList.requestFocus();
+
     }
     
     public void setSpss(boolean b){
@@ -787,9 +777,9 @@ public class SpecifyMetadataView extends DialogBase {
         for (Object o : variableListModel.toArray()) {
             list.add((VariableMu) o);
         }
-        metadataMu.setVariables(list);
-        metadataMu.setSeparator(separatorTemp);
-        metadataMu.setDataFileType(dataFileTypeTemp);
+        getMetadata().setVariables(list);
+        getMetadata().setSeparator(separatorTemp);
+        getMetadata().setDataFileType(dataFileTypeTemp);
     }
     private void okButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okButtonActionPerformed
         updateMetadata();

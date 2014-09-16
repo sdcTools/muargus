@@ -33,13 +33,6 @@ public class PramSpecificationController extends ControllerBase {
     }
 
     /**
-     * Opens the view by setting its visibility to true.
-     */
-    public void showView() {
-        getView().setVisible(true);
-    }
-
-    /**
      * Closes the view by setting its visibility to false.
      */
     public void close() {

@@ -1,7 +1,6 @@
 package muargus.controller;
 
 import java.util.ArrayList;
-import muargus.MuARGUS;
 import muargus.model.MetadataMu;
 import muargus.model.TableCollection;
 import muargus.model.TableMu;
@@ -14,8 +13,8 @@ import muargus.view.ShowTableCollectionView;
  */
 public class ShowTableCollectionController extends ControllerBase {
 
-    private TableCollection model;
-    private MetadataMu metadata;
+    private final TableCollection model;
+    private final MetadataMu metadata;
 
     /**
      * Constructor for the ShowTableCollectionController. This constructor makes
@@ -30,13 +29,6 @@ public class ShowTableCollectionController extends ControllerBase {
         this.metadata = metadata;
         this.model = metadata.getCombinations().getTableCollection();
         getView().setMetadata(this.metadata);
-    }
-
-    /**
-     * Opens the view by setting its visibility to true.
-     */
-    public void showView() {
-        getView().setVisible(true);
     }
 
     /**

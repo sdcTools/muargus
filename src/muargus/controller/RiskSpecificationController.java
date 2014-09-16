@@ -63,10 +63,12 @@ public class RiskSpecificationController extends ControllerBase {
             }
         }
         return tables;
-    }   
+    }
+    
     /**
      * Opens the view by setting its visibility to true.
      */
+    @Override
     public void showView() {
         ArrayList<TableMu> riskTables = getRiskTables();
         if (riskTables.size() > 1) {
