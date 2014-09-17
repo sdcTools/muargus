@@ -12,6 +12,7 @@ import muargus.VariableNameCellRenderer;
 import muargus.controller.NumericalRankSwappingController;
 import muargus.model.NumericalRankSwapping;
 import muargus.model.RankSwappingSpec;
+import muargus.model.ReplacementSpec;
 import muargus.model.VariableMu;
 
 
@@ -63,8 +64,8 @@ public class NumericalRankSwappingView extends DialogBase<NumericalRankSwappingC
         //updateValues();
     }
     
-    public void updateVariableRows(RankSwappingSpec rankSwapping){
-        for (VariableMu variableMu : rankSwapping.getVariables()) {
+    public void updateVariableRows(ReplacementSpec replacement){
+        for (VariableMu variableMu : replacement.getVariables()) {
             int index = this.model.getVariables().indexOf(variableMu);
             variablesTable.setValueAt(getModifiedText(variableMu), index, 0);
             variablesTable.setValueAt(variableMu.getName(), index, 1);
@@ -72,7 +73,7 @@ public class NumericalRankSwappingView extends DialogBase<NumericalRankSwappingC
     }
 
     private String getModifiedText(VariableMu variable) {
-        for (RankSwappingSpec spec : this.model.getRankSwappings()) {
+        for (ReplacementSpec spec : this.model.getRankSwappings()) {
             if (spec.getVariables().contains(variable)) {
                 return "X";
             }

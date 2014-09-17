@@ -5,9 +5,13 @@
 package muargus.view;
 
 import java.util.ArrayList;
+import javax.swing.DefaultListModel;
+import javax.swing.table.DefaultTableModel;
 import muargus.controller.NumericalMicroaggregationController;
 import muargus.model.MicroaggregationSpec;
 import muargus.model.NumericalMicroaggregation;
+import muargus.model.RankSwappingSpec;
+import muargus.model.ReplacementSpec;
 import muargus.model.VariableMu;
 
 /**
@@ -17,6 +21,8 @@ import muargus.model.VariableMu;
 public class NumericalMicroaggregationView extends DialogBase<NumericalMicroaggregationController> {
 
     NumericalMicroaggregation model;
+    private DefaultListModel<VariableMu> selectedListModel;
+
     /**
      * 
      * @param parent
@@ -32,31 +38,71 @@ public class NumericalMicroaggregationView extends DialogBase<NumericalMicroaggr
     @Override
     public void initializeData() {
         this.model = getMetadata().getCombinations().getNumericalMicroaggregation();
-        updateValues();
+        String[][] data = new String[this.model.getVariables().size()][2];
+        int index = 0;
+        for (VariableMu variable : model.getVariables()) {
+            data[index] = new String[] {getModifiedText(variable), variable.getName()};
+            index++;
+        }
+        
+        this.variablesTable.setModel(new DefaultTableModel(data, new Object[] {"Modified", "Variable"}));
+        this.variablesTable.getSelectionModel().setSelectionInterval(0,0);
+//        this.variableListModel = (DefaultListModel<VariableMu>) new DefaultListModel();
+//        for (VariableMu variable : getMetadata().getVariables()) {
+//            if (variable.isNumeric()) {
+//                this.variableListModel.addElement(variable);
+//            }
+//        }
+//        variableList.setModel(this.variableListModel);
+        this.selectedListModel = new DefaultListModel<>();
+        selectedVariableList.setModel(this.selectedListModel);
+        //variableList.setSelectedIndex(0);
+        //updateValues();
     }
     
-    public void updateValues(){
-        
+    public void updateVariableRows(ReplacementSpec replacement){
+        for (VariableMu variableMu : replacement.getVariables()) {
+            int index = this.model.getVariables().indexOf(variableMu);
+            variablesTable.setValueAt(getModifiedText(variableMu), index, 0);
+            variablesTable.setValueAt(variableMu.getName(), index, 1);
+        }
     }
 
-    public void updateVariableRows(MicroaggregationSpec microaggregation) {
-        //TODO implement
+    private String getModifiedText(VariableMu variable) {
+        for (ReplacementSpec spec : this.model.getMicroaggregations()) {
+            if (spec.getVariables().contains(variable)) {
+                return "X";
+            }
+        }
+        return "";
     }
     
     public int getMinimalNumberOfRecords() {
-        //TODO implement
-        return 0;
+        return Integer.parseInt(this.numberOfRecordsTextField.getText());
     }
     
     public boolean getOptimal() {
-        //TODO implement
-        return false;
+        return this.optimalCheckbox.isSelected();
     }
     
     public ArrayList<VariableMu> getSelectedVariables() {
-        //TODO implement;
-        return null;
+        ArrayList<VariableMu> selected = new ArrayList<>();
+        for (Object variable : ((DefaultListModel)selectedVariableList.getModel()).toArray()) {
+            selected.add((VariableMu) variable);
+        }
+        return selected;
     }
+    
+    @Override
+    public void setProgress(int progress) {
+        progressBar.setValue(progress);
+    }
+
+    @Override
+    public void showStepName(String stepName) {
+        stepNameLabel.setText(stepName);
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -66,53 +112,56 @@ public class NumericalMicroaggregationView extends DialogBase<NumericalMicroaggr
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jToggleButton1 = new javax.swing.JToggleButton();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
+        downButton = new javax.swing.JButton();
+        upButton = new javax.swing.JButton();
+        okButton = new javax.swing.JButton();
+        calculateButton = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jList2 = new javax.swing.JList();
+        selectedVariableList = new javax.swing.JList();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jList1 = new javax.swing.JList();
-        jProgressBar1 = new javax.swing.JProgressBar();
+        variablesTable = new javax.swing.JTable();
+        progressBar = new javax.swing.JProgressBar();
         jPanel3 = new javax.swing.JPanel();
-        jLabel2 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jCheckBox1 = new javax.swing.JCheckBox();
-        jButton6 = new javax.swing.JButton();
+        numberOfRecordsLabel = new javax.swing.JLabel();
+        numberOfRecordsTextField = new javax.swing.JTextField();
+        optimalCheckbox = new javax.swing.JCheckBox();
+        cancelButton = new javax.swing.JButton();
+        toSelectedButton = new javax.swing.JButton();
+        fromSelectedButton = new javax.swing.JButton();
+        undoButton = new javax.swing.JButton();
+        stepNameLabel = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Numerical Microaggregation");
 
-        jToggleButton1.setText(">");
-
-        jButton1.setText("<");
-
-        jButton2.setText("↓");
-
-        jButton3.setText("↑");
-
-        jButton4.setText("OK");
-        jButton4.addActionListener(new java.awt.event.ActionListener() {
+        downButton.setText("↓");
+        downButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton4ActionPerformed(evt);
+                downButtonActionPerformed(evt);
             }
         });
 
-        jButton5.setText("Calculate");
+        upButton.setText("↑");
+        upButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                upButtonActionPerformed(evt);
+            }
+        });
+
+        okButton.setText("OK");
+        okButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                okButtonActionPerformed(evt);
+            }
+        });
+
+        calculateButton.setText("Calculate");
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Selected"));
 
-        jList2.setModel(new javax.swing.AbstractListModel() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public Object getElementAt(int i) { return strings[i]; }
-        });
-        jScrollPane2.setViewportView(jList2);
+        jScrollPane2.setViewportView(selectedVariableList);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -127,12 +176,23 @@ public class NumericalMicroaggregationView extends DialogBase<NumericalMicroaggr
 
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Variable"));
 
-        jList1.setModel(new javax.swing.AbstractListModel() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public Object getElementAt(int i) { return strings[i]; }
+        variablesTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Modified", "Variable"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
         });
-        jScrollPane1.setViewportView(jList1);
+        jScrollPane1.setViewportView(variablesTable);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -151,9 +211,9 @@ public class NumericalMicroaggregationView extends DialogBase<NumericalMicroaggr
 
         jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
 
-        jLabel2.setText("<html>\nMinimum Number <br> of Records <br> per Group");
+        numberOfRecordsLabel.setText("<html>\nMinimum Number <br> of Records <br> per Group");
 
-        jCheckBox1.setText("Use optimal method");
+        optimalCheckbox.setText("Use optimal method");
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -163,11 +223,11 @@ public class NumericalMicroaggregationView extends DialogBase<NumericalMicroaggr
                 .addContainerGap()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(numberOfRecordsLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(numberOfRecordsTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                        .addComponent(jCheckBox1)
+                        .addComponent(optimalCheckbox)
                         .addGap(25, 25, 25)))
                 .addContainerGap(11, Short.MAX_VALUE))
         );
@@ -177,16 +237,34 @@ public class NumericalMicroaggregationView extends DialogBase<NumericalMicroaggr
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGap(21, 21, 21)
-                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(numberOfRecordsLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGap(31, 31, 31)
-                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(numberOfRecordsTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 14, Short.MAX_VALUE)
-                .addComponent(jCheckBox1)
+                .addComponent(optimalCheckbox)
                 .addContainerGap())
         );
 
-        jButton6.setText("Cancel");
+        cancelButton.setText("Cancel");
+
+        toSelectedButton.setText("→");
+        toSelectedButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                toSelectedButtonActionPerformed(evt);
+            }
+        });
+
+        fromSelectedButton.setText("←");
+        fromSelectedButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                fromSelectedButtonActionPerformed(evt);
+            }
+        });
+
+        undoButton.setText("Undo");
+
+        stepNameLabel.setText(" ");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -198,33 +276,36 @@ public class NumericalMicroaggregationView extends DialogBase<NumericalMicroaggr
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jButton5)
-                                .addGap(0, 0, Short.MAX_VALUE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(jToggleButton1)
-                                            .addComponent(jButton1))
-                                        .addGap(18, 18, 18)
-                                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jButton2, javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jButton3, javax.swing.GroupLayout.Alignment.TRAILING))
-                                .addContainerGap())))
+                                    .addComponent(toSelectedButton)
+                                    .addComponent(fromSelectedButton))
+                                .addGap(18, 18, 18)
+                                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(downButton, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(upButton, javax.swing.GroupLayout.Alignment.TRAILING))
+                        .addContainerGap())
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jProgressBar1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addGap(0, 0, Short.MAX_VALUE)
-                                .addComponent(jButton6)
+                            .addComponent(progressBar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(cancelButton)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(okButton, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addContainerGap())))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(18, 18, 18)
+                .addComponent(stepNameLabel)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(undoButton)
+                .addGap(26, 26, 26)
+                .addComponent(calculateButton)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -233,41 +314,96 @@ public class NumericalMicroaggregationView extends DialogBase<NumericalMicroaggr
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(layout.createSequentialGroup()
-                                        .addGap(48, 48, 48)
-                                        .addComponent(jToggleButton1)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jButton1))
-                                    .addGroup(layout.createSequentialGroup()
                                         .addGap(47, 47, 47)
-                                        .addComponent(jButton3)
+                                        .addComponent(upButton)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jButton2)))
-                                .addGap(47, 47, 47))
-                            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addComponent(downButton))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGap(48, 48, 48)
+                                        .addComponent(toSelectedButton)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(fromSelectedButton)))
+                                .addGap(47, 47, 47)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(16, 16, 16)
-                .addComponent(jButton5)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jProgressBar1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(calculateButton)
+                            .addComponent(undoButton))
+                        .addGap(11, 11, 11))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(stepNameLabel)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)))
+                .addComponent(progressBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton4)
-                    .addComponent(jButton6))
+                    .addComponent(okButton)
+                    .addComponent(cancelButton))
                 .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+    private void okButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okButtonActionPerformed
         this.setVisible(false);
-    }//GEN-LAST:event_jButton4ActionPerformed
+    }//GEN-LAST:event_okButtonActionPerformed
 
+    private void toSelectedButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_toSelectedButtonActionPerformed
+        boolean added = false;
+        for (int index : this.variablesTable.getSelectedRows()) {
+            VariableMu variable = this.model.getVariables().get(index);
+            if (!selectedListModel.contains(variable)) {
+                selectedListModel.addElement(variable);
+                added = true;
+            }
+        }
+
+        if (added) {
+            //Change selection of variables list
+            for (int varIndex=0; varIndex < variablesTable.getModel().getRowCount(); varIndex++) {
+                if (!selectedListModel.contains(this.model.getVariables().get(varIndex))) {
+                    variablesTable.getSelectionModel().setSelectionInterval(varIndex, varIndex);
+                    return;
+                }
+            }
+            variablesTable.getSelectionModel().setSelectionInterval(0,0);
+        }
+    }//GEN-LAST:event_toSelectedButtonActionPerformed
+
+    private void fromSelectedButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fromSelectedButtonActionPerformed
+        for (Object variable : selectedVariableList.getSelectedValuesList()) {
+            selectedListModel.removeElement((VariableMu)variable);
+        }
+    }//GEN-LAST:event_fromSelectedButtonActionPerformed
+
+    private void upButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_upButtonActionPerformed
+        int index = selectedVariableList.getSelectedIndex();
+        if (index > 0) {
+            VariableMu variable = selectedListModel.remove(index);
+            selectedListModel.add(index-1, variable);
+            selectedVariableList.setSelectedIndex(index-1);
+        }
+    }//GEN-LAST:event_upButtonActionPerformed
+
+    private void downButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_downButtonActionPerformed
+        int index = selectedVariableList.getSelectedIndex();
+        if (index > -1 && index < selectedListModel.getSize() - 1) {
+            VariableMu variable = selectedListModel.remove(index);
+            selectedListModel.add(index+1, variable);
+            selectedVariableList.setSelectedIndex(index+1);
+        }
+    }//GEN-LAST:event_downButtonActionPerformed
+
+    
+    
 //    /**
 //     * @param args the command line arguments
 //     */
@@ -310,23 +446,25 @@ public class NumericalMicroaggregationView extends DialogBase<NumericalMicroaggr
 //        });
 //    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
-    private javax.swing.JButton jButton6;
-    private javax.swing.JCheckBox jCheckBox1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JList jList1;
-    private javax.swing.JList jList2;
+    private javax.swing.JButton calculateButton;
+    private javax.swing.JButton cancelButton;
+    private javax.swing.JButton downButton;
+    private javax.swing.JButton fromSelectedButton;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
-    private javax.swing.JProgressBar jProgressBar1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JToggleButton jToggleButton1;
+    private javax.swing.JLabel numberOfRecordsLabel;
+    private javax.swing.JTextField numberOfRecordsTextField;
+    private javax.swing.JButton okButton;
+    private javax.swing.JCheckBox optimalCheckbox;
+    private javax.swing.JProgressBar progressBar;
+    private javax.swing.JList selectedVariableList;
+    private javax.swing.JLabel stepNameLabel;
+    private javax.swing.JButton toSelectedButton;
+    private javax.swing.JButton undoButton;
+    private javax.swing.JButton upButton;
+    private javax.swing.JTable variablesTable;
     // End of variables declaration//GEN-END:variables
 }
