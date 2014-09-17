@@ -63,7 +63,7 @@ public class NumericalRankSwappingController extends ControllerBase<NumericalRan
                 getView().showMessage("RankSwapping successfully completed");
                 getView().setProgress(0);
                 getView().showStepName("");
-                getNumericalRankSwappingView().updateVariableRows(getModel().getRankSwappings().get(getModel().getRankSwappings().size()-1));
+                getNumericalRankSwappingView().updateVariableRows(swapping);
             }
             catch (IOException ex) {
                 getView().showErrorMessage(new ArgusException(ex.getMessage()));
@@ -92,20 +92,25 @@ public class NumericalRankSwappingController extends ControllerBase<NumericalRan
                 printVariableNames(selected)))) {
             return;
         }
-        ArrayList<RankSwappingSpec> swappingsToUndo = new ArrayList<>();
-        for (VariableMu variable : selected) {
-            for (RankSwappingSpec swapping : getModel().getRankSwappings()) {
-                if (swapping.getVariables().contains(variable) && !swappingsToUndo.contains(swapping)) {
-                    swappingsToUndo.add(swapping);
+        for (RankSwappingSpec swapping : getModel().getRankSwappings()) {
+            if (swapping.getVariables().size() == selected.size()) {
+                boolean difference = false;
+                for (VariableMu variable : swapping.getVariables()) {
+                    if (!selected.contains(variable)) {
+                        difference = true;
+                        break;
+                    }
+                }
+                if (!difference) {
+                    getModel().getRankSwappings().remove(swapping);
+                    this.metadata.getReplacementSpecs().remove(swapping);
+                    getNumericalRankSwappingView().updateVariableRows(swapping);
+                    //TODO: remove temporary files?
+                    return;
                 }
             }
         }
-        for (RankSwappingSpec swapping : swappingsToUndo) {
-            getModel().getRankSwappings().remove(swapping);
-            this.metadata.getReplacementSpecs().remove(swapping);
-            getNumericalRankSwappingView().updateVariableRows(swapping);
-            //TODO: remove temporary files?
-        }
+        getView().showMessage(String.format("Rank swapping involving %s not found", printVariableNames(selected)));
     }
     
     public void calculate() {

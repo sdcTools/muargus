@@ -13,16 +13,20 @@ import java.util.ArrayList;
  * @author ambargus
  */
 public class NumericalMicroaggregation {
-    
+    private final ArrayList<VariableMu> variables;
     private final ArrayList<MicroaggregationSpec> microaggregations;
     
     public NumericalMicroaggregation() {
         this.microaggregations = new ArrayList<>();
+        this.variables = new ArrayList<>();
     }
             
+    public ArrayList<VariableMu> getVariables() {
+        return this.variables;
+    }
     
-     public ArrayList<MicroaggregationSpec> getMicroaggregations() {
-         return microaggregations;
-     }   
+    public ArrayList<MicroaggregationSpec> getMicroaggregations() {
+        return microaggregations;
+    }   
     
 }

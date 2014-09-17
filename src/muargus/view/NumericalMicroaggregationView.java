@@ -4,8 +4,11 @@
  */
 package muargus.view;
 
+import java.util.ArrayList;
 import muargus.controller.NumericalMicroaggregationController;
+import muargus.model.MicroaggregationSpec;
 import muargus.model.NumericalMicroaggregation;
+import muargus.model.VariableMu;
 
 /**
  *
@@ -36,6 +39,24 @@ public class NumericalMicroaggregationView extends DialogBase<NumericalMicroaggr
         
     }
 
+    public void updateVariableRows(MicroaggregationSpec microaggregation) {
+        //TODO implement
+    }
+    
+    public int getMinimalNumberOfRecords() {
+        //TODO implement
+        return 0;
+    }
+    
+    public boolean getOptimal() {
+        //TODO implement
+        return false;
+    }
+    
+    public ArrayList<VariableMu> getSelectedVariables() {
+        //TODO implement;
+        return null;
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
