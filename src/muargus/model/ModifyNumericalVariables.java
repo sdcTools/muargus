@@ -25,10 +25,10 @@ public class ModifyNumericalVariables {
     }
 
     /**
-     * Gets the ArrayList containing ModifyNumericalVariablesSpec's. The
-     * ModifyNumericalVariablesSpec contains all relevant information for
-     * modifying the relevant variable. If the ArrayList is empty, use this
-     * method to add ModifyNumericalVariablesSpec's.
+     * Gets the ArrayList containing the variable specifications for numerical
+     * modification. The ModifyNumericalVariablesSpec contains all relevant
+     * information for modifying the relevant variable. If the ArrayList is
+     * empty, use this method to add ModifyNumericalVariablesSpec's.
      *
      * @return ArrayList containing ModifyNumericalVariablesSpec's.
      */

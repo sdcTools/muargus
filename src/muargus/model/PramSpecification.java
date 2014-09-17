@@ -1,63 +1,112 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package muargus.model;
 
 import java.util.ArrayList;
 
 /**
+ * Model class of the PramSpecification screen. Only a single instance of this
+ * class will exist.
  *
- * @author pibd05
+ * @author Statistics Netherlands
  */
 public class PramSpecification {
-    
-    private boolean useBandwidth = false;
-    private final int defaultProbability = 80;
-    private ArrayList<PramVariableSpec> pramVarSpec;
-    private final String[] variablesColumnNames = {"P", "BW", "Variable"};
-    private final String[] codesColumnNames = {"Code", "Label", "Prob."};
+
+    private boolean useBandwidth;
+    private final int defaultProbability;
+    private final ArrayList<PramVariableSpec> pramVarSpec;
+    private final String[] variablesColumnNames;
+    private final String[] codesColumnNames;
     private String[][] variablesData;
-    
+
+    /**
+     * Constructor of the model class PramSpecification. Initializes the column
+     * names for the variablesTable and the codesTable. Makes an empty
+     * arraylists for the pramVarSpec and sets the default values for the
+     * useBandwidth and defaultProbability.
+     */
     public PramSpecification() {
+        this.variablesColumnNames = new String[]{"P", "BW", "Variable"};
+        this.codesColumnNames = new String[]{"Code", "Label", "Prob."};
+        this.pramVarSpec = new ArrayList<>();
+        this.useBandwidth = false;
+        this.defaultProbability = 80;
     }
 
+    /**
+     * Returns whether the bandwidth is used.
+     *
+     * @return Boolean indicating whether the bandwidth is used.
+     */
     public boolean useBandwidth() {
         return useBandwidth;
     }
 
+    /**
+     * Sets whether the bandwidth is used.
+     *
+     * @param useBandwidth Boolean indicating whether the bandwidth is used.
+     */
     public void setUseBandwidth(boolean useBandwidth) {
         this.useBandwidth = useBandwidth;
     }
 
+    /**
+     * Gets the defaultProbability.
+     *
+     * @return Integer containing the defaultProbability.
+     */
     public int getDefaultProbability() {
         return defaultProbability;
     }
 
+    /**
+     * Gets an ArrayList containing the variable specifications for PRAM. If the
+     * ArrayList is empty, use this method to add PramVariableSpec's.
+     *
+     * @return ArrayList containing the variable specifications for PRAM.
+     */
     public ArrayList<PramVariableSpec> getPramVarSpec() {
         return this.pramVarSpec;
     }
 
-    public void setPramVarSpec(ArrayList<PramVariableSpec> pramVarSpec) {
-        this.pramVarSpec = pramVarSpec;
-    }
-
+    /**
+     * Gets the column names of the variablesTable.
+     *
+     * @return Array of Strings containing the column names of the
+     * variablesTable.
+     */
     public String[] getVariablesColumnNames() {
         return variablesColumnNames;
     }
 
+    /**
+     * Gets the column names of the codesTable.
+     *
+     * @return Array of Strings containing the column names of the codesTable.
+     */
     public String[] getCodesColumnNames() {
         return this.codesColumnNames;
     }
 
+    /**
+     * Gets the data for the table containing the modified text and the variable
+     * name of each numerical variable.
+     *
+     * @return Double Array of Strings containing the modified text and the
+     * variable name of each numerical variable.
+     */
     public String[][] getVariablesData() {
         return variablesData;
     }
 
+    /**
+     * Sets the data for the table containing the modified text and the variable
+     * name of each numerical variable.
+     *
+     * @param variablesData Double Array of Strings containing the modified text
+     * and the variable name of each numerical variable.
+     */
     public void setVariablesData(String[][] variablesData) {
         this.variablesData = variablesData;
     }
-    
+
 }

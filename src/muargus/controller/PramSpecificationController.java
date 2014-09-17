@@ -57,15 +57,13 @@ public class PramSpecificationController extends ControllerBase<PramSpecificatio
      *
      */
     public void makePramVariableSpecs() {
-        if (getModel().getPramVarSpec() == null) {
-            ArrayList<PramVariableSpec> pramVarSpec = new ArrayList<>();
+        if (getModel().getPramVarSpec().isEmpty()) {
             for (VariableMu v : this.metadata.getVariables()) {
                 if (v.isCategorical()) {
                     PramVariableSpec p = new PramVariableSpec(v);
-                    pramVarSpec.add(p);
+                    getModel().getPramVarSpec().add(p);
                 }
             }
-            getModel().setPramVarSpec(pramVarSpec);
         }
     }
 
@@ -132,7 +130,7 @@ public class PramSpecificationController extends ControllerBase<PramSpecificatio
     public String[][] getCodesData(String variableName) {
         PramVariableSpec pramVariableSpec = getSelectedPramVarSpec(variableName);
         VariableMu variable = pramVariableSpec.getVariable();
-        
+
         String[][] codesData = null;
         if (variable != null) {
             ArrayList<CodeInfo> codeInfo = variable.getCodeInfos();
@@ -149,7 +147,7 @@ public class PramSpecificationController extends ControllerBase<PramSpecificatio
     }
 
     /**
-     * 
+     *
      * @param pramVariableSpec
      * @return
      */

@@ -510,6 +510,7 @@ public class MainFrameController {
      */
     public void manual() {
         try {
+            
             Desktop.getDesktop().browse(new URL("http://neon.vb.cbs.nl/casc/Software/MuManual4.2.pdf#page=13").toURI());
         } catch (URISyntaxException | IOException e) {
         }
