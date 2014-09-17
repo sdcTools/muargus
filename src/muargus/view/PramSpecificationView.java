@@ -464,7 +464,7 @@ public class PramSpecificationView extends DialogBase<PramSpecificationControlle
 
     private void bandwidthCheckBoxStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_bandwidthCheckBoxStateChanged
         this.bandwidthComboBox.setEnabled(this.bandwidthCheckBox.isSelected());
-        this.model.setUseBandwidth(this.bandwidthCheckBox.isSelected());
+        //this.model.setUseBandwidth(this.bandwidthCheckBox.isSelected());
     }//GEN-LAST:event_bandwidthCheckBoxStateChanged
 
     private void applyButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_applyButtonActionPerformed

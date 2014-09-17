@@ -112,7 +112,7 @@ public class Combinations {
      */
     public void createProtectedFile() {
         this.protectedFile = new ProtectedFile();
-        this.protectedFile.setVariables(this.getVariablesInTables());
+        this.protectedFile.getVariables().addAll(this.getVariablesInTables());
         this.protectedFile.setRiskModel(this.isRiskModel());
     }
 

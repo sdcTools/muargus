@@ -1,84 +1,102 @@
 package muargus.model;
 
 /**
+ * Model class of the variable specifications for PRAM. An instance for each
+ * categorical variable of this class will exist.
  *
- * @author pibd05
+ * @author Statistics Netherlands
  */
 public class PramVariableSpec {
 
-    private boolean useBandwidth = false;
+    private boolean useBandwidth;
     private int bandwidth;
-    private boolean applied = false;
+    private boolean applied;
     private String appliedText;
     private final VariableMu variable;
 
     /**
-     * 
-     * @param variable 
+     * Constructor of the model class PramVariableSpec. Initializes the variable
+     * and sets the default values for the useBandwidth and applied.
+     *
+     * @param variable The variable for which the PRAM specification can be
+     * applied.
      */
     public PramVariableSpec(VariableMu variable) {
         this.variable = variable;
+        this.useBandwidth = false;
+        this.applied = false;
     }
 
     /**
-     * 
-     * @return 
+     * Returns whether the bandwidth is used.
+     *
+     * @return Boolean indicating whether the bandwidth is used.
      */
     public boolean useBandwidth() {
         return this.useBandwidth;
     }
 
     /**
-     * 
-     * @param useBandwidth 
+     * Sets whether the bandwidth is used.
+     *
+     * @param useBandwidth Boolean indicating whether the bandwidth is used.
      */
     public void setUseBandwidth(boolean useBandwidth) {
         this.useBandwidth = useBandwidth;
     }
-    
+
     /**
-     * 
-     * @return 
+     * Gets the bandwidth.
+     *
+     * @return Integer containing the bandwidth.
      */
     public int getBandwidth() {
         return this.bandwidth;
     }
 
     /**
-     * 
-     * @param bandwidth 
+     * Sets the bandwidth
+     *
+     * @param bandwidth INteger containing the bandwidth.
      */
     public void setBandwidth(int bandwidth) {
         this.bandwidth = bandwidth;
     }
 
     /**
-     * 
-     * @return 
+     * Returns whether PRAM-specification has been applied on this variable.
+     *
+     * @return Returns boolean indicating whether PRAM-specification has been
+     * applied on this variable.
      */
     public boolean isApplied() {
         return this.applied;
     }
 
     /**
-     * 
-     * @param applied 
+     * Sets whether PRAM-specification has been applied on this variable.
+     *
+     * @param applied Boolean indicating whether PRAM-specification has been
+     * applied on this variable.
      */
     public void setApplied(boolean applied) {
         this.applied = applied;
     }
 
     /**
-     * 
-     * @return 
+     * Gets the variable.
+     *
+     * @return VariableMu instance containing the variable.
      */
     public VariableMu getVariable() {
         return this.variable;
     }
 
     /**
-     * 
-     * @return 
+     * Gets the text that will be displayed when the variable is applied.
+     *
+     * @return String containing the text that will be displayed when the
+     * variable is applied.
      */
     public String getAppliedText() {
         if (isApplied()) {
@@ -88,16 +106,19 @@ public class PramVariableSpec {
         }
         return appliedText;
     }
-    
+
     /**
-     * 
-     * @return 
+     * Gets the text that will be displayed for the bandwidth.
+     *
+     * @return String containing the bandwidth if PRAM-specification is applied
+     * and bandwith is used. If this is not the case it contains an empty
+     * String.
      */
-    public String getBandwidthText(){
-        if(isApplied() && useBandwidth()){
+    public String getBandwidthText() {
+        if (isApplied() && useBandwidth()) {
             return Integer.toString(this.bandwidth);
         } else {
-            return ""; 
+            return "";
         }
     }
 

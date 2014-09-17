@@ -3,6 +3,7 @@ niet behandelde opmerkingen/vragen:
     worden bij showUnsafeCombinations uit de MainFrameController opnieuw geinitialiseerd. Als dit gebeurd,
     dan is alle data verloren.
 -   zit de defaultProbability al in de registry?
+-   moeten de variabelen die als RiskModel zijn gespecificeerd in het scherm komen?
 
 Nog te doen:                                                                                                Mee bezig:
 

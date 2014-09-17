@@ -1,5 +1,10 @@
 niet behandelde opmerkingen/vragen:
--wat als risktabel maar nog geen risk gekozen? dan wel Risk has been applied met 0.000?
+- wat als risktabel maar nog geen risk gekozen? dan wel Risk has been applied met 0.000?
+- willen we de voorkeurs opties zoals 'use entropy' en 'keep in safe file' in de registry?
+- nu wordt bij de tabel nog gebruik gemaakt van een keyReleased en MouseClicked event maar dit moet een
+  selectionsChanged event worden.
+- berekening onder getData verschuiven naar constructor
+- nu worden de woorden 'priority' en 'weight' door gebruikt maar is er een verschil?
        
 Nog te doen:                                                                                                    Mee bezig:
 

@@ -10,7 +10,6 @@ import java.util.ArrayList;
  */
 public class PramSpecification {
 
-    private boolean useBandwidth;
     private final int defaultProbability;
     private final ArrayList<PramVariableSpec> pramVarSpec;
     private final String[] variablesColumnNames;
@@ -20,33 +19,14 @@ public class PramSpecification {
     /**
      * Constructor of the model class PramSpecification. Initializes the column
      * names for the variablesTable and the codesTable. Makes an empty
-     * arraylists for the pramVarSpec and sets the default values for the
-     * useBandwidth and defaultProbability.
+     * arraylists for the pramVarSpec and sets the default value for the
+     * defaultProbability.
      */
     public PramSpecification() {
         this.variablesColumnNames = new String[]{"P", "BW", "Variable"};
         this.codesColumnNames = new String[]{"Code", "Label", "Prob."};
         this.pramVarSpec = new ArrayList<>();
-        this.useBandwidth = false;
         this.defaultProbability = 80;
-    }
-
-    /**
-     * Returns whether the bandwidth is used.
-     *
-     * @return Boolean indicating whether the bandwidth is used.
-     */
-    public boolean useBandwidth() {
-        return useBandwidth;
-    }
-
-    /**
-     * Sets whether the bandwidth is used.
-     *
-     * @param useBandwidth Boolean indicating whether the bandwidth is used.
-     */
-    public void setUseBandwidth(boolean useBandwidth) {
-        this.useBandwidth = useBandwidth;
     }
 
     /**

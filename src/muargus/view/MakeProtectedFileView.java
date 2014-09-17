@@ -6,7 +6,6 @@ package muargus.view;
 
 import java.awt.Color;
 import java.io.File;
-import javax.swing.JCheckBox;
 import javax.swing.JRadioButton;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
@@ -23,6 +22,7 @@ public class MakeProtectedFileView extends DialogBase<MakeProtectedFileControlle
 
     ProtectedFile model;
     private TableModel tableModel;
+    private int selectedRow;
 
     /**
      * Creates new form MakeProtectedFileView
@@ -75,8 +75,8 @@ public class MakeProtectedFileView extends DialogBase<MakeProtectedFileControlle
             }
         };
         this.suppressionWeightTable.setModel(this.tableModel);
-        this.suppressionWeightTable.getSelectionModel().setSelectionInterval(this.model.getSelectedRow(), this.model.getSelectedRow());
-        this.suppressionWeightSlider.setValue(Integer.parseInt(this.model.getData()[this.model.getSelectedRow()][1]));
+        this.suppressionWeightTable.getSelectionModel().setSelectionInterval(this.selectedRow, this.selectedRow);
+        this.suppressionWeightSlider.setValue(Integer.parseInt(this.model.getData()[this.selectedRow][1]));
     }
 
     @Override
@@ -84,46 +84,14 @@ public class MakeProtectedFileView extends DialogBase<MakeProtectedFileControlle
         this.progressbar.setValue(progress);
     }
 
-    public JRadioButton getChangeIntoSequenceNumberRadioButton() {
-        return changeIntoSequenceNumberRadioButton;
-    }
-
-    public JRadioButton getKeepInSafeFileRadioButton() {
-        return keepInSafeFileRadioButton;
-    }
-
-    public JRadioButton getNoSuppressionRadioButton() {
-        return noSuppressionRadioButton;
-    }
-
-    public JRadioButton getRemoveFromSafeFileRadioButton() {
-        return removeFromSafeFileRadioButton;
-    }
-
-    public JRadioButton getUseEntropyRadioButton() {
-        return useEntropyRadioButton;
-    }
-
-    public JRadioButton getUseWeightRadioButton() {
-        return useWeightRadioButton;
-    }
-
-    public JCheckBox getWriteRecordRandomOrderCheckBox() {
-        return writeRecordRandomOrderCheckBox;
-    }
-
-    public JCheckBox getAddRiskToOutputFileCheckBox() {
-        return addRiskToOutputFileCheckBox;
-    }
-
     public JRadioButton getSuppressionRadioButton() {
         switch (this.model.getSuppressionType()) {
             case (0):
-                return getNoSuppressionRadioButton();
+                return this.noSuppressionRadioButton;
             case (1):
-                return getUseWeightRadioButton();
+                return this.useWeightRadioButton;
             case(2):
-                return getUseEntropyRadioButton();
+                return this.useEntropyRadioButton;
         }
         return null;
     }
@@ -401,17 +369,17 @@ public class MakeProtectedFileView extends DialogBase<MakeProtectedFileControlle
     }//GEN-LAST:event_cancelButtonActionPerformed
 
     private void suppressionWeightSliderStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_suppressionWeightSliderStateChanged
-        this.model.setPriority(this.model.getSelectedRow(), suppressionWeightSlider.getValue());
+        this.model.setPriority(this.selectedRow, suppressionWeightSlider.getValue());
         updateValues();
     }//GEN-LAST:event_suppressionWeightSliderStateChanged
 
     private void suppressionWeightTableKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_suppressionWeightTableKeyReleased
-        this.model.setSelectedRow(this.suppressionWeightTable.getSelectedRow());
+        this.selectedRow = this.suppressionWeightTable.getSelectedRow();
         updateValues();
     }//GEN-LAST:event_suppressionWeightTableKeyReleased
 
     private void suppressionWeightTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_suppressionWeightTableMouseClicked
-        this.model.setSelectedRow(this.suppressionWeightTable.getSelectedRow());
+        this.selectedRow = this.suppressionWeightTable.getSelectedRow();
         updateValues();
     }//GEN-LAST:event_suppressionWeightTableMouseClicked
 
