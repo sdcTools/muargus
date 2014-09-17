@@ -12,11 +12,11 @@ import java.util.ArrayList;
  *
  * @author ambargus
  */
-public class NumericalMicroaggregation {
+public class Microaggregation {
     private final ArrayList<VariableMu> variables;
     private final ArrayList<MicroaggregationSpec> microaggregations;
     
-    public NumericalMicroaggregation() {
+    public Microaggregation() {
         this.microaggregations = new ArrayList<>();
         this.variables = new ArrayList<>();
     }

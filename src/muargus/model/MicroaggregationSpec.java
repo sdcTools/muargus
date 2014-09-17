@@ -14,10 +14,12 @@ public class MicroaggregationSpec extends ReplacementSpec {
     
     private final int minimalNumberOfRecords;
     private final boolean optimal;
+    private final boolean numerical;
     
-    public MicroaggregationSpec(int minimalNumberOfRecords, boolean optimal) {
+    public MicroaggregationSpec(int minimalNumberOfRecords, boolean optimal, boolean numerical) {
         this.minimalNumberOfRecords = minimalNumberOfRecords;
         this.optimal = optimal;
+        this.numerical = numerical;
     }
 
     public int getMinimalNumberOfRecords() {
@@ -28,6 +30,9 @@ public class MicroaggregationSpec extends ReplacementSpec {
         return this.optimal;
     }
     
+    public boolean isNumerical() {
+        return this.numerical;
+    }
     
     
 }

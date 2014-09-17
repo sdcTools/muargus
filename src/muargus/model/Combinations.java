@@ -26,7 +26,8 @@ public class Combinations {
     private TableCollection tableCollection;
     private final HashMap<TableMu, RiskSpecification> riskSpecifications;
     private ModifyNumericalVariables modifyNumericalVariables;
-    private NumericalMicroaggregation numericalMicroaggregation;
+    private Microaggregation numericalMicroaggregation;
+    private Microaggregation qualitativeMicroaggregation;
     private NumericalRankSwapping numericalRankSwapping;
     private PramSpecification pramSpecification;
 
@@ -167,18 +168,24 @@ public class Combinations {
      *
      * @return Returns the NumbericalMicroaggregation model class.
      */
-    public NumericalMicroaggregation getNumericalMicroaggregation() {
-        return numericalMicroaggregation;
+    public Microaggregation getMicroaggregation(boolean numerical) {
+        return numerical ? this.numericalMicroaggregation : this.qualitativeMicroaggregation;
     }
 
     /**
      * Creates a new instance of the NumbericalMicroaggregation class.
      */
-    public void createNumericalMicroaggregation() {
-        this.numericalMicroaggregation = new NumericalMicroaggregation();
+    public void createMicroaggregation(boolean numerical) {
+        if (numerical) {
+            this.numericalMicroaggregation = new Microaggregation();
+        }
+        else {
+            this.qualitativeMicroaggregation = new Microaggregation();
+        }
+            
     }
-
-    /**
+    
+    /*
      * Gets the model class of the NumericalRankSwapping screen.
      *
      * @return Returns the NumericalRankSwapping model class.

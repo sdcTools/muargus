@@ -408,12 +408,12 @@ public class MainFrameController {
      *
      */
     public void numericalMicroaggregation() {
-        if (this.metadata.getCombinations().getNumericalMicroaggregation() == null) {
-            this.metadata.getCombinations().createNumericalMicroaggregation();
+        if (this.metadata.getCombinations().getMicroaggregation(true) == null) {
+            this.metadata.getCombinations().createMicroaggregation(true);
         }
 
-        NumericalMicroaggregationController controller = new NumericalMicroaggregationController(
-                this.view, this.metadata);
+        MicroaggregationController controller = new MicroaggregationController(
+                this.view, this.metadata, true);
         controller.showView();
     }
 

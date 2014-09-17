@@ -12,32 +12,31 @@ import java.io.IOException;
 import java.util.ArrayList;
 import muargus.model.MetadataMu;
 import muargus.model.MicroaggregationSpec;
-import muargus.model.NumericalMicroaggregation;
-import muargus.model.NumericalRankSwapping;
-import muargus.model.RankSwappingSpec;
+import muargus.model.Microaggregation;
 import muargus.model.ReplacementFile;
 import muargus.model.ReplacementSpec;
 import muargus.model.VariableMu;
-import muargus.view.NumericalMicroaggregationView;
-import muargus.view.NumericalRankSwappingView;
+import muargus.view.MicroaggregationView;
 import org.apache.commons.io.FileUtils;
 
 /**
  *
  * @author ambargus
  */
-public class NumericalMicroaggregationController extends ControllerBase<NumericalMicroaggregation> {
+public class MicroaggregationController extends ControllerBase<Microaggregation> {
     private final MetadataMu metadata;
+    private final boolean numerical;
 
-    public NumericalMicroaggregationController(java.awt.Frame parentView, MetadataMu metadata) {
-        super.setView(new NumericalMicroaggregationView(parentView, true, this));
+    public MicroaggregationController(java.awt.Frame parentView, MetadataMu metadata, boolean numerical) {
+        super.setView(new MicroaggregationView(parentView, true, this));
         this.metadata = metadata;
-        fillModel();
+        this.numerical = numerical;
+        fillModel(numerical);
         getView().setMetadata(this.metadata);
     }
     
-    private void fillModel() {
-        NumericalMicroaggregation model = metadata.getCombinations().getNumericalMicroaggregation();
+    private void fillModel(boolean numerical) {
+        Microaggregation model = metadata.getCombinations().getMicroaggregation(numerical);
         if (model.getVariables().isEmpty()) {
             for (VariableMu variable : this.metadata.getVariables()) {
                 if (variable.isNumeric()) {
@@ -63,18 +62,22 @@ public class NumericalMicroaggregationController extends ControllerBase<Numerica
             try {
                 FileUtils.copyFile(new File(microaggregation.getReplacementFile().getInputFilePath()), 
                         new File(microaggregation.getReplacementFile().getOutputFilePath()));
-                getView().showMessage("RankSwapping successfully completed");
+                getView().showMessage("Micro aggregation successfully completed");
                 getView().setProgress(0);
                 getView().showStepName("");
-                getNumericalMicroaggregationView().updateVariableRows(microaggregation);
+                getMicroaggregationView().updateVariableRows(microaggregation);
             }
             catch (IOException ex) {
                 getView().showErrorMessage(new ArgusException(ex.getMessage()));
             }
     }
     
-    private NumericalMicroaggregationView getNumericalMicroaggregationView() {
-        return (NumericalMicroaggregationView)getView();
+    public boolean isNumerical() {
+        return numerical;
+    }
+    
+    private MicroaggregationView getMicroaggregationView() {
+        return (MicroaggregationView)getView();
     }
     
     private String printVariableNames(ArrayList<VariableMu> list) {
@@ -87,7 +90,7 @@ public class NumericalMicroaggregationController extends ControllerBase<Numerica
     }
     
     public void undo() {
-        ArrayList<VariableMu> selected = getNumericalMicroaggregationView().getSelectedVariables();
+        ArrayList<VariableMu> selected = getMicroaggregationView().getSelectedVariables();
         if (selected.isEmpty()) {
             return;
         }
@@ -107,7 +110,7 @@ public class NumericalMicroaggregationController extends ControllerBase<Numerica
                 if (!difference) {
                     getModel().getMicroaggregations().remove(microaggregation);
                     this.metadata.getReplacementSpecs().remove(microaggregation);
-                    getNumericalMicroaggregationView().updateVariableRows(microaggregation);
+                    getMicroaggregationView().updateVariableRows(microaggregation);
                     //TODO: remove temporary files?
                     return;
                 }
@@ -117,7 +120,7 @@ public class NumericalMicroaggregationController extends ControllerBase<Numerica
     }
     
     public void calculate() {
-        ArrayList<VariableMu> selectedVariables = getNumericalMicroaggregationView().getSelectedVariables();
+        ArrayList<VariableMu> selectedVariables = getMicroaggregationView().getSelectedVariables();
         if (variablesAreUsed(selectedVariables)) {
             if (!getView().showConfirmDialog("One or more of the variables are already modified. Continue?")) {
                 return;
@@ -125,8 +128,9 @@ public class NumericalMicroaggregationController extends ControllerBase<Numerica
         }
         try {
             MicroaggregationSpec microaggregation = new MicroaggregationSpec(
-                    getNumericalMicroaggregationView().getMinimalNumberOfRecords(),
-                    getNumericalMicroaggregationView().getOptimal());
+                    getMicroaggregationView().getMinimalNumberOfRecords(),
+                    getMicroaggregationView().getOptimal(),
+                    numerical);
             microaggregation.getVariables().addAll(selectedVariables);
             microaggregation.setReplacementFile(new ReplacementFile("Microaggregation"));
             getModel().getMicroaggregations().add(microaggregation);

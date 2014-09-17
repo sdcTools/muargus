@@ -9,8 +9,8 @@ import javax.swing.DefaultListModel;
 import javax.swing.table.DefaultTableModel;
 import muargus.HighlightTableCellRenderer;
 import muargus.VariableNameCellRenderer;
-import muargus.controller.NumericalMicroaggregationController;
-import muargus.model.NumericalMicroaggregation;
+import muargus.controller.MicroaggregationController;
+import muargus.model.Microaggregation;
 import muargus.model.ReplacementSpec;
 import muargus.model.VariableMu;
 
@@ -18,9 +18,9 @@ import muargus.model.VariableMu;
  *
  * @author ambargus
  */
-public class NumericalMicroaggregationView extends DialogBase<NumericalMicroaggregationController> {
+public class MicroaggregationView extends DialogBase<MicroaggregationController> {
 
-    NumericalMicroaggregation model;
+    Microaggregation model;
     private DefaultListModel<VariableMu> selectedListModel;
 
     /**
@@ -29,7 +29,7 @@ public class NumericalMicroaggregationView extends DialogBase<NumericalMicroaggr
      * @param modal
      * @param controller 
      */
-    public NumericalMicroaggregationView(java.awt.Frame parent, boolean modal, NumericalMicroaggregationController controller) {
+    public MicroaggregationView(java.awt.Frame parent, boolean modal, MicroaggregationController controller) {
         super(parent, modal, controller);
         initComponents();
         setLocationRelativeTo(null);
@@ -39,7 +39,7 @@ public class NumericalMicroaggregationView extends DialogBase<NumericalMicroaggr
         
     @Override
     public void initializeData() {
-        this.model = getMetadata().getCombinations().getNumericalMicroaggregation();
+        this.model = getMetadata().getCombinations().getMicroaggregation(getController().isNumerical());
         String[][] data = new String[this.model.getVariables().size()][2];
         int index = 0;
         for (VariableMu variable : model.getVariables()) {
@@ -449,20 +449,20 @@ public class NumericalMicroaggregationView extends DialogBase<NumericalMicroaggr
 //                }
 //            }
 //        } catch (ClassNotFoundException ex) {
-//            java.util.logging.Logger.getLogger(NumericalMicroaggregationView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//            java.util.logging.Logger.getLogger(MicroaggregationView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
 //        } catch (InstantiationException ex) {
-//            java.util.logging.Logger.getLogger(NumericalMicroaggregationView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//            java.util.logging.Logger.getLogger(MicroaggregationView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
 //        } catch (IllegalAccessException ex) {
-//            java.util.logging.Logger.getLogger(NumericalMicroaggregationView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//            java.util.logging.Logger.getLogger(MicroaggregationView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
 //        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-//            java.util.logging.Logger.getLogger(NumericalMicroaggregationView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//            java.util.logging.Logger.getLogger(MicroaggregationView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
 //        }
 //        //</editor-fold>
 //
 //        /* Create and display the dialog */
 //        java.awt.EventQueue.invokeLater(new Runnable() {
 //            public void run() {
-//                NumericalMicroaggregationView dialog = new NumericalMicroaggregationView(new javax.swing.JFrame(), true);
+//                MicroaggregationView dialog = new MicroaggregationView(new javax.swing.JFrame(), true);
 //                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
 //                    @Override
 //                    public void windowClosing(java.awt.event.WindowEvent e) {
