@@ -59,7 +59,7 @@ public class NumericalMicroaggregationView extends DialogBase<NumericalMicroaggr
         this.selectedListModel = new DefaultListModel<>();
         selectedVariableList.setModel(this.selectedListModel);
         //variableList.setSelectedIndex(0);
-        //updateValues();
+        updateValues();
     }
     
     public void updateVariableRows(ReplacementSpec replacement){
@@ -93,6 +93,10 @@ public class NumericalMicroaggregationView extends DialogBase<NumericalMicroaggr
             selected.add((VariableMu) variable);
         }
         return selected;
+    }
+    
+    private void updateValues() {
+        optimalCheckbox.setEnabled(this.selectedListModel.size() == 1);
     }
     
     @Override
@@ -219,6 +223,8 @@ public class NumericalMicroaggregationView extends DialogBase<NumericalMicroaggr
         jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
 
         numberOfRecordsLabel.setText("<html>\nMinimum Number <br> of Records <br> per Group");
+
+        numberOfRecordsTextField.setText("5");
 
         optimalCheckbox.setText("Use optimal method");
 
@@ -377,6 +383,7 @@ public class NumericalMicroaggregationView extends DialogBase<NumericalMicroaggr
                 added = true;
             }
         }
+        updateValues();
 
         if (added) {
             //Change selection of variables list
@@ -394,6 +401,7 @@ public class NumericalMicroaggregationView extends DialogBase<NumericalMicroaggr
         for (Object variable : selectedVariableList.getSelectedValuesList()) {
             selectedListModel.removeElement((VariableMu)variable);
         }
+        updateValues();
     }//GEN-LAST:event_fromSelectedButtonActionPerformed
 
     private void upButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_upButtonActionPerformed
