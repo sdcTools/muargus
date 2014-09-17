@@ -7,10 +7,10 @@ package muargus.view;
 import java.util.ArrayList;
 import javax.swing.DefaultListModel;
 import javax.swing.table.DefaultTableModel;
+import muargus.HighlightTableCellRenderer;
+import muargus.VariableNameCellRenderer;
 import muargus.controller.NumericalMicroaggregationController;
-import muargus.model.MicroaggregationSpec;
 import muargus.model.NumericalMicroaggregation;
-import muargus.model.RankSwappingSpec;
 import muargus.model.ReplacementSpec;
 import muargus.model.VariableMu;
 
@@ -33,7 +33,9 @@ public class NumericalMicroaggregationView extends DialogBase<NumericalMicroaggr
         super(parent, modal, controller);
         initComponents();
         setLocationRelativeTo(null);
-    }
+        this.variablesTable.setDefaultRenderer(Object.class, new HighlightTableCellRenderer());
+        this.selectedVariableList.setCellRenderer(new VariableNameCellRenderer());
+     }
         
     @Override
     public void initializeData() {
@@ -158,6 +160,11 @@ public class NumericalMicroaggregationView extends DialogBase<NumericalMicroaggr
         });
 
         calculateButton.setText("Calculate");
+        calculateButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                calculateButtonActionPerformed(evt);
+            }
+        });
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Selected"));
 
@@ -263,6 +270,11 @@ public class NumericalMicroaggregationView extends DialogBase<NumericalMicroaggr
         });
 
         undoButton.setText("Undo");
+        undoButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                undoButtonActionPerformed(evt);
+            }
+        });
 
         stepNameLabel.setText(" ");
 
@@ -401,6 +413,14 @@ public class NumericalMicroaggregationView extends DialogBase<NumericalMicroaggr
             selectedVariableList.setSelectedIndex(index+1);
         }
     }//GEN-LAST:event_downButtonActionPerformed
+
+    private void calculateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_calculateButtonActionPerformed
+        getController().calculate();
+    }//GEN-LAST:event_calculateButtonActionPerformed
+
+    private void undoButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_undoButtonActionPerformed
+        getController().undo();
+    }//GEN-LAST:event_undoButtonActionPerformed
 
     
     
