@@ -7,6 +7,8 @@ Opmerking: Ik heb nu grofweg 1 scherm per week geplaatst maar sommige schermen z
     de praktijk betekenen dat we deze planning niet precies gaan opvolgen.
 -   door de nieuwe methodes wordt het databestand aangepast (soms alleen maar voor een paar varibelen)
     Hoe is het handig om de structuur op te zetten voor de tijdelijke databestand(en)?
+-   Willen we dat het toevoegen van een R-script makkelijk wordt gemaakt voor een ontwikkelaar of een eindgebruiker.
+    Het is mogelijk om een schermpje te maken waar je een r-script aanroept.
 
 
 Week 1 (1-7 september):                                                         Gedaan:
@@ -22,28 +24,34 @@ Week 2 (8-14 september):
 
 Week 3 (15-21 september):
     - ModifyNumericalVariables                                                  check
-    - SpecifyMetadata (SPSS & free with meta)                                   Anne
+    - NumericalRankSwapping                                                     Catalaan toevoegen
+    - NumericalMicroAggregation                                                 Catalaan toevoegen
+    - QualitativeMicroAggregation                                               Catalaan toevoegen
 
 Week 4 (22-28 september): (Jeldrik afwezig)
-
+    - SpecifyMetadata (SPSS & free with meta)                                   Anne
 
 Week 5 (29 septembet - 5 oktober): (Jeldrik & Anne afwezig)
 
 Week 6 (6-12 oktober):
-    - NumericalRankSwapping                                                     check
-
-Week 7 (13-19 oktober):
-    - NumericalMicroAggregation
-    - Contents
+    - Contents (help)
     - News
     - About
 
-Week 8 (20-26 oktober): (Anne afwezig)
+Week 7 (13-19 oktober):
     - kleine puntjes afwerken
+    - release notes
+
+Week 8 (20-26 oktober): (Anne afwezig)
+    - uitloop
 
 Week 9 (27 oktober - 2 november):
     - uitloop
 
+Release 3:
+    - UNIX/LINUX
+    - handleiding aanpassen
+    - release notes
 
 wishlist:
     - R-script toevoegen --> duidelijk krijgen hoe en wat.

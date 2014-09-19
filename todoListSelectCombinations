@@ -1,23 +1,20 @@
 niet behandelde opmerkingen/vragen:
+15. progressbar
+    - checken of hier nog iets aan gedaan moet worden bij heel veel tabellen?
+    - moet deze ook gekoppeld worden aan automatic generate tables? Ik denk dat het beter is om in plaats 
+      daarvan het maximum aantal tabellen kleiner te maken.
 
 Nog te doen:                                                                                                    Mee bezig:
-    
+
 Release 2
 
 6. table: 
     - constanten bovenaan zetten, niet in de code --> Jeldrik: is volgens mij gedaan                                     
     - geselecteerde rij visable 
     - kolommen klikken en sorteren (RowSorter: http://docs.oracle.com/javase/7/docs/api/javax/swing/RowSorter.html)
-    - kolombreedte fixen (rij 1 en 2 zijn te groot)                                                              
-15. progressbar
-    - checken of hier nog iets aan gedaan moet worden bij heel veel tabellen?
-    - moet deze ook gekoppeld worden aan automatic generate tables? Ik denk dat het beter is om in plaats 
-      daarvan het maximum aantal tabellen kleiner te maken.
-17. Kijk wat er in de Controller/Model kan en verplaats dat.                                                    ..
-18. code opschonen                                                                                              ..
 19. javadoc schrijven voor de methodes   
-23. dll crasht soms: proberen te reproduceren
-24. bij fout worden ten onrechte toch de nieuwe unsafe combinations getoond
+23. dll crasht soms: proberen te reproduceren --> als programma lang aan staat??    
+
 -minimale grootte scherm instellen
 
 Release 3+:
@@ -110,7 +107,7 @@ Gedaan:                                                                         
 21. bug: bij calculate tables als 0 tabellen rare foutmelding                                                   Anne
 22. foutcode bij ExploreFile vervangen door fouttekst                                                           Anne
 - bug: specificeer tabellen en klik dan op het kruisje rechtsboven om het scherm te sluiten. Dan crashed die.   Anne
-
+24. bij fout worden ten onrechte toch de nieuwe unsafe combinations getoond
 
 
     - method getVariables

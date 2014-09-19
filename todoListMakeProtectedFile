@@ -1,16 +1,16 @@
 niet behandelde opmerkingen/vragen:
-- wat als risktabel maar nog geen risk gekozen? dan wel Risk has been applied met 0.000?
+
 - willen we de voorkeurs opties zoals 'use entropy' en 'keep in safe file' in de registry?
-- nu wordt bij de tabel nog gebruik gemaakt van een keyReleased en MouseClicked event maar dit moet een
-  selectionsChanged event worden.
-- berekening onder getData verschuiven naar constructor
-- nu worden de woorden 'priority' en 'weight' door gebruikt maar is er een verschil?
-- is de check in de methode getNameOfSafeFile van de model klasse wel goed genoeg. Het checkt nu alleen of er een punt zit.
-- bij de methode initSafeMeta van de model klasse weet ik niet zeker of de javadocs helemaal goed zijn. 
+- nu worden de woorden 'priority' en 'weight' door gebruikt maar is er een verschil?            Anco??
        
 Nog te doen:                                                                                                    Mee bezig:
 
 Release 2:
+- is de check in de methode getNameOfSafeFile van de model klasse wel goed genoeg. Het checkt nu alleen of er een punt zit.
+- nu wordt bij de tabel nog gebruik gemaakt van een keyReleased en MouseClicked event maar dit moet een
+  selectionsChanged event worden.
+- berekening onder getData verschuiven naar constructor
+- waarschuwing als geen riskModel is gedefinieerd.
 
 10. makeFileButton:
 - otherModifications toevoegen (gebeurd wanneer de optie change into sequence number wordt gekozen)
@@ -20,7 +20,6 @@ Release 2:
 - Gegevens numerical variables scherm in rapport tonen
 - Gegevens microaggregatie in rapport tonen
 - Gegevens rank swapping in rapport tonen
-
    
 15. html viewer vervangen: de html/css wordt nu brak getoond
 -Scherm resizable maken en minimale grootte scherm instellen 
@@ -35,6 +34,7 @@ Behandelde opmerkingen/vragen:                                                  
 - de suppressionweight wordt nu direct opgeslagen als deze wordt aangepast is het MakeProtectedFile schem.          Anco: Ja, is mooi zo.
   Als er vervolgens wijzigingen in de metadata of in de tabellen worden gemaakt blijft deze wijziging behalve
   als dit wordt gewijzigd in de metadata. Is dit de bedoeling
+- wat als risktabel maar nog geen risk gekozen? dan wel Risk has been applied met 0.000?
 
 Gedaan:                                                                                                             Door:
 - zorg dat de geselecteerde rij ook opgeslagen wordt

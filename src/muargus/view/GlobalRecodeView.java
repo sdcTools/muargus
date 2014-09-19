@@ -312,6 +312,7 @@ public class GlobalRecodeView extends DialogBase<GlobalRecodeController> {
 
         warningLabel.setText("Warning");
 
+        warningTextArea.setEditable(false);
         warningTextArea.setBackground(new java.awt.Color(200, 200, 200));
         warningTextArea.setColumns(20);
         warningTextArea.setRows(5);

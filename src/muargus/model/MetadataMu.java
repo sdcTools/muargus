@@ -150,11 +150,10 @@ public class MetadataMu {
 //    public ArrayList<ReplacementFile> getReplacementFiles() {
 //        return replacementFiles;
 //    }
-
     public ArrayList<ReplacementSpec> getReplacementSpecs() {
         return this.replacementSpecs;
     }
-    
+
 //    public static ArrayList<VariableMu> makeClone(ArrayList<VariableMu> list) throws CloneNotSupportedException {
 //        ArrayList<VariableMu> clone = new ArrayList<>(list.size());
 //        for (VariableMu item : list) {
@@ -565,12 +564,10 @@ public class MetadataMu {
 //    public void setVariables(ArrayList<VariableMu> variables) {
 //        this.variables = variables;
 //    }
-
-    //TODO: Anne kan jij dit mooi uitleggen. 
     /**
      * Gets the hashcode. The hashcode is calculated as a addition of the
-     * hashcodes from the individual components: separator, dataFileType,
-     * dataFileName, metaFileName and the ArrayList of variables.
+     * hashcodes from the relevant individual components: separator,
+     * dataFileType, dataFileName, metaFileName and the ArrayList of variables.
      *
      * @return Integer containing the hashcode.
      */
