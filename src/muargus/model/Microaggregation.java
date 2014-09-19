@@ -35,7 +35,7 @@ public class Microaggregation {
     /**
      * Gets the ArrayList containing the variable specifications for the
      * microaggregation. The MicroaggregationSpec contains all relevant
-     * information for applying microaggreation on the relevant variable. If the
+     * information for applying microaggreation on the relevant variable(s). If the
      * ArrayList is empty, use this method to add MicroaggregationSpec's.
      *
      * @return ArrayList containing MicroaggregationSpec's.

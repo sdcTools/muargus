@@ -1,8 +1,7 @@
 package muargus.model;
 
 /**
- * Model class containing relevant information for microaggregation. An instance
- * for each numerical variable of this class will exist.
+ * Model class containing relevant information for microaggregation. 
  *
  * @author Statistics Netherlands
  */
@@ -13,8 +12,7 @@ public class MicroaggregationSpec extends ReplacementSpec {
     private final boolean numerical;
 
     /**
-     * Constructor of the model class Microaggregation. Makes empty arraylists
-     * for the variables and the microaggregations.
+     * Constructor of the model class Microaggregation. 
      *
      * @param minimalNumberOfRecords Integer containing the minimum number of
      * records per group.
