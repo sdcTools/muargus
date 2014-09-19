@@ -5,6 +5,8 @@ niet behandelde opmerkingen/vragen:
   selectionsChanged event worden.
 - berekening onder getData verschuiven naar constructor
 - nu worden de woorden 'priority' en 'weight' door gebruikt maar is er een verschil?
+- is de check in de methode getNameOfSafeFile van de model klasse wel goed genoeg. Het checkt nu alleen of er een punt zit.
+- bij de methode initSafeMeta van de model klasse weet ik niet zeker of de javadocs helemaal goed zijn. 
        
 Nog te doen:                                                                                                    Mee bezig:
 

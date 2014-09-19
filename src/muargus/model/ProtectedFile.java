@@ -24,7 +24,7 @@ public class ProtectedFile {
     public final int CHANGE_INTO_SEQUENCE_NUMBER = 2;
     public final int REMOVE_FROM_SAFE_FILE = 3;
 
-    private ArrayList<VariableMu> variables;
+    private final ArrayList<VariableMu> variables;
     private String[][] data;
     private final String[] columnames;
     private boolean riskModel;
@@ -66,8 +66,10 @@ public class ProtectedFile {
     }
 
     /**
+     * Gets the name and suppressionweight of all categorical variables.
      *
-     * @return
+     * @return Double Array of Strings containing the name and suppressionweight
+     * of all categorical variables.
      */
     public String[][] getData() {
         if (this.data == null) {
@@ -95,6 +97,7 @@ public class ProtectedFile {
 
     /**
      * Returns whether the option 'use weight' is selected.
+     *
      * @return Boolean indicating whether the option 'use weight' is selected.
      */
     public boolean isWithPrior() {
@@ -103,6 +106,7 @@ public class ProtectedFile {
 
     /**
      * Returns whether the option 'use entropy' is selected.
+     *
      * @return Boolean indicating whether the option 'use entropy' is selected.
      */
     public boolean isWithEntropy() {
@@ -111,7 +115,9 @@ public class ProtectedFile {
 
     /**
      * Returns whether the option 'randomize output' is selected.
-     * @return Boolean indicating whether the option 'randomize output' is selected.
+     *
+     * @return Boolean indicating whether the option 'randomize output' is
+     * selected.
      */
     public boolean isRandomizeOutput() {
         return randomizeOutput;
@@ -119,48 +125,57 @@ public class ProtectedFile {
 
     /**
      * Sets whether the option 'randomize output' is selected.
-     * @param randomizeOutput Boolean indicating whether the option 'randomize output' is selected.
+     *
+     * @param randomizeOutput Boolean indicating whether the option 'randomize
+     * output' is selected.
      */
     public void setRandomizeOutput(boolean randomizeOutput) {
         this.randomizeOutput = randomizeOutput;
     }
 
     /**
+     * Returns whether the risk will be added to the output file.
      *
-     * @return
+     * @return Boolean indicationg whether the risk will be added to the output
+     * file.
      */
     public boolean isPrintBHR() {
         return printBHR;
     }
 
     /**
+     * Sets whether the risk will be added to the output file.
      *
-     * @param printBHR
+     * @param printBHR Boolean indicationg whether the risk will be added to the
+     * output file.
      */
     public void setPrintBHR(boolean printBHR) {
         this.printBHR = printBHR;
     }
 
     /**
+     * Returns whether the risk model is used.
      *
-     * @return
+     * @return Boolean indication whether the risk model is used.
      */
     public boolean isRiskModel() {
         return riskModel;
     }
 
     /**
+     * Sets whether the risk model is used.
      *
-     * @param riskModel
+     * @param riskModel Boolean indication whether the risk model is used.
      */
     public void setRiskModel(boolean riskModel) {
         this.riskModel = riskModel;
     }
 
     /**
+     * Sets the safe metadata and the file names.
      *
-     * @param file
-     * @param meta
+     * @param file File instance choosen by the user for the safe file.
+     * @param meta Metadata instance containing the safe metadata.
      */
     public void initSafeMeta(File file, MetadataMu meta) {
         this.safeMeta = new MetadataMu(meta);
@@ -170,8 +185,9 @@ public class ProtectedFile {
     }
 
     /**
+     * Gets the safe metadata.
      *
-     * @return
+     * @return MetadataMu instance of the safe metadata.
      */
     public MetadataMu getSafeMeta() {
         return this.safeMeta;
@@ -185,9 +201,10 @@ public class ProtectedFile {
 //        return FilenameUtils.removeExtension(nameOfSafeFile) + ".rds";
 //    }
     /**
+     * Gets the name of the safe file.
      *
-     * @param file
-     * @return
+     * @param file File instance choosen by the user for the safe file.
+     * @return String containing the path name of the safe file.
      */
     private String getNameOfSafeFile(File file) {
         if (file.getName().contains(".")) {
@@ -198,48 +215,63 @@ public class ProtectedFile {
     }
 
     /**
+     * Gets the type of suppression.
      *
-     * @return
+     * @return Integer containing the constant for the suppression type.
+     * NO_SUPPRESSION = 0; USE_WEIGHT = 1; USE_ENTROPY = 2;
      */
     public int getSuppressionType() {
         return suppressionType;
     }
 
     /**
+     * Sets the type of suppression.
      *
-     * @param suppressionType
+     * @param suppressionType Integer containing the constant for the
+     * suppression type. NO_SUPPRESSION = 0; USE_WEIGHT = 1; USE_ENTROPY = 2;
      */
     public void setSuppressionType(int suppressionType) {
         this.suppressionType = suppressionType;
     }
 
     /**
+     * Gets the household type. The household type describes whether the data is
+     * household data and if so, what should be done whith this data.
      *
-     * @return
+     * @return Integer containing the constant for the household type.
+     * NOT_HOUSEHOLD_DATA = 0; KEEP_IN_SAFE_FILE = 1;
+     * CHANGE_INTO_SEQUENCE_NUMBER = 2; REMOVE_FROM_SAFE_FILE = 3;
      */
     public int getHouseholdType() {
         return householdType;
     }
 
     /**
+     * Sets the household type. The household type describes whether the data is
+     * household data and if so, what should be done whith this data.
      *
-     * @param householdType
+     * @param householdType Integer containing the constant for the household
+     * type. NOT_HOUSEHOLD_DATA = 0; KEEP_IN_SAFE_FILE = 1;
+     * CHANGE_INTO_SEQUENCE_NUMBER = 2; REMOVE_FROM_SAFE_FILE = 3;
      */
     public void setHouseholdType(int householdType) {
         this.householdType = householdType;
     }
 
     /**
+     * Returns whether the data is household data.
      *
-     * @return
+     * @return Boolean indicating whether de data is household data.
      */
     public boolean isHouseholdData() {
         return this.householdType != this.NOT_HOUSEHOLD_DATA;
     }
 
     /**
+     * Sets whether the data is household data.
      *
-     * @param householdData
+     * @param householdData Boolean indicating whether de data is household
+     * data.
      */
     public void setHouseholdData(boolean householdData) {
         if (!householdData) {
