@@ -8,6 +8,7 @@ package muargus;
 
 import java.awt.Color;
 import java.awt.Component;
+import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 import muargus.model.CodeInfo;
@@ -33,7 +34,7 @@ public class CodeTableCellRenderer extends DefaultTableCellRenderer {
           else {
               setForeground(isSelected ? Color.white : Color.black);
           }
-              
+          setHorizontalAlignment(column > 1 ? JLabel.RIGHT : JLabel.LEFT);
           return cr;
 
     }

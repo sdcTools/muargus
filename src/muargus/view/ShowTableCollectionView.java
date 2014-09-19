@@ -1,7 +1,9 @@
 package muargus.view;
 
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JLabel;
 import javax.swing.ListSelectionModel;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import muargus.VariableNameCellRenderer;
@@ -80,6 +82,9 @@ public class ShowTableCollectionView extends DialogBase<ShowTableCollectionContr
             }
         };
         this.table.setModel(tableModel);
+        DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
+        rightRenderer.setHorizontalAlignment(JLabel.RIGHT);
+        this.table.getColumn("# unsafe cells").setCellRenderer(rightRenderer);
     }
 
     /**

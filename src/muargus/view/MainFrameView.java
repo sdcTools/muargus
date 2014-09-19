@@ -5,10 +5,12 @@ import argus.model.DataFilePair;
 import argus.view.DialogOpenMicrodata;
 import java.util.ArrayList;
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import muargus.CodeTableCellRenderer;
 import muargus.MuARGUS;
@@ -791,6 +793,12 @@ public class MainFrameView extends javax.swing.JFrame {
         };
         this.unsafeCombinationsTable.setModel(tableModel);
 
+        DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
+        rightRenderer.setHorizontalAlignment(JLabel.RIGHT);
+        for (int index=1; index < columnNames.size(); index++) {
+            this.unsafeCombinationsTable.getColumn(String.format("dim %d", index)).setCellRenderer(rightRenderer);
+        }
+        
         this.unsafeCombinationsTable.getSelectionModel().addListSelectionListener(
                 new javax.swing.event.ListSelectionListener() {
                     @Override
@@ -845,6 +853,7 @@ public class MainFrameView extends javax.swing.JFrame {
         }
 
         DefaultTableModel tableModel = new DefaultTableModel(data, columnNames.toArray()) {
+            @Override
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return false;
             }

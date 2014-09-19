@@ -4,9 +4,11 @@
  */
 package muargus.view;
 
+import javax.swing.JLabel;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import muargus.HighlightTableCellRenderer;
@@ -87,6 +89,7 @@ public class PramSpecificationView extends DialogBase<PramSpecificationControlle
                 }
             }
         });
+
     }
 
     /**
@@ -145,7 +148,10 @@ public class PramSpecificationView extends DialogBase<PramSpecificationControlle
                 }
             }
         });
-        
+        DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
+        rightRenderer.setHorizontalAlignment(JLabel.RIGHT);
+        this.codesTable.getColumn("Prob.").setCellRenderer(rightRenderer);
+
         this.variablesTable.setDefaultRenderer(Object.class, new HighlightTableCellRenderer());
     }
 
