@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package muargus.model;
 
 import java.util.ArrayList;
@@ -28,7 +23,8 @@ public class Microaggregation {
     }
 
     /**
-     * Gets the ArrayList containing all the numerical variables.
+     * Gets the ArrayList containing all the numerical variables. If the
+     * ArrayList is empty, use this method to add VariableMu's.
      *
      * @return ArrayList containing all the numerical variables.
      */
