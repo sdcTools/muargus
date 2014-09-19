@@ -9,8 +9,10 @@ package muargus.model;
 import java.util.ArrayList;
 
 /**
+ * Model class of the RiskSpecification screen (both individual and household).
+ * Only a single instance of this class will exist.
  *
- * @author ambargus
+ * @author Statistics Netherlands
  */
 public class RiskSpecification {
     

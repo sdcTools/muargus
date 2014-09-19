@@ -1,8 +1,8 @@
 package muargus.model;
 
 /**
- * Model class of the RiskSpecification screen (both individual and household).
- * Only a single instance of this class will exist.
+ * Model class containing information on a single pillar of the risk model
+ * histogram. An instance for each pillar will exist.
  *
  * @author Statistics Netherlands
  */
@@ -16,8 +16,8 @@ public class RiskModelClass {
     /**
      * Constructor of the model class RiskModelClass.
      *
-     * @param leftValue Double containing the bottom left hand value.
-     * @param rightValue Double containing the upper right hand value.
+     * @param leftValue Double containing the left hand value of the pillar.
+     * @param rightValue Double containing the right hand value of the pillar.
      * @param frequency Integer containing the individual risk frequency.
      * @param hhFrequency Integer containing the household frequency.
      */
@@ -29,18 +29,18 @@ public class RiskModelClass {
     }
 
     /**
-     * Gets the bottom left hand value.
+     * Gets the left hand value of the pillar.
      *
-     * @return Double containing the bottom left hand value.
+     * @return Double containing the left hand value of the pillar.
      */
     public double getLeftValue() {
         return this.leftValue;
     }
 
     /**
-     * Gets the upper right hand value.
+     * Gets the right hand value of the pillar.
      *
-     * @return Double containing the upper right hand value.
+     * @return Double containing the right hand value of the pillar.
      */
     public double getRightValue() {
         return this.rightValue;

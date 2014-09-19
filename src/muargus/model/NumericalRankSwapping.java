@@ -33,10 +33,10 @@ public class NumericalRankSwapping {
     }
 
     /**
-     * Gets the ArrayList containing the variable specifications for rank
-     * swapping. The RankSwappingSpec contains all relevant information for
-     * applying rank swapping on the relevant variable. If the ArrayList is
-     * empty, use this method to add RankSwappingSpec's.
+     * Gets the ArrayList containing the rank swapping specifications. The
+     * RankSwappingSpec contains all relevant information for applying rank
+     * swapping on the relevant variable(s). If the ArrayList is empty, use this
+     * method to add RankSwappingSpec's.
      *
      * @return ArrayList containing RankSwappingSpec's.
      */

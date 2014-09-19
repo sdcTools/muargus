@@ -1,8 +1,7 @@
 package muargus.model;
 
 /**
- * Model class containing relevant information for rank swapping. An instance
- * for each numerical variable of this class will exist.
+ * Model class containing relevant information for rank swapping. 
  *
  * @author Statistics Netherlands
  */
@@ -11,8 +10,8 @@ public class RankSwappingSpec extends ReplacementSpec {
     private final double percentage;
 
     /**
-     * Constructor of the model class Microaggregation. Makes empty arraylists
-     * for the variables and the microaggregations.
+     * Constructor of the model class Microaggregation. Makes an empty arraylist
+     * for the microaggregations.
      *
      * @param percentage Double containing the rank swapping percentage.
      */
