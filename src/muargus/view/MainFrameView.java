@@ -315,7 +315,7 @@ public class MainFrameView extends javax.swing.JFrame {
         qualitativeMicroaggregationButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         qualitativeMicroaggregationButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                qualitativeMicroaggregationButtonActionPerformed(evt);
+                qualitativeMicroaggregationMenuItemActionPerformed(evt);
             }
         });
         toolBar.add(qualitativeMicroaggregationButton);
@@ -950,11 +950,6 @@ public class MainFrameView extends javax.swing.JFrame {
             controller.globalRecode(this.unsafeCombinationsTable.getSelectionModel().getMinSelectionIndex());
         }
     }//GEN-LAST:event_unsafeCombinationsTableMouseClicked
-
-    private void qualitativeMicroaggregationButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_qualitativeMicroaggregationButtonActionPerformed
-        ;
-// TODO add your handling code here:
-    }//GEN-LAST:event_qualitativeMicroaggregationButtonActionPerformed
 
     private void qualitativeMicroaggregationMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_qualitativeMicroaggregationMenuItemActionPerformed
         // TODO add your handling code here:
