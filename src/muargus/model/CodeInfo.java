@@ -126,11 +126,17 @@ public class CodeInfo {
         objArr[2] = this.frequency;
         for (int dimNr = 1; dimNr <= maxDims; dimNr++) {
             objArr[dimNr + 2] = this.unsafeCombinations.length < dimNr
-                    ? "-" : Integer.toString(this.unsafeCombinations[dimNr - 1]);
+                    ? -1 : this.unsafeCombinations[dimNr - 1];
         }
         return objArr;
     }
 
+    @Override
+    public String toString() {
+        return this.getCode();
+    }
+
+    
     /**
      * Gets the probability used for the PRAM-method
      *
