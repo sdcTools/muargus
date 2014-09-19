@@ -39,7 +39,7 @@ public class MicroaggregationController extends ControllerBase<Microaggregation>
         Microaggregation model = metadata.getCombinations().getMicroaggregation(numerical);
         if (model.getVariables().isEmpty()) {
             for (VariableMu variable : this.metadata.getVariables()) {
-                if (variable.isNumeric()) {
+                if (isNumerical() ? variable.isNumeric() : variable.isCategorical()) {
                     model.getVariables().add(variable);
                 }
             }

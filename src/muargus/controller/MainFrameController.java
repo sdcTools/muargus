@@ -432,6 +432,14 @@ public class MainFrameController {
         controller.showView();
     }
 
+    public void qualitativeMicroaggregation() {
+        if (this.metadata.getCombinations().getMicroaggregation(false) == null) {
+            this.metadata.getCombinations().createMicroaggregation(false);
+        }
+        MicroaggregationController controller = new MicroaggregationController(view, metadata, false);
+        controller.showView();
+        
+    }
     /**
      *
      */

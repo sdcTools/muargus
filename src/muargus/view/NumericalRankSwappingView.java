@@ -90,7 +90,12 @@ public class NumericalRankSwappingView extends DialogBase<NumericalRankSwappingC
     }
     
     public double getPercentage() {
-        return Double.parseDouble(percentageTextField.getText());
+        try {
+            return Double.parseDouble(percentageTextField.getText());
+        }
+        catch (NumberFormatException ex) {
+            return Double.NaN;
+        }
     }
     
     @Override
@@ -243,6 +248,7 @@ public class NumericalRankSwappingView extends DialogBase<NumericalRankSwappingC
         });
 
         calculateButton.setText("Calculate");
+        calculateButton.setEnabled(false);
         calculateButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 calculateButtonActionPerformed(evt);
@@ -365,6 +371,7 @@ public class NumericalRankSwappingView extends DialogBase<NumericalRankSwappingC
             }
         }
 
+        calculateButton.setEnabled(true);
         if (added) {
             //Change selection of variables list
             for (int varIndex=0; varIndex < variablesTable.getModel().getRowCount(); varIndex++) {
@@ -381,6 +388,10 @@ public class NumericalRankSwappingView extends DialogBase<NumericalRankSwappingC
         for (Object variable : selectedVariableList.getSelectedValuesList()) {
             selectedListModel.removeElement((VariableMu)variable);
         }
+        if (selectedVariableList.getModel().getSize() > 0) {
+            selectedVariableList.setSelectedIndex(0);
+        }
+        calculateButton.setEnabled(getSelectedVariables().size() > 0);
     }//GEN-LAST:event_fromSelectedButtonActionPerformed
 
     private void calculateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_calculateButtonActionPerformed

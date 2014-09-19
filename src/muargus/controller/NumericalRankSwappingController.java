@@ -83,6 +83,15 @@ public class NumericalRankSwappingController extends ControllerBase<NumericalRan
         return b.toString();
     }
     
+    private boolean checkFields() {
+        double percentage = getNumericalRankSwappingView().getPercentage();
+        if (Double.isNaN(percentage) || percentage <= 0 || percentage > 100) {
+            getView().showErrorMessage(new ArgusException("Illegal value for the Rank swapping percentage"));
+            return false;
+        }
+    return true;
+    }
+    
     public void undo() {
         ArrayList<VariableMu> selected = getNumericalRankSwappingView().getSelectedVariables();
         if (selected.isEmpty()) {
@@ -114,6 +123,9 @@ public class NumericalRankSwappingController extends ControllerBase<NumericalRan
     }
     
     public void calculate() {
+        if (!checkFields()) {
+            return;
+        }
         ArrayList<VariableMu> selectedVariables = getNumericalRankSwappingView().getSelectedVariables();
         if (variablesAreUsed(selectedVariables)) {
             if (!getView().showConfirmDialog("One or more of the variables are already modified. Continue?")) {
