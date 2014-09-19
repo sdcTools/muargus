@@ -3,6 +3,11 @@ niet behandelde opmerkingen/vragen:
     Dit komt omdat er een komma is gebruikt ipv een spatie. Oude mu ziet het ook als 1 missing value
     Wat doen?
 
+opmerkingen RecodeMu:
+-   moet positionsTruncated een integer zijn?
+-   willen we methoden verplaatsen naar de GlobalRecodeController? 
+    bijvoorbeeld: getTableRow(), write() en misschien equals() en hashcode()
+
 
 Nog te doen:                                                                                                Mee bezig:
  
