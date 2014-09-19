@@ -1,8 +1,8 @@
 package muargus.model;
 
 /**
- * Model class of the Microaggregation screen. Only a single instance of this
- * class will exist.
+ * Model class containing relevant information for microaggregation. An instance
+ * for each numerical variable of this class will exist.
  *
  * @author Statistics Netherlands
  */
