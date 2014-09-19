@@ -952,6 +952,7 @@ public class MainFrameView extends javax.swing.JFrame {
     }//GEN-LAST:event_unsafeCombinationsTableMouseClicked
 
     private void qualitativeMicroaggregationMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_qualitativeMicroaggregationMenuItemActionPerformed
+        controller.qualitativeMicroaggregation();
         // TODO add your handling code here:
     }//GEN-LAST:event_qualitativeMicroaggregationMenuItemActionPerformed
 
