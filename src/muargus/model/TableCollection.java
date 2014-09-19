@@ -5,7 +5,7 @@ import java.util.ArrayList;
 /**
  * The model class of the ShowTableCollection screen.
  *
- * @author ambargus
+ * @author Statistics Netherlands
  */
 public class TableCollection {
 
