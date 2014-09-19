@@ -35,6 +35,8 @@ public class MicroaggregationView extends DialogBase<MicroaggregationController>
         setLocationRelativeTo(null);
         this.variablesTable.setDefaultRenderer(Object.class, new HighlightTableCellRenderer());
         this.selectedVariableList.setCellRenderer(new VariableNameCellRenderer());
+        this.setTitle(controller.isNumerical() ? "Numerical Micro Aggregation" : "Qualitative Micro Aggregation");
+        this.optimalCheckbox.setVisible(controller.isNumerical());
      }
         
     @Override

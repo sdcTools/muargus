@@ -53,6 +53,7 @@ public class MainFrameController {
         ModifyNumericalVariables,
         NumericalMicroAggregation,
         NumericalRankSwapping,
+        QualitativeMicroAggregation,
         MakeProtectedFile,
         ViewReport,
         Contents,
@@ -91,10 +92,10 @@ public class MainFrameController {
         if (this.metadata.getCombinations() != null) {
             tablesCalculated = this.metadata != null && this.metadata.getCombinations().getTables().size() > 0;
         }
-        boolean hasNumericalaVariables = false;
+        boolean hasNumericalVariables = false;
         for (VariableMu variableMu : this.metadata.getVariables()) {
             if (variableMu.isNumeric()) {
-                hasNumericalaVariables = true;
+                hasNumericalVariables = true;
                 break;
             }
         }
@@ -111,9 +112,10 @@ public class MainFrameController {
                 tablesCalculated && metadata.getCombinations().isRiskModel() && !metadata.isHouseholdData());
         view.enableAction(Action.HouseholdRiskSpecification,
                 tablesCalculated && metadata.getCombinations().isRiskModel() && metadata.isHouseholdData());
-        view.enableAction(Action.ModifyNumericalVariables, tablesCalculated && hasNumericalaVariables);
-        view.enableAction(Action.NumericalMicroAggregation, tablesCalculated && hasNumericalaVariables);
-        view.enableAction(Action.NumericalRankSwapping, tablesCalculated && hasNumericalaVariables);
+        view.enableAction(Action.ModifyNumericalVariables, tablesCalculated && hasNumericalVariables);
+        view.enableAction(Action.NumericalMicroAggregation, tablesCalculated && hasNumericalVariables);
+        view.enableAction(Action.NumericalRankSwapping, tablesCalculated && hasNumericalVariables);
+        view.enableAction(Action.QualitativeMicroAggregation, tablesCalculated);
 
     }
 

@@ -28,9 +28,9 @@ public class MicroaggregationController extends ControllerBase<Microaggregation>
     private final boolean numerical;
 
     public MicroaggregationController(java.awt.Frame parentView, MetadataMu metadata, boolean numerical) {
+        this.numerical = numerical;
         super.setView(new MicroaggregationView(parentView, true, this));
         this.metadata = metadata;
-        this.numerical = numerical;
         fillModel(numerical);
         getView().setMetadata(this.metadata);
     }
