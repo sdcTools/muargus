@@ -61,7 +61,11 @@ public class NumericalRankSwappingView extends DialogBase<NumericalRankSwappingC
         this.selectedListModel = new DefaultListModel<>();
         selectedVariableList.setModel(this.selectedListModel);
         //variableList.setSelectedIndex(0);
-        //updateValues();
+        updateValues();
+    }
+    
+    private void updateValues() {
+        calculateButton.setEnabled(getSelectedVariables().size() > 0);    
     }
     
     public void updateVariableRows(ReplacementSpec replacement){
@@ -371,7 +375,7 @@ public class NumericalRankSwappingView extends DialogBase<NumericalRankSwappingC
             }
         }
 
-        calculateButton.setEnabled(true);
+        updateValues();
         if (added) {
             //Change selection of variables list
             for (int varIndex=0; varIndex < variablesTable.getModel().getRowCount(); varIndex++) {
@@ -391,7 +395,7 @@ public class NumericalRankSwappingView extends DialogBase<NumericalRankSwappingC
         if (selectedVariableList.getModel().getSize() > 0) {
             selectedVariableList.setSelectedIndex(0);
         }
-        calculateButton.setEnabled(getSelectedVariables().size() > 0);
+        updateValues();
     }//GEN-LAST:event_fromSelectedButtonActionPerformed
 
     private void calculateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_calculateButtonActionPerformed

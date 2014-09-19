@@ -89,6 +89,15 @@ public class MicroaggregationController extends ControllerBase<Microaggregation>
         return b.toString();
     }
     
+    private boolean checkFields() {
+        int nRecords = getMicroaggregationView().getMinimalNumberOfRecords();
+        if (nRecords < 2) {
+            getView().showErrorMessage(new ArgusException("Illegal value for Minimum Number of Records per Group"));
+            return false;
+        }
+        return true;
+    }
+        
     public void undo() {
         ArrayList<VariableMu> selected = getMicroaggregationView().getSelectedVariables();
         if (selected.isEmpty()) {
@@ -120,6 +129,9 @@ public class MicroaggregationController extends ControllerBase<Microaggregation>
     }
     
     public void calculate() {
+        if (!checkFields()) {
+            return;
+        }
         ArrayList<VariableMu> selectedVariables = getMicroaggregationView().getSelectedVariables();
         if (variablesAreUsed(selectedVariables)) {
             if (!getView().showConfirmDialog("One or more of the variables are already modified. Continue?")) {
