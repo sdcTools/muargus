@@ -67,72 +67,90 @@ public class RecodeMu {
     }
 
     /**
-     * 
-     * @return 
+     * Get the path of the global recode file.
+     *
+     * @return String containing the path of the global recode file.
      */
     public String getGrcFile() {
         return this.grcFile;
     }
 
     /**
-     * 
-     * @param grcFile 
+     * Set the path of the global recode file.
+     *
+     * @param grcFile String containing the path of the global recode file.
      */
     public void setGrcFile(String grcFile) {
         this.grcFile = grcFile;
     }
 
     /**
-     * 
-     * @return 
+     * Get the path of the code list file.
+     *
+     * @return String containing the the path of the code list file.
      */
     public String getCodeListFile() {
         return this.codeListFile;
     }
 
     /**
-     * 
-     * @param codeListFile 
+     * Set the path of the code list file.
+     *
+     * @param codeListFile String containing the the path of the code list file.
      */
     public void setCodeListFile(String codeListFile) {
         this.codeListFile = codeListFile;
     }
 
     /**
-     * 
-     * @return 
+     * Get the global recode text. The global recode text contains the recodings
+     * for the codes. The text mostly consists of multiple lines and each lines
+     * gives: 1) the new code, 2) a colon, 3) the original codes that will be
+     * recoded. Example: "20:1-8".
+     *
+     * @return String containing the global recode text.
      */
     public String getGrcText() {
         return this.grcText;
     }
 
     /**
-     * 
-     * @param grcText 
+     * Set the global recode text. The global recode text contains the recodings
+     * for the codes. The text mostly consists of multiple lines and each lines
+     * gives: 1) the new code, 2) a colon, 3) the original codes that will be
+     * recoded. Example: "20:1-8".
+     *
+     * @param grcText String containing the global recode text.
      */
     public void setGrcText(String grcText) {
         this.grcText = grcText;
     }
 
     /**
-     * 
-     * @return 
+     * Gets the variable.
+     *
+     * @return VariableMu instance containing the variable.
      */
     public VariableMu getVariable() {
         return this.variable;
     }
 
     /**
-     * 
-     * @return 
+     * Returns whether the variable is truncated.
+     *
+     * @return Boolean indicating whether the variable is truncated.
      */
     public boolean isTruncated() {
         return this.truncated;
     }
 
     /**
-     * 
-     * @param isTruncated 
+     * Sets whether the variable is truncated. If a variable is truncated the
+     * boolean recoded is set to false. This does not mean that a truncated
+     * variable can not also be recoded, but it is a way of knowing which form
+     * of recoding has been done last.
+     *
+     * @param isTruncated Boolean indicating whether the variable is truncated.
      */
     public void setTruncated(boolean isTruncated) {
         this.truncated = isTruncated;
@@ -142,16 +160,21 @@ public class RecodeMu {
     }
 
     /**
-     * 
-     * @return 
+     * Returns whether the variable is recoded.
+     *
+     * @return Boolean indicating whether the variable is recoded.
      */
     public boolean isRecoded() {
         return this.recoded;
     }
 
     /**
-     * 
-     * @param isRecoded 
+     * Sets whether the variable is recoded. If a variable is recoded the
+     * boolean truncated is set to false. This does not mean that a recoded
+     * variable can not also be truncated, but it is a way of knowing which form
+     * of recoding has been done last.
+     *
+     * @param isRecoded Boolean indicating whether the variable is recoded.
      */
     public void setRecoded(boolean isRecoded) {
         this.recoded = isRecoded;
@@ -161,72 +184,86 @@ public class RecodeMu {
     }
 
     /**
-     * 
-     * @return 
+     * Gets the new first missing value after recoding.
+     *
+     * @return String containing the new first missing value after recoding.
      */
     public String getMissing_1_new() {
         return this.missing_1_new;
     }
 
     /**
-     * 
-     * @param missing_1_new 
+     * Sets the new first missing value after recoding.
+     *
+     * @param missing_1_new String containing the new first missing value after
+     * recoding.
      */
     public void setMissing_1_new(String missing_1_new) {
         this.missing_1_new = missing_1_new;
     }
 
     /**
-     * 
-     * @return 
+     * Gets the new second missing value after recoding.
+     *
+     * @return String containing the new second missing value after recoding.
      */
     public String getMissing_2_new() {
         return this.missing_2_new;
     }
 
     /**
-     * 
-     * @param missing_2_new 
+     * Sets the new second missing value after recoding.
+     *
+     * @param missing_2_new String containing the new second missing value after
+     * recoding.
      */
     public void setMissing_2_new(String missing_2_new) {
         this.missing_2_new = missing_2_new;
     }
 
     /**
-     * 
-     * @return 
+     * Gets the original first missing value.
+     *
+     * @return String containing the original first missing value.
      */
     public String getMissing_1_original() {
         return this.missing_1_original;
     }
 
     /**
-     * 
-     * @return 
+     * Gets the original second missing value.
+     *
+     * @return String containing the original second missing value.
      */
     public String getMissing_2_original() {
         return this.missing_2_original;
     }
 
     /**
-     * 
-     * @return 
+     * Get the number of positions that are truncated.
+     *
+     * @return String containing the number of positions that are truncated.
      */
     public String getPositionsTruncated() {
         return positionsTruncated;
     }
 
     /**
-     * 
-     * @param positionsTruncated 
+     * Set the number of positions that are truncated
+     *
+     * @param positionsTruncated String containing the number of positions that
+     * are truncated.
      */
     public void setPositionsTruncated(String positionsTruncated) {
         this.positionsTruncated = positionsTruncated;
     }
 
+    //TODO: Zullen we dit veranderen naar een getData() en in de controller stoppen?
     /**
-     * 
-     * @return 
+     * Gets the data shown in the variables table for one row.
+     *
+     * @return Array of Strings containing the a symbol for the form of recoding
+     * in the first column and the variable name in the second column.
      */
     public String[] getTableRow() {
         String[] row = new String[2];
@@ -243,9 +280,13 @@ public class RecodeMu {
     }
 
     /**
-     * 
-     * @param file
-     * @throws ArgusException 
+     * Writes the global recode text as a .grc file. The global recode file
+     * contains the recodings (old and new codes), missing values and if
+     * available the codelist.
+     *
+     * @param file The file for the safe global recode file.
+     * @throws ArgusException Throws an ArgusException when an error during the
+     * writing of the file occurs.
      */
     public void write(File file) throws ArgusException {
         BufferedWriter w;
@@ -270,9 +311,14 @@ public class RecodeMu {
     }
 
     /**
-     * 
-     * @param o
-     * @return 
+     * Checks if a RecodeMu object is equal to this instance of RecodeMu. Each
+     * individual component of this RecodeMu instance is compaired to its
+     * counterpart of the given RecodeMu instance.
+     *
+     * @param o Object containing the RecodeMu object that will be compaired to
+     * this instance of RecodeMu.
+     * @return Boolean indicating whether the given RecodeMu object is equal to
+     * this instance of RecodeMu.
      */
     @Override
     public boolean equals(Object o) {
@@ -293,8 +339,12 @@ public class RecodeMu {
     }
 
     /**
-     * 
-     * @return 
+     * Gets the hashcode. The hashcode is calculated as a addition of the
+     * hashcodes from the relevant individual components: codeListFile, grcFile,
+     * grcText, missing_1_new, missing_2_new, missing_1_original and
+     * missing_2_original.
+     *
+     * @return Integer containing the hashcode.
      */
     @Override
     public int hashCode() {
