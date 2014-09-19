@@ -1,27 +1,32 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package muargus.model;
 
-
 /**
+ * Model class containing relevant information for rank swapping. An instance
+ * for each numerical variable of this class will exist.
  *
- * @author ambargus
+ * @author Statistics Netherlands
  */
 public class RankSwappingSpec extends ReplacementSpec {
+
     private final double percentage;
-    
+
+    /**
+     * Constructor of the model class Microaggregation. Makes empty arraylists
+     * for the variables and the microaggregations.
+     *
+     * @param percentage Double containing the rank swapping percentage.
+     */
     public RankSwappingSpec(double percentage) {
         this.percentage = percentage;
     }
 
-
+    /**
+     * Gets the rank swapping percentage.
+     *
+     * @return Double containing the rank swapping percentage.
+     */
     public double getPercentage() {
         return percentage;
     }
-    
-    
+
 }
