@@ -166,6 +166,7 @@ public class Combinations {
     /**
      * Gets the model class of the NumbericalMicroaggregation screen.
      *
+     * @param numerical Boolean indication whether there are numerical variables.
      * @return Returns the NumbericalMicroaggregation model class.
      */
     public Microaggregation getMicroaggregation(boolean numerical) {
@@ -174,6 +175,7 @@ public class Combinations {
 
     /**
      * Creates a new instance of the NumbericalMicroaggregation class.
+     * @param numerical Boolean indication whether there are numerical variables.
      */
     public void createMicroaggregation(boolean numerical) {
         if (numerical) {
@@ -212,8 +214,6 @@ public class Combinations {
      * Gets an array of integers containing the unsafeCombinations for each
      * dimensions.
      *
-     * @param variable VariableMu instance containing the informating on this
-     * particular variable.
      * @return Array of integers containing the number of unsafe combinations
      * per dimension.
      */
