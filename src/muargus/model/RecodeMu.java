@@ -258,7 +258,9 @@ public class RecodeMu {
         this.positionsTruncated = positionsTruncated;
     }
 
+    //TODO: Zullen we dit veranderen naar een getData() en in de controller stoppen?
     /**
+     * Gets the data shown in the variables table for one row.
      *
      * @return Array of Strings containing the a symbol for the form of recoding
      * in the first column and the variable name in the second column.
@@ -278,9 +280,13 @@ public class RecodeMu {
     }
 
     /**
+     * Writes the global recode text as a .grc file. The global recode file
+     * contains the recodings (old and new codes), missing values and if
+     * available the codelist.
      *
-     * @param file
-     * @throws ArgusException
+     * @param file The file for the safe global recode file.
+     * @throws ArgusException Throws an ArgusException when an error during the
+     * writing of the file occurs.
      */
     public void write(File file) throws ArgusException {
         BufferedWriter w;
@@ -305,9 +311,14 @@ public class RecodeMu {
     }
 
     /**
+     * Checks if a RecodeMu object is equal to this instance of RecodeMu. Each
+     * individual component of this RecodeMu instance is compaired to its
+     * counterpart of the given RecodeMu instance.
      *
-     * @param o
-     * @return
+     * @param o Object containing the RecodeMu object that will be compaired to
+     * this instance of RecodeMu.
+     * @return Boolean indicating whether the given RecodeMu object is equal to
+     * this instance of RecodeMu.
      */
     @Override
     public boolean equals(Object o) {
@@ -328,8 +339,12 @@ public class RecodeMu {
     }
 
     /**
+     * Gets the hashcode. The hashcode is calculated as a addition of the
+     * hashcodes from the relevant individual components: codeListFile, grcFile,
+     * grcText, missing_1_new, missing_2_new, missing_1_original and
+     * missing_2_original.
      *
-     * @return
+     * @return Integer containing the hashcode.
      */
     @Override
     public int hashCode() {

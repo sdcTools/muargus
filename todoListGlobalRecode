@@ -6,7 +6,7 @@ niet behandelde opmerkingen/vragen:
 opmerkingen RecodeMu:
 -   moet positionsTruncated een integer zijn?
 -   willen we methoden verplaatsen naar de GlobalRecodeController? 
-    bijvoorbeeld: getTableRow(), write() en misschien equals() en hashcode()
+    bijvoorbeeld: getTableRow(), write() en misschien equals()?
 
 
 Nog te doen:                                                                                                Mee bezig:
