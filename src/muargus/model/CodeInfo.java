@@ -135,7 +135,6 @@ public class CodeInfo {
     public String toString() {
         return this.getCode();
     }
-
     
     /**
      * Gets the probability used for the PRAM-method
