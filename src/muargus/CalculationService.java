@@ -146,7 +146,7 @@ public class CalculationService {
             table.setNrOfUnsafeCombinations(nUC[0]);
             ArrayList<VariableMu> variables = getVariables();
             for (int varIndex = 0; varIndex < dimensions; varIndex++) {
-                table.addVariable(variables.get(varList[varIndex] - 1));
+                table.getVariables().add(variables.get(varList[varIndex] - 1));
             }
             tables.add(table);
             index++;

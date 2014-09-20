@@ -432,7 +432,7 @@ public class SelectCombinationsView extends DialogBase<SelectCombinationsControl
             TableMu tableMuNew = new TableMu();
             tableMuNew.setThreshold(model.getThreshold());
             for (VariableMu v : variableMu) {
-                tableMuNew.addVariable(v);
+                tableMuNew.getVariables().add(v);
             }
             
             boolean add = true;
@@ -457,7 +457,7 @@ public class SelectCombinationsView extends DialogBase<SelectCombinationsControl
                     TableMu tableMu = new TableMu();
                     variablesSelectedListModel.removeAllElements();
                     tableMu.setThreshold(model.getThreshold());
-                    tableMu.setVariables(variableMu);
+                    tableMu.getVariables().addAll(Arrays.asList(variableMu));
                     model.addTable(tableMu);
                 }
             } else if (!model.isRiskModel()) {
@@ -664,7 +664,7 @@ public class SelectCombinationsView extends DialogBase<SelectCombinationsControl
 
                 //Make table, add the variable array and add this table to the table array
                 TableMu tableMu = new TableMu();
-                tableMu.setVariables(temp);
+                tableMu.getVariables().addAll(temp);
                 tableMu.setThreshold(model.getThresholds()[threshold]);
                 model.getTables().add(tableMu);
                 
@@ -707,7 +707,7 @@ public class SelectCombinationsView extends DialogBase<SelectCombinationsControl
                 
                 if (temp.size() == numberOfLevels) {
                     TableMu tableMu = new TableMu();
-                    tableMu.setVariables(temp);
+                    tableMu.getVariables().addAll(temp);
                     tableMu.setThreshold(model.getThreshold());
                     model.addTable(tableMu);
                 }

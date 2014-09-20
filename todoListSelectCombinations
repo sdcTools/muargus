@@ -1,4 +1,5 @@
 niet behandelde opmerkingen/vragen:
+- willen we een getData() methode in de constructor. Nu zit het half in de view en half in TableMu.
 15. progressbar
     - checken of hier nog iets aan gedaan moet worden bij heel veel tabellen?
     - moet deze ook gekoppeld worden aan automatic generate tables? Ik denk dat het beter is om in plaats 
