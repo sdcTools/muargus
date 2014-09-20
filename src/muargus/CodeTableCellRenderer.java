@@ -24,6 +24,9 @@ public class CodeTableCellRenderer extends DefaultTableCellRenderer {
          if (column == 0) {
              value = ((CodeInfo) value).getCode();
          }
+         if (value != null && value.equals(-1)) {
+             value = "-";
+         }
              
              
           Component cr = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);

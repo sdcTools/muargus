@@ -432,6 +432,7 @@ public class MainFrameView extends javax.swing.JFrame {
 
         unsafeCombinationsLabel.setText("# unsafe combinations in each dimension");
 
+        unsafeCombinationsTable.setAutoCreateRowSorter(true);
         unsafeCombinationsTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -474,6 +475,7 @@ public class MainFrameView extends javax.swing.JFrame {
 
         variableLabel.setText("Variable:");
 
+        variablesTable.setAutoCreateRowSorter(true);
         variablesTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -831,8 +833,8 @@ public class MainFrameView extends javax.swing.JFrame {
         if (0 > j || j >= this.model.getVariablesInTables().size()) {
             return;
         }
+        j = unsafeCombinationsTable.convertRowIndexToModel(j);
         VariableMu variable = this.model.getVariablesInTables().get(j);
-        
         //UnsafeInfo unsafeInfo = this.model.getUnsafe(variable);
         this.variableNameLabel.setText(variable.getName());
 
@@ -857,8 +859,21 @@ public class MainFrameView extends javax.swing.JFrame {
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return false;
             }
+            
+            @Override
+            public Class getColumnClass(int column) {
+                switch (column) {
+                    case 0:
+                        return CodeInfo.class;
+                    case 1:
+                        return String.class;
+                    default:
+                        return Integer.class;
+                }
+            }
         };
         variablesTable.setModel(tableModel);
+        variablesTable.setDefaultRenderer(Integer.class, new CodeTableCellRenderer());
         variablesTable.setDefaultRenderer(Object.class, new CodeTableCellRenderer());
 
     }
