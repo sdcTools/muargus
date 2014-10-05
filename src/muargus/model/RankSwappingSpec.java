@@ -7,24 +7,24 @@ package muargus.model;
  */
 public class RankSwappingSpec extends ReplacementSpec {
 
-    private final double percentage;
+    private final int percentage;
 
     /**
      * Constructor of the model class Microaggregation. Makes an empty arraylist
      * for the microaggregations.
      *
-     * @param percentage Double containing the rank swapping percentage.
+     * @param percentage Integer containing the rank swapping percentage.
      */
-    public RankSwappingSpec(double percentage) {
+    public RankSwappingSpec(int percentage) {
         this.percentage = percentage;
     }
 
     /**
      * Gets the rank swapping percentage.
      *
-     * @return Double containing the rank swapping percentage.
+     * @return Integer containing the rank swapping percentage.
      */
-    public double getPercentage() {
+    public int getPercentage() {
         return percentage;
     }
 

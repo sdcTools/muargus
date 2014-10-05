@@ -75,11 +75,7 @@ public class MainFrameView extends javax.swing.JFrame {
                 return;
             case ViewReport:
                 doEnable(viewReportButton, viewReportMenuItem, enable);
-                return;
-            case QualitativeMicroAggregation:
-                doEnable(qualitativeMicroaggregationButton, qualitativeMicroaggregationMenuItem, enable);
-                return;
-                
+                return;                
         }
     }
 
@@ -154,7 +150,6 @@ public class MainFrameView extends javax.swing.JFrame {
         pramSpecificationButton = new javax.swing.JButton();
         individualRiskSpecificationButton = new javax.swing.JButton();
         householdRiskSpecificationButton = new javax.swing.JButton();
-        qualitativeMicroaggregationButton = new javax.swing.JButton();
         modifyNumericalVariablesButton = new javax.swing.JButton();
         numericalMicroaggregationButton = new javax.swing.JButton();
         numericalRankSwappingButton = new javax.swing.JButton();
@@ -194,8 +189,6 @@ public class MainFrameView extends javax.swing.JFrame {
         numericalVariablesMenuItem = new javax.swing.JMenuItem();
         numericalMicroaggregationMenuItem = new javax.swing.JMenuItem();
         numericalRankSwappingMenuItem = new javax.swing.JMenuItem();
-        jSeparator1 = new javax.swing.JPopupMenu.Separator();
-        qualitativeMicroaggregationMenuItem = new javax.swing.JMenuItem();
         outputMenu = new javax.swing.JMenu();
         makeProtectedFileMenuItem = new javax.swing.JMenuItem();
         viewReportMenuItem = new javax.swing.JMenuItem();
@@ -308,19 +301,6 @@ public class MainFrameView extends javax.swing.JFrame {
             }
         });
         toolBar.add(householdRiskSpecificationButton);
-
-        qualitativeMicroaggregationButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/muargus/resources/icons/QM.png"))); // NOI18N
-        qualitativeMicroaggregationButton.setEnabled(false);
-        qualitativeMicroaggregationButton.setFocusable(false);
-        qualitativeMicroaggregationButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        qualitativeMicroaggregationButton.setPreferredSize(new java.awt.Dimension(23, 23));
-        qualitativeMicroaggregationButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        qualitativeMicroaggregationButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                qualitativeMicroaggregationMenuItemActionPerformed(evt);
-            }
-        });
-        toolBar.add(qualitativeMicroaggregationButton);
 
         modifyNumericalVariablesButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/muargus/resources/icons/Numeric_1_16x16x4.png"))); // NOI18N
         modifyNumericalVariablesButton.setEnabled(false);
@@ -652,17 +632,6 @@ public class MainFrameView extends javax.swing.JFrame {
             }
         });
         modifyMenu.add(numericalRankSwappingMenuItem);
-        modifyMenu.add(jSeparator1);
-
-        qualitativeMicroaggregationMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Q, java.awt.event.InputEvent.CTRL_MASK));
-        qualitativeMicroaggregationMenuItem.setText("Qualitative Micro Aggregation");
-        qualitativeMicroaggregationMenuItem.setEnabled(false);
-        qualitativeMicroaggregationMenuItem.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                qualitativeMicroaggregationMenuItemActionPerformed(evt);
-            }
-        });
-        modifyMenu.add(qualitativeMicroaggregationMenuItem);
 
         menuBar.add(modifyMenu);
 
@@ -975,11 +944,6 @@ public class MainFrameView extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_unsafeCombinationsTableMouseClicked
 
-    private void qualitativeMicroaggregationMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_qualitativeMicroaggregationMenuItemActionPerformed
-        controller.qualitativeMicroaggregation();
-        // TODO add your handling code here:
-    }//GEN-LAST:event_qualitativeMicroaggregationMenuItemActionPerformed
-
     /**
      * @param args the command line arguments
      */
@@ -1033,7 +997,6 @@ public class MainFrameView extends javax.swing.JFrame {
     private javax.swing.JMenuItem householdRiskSpecificationMenuItem;
     private javax.swing.JButton individualRiskSpecificationButton;
     private javax.swing.JMenuItem individualRiskSpecificationMenuItem;
-    private javax.swing.JPopupMenu.Separator jSeparator1;
     private javax.swing.JButton makeProtectedFileButton;
     private javax.swing.JMenuItem makeProtectedFileMenuItem;
     private javax.swing.JMenuItem manualMenuItem;
@@ -1055,8 +1018,6 @@ public class MainFrameView extends javax.swing.JFrame {
     private javax.swing.JMenu outputMenu;
     private javax.swing.JButton pramSpecificationButton;
     private javax.swing.JMenuItem pramSpecificationMenuItem;
-    private javax.swing.JButton qualitativeMicroaggregationButton;
-    private javax.swing.JMenuItem qualitativeMicroaggregationMenuItem;
     private javax.swing.JButton showTableCollectionButton;
     private javax.swing.JMenuItem showTableCollectionMenuItem;
     private javax.swing.JButton specifyCombinationsButton;

@@ -8,8 +8,9 @@ package muargus.controller;
 
 import argus.model.ArgusException;
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
+import muargus.extern.dataengine.Numerical;
+import muargus.extern.dataengine.NumericalDllConstants;
 import muargus.model.MetadataMu;
 import muargus.model.MicroaggregationSpec;
 import muargus.model.Microaggregation;
@@ -17,7 +18,6 @@ import muargus.model.ReplacementFile;
 import muargus.model.ReplacementSpec;
 import muargus.model.VariableMu;
 import muargus.view.MicroaggregationView;
-import org.apache.commons.io.FileUtils;
 
 /**
  *
@@ -59,17 +59,36 @@ public class MicroaggregationController extends ControllerBase<Microaggregation>
             //TODO: de catalaan
             //for now: just copy the file
             MicroaggregationSpec microaggregation = getModel().getMicroaggregations().get(getModel().getMicroaggregations().size()-1);
-            try {
-                FileUtils.copyFile(new File(microaggregation.getReplacementFile().getInputFilePath()), 
-                        new File(microaggregation.getReplacementFile().getOutputFilePath()));
+            //try {
+//                double[][] data = readVariablesFromFile(
+//                        new File(microaggregation.getReplacementFile().getInputFilePath()),
+//                        muargus.MuARGUS.getDefaultSeparator(), 
+//                        microaggregation.getVariables().size());
+                
+                Numerical num = new Numerical();
+                int[] errorCode = new int[1];
+                int[] nColPerGroup = new int[] { microaggregation.getVariables().size() };
+                num.DoMicroAggregation(microaggregation.getReplacementFile().getInputFilePath(),
+                        microaggregation.getReplacementFile().getOutputFilePath(),
+                        muargus.MuARGUS.getDefaultSeparator(),
+                        microaggregation.getVariables().size(),
+                        microaggregation.getMinimalNumberOfRecords(),
+                        1,
+                        microaggregation.isOptimal() ? 1 : 0,
+                        nColPerGroup,
+                        errorCode);
+                if (errorCode[0] != 0) {
+                    getView().showErrorMessage(new ArgusException("Error during MicroAggregation"));
+                }
                 getView().showMessage("Micro aggregation successfully completed");
                 getView().setProgress(0);
                 getView().showStepName("");
                 getMicroaggregationView().updateVariableRows(microaggregation);
-            }
-            catch (IOException ex) {
-                getView().showErrorMessage(new ArgusException(ex.getMessage()));
-            }
+            //}
+            //catch (ArgusException ex) {
+            //    getView().showErrorMessage(ex);
+                //getView().showErrorMessage(new ArgusException(ex.getMessage()));
+            //}
     }
     
     public boolean isNumerical() {
@@ -79,16 +98,7 @@ public class MicroaggregationController extends ControllerBase<Microaggregation>
     private MicroaggregationView getMicroaggregationView() {
         return (MicroaggregationView)getView();
     }
-    
-    private String printVariableNames(ArrayList<VariableMu> list) {
-        StringBuilder b = new StringBuilder(list.get(0).getName());
-        for (int i=1; i < list.size(); i++) {
-            b.append(", ");
-            b.append(list.get(i).getName());
-        }
-        return b.toString();
-    }
-    
+        
     private boolean checkFields() {
         int nRecords = getMicroaggregationView().getMinimalNumberOfRecords();
         if (nRecords < 2) {
@@ -104,7 +114,7 @@ public class MicroaggregationController extends ControllerBase<Microaggregation>
             return;
         }
         if (!getView().showConfirmDialog(String.format("The micro aggregation involving %s will be removed. Continue?",
-                printVariableNames(selected)))) {
+                VariableMu.printVariableNames(selected)))) {
             return;
         }
         for (MicroaggregationSpec microaggregation : getModel().getMicroaggregations()) {
@@ -125,7 +135,7 @@ public class MicroaggregationController extends ControllerBase<Microaggregation>
                 }
             }
         }
-        getView().showMessage(String.format("Micro aggregation involving %s not found", printVariableNames(selected)));
+        getView().showMessage(String.format("Micro aggregation involving %s not found", VariableMu.printVariableNames(selected)));
     }
     
     public void calculate() {

@@ -68,6 +68,9 @@ public class Combinations {
      * @return Returns the GlobalRecode model class.
      */
     public GlobalRecode getGlobalRecode() {
+        if (this.globalRecode == null) {
+            createGlobalRecode();
+        }
         return this.globalRecode;
     }
 
@@ -75,7 +78,7 @@ public class Combinations {
      * Creates a new instance of the GlobalRecode class and assigns the
      * variables used in the tables from the SelectCombinations.
      */
-    public void createGlobalRecode() {
+    private void createGlobalRecode() {
         this.globalRecode = new GlobalRecode();
         this.globalRecode.getVariables().addAll(this.getVariablesInTables());
     }
@@ -86,6 +89,9 @@ public class Combinations {
      * @return Returns the ShowTableCollection model class.
      */
     public TableCollection getTableCollection() {
+        if (this.tableCollection == null) {
+            createTableCollection();
+        }
         return this.tableCollection;
     }
 
@@ -93,7 +99,7 @@ public class Combinations {
      * Creates a new instance of the TableCollecton class and assigns the
      * variables used in the tables from the SelectCombinations.
      */
-    public void createTableCollection() {
+    private void createTableCollection() {
         this.tableCollection = new TableCollection();
         this.tableCollection.setVariables(this.getVariablesInTables());
     }
@@ -104,6 +110,9 @@ public class Combinations {
      * @return Returns the MakeProtectedFile model class.
      */
     public ProtectedFile getProtectedFile() {
+        if (this.protectedFile == null) {
+            createProtectedFile();
+        }
         return this.protectedFile;
     }
 
@@ -111,7 +120,7 @@ public class Combinations {
      * Creates a new instance of the ProtectedFile class, assigns the variables
      * used in the tables from the SelectCombinations and sets the riskmodel.
      */
-    public void createProtectedFile() {
+    private void createProtectedFile() {
         this.protectedFile = new ProtectedFile();
         this.protectedFile.getVariables().addAll(this.getVariablesInTables());
         this.protectedFile.setRiskModel(this.isRiskModel());
@@ -123,13 +132,16 @@ public class Combinations {
      * @return Returns the PramSpecification model class.
      */
     public PramSpecification getPramSpecification() {
+        if (this.pramSpecification == null) {
+            createPramSpecification();
+        }
         return pramSpecification;
     }
 
     /**
      * Creates a new instance of the PramSpecification class.
      */
-    public void createPramSpecification() {
+    private void createPramSpecification() {
         this.pramSpecification = new PramSpecification();
     }
 
@@ -153,13 +165,16 @@ public class Combinations {
      * @return Returns the ModifyNumericalVariables model class.
      */
     public ModifyNumericalVariables getModifyNumericalVariables() {
+        if (this.modifyNumericalVariables == null) {
+            createModifyNumericalVariables();
+        }
         return modifyNumericalVariables;
     }
 
     /**
      * Creates a new instance of the ModifyNumericalVariables class.
      */
-    public void createModifyNumericalVariables() {
+    private void createModifyNumericalVariables() {
         this.modifyNumericalVariables = new ModifyNumericalVariables();
     }
 
@@ -170,6 +185,9 @@ public class Combinations {
      * @return Returns the NumbericalMicroaggregation model class.
      */
     public Microaggregation getMicroaggregation(boolean numerical) {
+        if ((numerical ? this.numericalMicroaggregation : this.qualitativeMicroaggregation) == null) {
+            createMicroaggregation(numerical);
+        }
         return numerical ? this.numericalMicroaggregation : this.qualitativeMicroaggregation;
     }
 
@@ -177,7 +195,7 @@ public class Combinations {
      * Creates a new instance of the NumbericalMicroaggregation class.
      * @param numerical Boolean indication whether there are numerical variables.
      */
-    public void createMicroaggregation(boolean numerical) {
+    private void createMicroaggregation(boolean numerical) {
         if (numerical) {
             this.numericalMicroaggregation = new Microaggregation();
         }
@@ -193,13 +211,16 @@ public class Combinations {
      * @return Returns the NumericalRankSwapping model class.
      */
     public NumericalRankSwapping getNumericalRankSwapping() {
-        return numericalRankSwapping;
+        if (this.numericalRankSwapping == null) {
+            createNumericalRankSwapping();
+        }
+        return this.numericalRankSwapping;
     }
 
     /**
      * Creates a new instance of the NumericalRankSwapping class.
      */
-    public void createNumericalRankSwapping() {
+    private void createNumericalRankSwapping() {
         this.numericalRankSwapping = new NumericalRankSwapping();
     }
 

@@ -88,7 +88,7 @@ public class RiskSpecificationView extends DialogBase<RiskSpecificationControlle
     @Override
     public void initializeData() {
         this.model = getMetadata().getCombinations().getRiskSpecifications().get(this.riskTable);
-        this.tableLabel.setText(getController().getRiskTableTitle(this.riskTable)); 
+        this.tableLabel.setText(this.riskTable.getTableTitle()); 
         //this.maxRiskTextField.setText(formatDouble(this.model.getMaxRisk()));
         //this.maxReidentRateTextField.setText(formatDoublePrc(100*this.model.getMaxReidentRate()));
         updateValues();

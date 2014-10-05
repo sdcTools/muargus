@@ -11,7 +11,6 @@ import muargus.HighlightTableCellRenderer;
 import muargus.VariableNameCellRenderer;
 import muargus.controller.NumericalRankSwappingController;
 import muargus.model.NumericalRankSwapping;
-import muargus.model.RankSwappingSpec;
 import muargus.model.ReplacementSpec;
 import muargus.model.VariableMu;
 
@@ -93,12 +92,12 @@ public class NumericalRankSwappingView extends DialogBase<NumericalRankSwappingC
         return selected;
     }
     
-    public double getPercentage() {
+    public int getPercentage() {
         try {
-            return Double.parseDouble(percentageTextField.getText());
+            return Integer.parseInt(percentageTextField.getText());
         }
         catch (NumberFormatException ex) {
-            return Double.NaN;
+            return 0;
         }
     }
     

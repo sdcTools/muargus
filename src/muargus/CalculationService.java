@@ -23,7 +23,6 @@ import muargus.model.RecodeMu;
 import muargus.model.TableMu;
 import muargus.model.CodeInfo;
 import muargus.model.PramVariableSpec;
-import muargus.model.ReplacementFile;
 import muargus.model.ReplacementSpec;
 import muargus.model.RiskModelClass;
 //import muargus.model.UnsafeInfo;
@@ -235,6 +234,7 @@ public class CalculationService {
     }
 
     private void workerDone(Exception ex) {
+        //System.gc();
         if (ex == null) {
             this.firePropertyChange("result", null, "success");
         } else {
@@ -760,5 +760,6 @@ public class CalculationService {
         }
         return ksi[0];
     }
+    
 
 }

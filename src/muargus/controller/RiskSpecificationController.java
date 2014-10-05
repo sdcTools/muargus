@@ -41,20 +41,11 @@ public class RiskSpecificationController extends ControllerBase<RiskSpecificatio
     private ArrayList<String> getRiskTableTitles() {
         ArrayList<String> titles = new ArrayList<>();
         for (TableMu table : getRiskTables()) {
-            titles.add(getRiskTableTitle(table));
+            titles.add(table.getTableTitle());
         }
         return titles;
     }
-    
-    public String getRiskTableTitle(TableMu table) {
-        ArrayList<String> names = new ArrayList<>();
         
-        for (VariableMu variable : table.getVariables()) {
-            names.add(variable.getName());
-        }
-        return StrUtils.join(" x ", names);
-    }
-    
     private ArrayList<TableMu> getRiskTables() {
         ArrayList<TableMu> tables = new ArrayList<>();
         for (TableMu tableMu : this.metadata.getCombinations().getTables()) {

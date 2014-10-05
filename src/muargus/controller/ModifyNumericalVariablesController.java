@@ -84,7 +84,7 @@ public class ModifyNumericalVariablesController extends ControllerBase<ModifyNum
         String warningMessage = "";
 
         boolean bottom = false;
-        if (!selected.getBottomValue().isNaN()) {
+        if (!Double.isNaN(selected.getBottomValue())) {
             if (bottomReplacement.equals("")) {
                 warningMessage += "Bottom replacement value cannot be empty\n";
             } else {
@@ -103,7 +103,7 @@ public class ModifyNumericalVariablesController extends ControllerBase<ModifyNum
         }
 
         boolean top = false;
-        if (!selected.getTopValue().isNaN()) {
+        if (!Double.isNaN(selected.getTopValue())) {
             if (topReplacement.equals("")) {
                 warningMessage += "Top replacement value cannot be empty\n";
             } else {
@@ -127,7 +127,7 @@ public class ModifyNumericalVariablesController extends ControllerBase<ModifyNum
             }
         }
 
-        if (!selected.getRoundingBase().isNaN()) {
+        if (!Double.isNaN(selected.getRoundingBase())) {
             if (selected.getRoundingBase() <= 0) {
                 warningMessage += "Illegal Value for rounding\n";
             }
@@ -135,7 +135,7 @@ public class ModifyNumericalVariablesController extends ControllerBase<ModifyNum
             warningMessage += "Illegal value for the rounding base\n";
         }
 
-        if (!selected.getWeightNoisePercentage().isNaN()) {
+        if (!Double.isNaN(selected.getWeightNoisePercentage())) {
             if (selected.getWeightNoisePercentage() <= 0 || selected.getWeightNoisePercentage() > 100) {
                 warningMessage += "Illegal Value for the weight noise percentage\n"
                         + "Percentage needs to be a number larger than 0 and smaller than or equal to 100";
@@ -167,18 +167,12 @@ public class ModifyNumericalVariablesController extends ControllerBase<ModifyNum
 
     public void apply(ModifyNumericalVariablesSpec selected) {
         try {
-            if (!selected.getRoundingBase().equals(Double.NaN)) {
                 getCalculationService().setRounding(selected.getVariable(), selected.getRoundingBase(), selected.getVariable().getDecimals());
-            }
-            if (!selected.getTopValue().equals(Double.NaN)) {
                 getCalculationService().setTopBottomCoding(selected.getVariable(), true, selected.getTopValue(), selected.getTopReplacement());
-            }
-            if (!selected.getBottomValue().equals(Double.NaN)) {
                 getCalculationService().setTopBottomCoding(selected.getVariable(), false, selected.getBottomValue(), selected.getBottomReplacement());
-            }
-            if (!selected.getWeightNoisePercentage().equals(Double.NaN)) {
-                getCalculationService().setWeightNoise(selected.getVariable(), selected.getWeightNoisePercentage());
-            }
+                if (selected.getVariable().isWeight()) {
+                    getCalculationService().setWeightNoise(selected.getVariable(), selected.getWeightNoisePercentage());
+                }
         } catch (ArgusException ex) {
             System.out.println("error");
             getView().showErrorMessage(ex);

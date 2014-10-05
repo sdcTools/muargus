@@ -38,6 +38,7 @@ public class MuARGUS {
     
     static {
         System.loadLibrary("libmuargusdll");
+        System.loadLibrary("libnumericaldll");
     }
     
     //private static CMuArgCtrl muArgCrtl = new CMuArgCtrl();

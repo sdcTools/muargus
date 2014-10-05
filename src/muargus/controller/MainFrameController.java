@@ -181,10 +181,6 @@ public class MainFrameController {
      *
      */
     public void showTableCollection() {
-        if (this.metadata.getCombinations().getTableCollection() == null) {
-            this.metadata.getCombinations().createTableCollection();
-        }
-
         ShowTableCollectionController controller = new ShowTableCollectionController(
                 this.view, this.metadata);
         controller.showView();
@@ -195,10 +191,6 @@ public class MainFrameController {
      * @param selectedVariableIndex
      */
     public void globalRecode(int selectedVariableIndex) {
-        if (this.metadata.getCombinations().getGlobalRecode() == null) {
-            this.metadata.getCombinations().createGlobalRecode();
-        }
-
         GlobalRecodeController controller = new GlobalRecodeController(
                 this.view, this.metadata);
         controller.showView(selectedVariableIndex);
@@ -361,9 +353,6 @@ public class MainFrameController {
      *
      */
     public void pramSpecification() {
-        if (this.metadata.getCombinations().getPramSpecification() == null) {
-            this.metadata.getCombinations().createPramSpecification();
-        }
         PramSpecificationController controller = new PramSpecificationController(
                 this.view, this.metadata);
         controller.showView();
@@ -397,10 +386,6 @@ public class MainFrameController {
      *
      */
     public void numericalVariables() {
-        if (this.metadata.getCombinations().getModifyNumericalVariables() == null) {
-            this.metadata.getCombinations().createModifyNumericalVariables();
-        }
-
         ModifyNumericalVariablesController controller = new ModifyNumericalVariablesController(
                 this.view, this.metadata);
         controller.showView();
@@ -410,10 +395,6 @@ public class MainFrameController {
      *
      */
     public void numericalMicroaggregation() {
-        if (this.metadata.getCombinations().getMicroaggregation(true) == null) {
-            this.metadata.getCombinations().createMicroaggregation(true);
-        }
-
         MicroaggregationController controller = new MicroaggregationController(
                 this.view, this.metadata, true);
         controller.showView();
@@ -423,19 +404,12 @@ public class MainFrameController {
      *
      */
     public void numericalRankSwapping() {
-        if (this.metadata.getCombinations().getNumericalRankSwapping() == null) {
-            this.metadata.getCombinations().createNumericalRankSwapping();
-        }
-
         NumericalRankSwappingController controller = new NumericalRankSwappingController(
                 this.view, this.metadata);
         controller.showView();
     }
 
     public void qualitativeMicroaggregation() {
-        if (this.metadata.getCombinations().getMicroaggregation(false) == null) {
-            this.metadata.getCombinations().createMicroaggregation(false);
-        }
         MicroaggregationController controller = new MicroaggregationController(view, metadata, false);
         controller.showView();
         
@@ -445,9 +419,6 @@ public class MainFrameController {
      */
     public void makeProtectedFile() {
         try {
-            if (this.metadata.getCombinations().getProtectedFile() == null) {
-                this.metadata.getCombinations().createProtectedFile();
-            }
 
             MakeProtectedFileController controller = new MakeProtectedFileController(
                     this.view, this.metadata);

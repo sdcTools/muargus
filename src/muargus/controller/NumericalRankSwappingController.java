@@ -10,6 +10,7 @@ import argus.model.ArgusException;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import muargus.extern.dataengine.Numerical;
 import muargus.model.MetadataMu;
 import muargus.model.NumericalRankSwapping;
 import muargus.model.RankSwappingSpec;
@@ -54,35 +55,32 @@ public class NumericalRankSwappingController extends ControllerBase<NumericalRan
 
     @Override
     protected void doNextStep(boolean success) {
-            //TODO: de catalaan
-            //for now: just copy the file
             RankSwappingSpec swapping = getModel().getRankSwappings().get(getModel().getRankSwappings().size()-1);
-            try {
-                FileUtils.copyFile(new File(swapping.getReplacementFile().getInputFilePath()), 
-                        new File(swapping.getReplacementFile().getOutputFilePath()));
-                getView().showMessage("RankSwapping successfully completed");
+                Numerical num = new Numerical();
+                int[] errorCode = new int[1];
+                num.DoRankSwap(swapping.getReplacementFile().getInputFilePath(),
+                        swapping.getReplacementFile().getOutputFilePath(),
+                        muargus.MuARGUS.getDefaultSeparator(),
+                        swapping.getVariables().size(),
+                        (int)swapping.getPercentage(),
+                        errorCode);
+                if (errorCode[0] != 0) {
+                    getView().showErrorMessage(new ArgusException("Error during rank swapping"));
+                    this.metadata.getReplacementSpecs().remove(swapping);
+                    getModel().getRankSwappings().remove(swapping);
+                }
+                else {
+                    getView().showMessage("RankSwapping successfully completed");
+                }
                 getView().setProgress(0);
                 getView().showStepName("");
                 getNumericalRankSwappingView().updateVariableRows(swapping);
-            }
-            catch (IOException ex) {
-                getView().showErrorMessage(new ArgusException(ex.getMessage()));
-            }
     }
     
     private NumericalRankSwappingView getNumericalRankSwappingView() {
         return (NumericalRankSwappingView)getView();
     }
-    
-    private String printVariableNames(ArrayList<VariableMu> list) {
-        StringBuilder b = new StringBuilder(list.get(0).getName());
-        for (int i=1; i < list.size(); i++) {
-            b.append(", ");
-            b.append(list.get(i).getName());
-        }
-        return b.toString();
-    }
-    
+        
     private boolean checkFields() {
         double percentage = getNumericalRankSwappingView().getPercentage();
         if (Double.isNaN(percentage) || percentage <= 0 || percentage > 100) {
@@ -98,7 +96,7 @@ public class NumericalRankSwappingController extends ControllerBase<NumericalRan
             return;
         }
         if (!getView().showConfirmDialog(String.format("The rank swapping involving %s will be removed. Continue?",
-                printVariableNames(selected)))) {
+                VariableMu.printVariableNames(selected)))) {
             return;
         }
         for (RankSwappingSpec swapping : getModel().getRankSwappings()) {
@@ -119,7 +117,7 @@ public class NumericalRankSwappingController extends ControllerBase<NumericalRan
                 }
             }
         }
-        getView().showMessage(String.format("Rank swapping involving %s not found", printVariableNames(selected)));
+        getView().showMessage(String.format("Rank swapping involving %s not found", VariableMu.printVariableNames(selected)));
     }
     
     public void calculate() {
@@ -132,15 +130,16 @@ public class NumericalRankSwappingController extends ControllerBase<NumericalRan
                 return;
             }
         }
+        RankSwappingSpec rankSwapping = new RankSwappingSpec(getNumericalRankSwappingView().getPercentage());
         try {
-            RankSwappingSpec rankSwapping = new RankSwappingSpec(getNumericalRankSwappingView().getPercentage());
             rankSwapping.getVariables().addAll(selectedVariables);
             rankSwapping.setReplacementFile(new ReplacementFile("RankSwapping"));
-            getModel().getRankSwappings().add(rankSwapping);
             this.metadata.getReplacementSpecs().add(rankSwapping);
             getCalculationService().makeReplacementFile(this);
+            getModel().getRankSwappings().add(rankSwapping);
         }
         catch (ArgusException ex) {
+            this.metadata.getReplacementSpecs().remove(rankSwapping);
             getView().showErrorMessage(ex);
         }
     }

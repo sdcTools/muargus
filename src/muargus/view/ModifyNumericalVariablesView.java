@@ -1,10 +1,13 @@
 package muargus.view;
 
+import java.text.DecimalFormat;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
+import muargus.HighlightTableCellRenderer;
+import muargus.MuARGUS;
 import muargus.controller.ModifyNumericalVariablesController;
 import muargus.model.ModifyNumericalVariables;
 import muargus.model.ModifyNumericalVariablesSpec;
@@ -68,34 +71,19 @@ public class ModifyNumericalVariablesView extends DialogBase<ModifyNumericalVari
         this.weightNoisePanel.setEnabled(selected.getVariable().isWeight());
         this.percentageLabel.setEnabled(selected.getVariable().isWeight());
         this.percentageTextField.setEnabled(selected.getVariable().isWeight());
-        if (!selected.getBottomValue().equals(Double.NaN)) {
-            this.bottomValueTextField.setText(Double.toString(selected.getBottomValue()));
-        } else {
-            this.bottomValueTextField.setText("");
-            selected.setBottomValue(Double.NaN);
-        }
+        this.bottomValueTextField.setText(formatDouble(selected.getBottomValue()));
         this.bottomCodingReplacementTextField.setText(selected.getBottomReplacement());
-        if (!selected.getTopValue().equals(Double.NaN)) {
-            this.topValueTextField.setText(Double.toString(selected.getTopValue()));
-        } else {
-            this.topValueTextField.setText("");
-            selected.setTopValue(Double.NaN);
-        }
+        this.topValueTextField.setText(formatDouble(selected.getTopValue()));
         this.topCodingReplacementTextField.setText(selected.getTopReplacement());
-        if (!selected.getRoundingBase().equals(Double.NaN)) {
-            this.roundingBaseTextField.setText(Double.toString(selected.getRoundingBase()));
-        } else {
-            this.roundingBaseTextField.setText("");
-            selected.setRoundingBase(Double.NaN);
-        }
-        if (!selected.getWeightNoisePercentage().equals(Double.NaN)) {
-            this.percentageTextField.setText(Double.toString(selected.getWeightNoisePercentage()));
-        } else {
-            this.percentageTextField.setText("");
-            selected.setWeightNoisePercentage(Double.NaN);
-        }
+        this.roundingBaseTextField.setText(formatDouble(selected.getRoundingBase()));        
+        this.percentageTextField.setText(formatDouble(selected.getWeightNoisePercentage()));
     }
 
+    private String formatDouble(double d) {
+        DecimalFormat f = (DecimalFormat)DecimalFormat.getNumberInstance(MuARGUS.getLocale());
+        f.setGroupingUsed(false);
+        return Double.isNaN(d)? "" : f.format(d);
+    }
     /**
      *
      */
@@ -108,14 +96,22 @@ public class ModifyNumericalVariablesView extends DialogBase<ModifyNumericalVari
                 return false;
             }
         };
+        this.variablesTable.setDefaultRenderer(Object.class, new HighlightTableCellRenderer());
         this.variablesTable.setModel(variablesTableModel);
 
         for (int i = 0; i < this.variablesColumnWidth.length; i++) {
             this.variablesTable.getColumnModel().getColumn(i).setMinWidth(this.variablesColumnWidth[i]);
             this.variablesTable.getColumnModel().getColumn(i).setPreferredWidth(this.variablesColumnWidth[i]);
         }
+ 
+        this.variablesTable.setDefaultRenderer(Object.class, new HighlightTableCellRenderer());
+        for (int i=0; i < this.model.getModifyNumericalVariablesSpec().size(); i++) {
+            this.selectedRow = i;
+            showModified();
+        }
 
         this.variablesTable.getSelectionModel().setSelectionInterval(0, 0);
+        this.selectedRow = 0;
         this.variablesTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
 
             @Override
@@ -149,10 +145,10 @@ public class ModifyNumericalVariablesView extends DialogBase<ModifyNumericalVari
      * @return Boolean indicating whether the answers entered are valid.
      */
     public boolean checkValidAnswer() {
-        boolean valid = false;
         setValuesInModel();
-        if (valueEntered()) {
-            ModifyNumericalVariablesSpec selected = getModifyNumericalVariablesSpec();
+        ModifyNumericalVariablesSpec selected = getModifyNumericalVariablesSpec();
+        boolean hasValue = valueEntered();
+        if (hasValue) {
             String message = getController().getWarningMessage(selected,
                     this.bottomValueTextField.getText(),
                     this.topValueTextField.getText(),
@@ -163,17 +159,14 @@ public class ModifyNumericalVariablesView extends DialogBase<ModifyNumericalVari
             if (!message.equals("")) {
                 showMessage(message);
                 this.variablesTable.getSelectionModel().setSelectionInterval(this.selectedRow, this.selectedRow);
-            } else {
-                valid = true;
-                setModified(true);
-                getController().apply(getModifyNumericalVariablesSpec());
-                this.selectedRow = this.variablesTable.getSelectedRow();
+                return false;
             }
-        } else {
-            setModified(false);
-            this.selectedRow = this.variablesTable.getSelectedRow();
         }
-        return valid;
+        selected.setModified(hasValue);
+        showModified();
+        getController().apply(selected);
+        this.selectedRow = this.variablesTable.getSelectedRow();
+        return true;
     }
 
     /**
@@ -182,9 +175,9 @@ public class ModifyNumericalVariablesView extends DialogBase<ModifyNumericalVari
      * @param modified Boolean indicating whether this variable has been
      * modified.
      */
-    public void setModified(boolean modified) {
-        getModifyNumericalVariablesSpec().setModified(modified);
+    public void showModified() {
         this.variablesTable.setValueAt(getModifyNumericalVariablesSpec().getModifiedText(), this.selectedRow, 0);
+        this.variablesTable.setValueAt(getModifyNumericalVariablesSpec().getVariable().getName(), this.selectedRow, 1);
     }
 
     /**
@@ -228,6 +221,9 @@ public class ModifyNumericalVariablesView extends DialogBase<ModifyNumericalVari
         return valueEntered;
     }
 
+    private boolean doubleEquals(String text, double d) {
+        return text.equals(formatDouble(d));
+    }
     /**
      * Checks for all input if the value is changed.
      *
@@ -236,22 +232,22 @@ public class ModifyNumericalVariablesView extends DialogBase<ModifyNumericalVari
     public boolean valueChanged() {
         ModifyNumericalVariablesSpec selected = getModifyNumericalVariablesSpec();
         boolean valueChanged = false;
-        if (!this.bottomValueTextField.getText().equals(Double.toString(selected.getBottomValue()))) {
+        if (!doubleEquals(this.bottomValueTextField.getText(), selected.getBottomValue())) {
             valueChanged = true;
         }
         if (!this.bottomCodingReplacementTextField.getText().equals(selected.getBottomReplacement())) {
             valueChanged = true;
         }
-        if (!this.topValueTextField.getText().equals(Double.toString(selected.getTopValue()))) {
+        if (!doubleEquals(this.topValueTextField.getText(), selected.getTopValue())) {
             valueChanged = true;
         }
         if (!this.topCodingReplacementTextField.getText().equals(selected.getTopReplacement())) {
             valueChanged = true;
         }
-        if (!this.roundingBaseTextField.getText().equals(Double.toString(selected.getRoundingBase()))) {
+        if (!doubleEquals(this.roundingBaseTextField.getText(), selected.getRoundingBase())) {
             valueChanged = true;
         }
-        if (!this.percentageTextField.getText().equals(Double.toString(selected.getWeightNoisePercentage()))) {
+        if (!doubleEquals(this.percentageTextField.getText(), selected.getWeightNoisePercentage())) {
             valueChanged = true;
         }
         return valueChanged;

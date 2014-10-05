@@ -10,6 +10,14 @@ import muargus.CalculationService;
 import argus.model.ArgusException;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.text.NumberFormat;
+import java.text.ParseException;
+import java.util.ArrayList;
+import muargus.MuARGUS;
 import muargus.view.DialogBase;
 
 /**
@@ -84,5 +92,31 @@ public class ControllerBase<T> implements PropertyChangeListener {
     protected String getStepName() {
         return stepName;
     }
+    
+    public double[][] readVariablesFromFile(File file, String separator, int nVariables) throws ArgusException {
+        NumberFormat format = NumberFormat.getInstance(MuARGUS.getLocale());
+        ArrayList<double[]> records = new ArrayList();
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader(file));
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] fields = line.split(separator);
+                if (fields.length != nVariables) {
+                    throw new ArgusException("Incorret number of fields");
+                }
+                double[] doubles = new double[nVariables];
+                for (int index=0; index < nVariables; index++) {
+                    doubles[index] = format.parse(fields[index]).doubleValue();
+                }
+                records.add(doubles);
+            }
+        }
+        catch (IOException | ParseException ex) {
+            throw new ArgusException("Error reading replacement file: " + ex.getMessage());
+        }
+        double[][] arr = new double[records.size()][];
+        return records.toArray(arr);
+    }
+
 
 }

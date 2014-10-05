@@ -13,6 +13,8 @@ import muargus.model.MicroaggregationSpec;
 import muargus.model.ProtectedFile;
 import muargus.model.RankSwappingSpec;
 import muargus.model.ReplacementSpec;
+import muargus.model.RiskSpecification;
+import muargus.model.TableMu;
 import muargus.model.VariableMu;
 import muargus.view.MakeProtectedFileView;
 
@@ -46,9 +48,33 @@ public class MakeProtectedFileController extends ControllerBase<ProtectedFile> {
      * @param file
      */
     public void makeFile(File file) {
+        if (!isRiskThresholdSpecified()) {
+            return;
+        }
         this.metadata.getCombinations().getProtectedFile().initSafeMeta(file, this.metadata);
         removeRedundentReplacementSpecs();
         getCalculationService().makeProtectedFile(this);
+    }
+    
+    private boolean isRiskThresholdSpecified() {
+        Combinations comb = this.metadata.getCombinations();
+        for (TableMu table : comb.getTables()) {
+            if (table.isRiskModel()) {
+                if (!comb.getRiskSpecifications().containsKey(table) 
+                        || comb.getRiskSpecifications().get(table).getRiskThreshold() == 0) {
+                    if (!notSpecifiedIsOk(table)) {
+                        return false;
+                    }
+                } 
+            }
+        }
+        return true;
+    }
+    
+    private boolean notSpecifiedIsOk(TableMu table) {
+        String message = String.format("Table %s was specified in the Risk Model, but no Risk threshold was specified.\nContinue anyway?",
+                table.getTableTitle());
+        return (getView().showConfirmDialog(message));
     }
     
     private void removeRedundentReplacementSpecs() {

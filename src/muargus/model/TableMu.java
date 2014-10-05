@@ -1,5 +1,6 @@
 package muargus.model;
 
+import argus.utils.StrUtils;
 import java.util.ArrayList;
 
 /**
@@ -154,4 +155,20 @@ public class TableMu {
         }
         return contains;
     }
+    
+    /**
+     * Constructs the title of the table, containing of the table dimension 
+     * names separated by x
+     * 
+     * @return title of the table
+     */
+    public String getTableTitle() {
+        ArrayList<String> names = new ArrayList<>();
+        
+        for (VariableMu variable : this.getVariables()) {
+            names.add(variable.getName());
+        }
+        return StrUtils.join(" x ", names);
+    }
+
 }

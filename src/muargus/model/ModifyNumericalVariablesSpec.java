@@ -16,12 +16,12 @@ public class ModifyNumericalVariablesSpec {
     private boolean modified;
     private String modifiedText;
     private double[] min_max;
-    private Double bottomValue;
-    private Double topValue;
+    private double bottomValue;
+    private double topValue;
     private String bottomReplacement;
     private String topReplacement;
-    private Double roundingBase;
-    private Double weightNoisePercentage;
+    private double roundingBase;
+    private double weightNoisePercentage;
 
     /**
      * Constructor of the model class ModifyNumericalVariablesSpec. Sets the
@@ -129,7 +129,7 @@ public class ModifyNumericalVariablesSpec {
      *
      * @return Double containing the bottom value.
      */
-    public Double getBottomValue() {
+    public double getBottomValue() {
         return this.bottomValue;
     }
 
@@ -152,7 +152,7 @@ public class ModifyNumericalVariablesSpec {
      *
      * @param bottomValue Double containing the bottom value.
      */
-    public void setBottomValue(Double bottomValue) {
+    public void setBottomValue(double bottomValue) {
         this.bottomValue = bottomValue;
     }
 
@@ -161,7 +161,7 @@ public class ModifyNumericalVariablesSpec {
      *
      * @return Double containing the top value.
      */
-    public Double getTopValue() {
+    public double getTopValue() {
         return this.topValue;
     }
 
@@ -183,7 +183,7 @@ public class ModifyNumericalVariablesSpec {
      *
      * @param topValue Double containing the top value.
      */
-    public void setTopValue(Double topValue) {
+    public void setTopValue(double topValue) {
         this.topValue = topValue;
     }
 
@@ -236,7 +236,7 @@ public class ModifyNumericalVariablesSpec {
      *
      * @return Double containing the rounding base.
      */
-    public Double getRoundingBase() {
+    public double getRoundingBase() {
         return this.roundingBase;
     }
 
@@ -258,7 +258,7 @@ public class ModifyNumericalVariablesSpec {
      *
      * @param roundingBase Double containing the rounding base.
      */
-    public void setRoundingBase(Double roundingBase) {
+    public void setRoundingBase(double roundingBase) {
         this.roundingBase = roundingBase;
     }
 
@@ -269,7 +269,7 @@ public class ModifyNumericalVariablesSpec {
      * @return Double containing the amount of noise to be added to the weight
      * variable as a percentage.
      */
-    public Double getWeightNoisePercentage() {
+    public double getWeightNoisePercentage() {
         return this.weightNoisePercentage;
     }
 
@@ -293,7 +293,7 @@ public class ModifyNumericalVariablesSpec {
      * @param weightNoisePercentage Double containing the amount of noise to be
      * added to the weight variable as a percentage.
      */
-    public void setWeightNoisePercentage(Double weightNoisePercentage) {
+    public void setWeightNoisePercentage(double weightNoisePercentage) {
         this.weightNoisePercentage = weightNoisePercentage;
     }
 

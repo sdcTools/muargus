@@ -49,4 +49,5 @@ public class ReplacementSpec {
     public void setReplacementFile(ReplacementFile replacementFile) {
         this.replacementFile = replacementFile;
     }
+    
 }

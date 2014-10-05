@@ -10,10 +10,16 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import muargus.model.MetadataMu;
+import muargus.model.MicroaggregationSpec;
+import muargus.model.ModifyNumericalVariablesSpec;
+import muargus.model.RankSwappingSpec;
 import muargus.model.RecodeMu;
+import muargus.model.ReplacementSpec;
 import muargus.model.RiskSpecification;
 import muargus.model.TableMu;
 import muargus.model.VariableMu;
@@ -49,11 +55,85 @@ public class HTMLReportWriter {
         if (metadata.getCombinations().isRiskModel()) {
             body.appendChild(writeBaseIndividualRisk(metadata));
         }
+        if (hasOtherModifications(metadata)) {
+            body.appendChild(writeOtherModificationsTable(metadata));
+        }
         body.appendChild(writeSuppressionTable(metadata));
         body.appendChild(writeSafeFileMetaTable(metadata));
         body.appendChild(writeFooter());
     }
 
+    private static Element writeOtherModificationsTable(MetadataMu metadata) {
+        Element p = doc.createElement("p");
+        addChildElement(p, "h2", "Other modifications");
+        Element table = addChildElement(p, "table");
+        Element tr = addChildElement(table, "tr");
+        addChildElement(tr, "th", "Method");
+        addChildElement(tr, "th", "Variables");
+        addChildElement(tr, "th", "Parameters");
+        for (ModifyNumericalVariablesSpec spec : metadata.getCombinations().getModifyNumericalVariables().getModifyNumericalVariablesSpec()) {
+            //Bottom coding
+            if (!Double.isNaN(spec.getBottomValue())) {
+                tr = addChildElement(table, "tr");
+                addChildElement(tr, "td", "Bottom coding");
+                addChildElement(tr, "td", spec.getVariable().getName());
+                addChildElement(tr, "td", String.format(
+                        "Top value: %s; Replacement: %s", formatDouble(spec.getBottomValue(),2, false), spec.getBottomReplacement()));
+            }
+            //Top coding
+            if (!Double.isNaN(spec.getTopValue())) {
+                tr = addChildElement(table, "tr");
+                addChildElement(tr, "td", "Top coding");
+                addChildElement(tr, "td", spec.getVariable().getName());
+                addChildElement(tr, "td", String.format(
+                        "Top value: %s; Replacement: %s", formatDouble(spec.getTopValue(), 2, false), spec.getTopReplacement()));
+            }
+            //Rounding    
+            if (!Double.isNaN(spec.getRoundingBase())) {
+                tr = addChildElement(table, "tr");
+                addChildElement(tr, "td", "Rounding");
+                addChildElement(tr, "td", spec.getVariable().getName());
+                addChildElement(tr, "td", String.format(
+                        "Rounding base: %s", formatDouble(spec.getRoundingBase(), 2, false)));
+            }
+            //Weight noise
+            if (!Double.isNaN(spec.getWeightNoisePercentage())) {
+                tr = addChildElement(table, "tr");
+                addChildElement(tr, "td", "Weight noise");
+                addChildElement(tr, "td", spec.getVariable().getName());
+                addChildElement(tr, "td", String.format(
+                        "%s %% random noise has been added ", formatDouble(spec.getWeightNoisePercentage(), 2, false)));
+            }
+        }
+        for (ReplacementSpec replacement : metadata.getReplacementSpecs()) {
+                tr = addChildElement(table, "tr");
+                addChildElement(tr, "td", replacement instanceof RankSwappingSpec ? 
+                        "Rank swapping" : "Numerical microaggregation");
+                addChildElement(tr, "td", VariableMu.printVariableNames(replacement.getVariables()));
+                if (replacement instanceof RankSwappingSpec) {
+                    addChildElement(tr, "td",
+                        String.format("Percentage: %d %%", ((RankSwappingSpec)replacement).getPercentage()));
+                }
+                else {
+                    MicroaggregationSpec microAggr = (MicroaggregationSpec) replacement;
+                    String optimal =  microAggr.getVariables().size() == 1  ? 
+                            String.format("; Optimal: %s", (microAggr.isOptimal() ? "yes" : "no")) : "";
+                    addChildElement(tr, "td",
+                        String.format("Group size: %d%s", microAggr.getMinimalNumberOfRecords(), optimal));
+                    
+                }
+            
+        }
+        return p;
+    }
+    
+    private static boolean hasOtherModifications(MetadataMu metadata) {
+        if (metadata.getCombinations().getModifyNumericalVariables().getModifyNumericalVariablesSpec().size() > 0) {
+            return true;
+        }
+        return metadata.getReplacementSpecs().size() > 0;            
+    }
+    
     private static Element writeFrequencyTablesTable(MetadataMu metadata) {
         Element p = doc.createElement("p");
         addChildElement(p, "h2", "Frequency tables used");
@@ -162,10 +242,10 @@ public class HTMLReportWriter {
 
     }
 
-    private static String formatDouble(double d, int decimals) {
-        String format = "%." + decimals + "f";
-        return String.format(MuARGUS.getLocale(), format, d);
-    }
+    //private static String formatDouble(double d, int decimals) {
+    //    String format = "%." + decimals + "f";
+    //    return String.format(MuARGUS.getLocale(), format, d);
+    //}
 
     private static Element writeBaseIndividualRisk(MetadataMu metadata) {
         Element p = doc.createElement("p");
@@ -181,11 +261,11 @@ public class HTMLReportWriter {
                 addChildElement(p, "h2", table);
                 RiskSpecification riskSpec = metadata.getCombinations().getRiskSpecifications().get(t);
                 if (metadata.isHouseholdData()) {
-                    addChildElement(p, "h2", "Household risk: " + formatDouble(riskSpec.getRiskThreshold(), 5));
+                    addChildElement(p, "h2", "Household risk: " + formatDouble(riskSpec == null ? 0 : riskSpec.getRiskThreshold(), 5, true));
                 }
                 else {
-                    addChildElement(p, "h2", "Ind. risk: " + formatDouble(riskSpec.getRiskThreshold(), 5));
-                    addChildElement(p, "h2", "Ind. re-ident rate: " + formatDouble(riskSpec.getReidentRateThreshold()*100, 3) + " %");
+                    addChildElement(p, "h2", "Ind. risk: " + formatDouble(riskSpec == null ? 0 : riskSpec.getRiskThreshold(), 5, true));
+                    addChildElement(p, "h2", "Ind. re-ident rate: " + formatDouble(riskSpec == null ? 0 : riskSpec.getReidentRateThreshold()*100, 3, true) + " %");
                 }
                     
                 addChildElement(p, "h2", "");
@@ -214,7 +294,7 @@ public class HTMLReportWriter {
             tr = addChildElement(table, "tr");
             addChildElement(tr, "td", v.getName());
             if (metadata.getCombinations().getProtectedFile().isWithEntropy()) {
-                addChildElement(tr, "td", String.format("%.2f", v.getEntropy()));
+                addChildElement(tr, "td", formatDouble(v.getEntropy(),2, true));
             } else {
                 addChildElement(tr, "td", Integer.toString(v.getSuppressweight()));
             }
@@ -229,6 +309,15 @@ public class HTMLReportWriter {
         return p;
     }
 
+    private static String formatDouble(double d, int decimals, boolean showIfZero) {
+        DecimalFormat decimalFormat = (DecimalFormat)NumberFormat.getNumberInstance(MuARGUS.getLocale());
+        decimalFormat.setGroupingUsed(false);
+        decimalFormat.setMaximumFractionDigits(decimals);
+        decimalFormat.setMinimumFractionDigits(showIfZero ? decimals : 0);
+        return decimalFormat.format(d);
+        
+    }
+    
     private static Element writeSafeFileMetaTable(MetadataMu metadata) {
         MetadataMu safeMeta = getSafeMeta(metadata);
 

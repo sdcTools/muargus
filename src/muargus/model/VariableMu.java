@@ -553,6 +553,16 @@ public class VariableMu {
         return this.codeInfos;
     }
 
+    public static String printVariableNames(ArrayList<VariableMu> list) {
+        StringBuilder b = new StringBuilder(list.get(0).getName());
+        for (int i=1; i < list.size(); i++) {
+            b.append(", ");
+            b.append(list.get(i).getName());
+        }
+        return b.toString();
+    }
+
+    
     /**
      * 
      * @param writer
