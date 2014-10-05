@@ -38,7 +38,7 @@ public class CalculationService {
     private class ProgressListener extends IProgressListener {
 
         private final CalculationService service;
-
+        
         public ProgressListener(CalculationService service) {
             this.service = service;
         }
@@ -61,10 +61,12 @@ public class CalculationService {
     private static final Logger logger = Logger.getLogger(SelectCombinationsController.class.getName());
     private final CMuArgCtrl c;
     private MetadataMu metadata;
+    private final ProgressListener progressListener; //must remain in scope, or will be garbage collected 
 
     public CalculationService(final CMuArgCtrl muArgCtrl) {
         c = muArgCtrl;
-        c.SetProgressListener(new ProgressListener(this));
+        this.progressListener = new ProgressListener(this);
+        c.SetProgressListener(this.progressListener);
         this.metadata = null;
     }
 
@@ -234,7 +236,6 @@ public class CalculationService {
     }
 
     private void workerDone(Exception ex) {
-        //System.gc();
         if (ex == null) {
             this.firePropertyChange("result", null, "success");
         } else {
