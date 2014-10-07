@@ -1,32 +1,32 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package muargus.view;
 
 import java.util.ArrayList;
 import javax.swing.DefaultListModel;
-import javax.swing.ListModel;
 
 /**
- *
- * @author pibd05
+ * 
+ * @author Statistics Netherlands
  */
 public class TablePickView extends DialogBase {
 
     private boolean cancelled = true;
-    
+
     /**
      * Creates new form TablePickView
+     *
+     * @param parent the Frame of the mainFrame.
+     * @param modal boolean to set the modal status
      */
     public TablePickView(java.awt.Frame parent, boolean modal) {
         super(parent, modal, null);
         setLocationRelativeTo(null);
         initComponents();
     }
-    
+
+    /**
+     *
+     * @param tables
+     */
     public void setTables(ArrayList<String> tables) {
         DefaultListModel model = new DefaultListModel();
         for (String str : tables) {
@@ -35,7 +35,12 @@ public class TablePickView extends DialogBase {
         tableList.setModel(model);
         tableList.setSelectedIndex(0);
     }
-    
+
+    /**
+     * Gets the index of the selected table.
+     *
+     * @return Integer containing the index of the selected table.
+     */
     public int getSelectedIndex() {
         return cancelled ? -1 : tableList.getSelectedIndex();
     }
@@ -115,47 +120,6 @@ public class TablePickView extends DialogBase {
         this.setVisible(false);
     }//GEN-LAST:event_cancelButtonActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(TablePickView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(TablePickView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(TablePickView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(TablePickView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the dialog */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                TablePickView dialog = new TablePickView(new javax.swing.JFrame(), true);
-                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
-                    @Override
-                    public void windowClosing(java.awt.event.WindowEvent e) {
-                        System.exit(0);
-                    }
-                });
-                dialog.setVisible(true);
-            }
-        });
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton cancelButton;

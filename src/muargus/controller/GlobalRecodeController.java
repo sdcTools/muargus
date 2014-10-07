@@ -48,7 +48,7 @@ public class GlobalRecodeController extends ControllerBase<GlobalRecode> {
     }
 
     /**
-     * Closes the screen.
+     * Closes the view by setting its visibility to false.
      */
     public void close() {
         getView().setVisible(false);

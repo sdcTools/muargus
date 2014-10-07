@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package muargus.view;
 
 import argus.model.ArgusException;
@@ -11,7 +7,6 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JOptionPane;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.html.HTMLDocument;
 import javax.swing.text.html.HTMLEditorKit;
@@ -19,39 +14,43 @@ import muargus.controller.MainFrameController;
 import muargus.controller.ViewReportController;
 
 /**
+ * View class of the ViewReport screen.
  *
- * @author ambargus
+ * @author Statistics Netherlands
  */
 public class ViewReportView extends DialogBase<ViewReportController> {
-    
+
     /**
-     * Creates new form OutputViewReport
-     * @param parent
-     * @param controller
-     * @param modal
+     * Creates new ViewReportView.
+     *
+     * @param parent the Frame of the mainFrame.
+     * @param modal boolean to set the modal status
+     * @param controller the controller of this view.
      */
     public ViewReportView(java.awt.Frame parent, ViewReportController controller, boolean modal) {
         super(parent, modal, controller);
         initComponents();
         this.setLocationRelativeTo(null);
     }
-    
-    public void showReport(String html) {
 
-        try 
-        {
+    /**
+     * Shows the html report.
+     *
+     * @param html String containing the file path of the html report.
+     */
+    public void showReport(String html) {
+        try {
             Reader stringReader = new StringReader(html);
             HTMLEditorKit htmlKit = new HTMLEditorKit();
-            
+
             HTMLDocument htmlDoc = (HTMLDocument) htmlKit.createDefaultDocument();
-            htmlDoc.putProperty("IgnoreCharsetDirective", new Boolean(true));
+            htmlDoc.putProperty("IgnoreCharsetDirective", true);
             htmlKit.read(stringReader, htmlDoc, 0);
             htmlPane.setDocument(htmlDoc);
-        } catch (IOException|BadLocationException ex) {
+        } catch (IOException | BadLocationException ex) {
             Logger.getLogger(MainFrameController.class.getName()).log(Level.SEVERE, null, ex);
             showErrorMessage(new ArgusException("Error creating report: " + ex.getMessage()));
         }
-        
     }
 
     /**
@@ -130,53 +129,12 @@ public class ViewReportView extends DialogBase<ViewReportController> {
     private void printButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_printButtonActionPerformed
         try {
             htmlPane.print();
-        }
-        catch (PrinterException ex) {
+        } catch (PrinterException ex) {
             showMessage("Error printing report: " + ex.getMessage());
         }
     }//GEN-LAST:event_printButtonActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(ViewReportView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(ViewReportView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(ViewReportView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(ViewReportView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-//
-//        /* Create and display the dialog */
-//        java.awt.EventQueue.invokeLater(new Runnable() {
-//            public void run() {
-//                ViewReportView view = new ViewReportView(new javax.swing.JFrame(), true);
-//                view.addWindowListener(new java.awt.event.WindowAdapter() {
-//                    @Override
-//                    public void windowClosing(java.awt.event.WindowEvent e) {
-//                        System.exit(0);
-//                    }
-//                });
-//                view.setVisible(true);
-//            }
-//        });
-    }
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton closeButton;
     private javax.swing.JEditorPane htmlPane;

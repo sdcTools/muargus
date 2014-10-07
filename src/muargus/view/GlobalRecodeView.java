@@ -79,7 +79,7 @@ public class GlobalRecodeView extends DialogBase<GlobalRecodeController> {
     /**
      * Updates the table containing the type of recoding and the variable name.
      */
-    public void updateTable() {
+    private void updateTable() {
         String[][] data = new String[this.model.getRecodeMus().size()][2];
         int index = 0;
         for (RecodeMu r : model.getRecodeMus()) {

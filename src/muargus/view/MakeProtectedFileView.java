@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package muargus.view;
 
 import java.awt.Color;
@@ -16,7 +12,7 @@ import muargus.model.MetadataMu;
 
 /**
  *
- * @author ambargus
+ * @author Statistics Netherlands
  */
 public class MakeProtectedFileView extends DialogBase<MakeProtectedFileController> {
 
@@ -27,14 +23,13 @@ public class MakeProtectedFileView extends DialogBase<MakeProtectedFileControlle
     /**
      * Creates new form MakeProtectedFileView
      *
-     * @param parent
-     * @param modal
-     * @param controller
+     * @param parent the Frame of the mainFrame.
+     * @param modal boolean to set the modal status
+     * @param controller the controller of this view.
      */
     public MakeProtectedFileView(java.awt.Frame parent, boolean modal, MakeProtectedFileController controller) {
         super(parent, modal, controller);
         initComponents();
-        //this.model = this.controller.getModel();
         this.setLocationRelativeTo(null);
         this.suppressionWeightTable.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     }
@@ -53,7 +48,7 @@ public class MakeProtectedFileView extends DialogBase<MakeProtectedFileControlle
         this.updateValues();
     }
 
-    public void updateValues() {
+    private void updateValues() {
         boolean suppression = this.useWeightRadioButton.isSelected();
         this.suppressionWeightPerVariableLabel.setEnabled(suppression);
         this.suppressionWeightScrollPane.setEnabled(suppression);
@@ -84,13 +79,13 @@ public class MakeProtectedFileView extends DialogBase<MakeProtectedFileControlle
         this.progressbar.setValue(progress);
     }
 
-    public JRadioButton getSuppressionRadioButton() {
+    private JRadioButton getSuppressionRadioButton() {
         switch (this.model.getSuppressionType()) {
             case (0):
                 return this.noSuppressionRadioButton;
             case (1):
                 return this.useWeightRadioButton;
-            case(2):
+            case (2):
                 return this.useEntropyRadioButton;
         }
         return null;
@@ -358,7 +353,7 @@ public class MakeProtectedFileView extends DialogBase<MakeProtectedFileControlle
     }// </editor-fold>//GEN-END:initComponents
 
     private void makeFileButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_makeFileButtonActionPerformed
-        String filePath = showFileDialog("Make safe micro file" , true, new String[] {"Safefile (*.saf)|saf"});
+        String filePath = showFileDialog("Make safe micro file", true, new String[]{"Safefile (*.saf)|saf"});
         if (filePath != null) {
             getController().makeFile(new File(filePath));
         }

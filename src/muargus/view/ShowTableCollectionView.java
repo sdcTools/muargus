@@ -14,7 +14,7 @@ import muargus.model.VariableMu;
 /**
  * The view class of the ShowTableCollection screen.
  *
- * @author ambargus
+ * @author Statistics Netherlands
  */
 public class ShowTableCollectionView extends DialogBase<ShowTableCollectionController> {
 
@@ -73,7 +73,7 @@ public class ShowTableCollectionView extends DialogBase<ShowTableCollectionContr
     /**
      * Updates the values of the Table by resetting the table with new values.
      */
-    public void updateTable() {
+    private void updateTable() {
         getController().setSubData(this.model.isShowAllTables());
         this.tableModel = new DefaultTableModel(this.model.getSubdata(), this.model.getColumnNames()) {
             @Override

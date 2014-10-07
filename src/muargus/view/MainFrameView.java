@@ -21,7 +21,7 @@ import muargus.model.VariableMu;
 
 /**
  *
- * @author ambargus
+ * @author Statistics Netherlands
  */
 public class MainFrameView extends javax.swing.JFrame {
 
@@ -75,7 +75,6 @@ public class MainFrameView extends javax.swing.JFrame {
                 return;
             case ViewReport:
                 doEnable(viewReportButton, viewReportMenuItem, enable);
-                return;                
         }
     }
 
@@ -106,28 +105,6 @@ public class MainFrameView extends javax.swing.JFrame {
 
     public void showMessage(String message) {
         JOptionPane.showMessageDialog(null, message, MuARGUS.getMessageTitle(), JOptionPane.INFORMATION_MESSAGE);
-    }
-
-    /**
-     * enables buttons
-     */
-    public void organise() {
-//        specifyMetadataAction.setEnabled(Application.numberOfMetadatas() > 0);
-//        specifyTablesAction.setEnabled(Application.numberOfMetadatas() > 0);
-//
-//        selectTableAction.setEnabled(TableService.numberOfTables() 
-//        saveTableAction.setEnabled(TableService.numberOfTables() != 0);
-//        viewReportAction.setEnabled(TableService.numberOfTables() != 0);      
-//        menuItemWriteBatchFile.setEnabled(Application.numberOfMetadatas() > 0);  
-//
-//        menuItemProtectJJFormat.setVisible(Application.isAnco());
-//        menuItemAncoNews.setVisible(Application.isAnco());
-//        menuItemSolverOptions.setVisible(Application.isAnco());
-//
-//        panelTable.setVisible(TableService.numberOfTables() != 0);
-//        if (TableService.numberOfTables() != 0) {panelTable.enableHiddenFeatures(Application.isAnco());}> 1);     
-//        menuItemLinkedTables.setEnabled(TableService.numberOfTables() != 0);
-
     }
 
     /**
@@ -753,7 +730,7 @@ public class MainFrameView extends javax.swing.JFrame {
         Object[][] data = new Object[model.getVariablesInTables().size()][];
         int rowIndex = 0;
         for (VariableMu variable : model.getVariablesInTables()) {
-            data[rowIndex] =  toObjectArray(model, variable); //TODO mooier
+            data[rowIndex] = toObjectArray(model, variable); //TODO mooier
             rowIndex++;
         }
         DefaultTableModel tableModel = new DefaultTableModel(data, columnNames.toArray()) {
@@ -766,10 +743,10 @@ public class MainFrameView extends javax.swing.JFrame {
 
         DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
         rightRenderer.setHorizontalAlignment(JLabel.RIGHT);
-        for (int index=1; index < columnNames.size(); index++) {
+        for (int index = 1; index < columnNames.size(); index++) {
             this.unsafeCombinationsTable.getColumn(String.format("dim %d", index)).setCellRenderer(rightRenderer);
         }
-        
+
         this.unsafeCombinationsTable.getSelectionModel().addListSelectionListener(
                 new javax.swing.event.ListSelectionListener() {
                     @Override
@@ -781,18 +758,16 @@ public class MainFrameView extends javax.swing.JFrame {
         this.unsafeCombinationsTable.getSelectionModel().setSelectionInterval(selectedIndex, selectedIndex);
     }
 
-    
     private Object[] toObjectArray(Combinations combinations, VariableMu variable) {
         int nDims = combinations.getMaxDimsInTables();
         Object[] objArr = new Object[nDims + 1];
         objArr[0] = variable.getName();
-        for (int dimNr=1; dimNr <= nDims; dimNr++) {
-            objArr[dimNr] = combinations.getUnsafeCombinations().get(variable).length < dimNr ?
-                    "-" : Integer.toString(combinations.getUnsafeCombinations().get(variable)[dimNr-1]);
+        for (int dimNr = 1; dimNr <= nDims; dimNr++) {
+            objArr[dimNr] = combinations.getUnsafeCombinations().get(variable).length < dimNr
+                    ? "-" : Integer.toString(combinations.getUnsafeCombinations().get(variable)[dimNr - 1]);
         }
         return objArr;
     }
-    
 
     private void selectionChanged(javax.swing.event.ListSelectionEvent evt) {
         if (evt.getValueIsAdjusting()) {
@@ -828,7 +803,7 @@ public class MainFrameView extends javax.swing.JFrame {
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return false;
             }
-            
+
             @Override
             public Class getColumnClass(int column) {
                 switch (column) {
@@ -852,19 +827,6 @@ public class MainFrameView extends javax.swing.JFrame {
     }//GEN-LAST:event_exitMenuItemActionPerformed
 
     private void metaDataMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_metaDataMenuItemActionPerformed
-//        String e = OpenMicrodataModel.getMicrodataPath();
-//        System.out.printf("%s\n", e);
-//        String f = OpenMicrodataModel.getMetadataPath();
-//        System.out.printf("%s\n", f);
-//        String c = metadata.dataFile;
-//        System.out.printf("%s\n", c);
-//        String d = metadata.metaFile;
-//        System.out.printf("%s\n", d);
-//        String a = dataFilePair.getDataFileName();
-//        System.out.printf("%s\n", a);
-//        String b = dataFilePair.getMetaFileName();
-//        System.out.printf("%s\n", b);
-
         controller.specifyMetaData();
     }//GEN-LAST:event_metaDataMenuItemActionPerformed
 
@@ -938,47 +900,11 @@ public class MainFrameView extends javax.swing.JFrame {
     }//GEN-LAST:event_manualMenuItemActionPerformed
 
     private void unsafeCombinationsTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_unsafeCombinationsTableMouseClicked
-        // TODO add your handling code here:
         if (evt.getClickCount() == 2) {
             controller.globalRecode(this.unsafeCombinationsTable.getSelectionModel().getMinSelectionIndex());
         }
     }//GEN-LAST:event_unsafeCombinationsTableMouseClicked
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(MainFrameView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(MainFrameView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(MainFrameView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(MainFrameView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new MainFrameView().setVisible(true);
-
-            }
-        });
-    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton ManualButton;
     private javax.swing.JButton aboutButton;
