@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package muargus.view;
 
 import argus.model.ArgusException;
@@ -19,31 +15,36 @@ import muargus.model.RecodeMu;
 import muargus.model.VariableMu;
 
 /**
+ * View class of the GlobalRecode screen.
  *
- * @author ambargus
+ * @author Statistics Netherlands
  */
 public class GlobalRecodeView extends DialogBase<GlobalRecodeController> {
 
     private GlobalRecode model;
     private RecodeMu selectedRecode;
     private RecodeMu selectedRecodeClone;
+    private final int[] columnWidth = {30, 70}; // gives the width of column 1, 2
 
     /**
-     * Creates new form GlobalRecodeView
+     * Creates new GlobalRecodeView.
      *
-     * @param parent
-     * @param modal
-     * @param controller
+     * @param parent the Frame of the mainFrame.
+     * @param modal boolean to set the modal status
+     * @param controller the controller of this view.
      */
     public GlobalRecodeView(java.awt.Frame parent, boolean modal, GlobalRecodeController controller) {
         super(parent, modal, controller);
         initComponents();
-        //this.model = this.controller.getModel();
         this.setLocationRelativeTo(null);
         this.variablesTable.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-
     }
-    
+
+    /**
+     * Initializes the data. The model is set, recodeMu's are made for each
+     * variable, the table is set (values, selectionModel, width and cell
+     * renderer) and the values are set.
+     */
     @Override
     public void initializeData() {
         this.model = getMetadata().getCombinations().getGlobalRecode();
@@ -63,20 +64,22 @@ public class GlobalRecodeView extends DialogBase<GlobalRecodeController> {
                     handleSelectionChanged();
                 }
             }
-        });        
-        
-        this.variablesTable.getColumnModel().getColumn(0).setMinWidth(30);
-        this.variablesTable.getColumnModel().getColumn(0).setPreferredWidth(30);
-        this.variablesTable.getColumnModel().getColumn(1).setMinWidth(70);
-        this.variablesTable.getColumnModel().getColumn(1).setPreferredWidth(70);
+        });
+
+        for (int i = 0; i < this.columnWidth.length; i++) {
+            this.variablesTable.getColumnModel().getColumn(i).setMinWidth(this.columnWidth[i]);
+            this.variablesTable.getColumnModel().getColumn(i).setPreferredWidth(this.columnWidth[i]);
+        }
 
         this.variablesTable.setDefaultRenderer(Object.class, new HighlightTableCellRenderer());
 
         updateValues();
     }
 
+    /**
+     * Updates the table containing the type of recoding and the variable name.
+     */
     public void updateTable() {
-
         String[][] data = new String[this.model.getRecodeMus().size()][2];
         int index = 0;
         for (RecodeMu r : model.getRecodeMus()) {
@@ -84,7 +87,7 @@ public class GlobalRecodeView extends DialogBase<GlobalRecodeController> {
             index++;
         }
 
-        TableModel tableModel = new DefaultTableModel(data, this.model.getColumnNames()){
+        TableModel tableModel = new DefaultTableModel(data, this.model.getColumnNames()) {
             @Override
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return false;
@@ -93,7 +96,11 @@ public class GlobalRecodeView extends DialogBase<GlobalRecodeController> {
         this.variablesTable.setModel(tableModel);
     }
 
-    public void updateValues() {
+    /**
+     * Updates the values. Sets the missing values, file names, global recode
+     * text and enables/disables the truncated and undo button.
+     */
+    private void updateValues() {
         //this.updateTable();
         //System.out.println(variablesTable.getSelectedRow());
         //this.variablesTable.getSelectionModel().setSelectionInterval(variablesTable.getSelectedRow(), variablesTable.getSelectedRow());
@@ -107,25 +114,38 @@ public class GlobalRecodeView extends DialogBase<GlobalRecodeController> {
         this.missing_1_newTextField.setText(selected.getMissing_1_new());
         this.missing_2_newTextField.setText(selected.getMissing_2_new());
         this.codelistRecodeTextField.setText(selected.getCodeListFile());
-        this.globalRecodeRecodeTextField.setText(selected.getGrcFile());
+        this.globalRecodeTextField.setText(selected.getGrcFile());
         this.truncateButton.setEnabled(selected.getVariable().isTruncable());
         enableApplyButton();
         this.undoButton.setEnabled(selected.isRecoded() || selected.isTruncated());
         this.editTextArea.setText(selected.getGrcText());
     }
-    
+
+    /**
+     * Enables the apply button. Only enable apply when there is something in
+     * the Grc text box.
+     */
     private void enableApplyButton() {
-        //boolean equals = getSelectedRecode().equals(selectedRecodeClone);
-        //Only enable apply when there is something in the Grc text box
         this.applyButton.setEnabled(this.editTextArea.getText().length() > 0);
     }
 
+    /**
+     * Gets the selected RecodeMu containing the recoding information for this
+     * variable.
+     *
+     * @return RecodeMu containing the recoding information for this variable.
+     */
     private RecodeMu getSelectedRecode() {
         return this.selectedRecode;
     }
 
+    /**
+     * Gets the global recode file path.
+     *
+     * @return String containing the global recode file path.
+     */
     private String askForGrcPath() {
-        return showFileDialog("Open Recode File", false, new String[] { "Recode files (*.grc)|grc" });
+        return showFileDialog("Open Recode File", false, new String[]{"Recode files (*.grc)|grc"});
 //        JFileChooser fileChooser = new JFileChooser();
 //        String hs = SystemUtils.getRegString("general", "datadir", "");
 //        if (!hs.equals("")){
@@ -146,25 +166,33 @@ public class GlobalRecodeView extends DialogBase<GlobalRecodeController> {
 //        }
 //        return null;
     }
-    
+
+    /**
+     * Gets the user input for the number of positions that need to be
+     * truncated.
+     *
+     * @param varLength Integer containing the length of the variable.
+     * @return Integer containing the number of positions that need to be
+     * truncated.
+     */
     private int getTruncatePositions(int varLength) {
         while (true) {
             String result = JOptionPane.showInputDialog(null, "Number of Digits", 1);
-            if (result == null || result.length() == 0)
+            if (result == null || result.length() == 0) {
                 return 0;
-            
+            }
+
             String message = "Illegal input value";
-            Integer positions = 0;
             try {
-                positions = Integer.parseInt(result);
+                Integer positions = Integer.parseInt(result);
                 if (positions > 0) {
-                    if (positions < varLength)
+                    if (positions < varLength) {
                         return positions;
+                    }
                     message = "You cannot truncate more than the width of the field.";
                 }
-            }
-            catch (NumberFormatException ex) {
-                ; //No action needed
+            } catch (NumberFormatException ex) {
+                //No action needed
             }
             showMessage(message);
         }
@@ -183,12 +211,11 @@ public class GlobalRecodeView extends DialogBase<GlobalRecodeController> {
         variablesTable = new javax.swing.JTable();
         editLabel = new javax.swing.JLabel();
         editScrollPane = new javax.swing.JScrollPane();
-        jScrollPane1 = new javax.swing.JScrollPane();
         editTextArea = new javax.swing.JTextArea();
         codelistRecodeLabel = new javax.swing.JLabel();
         codelistRecodeTextField = new javax.swing.JTextField();
         codelistRecodeButton = new javax.swing.JButton();
-        globalRecodeRecodeTextField = new javax.swing.JTextField();
+        globalRecodeTextField = new javax.swing.JTextField();
         warningLabel = new javax.swing.JLabel();
         warningScrollPane = new javax.swing.JScrollPane();
         warningTextArea = new javax.swing.JTextArea();
@@ -215,6 +242,8 @@ public class GlobalRecodeView extends DialogBase<GlobalRecodeController> {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Global Recode");
+        setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        setMinimumSize(new java.awt.Dimension(620, 530));
 
         variablesTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -289,9 +318,7 @@ public class GlobalRecodeView extends DialogBase<GlobalRecodeController> {
                 editTextAreaCaretUpdate(evt);
             }
         });
-        jScrollPane1.setViewportView(editTextArea);
-
-        editScrollPane.setViewportView(jScrollPane1);
+        editScrollPane.setViewportView(editTextArea);
 
         codelistRecodeLabel.setText("Codelist for recode");
 
@@ -308,7 +335,7 @@ public class GlobalRecodeView extends DialogBase<GlobalRecodeController> {
             }
         });
 
-        globalRecodeRecodeTextField.setEditable(false);
+        globalRecodeTextField.setEditable(false);
 
         warningLabel.setText("Warning");
 
@@ -505,7 +532,7 @@ public class GlobalRecodeView extends DialogBase<GlobalRecodeController> {
                 .addComponent(buttonPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(missingValuesPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
                 .addComponent(closePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -524,19 +551,19 @@ public class GlobalRecodeView extends DialogBase<GlobalRecodeController> {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(warningScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 290, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(codelistRecodeTextField)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(codelistRecodeButton))
                     .addComponent(editScrollPane, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(globalRecodeRecodeTextField)
+                    .addComponent(globalRecodeTextField)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(codelistRecodeLabel1)
                             .addComponent(warningLabel)
                             .addComponent(editLabel)
                             .addComponent(codelistRecodeLabel))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(codelistRecodeTextField)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(codelistRecodeButton)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -546,26 +573,26 @@ public class GlobalRecodeView extends DialogBase<GlobalRecodeController> {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(midSectionPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(variablesScrollPane)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(editLabel)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(editScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(editScrollPane)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(codelistRecodeLabel)
-                                .addGap(4, 4, 4)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(codelistRecodeButton)
-                                    .addComponent(codelistRecodeTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(codelistRecodeTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(codelistRecodeButton))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(codelistRecodeLabel1)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(globalRecodeRecodeTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
+                                .addComponent(globalRecodeTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(warningLabel)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(warningScrollPane)))
+                                .addComponent(warningScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addContainerGap())))
         );
 
@@ -578,9 +605,10 @@ public class GlobalRecodeView extends DialogBase<GlobalRecodeController> {
     }//GEN-LAST:event_closeButtonActionPerformed
 
     private void codelistRecodeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_codelistRecodeButtonActionPerformed
-        String filePath = showFileDialog("Open Codelist File", false, new String[] { "Codelist (*.cdl)|cdl"});
-        if (filePath != null)
+        String filePath = showFileDialog("Open Codelist File", false, new String[]{"Codelist (*.cdl)|cdl"});
+        if (filePath != null) {
             setCodelistText(filePath);
+        }
 //        JFileChooser fileChooser = new JFileChooser();
 //        fileChooser.setFileFilter(new FileNameExtensionFilter("Codelist (*.cdl)", "cdl"));
 //        String hs = SystemUtils.getRegString("general", "datadir", "");
@@ -610,14 +638,13 @@ public class GlobalRecodeView extends DialogBase<GlobalRecodeController> {
                 variablesTable.getModel().setValueAt(getSelectedRecode().getVariable().getName(), rowIndex, 1);
                 updateValues();
             }
- 
-        }
-        catch (ArgusException ex) {
+
+        } catch (ArgusException ex) {
             showErrorMessage(ex);
         }
     }//GEN-LAST:event_truncateButtonActionPerformed
 
-    
+
     private void readButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_readButtonActionPerformed
         String path = askForGrcPath();
         if (path != null) {
@@ -625,25 +652,39 @@ public class GlobalRecodeView extends DialogBase<GlobalRecodeController> {
                 getController().read(path, this.getSelectedRecode());
                 this.selectedRecodeClone = new RecodeMu(this.selectedRecode);
                 updateValues();
-            }
-            catch (ArgusException ex) {
+            } catch (ArgusException ex) {
                 showErrorMessage(ex);
             }
         }
     }//GEN-LAST:event_readButtonActionPerformed
 
+    /**
+     * Shows the warning text in the warning textField.
+     *
+     * @param warning String containing the warning message.
+     */
     public void showWarning(String warning) {
         warningTextArea.setText(warning);
     }
-    
+
+    /**
+     * Sets the selected index.
+     *
+     * @param index Integer containing the selected index.
+     */
     public void setSelectedIndex(int index) {
         this.variablesTable.getSelectionModel().setSelectionInterval(index, index);
     }
-    
+
+    /**
+     * Gets the selected index.
+     *
+     * @return Integer containing the selected index.
+     */
     public int getSelectedIndex() {
         return this.variablesTable.getSelectionModel().getMaxSelectionIndex();
     }
-    
+
     private void applyButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_applyButtonActionPerformed
         try {
             fixGrcReturns(getSelectedRecode());
@@ -652,8 +693,7 @@ public class GlobalRecodeView extends DialogBase<GlobalRecodeController> {
             variablesTable.getModel().setValueAt("R", rowIndex, 0);
             variablesTable.getModel().setValueAt(getSelectedRecode().getVariable().getName(), rowIndex, 1);
             updateValues();
-        }
-        catch (ArgusException ex) {
+        } catch (ArgusException ex) {
             showErrorMessage(ex);
         }
     }//GEN-LAST:event_applyButtonActionPerformed
@@ -664,29 +704,41 @@ public class GlobalRecodeView extends DialogBase<GlobalRecodeController> {
             int rowIndex = this.model.getVariables().indexOf(getSelectedRecode().getVariable());
             variablesTable.getModel().setValueAt("", rowIndex, 0);
             variablesTable.getModel().setValueAt(getSelectedRecode().getVariable().getName(), rowIndex, 1);
-        }
-        catch (ArgusException ex) {
+        } catch (ArgusException ex) {
             showErrorMessage(ex);
         }
     }//GEN-LAST:event_undoButtonActionPerformed
 
+    /**
+     * Sets the global recode file text.
+     *
+     * @param recode Recodemu containing the information of the selected
+     * variable.
+     */
     private void fixGrcReturns(RecodeMu recode) {
         recode.setGrcText(recode.getGrcText().replace("\r\n", "\n").replace("\n", "\r\n"));
     }
-    
+
+    /**
+     * Saves the global recode file.
+     */
     private void saveGrcFile() {
-        String filePath = showFileDialog("Save Recode File", true, new String[] {"Recode files (*.grc)|grc" });
+        String filePath = showFileDialog("Save Recode File", true, new String[]{"Recode files (*.grc)|grc"});
         if (filePath != null) {
             try {
                 this.selectedRecode.write(new File(filePath));
-            }
-            catch (ArgusException ex) {
+            } catch (ArgusException ex) {
                 showErrorMessage(ex);
             }
         }
     }
-        
-    
+
+    /**
+     * Handler that is activated when a different variable is selected. Askes if
+     * the recode information needs to be safed when it has been changed,
+     * changes the selected recodeMu, selected recodeMu clone and updates the
+     * values.
+     */
     private void handleSelectionChanged() {
         if (this.selectedRecodeClone != null) {
             if (!selectedRecodeClone.equals(getSelectedRecode())) {
@@ -699,7 +751,7 @@ public class GlobalRecodeView extends DialogBase<GlobalRecodeController> {
         this.selectedRecodeClone = new RecodeMu(getSelectedRecode());
         updateValues();
     }
-    
+
     private void editTextAreaCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_editTextAreaCaretUpdate
         getSelectedRecode().setGrcText(this.editTextArea.getText());
         enableApplyButton();
@@ -722,8 +774,9 @@ public class GlobalRecodeView extends DialogBase<GlobalRecodeController> {
     }//GEN-LAST:event_codelistRecodeTextFieldCaretUpdate
 
     /**
+     * Sets the file name of the Codelist.
      *
-     * @param filename
+     * @param filename String containing the file name of the Codelist.
      */
     private void setCodelistText(String filename) {
         codelistRecodeTextField.setText(filename);
@@ -741,7 +794,7 @@ public class GlobalRecodeView extends DialogBase<GlobalRecodeController> {
     private javax.swing.JLabel editLabel;
     private javax.swing.JScrollPane editScrollPane;
     private javax.swing.JTextArea editTextArea;
-    private javax.swing.JTextField globalRecodeRecodeTextField;
+    private javax.swing.JTextField globalRecodeTextField;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JPanel midSectionPanel;
     private javax.swing.JLabel mising_1_newLabel;
