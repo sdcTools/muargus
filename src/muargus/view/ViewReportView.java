@@ -21,7 +21,7 @@ import muargus.controller.ViewReportController;
 public class ViewReportView extends DialogBase<ViewReportController> {
 
     /**
-     * Creates new ViewReportView.
+     * Creates new form ViewReportView.
      *
      * @param parent the Frame of the mainFrame.
      * @param modal boolean to set the modal status
@@ -30,7 +30,7 @@ public class ViewReportView extends DialogBase<ViewReportController> {
     public ViewReportView(java.awt.Frame parent, ViewReportController controller, boolean modal) {
         super(parent, modal, controller);
         initComponents();
-        this.setLocationRelativeTo(null);
+        setLocationRelativeTo(null);
     }
 
     /**

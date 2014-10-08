@@ -4,7 +4,10 @@ import java.util.ArrayList;
 import javax.swing.DefaultListModel;
 
 /**
- * 
+ * Class of th eTablePick View. The TablePickView shows all tables for which the
+ * risk model is set and lets the user choose one of them to specify the risk
+ * model.
+ *
  * @author Statistics Netherlands
  */
 public class TablePickView extends DialogBase {
@@ -12,7 +15,7 @@ public class TablePickView extends DialogBase {
     private boolean cancelled = true;
 
     /**
-     * Creates new form TablePickView
+     * Creates new form TablePickView.
      *
      * @param parent the Frame of the mainFrame.
      * @param modal boolean to set the modal status
@@ -24,16 +27,18 @@ public class TablePickView extends DialogBase {
     }
 
     /**
+     * Sets the tables.
      *
-     * @param tables
+     * @param tables ArrayList of Strings containing the tables for which the
+     * risk model is set.
      */
     public void setTables(ArrayList<String> tables) {
         DefaultListModel model = new DefaultListModel();
         for (String str : tables) {
             model.addElement(str);
         }
-        tableList.setModel(model);
-        tableList.setSelectedIndex(0);
+        this.tableList.setModel(model);
+        this.tableList.setSelectedIndex(0);
     }
 
     /**
@@ -42,7 +47,7 @@ public class TablePickView extends DialogBase {
      * @return Integer containing the index of the selected table.
      */
     public int getSelectedIndex() {
-        return cancelled ? -1 : tableList.getSelectedIndex();
+        return this.cancelled ? -1 : this.tableList.getSelectedIndex();
     }
 
     /**
@@ -111,12 +116,12 @@ public class TablePickView extends DialogBase {
     }// </editor-fold>//GEN-END:initComponents
 
     private void okButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okButtonActionPerformed
-        cancelled = false;
+        this.cancelled = false;
         this.setVisible(false);
     }//GEN-LAST:event_okButtonActionPerformed
 
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
-        cancelled = true;
+        this.cancelled = true;
         this.setVisible(false);
     }//GEN-LAST:event_cancelButtonActionPerformed
 
