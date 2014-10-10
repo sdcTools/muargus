@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package muargus.view;
 
 import argus.model.ArgusException;
@@ -21,7 +17,7 @@ import org.jfree.chart.event.ChartProgressListener;
 
 /**
  *
- * @author ambargus
+ * @author Statistics Netherlands
  */
 public class RiskSpecificationView extends DialogBase<RiskSpecificationController> implements ChartProgressListener {
 
@@ -29,14 +25,14 @@ public class RiskSpecificationView extends DialogBase<RiskSpecificationControlle
     private TableMu riskTable;
     private ChartPanel cp = null;
     private boolean calculating = false;
-    
+
     private final int SLIDERKNOBSIZE = 16;
 
     /**
-     * 
-     * @param parent
-     * @param modal
-     * @param controller
+     *
+     * @param parent the Frame of the mainFrame.
+     * @param modal boolean to set the modal status
+     * @param controller the controller of this view.
      * @param isHousehold
      */
     public RiskSpecificationView(java.awt.Frame parent, boolean modal, RiskSpecificationController controller,
@@ -46,22 +42,21 @@ public class RiskSpecificationView extends DialogBase<RiskSpecificationControlle
         setHouseholdComponents(isHousehold);
         setLocationRelativeTo(null);
     }
-    
+
     private void showChart() {
-        if (jPanelChart.getComponentCount() > 0) {
-            jPanelChart.remove(cp);
-            jPanelChart.revalidate();
+        if (this.jPanelChart.getComponentCount() > 0) {
+            this.jPanelChart.remove(this.cp);
+            this.jPanelChart.revalidate();
         }
         RiskChartBuilder builder = new RiskChartBuilder();
-        jPanelChart.setLayout(new BorderLayout());
-        cp = builder.CreateChart(this.model, getDecimals(), getMetadata().isHouseholdData());
-        cp.getChart().addProgressListener(this);
-        jPanelChart.add(cp, BorderLayout.CENTER);
-        jPanelChart.repaint();
-            
-        
+        this.jPanelChart.setLayout(new BorderLayout());
+        this.cp = builder.CreateChart(this.model, getDecimals(), getMetadata().isHouseholdData());
+        this.cp.getChart().addProgressListener(this);
+        this.jPanelChart.add(this.cp, BorderLayout.CENTER);
+        this.jPanelChart.repaint();
+
     }
-    
+
     private void setHouseholdComponents(boolean isHousehold) {
         this.reidentCalcButton.setVisible(!isHousehold);
         this.reidentThresholdTextField.setVisible(!isHousehold);
@@ -72,8 +67,7 @@ public class RiskSpecificationView extends DialogBase<RiskSpecificationControlle
         this.riskLabel.setText(isHousehold ? "househ. risk" : "ind. risk");
         this.riskThresholdLabel.setText(isHousehold ? "<html>HH risk<br>threshold</html>" : "<html>ind. risk<br>threshold</html>");
         this.nUnsafeLabel.setText(isHousehold ? "# unsafe HH:" : "# unsafe records");
-    } 
-    
+    }
 
 //    @Override
 //    public void setVisible(boolean bln) {
@@ -83,36 +77,45 @@ public class RiskSpecificationView extends DialogBase<RiskSpecificationControlle
 //        double max = r.getMaxX();
 //        JOptionPane.showMessageDialog(null, min);
 //    }
-    
-    
+    /**
+     *
+     */
     @Override
     public void initializeData() {
         this.model = getMetadata().getCombinations().getRiskSpecifications().get(this.riskTable);
-        this.tableLabel.setText(this.riskTable.getTableTitle()); 
+        this.tableLabel.setText(this.riskTable.getTableTitle());
         //this.maxRiskTextField.setText(formatDouble(this.model.getMaxRisk()));
         //this.maxReidentRateTextField.setText(formatDoublePrc(100*this.model.getMaxReidentRate()));
         updateValues();
         showChart();
     }
-    
+
+    /**
+     *
+     * @param table
+     */
     public void setRiskTable(TableMu table) {
         this.riskTable = table;
     }
-    
+
     private int getDecimals() {
-        return Integer.parseInt(decimalsCombo.getSelectedItem().toString());
+        return Integer.parseInt(this.decimalsCombo.getSelectedItem().toString());
     }
+
     private String formatDouble(double d) {
         String format = "%." + getDecimals() + "f";
         return String.format(MuARGUS.getLocale(), format, d);
     }
 
     private String formatDoublePrc(double d) {
-        String format = "%." + Integer.toString(getDecimals()  - 2) + "f";
-        return String.format(MuARGUS.getLocale(), format, d*100);
+        String format = "%." + Integer.toString(getDecimals() - 2) + "f";
+        return String.format(MuARGUS.getLocale(), format, d * 100);
     }
 
-    public void updateValues(){
+    /**
+     *
+     */
+    private void updateValues() {
         this.maxRiskTextField.setText(formatDouble(this.model.getMaxRisk()));
         this.maxReidentRateTextField.setText(formatDoublePrc(this.model.getMaxReidentRate()) + "%");
         this.riskThresholdTextField.setText(formatDouble(this.model.getRiskThreshold()));
@@ -123,11 +126,33 @@ public class RiskSpecificationView extends DialogBase<RiskSpecificationControlle
     }
 
     private void setSliderPosition() {
-        double value = riskSlider.getMaximum() *  Math.log(this.model.getRiskThreshold()/this.model.getMinRisk())/
-                Math.log(this.model.getMaxRisk()/this.model.getMinRisk());
-        this.riskSlider.setValue((int)value);
+        double value = this.riskSlider.getMaximum() * Math.log(this.model.getRiskThreshold() / this.model.getMinRisk())
+                / Math.log(this.model.getMaxRisk() / this.model.getMinRisk());
+        this.riskSlider.setValue((int) value);
     }
-    
+
+    @Override
+    public void chartProgress(ChartProgressEvent cpe) {
+        if (cpe.getPercent() == 100) {
+            Rectangle2D rect = this.cp.getChartRenderingInfo().getPlotInfo().getDataArea();
+            GroupLayout groupLayout = (GroupLayout) this.sliderPanel.getLayout();
+            int gapLeft = (int) rect.getMinX() - this.SLIDERKNOBSIZE / 2;
+            int gapRight = this.sliderPanel.getWidth() - (int) rect.getMaxX() - this.SLIDERKNOBSIZE / 2;
+            groupLayout.setHorizontalGroup(
+                    groupLayout.createSequentialGroup()
+                    .addContainerGap(gapLeft, gapLeft)
+                    .addComponent(this.riskSlider)
+                    .addContainerGap(gapRight, gapRight));
+            this.sliderPanel.setLayout(groupLayout);
+        }
+    }
+
+    private void showCumulative(boolean cumulative) {
+        getController().fillModelHistogramData(cumulative);
+        showChart();
+
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -168,7 +193,7 @@ public class RiskSpecificationView extends DialogBase<RiskSpecificationControlle
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Risk Specification");
-        setMinimumSize(new java.awt.Dimension(725, 300));
+        setMinimumSize(new java.awt.Dimension(725, 500));
 
         tableLabel.setText("Dimensions");
 
@@ -431,11 +456,11 @@ public class RiskSpecificationView extends DialogBase<RiskSpecificationControlle
     }//GEN-LAST:event_okButtonActionPerformed
 
     private void riskSliderStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_riskSliderStateChanged
-        if (!riskSlider.getValueIsAdjusting() && !this.calculating) {
-            
+        if (!this.riskSlider.getValueIsAdjusting() && !this.calculating) {
+
             double threshold = this.model.getMinRisk() * Math.exp(
-                    (Math.log(this.model.getMaxRisk() / this.model.getMinRisk()))*riskSlider.getValue()/riskSlider.getMaximum());
-            
+                    (Math.log(this.model.getMaxRisk() / this.model.getMinRisk())) * this.riskSlider.getValue() / this.riskSlider.getMaximum());
+
             this.model.setRiskThreshold(threshold);
             getController().calculateByRiskThreshold();
             updateValues();
@@ -453,7 +478,7 @@ public class RiskSpecificationView extends DialogBase<RiskSpecificationControlle
 
     private void unsafeCalcButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_unsafeCalcButtonActionPerformed
         this.calculating = true;
-        this.model.setUnsafeRecords(Integer.parseInt(unsafeRecordsTextField.getText()));
+        this.model.setUnsafeRecords(Integer.parseInt(this.unsafeRecordsTextField.getText()));
         getController().calculateByUnsafeRecords();
         updateValues();
     }//GEN-LAST:event_unsafeCalcButtonActionPerformed
@@ -461,13 +486,11 @@ public class RiskSpecificationView extends DialogBase<RiskSpecificationControlle
     private void reidentCalcButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reidentCalcButtonActionPerformed
         this.calculating = true;
         try {
-            double d = NumberFormat.getInstance(MuARGUS.getLocale()).parse(reidentThresholdTextField.getText()).doubleValue();
-            getController().calculateByReidentThreshold(d/100, getDecimals());
-        }
-        catch (ParseException ex) {
+            double d = NumberFormat.getInstance(MuARGUS.getLocale()).parse(this.reidentThresholdTextField.getText()).doubleValue();
+            getController().calculateByReidentThreshold(d / 100, getDecimals());
+        } catch (ParseException ex) {
             showErrorMessage(new ArgusException("Entered value is not valid"));
-        }
-        catch (ArgusException ex) {
+        } catch (ArgusException ex) {
             showErrorMessage(ex);
         }
         updateValues();
@@ -476,62 +499,16 @@ public class RiskSpecificationView extends DialogBase<RiskSpecificationControlle
     private void riskCalcButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_riskCalcButtonActionPerformed
         try {
             this.calculating = true;
-            double d = NumberFormat.getInstance(MuARGUS.getLocale()).parse(riskThresholdTextField.getText()).doubleValue();
+            double d = NumberFormat.getInstance(MuARGUS.getLocale()).parse(this.riskThresholdTextField.getText()).doubleValue();
             this.model.setRiskThreshold(d);
             getController().calculateByRiskThreshold();
             updateValues();
-        }
-        catch (ParseException ex) {
+        } catch (ParseException ex) {
             showErrorMessage(new ArgusException("Entered value is not valid"));
         }
     }//GEN-LAST:event_riskCalcButtonActionPerformed
 
-    private void showCumulative(boolean cumulative) {
-        getController().fillModelHistogramData(cumulative);
-        showChart();
-        
-    }
-//    /**
-//     * @param args the command line arguments
-//     */
-//    public static void main(String args[]) {
-//        /* Set the Nimbus look and feel */
-//        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-//        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-//         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-//         */
-//        try {
-//            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-//                if ("Nimbus".equals(info.getName())) {
-//                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-//                    break;
-//                }
-//            }
-//        } catch (ClassNotFoundException ex) {
-//            java.util.logging.Logger.getLogger(RiskSpecificationView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        } catch (InstantiationException ex) {
-//            java.util.logging.Logger.getLogger(RiskSpecificationView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        } catch (IllegalAccessException ex) {
-//            java.util.logging.Logger.getLogger(RiskSpecificationView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-//            java.util.logging.Logger.getLogger(RiskSpecificationView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        }
-//        //</editor-fold>
-//
-//        /* Create and display the dialog */
-//        java.awt.EventQueue.invokeLater(new Runnable() {
-//            public void run() {
-//                RiskSpecificationView dialog = new RiskSpecificationView(new javax.swing.JFrame(), true);
-//                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
-//                    @Override
-//                    public void windowClosing(java.awt.event.WindowEvent e) {
-//                        System.exit(0);
-//                    }
-//                });
-//                dialog.setVisible(true);
-//            }
-//        });
-//    }
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JCheckBox cumulativeCheckbox;
     private javax.swing.JComboBox decimalsCombo;
@@ -561,19 +538,4 @@ public class RiskSpecificationView extends DialogBase<RiskSpecificationControlle
     private javax.swing.JTextField unsafeRecordsTextField;
     // End of variables declaration//GEN-END:variables
 
-    @Override
-    public void chartProgress(ChartProgressEvent cpe) {
-        if (cpe.getPercent() == 100) {
-            Rectangle2D rect = cp.getChartRenderingInfo().getPlotInfo().getDataArea();
-            GroupLayout groupLayout = (GroupLayout)sliderPanel.getLayout();
-            int gapLeft = (int)rect.getMinX() - SLIDERKNOBSIZE/2;
-            int gapRight = sliderPanel.getWidth() - (int)rect.getMaxX() - SLIDERKNOBSIZE/2;
-            groupLayout.setHorizontalGroup(
-                    groupLayout.createSequentialGroup()
-                        .addContainerGap(gapLeft,gapLeft)
-                        .addComponent(riskSlider)
-                        .addContainerGap(gapRight, gapRight));
-            sliderPanel.setLayout(groupLayout);
-        }
-    }
 }

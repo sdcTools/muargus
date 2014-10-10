@@ -14,7 +14,7 @@ import muargus.model.ModifyNumericalVariablesSpec;
 
 /**
  *
- * @author ambargus
+ * @author Statistics Netherlands
  */
 public class ModifyNumericalVariablesView extends DialogBase<ModifyNumericalVariablesController> {
 
@@ -24,9 +24,9 @@ public class ModifyNumericalVariablesView extends DialogBase<ModifyNumericalVari
 
     /**
      *
-     * @param parent
-     * @param modal
-     * @param controller
+     * @param parent the Frame of the mainFrame.
+     * @param modal boolean to set the modal status
+     * @param controller the controller of this view.
      */
     public ModifyNumericalVariablesView(java.awt.Frame parent, boolean modal, ModifyNumericalVariablesController controller) {
         super(parent, modal, controller);
@@ -52,7 +52,7 @@ public class ModifyNumericalVariablesView extends DialogBase<ModifyNumericalVari
      *
      * @return
      */
-    public ModifyNumericalVariablesSpec getModifyNumericalVariablesSpec() {
+    private ModifyNumericalVariablesSpec getModifyNumericalVariablesSpec() {
         ModifyNumericalVariablesSpec selected = this.model.getModifyNumericalVariablesSpec().get(this.selectedRow);
         return selected;
     }
@@ -60,7 +60,7 @@ public class ModifyNumericalVariablesView extends DialogBase<ModifyNumericalVari
     /**
      *
      */
-    public void updateValues() {
+    private void updateValues() {
         double[] min_max = getController().getMinMax(
                 this.model.getModifyNumericalVariablesSpec().get(this.variablesTable.getSelectedRow()).getVariable());
 
@@ -75,19 +75,20 @@ public class ModifyNumericalVariablesView extends DialogBase<ModifyNumericalVari
         this.bottomCodingReplacementTextField.setText(selected.getBottomReplacement());
         this.topValueTextField.setText(formatDouble(selected.getTopValue()));
         this.topCodingReplacementTextField.setText(selected.getTopReplacement());
-        this.roundingBaseTextField.setText(formatDouble(selected.getRoundingBase()));        
+        this.roundingBaseTextField.setText(formatDouble(selected.getRoundingBase()));
         this.percentageTextField.setText(formatDouble(selected.getWeightNoisePercentage()));
     }
 
     private String formatDouble(double d) {
-        DecimalFormat f = (DecimalFormat)DecimalFormat.getNumberInstance(MuARGUS.getLocale());
+        DecimalFormat f = (DecimalFormat) DecimalFormat.getNumberInstance(MuARGUS.getLocale());
         f.setGroupingUsed(false);
-        return Double.isNaN(d)? "" : f.format(d);
+        return Double.isNaN(d) ? "" : f.format(d);
     }
+
     /**
      *
      */
-    public void makeVariablesTable() {
+    private void makeVariablesTable() {
         getController().setVariablesData();
 
         TableModel variablesTableModel = new DefaultTableModel(this.model.getVariablesData(), this.model.getVariablesColumnNames()) {
@@ -103,9 +104,9 @@ public class ModifyNumericalVariablesView extends DialogBase<ModifyNumericalVari
             this.variablesTable.getColumnModel().getColumn(i).setMinWidth(this.variablesColumnWidth[i]);
             this.variablesTable.getColumnModel().getColumn(i).setPreferredWidth(this.variablesColumnWidth[i]);
         }
- 
+
         this.variablesTable.setDefaultRenderer(Object.class, new HighlightTableCellRenderer());
-        for (int i=0; i < this.model.getModifyNumericalVariablesSpec().size(); i++) {
+        for (int i = 0; i < this.model.getModifyNumericalVariablesSpec().size(); i++) {
             this.selectedRow = i;
             showModified();
         }
@@ -124,11 +125,11 @@ public class ModifyNumericalVariablesView extends DialogBase<ModifyNumericalVari
     }
 
     /**
-     * Event handler when the selected variable has changed.
-     * If a different variable is selected, the entered values are checked and
-     * the visible values are updated.
+     * Event handler when the selected variable has changed. If a different
+     * variable is selected, the entered values are checked and the visible
+     * values are updated.
      */
-    public void variablesSelectionChanged() {
+    private void variablesSelectionChanged() {
         if (this.variablesTable.getSelectedRow() != this.selectedRow) {
             checkValidAnswer();
         }
@@ -144,7 +145,7 @@ public class ModifyNumericalVariablesView extends DialogBase<ModifyNumericalVari
      *
      * @return Boolean indicating whether the answers entered are valid.
      */
-    public boolean checkValidAnswer() {
+    private boolean checkValidAnswer() {
         setValuesInModel();
         ModifyNumericalVariablesSpec selected = getModifyNumericalVariablesSpec();
         boolean hasValue = valueEntered();
@@ -172,10 +173,8 @@ public class ModifyNumericalVariablesView extends DialogBase<ModifyNumericalVari
     /**
      * Sets whether this variable has been modified.
      *
-     * @param modified Boolean indicating whether this variable has been
-     * modified.
      */
-    public void showModified() {
+    private void showModified() {
         this.variablesTable.setValueAt(getModifyNumericalVariablesSpec().getModifiedText(), this.selectedRow, 0);
         this.variablesTable.setValueAt(getModifyNumericalVariablesSpec().getVariable().getName(), this.selectedRow, 1);
     }
@@ -183,7 +182,7 @@ public class ModifyNumericalVariablesView extends DialogBase<ModifyNumericalVari
     /**
      * Sets the values in the model.
      */
-    public void setValuesInModel() {
+    private void setValuesInModel() {
         ModifyNumericalVariablesSpec selected = getModifyNumericalVariablesSpec();
         selected.setBottomValue(this.bottomValueTextField.getText());
         selected.setBottomReplacement(this.bottomCodingReplacementTextField.getText());
@@ -198,7 +197,7 @@ public class ModifyNumericalVariablesView extends DialogBase<ModifyNumericalVari
      *
      * @return Boolean indicating whether at least one value has been entered.
      */
-    public boolean valueEntered() {
+    private boolean valueEntered() {
         boolean valueEntered = false;
         if (!this.bottomValueTextField.getText().equals("")) {
             valueEntered = true;
@@ -224,12 +223,13 @@ public class ModifyNumericalVariablesView extends DialogBase<ModifyNumericalVari
     private boolean doubleEquals(String text, double d) {
         return text.equals(formatDouble(d));
     }
+
     /**
      * Checks for all input if the value is changed.
      *
      * @return Boolean indicating whether a value has changed.
      */
-    public boolean valueChanged() {
+    private boolean valueChanged() {
         ModifyNumericalVariablesSpec selected = getModifyNumericalVariablesSpec();
         boolean valueChanged = false;
         if (!doubleEquals(this.bottomValueTextField.getText(), selected.getBottomValue())) {

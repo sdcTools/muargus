@@ -19,25 +19,24 @@ import muargus.HighlightTableCellRenderer;
 
 /**
  *
- * @author ambargus
+ * @author Statistics Netherlands
  */
 public class SelectCombinationsView extends DialogBase<SelectCombinationsController> {
-    
+
     private Combinations model;
     private DefaultListModel variablesListModel;
     private DefaultListModel variablesSelectedListModel;
     private TableModel tableModel;
     private final Frame parent;
     private long numberOfTables;
-    private final int[] columnWidth = new int[]{30,45,65}; // gives the width of column 1, 2 and the final value is the width of all the other columns
-    
+    private final int[] columnWidth = {30, 45, 65}; // gives the width of column 1, 2 and the final value is the width of all the other columns
 
     /**
      * Creates new form SelectCombinationsView
      *
-     * @param parent
-     * @param modal
-     * @param controller
+     * @param parent the Frame of the mainFrame.
+     * @param modal boolean to set the modal status
+     * @param controller the controller of this view.
      */
     public SelectCombinationsView(java.awt.Frame parent, boolean modal, SelectCombinationsController controller) {
         super(parent, modal, controller);
@@ -47,8 +46,8 @@ public class SelectCombinationsView extends DialogBase<SelectCombinationsControl
         variablesList.setCellRenderer(new VariableNameCellRenderer());
         variablesSelectedList.setCellRenderer(new VariableNameCellRenderer());
     }
-    
-    public void setModel(Combinations  model) {
+
+    public void setModel(Combinations model) {
         this.model = model;
         updateValues();
     }
@@ -66,7 +65,7 @@ public class SelectCombinationsView extends DialogBase<SelectCombinationsControl
             }
         }
         variablesList.setModel(variablesListModel);
-        
+
         variablesSelectedList.setModel(variablesSelectedListModel);
         if (variablesListModel.getSize() > 0) {
             variablesList.setSelectedIndex(0);
@@ -76,7 +75,7 @@ public class SelectCombinationsView extends DialogBase<SelectCombinationsControl
         table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         //table.setDefaultRenderer(Object.class, new CombinationsTableCellRenderer());
         table.setDefaultRenderer(Object.class, new HighlightTableCellRenderer());
-        
+
     }
 
     /**
@@ -87,34 +86,34 @@ public class SelectCombinationsView extends DialogBase<SelectCombinationsControl
         // gets the tables from Combinations and adds these to a double  array, containing the data
         ArrayList<TableMu> tables = model.getTables();
         String[][] data = new String[model.getTables().size()][model.getNumberOfColumns()];
-        
+
         int index = 0;
         for (TableMu t : tables) {
             data[index] = t.getTable();
             index++;
         }
-        
+
         ArrayList<String> columnNames = new ArrayList<>(Arrays.asList("Risk", "Thres.", "Var 1"));
         if (model.getNumberOfColumns() > 3) {
             for (int i = 2; i <= model.getNumberOfColumns() - 2; i++) {
                 columnNames.add("Var " + i);
             }
         }
-        
-        tableModel = new DefaultTableModel(data, columnNames.toArray()){
+
+        tableModel = new DefaultTableModel(data, columnNames.toArray()) {
             @Override
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return false;
             }
-        };        
+        };
         table.setModel(tableModel);
 
         // sets the size of each column
         for (int i = 0; i < table.getColumnModel().getColumnCount(); i++) {
             int colWidth;
-            if(i> 2){
+            if (i > 2) {
                 colWidth = this.columnWidth[2];
-            } else{
+            } else {
                 colWidth = this.columnWidth[i];
             }
             table.getColumnModel().getColumn(i).setMinWidth(colWidth);
@@ -130,7 +129,7 @@ public class SelectCombinationsView extends DialogBase<SelectCombinationsControl
     /**
      * Removes all the tables
      */
-    public void clear() {
+    private void clear() {
         int size = model.getTables().size();
         for (int i = size - 1; i >= 0; i--) {
             model.removeTable(i);
@@ -367,13 +366,11 @@ public class SelectCombinationsView extends DialogBase<SelectCombinationsControl
         try {
             if (this.model.getTables().isEmpty()) {
                 showMessage("No tables specified");
-             }
-            else {
+            } else {
                 getController().calculateTables();
             }
-        } 
-        catch (ArgusException ex) {
-            showErrorMessage(ex);       
+        } catch (ArgusException ex) {
+            showErrorMessage(ex);
         }
     }//GEN-LAST:event_calculateTablesButtonActionPerformed
 
@@ -393,7 +390,7 @@ public class SelectCombinationsView extends DialogBase<SelectCombinationsControl
                 variablesSelectedListModel.add(variablesSelectedListModel.getSize(), (VariableMu) variable);
             }
         }
-        
+
         variablesList.setSelectedIndex(index[index.length - 1] + 1);
     }//GEN-LAST:event_moveToSelectedButtonActionPerformed
 
@@ -408,7 +405,7 @@ public class SelectCombinationsView extends DialogBase<SelectCombinationsControl
         variablesSelectedListModel.removeAllElements();
         variablesList.setSelectedIndex(0);
     }//GEN-LAST:event_removeAllFromSelectedButtonActionPerformed
-    
+
     public boolean validThreshold() {
         boolean valid;
         try {
@@ -434,7 +431,7 @@ public class SelectCombinationsView extends DialogBase<SelectCombinationsControl
             for (VariableMu v : variableMu) {
                 tableMuNew.getVariables().add(v);
             }
-            
+
             boolean add = true;
             // only check for double tables when then number of tables is between 0 and 100
             //TODO: constant
@@ -451,7 +448,7 @@ public class SelectCombinationsView extends DialogBase<SelectCombinationsControl
                     }
                 }
             }
-            
+
             if (add) {
                 if (variablesSelectedListModel.size() > 0) {
                     TableMu tableMu = new TableMu();
@@ -478,11 +475,11 @@ public class SelectCombinationsView extends DialogBase<SelectCombinationsControl
      * @param tableMuOld
      * @return It returns if a table can be added
      */
-    public boolean compareRows(TableMu tableMuNew, TableMu tableMuOld) {
+    private boolean compareRows(TableMu tableMuNew, TableMu tableMuOld) {
         boolean isValid = true;
-        boolean exit = false;
+        //boolean exit = false;
         int numberOfDoubleVariables = 0;
-        
+
         for (VariableMu oldVariable : tableMuOld.getVariables()) {
             for (VariableMu newVariable : tableMuNew.getVariables()) {
                 if (oldVariable.equals(newVariable)) {
@@ -568,12 +565,12 @@ public class SelectCombinationsView extends DialogBase<SelectCombinationsControl
                 numberOfLevels++;
             }
         }
-        
+
         int numberOfVariables = allValidVariables.size();
-        
+
         GenerateAutomaticTables generateAutomaticTables = new GenerateAutomaticTables(parent, true, this.model, numberOfVariables);
         generateAutomaticTables.setVisible(true);
-        
+
         if (generateAutomaticTables.isValid()) {
             if (generateAutomaticTables.isMakeUpToDimensionRadioButton()) {
                 int dimensions = generateAutomaticTables.getDimensionTextField();
@@ -593,7 +590,7 @@ public class SelectCombinationsView extends DialogBase<SelectCombinationsControl
 
         //TODO: progressbar laten zien?
         // removes double tables
-        if (numberOfOldTables < this.model.getMaximumNumberOfTables()) {            
+        if (numberOfOldTables < this.model.getMaximumNumberOfTables()) {
             for (int i = 0; i < numberOfOldTables; i++) {
                 for (int j = model.getNumberOfRows() - 1; j >= numberOfOldTables; j--) {
                     if (!compareRows(model.getTables().get(i), model.getTables().get(j))) {
@@ -602,24 +599,24 @@ public class SelectCombinationsView extends DialogBase<SelectCombinationsControl
                 }
             }
         }
-        
+
         boolean risk = model.isRiskModel();
         if (risk && numberOfOldTables < this.model.getMaximumNumberOfTables()) {
             this.removeTableRiskModel(this.getListOfRemovedTables());
         }
-        
+
         updateValues();
     }//GEN-LAST:event_automaticSpecificationButtonActionPerformed
-    
-    public long getNumberOfTables() {
+
+    private long getNumberOfTables() {
         return numberOfTables;
     }
-    
-    public void setNumberOfTables(int dimensions, int numberOfVariables) {
+
+    private void setNumberOfTables(int dimensions, int numberOfVariables) {
         this.numberOfTabels(1, dimensions, numberOfVariables);
     }
-    
-    public void numberOfTabels(long numberOfTables, int dimensions, int numberOfVariables) {
+
+    private void numberOfTabels(long numberOfTables, int dimensions, int numberOfVariables) {
         if (dimensions > 0) {
             long tempNumber = numberOfTables * numberOfVariables;
             if (tempNumber < 0) {
@@ -629,30 +626,30 @@ public class SelectCombinationsView extends DialogBase<SelectCombinationsControl
                 int tempDimensions = dimensions - 1;
                 numberOfTabels(tempNumber, tempDimensions, tempNumberOfVariables);
             }
-            
+
         } else if (dimensions == 0) {
             this.numberOfTables = numberOfTables;
         }
     }
-    
+
     @Override
     public void setProgress(int progress) {
         this.progressbar.setValue(progress);
     }
-    
+
     @Override
     public void showStepName(String value) {
         this.progressLabel.setText(value);
     }
-    
-    public void calculateTablesForDimensions(ArrayList<VariableMu> data, int dimensions) {
+
+    private void calculateTablesForDimensions(ArrayList<VariableMu> data, int dimensions) {
         ArrayList<VariableMu> variableSubset = new ArrayList<>();
         int startPos = 0;
         int threshold = 0;
         calculateTablesForDimensions(startPos, data, dimensions, variableSubset, threshold);
     }
-    
-    public void calculateTablesForDimensions(int startPos, ArrayList<VariableMu> allVariables, int dimension,
+
+    private void calculateTablesForDimensions(int startPos, ArrayList<VariableMu> allVariables, int dimension,
             ArrayList<VariableMu> variableSubset, int threshold) {
         if (dimension > 0) {
             for (int i = startPos; i < allVariables.size(); i++) {
@@ -667,25 +664,25 @@ public class SelectCombinationsView extends DialogBase<SelectCombinationsControl
                 tableMu.getVariables().addAll(temp);
                 tableMu.setThreshold(model.getThresholds()[threshold]);
                 model.getTables().add(tableMu);
-                
+
                 int d = dimension - 1;
                 calculateTablesForDimensions(i + 1, allVariables, d, temp, threshold + 1);
             }
         }
     }
-    
-    public void calculateTablesForID(int numberOfLevels, ArrayList<ArrayList<VariableMu>> variables, ArrayList<VariableMu> allValidVariables) {
+
+    private void calculateTablesForID(int numberOfLevels, ArrayList<ArrayList<VariableMu>> variables, ArrayList<VariableMu> allValidVariables) {
         int index = 1; // don't add the variables with an ID number of 0
         int _size = 0;
         int currentLevel = 0;
         ArrayList<VariableMu> variableSubset = new ArrayList<>();
-        
+
         calculateTablesForID(0, index, _size, currentLevel, variableSubset, numberOfLevels, variables, allValidVariables);
     }
-    
-    public void calculateTablesForID(int _i, int _index, int _size, int _currentLevel, ArrayList<VariableMu> variableSubset,
+
+    private void calculateTablesForID(int _i, int _index, int _size, int _currentLevel, ArrayList<VariableMu> variableSubset,
             int numberOfLevels, ArrayList<ArrayList<VariableMu>> variables, ArrayList<VariableMu> allVariables) {
-        
+
         int currentLevel = _currentLevel + 1;
         if (currentLevel <= numberOfLevels) {
             int index = _index;
@@ -699,12 +696,12 @@ public class SelectCombinationsView extends DialogBase<SelectCombinationsControl
                     break;
                 }
             }
-            
+
             for (int i = _i; i < size; i++) {
                 ArrayList<VariableMu> temp = new ArrayList<>();
                 temp.addAll(variableSubset);
                 temp.add(allVariables.get(i));
-                
+
                 if (temp.size() == numberOfLevels) {
                     TableMu tableMu = new TableMu();
                     tableMu.getVariables().addAll(temp);
@@ -719,10 +716,10 @@ public class SelectCombinationsView extends DialogBase<SelectCombinationsControl
     private void clearButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearButtonActionPerformed
         this.clear();
     }//GEN-LAST:event_clearButtonActionPerformed
-    
-    public ArrayList<TableMu> getListOfRemovedTables(){
+
+    private ArrayList<TableMu> getListOfRemovedTables() {
         ArrayList<TableMu> toBeRemovedTables = new ArrayList<>();
-        
+
         for (int i = model.getNumberOfRows() - 1; i >= 0; i--) {
             TableMu t = model.getTables().get(i);
             if (!t.isRiskModel()) {
@@ -733,8 +730,8 @@ public class SelectCombinationsView extends DialogBase<SelectCombinationsControl
         }
         return toBeRemovedTables;
     }
-    
-    public boolean overlappingTables(ArrayList<TableMu> toBeRemovedTables, TableMu tableMu){
+
+    private boolean overlappingTables(ArrayList<TableMu> toBeRemovedTables, TableMu tableMu) {
         boolean valid = false;
         if (toBeRemovedTables.size() > 0) {
             if (JOptionPane.showConfirmDialog(this, "Overlapping tables found with this risk table\nDo you want to remove them?", "Mu Argus", JOptionPane.YES_NO_OPTION) == JOptionPane.NO_OPTION) {
@@ -744,17 +741,17 @@ public class SelectCombinationsView extends DialogBase<SelectCombinationsControl
         }
         return valid;
     }
-    
+
     private void removeTableRiskModel(ArrayList<TableMu> toBeRemovedTables) {
         for (TableMu t : toBeRemovedTables) {
             model.removeTable(t);
         }
     }
-    
-    public void enableCalculateTables(boolean enabled){
-       this.calculateTablesButton.setEnabled(enabled);
+
+    public void enableCalculateTables(boolean enabled) {
+        this.calculateTablesButton.setEnabled(enabled);
     }
-    
+
     private boolean weightVariableExists() {
         for (VariableMu variable : getMetadata().getVariables()) {
             if (variable.isWeight()) {
@@ -766,7 +763,7 @@ public class SelectCombinationsView extends DialogBase<SelectCombinationsControl
 
     private void setTableRiskModelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_setTableRiskModelButtonActionPerformed
         if (model.getTables().size() > 0) {
-            
+
             try { // afvangen geen tabel geselecteerd
                 //TODO: geen try catch 
                 int index = table.getSelectedRow();
@@ -774,15 +771,15 @@ public class SelectCombinationsView extends DialogBase<SelectCombinationsControl
                 if (!weightVariableExists()) {
                     showMessage("No weight variable has been specified, so the risk-model cannot be applied");
                     return;
-                }                
+                }
                 tableMu.setRiskModel(!tableMu.isRiskModel());
-                
+
                 if (tableMu.isRiskModel()) {  //The table is added to the risk model
                     ArrayList<TableMu> toBeRemovedTables = this.getListOfRemovedTables();
                     this.overlappingTables(toBeRemovedTables, tableMu);
                     this.removeTableRiskModel(toBeRemovedTables);
                 }
-                
+
                 updateValues();
                 table.getSelectionModel().setSelectionInterval(index, index);
             } catch (Exception e) {

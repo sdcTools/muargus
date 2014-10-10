@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package muargus.view;
 
 import argus.utils.SingleListSelectionModel;
@@ -19,23 +15,27 @@ import muargus.model.VariableMu;
 
 /**
  *
- * @author ambargus
+ * @author Statistics Netherlands
  */
 public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
-    
+
     private ArrayList<VariableMu> related;
-    private final String[] idLevel = {"0","1","2","3","4","5"};
-    private final String[] format = {"Fixed format", "Free format", "Free with meta", "SPSS system file" }; // maak hier enum van
+    private final String[] idLevel = {"0", "1", "2", "3", "4", "5"};
+    private final String[] format = {"Fixed format", "Free format", "Free with meta", "SPSS system file"}; // maak hier enum van
     private final String[] suppressionWeight = new String[101];
     //private MetadataMu metadataMu;
     private String separatorTemp;
     private int dataFileTypeTemp;
     private final VariableMu dummyVar = new VariableMu();
-    
+
     private DefaultListModel variableListModel;
-    
+
     /**
      * Creates new form SpecifyMetadataView
+     *
+     * @param parent the Frame of the mainFrame.
+     * @param modal boolean to set the modal status
+     * @param controller the controller of this view.
      */
     public SpecifyMetadataView(java.awt.Frame parent, boolean modal, SpecifyMetadataController controller) {
         super(parent, modal, controller);
@@ -46,31 +46,33 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
         relatedToComboBox.setRenderer(new VariableNameCellRenderer());
     }
 
+    /**
+     *
+     */
     @Override
-    public void initializeData(){
+    public void initializeData() {
 
         separatorTemp = getMetadata().getSeparator();
         dataFileTypeTemp = getMetadata().getDataFileType();
-        
-        variableListModel = new DefaultListModel<>(); 
+
+        variableListModel = new DefaultListModel<>();
         for (VariableMu variable : getMetadata().getVariables()) {
             variableListModel.addElement(variable);
         }
         variablesList.setModel(variableListModel);
 
-
         // makes the list of suppressionweights for the suppressionWeightJComboBox
-        for (int i = 0; i < suppressionWeight.length; i++){
+        for (int i = 0; i < suppressionWeight.length; i++) {
             suppressionWeight[i] = Integer.toString(i);
         }
-        
+
         // add lists of names to the ComboBoxes
         identificationComboBox.setModel(new DefaultComboBoxModel(idLevel));
         weightLocalSuppressionComboBox.setModel(new DefaultComboBoxModel(suppressionWeight));
         variablesComboBox.setModel(new DefaultComboBoxModel(format));
-        
+
         // check the format and set the appropriate settings
-        switch(getMetadata().getDataFileType()){
+        switch (getMetadata().getDataFileType()) {
             case MetadataMu.DATA_FILE_TYPE_FIXED:
                 setFixed();
                 break;
@@ -84,20 +86,20 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
                 setSpss(true);
                 break;
         }
-        
+
         if (variableListModel.getSize() > 0) {
             variablesList.setSelectedIndex(0);
         }
         calculateButtonStates();
-        
+
         if (getMetadata().getVariables().isEmpty()) {
             enableAllControls(false);
         }
         variablesList.requestFocus();
 
     }
-    
-    public void setSpss(boolean b){
+
+    private void setSpss(boolean b) {
         dataFileTypeTemp = MetadataMu.DATA_FILE_TYPE_SPSS;
         separatorLabel.setVisible(!b);
         separatorTextField.setVisible(!b);
@@ -113,8 +115,8 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
         codelistfileButton.setEnabled(!b);
         generateButton.setEnabled(!b);
     }
-    
-    public void setFixed(){
+
+    private void setFixed() {
         setSpss(false);
         dataFileTypeTemp = MetadataMu.DATA_FILE_TYPE_FIXED;
         separatorLabel.setVisible(false);
@@ -124,8 +126,8 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
         variablesComboBox.setSelectedIndex(0);
         generateButton.setEnabled(false);
     }
-    
-    public void setFree(){
+
+    private void setFree() {
         setSpss(false);
         dataFileTypeTemp = MetadataMu.DATA_FILE_TYPE_FREE;
         separatorLabel.setVisible(true);
@@ -135,8 +137,8 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
         variablesComboBox.setSelectedIndex(1);
         generateButton.setEnabled(false);
     }
-    
-    public void setFreeWithMeta(){
+
+    private void setFreeWithMeta() {
         setSpss(false);
         dataFileTypeTemp = MetadataMu.DATA_FILE_TYPE_FREE_WITH_META;
         separatorLabel.setVisible(true);
@@ -146,8 +148,8 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
         variablesComboBox.setSelectedIndex(1);
         generateButton.setEnabled(true);
     }
-    
-    public void updateValues(){
+
+    private void updateValues() {
         VariableMu selected = getSelectedVariable();
         nameTextField.setText(selected.getName());
         identificationComboBox.setSelectedIndex(selected.getIdLevel());
@@ -169,33 +171,34 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
         startingPositionTextField.setText(Integer.toString(selected.getStartingPosition()));
         lengthTextField.setText(Integer.toString(selected.getVariableLength()));
         separatorTextField.setText(separatorTemp);
-        
+
         related = new ArrayList<>();
         related.add(new VariableMu("--none--"));
-        for (Object o: variableListModel.toArray()) {
-            if (!o.equals(selected))
-            related.add((VariableMu) o);
+        for (Object o : variableListModel.toArray()) {
+            if (!o.equals(selected)) {
+                related.add((VariableMu) o);
+            }
         }
         relatedToComboBox.setModel(
                 new javax.swing.DefaultComboBoxModel(related.toArray()));
 
-        if(selected.isRelated()){
+        if (selected.isRelated()) {
             relatedToComboBox.setSelectedItem(selected.getRelatedVariable());
         } else {
             relatedToComboBox.setSelectedIndex(0);
         }
     }
-    
+
     private void calculateButtonStates() {
         int index = variablesList.getSelectedIndex();
         deleteButton.setEnabled(index != -1);
         moveUpButton.setEnabled(index > 0);
         moveDownButton.setEnabled((index != -1) && (index < variableListModel.getSize() - 1));
-            codelistfileButton.setEnabled(codelistfileCheckBox.isSelected());
-            codelistfileTextField.setEnabled(codelistfileCheckBox.isSelected());
+        codelistfileButton.setEnabled(codelistfileCheckBox.isSelected());
+        codelistfileTextField.setEnabled(codelistfileCheckBox.isSelected());
     }
-    
-    private VariableMu getSelectedVariable(){
+
+    private VariableMu getSelectedVariable() {
         VariableMu selected = (VariableMu) variablesList.getSelectedValue();
         return selected == null ? dummyVar : selected;
     }
@@ -788,19 +791,19 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
         VariableMu variable = (VariableMu) variableListModel.get(index);
         variableListModel.set(index, variableListModel.get(index - 1));
         variableListModel.set(index - 1, variable);
-        variablesList.setSelectedIndex(index-1 ); 
+        variablesList.setSelectedIndex(index - 1);
         calculateButtonStates();
     }//GEN-LAST:event_moveUpButtonActionPerformed
 
     private void variablesComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_variablesComboBoxActionPerformed
         //TODO: kan mooier door middel van enum i.p.v. format[]
         String name = (String) variablesComboBox.getSelectedItem();
-        
-        if(name.equals(format[0])){
+
+        if (name.equals(format[0])) {
             setFixed();
-        } else if (name.equals(format[1])){
+        } else if (name.equals(format[1])) {
             setFree();
-        } else if (name.equals(format[2])){
+        } else if (name.equals(format[2])) {
             setFreeWithMeta();
         } else {
             setSpss(true);
@@ -809,7 +812,7 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
 
     private void newButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newButtonActionPerformed
         int index = variablesList.getSelectedIndex() + 1;
-        
+
         VariableMu variable = new VariableMu("New");
         variableListModel.add(index, variable);
         enableAllControls(true);
@@ -828,16 +831,15 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
         }
         try {
             variableListModel.remove(index);
+        } catch (Exception ex) {
         }
-        catch (Exception ex) {}
         calculateButtonStates();
         if (variablesList.getSelectedIndex() > -1) {
             updateValues();
-        }
-        else {
+        } else {
             enableAllControls(false);
         }
-        
+
     }//GEN-LAST:event_deleteButtonActionPerformed
 
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
@@ -846,7 +848,7 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
     }//GEN-LAST:event_cancelButtonActionPerformed
 
     private void codelistfileButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_codelistfileButtonActionPerformed
-        String filePath = showFileDialog("Open Codelist File", false, new String[] {"Codelist (*.cdl)|cdl"});
+        String filePath = showFileDialog("Open Codelist File", false, new String[]{"Codelist (*.cdl)|cdl"});
         if (filePath != null) {
             codelistfileTextField.setText(filePath);
         }
@@ -871,43 +873,43 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
         VariableMu variable = (VariableMu) variableListModel.get(index);
         variableListModel.set(index, variableListModel.get(index + 1));
         variableListModel.set(index + 1, variable);
-        variablesList.setSelectedIndex(index+1); 
+        variablesList.setSelectedIndex(index + 1);
         calculateButtonStates();
     }//GEN-LAST:event_moveDownButtonActionPerformed
 
     private void hhIdentifierRadioButtonStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_hhIdentifierRadioButtonStateChanged
         getSelectedVariable().setHouse_id(hhIdentifierRadioButton.isSelected());
         if (hhIdentifierRadioButton.isSelected()) {
-                categoricalCheckBox.setSelected(false);
-                categoricalCheckBox.setEnabled(false);
-                numericalCheckBox.setSelected(false);
-                numericalCheckBox.setEnabled(false);
+            categoricalCheckBox.setSelected(false);
+            categoricalCheckBox.setEnabled(false);
+            numericalCheckBox.setSelected(false);
+            numericalCheckBox.setEnabled(false);
         }
     }//GEN-LAST:event_hhIdentifierRadioButtonStateChanged
 
     private void hhvariableRadioButtonStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_hhvariableRadioButtonStateChanged
         getSelectedVariable().setHousehold(hhvariableRadioButton.isSelected());
         if (hhvariableRadioButton.isSelected()) {
-                categoricalCheckBox.setEnabled(true);
-                numericalCheckBox.setEnabled(true);
+            categoricalCheckBox.setEnabled(true);
+            numericalCheckBox.setEnabled(true);
         }
     }//GEN-LAST:event_hhvariableRadioButtonStateChanged
 
     private void weightRadioButtonStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_weightRadioButtonStateChanged
         getSelectedVariable().setWeight(weightRadioButton.isSelected());
-                if (weightRadioButton.isSelected()) {
-                categoricalCheckBox.setSelected(false);
-                categoricalCheckBox.setEnabled(false);
-                numericalCheckBox.setSelected(true);
-                numericalCheckBox.setEnabled(false);
+        if (weightRadioButton.isSelected()) {
+            categoricalCheckBox.setSelected(false);
+            categoricalCheckBox.setEnabled(false);
+            numericalCheckBox.setSelected(true);
+            numericalCheckBox.setEnabled(false);
         }
     }//GEN-LAST:event_weightRadioButtonStateChanged
 
     private void otherRadioButtonStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_otherRadioButtonStateChanged
         getSelectedVariable().setOther(otherRadioButton.isSelected());
         if (otherRadioButton.isSelected()) {
-                categoricalCheckBox.setEnabled(true);
-                numericalCheckBox.setEnabled(true);
+            categoricalCheckBox.setEnabled(true);
+            numericalCheckBox.setEnabled(true);
         }
     }//GEN-LAST:event_otherRadioButtonStateChanged
 
@@ -930,14 +932,17 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
         enableControls(this.relatedToPanel, enable);
         enableControls(this.relatedToComboBox, enable);
     }
-    
+
     private void enableControls(Component control, boolean enable) {
-        if (!(control instanceof JComponent) && !(control instanceof JDialog))
+        if (!(control instanceof JComponent) && !(control instanceof JDialog)) {
             return;
+        }
         control.setEnabled(enable);
-        if (control instanceof Container)
-        for (Component c : ((Container)control).getComponents())
-            enableControls(c, enable);
+        if (control instanceof Container) {
+            for (Component c : ((Container) control).getComponents()) {
+                enableControls(c, enable);
+            }
+        }
     }
     private void numericalCheckBoxStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_numericalCheckBoxStateChanged
         getSelectedVariable().setNumeric(numericalCheckBox.isSelected());
@@ -955,7 +960,7 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
     }//GEN-LAST:event_codelistfileCheckBoxStateChanged
 
     private void variablesListValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_variablesListValueChanged
-        if(!evt.getValueIsAdjusting()){
+        if (!evt.getValueIsAdjusting()) {
             VariableMu value = (VariableMu) variablesList.getSelectedValue();
             if (value == null) {
                 enableAllControls(false);
@@ -970,19 +975,22 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
     private void startingPositionTextFieldCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_startingPositionTextFieldCaretUpdate
         try {
             getSelectedVariable().setStartingPosition(startingPositionTextField.getText());
-        } catch (Exception e){}
+        } catch (Exception e) {
+        }
     }//GEN-LAST:event_startingPositionTextFieldCaretUpdate
 
     private void lengthTextFieldCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_lengthTextFieldCaretUpdate
         try {
             getSelectedVariable().setVariableLength(lengthTextField.getText());
-        } catch (Exception e){}
+        } catch (Exception e) {
+        }
     }//GEN-LAST:event_lengthTextFieldCaretUpdate
 
     private void decimalsTextFieldCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_decimalsTextFieldCaretUpdate
         try {
             getSelectedVariable().setDecimals(decimalsTextField.getText());
-        } catch (Exception e){}
+        } catch (Exception e) {
+        }
     }//GEN-LAST:event_decimalsTextFieldCaretUpdate
 
     private void missing1TextFieldCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_missing1TextFieldCaretUpdate
@@ -1010,7 +1018,7 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
     }//GEN-LAST:event_weightLocalSuppressionComboBoxActionPerformed
 
     private void relatedToComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_relatedToComboBoxActionPerformed
-        if(relatedToComboBox.getSelectedIndex() != 0){
+        if (relatedToComboBox.getSelectedIndex() != 0) {
             getSelectedVariable().setRelatedVariable((VariableMu) relatedToComboBox.getSelectedItem());
         } else {
             getSelectedVariable().setRelatedVariable(null);
@@ -1022,7 +1030,7 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
         variablesList.updateUI();
     }//GEN-LAST:event_nameTextFieldCaretUpdate
 
-    
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel attributesPanel;
     private javax.swing.JButton cancelButton;

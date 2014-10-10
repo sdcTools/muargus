@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package muargus.controller;
 
 import argus.model.ArgusException;
@@ -16,51 +12,66 @@ import muargus.model.RecodeMu;
 import muargus.view.GlobalRecodeView;
 
 /**
+ * Controller class of the GlobalRecode screen.
  *
- * @author ambargus
+ * @author Statistics Netherlands
  */
 public class GlobalRecodeController extends ControllerBase<GlobalRecode> {
 
-    private final MetadataMu metadata;
-
+    //private final MetadataMu metadata;
     /**
+     * Constructor for the GlobalRecodeController. This constructor makes a new
+     * view and sets the metadata for the view.
      *
-     * @param parentView
-     * @param metadata
-     * @param model
-     * @param selectCombinationsModel
+     * @param parentView the Frame of the mainFrame that is given to the
+     * ShowTableCollectionView.
+     * @param metadata the orginal metadata.
      */
     public GlobalRecodeController(java.awt.Frame parentView, MetadataMu metadata) {
         super.setView(new GlobalRecodeView(parentView, true, this));
-        this.metadata = metadata;
+        //this.metadata = metadata;
         getView().setMetadata(metadata);
-        
         //this.selectCombinationsModel = selectCombinationsModel;
         //this.view = view;
     }
 
+    /**
+     * Shows the view and sets the selected variable in the GlobalRecodeView
+     * equal to the selected variable in the main frame.
+     *
+     * @param selectedRowIndex Integer containing the index of the selected
+     * variable in the main frame.
+     */
     public void showView(int selectedRowIndex) {
         getGlobalRecodeView().setSelectedIndex(selectedRowIndex);
         getView().setVisible(true);
     }
 
-//    public GlobalRecode getModel() {
-//        return this.model;
-//    }
     /**
-     *
+     * Closes the view by setting its visibility to false.
      */
     public void close() {
         getView().setVisible(false);
     }
 
+    /**
+     * Gets the index of the selected variable.
+     *
+     * @return Integer containing the index of the selected variable.
+     */
     public int getSelectedVariableIndex() {
         return getGlobalRecodeView().getSelectedIndex();
     }
-    
+
+    /**
+     * Gets the GlobalRecodeView.
+     *
+     * @return GlobalRecodeView.
+     */
     private GlobalRecodeView getGlobalRecodeView() {
-        return (GlobalRecodeView)getView();
+        return (GlobalRecodeView) getView();
     }
+
     /**
      *
      */
@@ -83,9 +94,15 @@ public class GlobalRecodeController extends ControllerBase<GlobalRecode> {
 //        }
 //        view.setCodelistText(filename);
 //    }
-
     /**
+     * Reads the global recode file. Sets the recode codes, new missing values
+     * and the codelist file.
      *
+     * @param path String containing the path name of the global recode file.
+     * @param recode RecodeMu containing the information on the variable for
+     * which the global recode file will be read.
+     * @throws ArgusException Throws an ArgusException when an error occurs
+     * during reading.
      */
     public void read(String path, RecodeMu recode) throws ArgusException {
         recode.setMissing_1_new("");
@@ -123,10 +140,14 @@ public class GlobalRecodeController extends ControllerBase<GlobalRecode> {
         }
 
     }
-    
 
     /**
+     * Apply's the recoding on the selected variable.
      *
+     * @param recode RecodeMu containing the information on the variable for
+     * which the recoding will be done.
+     * @throws ArgusException Throws an ArgusException when an error occurs
+     * during recoding.
      */
     public void apply(RecodeMu recode) throws ArgusException {
         String warning = getCalculationService().doRecode(recode);
@@ -136,14 +157,29 @@ public class GlobalRecodeController extends ControllerBase<GlobalRecode> {
         recode.setRecoded(true);
     }
 
+    /**
+     * Undo's the recoding of the selected variable.
+     *
+     * @param recode RecodeMu containing the information on the variable for
+     * which the recoding needs to be undone.
+     * @throws ArgusException Throws an ArgusException when an error occurs
+     * while undoing the recoding.
+     */
     public void undo(RecodeMu recode) throws ArgusException {
         getCalculationService().undoRecode(recode);
         recode.setRecoded(false);
         recode.setTruncated(false);
     }
 
-        /**
+    /**
+     * Truncates the selected variable.
      *
+     * @param recode RecodeMu containing the information on the variable that
+     * will be truncated.
+     * @param positions Integer containing the number of positions that will be
+     * truncated.
+     * @throws ArgusException Throws an ArgusException when an error occurs
+     * during truncating.
      */
     public void truncate(RecodeMu recode, int positions) throws ArgusException {
         getCalculationService().truncate(recode, positions);
@@ -151,9 +187,5 @@ public class GlobalRecodeController extends ControllerBase<GlobalRecode> {
         recode.setTruncated(true);
         recode.setPositionsTruncated(Integer.toString(positions));
     }
-
-    /**
-     *
-     */
 
 }

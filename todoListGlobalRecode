@@ -13,8 +13,8 @@ Nog te doen:                                                                    
  
 
 Release 2:
-11. javadoc schrijven voor de methodes                                                                      Jeldrik
--minimale grootte scherm instellen
+
+
 
 Release 3+:
    
@@ -40,29 +40,29 @@ Gedaan:                                                                         
     - vul het textField van de missing values met de missing values van de geselecteerde variabele          Jeldrik
 4. readButton:
     - open een fileChooser geschikt voor .grc files                                                         Anne
-    - plaats de text van de .grc file die niet tussen <> staat in de EditTextField                            Anne
-    - plaats de .grc filenaam in het .grc textfield                                                           Anne
+    - plaats de text van de .grc file die niet tussen <> staat in de EditTextField                          Anne
+    - plaats de .grc filenaam in het .grc textfield                                                         Anne
     - plaats de .cdl filenaam in het .cdl textfield (staat in de .grc file)                                 Anne
-    - plaats de nieuwe missing values op de goede plek (staan in de .grc file)                               Anne
+    - plaats de nieuwe missing values op de goede plek (staan in de .grc file)                              Anne
 5. applyButton:
     - alleen klikbaar als het EditTextField niet leeg is                                                    Anne
-    - check of de waardes in het EditTextField correct zijn (gebeurd als het goed is al in de dll)            Anne
-    - hercodeerd met behulp van de dllfunctie doRecode (pak de benodigde waardes van het scherm)               Anne
-    - voer de hercodering uit met de dllFunctie applyRecode                                                    Anne
-    - voeg een R toe bij de variabele en zet deze variabela as isRecoded bij VariableMU                    Anne
-    - maak de Undo button klikbaar                                                                            Anne
-    - nu wordt bij een klik op read een R toegevoegd, maar dit moet pas bij apply                              Anne
+    - check of de waardes in het EditTextField correct zijn (gebeurd als het goed is al in de dll)          Anne
+    - hercodeerd met behulp van de dllfunctie doRecode (pak de benodigde waardes van het scherm)            Anne
+    - voer de hercodering uit met de dllFunctie applyRecode                                                 Anne
+    - voeg een R toe bij de variabele en zet deze variabela as isRecoded bij VariableMU                     Anne
+    - maak de Undo button klikbaar                                                                          Anne
+    - nu wordt bij een klik op read een R toegevoegd, maar dit moet pas bij apply                           Anne
     - maak apply disabled na apply, en weer enabled als gebruiker iets aanpast?                             Anne
 6. truncateButton:
     - is alleen zichtbaar als de variabele truncatable is                                                   Jeldrik
     - voer truncate uit met de dllFunctie doTruncate                                                        Anne
-    - maak de undo button klikbaar                                                                            Anne
+    - maak de undo button klikbaar                                                                          Anne
     - geef een scherm die vraagt om het aantal getallen voor de truncate                                    Anne
     - check of het aantal getallen voor de truncate geldig is                                               Anne
 7. undoButton:
-    - alleen zichtbaar als de geselecteerde waarde of truncated of recoded is                                Anne
-    - voer undo uit met de dllFunctie undoRecode                                                                Anne
-    - zet recoded/truncated op false                                                                            Anne
+    - alleen zichtbaar als de geselecteerde waarde of truncated of recoded is                               Anne
+    - voer undo uit met de dllFunctie undoRecode                                                            Anne
+    - zet recoded/truncated op false                                                                        Anne
 8. warningTextArea
     - laat de foutmeldingen zien uit de dll                                                                 Anne
     - textField warning zorgen dat niet getypt kan worden.
@@ -72,6 +72,7 @@ Gedaan:                                                                         
     - pas het hoofdscherm aan                                                                               Anne
     - als het scherm gesloten wordt (dus ook via het rode kruisje), dan moet in de mainframe dezelfde   
       variabele geselecteerd worden, als geselecteerd was in de globalRecodeView
+11. javadoc schrijven voor de methodes                                                                      Jeldrik
 12. Missing values:
     - zet original values non-editable                                                                      Jeldrik
 13. kolommen verwisselen uitzetten (onder properties: tableHeader)                                          Anne
@@ -81,3 +82,4 @@ bug:  Als ik Region hercodeer, krijg ik netjes de nieuwe codes met bijbehorende 
       Als ik “undo” klik, dan krijg ik wel de juiste codes, maar niet de juiste labels. 
 bug:  het programma crashed als je het bestand voor MARSTAT inleest en vervolgens op apply drukt            Anne
 bug dll: Bij (bijv) recode 1-2:3 crasht de dll                                                              Anne
+    - minimale grootte scherm instellen                                                                     Jeldrik

@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package muargus.view;
 
 import javax.swing.JOptionPane;
@@ -9,19 +5,19 @@ import muargus.model.Combinations;
 
 /**
  *
- * @author ambargus
+ * @author Statistics Netherlands
  */
 public class ArgusInput extends DialogBase {
 
-    private boolean isThreshold;
+    private final boolean isThreshold;
     private boolean okButtonPressed = false;
     private int previousThreshold = 1;
 
     /**
      * Creates new form ArgusInput
      *
-     * @param parent
-     * @param modal
+     * @param parent the Frame of the mainFrame.
+     * @param modal boolean to set the modal status
      * @param model
      * @param isThreshold
      */
@@ -33,26 +29,50 @@ public class ArgusInput extends DialogBase {
         this.setLocationRelativeTo(null);
     }
 
+    /**
+     *
+     * @param text
+     */
     public void setLabelText(String text) {
         this.label.setText(text);
     }
 
+    /**
+     *
+     * @return
+     */
     public String getTextField() {
         return textField.getText();
     }
 
+    /**
+     *
+     * @param text
+     */
     public void setTextField(String text) {
         this.textField.setText(text);
     }
 
+    /**
+     *
+     * @param previousThreshold
+     */
     public void setPreviousThreshold(int previousThreshold) {
         this.previousThreshold = previousThreshold;
     }
 
+    /**
+     *
+     * @return
+     */
     public boolean isOkButtonPressed() {
         return okButtonPressed;
     }
-    
+
+    /**
+     *
+     * @return
+     */
     public boolean isThresholdValid() {
         boolean valid = true;
 

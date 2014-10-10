@@ -1,9 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package muargus.view;
 
 import argus.model.ArgusException;
@@ -17,7 +11,8 @@ import muargus.model.MetadataMu;
 
 /**
  *
- * @author pibd05
+ * @author Statistics Netherlands
+ * @param <T>
  */
 public class DialogBase<T> extends javax.swing.JDialog {
 
@@ -26,6 +21,9 @@ public class DialogBase<T> extends javax.swing.JDialog {
     
     /**
      * Creates new form DialogBase
+     * @param parent the Frame of the mainFrame.
+     * @param modal boolean to set the modal status
+     * @param controller the controller of the view.
      */
     public DialogBase(java.awt.Frame parent, boolean modal, T controller) {
         super(parent, modal);
@@ -33,15 +31,26 @@ public class DialogBase<T> extends javax.swing.JDialog {
         initComponents();
     }
     
+    /**
+     * 
+     * @param metadata 
+     */
     public void setMetadata(MetadataMu metadata) {
         this.metadata = metadata;
         initializeData();
     }
 
+    /**
+     * 
+     * @return 
+     */
     protected MetadataMu getMetadata() {
         return this.metadata;
     }
     
+    /**
+     * 
+     */
     protected void initializeData() {
         //Base class implementation is empty
     }
@@ -71,18 +80,38 @@ public class DialogBase<T> extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
     
+    /**
+     * 
+     * @param ex 
+     */
     public void showErrorMessage(ArgusException ex) {
         JOptionPane.showMessageDialog(null, ex.getMessage(), MuARGUS.getMessageTitle(), JOptionPane.ERROR_MESSAGE);
     }
     
+    /**
+     * 
+     * @param message
+     * @return 
+     */
     public boolean showConfirmDialog(String message) {
         return (JOptionPane.showConfirmDialog(null, message, MuARGUS.getMessageTitle(), JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION);
     }
     
+    /**
+     * 
+     * @param message 
+     */
     public void showMessage(String message) {
         JOptionPane.showMessageDialog(null, message, MuARGUS.getMessageTitle(), JOptionPane.INFORMATION_MESSAGE);
     }
     
+    /**
+     * 
+     * @param title
+     * @param forSaving
+     * @param filter
+     * @return 
+     */
     public String showFileDialog(String title, boolean forSaving, String[] filter) {
         JFileChooser fileChooser = new JFileChooser();
         String hs = SystemUtils.getRegString("general", "datadir", "");
@@ -109,60 +138,77 @@ public class DialogBase<T> extends javax.swing.JDialog {
         return fileChooser.getSelectedFile().getPath();
     } 
     
+    /**
+     * 
+     * @param filter
+     * @return 
+     */
     private String[] splitFilter(String filter) {
         return filter.split("\\|");
     }
     
+//    /**
+//     * @param args the command line arguments
+//     */
+//    public static void main(String args[]) {
+//        /* Set the Nimbus look and feel */
+//        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+//        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+//         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+//         */
+//        try {
+//            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+//                if ("Nimbus".equals(info.getName())) {
+//                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+//                    break;
+//                }
+//            }
+//        } catch (ClassNotFoundException ex) {
+//            java.util.logging.Logger.getLogger(DialogBase.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        } catch (InstantiationException ex) {
+//            java.util.logging.Logger.getLogger(DialogBase.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        } catch (IllegalAccessException ex) {
+//            java.util.logging.Logger.getLogger(DialogBase.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+//            java.util.logging.Logger.getLogger(DialogBase.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        }
+//        //</editor-fold>
+//
+//        /* Create and display the dialog */
+//        java.awt.EventQueue.invokeLater(new Runnable() {
+//            public void run() {
+//                DialogBase dialog = new DialogBase(new javax.swing.JFrame(), true, null);
+//                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
+//                    @Override
+//                    public void windowClosing(java.awt.event.WindowEvent e) {
+//                        System.exit(0);
+//                    }
+//                });
+//                dialog.setVisible(true);
+//            }
+//        });
+//    }
+
     /**
-     * @param args the command line arguments
+     * 
+     * @param stepName 
      */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(DialogBase.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(DialogBase.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(DialogBase.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(DialogBase.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the dialog */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                DialogBase dialog = new DialogBase(new javax.swing.JFrame(), true, null);
-                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
-                    @Override
-                    public void windowClosing(java.awt.event.WindowEvent e) {
-                        System.exit(0);
-                    }
-                });
-                dialog.setVisible(true);
-            }
-        });
-    }
-
     public void showStepName(String stepName) {
         //Base class implementation is empty
     }
 
+    /**
+     * 
+     * @param progress 
+     */
     public void setProgress(int progress) {
         //Base class implementation is empty
     }
 
+    /**
+     * 
+     * @return 
+     */
     protected T getController() {
         return this.controller;
     }

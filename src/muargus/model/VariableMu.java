@@ -56,9 +56,11 @@ public class VariableMu {
     /**
      * Constructor of the model class VariableMu. Makes an empty arraylists for
      * the codeInfos, initializes the array of missings and sets the default
-     * value.
+     * values.
      */
     public VariableMu() {
+        this.codeInfos = new ArrayList<>();
+        this.missing = new String[MAX_NUMBER_OF_MISSINGS];
         this.name = "";
         this.startingPosition = 0;
         this.variableLength = 1;
@@ -75,8 +77,6 @@ public class VariableMu {
         this.household = false;
         this.relatedVariableName = null;
         this.relatedVariable = null;
-        this.codeInfos = new ArrayList<>();
-        this.missing = new String[MAX_NUMBER_OF_MISSINGS];
     }
 
     /**

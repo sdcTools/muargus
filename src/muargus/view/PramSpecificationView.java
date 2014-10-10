@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package muargus.view;
 
 import javax.swing.JLabel;
@@ -20,7 +16,7 @@ import muargus.model.VariableMu;
 
 /**
  *
- * @author ambargus
+ * @author Statistics Netherlands
  */
 public class PramSpecificationView extends DialogBase<PramSpecificationController> {
 
@@ -32,9 +28,9 @@ public class PramSpecificationView extends DialogBase<PramSpecificationControlle
 
     /**
      *
-     * @param parent
-     * @param modal
-     * @param controller
+     * @param parent the Frame of the mainFrame.
+     * @param modal boolean to set the modal status
+     * @param controller the controller of this view.
      */
     public PramSpecificationView(java.awt.Frame parent, boolean modal, PramSpecificationController controller) {
         super(parent, modal, controller);
@@ -63,7 +59,7 @@ public class PramSpecificationView extends DialogBase<PramSpecificationControlle
     /**
      *
      */
-    public void makeVariablesTable() {
+    private void makeVariablesTable() {
         getController().makeVariablesData();
 
         TableModel variablesTableModel = new DefaultTableModel(this.model.getVariablesData(), this.model.getVariablesColumnNames()) {
@@ -96,7 +92,7 @@ public class PramSpecificationView extends DialogBase<PramSpecificationControlle
      *
      * @return
      */
-    public PramVariableSpec getSelectedPramVariableSpec() {
+    private PramVariableSpec getSelectedPramVariableSpec() {
         return getController().getSelectedPramVarSpec(
                 (String) this.variablesTable.getValueAt(this.variablesTable.getSelectedRow(), 2));
     }
@@ -105,18 +101,18 @@ public class PramSpecificationView extends DialogBase<PramSpecificationControlle
      *
      * @return
      */
-    public CodeInfo getSelectedCodeInfo() {
+    private CodeInfo getSelectedCodeInfo() {
         return getSelectedPramVariableSpec().getVariable().getCodeInfos().get(this.selectedRow);
     }
 
-    public CodeInfo getSelectedCodeInfo(VariableMu variable) {
+    private CodeInfo getSelectedCodeInfo(VariableMu variable) {
         return variable.getCodeInfos().get(this.selectedRow);
     }
 
     /**
      *
      */
-    public void updateCodesTable() {
+    private void updateCodesTable() {
         if (this.codesTable.getSelectedRowCount() > 0) {
             selectedRow = this.codesTable.getSelectedRow();
         } else {
@@ -503,7 +499,7 @@ public class PramSpecificationView extends DialogBase<PramSpecificationControlle
         setProbability(this.defaultProbabilityComboBox.getSelectedIndex());
     }//GEN-LAST:event_defaultProbabilityButtonActionPerformed
 
-    public void setProbability(int probability){
+    private void setProbability(int probability){
         for (CodeInfo c : getSelectedPramVariableSpec().getVariable().getCodeInfos()) {
             c.setPramProbability(probability);
         }
@@ -526,7 +522,7 @@ public class PramSpecificationView extends DialogBase<PramSpecificationControlle
         }
     }//GEN-LAST:event_undoButtonActionPerformed
 
-    public void variablesSelectionChanged() {
+    private void variablesSelectionChanged() {
         this.codesTable.getSelectionModel().setSelectionInterval(0, 0);
         this.selectedRow = 0;
         int value = getSelectedPramVariableSpec().getBandwidth();

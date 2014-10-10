@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package muargus.view;
 
 import java.util.ArrayList;
@@ -16,7 +12,7 @@ import muargus.model.VariableMu;
 
 /**
  *
- * @author ambargus
+ * @author Statistics Netherlands
  */
 public class MicroaggregationView extends DialogBase<MicroaggregationController> {
 
@@ -24,10 +20,10 @@ public class MicroaggregationView extends DialogBase<MicroaggregationController>
     private DefaultListModel<VariableMu> selectedListModel;
 
     /**
-     * 
-     * @param parent
-     * @param modal
-     * @param controller 
+     *
+     * @param parent the Frame of the mainFrame.
+     * @param modal boolean to set the modal status
+     * @param controller the controller of this view.
      */
     public MicroaggregationView(java.awt.Frame parent, boolean modal, MicroaggregationController controller) {
         super(parent, modal, controller);
@@ -37,20 +33,20 @@ public class MicroaggregationView extends DialogBase<MicroaggregationController>
         this.selectedVariableList.setCellRenderer(new VariableNameCellRenderer());
         this.setTitle(controller.isNumerical() ? "Numerical Micro Aggregation" : "Qualitative Micro Aggregation");
         this.optimalCheckbox.setVisible(controller.isNumerical());
-     }
-        
+    }
+
     @Override
     public void initializeData() {
         this.model = getMetadata().getCombinations().getMicroaggregation(getController().isNumerical());
         String[][] data = new String[this.model.getVariables().size()][2];
         int index = 0;
         for (VariableMu variable : model.getVariables()) {
-            data[index] = new String[] {getModifiedText(variable), variable.getName()};
+            data[index] = new String[]{getModifiedText(variable), variable.getName()};
             index++;
         }
-        
-        this.variablesTable.setModel(new DefaultTableModel(data, new Object[] {"Modified", "Variable"}));
-        this.variablesTable.getSelectionModel().setSelectionInterval(0,0);
+
+        this.variablesTable.setModel(new DefaultTableModel(data, new Object[]{"Modified", "Variable"}));
+        this.variablesTable.getSelectionModel().setSelectionInterval(0, 0);
 //        this.variableListModel = (DefaultListModel<VariableMu>) new DefaultListModel();
 //        for (VariableMu variable : getMetadata().getVariables()) {
 //            if (variable.isNumeric()) {
@@ -63,8 +59,8 @@ public class MicroaggregationView extends DialogBase<MicroaggregationController>
         //variableList.setSelectedIndex(0);
         updateValues();
     }
-    
-    public void updateVariableRows(ReplacementSpec replacement){
+
+    public void updateVariableRows(ReplacementSpec replacement) {
         for (VariableMu variableMu : replacement.getVariables()) {
             int index = this.model.getVariables().indexOf(variableMu);
             variablesTable.setValueAt(getModifiedText(variableMu), index, 0);
@@ -80,33 +76,32 @@ public class MicroaggregationView extends DialogBase<MicroaggregationController>
         }
         return "";
     }
-    
+
     public int getMinimalNumberOfRecords() {
         try {
             return Integer.parseInt(this.numberOfRecordsTextField.getText());
-        }
-        catch (NumberFormatException ex) {
+        } catch (NumberFormatException ex) {
             return -1;
         }
     }
-    
+
     public boolean getOptimal() {
         return this.optimalCheckbox.isSelected();
     }
-    
+
     public ArrayList<VariableMu> getSelectedVariables() {
         ArrayList<VariableMu> selected = new ArrayList<>();
-        for (Object variable : ((DefaultListModel)selectedVariableList.getModel()).toArray()) {
+        for (Object variable : ((DefaultListModel) selectedVariableList.getModel()).toArray()) {
             selected.add((VariableMu) variable);
         }
         return selected;
     }
-    
+
     private void updateValues() {
         optimalCheckbox.setEnabled(this.selectedListModel.size() == 1);
-        calculateButton.setEnabled(this.selectedListModel.size() > 0);    
+        calculateButton.setEnabled(this.selectedListModel.size() > 0);
     }
-    
+
     @Override
     public void setProgress(int progress) {
         progressBar.setValue(progress);
@@ -393,19 +388,19 @@ public class MicroaggregationView extends DialogBase<MicroaggregationController>
 
         if (added) {
             //Change selection of variables list
-            for (int varIndex=0; varIndex < variablesTable.getModel().getRowCount(); varIndex++) {
+            for (int varIndex = 0; varIndex < variablesTable.getModel().getRowCount(); varIndex++) {
                 if (!selectedListModel.contains(this.model.getVariables().get(varIndex))) {
                     variablesTable.getSelectionModel().setSelectionInterval(varIndex, varIndex);
                     return;
                 }
             }
-            variablesTable.getSelectionModel().setSelectionInterval(0,0);
+            variablesTable.getSelectionModel().setSelectionInterval(0, 0);
         }
     }//GEN-LAST:event_toSelectedButtonActionPerformed
 
     private void fromSelectedButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fromSelectedButtonActionPerformed
         for (Object variable : selectedVariableList.getSelectedValuesList()) {
-            selectedListModel.removeElement((VariableMu)variable);
+            selectedListModel.removeElement((VariableMu) variable);
         }
         updateValues();
     }//GEN-LAST:event_fromSelectedButtonActionPerformed
@@ -414,8 +409,8 @@ public class MicroaggregationView extends DialogBase<MicroaggregationController>
         int index = selectedVariableList.getSelectedIndex();
         if (index > 0) {
             VariableMu variable = selectedListModel.remove(index);
-            selectedListModel.add(index-1, variable);
-            selectedVariableList.setSelectedIndex(index-1);
+            selectedListModel.add(index - 1, variable);
+            selectedVariableList.setSelectedIndex(index - 1);
         }
     }//GEN-LAST:event_upButtonActionPerformed
 
@@ -423,8 +418,8 @@ public class MicroaggregationView extends DialogBase<MicroaggregationController>
         int index = selectedVariableList.getSelectedIndex();
         if (index > -1 && index < selectedListModel.getSize() - 1) {
             VariableMu variable = selectedListModel.remove(index);
-            selectedListModel.add(index+1, variable);
-            selectedVariableList.setSelectedIndex(index+1);
+            selectedListModel.add(index + 1, variable);
+            selectedVariableList.setSelectedIndex(index + 1);
         }
     }//GEN-LAST:event_downButtonActionPerformed
 
@@ -436,49 +431,7 @@ public class MicroaggregationView extends DialogBase<MicroaggregationController>
         getController().undo();
     }//GEN-LAST:event_undoButtonActionPerformed
 
-    
-    
-//    /**
-//     * @param args the command line arguments
-//     */
-//    public static void main(String args[]) {
-//        /* Set the Nimbus look and feel */
-//        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-//        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-//         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-//         */
-//        try {
-//            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-//                if ("Nimbus".equals(info.getName())) {
-//                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-//                    break;
-//                }
-//            }
-//        } catch (ClassNotFoundException ex) {
-//            java.util.logging.Logger.getLogger(MicroaggregationView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        } catch (InstantiationException ex) {
-//            java.util.logging.Logger.getLogger(MicroaggregationView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        } catch (IllegalAccessException ex) {
-//            java.util.logging.Logger.getLogger(MicroaggregationView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-//            java.util.logging.Logger.getLogger(MicroaggregationView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        }
-//        //</editor-fold>
-//
-//        /* Create and display the dialog */
-//        java.awt.EventQueue.invokeLater(new Runnable() {
-//            public void run() {
-//                MicroaggregationView dialog = new MicroaggregationView(new javax.swing.JFrame(), true);
-//                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
-//                    @Override
-//                    public void windowClosing(java.awt.event.WindowEvent e) {
-//                        System.exit(0);
-//                    }
-//                });
-//                dialog.setVisible(true);
-//            }
-//        });
-//    }
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton calculateButton;
     private javax.swing.JButton cancelButton;
