@@ -1,5 +1,10 @@
 niet behandelde opmerkingen/vragen:
--is percentage int of double?
+- is percentage int of double?
+- bug: knalt er uit. Maak een tabel, zet risk model aan, open risk specification, 
+  maak het scherm groter/kleiner, voer rankswapping uit.
+- cancel button kan weg?
+- de undo button werkt alleen als de variabele in het selected field staat. Misschien is het mooi als
+  je ook undo kan doen door alleen de variabele(n) te selecteren?
 
 Nog te doen:                                                                                                Mee bezig:
 

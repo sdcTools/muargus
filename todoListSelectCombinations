@@ -10,9 +10,10 @@ Nog te doen:                                                                    
 Release 2
 
 6. table: 
-    - constanten bovenaan zetten, niet in de code --> Jeldrik: is volgens mij gedaan                                     
     - geselecteerde rij visable 
     - kolommen klikken en sorteren (RowSorter: http://docs.oracle.com/javase/7/docs/api/javax/swing/RowSorter.html)
+12. setTableRiskModelButton
+    - risk model zetten voor meerder tabellen tegelijkertijd mogelijk maken
 19. javadoc schrijven voor de methodes   
 23. dll crasht soms: proberen te reproduceren --> als programma lang aan staat??    
 
@@ -46,6 +47,7 @@ Gedaan:                                                                         
     - vul de tabel met tabellen die al zijn berekend (als er tabellen zijn)                                     Jeldrik
     - mogelijk maken dat de lijst gevuld/geleegd kan worden                                                     Jeldrik
     - maak automatisch titels voor elke kolom aan                                                               Jeldrik
+    - constanten bovenaan zetten, niet in de code                                                               Jeldrik
 7. addRowButton:                                                                                                
     - check of een rij toegevoegd mag worden                                                                    Jeldrik
          a. er mag geen overlap zijn in de variabele voor het riskmodel (geef indien nodig waarschuwing)        Jeldrik

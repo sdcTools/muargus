@@ -22,11 +22,11 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
 
     private ArrayList<VariableMu> related;
     private final String[] idLevel = {"0", "1", "2", "3", "4", "5"};
-    private final String[] format = {"Fixed format", "Free format", "Free with meta", "SPSS system file"}; // maak hier enum van
-    private final String[] suppressionWeight;
+    private final String[] format = {"Fixed format", "Free format", "Free with meta", "SPSS system file"}; 
+    private String[] suppressionWeight;
     private String separatorTemp;
     private int dataFileTypeTemp;
-    private final VariableMu dummyVar;
+    private VariableMu dummyVar;
 
     private DefaultListModel variableListModel;
 
@@ -44,18 +44,20 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
         this.variablesList.setSelectionModel(new SingleListSelectionModel());
         this.variablesList.setCellRenderer(new VariableNameCellRenderer());
         this.relatedToComboBox.setRenderer(new VariableNameCellRenderer());
-        this.suppressionWeight = new String[101];
-        this.dummyVar = new VariableMu();
+        
     }
 
     /**
-     *
+     * Initializes the data for the SpecifyMetadataView.
      */
     @Override
     public void initializeData() {
         this.separatorTemp = getMetadata().getSeparator();
         this.dataFileTypeTemp = getMetadata().getDataFileType();
+        this.suppressionWeight = new String[101];
+        this.dummyVar = new VariableMu();
 
+        // adds the variables
         this.variableListModel = new DefaultListModel<>();
         for (VariableMu variable : getMetadata().getVariables()) {
             this.variableListModel.addElement(variable);
@@ -91,13 +93,13 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
         if (this.variableListModel.getSize() > 0) {
             this.variablesList.setSelectedIndex(0);
         }
+        
         calculateButtonStates();
 
         if (getMetadata().getVariables().isEmpty()) {
             enableAllControls(false);
         }
         this.variablesList.requestFocus();
-
     }
 
     private void setSpss(boolean b) {
@@ -264,6 +266,7 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Specify Metadata");
+        setMinimumSize(new java.awt.Dimension(560, 490));
 
         variablesComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Fixed format", "Free format", "Free with meta", "SPSS system file" }));
         variablesComboBox.addActionListener(new java.awt.event.ActionListener() {
@@ -782,6 +785,7 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
         getMetadata().setSeparator(this.separatorTemp);
         getMetadata().setDataFileType(this.dataFileTypeTemp);
     }
+
     private void okButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okButtonActionPerformed
         updateMetadata();
         getController().ok();
@@ -797,17 +801,19 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
     }//GEN-LAST:event_moveUpButtonActionPerformed
 
     private void variablesComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_variablesComboBoxActionPerformed
-        //TODO: kan mooier door middel van enum i.p.v. format[]
-        String name = (String) this.variablesComboBox.getSelectedItem();
-
-        if (name.equals(this.format[0])) {
-            setFixed();
-        } else if (name.equals(this.format[1])) {
-            setFree();
-        } else if (name.equals(this.format[2])) {
-            setFreeWithMeta();
-        } else {
-            setSpss(true);
+        switch (this.variablesComboBox.getSelectedIndex()) {
+            case MetadataMu.DATA_FILE_TYPE_FIXED - 1:
+                setFixed();
+                break;
+            case MetadataMu.DATA_FILE_TYPE_FREE - 1:
+                setFree();
+                break;
+            case MetadataMu.DATA_FILE_TYPE_FREE_WITH_META - 1:
+                setFreeWithMeta();
+                break;
+            case MetadataMu.DATA_FILE_TYPE_SPSS - 1:
+                setSpss(true);
+                break;
         }
     }//GEN-LAST:event_variablesComboBoxActionPerformed
 
@@ -840,7 +846,6 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
         } else {
             enableAllControls(false);
         }
-
     }//GEN-LAST:event_deleteButtonActionPerformed
 
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
@@ -853,20 +858,6 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
         if (filePath != null) {
             this.codelistfileTextField.setText(filePath);
         }
-//        String hs = SystemUtils.getRegString("general", "datadir", "");
-//        if (!hs.equals("")){
-//            File file = new File(hs); 
-//            fileChooser.setCurrentDirectory(file);
-//        }
-//        fileChooser.setDialogTitle("Open Codelist File");
-//        fileChooser.setSelectedFile(new File(""));
-//        fileChooser.resetChoosableFileFilters();
-//        fileChooser.setFileFilter(new FileNameExtensionFilter("Codelist (*.cdl)", "cdl"));
-//        if (fileChooser.showOpenDialog(this) == javax.swing.JFileChooser.APPROVE_OPTION) {
-//            ;
-//            hs = fileChooser.getSelectedFile().getPath();
-//            if (!hs.equals("")){SystemUtils.putRegString("general", "datadir", hs);}
-//        }
     }//GEN-LAST:event_codelistfileButtonActionPerformed
 
     private void moveDownButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_moveDownButtonActionPerformed
