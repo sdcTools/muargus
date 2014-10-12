@@ -208,7 +208,7 @@ public class MetadataMu {
                 } else {
                     variable.setStartingPosition("1");  //not relevant, but must be >0
                 }
-                variable.setVariableLength(tokenizer.nextToken());
+                variable.setVariableLength(Integer.parseInt(tokenizer.nextToken()));
                 variable.setMissing(0, tokenizer.nextToken());
                 variable.setMissing(1, tokenizer.nextToken());
             } else if (variable == null) {

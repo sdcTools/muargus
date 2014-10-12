@@ -781,17 +781,20 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
     }// </editor-fold>//GEN-END:initComponents
 
     private void generateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generateButtonActionPerformed
-        if (getMetadata().getDataFileType() == MetadataMu.DATA_FILE_TYPE_SPSS) {
+        if (this.dataFileTypeTemp == MetadataMu.DATA_FILE_TYPE_SPSS) {
             getController().generateSpss();
         } else {
             GenerateParameters generateView = new GenerateParameters(this.parent, true);
+            generateView.setSeparator(this.separatorTextField.getText());
             generateView.setVisible(true);
             if (generateView.isOk()) {
                 getMetadata().setSeparator(generateView.getSeparator());
                 getController().generateFromHeader(getMetadata(),
                         generateView.getDefaultLength(), generateView.getDefaultMissing());
                 this.separatorTemp = generateView.getSeparator();
-                updateMetadata();
+                getMetadata().setDataFileType(MetadataMu.DATA_FILE_TYPE_FREE_WITH_META);
+                enableAllControls(!getMetadata().getVariables().isEmpty());
+                initializeData();
                 updateValues();
             }
         }
@@ -1005,8 +1008,8 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
 
     private void lengthTextFieldCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_lengthTextFieldCaretUpdate
         try {
-            getSelectedVariable().setVariableLength(lengthTextField.getText());
-        } catch (Exception e) {
+            getSelectedVariable().setVariableLength(Integer.parseInt(lengthTextField.getText()));
+        } catch (NumberFormatException e) {
         }
     }//GEN-LAST:event_lengthTextFieldCaretUpdate
 

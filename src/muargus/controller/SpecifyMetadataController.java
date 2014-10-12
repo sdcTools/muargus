@@ -2,11 +2,17 @@
 package muargus.controller;
 
 import argus.model.ArgusException;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 //import javax.swing.DefaultListModel;
 import muargus.model.Combinations;
 import muargus.model.MetadataMu;
+import muargus.model.VariableMu;
 import muargus.view.GenerateParameters;
 import muargus.view.SpecifyMetadataView;
 
@@ -41,7 +47,34 @@ public class SpecifyMetadataController extends ControllerBase<MetadataMu> {
     }
     
     public void generateFromHeader(MetadataMu metadata, int defaultFieldLength, String defaultMissing) {
-        //TODO
+        try {
+            String[] fieldnames = getNamesFromHeader(metadata.getFileNames().getDataFileName(), 
+                    metadata.getSeparator());
+            metadata.getVariables().clear();
+            for (String fieldname : fieldnames) {
+                VariableMu variable = new VariableMu(fieldname);
+                variable.setVariableLength(defaultFieldLength);
+                if (defaultMissing.length() > 0) {
+                    variable.setMissing(0, defaultMissing);
+                }
+                metadata.getVariables().add(variable);
+            }
+        }
+        catch (ArgusException ex) {
+            getView().showErrorMessage(ex);
+        }
+    }
+    
+    private String[] getNamesFromHeader(String filename, String separator) throws ArgusException {
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader(new File(filename)));
+            String firstLine = reader.readLine();
+            return firstLine.split(separator);
+            
+        } catch (IOException ex) {
+            logger.log(Level.SEVERE, null, ex);
+            throw new ArgusException("Error reading data file");
+        }
     }
 
     private boolean areTablesSpecified() {

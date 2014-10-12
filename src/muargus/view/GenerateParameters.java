@@ -1,5 +1,7 @@
 package muargus.view;
 
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author Statistics Netherlands
@@ -22,7 +24,11 @@ public class GenerateParameters extends DialogBase {
     
     public String getSeparator() {
         return this.separatorTextField.getText();
-    } 
+    }
+    
+    public void setSeparator(String separator) {
+        this.separatorTextField.setText(separator);
+    }
     
     public int getDefaultLength() {
         return Integer.parseInt(this.fieldLengthTextField.getText());
@@ -141,9 +147,19 @@ public class GenerateParameters extends DialogBase {
     }// </editor-fold>//GEN-END:initComponents
 
     private void okButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okButtonActionPerformed
-        //TODO: validations
-        this.ok = true;
-        this.setVisible(false);
+        if (separatorTextField.getText().length() == 0) {
+            showMessage("Please enter a separator");
+            return;
+        }
+        try {
+            if (Integer.parseInt(fieldLengthTextField.getText()) > 0) {
+                this.ok = true;
+                this.setVisible(false);
+                return;
+            }
+        }
+        catch (NumberFormatException ex) { }
+        showMessage("Please enter a nonzero field length");
     }//GEN-LAST:event_okButtonActionPerformed
 
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
