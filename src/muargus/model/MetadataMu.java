@@ -250,7 +250,6 @@ public class MetadataMu {
                         variable.setWeight(true);
                         break;
                     case "<HOUSE_ID>":
-                        this.setHouseholdData(true);
                         variable.setHouse_id(true);
                         break;
                     case "<HOUSEHOLD>":
@@ -448,9 +447,11 @@ public class MetadataMu {
      * fixed, free, free with meta and SPSS.
      *
      * @return Integer containing the type of the data file. The integers
-     * correspont to the DATA_FILE_TYPE constants: DATA_FILE_TYPE_FIXED = 1;
-     * DATA_FILE_TYPE_FREE = 2; DATA_FILE_TYPE_FREE_WITH_META = 3;
-     * DATA_FILE_TYPE_SPSS = 4;
+     * correspond to the DATA_FILE_TYPE constants. Possible values: 
+     *   DATA_FILE_TYPE_FIXED
+     *   DATA_FILE_TYPE_FREE
+     *   DATA_FILE_TYPE_FREE_WITH_META
+     *   DATA_FILE_TYPE_SPSS
      */
     public int getDataFileType() {
         return this.dataFileType;
@@ -461,9 +462,11 @@ public class MetadataMu {
      * fixed, free, free with meta and SPSS.
      *
      * @param dataFileType Integer containing the type of the data file. The
-     * integers correspont to the DATA_FILE_TYPE constants: DATA_FILE_TYPE_FIXED
-     * = 1; DATA_FILE_TYPE_FREE = 2; DATA_FILE_TYPE_FREE_WITH_META = 3;
-     * DATA_FILE_TYPE_SPSS = 4;
+     * integers correspond to the DATA_FILE_TYPE constants. Allowed values:
+     *   DATA_FILE_TYPE_FIXED
+     *   DATA_FILE_TYPE_FREE
+     *   DATA_FILE_TYPE_FREE_WITH_META
+     *   DATA_FILE_TYPE_SPSS
      */
     public void setDataFileType(int dataFileType) {
         this.dataFileType = dataFileType;
@@ -490,8 +493,8 @@ public class MetadataMu {
     /**
      * Gets the file names of both the metadata file and the data file
      *
-     * @return DataFilePair instance containing two String with the path of the
-     * metadata file and the data file.
+     * @return DataFilePair instance containing the path of the
+     * metadata file and of the data file.
      */
     public DataFilePair getFileNames() {
         return this.filenames;
@@ -500,8 +503,8 @@ public class MetadataMu {
     /**
      * Sets the file names of both the metadata file and the data file
      *
-     * @param filenames DataFilePair instance containing two String with the
-     * path of the metadata file and the data file.
+     * @param filenames DataFilePair instance containing the
+     * path of the metadata file and of the data file.
      */
     public void setFileNames(DataFilePair filenames) {
         this.filenames = filenames;
@@ -513,16 +516,12 @@ public class MetadataMu {
      * @return Boolean stating whether the data is Household data.
      */
     public boolean isHouseholdData() {
-        return householdData;
-    }
-
-    /**
-     * Sets whether the data is Household data.
-     *
-     * @param householdData Boolean stating whether the data is Household data.
-     */
-    public void setHouseholdData(boolean householdData) {
-        this.householdData = householdData;
+        for (VariableMu variable : variables) {
+            if (variable.isHouse_id()) {
+                return true;
+            }
+        }
+        return false;
     }
 
 //    // TODO: remove after testing

@@ -27,6 +27,7 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
     private String separatorTemp;
     private int dataFileTypeTemp;
     private final VariableMu dummyVar = new VariableMu();
+    private final java.awt.Frame parent;
 
     private DefaultListModel variableListModel;
 
@@ -39,6 +40,7 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
      */
     public SpecifyMetadataView(java.awt.Frame parent, boolean modal, SpecifyMetadataController controller) {
         super(parent, modal, controller);
+        this.parent = parent;
         initComponents();
         this.setLocationRelativeTo(null);
         variablesList.setSelectionModel(new SingleListSelectionModel());
@@ -125,6 +127,9 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
         startingPositionTextField.setVisible(true);
         variablesComboBox.setSelectedIndex(0);
         generateButton.setEnabled(false);
+        if (this.variableListModel.isEmpty()) {
+            enableAllControls(false);
+        }
     }
 
     private void setFree() {
@@ -136,6 +141,9 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
         startingPositionTextField.setVisible(false);
         variablesComboBox.setSelectedIndex(1);
         generateButton.setEnabled(false);
+        if (this.variableListModel.isEmpty()) {
+            enableAllControls(false);
+        }
     }
 
     private void setFreeWithMeta() {
@@ -145,8 +153,11 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
         separatorTextField.setVisible(true);
         startingPositionLabel.setVisible(false);
         startingPositionTextField.setVisible(false);
-        variablesComboBox.setSelectedIndex(1);
+        variablesComboBox.setSelectedIndex(2);
         generateButton.setEnabled(true);
+        if (this.variableListModel.isEmpty()) {
+            enableAllControls(false);
+        }
     }
 
     private void updateValues() {
@@ -770,7 +781,20 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
     }// </editor-fold>//GEN-END:initComponents
 
     private void generateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generateButtonActionPerformed
-        getController().generate();
+        if (getMetadata().getDataFileType() == MetadataMu.DATA_FILE_TYPE_SPSS) {
+            getController().generateSpss();
+        } else {
+            GenerateParameters generateView = new GenerateParameters(this.parent, true);
+            generateView.setVisible(true);
+            if (generateView.isOk()) {
+                getMetadata().setSeparator(generateView.getSeparator());
+                getController().generateFromHeader(getMetadata(),
+                        generateView.getDefaultLength(), generateView.getDefaultMissing());
+                this.separatorTemp = generateView.getSeparator();
+                updateMetadata();
+                updateValues();
+            }
+        }
     }//GEN-LAST:event_generateButtonActionPerformed
 
     private void updateMetadata() {

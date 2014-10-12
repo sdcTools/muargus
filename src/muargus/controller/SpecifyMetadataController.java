@@ -7,6 +7,7 @@ import java.util.logging.Logger;
 //import javax.swing.DefaultListModel;
 import muargus.model.Combinations;
 import muargus.model.MetadataMu;
+import muargus.view.GenerateParameters;
 import muargus.view.SpecifyMetadataView;
 
 /**
@@ -32,13 +33,15 @@ public class SpecifyMetadataController extends ControllerBase<MetadataMu> {
     }
 
     /**
-     *
+     * Generates meta from the Spss data file
+     * 
      */
-    public void generate() {
-        //TODO: Wat moet hier gebeuren?
-
-        //Generate generate; = new Generate(view, true);
-        //generate.setVisible(true);
+    public void generateSpss() {
+            //TODO: spss
+    }
+    
+    public void generateFromHeader(MetadataMu metadata, int defaultFieldLength, String defaultMissing) {
+        //TODO
     }
 
     private boolean areTablesSpecified() {
