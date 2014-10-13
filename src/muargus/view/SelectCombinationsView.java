@@ -80,6 +80,7 @@ public class SelectCombinationsView extends DialogBase<SelectCombinationsControl
         // set the default values and the size of the first two colums
         this.table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         this.table.setDefaultRenderer(Object.class, new HighlightTableCellRenderer());
+        this.table.setDefaultRenderer(Integer.class, new HighlightTableCellRenderer());
 
     }
 
@@ -90,11 +91,11 @@ public class SelectCombinationsView extends DialogBase<SelectCombinationsControl
         this.thresholdTextField.setText(this.model.getThreshold());
         // gets the tables from Combinations and adds these to a double array, containing the data
         ArrayList<TableMu> tables = this.model.getTables();
-        String[][] data = new String[this.model.getTables().size()][this.model.getNumberOfColumns()];
+        Object[][] data = new Object[this.model.getTables().size()][this.model.getNumberOfColumns()];
 
         int index = 0;
         for (TableMu t : tables) {
-            data[index] = t.getTable();
+            data[index] = t.getTableData();
             index++;
         }
 
@@ -112,6 +113,13 @@ public class SelectCombinationsView extends DialogBase<SelectCombinationsControl
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return false;
             }
+
+            @Override
+            public Class getColumnClass(int i) {
+                return (i == 1 ? Integer.class : String.class);
+            }
+            
+            
         };
         this.table.setModel(this.tableModel);
 
@@ -259,6 +267,7 @@ public class SelectCombinationsView extends DialogBase<SelectCombinationsControl
             }
         });
 
+        table.setAutoCreateRowSorter(true);
         table.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null},
@@ -520,6 +529,9 @@ public class SelectCombinationsView extends DialogBase<SelectCombinationsControl
         if (this.model.getNumberOfRows() > 0) {
             try {
                 int[] selectedRows = this.table.getSelectedRows();
+                for (int i=0; i < selectedRows.length; i++) {
+                    selectedRows[i] = this.table.convertRowIndexToModel(selectedRows[i]);
+                }
                 this.variablesSelectedListModel.removeAllElements();
                 ArrayList<VariableMu> variableMu = this.model.getTables().get(selectedRows[selectedRows.length - 1]).getVariables();
                 for (int j = 0; j < variableMu.size(); j++) {
@@ -772,6 +784,7 @@ public class SelectCombinationsView extends DialogBase<SelectCombinationsControl
             try { // afvangen geen tabel geselecteerd
                 //TODO: geen try catch 
                 int index = this.table.getSelectedRow();
+                index = this.table.convertRowIndexToModel(index);
                 TableMu tableMu = this.model.getTables().get(index);
                 if (!weightVariableExists()) {
                     showMessage("No weight variable has been specified, so the risk-model cannot be applied");

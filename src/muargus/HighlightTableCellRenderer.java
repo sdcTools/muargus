@@ -8,6 +8,7 @@ package muargus;
 
 import java.awt.Color;
 import java.awt.Component;
+import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 
@@ -26,7 +27,9 @@ public class HighlightTableCellRenderer extends DefaultTableCellRenderer {
           else {
               setForeground(isSelected ? Color.white : Color.black);
           }
-              
+          if (value instanceof Integer) {
+              setHorizontalAlignment(JLabel.RIGHT);
+          }   
           return cr;
      }
 }

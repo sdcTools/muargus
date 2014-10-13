@@ -246,6 +246,7 @@ public class GlobalRecodeView extends DialogBase<GlobalRecodeController> {
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         setMinimumSize(new java.awt.Dimension(620, 530));
 
+        variablesTable.setAutoCreateRowSorter(true);
         variablesTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null},
@@ -634,7 +635,7 @@ public class GlobalRecodeView extends DialogBase<GlobalRecodeController> {
             int positions = getTruncatePositions(getSelectedRecode().getVariable().getVariableLength());
             if (positions > 0) {
                 getController().truncate(getSelectedRecode(), positions);
-                int rowIndex = this.model.getVariables().indexOf(getSelectedRecode().getVariable());
+                int rowIndex = getSelectedRowIndex();
                 variablesTable.getModel().setValueAt("T", rowIndex, 0);
                 variablesTable.getModel().setValueAt(getSelectedRecode().getVariable().getName(), rowIndex, 1);
                 updateValues();
@@ -674,6 +675,7 @@ public class GlobalRecodeView extends DialogBase<GlobalRecodeController> {
      * @param index Integer containing the selected index.
      */
     public void setSelectedIndex(int index) {
+        index = this.variablesTable.convertColumnIndexToView(index);
         this.variablesTable.getSelectionModel().setSelectionInterval(index, index);
     }
 
@@ -682,15 +684,20 @@ public class GlobalRecodeView extends DialogBase<GlobalRecodeController> {
      *
      * @return Integer containing the selected index.
      */
-    public int getSelectedIndex() {
-        return this.variablesTable.getSelectionModel().getMaxSelectionIndex();
+    public int getSelectedVariableIndex() {
+        int index = this.variablesTable.getSelectionModel().getMaxSelectionIndex();
+        return this.variablesTable.convertRowIndexToModel(index);
     }
 
+    private int getSelectedRowIndex() {
+        return this.model.getVariables().indexOf(getSelectedRecode().getVariable());
+    }
+    
     private void applyButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_applyButtonActionPerformed
         try {
             fixGrcReturns(getSelectedRecode());
             getController().apply(getSelectedRecode());
-            int rowIndex = this.model.getVariables().indexOf(getSelectedRecode().getVariable());
+            int rowIndex = getSelectedRowIndex();
             variablesTable.getModel().setValueAt("R", rowIndex, 0);
             variablesTable.getModel().setValueAt(getSelectedRecode().getVariable().getName(), rowIndex, 1);
             updateValues();
@@ -702,7 +709,7 @@ public class GlobalRecodeView extends DialogBase<GlobalRecodeController> {
     private void undoButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_undoButtonActionPerformed
         try {
             getController().undo(getSelectedRecode());
-            int rowIndex = this.model.getVariables().indexOf(getSelectedRecode().getVariable());
+            int rowIndex = getSelectedRowIndex();
             variablesTable.getModel().setValueAt("", rowIndex, 0);
             variablesTable.getModel().setValueAt(getSelectedRecode().getVariable().getName(), rowIndex, 1);
         } catch (ArgusException ex) {
@@ -748,7 +755,7 @@ public class GlobalRecodeView extends DialogBase<GlobalRecodeController> {
                 }
             }
         }
-        this.selectedRecode = model.getRecodeMus().get(variablesTable.getSelectedRow());
+        this.selectedRecode = model.getRecodeMus().get(getSelectedVariableIndex());
         this.selectedRecodeClone = new RecodeMu(getSelectedRecode());
         updateValues();
     }
@@ -792,7 +799,6 @@ public class GlobalRecodeView extends DialogBase<GlobalRecodeController> {
     private javax.swing.JScrollPane editScrollPane;
     private javax.swing.JTextArea editTextArea;
     private javax.swing.JTextField globalRecodeTextField;
-    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JPanel midSectionPanel;
     private javax.swing.JLabel mising_1_newLabel;
     private javax.swing.JPanel missingValuesPanel;

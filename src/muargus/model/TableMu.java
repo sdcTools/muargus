@@ -116,18 +116,18 @@ public class TableMu {
     /**
      * Gets the data for one table.
      *
-     * @return Array of Strings containing with the first value indicating if
+     * @return Array of Objects containing with the first value indicating if
      * the riskModel is set, the second value showing the threshold and each
      * following value containing all variables in the table.
      */
-    public String[] getTable() {
-        String[] table = new String[variables.size() + 2];
+    public Object[] getTableData() {
+        Object[] table = new Object[variables.size() + 2];
         if (isRiskModel()) {
             table[0] = "R";
         } else {
             table[0] = "";
         }
-        table[1] = Integer.toString(threshold);
+        table[1] = this.threshold;
         for (int i = 0; i < variables.size(); i++) {
             table[i + 2] = variables.get(i).getName();
         }
