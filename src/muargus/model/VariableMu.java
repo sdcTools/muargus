@@ -565,61 +565,6 @@ public class VariableMu {
     
     /**
      * 
-     * @param writer
-     * @param dataFileType
-     * @param all 
-     */
-    public void write(PrintWriter writer, final int dataFileType, boolean all) {
-        writer.print(this.name);
-        if (MetadataMu.DATA_FILE_TYPE_FIXED == dataFileType) {
-            writer.print(" " + this.startingPosition);
-        }
-        writer.print(" " + this.variableLength);
-        if (this.categorical) {
-            for (String missingValue : this.missing) {
-                if (StringUtils.isNotBlank(missingValue)) {
-                    writer.print(" " + StrUtils.quote(missingValue));
-                }
-            }
-        }
-        writer.println();
-        if (this.isRecodable()) {
-            writer.println("    <RECODABLE>");
-        }
-        if (this.numeric) {
-            writer.println("    <NUMERIC>");
-        }
-        if (this.decimals > 0) {
-            writer.println("    <DECIMALS> " + this.decimals);
-        }
-        if (this.weight) {
-            writer.println("    <WEIGHT>");
-        }
-        if (this.house_id) {
-            writer.println("    <HOUSE_ID>");
-        }
-        if (this.household) {
-            writer.println("    <HOUSEHOLD>");
-        }
-        if (this.relatedVariable != null) {
-            writer.println("    <RELATED> " + StrUtils.quote(this.relatedVariable.getName()));
-        }
-        if (this.categorical) {
-            if (this.truncable) {
-                writer.println("    <TRUNCABLE>");
-            }
-            if (all) {
-                writer.println("    <IDLEVEL> " + this.idLevel);
-                writer.println("    <SUPPRESSWEIGHT> " + this.suppressweight);
-            }
-            if (this.codelist) {
-                writer.println("    <CODELIST> " + StrUtils.quote(this.codeListFile));
-            }
-        }
-    }
-
-    /**
-     * 
      * @param o
      * @return 
      */

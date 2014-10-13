@@ -10,6 +10,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import muargus.HighlightTableCellRenderer;
 import muargus.controller.GlobalRecodeController;
+import muargus.io.MetaReader;
 import muargus.model.GlobalRecode;
 import muargus.model.RecodeMu;
 import muargus.model.VariableMu;
@@ -649,7 +650,7 @@ public class GlobalRecodeView extends DialogBase<GlobalRecodeController> {
         String path = askForGrcPath();
         if (path != null) {
             try {
-                getController().read(path, this.getSelectedRecode());
+                MetaReader.readGrc(path, this.getSelectedRecode());
                 this.selectedRecodeClone = new RecodeMu(this.selectedRecode);
                 updateValues();
             } catch (ArgusException ex) {
