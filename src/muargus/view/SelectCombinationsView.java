@@ -2,6 +2,7 @@ package muargus.view;
 
 import argus.model.ArgusException;
 import java.awt.Frame;
+import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.Arrays;
 import javax.swing.DefaultListModel;
@@ -175,7 +176,7 @@ public class SelectCombinationsView extends DialogBase<SelectCombinationsControl
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Specify Combinations");
-        setMinimumSize(new java.awt.Dimension(670, 450));
+        setMinimumSize(new java.awt.Dimension(690, 450));
 
         variablesScrollPane.setViewportView(variablesList);
 
@@ -462,8 +463,8 @@ public class SelectCombinationsView extends DialogBase<SelectCombinationsControl
             }
 
             /* If the new table is valid, it will be added. If the table is not valid and
-               the riskmodel (BIR) is not used, it means that new table already excists 
-               and thus the list of selected variables will be emptied.*/
+             the riskmodel (BIR) is not used, it means that new table already excists 
+             and thus the list of selected variables will be emptied.*/
             if (add) {
                 if (this.variablesSelectedListModel.size() > 0) {
                     this.variablesSelectedListModel.removeAllElements();
@@ -472,9 +473,10 @@ public class SelectCombinationsView extends DialogBase<SelectCombinationsControl
             } else if (!this.model.isRiskModel()) {
                 this.variablesSelectedListModel.removeAllElements();
             }
-            
+
             updateValues();
             this.table.getSelectionModel().setSelectionInterval(this.model.getNumberOfRows() - 1, this.model.getNumberOfRows() - 1);
+            table.scrollRectToVisible(new Rectangle(table.getCellRect(this.model.getNumberOfRows() - 1, 0, true)));
         }
     }//GEN-LAST:event_addRowButtonActionPerformed
 
@@ -484,7 +486,8 @@ public class SelectCombinationsView extends DialogBase<SelectCombinationsControl
      * riskmodel, it returns true if the table has to much overlap, it returns
      * false
      *
-     * @param tableMuNew TableMu instance of new table that will be added if the table is valid.
+     * @param tableMuNew TableMu instance of new table that will be added if the
+     * table is valid.
      * @param tableMuOld TableMu instance of the already existing table
      * @return It returns if a table can be added
      */
@@ -518,25 +521,21 @@ public class SelectCombinationsView extends DialogBase<SelectCombinationsControl
 
     private void removeRowButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeRowButtonActionPerformed
         if (this.model.getNumberOfRows() > 0) {
-            try {
-                int[] selectedRows = this.table.getSelectedRows();
-                this.variablesSelectedListModel.removeAllElements();
-                ArrayList<VariableMu> variableMu = this.model.getTables().get(selectedRows[selectedRows.length - 1]).getVariables();
-                for (int j = 0; j < variableMu.size(); j++) {
-                    this.variablesSelectedListModel.add(j, variableMu.get(j));
-                }
-                for (int i = selectedRows.length - 1; i > -1; i--) {
-                    this.model.removeTable(selectedRows[i]);
-                }
-            } catch (Exception e) {
-                this.model.removeTable(this.model.getNumberOfRows());
+            int[] selectedRows = this.table.getSelectedRows();
+            this.variablesSelectedListModel.removeAllElements();
+            ArrayList<VariableMu> variableMu = this.model.getTables().get(selectedRows[selectedRows.length - 1]).getVariables();
+            for (int j = 0; j < variableMu.size(); j++) {
+                this.variablesSelectedListModel.add(j, variableMu.get(j));
+            }
+            for (int i = selectedRows.length - 1; i > -1; i--) {
+                this.model.removeTable(selectedRows[i]);
             }
             if (this.model.getNumberOfRows() == 0) {
                 clear();
             }
         }
         updateValues();
-        table.getSelectionModel().setSelectionInterval(0, 0);
+        this.table.getSelectionModel().setSelectionInterval(0, 0);
     }//GEN-LAST:event_removeRowButtonActionPerformed
 
     private void automaticSpecificationButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_automaticSpecificationButtonActionPerformed
@@ -611,6 +610,7 @@ public class SelectCombinationsView extends DialogBase<SelectCombinationsControl
         }
 
         updateValues();
+        this.table.getSelectionModel().setSelectionInterval(0, 0);
     }//GEN-LAST:event_automaticSpecificationButtonActionPerformed
 
     private long getNumberOfTables() {
@@ -623,37 +623,80 @@ public class SelectCombinationsView extends DialogBase<SelectCombinationsControl
 
     private void numberOfTabels(long numberOfTables, int dimensions, int numberOfVariables) {
         if (dimensions > 0) {
-            long tempNumber = numberOfTables * numberOfVariables;
-            if (tempNumber < 0) {
-                JOptionPane.showMessageDialog(this, "To ... many ... dimensions ...\nCan't ... visualize :-(");
-            } else {
+            try {
+                long tempNumber = numberOfTables * numberOfVariables;
                 int tempNumberOfVariables = numberOfVariables - 1;
                 int tempDimensions = dimensions - 1;
                 numberOfTabels(tempNumber, tempDimensions, tempNumberOfVariables);
+            } catch (Exception e) {
+                //TODO: fixen dat een waarschuwing wordt gegeven bij teveel dimensies op de goede plek.
+                JOptionPane.showMessageDialog(this, "To ... many ... dimensions ...\nCan't ... visualize :-(");
             }
+//            if (tempNumber < 0) {
+//                JOptionPane.showMessageDialog(this, "To ... many ... dimensions ...\nCan't ... visualize :-(");
+//            } else {
+//                int tempNumberOfVariables = numberOfVariables - 1;
+//                int tempDimensions = dimensions - 1;
+//                numberOfTabels(tempNumber, tempDimensions, tempNumberOfVariables);
+//            }
 
         } else if (dimensions == 0) {
             this.numberOfTables = numberOfTables;
         }
     }
 
+    /**
+     * Sets the progress of the progressbar.
+     *
+     * @param progress Integer indicating the progress made.
+     */
     @Override
     public void setProgress(int progress) {
         this.progressbar.setValue(progress);
     }
 
+    /**
+     * Shows the progress step name.
+     *
+     * @param value String containing the progress step name.
+     */
     @Override
     public void showStepName(String value) {
         this.progressLabel.setText(value);
     }
 
-    private void calculateTablesForDimensions(ArrayList<VariableMu> data, int dimensions) {
+    /**
+     * Starts the recursion equation that calculates the tables for the
+     * specified number of dimensions. Assings an empty Arraylist of
+     * variableMu's, the starting position and the threshold.
+     *
+     * @param allVariables ArrayList of VariableMu's containing all variables.
+     * @param dimensions Integer containing the number of dimensions.
+     */
+    private void calculateTablesForDimensions(ArrayList<VariableMu> allVariables, int dimensions) {
         ArrayList<VariableMu> variableSubset = new ArrayList<>();
         int startPos = 0;
         int threshold = 0;
-        calculateTablesForDimensions(startPos, data, dimensions, variableSubset, threshold);
+        calculateTablesForDimensions(startPos, allVariables, dimensions, variableSubset, threshold);
     }
 
+    /**
+     * Main body of the recursion equation that calculates the tables for the
+     * specified number of dimensions. This recursion equation starts with
+     * looping through all variables. Whithin the loop the equation adds the
+     * variable to the varibleSubset, makes a table, calls itself and passes the
+     * variableSubset on. Every time this equation calls itself the
+     * variableSubset will add a variable until the number of dimensions are
+     * higher than the number of calls of this function.
+     *
+     * @param startPos
+     * @param allVariables ArrayList of VariableMu's containing all variables.
+     * @param dimensions Integer containing the number of dimensions.
+     * @param variableSubset ArrayList of VariableMu's containing between one
+     * variable and as many variables as the number of dimensions.
+     * @param threshold Integer containing the threshold for the specified
+     * dimension.
+     */
     private void calculateTablesForDimensions(int startPos, ArrayList<VariableMu> allVariables, int dimension,
             ArrayList<VariableMu> variableSubset, int threshold) {
         if (dimension > 0) {
@@ -676,6 +719,17 @@ public class SelectCombinationsView extends DialogBase<SelectCombinationsControl
         }
     }
 
+    /**
+     * Starts the recursion equation that calculates the tables for the ID
+     * levels.
+     *
+     * @param numberOfLevels Integer containing the number of ID-levels with at
+     * least one variable.
+     * @param variables ArrayList containing ArrayList's of VariableMu's for
+     * each ID-level. variables.
+     * @param allValidVariables ArrayList of VariableMu's containing all
+     * variables with an ID-level higher than 0
+     */
     private void calculateTablesForID(int numberOfLevels, ArrayList<ArrayList<VariableMu>> variables, ArrayList<VariableMu> allValidVariables) {
         int index = 1; // don't add the variables with an ID number of 0
         int _size = 0;
@@ -753,6 +807,12 @@ public class SelectCombinationsView extends DialogBase<SelectCombinationsControl
         }
     }
 
+    /**
+     * Enables/Disables the calculate tables button.
+     *
+     * @param enabled Boolean indicating whether the calculate tables button
+     * needs to be enabled.
+     */
     public void enableCalculateTables(boolean enabled) {
         this.calculateTablesButton.setEnabled(enabled);
     }
@@ -769,27 +829,27 @@ public class SelectCombinationsView extends DialogBase<SelectCombinationsControl
     private void setTableRiskModelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_setTableRiskModelButtonActionPerformed
         if (this.model.getTables().size() > 0) {
 
-            try { // afvangen geen tabel geselecteerd
-                //TODO: geen try catch 
-                int index = this.table.getSelectedRow();
-                TableMu tableMu = this.model.getTables().get(index);
-                if (!weightVariableExists()) {
-                    showMessage("No weight variable has been specified, so the risk-model cannot be applied");
-                    return;
-                }
-                tableMu.setRiskModel(!tableMu.isRiskModel());
-
-                if (tableMu.isRiskModel()) {  //The table is added to the risk model
-                    ArrayList<TableMu> toBeRemovedTables = getListOfRemovedTables();
-                    overlappingTables(toBeRemovedTables, tableMu);
-                    removeTableRiskModel(toBeRemovedTables);
-                }
-
-                updateValues();
-                this.table.getSelectionModel().setSelectionInterval(index, index);
-            } catch (Exception e) {
-                showMessage("No table is selected");
+            //try { // afvangen geen tabel geselecteerd
+            //TODO: geen try catch 
+            int index = this.table.getSelectedRow();
+            TableMu tableMu = this.model.getTables().get(index);
+            if (!weightVariableExists()) {
+                showMessage("No weight variable has been specified, so the risk-model cannot be applied");
+                return;
             }
+            tableMu.setRiskModel(!tableMu.isRiskModel());
+
+            if (tableMu.isRiskModel()) {  //The table is added to the risk model
+                ArrayList<TableMu> toBeRemovedTables = getListOfRemovedTables();
+                overlappingTables(toBeRemovedTables, tableMu);
+                removeTableRiskModel(toBeRemovedTables);
+            }
+
+            updateValues();
+            this.table.getSelectionModel().setSelectionInterval(index, index);
+            //} catch (Exception e) {
+//                showMessage("No table is selected");
+//            }
         }
     }//GEN-LAST:event_setTableRiskModelButtonActionPerformed
 
