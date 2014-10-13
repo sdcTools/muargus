@@ -1,22 +1,19 @@
 niet behandelde opmerkingen/vragen:
-Undo button toevoegen?
+
 
 Nog te doen:                                                                                                Mee bezig:
 
 Release 2
 
-2.  variablesTable
-    - maak de regels die zijn veranderd rood in de tabel
+    
 11. schrijf javadocs                                                                                        Jeldrik
 12. Refactoren (kijken of alles volgens de MVC is gedaan, het weghalen van overbodige code etc.) 
 
 
 
 Release 3
+Undo/clear button toevoegen?
 
-Behandelde opmerkingen/vragen:                                                                              Antwoord:
-- checken wanneer de dll uitgevoerd wordt (oude mu is volgens mij pas bij makeSafeFile                      Gebeurd nu bij apply
-- Is het een idee om een close button toe te voegen en de ok button te veranderen in een apply button?      Ja
 
 
 Gedaan:                                                                                                     Door:
@@ -28,6 +25,7 @@ Gedaan:                                                                         
     - klassen koppelen aan de rest van het programma
     - minimum en maximum value label toevoegen
 2.  variablesTable
+- maak de regels die zijn veranderd rood in de tabel
     - vullen met alle numerieke variabelen  
     - vullen met alle numerieke variabelen  
     - zorg dat bij zowel klikken op een variabele als het gebruik van de pijltjestoetsen de waardes veranderen
@@ -57,3 +55,8 @@ Gedaan:                                                                         
     - Minimale grootte scherm instellen
 
 wishlish:
+
+Behandelde opmerkingen/vragen:                                                                              Antwoord:
+
+- checken wanneer de dll uitgevoerd wordt (oude mu is volgens mij pas bij makeSafeFile                      Gebeurd nu bij apply
+- Is het een idee om een close button toe te voegen en de ok button te veranderen in een apply button?      Ja

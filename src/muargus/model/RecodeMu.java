@@ -17,7 +17,7 @@ import java.util.Objects;
 public class RecodeMu {
 
     private boolean truncated;
-    private String positionsTruncated;
+    private int positionsTruncated;
     private boolean recoded;
     private String grcText;
     private final VariableMu variable;
@@ -244,7 +244,7 @@ public class RecodeMu {
      *
      * @return String containing the number of positions that are truncated.
      */
-    public String getPositionsTruncated() {
+    public int getPositionsTruncated() {
         return positionsTruncated;
     }
 
@@ -254,7 +254,7 @@ public class RecodeMu {
      * @param positionsTruncated String containing the number of positions that
      * are truncated.
      */
-    public void setPositionsTruncated(String positionsTruncated) {
+    public void setPositionsTruncated(int positionsTruncated) {
         this.positionsTruncated = positionsTruncated;
     }
 

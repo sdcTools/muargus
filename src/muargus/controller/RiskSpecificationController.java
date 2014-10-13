@@ -10,6 +10,7 @@ import muargus.view.RiskSpecificationView;
 import muargus.view.TablePickView;
 
 /**
+ * Controller class of the RiskSpecification screen.
  *
  * @author Statistics Netherlands
  */
@@ -21,9 +22,10 @@ public class RiskSpecificationController extends ControllerBase<RiskSpecificatio
     private final java.awt.Frame parentView;
 
     /**
+     * Constructor for the RiskSpecificationController.
      *
-     * @param parentView
-     * @param metadata
+     * @param parentView the Frame of the mainFrame.
+     * @param metadata the orginal metadata.
      */
     public RiskSpecificationController(java.awt.Frame parentView, MetadataMu metadata) {
         this.parentView = parentView;
@@ -35,6 +37,11 @@ public class RiskSpecificationController extends ControllerBase<RiskSpecificatio
         this.getView().setMetadata(this.metadata);
     }
 
+    /**
+     * Gets the titles of the risk tables.
+     *
+     * @return ArrayList of Strings containing the titles of the risk tables.
+     */
     private ArrayList<String> getRiskTableTitles() {
         ArrayList<String> titles = new ArrayList<>();
         for (TableMu table : getRiskTables()) {
@@ -43,6 +50,12 @@ public class RiskSpecificationController extends ControllerBase<RiskSpecificatio
         return titles;
     }
 
+    /**
+     * Gets all risk tables.
+     *
+     * @return Arraylist of TableMu's containing tables for which the risk model
+     * is specified.
+     */
     private ArrayList<TableMu> getRiskTables() {
         ArrayList<TableMu> tables = new ArrayList<>();
         for (TableMu tableMu : this.metadata.getCombinations().getTables()) {
@@ -53,6 +66,10 @@ public class RiskSpecificationController extends ControllerBase<RiskSpecificatio
         return tables;
     }
 
+    /**
+     * Shows the TablePickView if for more than one table the risk model is
+     * specified and sets the model using the selected table.
+     */
     private RiskSpecification pickRiskSpecification() {
         if (getRiskTables().size() > 1) {
             TablePickView tableView = new TablePickView(this.parentView, true);
@@ -64,10 +81,15 @@ public class RiskSpecificationController extends ControllerBase<RiskSpecificatio
             return getModel(tableView.getSelectedIndex());
         } else {
             return getModel(0);
-
         }
     }
 
+    /**
+     * Initializes the data. The method checks whether the classes, containing
+     * the riskmodel information for each pillar in the histogram, are empty. If
+     * so, the risk threshold is initialized. Makes a normal (non-cumulative)
+     * histogram of the data and calculates the values using the risk threshold.
+     */
     private void init() {
         boolean initialize = getModel().getClasses().isEmpty();
         fillModelHistogramData(false);
@@ -79,8 +101,10 @@ public class RiskSpecificationController extends ControllerBase<RiskSpecificatio
     }
 
     /**
+     * Fills the histogram with the data.
      *
-     * @param cumulative
+     * @param cumulative Boolean indicating whether a cumulative or a normal
+     * histogram should be shown.
      */
     public void fillModelHistogramData(boolean cumulative) {
         try {
@@ -90,15 +114,26 @@ public class RiskSpecificationController extends ControllerBase<RiskSpecificatio
         } catch (ArgusException ex) {
             getView().showErrorMessage(ex);
         }
-
     }
 
+    /**
+     * Gets the model class of the RiskSpecification screen.
+     *
+     * @param index Integer containing the index of the list of tables for which
+     * the risk model is specified. If for only one table the risk model is
+     * specified, the default value is 0.
+     * @return RiskSpecification instance for the specified table.
+     */
     private RiskSpecification getModel(int index) {
         RiskSpecification riskSpec = this.metadata.getCombinations().getRiskSpecifications().get(getRiskTables().get(index));
         riskSpec.SetRiskTable(getRiskTables().get(index));
         return riskSpec;
     }
 
+    /**
+     * Initializes the risk threshold. The risk threshold is the average of the
+     * minimum and the maximum risk threshold.
+     */
     private void initializeRiskThreshold() {
         ArrayList<RiskModelClass> classes = getModel().getClasses();
         double min = Math.log(classes.get(0).getLeftValue());
@@ -107,7 +142,8 @@ public class RiskSpecificationController extends ControllerBase<RiskSpecificatio
     }
 
     /**
-     *
+     * Calculates the values for the risk specification using the risk
+     * threshold.
      */
     public void calculateByRiskThreshold() {
         try {
@@ -121,7 +157,8 @@ public class RiskSpecificationController extends ControllerBase<RiskSpecificatio
     }
 
     /**
-     *
+     * Calculates the values for the risk specification using the number of
+     * unsafe records.
      */
     public void calculateByUnsafeRecords() {
         try {
@@ -132,14 +169,17 @@ public class RiskSpecificationController extends ControllerBase<RiskSpecificatio
         } catch (ArgusException ex) {
             getView().showErrorMessage(ex);
         }
-
     }
 
     /**
+     * Calculates the values for the risk specification using the
+     * reidentification threshold.
      *
-     * @param soughtValue
-     * @param nDecimals
-     * @throws ArgusException
+     * @param soughtValue Double containing the sought reidentification
+     * threshold.
+     * @param nDecimals Integer containing the number of decimals to be shown
+     * @throws ArgusException Throws an ArgusException when the reidentification
+     * rate of the threshold is not between 0 and the maximum rate.
      */
     public void calculateByReidentThreshold(double soughtValue, int nDecimals) throws ArgusException {
         if (soughtValue > getModel().getMaxReidentRate()
@@ -155,7 +195,7 @@ public class RiskSpecificationController extends ControllerBase<RiskSpecificatio
         double risk = getModel().getRiskThreshold();
         int iteration = 0;
         double epsilon = Math.exp(-Math.log(10) * nDecimals);
-        while (iteration < MAX_ITERATIONS) {
+        while (iteration < this.MAX_ITERATIONS) {
             if (Math.abs(value - soughtValue) < epsilon) {
                 break;
             }

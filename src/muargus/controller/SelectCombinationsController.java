@@ -15,7 +15,7 @@ import muargus.view.SelectCombinationsView;
 
 /**
  *
- * @author ambargus
+ * @author Statistics Netherlands
  */
 public class SelectCombinationsController extends  ControllerBase<Combinations> {
     

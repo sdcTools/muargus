@@ -20,7 +20,7 @@ import muargus.view.MakeProtectedFileView;
 
 /**
  *
- * @author ambargus
+ * @author Statistics Netherlands
  */
 public class MakeProtectedFileController extends ControllerBase<ProtectedFile> {
 

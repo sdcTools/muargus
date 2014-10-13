@@ -21,7 +21,7 @@ import muargus.view.MicroaggregationView;
 
 /**
  *
- * @author ambargus
+ * @author Statistics Netherlands
  */
 public class MicroaggregationController extends ControllerBase<Microaggregation> {
     private final MetadataMu metadata;

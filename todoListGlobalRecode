@@ -1,12 +1,8 @@
 niet behandelde opmerkingen/vragen:
--   De nieuwe missing values van het bestand AGE3.GRC worden gezien als 1 missing value
-    Dit komt omdat er een komma is gebruikt ipv een spatie. Oude mu ziet het ook als 1 missing value
-    Wat doen?
 
 opmerkingen RecodeMu:
--   moet positionsTruncated een integer zijn?
--   willen we methoden verplaatsen naar de GlobalRecodeController? 
-    bijvoorbeeld: getTableRow(), write() en misschien equals()?
+
+
 
 
 Nog te doen:                                                                                                Mee bezig:
@@ -17,7 +13,11 @@ Release 2:
 
 
 Release 3+:
-   
+-   De nieuwe missing values van het bestand AGE3.GRC worden gezien als 1 missing value
+    Dit komt omdat er een komma is gebruikt ipv een spatie. Oude mu ziet het ook als 1 missing value
+    Wat doen?
+-   willen we methoden verplaatsen naar de GlobalRecodeController? 
+    bijvoorbeeld: getTableRow(), write() en misschien equals()?   
 
 Behandelde opmerkingen/vragen:                                                                              Antwoord:
 
@@ -83,3 +83,4 @@ bug:  Als ik Region hercodeer, krijg ik netjes de nieuwe codes met bijbehorende 
 bug:  het programma crashed als je het bestand voor MARSTAT inleest en vervolgens op apply drukt            Anne
 bug dll: Bij (bijv) recode 1-2:3 crasht de dll                                                              Anne
     - minimale grootte scherm instellen                                                                     Jeldrik
+-   moet positionsTruncated een integer zijn? --> Ja                                                        Jeldrik

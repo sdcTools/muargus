@@ -6,11 +6,9 @@ niet behandelde opmerkingen/vragen:
 Nog te doen:                                                                                                    Mee bezig:
 
 Release 2:
-- is de check in de methode getNameOfSafeFile van de model klasse wel goed genoeg. Het checkt nu alleen of er een punt zit.
-- nu wordt bij de tabel nog gebruik gemaakt van een keyReleased en MouseClicked event maar dit moet een
+- nu wordt bij de tabel nog gebruik gemaakt van een keyReleased en MouseClicked event maar dit moet een         Jeldrik
   selectionsChanged event worden.
-- berekening onder getData verschuiven naar constructor
-- waarschuwing als geen riskModel is gedefinieerd.
+- waarschuwing als geen riskModel is gedefinieerd.                                                              Anne
 
 10. makeFileButton:
 - otherModifications toevoegen (gebeurd wanneer de optie change into sequence number wordt gekozen)
@@ -26,6 +24,7 @@ Release 2:
 16. javadocs schrijven                                                                                          Jeldrik
 
 Release 3+
+- berekening onder getData verschuiven naar constructor
 
 
 Behandelde opmerkingen/vragen:                                                                                      Antwoord:
@@ -89,6 +88,7 @@ Gedaan:                                                                         
 14. bug: na cancel button in file chooser komt foutmelding                                                          Anne
 - writeBaseIndividualRisk: risk van meerdere tabellen wordt nog niet getoond
 - writeBaseHHRisk: risk van meerdere tabellen wordt nog niet getoond
+- is de check in de methode getNameOfSafeFile van de model klasse wel goed genoeg. Het checkt nu alleen of er een punt zit.
 
 Whishlist:
 -   weights automatisch bepalen door middel van entropie? Ik weet niet precies hoe dit zou moeten maar hierdoor

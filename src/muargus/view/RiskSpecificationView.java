@@ -16,6 +16,8 @@ import org.jfree.chart.event.ChartProgressEvent;
 import org.jfree.chart.event.ChartProgressListener;
 
 /**
+ * View class of the RiskSpecification screen. This class is used for both the
+ * individual risk specification and the household risk specification.
  *
  * @author Statistics Netherlands
  */
@@ -29,11 +31,13 @@ public class RiskSpecificationView extends DialogBase<RiskSpecificationControlle
     private final int SLIDERKNOBSIZE = 16;
 
     /**
+     * Creates new form RiskSpecificationView.
      *
      * @param parent the Frame of the mainFrame.
-     * @param modal boolean to set the modal status
+     * @param modal Boolean to set the modal status.
      * @param controller the controller of this view.
-     * @param isHousehold
+     * @param isHousehold Boolean indicating whether the data includes household
+     * data.
      */
     public RiskSpecificationView(java.awt.Frame parent, boolean modal, RiskSpecificationController controller,
             boolean isHousehold) {
@@ -43,6 +47,9 @@ public class RiskSpecificationView extends DialogBase<RiskSpecificationControlle
         setLocationRelativeTo(null);
     }
 
+    /**
+     * Shows the Histogram.
+     */
     private void showChart() {
         if (this.jPanelChart.getComponentCount() > 0) {
             this.jPanelChart.remove(this.cp);
@@ -57,6 +64,12 @@ public class RiskSpecificationView extends DialogBase<RiskSpecificationControlle
 
     }
 
+    /**
+     * Sets the components (in)visible depending whether the data is household
+     * data.
+     *
+     * @param isHousehold Boolean indicating whether the data is household data.
+     */
     private void setHouseholdComponents(boolean isHousehold) {
         this.reidentCalcButton.setVisible(!isHousehold);
         this.reidentThresholdTextField.setVisible(!isHousehold);
@@ -78,7 +91,8 @@ public class RiskSpecificationView extends DialogBase<RiskSpecificationControlle
 //        JOptionPane.showMessageDialog(null, min);
 //    }
     /**
-     *
+     * Initializes the data. This method sets the model, the label of the table,
+     * the values and the chart.
      */
     @Override
     public void initializeData() {
@@ -91,13 +105,19 @@ public class RiskSpecificationView extends DialogBase<RiskSpecificationControlle
     }
 
     /**
+     * Sets the risk table.
      *
-     * @param table
+     * @param table TableMu instance for which the risk specification is made.
      */
     public void setRiskTable(TableMu table) {
         this.riskTable = table;
     }
 
+    /**
+     * Gets the number of decimals that will be shown.
+     *
+     * @return Integer containing the number of decimals.
+     */
     private int getDecimals() {
         return Integer.parseInt(this.decimalsCombo.getSelectedItem().toString());
     }
@@ -113,7 +133,7 @@ public class RiskSpecificationView extends DialogBase<RiskSpecificationControlle
     }
 
     /**
-     *
+     * Updates the values.
      */
     private void updateValues() {
         this.maxRiskTextField.setText(formatDouble(this.model.getMaxRisk()));
@@ -125,12 +145,20 @@ public class RiskSpecificationView extends DialogBase<RiskSpecificationControlle
         this.calculating = false;
     }
 
+    /**
+     * Sets the position of the slider.
+     */
     private void setSliderPosition() {
         double value = this.riskSlider.getMaximum() * Math.log(this.model.getRiskThreshold() / this.model.getMinRisk())
                 / Math.log(this.model.getMaxRisk() / this.model.getMinRisk());
         this.riskSlider.setValue((int) value);
     }
 
+    /**
+     * Receives notification of a chart progress event.
+     *
+     * @param cpe ChartProgressEvent
+     */
     @Override
     public void chartProgress(ChartProgressEvent cpe) {
         if (cpe.getPercent() == 100) {
@@ -147,6 +175,12 @@ public class RiskSpecificationView extends DialogBase<RiskSpecificationControlle
         }
     }
 
+    /**
+     * Change the histogram to cumulative/normal.
+     *
+     * @param cumulative Boolean indicating whether the cumulative histogram
+     * will be shown.
+     */
     private void showCumulative(boolean cumulative) {
         getController().fillModelHistogramData(cumulative);
         showChart();

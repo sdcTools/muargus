@@ -18,7 +18,7 @@ import muargus.view.PramSpecificationView;
 
 /**
  *
- * @author ambargus
+ * @author Statistics Netherlands
  */
 public class PramSpecificationController extends ControllerBase<PramSpecification> {
 

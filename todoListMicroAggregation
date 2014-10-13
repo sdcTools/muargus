@@ -5,7 +5,6 @@ Nog te doen:                                                                    
 Release 2
 
 11. Calculate button:
-    -Catalaan dll aanroepen
     -record number in/uit registry
     -optimal in/uit registry
 13. schrijf javadocs
@@ -41,7 +40,9 @@ Gedaan:
     - alleen geselecteerd als er in selectedVariablesTable precies 1 variabele zit
 10. progressbar                                                                                             Anne
     - koppelen aan goButton
-11. goButton                                                                                                Anne
+11. goButton   
+    -Catalaan dll aanroepen
+                                                                                             Anne
     - controleer validiteit velden
 12. readyButton                                                                                             Anne
     - sluit het scherm

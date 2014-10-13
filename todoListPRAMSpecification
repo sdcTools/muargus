@@ -7,9 +7,9 @@ niet behandelde opmerkingen/vragen:
 Nog te doen:                                                                                                Mee bezig:
 
 Release 2
--   zit de defaultProbability al in de registry?
+-   zit de defaultProbability al in de registry?                                                            Anne
 12. closebutton
-    - waarschuwing geven als dingen zijn aangepast: wil je dit nog toepassen?
+    - waarschuwing geven als dingen zijn aangepast: wil je dit nog toepassen?                               Jeldrik
 13. schrijf javadocs                                                                                        Jeldrik
 14. Refactoren (kijken of alles volgens de MVC is gedaan, het weghalen van overbodige code etc.) 
 -minimale grootte scherm instellen

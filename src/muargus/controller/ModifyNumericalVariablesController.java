@@ -15,7 +15,7 @@ import muargus.view.ModifyNumericalVariablesView;
 
 /**
  *
- * @author ambargus
+ * @author Statistics Netherlands
  */
 public class ModifyNumericalVariablesController extends ControllerBase<ModifyNumericalVariables> {
 

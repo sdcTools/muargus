@@ -150,7 +150,7 @@ public class GlobalRecodeView extends DialogBase<GlobalRecodeController> {
 //        JFileChooser fileChooser = new JFileChooser();
 //        String hs = SystemUtils.getRegString("general", "datadir", "");
 //        if (!hs.equals("")){
-//            File file = new File(hs); 
+//            File file = new File(hs);
 //            fileChooser.setCurrentDirectory(file);
 //        }
 //        fileChooser.setDialogTitle("Open Codelist File");
@@ -614,9 +614,9 @@ public class GlobalRecodeView extends DialogBase<GlobalRecodeController> {
 //        fileChooser.setFileFilter(new FileNameExtensionFilter("Codelist (*.cdl)", "cdl"));
 //        String hs = SystemUtils.getRegString("general", "datadir", "");
 //        if (!hs.equals("")){
-//            File file = new File(hs); 
+//            File file = new File(hs);
 //            fileChooser.setCurrentDirectory(file);
-//        }        
+//        }
 //        fileChooser.showOpenDialog(null);
 //
 //        String filename;
@@ -761,10 +761,6 @@ public class GlobalRecodeView extends DialogBase<GlobalRecodeController> {
     private void missing_1_newTextFieldCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_missing_1_newTextFieldCaretUpdate
         getSelectedRecode().setMissing_1_new(this.missing_1_newTextField.getText());
     }//GEN-LAST:event_missing_1_newTextFieldCaretUpdate
-
-    private void globalRecodeRecodeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_globalRecodeRecodeButtonActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_globalRecodeRecodeButtonActionPerformed
 
     private void missing_2_newTextFieldCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_missing_2_newTextFieldCaretUpdate
         getSelectedRecode().setMissing_2_new(this.missing_2_newTextField.getText());
