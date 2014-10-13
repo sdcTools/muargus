@@ -94,52 +94,6 @@ public class GlobalRecodeController extends ControllerBase<GlobalRecode> {
 //        }
 //        view.setCodelistText(filename);
 //    }
-    /**
-     * Reads the global recode file. Sets the recode codes, new missing values
-     * and the codelist file.
-     *
-     * @param path String containing the path name of the global recode file.
-     * @param recode RecodeMu containing the information on the variable for
-     * which the global recode file will be read.
-     * @throws ArgusException Throws an ArgusException when an error occurs
-     * during reading.
-     */
-    public void read(String path, RecodeMu recode) throws ArgusException {
-        recode.setMissing_1_new("");
-        recode.setMissing_2_new("");
-        recode.setCodeListFile("");
-        File file = new File(path);
-        try {
-            BufferedReader reader = new BufferedReader(new FileReader(file));
-            StringBuilder sb = new StringBuilder();
-            String line;
-            Tokenizer tokenizer = new Tokenizer(reader);
-            while ((line = tokenizer.nextLine()) != null) {
-                String token = tokenizer.nextToken();
-                if (!token.startsWith("<")) {
-                    sb.append(line);
-                    sb.append(System.lineSeparator());
-                } else if ("<MISSING>".equals(token)) {
-                    token = tokenizer.nextToken();
-                    recode.setMissing_1_new(token);
-                    token = tokenizer.nextToken();
-                    if (token != null) {
-                        recode.setMissing_2_new(token);
-                    }
-                } else if ("<CODELIST>".equals(token)) {
-                    recode.setCodeListFile(tokenizer.nextToken());
-                } else {
-                    throw new ArgusException("Error reading file, invalid token: " + token);
-                }
-            }
-            reader.close();
-            recode.setGrcText(sb.toString());
-            recode.setGrcFile(path);
-        } catch (IOException ex) {
-            throw new ArgusException("Error during reading file");
-        }
-
-    }
 
     /**
      * Apply's the recoding on the selected variable.

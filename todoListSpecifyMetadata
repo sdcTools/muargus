@@ -6,8 +6,7 @@ Nog te doen:                                                                    
 
 Release 2:
 
-14. generate knop 
-15. inlezen free format with data
+14. generate knop SPSS
 16. inlezen SPSS
 18. code opschonen
 19. javadoc schrijven voor de methodes                                                                      Jeldrik
@@ -65,5 +64,6 @@ Gedaan:                                                                         
     Alleen missing 2 invullen mag ook niet
 22. detectie of codelijst-file wel bestaat aanpassen                                                          Anne     
 23. geen missing bij niet-categoriale variabelen: a la oude Mu (spaties) of foutmelding                      Anne
+15. inlezen free format with data                                                                             Anne
 
 

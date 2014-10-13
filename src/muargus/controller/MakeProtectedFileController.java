@@ -7,13 +7,13 @@ package muargus.controller;
 import argus.model.ArgusException;
 import java.io.File;
 import java.util.ArrayList;
+import muargus.io.MetaWriter;
 import muargus.model.MetadataMu;
 import muargus.model.Combinations;
 import muargus.model.MicroaggregationSpec;
 import muargus.model.ProtectedFile;
 import muargus.model.RankSwappingSpec;
 import muargus.model.ReplacementSpec;
-import muargus.model.RiskSpecification;
 import muargus.model.TableMu;
 import muargus.model.VariableMu;
 import muargus.view.MakeProtectedFileView;
@@ -110,9 +110,9 @@ public class MakeProtectedFileController extends ControllerBase<ProtectedFile> {
         
         getCalculationService().fillSafeFileMetadata();
         MetadataMu safeMetadata = this.metadata.getCombinations().getProtectedFile().getSafeMeta();
-        File file = new File(safeMetadata.getFileNames().getMetaFileName());
         try {
-            safeMetadata.write(file, false);
+            MetaWriter.writeRda(safeMetadata.getFileNames().getMetaFileName(), 
+                    safeMetadata, false);
             this.fileCreated = true;
         }
         catch (ArgusException ex) {

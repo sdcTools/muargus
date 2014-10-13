@@ -5,15 +5,18 @@
  */
 package muargus;
 
+import argus.model.ArgusException;
 import argus.utils.Tokenizer;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.StringReader;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import muargus.io.MetaReader;
 import muargus.model.MetadataMu;
 import muargus.model.MicroaggregationSpec;
 import muargus.model.ModifyNumericalVariablesSpec;
@@ -204,8 +207,8 @@ public class HTMLReportWriter {
                         addChildElement(tr, "th", "Code");
                         addChildElement(tr, "th", "Categories");
                         try {
-                            File file = new File(r.getGrcFile());
-                            BufferedReader reader = new BufferedReader(new FileReader(file));
+                            MetaReader.readGrc(r.getGrcFile(), r);
+                            BufferedReader reader = new BufferedReader(new StringReader(r.getGrcText()));
                             Tokenizer tokenizer = new Tokenizer(reader);
                             String line;
                             while ((line = tokenizer.nextLine()) != null && !line.substring(0, 1).equals("<")) {
@@ -222,7 +225,7 @@ public class HTMLReportWriter {
                                 addChildElement(tr, "td", "Missing 2");
                             }
 
-                        } catch (FileNotFoundException ex) {
+                        } catch (ArgusException ex) {
                             //Logger.getLogger(HTMLReportWriter.class.getName()).log(Level.SEVERE, null, ex);
                         }
                     } else if (r.isTruncated()) {

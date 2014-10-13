@@ -21,6 +21,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import muargus.HTMLReportWriter;
 import muargus.MuARGUS;
+import muargus.io.MetaReader;
 import muargus.model.CodeInfo;
 import muargus.model.Combinations;
 import muargus.model.MetadataMu;
@@ -131,8 +132,8 @@ public class MainFrameController {
         MetadataMu newMetadata = new MetadataMu();
         newMetadata.setFileNames(filenames);
         try {
-            newMetadata.readMetadata();
-        } catch (Exception ex) {
+            MetaReader.readRda(newMetadata);
+        } catch (ArgusException ex) {
             this.view.showErrorMessage(new ArgusException("Error reading metadata file: " + ex.getMessage()));
             return;
         }
@@ -229,7 +230,7 @@ public class MainFrameController {
                 }
                 if (!"".equals(codelistFile)) {
                     try {
-                        HashMap<String, String> codelist = readCodelist(codelistFile);
+                        HashMap<String, String> codelist = MetaReader.readCodelist(codelistFile, this.metadata);
                         for (CodeInfo codeInfo : variable.getCodeInfos()) {
                             if (codelist.containsKey(codeInfo.getCode().trim())) {
                                 codeInfo.setLabel(codelist.get(codeInfo.getCode().trim()));
@@ -313,41 +314,6 @@ public class MainFrameController {
 //        return missingCodelists;
 //    }
 
-    private HashMap<String, String> readCodelist(String path) throws ArgusException {
-        BufferedReader reader = null;
-        try {
-            File file = new File(path);
-            if (!file.isAbsolute()) {
-                File dir = new File(this.metadata.getFileNames().getMetaFileName()).getParentFile();
-                file = new File(dir, path);
-            }
-            reader = new BufferedReader(new FileReader(file));
-        } catch (FileNotFoundException ex) {
-            System.out.println("file not found");
-            //logger.log(Level.SEVERE, null, ex);
-            throw new ArgusException(String.format("Codelist %s not found", path));
-        }
-        HashMap<String, String> codelist = new HashMap<>();
-        try {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                String[] parts = line.split(",");
-                if (parts.length > 1) {
-                    codelist.put(parts[0].trim(), StrUtils.unQuote(parts[1].trim()));
-                }
-            }
-            reader.close();
-        } catch (Exception ex) {
-            //logger.log(Level.SEVERE, null, ex);
-            try {
-                reader.close();
-            } catch (Exception e) {
-                ;
-            }
-            throw new ArgusException(String.format("Error in codelist file (%s)", path));
-        }
-        return codelist;
-    }
 
     /**
      *

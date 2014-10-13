@@ -2,16 +2,7 @@ package muargus.model;
 
 import argus.model.ArgusException;
 import argus.model.DataFilePair;
-import argus.utils.StrUtils;
-import argus.utils.Tokenizer;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.logging.Level;
@@ -38,8 +29,6 @@ public class MetadataMu {
     private boolean householdData = false;
     private String separator = ";";
 
-    private BufferedReader reader;
-    private Tokenizer tokenizer;
     private final ArrayList<VariableMu> variables;
     private DataFilePair filenames;
     private Combinations combinations;
@@ -169,107 +158,6 @@ public class MetadataMu {
 //        System.out.println(variables.get(1).getName());
 //        System.out.println(cloneData.get(1).getName());
 //    }
-    /**
-     * Reads the entire metafile and initalizes the variables. This method reads
-     * the metadatafile line for line. It makes a new variable object for each
-     * variable it finds and provides the relevant information of this variable
-     * (is it recodable, what is it's ID_level etc).
-     *
-     * @throws ArgusException Throws an ArgusException when the file cannot be
-     * read.
-     */
-    public void readMetadata() throws ArgusException {
-        if (this.filenames.getMetaFileName().length() == 0) {
-            return;
-        }
-
-        dataFileType = DATA_FILE_TYPE_FIXED;
-        VariableMu variable = null;
-
-        try {
-            reader = new BufferedReader(new FileReader(new File(this.filenames.getMetaFileName())));
-        } catch (FileNotFoundException ex) {
-            System.out.println("file not found");
-            logger.log(Level.SEVERE, null, ex);
-            throw new ArgusException("Metadata file not found");
-        }
-
-        tokenizer = new Tokenizer(reader);
-        while (tokenizer.nextLine() != null) {
-            String value = tokenizer.nextToken();
-
-            if (!value.substring(0, 1).equals("<")) {
-                variable = new VariableMu();
-                variable.setRecodable(false);
-                variable.setName(tokenizer.getValue());
-                variables.add(variable);
-                if (getDataFileType() == DATA_FILE_TYPE_FIXED) {
-                    variable.setStartingPosition(tokenizer.nextToken());
-                } else {
-                    variable.setStartingPosition("1");  //not relevant, but must be >0
-                }
-                variable.setVariableLength(Integer.parseInt(tokenizer.nextToken()));
-                variable.setMissing(0, tokenizer.nextToken());
-                variable.setMissing(1, tokenizer.nextToken());
-            } else if (variable == null) {
-                switch (value) {
-                    case "<SEPARATOR>":
-                        setDataFileType(DATA_FILE_TYPE_FREE);
-                        setSeparator(tokenizer.nextToken());
-                        break;
-                    case "<SPSS>":
-                        setDataFileType(DATA_FILE_TYPE_SPSS);
-                        break;
-                    case "<NAMESINFRONT>":
-                        setDataFileType(DATA_FILE_TYPE_FREE_WITH_META);
-                        break;
-                }
-            } else {
-                switch (value) {
-                    case "<RECODEABLE>":
-                    case "<RECODABLE>":
-                        variable.setRecodable(true);
-                        break;
-                    case "<CODELIST>":
-                        variable.setCodelist(true);
-                        variable.setCodeListFile(tokenizer.nextToken());
-                        break;
-                    case "<IDLEVEL>":
-                        variable.setIdLevel(tokenizer.nextToken());
-                        break;
-                    case "<TRUNCABLE>":
-                        variable.setTruncable(true);
-                        break;
-                    case "<NUMERIC>":
-                        variable.setNumeric(true);
-                        break;
-                    case "<DECIMALS>":
-                        variable.setDecimals(tokenizer.nextToken());
-                        break;
-                    case "<WEIGHT>":
-                        variable.setWeight(true);
-                        break;
-                    case "<HOUSE_ID>":
-                        variable.setHouse_id(true);
-                        break;
-                    case "<HOUSEHOLD>":
-                        variable.setHousehold(true);
-                        break;
-                    case "<SUPPRESSWEIGHT>":
-                        variable.setSuppressweight(tokenizer.nextToken());
-                        break;
-                    case "<RELATED>":
-                        variable.setRelatedVariableName(tokenizer.nextToken());
-                        break;
-                    default:
-                        break;
-                }
-            }
-        }
-        tokenizer.close();
-
-        linkRelatedVariables();
-    }
 
 //    /**
 //     *
@@ -279,50 +167,6 @@ public class MetadataMu {
 //    private void writeVariable(Writer w, VariableMu variable) {
 //
 //    }
-    /**
-     * Writes the metadata to a .rda file when a BufferdWritier has been
-     * initialized.
-     *
-     * @param w BufferedWriter already initiated with the neede file.
-     * @param all Boolean variable stating whether all metadata needs to be
-     * written. When writing the safe metadata, the suppressionweight is for
-     * example not necessary.
-     * @throws IOException Throws an IOException when an error occurs during
-     * writing.
-     */
-    private void write(BufferedWriter w, boolean all) throws IOException {
-        try (
-                PrintWriter writer = new PrintWriter(w)) {
-            if (dataFileType == DATA_FILE_TYPE_FREE) {
-                writer.println("   <SEPARATOR> " + StrUtils.quote(separator));
-            }
-            if (dataFileType == DATA_FILE_TYPE_SPSS) {
-                writer.println("   <SPSS>");
-            }
-            for (VariableMu variable : this.variables) {
-                variable.write(writer, this.dataFileType, all);
-            }
-        }
-    }
-
-    /**
-     * Writes the metadata to a .rda file.
-     *
-     * @param file File containing the metadata.
-     * @param all all metadata wegschrijven ja of nee? --> safe metadata neemt
-     * niet alles mee (suppressionweight)
-     * @throws ArgusException Throws an ArgusException when an error occurs
-     * during writing.
-     */
-    public void write(File file, boolean all) throws ArgusException {
-        try {
-            write(new BufferedWriter(new FileWriter(file)), all);
-            this.filenames = new DataFilePair(this.filenames.getDataFileName(), file.getPath());
-        } catch (IOException ex) {
-            logger.log(Level.SEVERE, null, ex);
-            throw new ArgusException("Error writing to file. Error message: " + ex.getMessage());
-        }
-    }
 
     /**
      * Links variables to each other if this is specified.
@@ -330,7 +174,7 @@ public class MetadataMu {
      * @throws ArgusException Throws an ArgusException when a variable is
      * related to a non-specified variable.
      */
-    private void linkRelatedVariables() throws ArgusException {
+    public void linkRelatedVariables() throws ArgusException {
         for (VariableMu var : variables) {
             var.linkRelatedVariable(variables);
         }
