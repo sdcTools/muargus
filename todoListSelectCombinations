@@ -12,8 +12,7 @@ Release 2
 6. table: 
     - geselecteerde rij visable                                                                                     Jeldrik
     - kolommen klikken en sorteren (RowSorter: http://docs.oracle.com/javase/7/docs/api/javax/swing/RowSorter.html) Anne
-
-19. javadoc schrijven voor de methodes   
+19. javadoc schrijven voor de methodes                                                                              Jeldrik
 23. dll crasht soms: proberen te reproduceren --> als programma lang aan staat??    
 
 -minimale grootte scherm instellen
