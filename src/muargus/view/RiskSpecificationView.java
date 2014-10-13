@@ -47,6 +47,9 @@ public class RiskSpecificationView extends DialogBase<RiskSpecificationControlle
         setLocationRelativeTo(null);
     }
 
+    /**
+     * Shows the Histogram.
+     */
     private void showChart() {
         if (this.jPanelChart.getComponentCount() > 0) {
             this.jPanelChart.remove(this.cp);
@@ -61,6 +64,12 @@ public class RiskSpecificationView extends DialogBase<RiskSpecificationControlle
 
     }
 
+    /**
+     * Sets the components (in)visible depending whether the data is household
+     * data.
+     *
+     * @param isHousehold Boolean indicating whether the data is household data.
+     */
     private void setHouseholdComponents(boolean isHousehold) {
         this.reidentCalcButton.setVisible(!isHousehold);
         this.reidentThresholdTextField.setVisible(!isHousehold);
@@ -104,6 +113,11 @@ public class RiskSpecificationView extends DialogBase<RiskSpecificationControlle
         this.riskTable = table;
     }
 
+    /**
+     * Gets the number of decimals that will be shown.
+     *
+     * @return Integer containing the number of decimals.
+     */
     private int getDecimals() {
         return Integer.parseInt(this.decimalsCombo.getSelectedItem().toString());
     }
@@ -119,7 +133,7 @@ public class RiskSpecificationView extends DialogBase<RiskSpecificationControlle
     }
 
     /**
-     *
+     * Updates the values.
      */
     private void updateValues() {
         this.maxRiskTextField.setText(formatDouble(this.model.getMaxRisk()));
@@ -131,6 +145,9 @@ public class RiskSpecificationView extends DialogBase<RiskSpecificationControlle
         this.calculating = false;
     }
 
+    /**
+     * Sets the position of the slider.
+     */
     private void setSliderPosition() {
         double value = this.riskSlider.getMaximum() * Math.log(this.model.getRiskThreshold() / this.model.getMinRisk())
                 / Math.log(this.model.getMaxRisk() / this.model.getMinRisk());
@@ -138,8 +155,9 @@ public class RiskSpecificationView extends DialogBase<RiskSpecificationControlle
     }
 
     /**
-     * 
-     * @param cpe 
+     * Receives notification of a chart progress event.
+     *
+     * @param cpe ChartProgressEvent
      */
     @Override
     public void chartProgress(ChartProgressEvent cpe) {
@@ -157,6 +175,12 @@ public class RiskSpecificationView extends DialogBase<RiskSpecificationControlle
         }
     }
 
+    /**
+     * Change the histogram to cumulative/normal.
+     *
+     * @param cumulative Boolean indicating whether the cumulative histogram
+     * will be shown.
+     */
     private void showCumulative(boolean cumulative) {
         getController().fillModelHistogramData(cumulative);
         showChart();
