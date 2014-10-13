@@ -22,10 +22,10 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
 
     private ArrayList<VariableMu> related;
     private final String[] idLevel = {"0", "1", "2", "3", "4", "5"};
-    private final String[] format = {"Fixed format", "Free format", "Free with meta", "SPSS system file"}; 
+    private final String[] format = {"Fixed format", "Free format", "Free with meta", "SPSS system file"};
     private String[] suppressionWeight;
-    private String separatorTemp;
-    private int dataFileTypeTemp;
+    private String separatorTemp;// TODO: uitzoeken of deze nodig is.
+    private int dataFileTypeTemp;// TODO: uitzoeken of deze nodig is.
     private final VariableMu dummyVar = new VariableMu();
     private final java.awt.Frame parent;
 
@@ -46,7 +46,7 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
         this.variablesList.setSelectionModel(new SingleListSelectionModel());
         this.variablesList.setCellRenderer(new VariableNameCellRenderer());
         this.relatedToComboBox.setRenderer(new VariableNameCellRenderer());
-        
+
     }
 
     /**
@@ -94,7 +94,7 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
         if (this.variableListModel.getSize() > 0) {
             this.variablesList.setSelectedIndex(0);
         }
-        
+
         calculateButtonStates();
 
         if (getMetadata().getVariables().isEmpty()) {
@@ -103,6 +103,11 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
         this.variablesList.requestFocus();
     }
 
+    /**
+     * Method setting the values for when the SPSS mode is set.
+     *
+     * @param b Boolean indicating whether the SPSS mode is set.
+     */
     private void setSpss(boolean b) {
         this.dataFileTypeTemp = MetadataMu.DATA_FILE_TYPE_SPSS;
         this.separatorLabel.setVisible(!b);
@@ -121,6 +126,11 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
         this.variablesComboBox.setSelectedIndex(this.dataFileTypeTemp - 1);
     }
 
+    /**
+     * Method setting the values for when the SPSS mode is set or not.
+     *
+     * @param b Boolean indicating whether the SPSS mode is set.
+     */
     private void setFixed() {
         setSpss(false);
         dataFileTypeTemp = MetadataMu.DATA_FILE_TYPE_FIXED;
@@ -135,6 +145,9 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
         }
     }
 
+    /**
+     * Method setting the values for when free format data is used.
+     */
     private void setFree() {
         setSpss(false);
         dataFileTypeTemp = MetadataMu.DATA_FILE_TYPE_FREE;
@@ -149,6 +162,11 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
         }
     }
 
+    /**
+     * Method setting the values for when free format data whith metadata is
+     * used. In free with meta data, the first row of the data file contains the
+     * variable names.
+     */
     private void setFreeWithMeta() {
         setSpss(false);
         dataFileTypeTemp = MetadataMu.DATA_FILE_TYPE_FREE_WITH_META;
@@ -163,6 +181,9 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
         }
     }
 
+    /**
+     * Updates the values.
+     */
     private void updateValues() {
         VariableMu selected = getSelectedVariable();
         this.nameTextField.setText(selected.getName());
@@ -203,6 +224,10 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
         }
     }
 
+    /**
+     * Sets the button states enabled if it is required for the selected
+     * data-format.
+     */
     private void calculateButtonStates() {
         int index = this.variablesList.getSelectedIndex();
         this.deleteButton.setEnabled(index != -1);
@@ -212,6 +237,10 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
         this.codelistfileTextField.setEnabled(this.codelistfileCheckBox.isSelected());
     }
 
+    /**
+     * Gets the selected variable.
+     * @return VariableMu instance of the selected variable.
+     */
     private VariableMu getSelectedVariable() {
         VariableMu selected = (VariableMu) this.variablesList.getSelectedValue();
         return selected == null ? this.dummyVar : selected;

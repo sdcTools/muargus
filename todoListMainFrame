@@ -1,8 +1,8 @@
 niet behandelde opmerkingen/vragen:
-- willen we explore file apart trekken?
-10. wat doen met knoppen tijdens achtergrondprocessen?
-- willen we de file paths opslaan als String of als File? Volgens mij gebeurt het nu overal als String.
-11. de extensies bij open microdata komen niet overeen met oude mu: wat moeten we doen?
+
+10. wat doen met knoppen tijdens achtergrondprocessen? --> ANCO
+
+11. de extensies bij open microdata komen niet overeen met oude mu: wat moeten we doen? (.csv)
 
 
 Nog te doen:                                                                                                    Mee bezig:
@@ -13,11 +13,11 @@ Release 2:
 2. javadoc schrijven voor de methodes                                                                           Jeldrik
 4. kolommen klikken en sorteren (RowSorter: http://docs.oracle.com/javase/7/docs/api/javax/swing/RowSorter.html)
 8. kijken welke schermen wel en welke niet gemaximaliseerd mogen worden.
-9. warning messages checken (wat wordt hiermee bedoeld?) --> of ze duidelijk zijn qua taal en consistent
--minimale grootte scherm instellen
+
 
 Release 3+:
-
+9. warning messages checken (wat wordt hiermee bedoeld?) --> of ze duidelijk zijn qua taal en consistent
+-minimale grootte scherm instellen
 
 
 
@@ -32,7 +32,8 @@ Gedaan:                                                                         
 6. bug: taakbalk kan versleept worden maar dat wil ik niet													Anne
 7. kolommen met cijfers rechts uitlijnen                                                                    Anne
 3. als op variabele dubbel wordt geklikt opent global recode en is de variabele geselecteerd die veranderd is.
-
+- willen we de file paths opslaan als String of als File? Volgens mij gebeurt het nu overal als String.
 
 wishlish:
 - icoontjes achtergrond mooi maken
+- willen we explore file apart trekken?

@@ -10,17 +10,17 @@ Nog te doen:                                                                    
 Release 2
 
 6. table: 
-    - geselecteerde rij visable 
-    - kolommen klikken en sorteren (RowSorter: http://docs.oracle.com/javase/7/docs/api/javax/swing/RowSorter.html)
-12. setTableRiskModelButton
-    - risk model zetten voor meerder tabellen tegelijkertijd mogelijk maken
+    - geselecteerde rij visable                                                                                     Jeldrik
+    - kolommen klikken en sorteren (RowSorter: http://docs.oracle.com/javase/7/docs/api/javax/swing/RowSorter.html) Anne
+
 19. javadoc schrijven voor de methodes   
 23. dll crasht soms: proberen te reproduceren --> als programma lang aan staat??    
 
 -minimale grootte scherm instellen
 
 Release 3+:
-
+12. setTableRiskModelButton
+    - risk model zetten voor meerder tabellen tegelijkertijd mogelijk maken
 
 
 Behandelde opmerkingen/vragen:                                                                                  Antwoord:

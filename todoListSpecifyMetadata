@@ -1,5 +1,8 @@
 niet behandelde opmerkingen/vragen:
 24. inhoudelijke fout in ingelezen metadata: wat doen? knoppen uitzetten?
+- (prioriteit = laag) Bij de model class wordt bij de private method setSPSS ene boolean meegegeven maar bij de andere
+  zoals setFixed wordt dit niet gedaan omdat het niet hoeft. Anne, vindt jij dit een mooie manier of 
+  heb je een idee hoe het mooier kan? 
 
 Nog te doen:                                                                                                Mee bezig:
 
