@@ -57,7 +57,6 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
         this.separatorTemp = getMetadata().getSeparator();
         this.dataFileTypeTemp = getMetadata().getDataFileType();
         this.suppressionWeight = new String[101];
-        this.dummyVar = new VariableMu();
 
         // adds the variables
         this.variableListModel = new DefaultListModel<>();
@@ -129,7 +128,7 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
         separatorTextField.setVisible(false);
         startingPositionLabel.setVisible(true);
         startingPositionTextField.setVisible(true);
-        variablesComboBox.setSelectedIndex(0);
+        variablesComboBox.setSelectedIndex(this.dataFileTypeTemp - 1);
         generateButton.setEnabled(false);
         if (this.variableListModel.isEmpty()) {
             enableAllControls(false);
@@ -143,7 +142,7 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
         separatorTextField.setVisible(true);
         startingPositionLabel.setVisible(false);
         startingPositionTextField.setVisible(false);
-        variablesComboBox.setSelectedIndex(1);
+        variablesComboBox.setSelectedIndex(this.dataFileTypeTemp - 1);
         generateButton.setEnabled(false);
         if (this.variableListModel.isEmpty()) {
             enableAllControls(false);
@@ -157,7 +156,7 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
         separatorTextField.setVisible(true);
         startingPositionLabel.setVisible(false);
         startingPositionTextField.setVisible(false);
-        variablesComboBox.setSelectedIndex(2);
+        variablesComboBox.setSelectedIndex(this.dataFileTypeTemp - 1);
         generateButton.setEnabled(true);
         if (this.variableListModel.isEmpty()) {
             enableAllControls(false);
