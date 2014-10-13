@@ -10,14 +10,6 @@ import muargus.CalculationService;
 import argus.model.ArgusException;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-import java.text.NumberFormat;
-import java.text.ParseException;
-import java.util.ArrayList;
-import muargus.MuARGUS;
 import muargus.view.DialogBase;
 
 /**
