@@ -9,7 +9,7 @@ Nog te doen:                                                                    
  
 
 Release 2:
--   moet positionsTruncated een integer zijn? --> Ja                                                        Jeldrik
+
 
 
 Release 3+:
@@ -83,3 +83,4 @@ bug:  Als ik Region hercodeer, krijg ik netjes de nieuwe codes met bijbehorende 
 bug:  het programma crashed als je het bestand voor MARSTAT inleest en vervolgens op apply drukt            Anne
 bug dll: Bij (bijv) recode 1-2:3 crasht de dll                                                              Anne
     - minimale grootte scherm instellen                                                                     Jeldrik
+-   moet positionsTruncated een integer zijn? --> Ja                                                        Jeldrik

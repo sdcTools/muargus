@@ -134,7 +134,7 @@ public class GlobalRecodeController extends ControllerBase<GlobalRecode> {
         getCalculationService().truncate(recode, positions);
         recode.setRecoded(false);
         recode.setTruncated(true);
-        recode.setPositionsTruncated(Integer.toString(positions));
+        recode.setPositionsTruncated(positions);
     }
 
 }
