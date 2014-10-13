@@ -1,6 +1,6 @@
 niet behandelde opmerkingen/vragen:
 24. inhoudelijke fout in ingelezen metadata: wat doen? knoppen uitzetten?
-- (prioriteit = laag) Bij de model class wordt bij de private method setSPSS ene boolean meegegeven maar bij de andere
+- (prioriteit = laag) Bij de model class wordt bij de private method setSPSS een boolean meegegeven maar bij de andere
   zoals setFixed wordt dit niet gedaan omdat het niet hoeft. Anne, vindt jij dit een mooie manier of 
   heb je een idee hoe het mooier kan? 
 
@@ -10,13 +10,12 @@ Release 2:
 
 14. generate knop SPSS
 16. inlezen SPSS
-18. code opschonen
-19. javadoc schrijven voor de methodes                                                                      Jeldrik
--minimale grootte scherm instellen                                                                          Jeldrik
+
  
 
 Release 3+:
-
+- implement significant difference
+- TODO'tjes in MetadataMu
 
 Behandelde opmerkingen/vragen:                                                                              Antwoord:
 - wat is een goede default directory                                                                        Documenten
@@ -54,6 +53,8 @@ Gedaan:                                                                         
 13. options for argus + missing + truncation + codelijst: afhankelijk van categorical                       Anne
 17. wanneer tabellen gespecificeerd zijn en de metadata is aangepast, waarschuwing geven dat als men        Jeldrik 
     doorgaat, alle gespecificeerde tabellen opnieuw geinitialiseerd moeten worden
+18. code opschonen
+19. javadoc schrijven voor de methodes                                                                      Jeldrik
 20. Foutafhandeling wanneer geen schrijfrechten zijn (zie beschrijving hieronder)                           Anne
     Bug: wanneer iets wordt aangepast en vervolgens op Ok wordt geklikt, 
     dan wordt gevraagd of je het wilt opslaan. Als je het vervolgens wilt opslaan, dan kan je niet opslaan
@@ -67,5 +68,6 @@ Gedaan:                                                                         
 22. detectie of codelijst-file wel bestaat aanpassen                                                          Anne     
 23. geen missing bij niet-categoriale variabelen: a la oude Mu (spaties) of foutmelding                      Anne
 15. inlezen free format with data                                                                             Anne
+-minimale grootte scherm instellen                                                                          Jeldrik
 
 

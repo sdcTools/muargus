@@ -11,8 +11,9 @@ import muargus.model.VariableMu;
 import muargus.view.SpecifyMetadataView;
 
 /**
+ * Controller class of the SpecifyMetadata screen.
  *
- * @author ambargus
+ * @author Statistics Netherlands
  */
 public class SpecifyMetadataController extends ControllerBase<MetadataMu> {
 
@@ -21,9 +22,10 @@ public class SpecifyMetadataController extends ControllerBase<MetadataMu> {
     private static final Logger logger = Logger.getLogger(SpecifyMetadataController.class.getName());
 
     /**
+     * Constructor for the SpecifyMetadataController.
      *
-     * @param parentView
-     * @param metadata
+     * @param parentView the Frame of the mainFrame.
+     * @param metadata the orginal metadata.
      */
     public SpecifyMetadataController(java.awt.Frame parentView, MetadataMu metadata) {
         super.setView(new SpecifyMetadataView(parentView, true, this));
@@ -34,15 +36,22 @@ public class SpecifyMetadataController extends ControllerBase<MetadataMu> {
 
     /**
      * Generates meta from the Spss data file
-     * 
      */
     public void generateSpss() {
-            //TODO: spss
+        //TODO: spss
     }
-    
+
+    /**
+     * Generates metadata for the free with metadata file-type.
+     *
+     * @param metadata MetadataMu instance containing the metadata.
+     * @param defaultFieldLength Integer containing the default lenght of a
+     * field.
+     * @param defaultMissing String containing the default missing value.
+     */
     public void generateFromHeader(MetadataMu metadata, int defaultFieldLength, String defaultMissing) {
         try {
-            String[] fieldnames = MetaReader.readHeader(metadata.getFileNames().getDataFileName(), 
+            String[] fieldnames = MetaReader.readHeader(metadata.getFileNames().getDataFileName(),
                     metadata.getSeparator());
             metadata.getVariables().clear();
             for (String fieldname : fieldnames) {
@@ -53,20 +62,30 @@ public class SpecifyMetadataController extends ControllerBase<MetadataMu> {
                 }
                 metadata.getVariables().add(variable);
             }
-        }
-        catch (ArgusException ex) {
+        } catch (ArgusException ex) {
             getView().showErrorMessage(ex);
         }
     }
-    
+
+    /**
+     * Checks whether tables are specified.
+     *
+     * @return Boolean indicating whether tables are specified.
+     *
+     */
     private boolean areTablesSpecified() {
         Combinations combinations = getModel().getCombinations();
         return (combinations != null && combinations.getTables().size() > 0);
     }
+
     /**
-     *
+     * Actions performed when the Ok button is pressed. If changes have been
+     * made the new metadata will be verified, it will be checked whether the
+     * changes are significant and the user is asked if he/she wants to safe the
+     * new metadata..
      */
     public void ok() {
+        // verify the metadata if changes have been made.
         if (!getModel().equals(this.metadataClone)) {
             try {
                 this.metadataClone.verify();
@@ -75,59 +94,49 @@ public class SpecifyMetadataController extends ControllerBase<MetadataMu> {
                 return;
             }
 
+            /* check if the changes are significant. If they are significant 
+             ask the user if he/she wishes to continue. */
             String message;
             boolean significantDifference = areTablesSpecified() && getModel().significantDifference(this.metadataClone);
-            if (significantDifference)
-            {
+            if (significantDifference) {
                 message = "";
                 if (!getView().showConfirmDialog("Changing the Metadata will result in losing already specified tables.\n"
                         + "Do you wish to continue?")) {
                     return;
                 }
-                //this.metadata.setCombinations(null);
-                //Not necessary, since the clone doesnt contain the combinations
             } else {
                 this.metadataClone.setCombinations(getModel().getCombinations());
                 message = "Metadata has been changed. ";
             }
 
+            // set the metadata and ask if the user want to save the metadata.
             setModel(this.metadataClone);
             if (getView().showConfirmDialog(message + "Save changes to file?")) {
-                String filePath = getView().showFileDialog("Save ARGUS metadata", true, new String[] {"ARGUS metadata file (*.rda)|rda"});
+                String filePath = getView().showFileDialog("Save ARGUS metadata", true, new String[]{"ARGUS metadata file (*.rda)|rda"});
                 if (filePath != null) {
                     try {
                         MetaWriter.writeRda(filePath, getModel(), true);
-                    }
-                    catch (ArgusException ex) {
+                    } catch (ArgusException ex) {
                         getView().showErrorMessage(ex);
                     }
                 }
-
-//                JFileChooser fileChooser = new JFileChooser();
-//                String hs = SystemUtils.getRegString("general", "datadir", "");
-//                if (!hs.equals("")){
-//                    File file = new File(hs); 
-//                    fileChooser.setCurrentDirectory(file);
-//                }
-//                if (fileChooser.showSaveDialog(view) == JFileChooser.APPROVE_OPTION) {
-//                    try {
-//                        this.metadata.write(fileChooser.getSelectedFile(), true);
-//                    }
-//                    catch (ArgusException ex) {
-//                        JOptionPane.showMessageDialog(null, ex.getMessage());
-//                    }
-//                }
             }
         }
         this.getView().setVisible(false);
     }
 
+    /**
+     * Gets the metadata.
+     *
+     * @return MetadataMu containing the metadata.
+     */
     public MetadataMu getMetadata() {
         return getModel();
     }
 
     /**
-     *
+     * Cancels all changes made and closes the specifyMetadata screen after user
+     * confirmation.
      */
     public void cancel() {
         if (!getMetadata().equals(this.metadataClone)) {

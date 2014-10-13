@@ -24,8 +24,6 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
     private final String[] idLevel = {"0", "1", "2", "3", "4", "5"};
     private final String[] format = {"Fixed format", "Free format", "Free with meta", "SPSS system file"};
     private String[] suppressionWeight;
-    private String separatorTemp;// TODO: uitzoeken of deze nodig is.
-    private int dataFileTypeTemp;// TODO: uitzoeken of deze nodig is.
     private final VariableMu dummyVar = new VariableMu();
     private final java.awt.Frame parent;
 
@@ -54,8 +52,6 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
      */
     @Override
     public void initializeData() {
-        this.separatorTemp = getMetadata().getSeparator();
-        this.dataFileTypeTemp = getMetadata().getDataFileType();
         this.suppressionWeight = new String[101];
 
         // adds the variables
@@ -109,7 +105,7 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
      * @param b Boolean indicating whether the SPSS mode is set.
      */
     private void setSpss(boolean b) {
-        this.dataFileTypeTemp = MetadataMu.DATA_FILE_TYPE_SPSS;
+        getMetadata().setDataFileType(MetadataMu.DATA_FILE_TYPE_SPSS);
         this.separatorLabel.setVisible(!b);
         this.separatorTextField.setVisible(!b);
         this.startingPositionLabel.setVisible(!b);
@@ -123,7 +119,7 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
         this.codelistfileCheckBox.setEnabled(!b);
         this.codelistfileButton.setEnabled(!b);
         this.generateButton.setEnabled(!b);
-        this.variablesComboBox.setSelectedIndex(this.dataFileTypeTemp - 1);
+        this.variablesComboBox.setSelectedIndex(MetadataMu.DATA_FILE_TYPE_SPSS - 1);
     }
 
     /**
@@ -133,12 +129,12 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
      */
     private void setFixed() {
         setSpss(false);
-        dataFileTypeTemp = MetadataMu.DATA_FILE_TYPE_FIXED;
+        getMetadata().setDataFileType(MetadataMu.DATA_FILE_TYPE_FIXED);
         separatorLabel.setVisible(false);
         separatorTextField.setVisible(false);
         startingPositionLabel.setVisible(true);
         startingPositionTextField.setVisible(true);
-        variablesComboBox.setSelectedIndex(this.dataFileTypeTemp - 1);
+        variablesComboBox.setSelectedIndex(MetadataMu.DATA_FILE_TYPE_FIXED - 1);
         generateButton.setEnabled(false);
         if (this.variableListModel.isEmpty()) {
             enableAllControls(false);
@@ -150,12 +146,12 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
      */
     private void setFree() {
         setSpss(false);
-        dataFileTypeTemp = MetadataMu.DATA_FILE_TYPE_FREE;
+        getMetadata().setDataFileType(MetadataMu.DATA_FILE_TYPE_FREE);
         separatorLabel.setVisible(true);
         separatorTextField.setVisible(true);
         startingPositionLabel.setVisible(false);
         startingPositionTextField.setVisible(false);
-        variablesComboBox.setSelectedIndex(this.dataFileTypeTemp - 1);
+        variablesComboBox.setSelectedIndex(MetadataMu.DATA_FILE_TYPE_FREE - 1);
         generateButton.setEnabled(false);
         if (this.variableListModel.isEmpty()) {
             enableAllControls(false);
@@ -169,12 +165,12 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
      */
     private void setFreeWithMeta() {
         setSpss(false);
-        dataFileTypeTemp = MetadataMu.DATA_FILE_TYPE_FREE_WITH_META;
+        getMetadata().setDataFileType(MetadataMu.DATA_FILE_TYPE_FREE_WITH_META);
         separatorLabel.setVisible(true);
         separatorTextField.setVisible(true);
         startingPositionLabel.setVisible(false);
         startingPositionTextField.setVisible(false);
-        variablesComboBox.setSelectedIndex(this.dataFileTypeTemp - 1);
+        variablesComboBox.setSelectedIndex(MetadataMu.DATA_FILE_TYPE_FREE_WITH_META - 1);
         generateButton.setEnabled(true);
         if (this.variableListModel.isEmpty()) {
             enableAllControls(false);
@@ -205,7 +201,7 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
         this.missing2TextField.setText(selected.getMissing(1));
         this.startingPositionTextField.setText(Integer.toString(selected.getStartingPosition()));
         this.lengthTextField.setText(Integer.toString(selected.getVariableLength()));
-        this.separatorTextField.setText(this.separatorTemp);
+        this.separatorTextField.setText(getMetadata().getSeparator());
 
         this.related = new ArrayList<>();
         this.related.add(new VariableMu("--none--"));
@@ -813,7 +809,7 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
     }// </editor-fold>//GEN-END:initComponents
 
     private void generateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generateButtonActionPerformed
-        if (this.dataFileTypeTemp == MetadataMu.DATA_FILE_TYPE_SPSS) {
+        if (getMetadata().getDataFileType() == MetadataMu.DATA_FILE_TYPE_SPSS) {
             getController().generateSpss();
         } else {
             GenerateParameters generateView = new GenerateParameters(this.parent, true);
@@ -823,7 +819,6 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
                 getMetadata().setSeparator(generateView.getSeparator());
                 getController().generateFromHeader(getMetadata(),
                         generateView.getDefaultLength(), generateView.getDefaultMissing());
-                this.separatorTemp = generateView.getSeparator();
                 getMetadata().setDataFileType(MetadataMu.DATA_FILE_TYPE_FREE_WITH_META);
                 enableAllControls(!getMetadata().getVariables().isEmpty());
                 initializeData();
@@ -837,8 +832,6 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
         for (Object o : this.variableListModel.toArray()) {
             getMetadata().getVariables().add((VariableMu) o);
         }
-        getMetadata().setSeparator(this.separatorTemp);
-        getMetadata().setDataFileType(this.dataFileTypeTemp);
     }
 
     private void okButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okButtonActionPerformed
@@ -884,8 +877,8 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
 
     private void deleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteButtonActionPerformed
         int index = this.variablesList.getSelectedIndex();
-        // set the selection to an item that still exists after deletion
-        // if not done before removal the remove button will loose focus
+        /* set the selection to an item that still exists after deletion
+           if not done before removal the remove button will loose focus*/
         if (index == this.variableListModel.getSize() - 1) {
             this.variablesList.setSelectedIndex(index - 1);
         } else {
@@ -1054,7 +1047,7 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
     }//GEN-LAST:event_codelistfileTextFieldCaretUpdate
 
     private void separatorTextFieldCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_separatorTextFieldCaretUpdate
-        this.separatorTemp = this.separatorTextField.getText();
+        getMetadata().setSeparator(this.separatorTextField.getText());
     }//GEN-LAST:event_separatorTextFieldCaretUpdate
 
     private void identificationComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_identificationComboBoxActionPerformed

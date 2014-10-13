@@ -14,7 +14,7 @@ import java.util.logging.Logger;
  *
  * @author Statistics Netherlands
  */
-public class MetadataMu {
+public final class MetadataMu {
 
     private static final Logger logger = Logger.getLogger(MetadataMu.class.getName());
 
@@ -26,7 +26,6 @@ public class MetadataMu {
 
     //default
     private int dataFileType = DATA_FILE_TYPE_FIXED;
-    private boolean householdData = false;
     private String separator = ";";
 
     private final ArrayList<VariableMu> variables;
@@ -131,14 +130,11 @@ public class MetadataMu {
         this.recordCount = recordCount;
     }
 
-//    /**
-//     * Gets the ArrayList containing all the ReplacementFiles.
-//     *
-//     * @return ArrayList containing all the ReplacementFiles.
-//     */
-//    public ArrayList<ReplacementFile> getReplacementFiles() {
-//        return replacementFiles;
-//    }
+    /**
+     * Gets the ArrayList containing all the ReplacementFiles.
+     *
+     * @return ArrayList containing all the ReplacementFiles.
+     */
     public ArrayList<ReplacementSpec> getReplacementSpecs() {
         return this.replacementSpecs;
     }
@@ -274,18 +270,6 @@ public class MetadataMu {
 //        }
     }
 
-//    public void setMetadataFile(String metaFile){
-//        this.metadataFile = metaFile;
-//    }
-//    
-//    public String getMetadataFile(){      
-//        if (filenames.getMetaFileName() != null){
-//            metadataFile = getFileNames().getMetaFileName();
-//        } else if(metadataFile == null || metadataFile.equals(defaultmetaFile)){ 
-//            metadataFile = defaultmetaFile;
-//        }
-//        return metadataFile;
-//    }
     /**
      * Gets the type of the data file. There are four different data types:
      * fixed, free, free with meta and SPSS.
@@ -368,28 +352,6 @@ public class MetadataMu {
         return false;
     }
 
-//    // TODO: remove after testing
-//    /**
-//     * 
-//     */
-//    public void testPrintAll() {
-//        try {
-//            for (VariableMu v : variables) {
-//                System.out.println("Variable name: " + v.getName());
-//                System.out.println("\tRecodable is " + v.isRecodable());
-//                System.out.println("\tCodelist is " + v.isCodelist() + " " + v.getCodeListFile());
-//                System.out.println("\tIDLevel is " + v.getIdLevel());
-//                System.out.println("\tTruncable is " + v.isTruncable());
-//                System.out.println("\tNumeric is " + v.isNumeric());
-//                System.out.println("\tWeight is " + v.isWeight());
-//                System.out.println("\tHouse_ID is " + v.isHouse_id());
-//                System.out.println("\tHousehold is " + v.isHousehold());
-//                System.out.println("\tSuppressWeight is " + v.getSuppressweight());
-//                //System.out.println("\tRelatedVariable is " + v.getRelatedVariable().getName());
-//            }
-//        } catch (Exception e) {
-//        }
-//    }
     /**
      * Gets an ArrayList containing all the Variables in the Metadata.
      *
@@ -399,14 +361,6 @@ public class MetadataMu {
         return variables;
     }
 
-//    /**
-//     * Sets an ArrayList containing all the Variables in the Metadata.
-//     *
-//     * @param variables ArrayList containing all the Variables in the Metadata.
-//     */
-//    public void setVariables(ArrayList<VariableMu> variables) {
-//        this.variables = variables;
-//    }
     /**
      * Gets the hashcode. The hashcode is calculated as a addition of the
      * hashcodes from the relevant individual components: separator,
@@ -425,10 +379,6 @@ public class MetadataMu {
         return hash;
     }
 
-//    public static void main (String[] args) throws ArgusException{
-//        MetadataMu t = new MetadataMu();
-//        t.readMetadata(t.getMetadataFile());
-//    }
     /**
      * Returns if the metadata is equal to its clone.
      *
