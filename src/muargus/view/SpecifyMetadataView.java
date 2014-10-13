@@ -26,7 +26,8 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
     private String[] suppressionWeight;
     private String separatorTemp;
     private int dataFileTypeTemp;
-    private VariableMu dummyVar;
+    private final VariableMu dummyVar = new VariableMu();
+    private final java.awt.Frame parent;
 
     private DefaultListModel variableListModel;
 
@@ -39,6 +40,7 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
      */
     public SpecifyMetadataView(java.awt.Frame parent, boolean modal, SpecifyMetadataController controller) {
         super(parent, modal, controller);
+        this.parent = parent;
         initComponents();
         setLocationRelativeTo(null);
         this.variablesList.setSelectionModel(new SingleListSelectionModel());
@@ -122,35 +124,44 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
 
     private void setFixed() {
         setSpss(false);
-        this.dataFileTypeTemp = MetadataMu.DATA_FILE_TYPE_FIXED;
-        this.separatorLabel.setVisible(false);
-        this.separatorTextField.setVisible(false);
-        this.startingPositionLabel.setVisible(true);
-        this.startingPositionTextField.setVisible(true);
-        this.variablesComboBox.setSelectedIndex(this.dataFileTypeTemp - 1);
-        this.generateButton.setEnabled(false);
+        dataFileTypeTemp = MetadataMu.DATA_FILE_TYPE_FIXED;
+        separatorLabel.setVisible(false);
+        separatorTextField.setVisible(false);
+        startingPositionLabel.setVisible(true);
+        startingPositionTextField.setVisible(true);
+        variablesComboBox.setSelectedIndex(0);
+        generateButton.setEnabled(false);
+        if (this.variableListModel.isEmpty()) {
+            enableAllControls(false);
+        }
     }
 
     private void setFree() {
         setSpss(false);
-        this.dataFileTypeTemp = MetadataMu.DATA_FILE_TYPE_FREE;
-        this.separatorLabel.setVisible(true);
-        this.separatorTextField.setVisible(true);
-        this.startingPositionLabel.setVisible(false);
-        this.startingPositionTextField.setVisible(false);
-        this.variablesComboBox.setSelectedIndex(this.dataFileTypeTemp - 1);
-        this.generateButton.setEnabled(false);
+        dataFileTypeTemp = MetadataMu.DATA_FILE_TYPE_FREE;
+        separatorLabel.setVisible(true);
+        separatorTextField.setVisible(true);
+        startingPositionLabel.setVisible(false);
+        startingPositionTextField.setVisible(false);
+        variablesComboBox.setSelectedIndex(1);
+        generateButton.setEnabled(false);
+        if (this.variableListModel.isEmpty()) {
+            enableAllControls(false);
+        }
     }
 
     private void setFreeWithMeta() {
         setSpss(false);
-        this.dataFileTypeTemp = MetadataMu.DATA_FILE_TYPE_FREE_WITH_META;
-        this.separatorLabel.setVisible(true);
-        this.separatorTextField.setVisible(true);
-        this.startingPositionLabel.setVisible(false);
-        this.startingPositionTextField.setVisible(false);
-        this.variablesComboBox.setSelectedIndex(this.dataFileTypeTemp - 1);
-        this.generateButton.setEnabled(true);
+        dataFileTypeTemp = MetadataMu.DATA_FILE_TYPE_FREE_WITH_META;
+        separatorLabel.setVisible(true);
+        separatorTextField.setVisible(true);
+        startingPositionLabel.setVisible(false);
+        startingPositionTextField.setVisible(false);
+        variablesComboBox.setSelectedIndex(2);
+        generateButton.setEnabled(true);
+        if (this.variableListModel.isEmpty()) {
+            enableAllControls(false);
+        }
     }
 
     private void updateValues() {
@@ -774,7 +785,23 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
     }// </editor-fold>//GEN-END:initComponents
 
     private void generateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generateButtonActionPerformed
-        getController().generate();
+        if (this.dataFileTypeTemp == MetadataMu.DATA_FILE_TYPE_SPSS) {
+            getController().generateSpss();
+        } else {
+            GenerateParameters generateView = new GenerateParameters(this.parent, true);
+            generateView.setSeparator(this.separatorTextField.getText());
+            generateView.setVisible(true);
+            if (generateView.isOk()) {
+                getMetadata().setSeparator(generateView.getSeparator());
+                getController().generateFromHeader(getMetadata(),
+                        generateView.getDefaultLength(), generateView.getDefaultMissing());
+                this.separatorTemp = generateView.getSeparator();
+                getMetadata().setDataFileType(MetadataMu.DATA_FILE_TYPE_FREE_WITH_META);
+                enableAllControls(!getMetadata().getVariables().isEmpty());
+                initializeData();
+                updateValues();
+            }
+        }
     }//GEN-LAST:event_generateButtonActionPerformed
 
     private void updateMetadata() {
@@ -974,7 +1001,7 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
 
     private void lengthTextFieldCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_lengthTextFieldCaretUpdate
         try {
-            getSelectedVariable().setVariableLength(this.lengthTextField.getText());
+            getSelectedVariable().setVariableLength(Integer.parseInt(lengthTextField.getText()));
         } catch (NumberFormatException e) {
         }
     }//GEN-LAST:event_lengthTextFieldCaretUpdate

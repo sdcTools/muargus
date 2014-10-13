@@ -425,8 +425,8 @@ public class VariableMu {
      * 
      * @param variableLength 
      */
-    public void setVariableLength(String variableLength) {
-        this.variableLength = Integer.parseInt(variableLength);
+    public void setVariableLength(int variableLength) {
+        this.variableLength = variableLength;
     }
 
     /**

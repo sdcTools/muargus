@@ -505,7 +505,7 @@ public class CalculationService {
             c.GetVarProperties(index, startPos, nPos, nSuppressions, entropy, bandwidth, missing1, missing2, nOfCodes, nOfMissing);
             variable.setStartingPosition(Integer.toString(startPos[0]));
             delta += nPos[0] - variable.getVariableLength();
-            variable.setVariableLength(Integer.toString(nPos[0]));
+            variable.setVariableLength(nPos[0]);
             variable.setnOfSuppressions(nSuppressions[0]);
             variable.setEntropy(entropy[0]);
             variable.setBandwidth(bandwidth[0]);
