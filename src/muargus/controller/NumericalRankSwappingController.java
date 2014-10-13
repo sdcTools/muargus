@@ -20,7 +20,7 @@ import org.apache.commons.io.FileUtils;
 
 /**
  *
- * @author ambargus
+ * @author Statistics Netherlands
  */
 public class NumericalRankSwappingController extends ControllerBase<NumericalRankSwapping> {
     private final MetadataMu metadata;

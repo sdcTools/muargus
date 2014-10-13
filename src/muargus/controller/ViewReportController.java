@@ -22,7 +22,7 @@ import org.w3c.dom.Document;
 
 /**
  *
- * @author ambargus
+ * @author Statistics Netherlands
  */
 public class ViewReportController {
     
