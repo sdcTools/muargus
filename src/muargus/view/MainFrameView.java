@@ -38,6 +38,11 @@ public class MainFrameView extends javax.swing.JFrame {
         this.setLocationRelativeTo(null);
     }
 
+    /**
+     * 
+     * @param action
+     * @param enable 
+     */
     public void enableAction(MainFrameController.Action action, boolean enable) {
         switch (action) {
             case SpecifyMetadata:
@@ -78,6 +83,12 @@ public class MainFrameView extends javax.swing.JFrame {
         }
     }
 
+    /**
+     * 
+     * @param button
+     * @param item
+     * @param enable 
+     */
     private void doEnable(JButton button, JMenuItem item, boolean enable) {
         if (button != null) {
             button.setEnabled(enable);
@@ -87,22 +98,42 @@ public class MainFrameView extends javax.swing.JFrame {
         }
     }
 
+    /**
+     * 
+     * @return 
+     */
     public JTable getUnsafeCombinationsTable() {
         return unsafeCombinationsTable;
     }
 
+    /**
+     * 
+     * @return 
+     */
     public JTable getVariablesTable() {
         return variablesTable;
     }
 
+    /**
+     * 
+     * @param variableNameLabel 
+     */
     public void setVariableNameLabel(String variableNameLabel) {
         this.variableNameLabel.setText(variableNameLabel);
     }
 
+    /**
+     * 
+     * @param ex 
+     */
     public void showErrorMessage(ArgusException ex) {
         JOptionPane.showMessageDialog(this, ex.getMessage(), MuARGUS.getMessageTitle(), JOptionPane.ERROR_MESSAGE);
     }
 
+    /**
+     * 
+     * @param message 
+     */
     public void showMessage(String message) {
         JOptionPane.showMessageDialog(null, message, MuARGUS.getMessageTitle(), JOptionPane.INFORMATION_MESSAGE);
     }
@@ -709,6 +740,11 @@ public class MainFrameView extends javax.swing.JFrame {
         controller.openMicrodata();
     }//GEN-LAST:event_openMicrodataMenuItemActionPerformed
 
+    /**
+     * 
+     * @param filenames
+     * @return 
+     */
     public DataFilePair showOpenMicrodataDialog(DataFilePair filenames) {
         DialogOpenMicrodata dialog = new DialogOpenMicrodata(this, true);
         dialog.setDataFileNames(filenames.getDataFileName(), filenames.getMetaFileName());
@@ -718,6 +754,11 @@ public class MainFrameView extends javax.swing.JFrame {
         return null;
     }
 
+    /**
+     * 
+     * @param model
+     * @param selectedIndex 
+     */ 
     public void showUnsafeCombinations(Combinations model, int selectedIndex) {
         this.model = model;
         ArrayList<String> columnNames = new ArrayList<>();
@@ -819,7 +860,6 @@ public class MainFrameView extends javax.swing.JFrame {
         variablesTable.setModel(tableModel);
         variablesTable.setDefaultRenderer(Integer.class, new CodeTableCellRenderer());
         variablesTable.setDefaultRenderer(Object.class, new CodeTableCellRenderer());
-
     }
 
     private void exitMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitMenuItemActionPerformed

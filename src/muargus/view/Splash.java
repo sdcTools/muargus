@@ -1,6 +1,7 @@
 package muargus.view;
 
 /**
+ * Splash Screen.
  *
  * @author Statistics Netherlands
  */
@@ -8,6 +9,7 @@ public class Splash extends DialogBase {
 
     /**
      * Creates new form Splash
+     *
      * @param parent the Frame of the mainFrame.
      * @param modal boolean to set the modal status
      */

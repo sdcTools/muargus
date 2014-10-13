@@ -404,7 +404,7 @@ public class Combinations {
 
     /**
      * Gets the maximum number of tables whithout the user being asked if he/she
-     * would like to specy this ammount of tables and for which double tables
+     * would like to specify this ammount of tables and for which double tables
      * will be removed if the riskModel is active.
      *
      * @return Integer containing the maximum number of tables whithout the user
