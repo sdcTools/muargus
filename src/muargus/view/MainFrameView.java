@@ -3,13 +3,16 @@ package muargus.view;
 import argus.model.ArgusException;
 import argus.model.DataFilePair;
 import argus.view.DialogOpenMicrodata;
+import java.awt.Component;
 import java.util.ArrayList;
+import javax.swing.DefaultRowSorter;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
+import javax.swing.RowSorter;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import muargus.CodeTableCellRenderer;
@@ -428,7 +431,22 @@ public class MainFrameView extends javax.swing.JFrame {
             new String [] {
                 "Variable", "dim 1", ""
             }
-        ));
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Object.class, java.lang.Integer.class, java.lang.Integer.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, true, true
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         unsafeCombinationsTable.setShowHorizontalLines(false);
         unsafeCombinationsTable.setShowVerticalLines(false);
         unsafeCombinationsTable.getTableHeader().setReorderingAllowed(false);
@@ -760,6 +778,8 @@ public class MainFrameView extends javax.swing.JFrame {
      * @param selectedIndex 
      */ 
     public void showUnsafeCombinations(Combinations model, int selectedIndex) {
+        RowSorter sorter = this.unsafeCombinationsTable.getRowSorter();
+        this.unsafeCombinationsTable.setRowSorter(null);
         this.model = model;
         ArrayList<String> columnNames = new ArrayList<>();
         columnNames.add("Variable");
@@ -779,13 +799,32 @@ public class MainFrameView extends javax.swing.JFrame {
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return false;
             }
+            
+            @Override
+            public Class getColumnClass(int columnIndex) {
+                return columnIndex == 0 ? String.class : Integer.class;
+            }
         };
         this.unsafeCombinationsTable.setModel(tableModel);
 
-        DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
-        rightRenderer.setHorizontalAlignment(JLabel.RIGHT);
+        DefaultTableCellRenderer renderer = new DefaultTableCellRenderer() {
+
+            @Override
+            public Component getTableCellRendererComponent(JTable jtable, Object o, boolean bln, boolean bln1, int i, int i1) {
+                Object o2 = (new Integer(-1).equals(o) ? "-" : o);
+                return super.getTableCellRendererComponent(jtable, o2, bln, bln1, i, i1); //To change body of generated methods, choose Tools | Templates.
+            }
+            
+            @Override
+            public int getHorizontalAlignment() {
+                return JLabel.RIGHT;
+            }
+        };
+        
+        //renderer.setHorizontalAlignment(JLabel.RIGHT);
         for (int index = 1; index < columnNames.size(); index++) {
-            this.unsafeCombinationsTable.getColumn(String.format("dim %d", index)).setCellRenderer(rightRenderer);
+            
+            this.unsafeCombinationsTable.getColumn(String.format("dim %d", index)).setCellRenderer(renderer);
         }
 
         this.unsafeCombinationsTable.getSelectionModel().addListSelectionListener(
@@ -795,8 +834,12 @@ public class MainFrameView extends javax.swing.JFrame {
                         selectionChanged(evt);
                     }
                 });
-
-        this.unsafeCombinationsTable.getSelectionModel().setSelectionInterval(selectedIndex, selectedIndex);
+        int i = selectedIndex;
+        if (!sorter.getSortKeys().isEmpty()) {
+            this.unsafeCombinationsTable.setRowSorter(sorter);
+            i = this.unsafeCombinationsTable.convertRowIndexToView(selectedIndex);
+        }
+        this.unsafeCombinationsTable.getSelectionModel().setSelectionInterval(i, i);
     }
 
     private Object[] toObjectArray(Combinations combinations, VariableMu variable) {
@@ -805,7 +848,7 @@ public class MainFrameView extends javax.swing.JFrame {
         objArr[0] = variable.getName();
         for (int dimNr = 1; dimNr <= nDims; dimNr++) {
             objArr[dimNr] = combinations.getUnsafeCombinations().get(variable).length < dimNr
-                    ? "-" : Integer.toString(combinations.getUnsafeCombinations().get(variable)[dimNr - 1]);
+                    ? -1 : combinations.getUnsafeCombinations().get(variable)[dimNr - 1];
         }
         return objArr;
     }
@@ -879,7 +922,10 @@ public class MainFrameView extends javax.swing.JFrame {
     }//GEN-LAST:event_showTableCollectionMenuItemActionPerformed
 
     private void globalRecodeMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_globalRecodeMenuItemActionPerformed
-        controller.globalRecode(this.unsafeCombinationsTable.getSelectionModel().getMinSelectionIndex());
+        int j = this.unsafeCombinationsTable.getSelectionModel().getMinSelectionIndex();
+        if (j >= 0) {
+            controller.globalRecode(this.unsafeCombinationsTable.convertRowIndexToModel(j));
+        }
     }//GEN-LAST:event_globalRecodeMenuItemActionPerformed
 
     private void pramSpecificationMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pramSpecificationMenuItemActionPerformed
@@ -941,7 +987,8 @@ public class MainFrameView extends javax.swing.JFrame {
 
     private void unsafeCombinationsTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_unsafeCombinationsTableMouseClicked
         if (evt.getClickCount() == 2) {
-            controller.globalRecode(this.unsafeCombinationsTable.getSelectionModel().getMinSelectionIndex());
+            int j = this.unsafeCombinationsTable.getSelectionModel().getMinSelectionIndex();
+            controller.globalRecode(this.unsafeCombinationsTable.convertRowIndexToModel(j));
         }
     }//GEN-LAST:event_unsafeCombinationsTableMouseClicked
 
