@@ -154,11 +154,15 @@ public class Combinations {
         return riskSpecifications;
     }
 
+    /**
+     * Fills the model of the RiskSpecification screen with the tables.
+     */
     public void fillRiskSpecifications() {
         for (TableMu table : this.getTables()) {
             this.riskSpecifications.put(table, new RiskSpecification());
         }
     }
+
     /**
      * Gets the model class of the ModifyNumericalVariables screen.
      *
@@ -181,7 +185,8 @@ public class Combinations {
     /**
      * Gets the model class of the NumbericalMicroaggregation screen.
      *
-     * @param numerical Boolean indication whether there are numerical variables.
+     * @param numerical Boolean indication whether there are numerical
+     * variables.
      * @return Returns the NumbericalMicroaggregation model class.
      */
     public Microaggregation getMicroaggregation(boolean numerical) {
@@ -193,18 +198,19 @@ public class Combinations {
 
     /**
      * Creates a new instance of the NumbericalMicroaggregation class.
-     * @param numerical Boolean indication whether there are numerical variables.
+     *
+     * @param numerical Boolean indication whether there are numerical
+     * variables.
      */
     private void createMicroaggregation(boolean numerical) {
         if (numerical) {
             this.numericalMicroaggregation = new Microaggregation();
-        }
-        else {
+        } else {
             this.qualitativeMicroaggregation = new Microaggregation();
         }
-            
+
     }
-    
+
     /*
      * Gets the model class of the NumericalRankSwapping screen.
      *
@@ -230,7 +236,6 @@ public class Combinations {
 //    public void clearUnsafeCombinations() {
 //        this.unsafeCombinations = new HashMap<>();
 //    }
-
     /**
      * Gets an array of integers containing the unsafeCombinations for each
      * dimensions.
@@ -244,6 +249,7 @@ public class Combinations {
     public HashMap<VariableMu, int[]> getUnsafeCombinations() {
         return this.unsafeCombinations;
     }
+
     /**
      * Sets the number of unsafe combinations
      *
