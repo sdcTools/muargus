@@ -351,7 +351,6 @@
         <Component class="javax.swing.JLabel" name="decimalsLabel">
           <Properties>
             <Property name="text" type="java.lang.String" value="Decimals:"/>
-            <Property name="enabled" type="boolean" value="false"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JTextField" name="decimalsTextField">

@@ -441,7 +441,6 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
         });
 
         decimalsLabel.setText("Decimals:");
-        decimalsLabel.setEnabled(false);
 
         decimalsTextField.setEnabled(false);
         decimalsTextField.addCaretListener(new javax.swing.event.CaretListener() {

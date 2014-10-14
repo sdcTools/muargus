@@ -3,6 +3,7 @@ niet behandelde opmerkingen/vragen:
 - (prioriteit = laag) Bij de model class wordt bij de private method setSPSS een boolean meegegeven maar bij de andere
   zoals setFixed wordt dit niet gedaan omdat het niet hoeft. Anne, vindt jij dit een mooie manier of 
   heb je een idee hoe het mooier kan? 
+- decimals label en textfield zijn niet altijd goed enabled.
 
 Nog te doen:                                                                                                Mee bezig:
 
