@@ -844,8 +844,9 @@ public class MainFrameView extends javax.swing.JFrame {
                         }
                     });
         
-            this.unsafeCombinationsTable.getSelectionModel().setSelectionInterval(selectedIndex, selectedIndex);
         }
+        int i = this.unsafeCombinationsTable.convertRowIndexToView(selectedIndex);
+        this.unsafeCombinationsTable.getSelectionModel().setSelectionInterval(i, i);
     }
 
     private Object[] toObjectArray(Combinations combinations, VariableMu variable) {
