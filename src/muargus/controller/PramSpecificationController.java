@@ -127,20 +127,20 @@ public class PramSpecificationController extends ControllerBase<PramSpecificatio
      *
      * @param variableName
      */
-    public String[][] getCodesData(String variableName) {
+    public Object[][] getCodesData(String variableName) {
         PramVariableSpec pramVariableSpec = getSelectedPramVarSpec(variableName);
         VariableMu variable = pramVariableSpec.getVariable();
 
-        String[][] codesData = null;
+        Object[][] codesData = null;
         if (variable != null) {
             ArrayList<CodeInfo> codeInfo = variable.getCodeInfos();
             int numberOfCodes = codeInfo.size() - variable.getNumberOfMissings();
-            codesData = new String[numberOfCodes][3];
+            codesData = new Object[numberOfCodes][3];
 
             for (int i = 0; i < numberOfCodes; i++) {
                 codesData[i][0] = codeInfo.get(i).getCode();
                 codesData[i][1] = codeInfo.get(i).getLabel();
-                codesData[i][2] = Integer.toString(codeInfo.get(i).getPramProbability());
+                codesData[i][2] = codeInfo.get(i).getPramProbability();
             }
         }
         return codesData;

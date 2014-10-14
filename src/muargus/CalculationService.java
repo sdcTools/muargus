@@ -593,7 +593,7 @@ public class CalculationService {
                     int[] unsafeCount = new int[model.getMaxDimsInTables()];
                     boolean result = c.UnsafeVariable(varIndex + 1, nDims, unsafeCount);
                     if (!result) {
-                        throw new ArgusException("Error is UnsafeVariable");
+                        throw new ArgusException("Error in UnsafeVariable");
                     }
                     model.setUnsafeCombinations(variable, unsafeCount, nDims[0]);
 
