@@ -9,8 +9,15 @@ Nog te doen:                                                                    
 
 Release 2:
 
-14. generate knop SPSS
-16. inlezen SPSS
+16. inlezen SPSS:
+-als sav file, dan alleen SPSS mogelijk; als geen sav file, dan geen SPSS mogelijk
+-getVariablesFromSpss implementatie: metadatafile door spss laten genereren
+-getVariablesFromSpss implementatie: gegenereerde metadatafile lezen en SpssVariables creeren
+-Resultaten keuze SpssSelectVariablesView verwerken
+-Immuteerbare velden un-editable maken (naam, lengte, startposition, numerical, missings, ..)
+-Indien bestaande rda file wordt aangewezen: controle
+
+
 
  
 

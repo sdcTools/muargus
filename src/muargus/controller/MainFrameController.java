@@ -174,7 +174,7 @@ public class MainFrameController {
                 this.view, this.metadata);
         controller.showView();
         if (!this.metadata.getCombinations().getTables().isEmpty()) {
-            showUnsafeCombinations(0);
+            showUnsafeCombinations(0, true);
         }
     }
 
@@ -195,17 +195,17 @@ public class MainFrameController {
         GlobalRecodeController controller = new GlobalRecodeController(
                 this.view, this.metadata);
         controller.showView(selectedVariableIndex);
-        showUnsafeCombinations(controller.getSelectedVariableIndex());
+        showUnsafeCombinations(controller.getSelectedVariableIndex(), false);
     }
 
-    private void showUnsafeCombinations(int variableIndex) {
+    private void showUnsafeCombinations(int variableIndex, boolean redraw) {
         try {
             MuARGUS.getCalculationService().getVariableInfo();
             ArrayList<String> missingCodelists = addCodelistInfo();
             if (!missingCodelists.isEmpty()) {
                 view.showMessage(StrUtils.join("\n", missingCodelists));
             }
-            view.showUnsafeCombinations(this.metadata.getCombinations(), variableIndex);
+            view.showUnsafeCombinations(this.metadata.getCombinations(), variableIndex, redraw);
             organise();
         } catch (ArgusException ex) {
             view.showErrorMessage(ex);

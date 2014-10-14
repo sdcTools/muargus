@@ -119,13 +119,20 @@ public class PramSpecificationView extends DialogBase<PramSpecificationControlle
             selectedRow = 0;
         }
 
-        String[][] codesData = getController().getCodesData(getSelectedPramVariableSpec().getVariable().getName());
+        Object[][] codesData = getController().getCodesData(getSelectedPramVariableSpec().getVariable().getName());
 
         this.codesTableModel = new DefaultTableModel(codesData, this.model.getCodesColumnNames()) {
             @Override
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return false;
             }
+
+            @Override
+            public Class getColumnClass(int i) {
+                return i == 2 ? Integer.class : String.class;
+            }
+            
+            
         };
         this.codesTable.setModel(this.codesTableModel);
 
@@ -187,6 +194,7 @@ public class PramSpecificationView extends DialogBase<PramSpecificationControlle
 
         leftPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Variables"));
 
+        variablesTable.setAutoCreateRowSorter(true);
         variablesTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null},
@@ -233,6 +241,7 @@ public class PramSpecificationView extends DialogBase<PramSpecificationControlle
 
         CodesPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Codes"));
 
+        codesTable.setAutoCreateRowSorter(true);
         codesTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null},

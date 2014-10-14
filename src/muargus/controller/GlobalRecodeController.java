@@ -55,7 +55,7 @@ public class GlobalRecodeController extends ControllerBase<GlobalRecode> {
      * @return Integer containing the index of the selected variable.
      */
     public int getSelectedVariableIndex() {
-        return getGlobalRecodeView().getSelectedIndex();
+        return getGlobalRecodeView().getSelectedVariableIndex();
     }
 
     /**

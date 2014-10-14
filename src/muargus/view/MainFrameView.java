@@ -5,7 +5,6 @@ import argus.model.DataFilePair;
 import argus.view.DialogOpenMicrodata;
 import java.awt.Component;
 import java.util.ArrayList;
-import javax.swing.DefaultRowSorter;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JMenuItem;
@@ -15,6 +14,8 @@ import javax.swing.ListSelectionModel;
 import javax.swing.RowSorter;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
 import muargus.CodeTableCellRenderer;
 import muargus.MuARGUS;
 import muargus.controller.MainFrameController;
@@ -773,13 +774,12 @@ public class MainFrameView extends javax.swing.JFrame {
     }
 
     /**
-     * 
+     *
      * @param model
-     * @param selectedIndex 
-     */ 
-    public void showUnsafeCombinations(Combinations model, int selectedIndex) {
-        RowSorter sorter = this.unsafeCombinationsTable.getRowSorter();
-        this.unsafeCombinationsTable.setRowSorter(null);
+     * @param selectedIndex
+     * @param redraw
+     */
+    public void showUnsafeCombinations(Combinations model, int selectedIndex, boolean redraw) {
         this.model = model;
         ArrayList<String> columnNames = new ArrayList<>();
         columnNames.add("Variable");
@@ -794,51 +794,58 @@ public class MainFrameView extends javax.swing.JFrame {
             data[rowIndex] = toObjectArray(model, variable); //TODO mooier
             rowIndex++;
         }
-        DefaultTableModel tableModel = new DefaultTableModel(data, columnNames.toArray()) {
-            @Override
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return false;
+        if (!redraw) {
+            for (int varIndex = 0; varIndex < data.length; varIndex++) {
+                for (int dimIndex=1; dimIndex <= columnNames.size() - 1; dimIndex++) {
+                    this.unsafeCombinationsTable.getModel().setValueAt(data[varIndex][dimIndex],
+                            varIndex, dimIndex);
+                }
             }
-            
-            @Override
-            public Class getColumnClass(int columnIndex) {
-                return columnIndex == 0 ? String.class : Integer.class;
-            }
-        };
-        this.unsafeCombinationsTable.setModel(tableModel);
+        }
+        else {
+            DefaultTableModel tableModel = new DefaultTableModel(data, columnNames.toArray()) {
+                @Override
+                public boolean isCellEditable(int rowIndex, int columnIndex) {
+                    return false;
+                }
 
-        DefaultTableCellRenderer renderer = new DefaultTableCellRenderer() {
+                @Override
+                public Class getColumnClass(int columnIndex) {
+                    return columnIndex == 0 ? String.class : Integer.class;
+                }
+            };
+            this.unsafeCombinationsTable.setModel(tableModel);
 
-            @Override
-            public Component getTableCellRendererComponent(JTable jtable, Object o, boolean bln, boolean bln1, int i, int i1) {
-                Object o2 = (new Integer(-1).equals(o) ? "-" : o);
-                return super.getTableCellRendererComponent(jtable, o2, bln, bln1, i, i1); //To change body of generated methods, choose Tools | Templates.
+            DefaultTableCellRenderer renderer = new DefaultTableCellRenderer() {
+
+                @Override
+                public Component getTableCellRendererComponent(JTable jtable, Object o, boolean bln, boolean bln1, int i, int i1) {
+                    Object o2 = (new Integer(-1).equals(o) ? "-" : o);
+                    return super.getTableCellRendererComponent(jtable, o2, bln, bln1, i, i1); //To change body of generated methods, choose Tools | Templates.
+                }
+
+                @Override
+                public int getHorizontalAlignment() {
+                    return JLabel.RIGHT;
+                }
+            };
+
+            //renderer.setHorizontalAlignment(JLabel.RIGHT);
+            for (int index = 1; index < columnNames.size(); index++) {
+
+                this.unsafeCombinationsTable.getColumn(String.format("dim %d", index)).setCellRenderer(renderer);
             }
-            
-            @Override
-            public int getHorizontalAlignment() {
-                return JLabel.RIGHT;
-            }
-        };
+
+            this.unsafeCombinationsTable.getSelectionModel().addListSelectionListener(
+                    new javax.swing.event.ListSelectionListener() {
+                        @Override
+                        public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+                            selectionChanged(evt);
+                        }
+                    });
         
-        //renderer.setHorizontalAlignment(JLabel.RIGHT);
-        for (int index = 1; index < columnNames.size(); index++) {
-            
-            this.unsafeCombinationsTable.getColumn(String.format("dim %d", index)).setCellRenderer(renderer);
         }
-
-        this.unsafeCombinationsTable.getSelectionModel().addListSelectionListener(
-                new javax.swing.event.ListSelectionListener() {
-                    @Override
-                    public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
-                        selectionChanged(evt);
-                    }
-                });
-        int i = selectedIndex;
-        if (!sorter.getSortKeys().isEmpty()) {
-            this.unsafeCombinationsTable.setRowSorter(sorter);
-            i = this.unsafeCombinationsTable.convertRowIndexToView(selectedIndex);
-        }
+        int i = this.unsafeCombinationsTable.convertRowIndexToView(selectedIndex);
         this.unsafeCombinationsTable.getSelectionModel().setSelectionInterval(i, i);
     }
 

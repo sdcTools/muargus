@@ -15,6 +15,7 @@ Release 2
 6. table: 
     - kolommen klikken en sorteren (RowSorter: http://docs.oracle.com/javase/7/docs/api/javax/swing/RowSorter.html) Anne
 19. javadoc schrijven voor de methodes                                                                              Jeldrik
+-SPSS: genereer ascii databestand voorafgaand aan explorefile
 
 
 Release 3+:

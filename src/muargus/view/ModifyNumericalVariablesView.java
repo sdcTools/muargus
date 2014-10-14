@@ -61,10 +61,11 @@ public class ModifyNumericalVariablesView extends DialogBase<ModifyNumericalVari
      *
      */
     private void updateValues() {
+        int selectedIndex = this.variablesTable.convertRowIndexToModel(this.variablesTable.getSelectedRow());
         double[] min_max = getController().getMinMax(
-                this.model.getModifyNumericalVariablesSpec().get(this.variablesTable.getSelectedRow()).getVariable());
+                this.model.getModifyNumericalVariablesSpec().get(selectedIndex).getVariable());
 
-        ModifyNumericalVariablesSpec selected = this.model.getModifyNumericalVariablesSpec().get(this.variablesTable.getSelectedRow());
+        ModifyNumericalVariablesSpec selected = this.model.getModifyNumericalVariablesSpec().get(selectedIndex);
         selected.setMin_max(min_max);
         this.minimumTextField.setText(getController().getMin(selected));
         this.maximumTextField.setText(getController().getMax(selected));
@@ -130,7 +131,7 @@ public class ModifyNumericalVariablesView extends DialogBase<ModifyNumericalVari
      * values are updated.
      */
     private void variablesSelectionChanged() {
-        if (this.variablesTable.getSelectedRow() != this.selectedRow) {
+        if (this.variablesTable.convertRowIndexToModel(this.variablesTable.getSelectedRow()) != this.selectedRow) {
             checkValidAnswer();
         }
         updateValues();
@@ -166,7 +167,7 @@ public class ModifyNumericalVariablesView extends DialogBase<ModifyNumericalVari
         selected.setModified(hasValue);
         showModified();
         getController().apply(selected);
-        this.selectedRow = this.variablesTable.getSelectedRow();
+        this.selectedRow = this.variablesTable.convertRowIndexToModel(this.variablesTable.getSelectedRow());
         return true;
     }
 
@@ -175,8 +176,8 @@ public class ModifyNumericalVariablesView extends DialogBase<ModifyNumericalVari
      *
      */
     private void showModified() {
-        this.variablesTable.setValueAt(getModifyNumericalVariablesSpec().getModifiedText(), this.selectedRow, 0);
-        this.variablesTable.setValueAt(getModifyNumericalVariablesSpec().getVariable().getName(), this.selectedRow, 1);
+        this.variablesTable.getModel().setValueAt(getModifyNumericalVariablesSpec().getModifiedText(), this.selectedRow, 0);
+        this.variablesTable.getModel().setValueAt(getModifyNumericalVariablesSpec().getVariable().getName(), this.selectedRow, 1);
     }
 
     /**
@@ -292,6 +293,7 @@ public class ModifyNumericalVariablesView extends DialogBase<ModifyNumericalVari
         setMinimumSize(new java.awt.Dimension(410, 430));
         setPreferredSize(new java.awt.Dimension(410, 430));
 
+        variablesTable.setAutoCreateRowSorter(true);
         variablesTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null},
