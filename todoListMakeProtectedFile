@@ -18,6 +18,7 @@ Release 2:
 - Gegevens numerical variables scherm in rapport tonen
 - Gegevens microaggregatie in rapport tonen
 - Gegevens rank swapping in rapport tonen
+- SPSS: genereer safe SAV file
    
 15. html viewer vervangen: de html/css wordt nu brak getoond
 -Scherm resizable maken en minimale grootte scherm instellen 

@@ -4,6 +4,7 @@ import argus.utils.SingleListSelectionModel;
 import java.awt.Component;
 import java.awt.Container;
 import java.util.ArrayList;
+import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.JComponent;
@@ -11,6 +12,7 @@ import javax.swing.JDialog;
 import muargus.VariableNameCellRenderer;
 import muargus.model.MetadataMu;
 import muargus.controller.SpecifyMetadataController;
+import muargus.model.SpssVariable;
 import muargus.model.VariableMu;
 
 /**
@@ -865,7 +867,25 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
         }
     }//GEN-LAST:event_variablesComboBoxActionPerformed
 
+    private List<SpssVariable> getVariablesFromSpss() {
+        //TODO: create metadata-file from Sav file using SPSS
+        //TODO: read metadata-file and create SpssVariable instances
+        ArrayList<SpssVariable> variables = new ArrayList<SpssVariable>();
+        variables.add(new SpssVariable("Test1", "F3", "scale"));
+        variables.add(new SpssVariable("Test2", "A3", "nominal"));
+        variables.add(new SpssVariable("Test3", "F8", "scale"));
+        
+        return variables;
+    }
+    
     private void newButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newButtonActionPerformed
+        if (this.getMetadata().getDataFileType() == MetadataMu.DATA_FILE_TYPE_SPSS) {
+            List<SpssVariable> variables = getVariablesFromSpss();
+            SpssSelectVariablesView selectView = new SpssSelectVariablesView(parent, true);
+            selectView.showVariables(variables);
+            selectView.setVisible(true);
+            return;
+        }
         int index = this.variablesList.getSelectedIndex() + 1;
 
         VariableMu variable = new VariableMu("New");
