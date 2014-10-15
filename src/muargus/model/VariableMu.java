@@ -210,6 +210,10 @@ public class VariableMu {
     public void setIdLevel(String idLevel) {
         this.idLevel = Integer.parseInt(idLevel);
     }
+    
+    public void setIdLevel(int idLevel) {
+        this.idLevel = idLevel;
+    }
 
     /**
      * 
@@ -297,6 +301,14 @@ public class VariableMu {
      */
     public void setDecimals(String decimals) {
         this.decimals = Integer.parseInt(decimals);
+    }
+    
+    /**
+     * 
+     * @param decimals 
+     */
+    public void setDecimals(int decimals) {
+        this.decimals = decimals;
     }
 
     /**
@@ -459,6 +471,10 @@ public class VariableMu {
      */
     public void setMissing(int index, String value) {
         this.missing[index] = value;
+    }
+    
+    public void setMissing(String[] missing) {
+        this.missing = missing;
     }
 
     /**

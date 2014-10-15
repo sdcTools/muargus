@@ -2,11 +2,20 @@
 package muargus.controller;
 
 import argus.model.ArgusException;
+import argus.utils.Tokenizer;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import muargus.io.MetaReader;
 import muargus.io.MetaWriter;
 import muargus.model.Combinations;
 import muargus.model.MetadataMu;
+import muargus.model.SpssVariable;
 import muargus.model.VariableMu;
 import muargus.view.SpecifyMetadataView;
 
@@ -36,9 +45,146 @@ public class SpecifyMetadataController extends ControllerBase<MetadataMu> {
 
     /**
      * Generates meta from the Spss data file
+     *
+     * @return
      */
-    public void generateSpss() {
-        //TODO: spss
+    public ArrayList<SpssVariable> readSpssMetaFile() {
+//        ArrayList<SpssVariable> variables = new ArrayList<>();
+//        ArrayList<ArrayList<String>> data = new ArrayList<>();
+//        BufferedReader reader = null;
+//        try {
+//
+//            File file = new File("C:\\\\Users\\\\Gebruiker\\\\Desktop\\\\metadata.txt");
+//            reader = new BufferedReader(new FileReader(file));
+//            Tokenizer tokenizer = new Tokenizer(reader);
+//            tokenizer.nextLine();
+//            int numberOfVariables = 0;
+//            for (int i = 0; i < 4; i++) {
+//                String line = tokenizer.nextLine();
+//                System.out.println(line);
+//                String value;
+//                ArrayList<String> temp = new ArrayList<>();
+//                data.add(temp);
+//                if (i == 0) {
+//                    do {
+//                        value = tokenizer.nextToken();
+//                        data.get(i).add(value);
+//                        numberOfVariables++;
+//                    } while (!value.equals(""));
+//                } else {
+//                    for(int j  = 0; j < numberOfVariables; j++){
+//                        value = tokenizer.nextToken();
+////                        if(value = null){
+////                            System.out.println("dafad");
+////                        }
+//                        data.get(i).add(value);
+//                    }
+//                }
+//
+//            }
+////            while (tokenizer.nextLine() != null) {
+////                String value;
+////                ArrayList<String> temp = new ArrayList<>();
+////                data.add(temp);
+////                do {
+////                    value = tokenizer.nextToken();
+////                    data.get(column).add(value);
+////                } while (!value.equals(""));
+////                column++;
+////            }
+//
+//        } catch (FileNotFoundException ex) {
+//            Logger.getLogger(SpecifyMetadataController.class.getName()).log(Level.SEVERE, null, ex);
+//        } finally {
+//            try {
+//                reader.close();
+//            } catch (IOException ex) {
+//                Logger.getLogger(SpecifyMetadataController.class.getName()).log(Level.SEVERE, null, ex);
+//            }
+//        }
+//
+//        // wat te doen bij lege waardes
+//        for (int i = 0; i < data.get(1).size(); i++) {
+//            if (!data.get(1).get(i).equals("")) {
+//                SpssVariable variable = new SpssVariable(data.get(0).get(i), data.get(1).get(i),
+//                        data.get(2).get(i), data.get(3).get(i));
+//                variables.add(variable);
+//            }
+//        }
+//
+//        return variables;
+//    }
+//
+//    public boolean doesVariableExist(VariableMu variable) {
+//        boolean doubleVariable = false;
+//        for (VariableMu v : this.metadataClone.getVariables()) {
+//            if (v.getName().equals(variable.getName())) {
+//                doubleVariable = true;
+//            }
+//        }
+//        return doubleVariable;
+        return null;
+    }
+
+    //TODO: verander zodat een file ingelezen wordt.
+
+    public String[] getCommand() {
+        String[] command = {
+            "********************************************************************************.",
+            "* Title/Objective: selectie van metadata uit actieve datafile wegschrijven.",
+            "* Context/Project: compatibiliteitsproblemen muArgus na upgrade naar Spss 20.",
+            "* Description: work-around die zorgt dat muArgus weer .sav bestanden accepteert.",
+            "* Author: ARSM.",
+            "* Maintainer: ARSM.",
+            "* Syntax: \\\\cbsp.nl\\Profiel\\Productie\\ARSM\\Desktop\\argus.sps.",
+            "* Last saved (yyyy-mm-dd @ hh:mm:ss): 2013-09-04 @ 16:26:50.",
+            "* SPSS & OS version: 20.0.0.2 on Windows 7.",
+            "********************************************************************************.",
+            "",
+            "",
+            "* testdata.",
+            "get file = \"" + metadataClone.getFileNames().getDataFileName() + "\".",
+            "* missing values jobcat (1, 3).", "", "*****.",
+            "* metadata voor Argus in %temp%/metadata.txt.",
+            "* regel 1: encoding",
+            "* regel 2: variabele namen (tab-separated)",
+            "* regel 3: formats.",
+            "* regel 4: missing value(s) (comma-separated indien van toepassing).",
+            "* regel 5. meetniveaus",
+            "* regel 6: value labels 'value'='label' (comma-separated indien van toepassing).",
+            "begin program.",
+            "import os, codecs",
+            "import spss, spssaux",
+            "",
+            "# scheidingstekens voor metadata resp. regels",
+            "SEP, LINESEP = \"\\t\", os.linesep",
+            "",
+            "# gebruikte encoding afleiden.",
+            "codepage, utf8mode = map(spss.GetSetting, [\"locale\", \"unicode\"]) ",
+            "codepage = codepage.split(\".\")[-1]",
+            "encoding = \"utf-8\" if utf8mode == \"Yes\" else codepage",
+            "\n",
+            "# valuelabels: <SEP>-gescheiden tussen vars, comma-gescheiden binnen vars",
+            "# value en label gescheiden door een = teken en zijn single-quoted ivm",
+            "# eventuele embedded =-tekens", "vardict = spssaux.VariableDict()",
+            "varValueLabels = []", "for v in vardict:", "    valuelabels = []",
+            "    for key, var in v.ValueLabels.items():",
+            "        valuelabels.append(\"%r=%r\" % (key, var))",
+            "    varValueLabels.append(\", \".join(valuelabels))",
+            "varValueLabels = SEP.join(varValueLabels)", "",
+            "# schrijf het bestand weg",
+            "with codecs.open(R\"C:\\\\Users\\\\Gebruiker\\\\Desktop\\\\metadata.txt\", \"wb\", ",
+            "                          encoding=encoding) as outfile:",
+            "    outfile.write(encoding + LINESEP)",
+            "    outfile.write(SEP.join([v.VariableName for v in vardict]) + LINESEP)",
+            "    outfile.write(SEP.join([v.VariableFormat for v in vardict]) + LINESEP)",
+            "    outfile.write(SEP.join([v.MissingValues for v in vardict]) + LINESEP)",
+            "    outfile.write(SEP.join([v.VariableLevel for v in vardict]) + LINESEP)",
+            //"    outfile.write(varValueLabels + LINESEP)", 
+            "end program."
+        };
+        return command;
+
     }
 
     /**

@@ -1,6 +1,9 @@
 package muargus.view;
 
 import argus.utils.SingleListSelectionModel;
+import com.ibm.statistics.plugin.Cursor;
+import com.ibm.statistics.plugin.StatsException;
+import com.ibm.statistics.plugin.StatsUtil;
 import java.awt.Component;
 import java.awt.Container;
 import java.util.ArrayList;
@@ -46,7 +49,6 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
         this.variablesList.setSelectionModel(new SingleListSelectionModel());
         this.variablesList.setCellRenderer(new VariableNameCellRenderer());
         this.relatedToComboBox.setRenderer(new VariableNameCellRenderer());
-
     }
 
     /**
@@ -71,7 +73,7 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
         // add lists of names to the ComboBoxes
         this.identificationComboBox.setModel(new DefaultComboBoxModel(this.idLevel));
         this.weightLocalSuppressionComboBox.setModel(new DefaultComboBoxModel(this.suppressionWeight));
-        this.variablesComboBox.setModel(new DefaultComboBoxModel(this.format));
+        //this.variablesComboBox.setModel(new DefaultComboBoxModel(this.format));
 
         // check the format and set the appropriate settings
         switch (getMetadata().getDataFileType()) {
@@ -87,6 +89,14 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
             case MetadataMu.DATA_FILE_TYPE_SPSS:
                 setSpss(true);
                 break;
+        }
+
+        if (getMetadata().getDataFileType() == MetadataMu.DATA_FILE_TYPE_SPSS) {
+            String[] tempFormat = {format[3]};
+            this.variablesComboBox.setModel(new DefaultComboBoxModel(tempFormat));
+        } else {
+            String[] tempFormat = {format[0], format[1], format[2]};
+            this.variablesComboBox.setModel(new DefaultComboBoxModel(tempFormat));
         }
 
         if (this.variableListModel.getSize() > 0) {
@@ -121,7 +131,7 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
         this.codelistfileCheckBox.setEnabled(!b);
         this.codelistfileButton.setEnabled(!b);
         this.generateButton.setEnabled(!b);
-        this.variablesComboBox.setSelectedIndex(MetadataMu.DATA_FILE_TYPE_SPSS - 1);
+        this.variablesComboBox.setEnabled(!b);
     }
 
     /**
@@ -134,8 +144,8 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
         getMetadata().setDataFileType(MetadataMu.DATA_FILE_TYPE_FIXED);
         separatorLabel.setVisible(false);
         separatorTextField.setVisible(false);
-        startingPositionLabel.setVisible(true);
-        startingPositionTextField.setVisible(true);
+        //startingPositionLabel.setVisible(true);
+        //startingPositionTextField.setVisible(true);
         variablesComboBox.setSelectedIndex(MetadataMu.DATA_FILE_TYPE_FIXED - 1);
         generateButton.setEnabled(false);
         if (this.variableListModel.isEmpty()) {
@@ -149,8 +159,8 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
     private void setFree() {
         setSpss(false);
         getMetadata().setDataFileType(MetadataMu.DATA_FILE_TYPE_FREE);
-        separatorLabel.setVisible(true);
-        separatorTextField.setVisible(true);
+        //separatorLabel.setVisible(true);
+        //separatorTextField.setVisible(true);
         startingPositionLabel.setVisible(false);
         startingPositionTextField.setVisible(false);
         variablesComboBox.setSelectedIndex(MetadataMu.DATA_FILE_TYPE_FREE - 1);
@@ -168,12 +178,12 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
     private void setFreeWithMeta() {
         setSpss(false);
         getMetadata().setDataFileType(MetadataMu.DATA_FILE_TYPE_FREE_WITH_META);
-        separatorLabel.setVisible(true);
-        separatorTextField.setVisible(true);
+        //separatorLabel.setVisible(true);
+        //separatorTextField.setVisible(true);
         startingPositionLabel.setVisible(false);
         startingPositionTextField.setVisible(false);
         variablesComboBox.setSelectedIndex(MetadataMu.DATA_FILE_TYPE_FREE_WITH_META - 1);
-        generateButton.setEnabled(true);
+        //generateButton.setEnabled(true);
         if (this.variableListModel.isEmpty()) {
             enableAllControls(false);
         }
@@ -237,6 +247,7 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
 
     /**
      * Gets the selected variable.
+     *
      * @return VariableMu instance of the selected variable.
      */
     private VariableMu getSelectedVariable() {
@@ -812,7 +823,7 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
 
     private void generateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generateButtonActionPerformed
         if (getMetadata().getDataFileType() == MetadataMu.DATA_FILE_TYPE_SPSS) {
-            getController().generateSpss();
+            //getController().generateSpss();
         } else {
             GenerateParameters generateView = new GenerateParameters(this.parent, true);
             generateView.setSeparator(this.separatorTextField.getText());
@@ -868,22 +879,43 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
     }//GEN-LAST:event_variablesComboBoxActionPerformed
 
     private List<SpssVariable> getVariablesFromSpss() {
-        //TODO: create metadata-file from Sav file using SPSS
-        //TODO: read metadata-file and create SpssVariable instances
-        ArrayList<SpssVariable> variables = new ArrayList<SpssVariable>();
-        variables.add(new SpssVariable("Test1", "F3", "scale"));
-        variables.add(new SpssVariable("Test2", "A3", "nominal"));
-        variables.add(new SpssVariable("Test3", "F8", "scale"));
-        
+        ArrayList<SpssVariable> variables = new ArrayList<>();
+        try{
+            StatsUtil.start();
+            StatsUtil.submit("get file = \"" + getMetadata().getFileNames().getDataFileName() + "\".");
+            for (int i = 0; i < StatsUtil.getVariableCount(); i++){
+                SpssVariable variable = new SpssVariable(StatsUtil.getVariableName(i), StatsUtil.getVariableFormatDecimal(i),
+                        StatsUtil.getVariableFormatWidth(i), StatsUtil.getNumericMissingValues(i), StatsUtil.getVariableMeasurementLevel(i));
+                variables.add(variable);
+            }
+            StatsUtil.stop();
+        } catch (StatsException e){
+            
+        }
         return variables;
     }
-    
+
     private void newButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newButtonActionPerformed
         if (this.getMetadata().getDataFileType() == MetadataMu.DATA_FILE_TYPE_SPSS) {
             List<SpssVariable> variables = getVariablesFromSpss();
             SpssSelectVariablesView selectView = new SpssSelectVariablesView(parent, true);
             selectView.showVariables(variables);
             selectView.setVisible(true);
+//            for (SpssVariable variable : variables) {
+//                if (variable.isSelected()) {
+//                    VariableMu v = new VariableMu(variable.getName());
+//                    if (!getController().doesVariableExist(v)) {
+//                        v.setVariableLength(variable.getVariableLength());
+//                        v.setDecimals(variable.getNumberOfDecimals());
+//                        v.setNumeric(variable.isNumeric());
+//                        v.setCategorical(variable.isCategorical());
+//                        v.setMissing(variable.getMissing());
+//                        v.setIdLevel(1);
+//                        getMetadata().getVariables().add(v);
+//                    }
+//                }
+//            }
+//            initializeData();
             return;
         }
         int index = this.variablesList.getSelectedIndex() + 1;
@@ -898,7 +930,7 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
     private void deleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteButtonActionPerformed
         int index = this.variablesList.getSelectedIndex();
         /* set the selection to an item that still exists after deletion
-           if not done before removal the remove button will loose focus*/
+         if not done before removal the remove button will loose focus*/
         if (index == this.variableListModel.getSize() - 1) {
             this.variablesList.setSelectedIndex(index - 1);
         } else {

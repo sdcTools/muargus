@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package muargus.io;
 
 import argus.model.ArgusException;
@@ -30,19 +29,25 @@ import muargus.model.VariableMu;
  * @author Argus
  */
 public class MetaReader {
-    
+
     /**
      * Reads the entire metafile and initalizes the variables. This method reads
      * the metadatafile line for line. It makes a new variable object for each
      * variable it finds and provides the relevant information of this variable
      * (is it recodable, what is it's ID_level etc).
      *
+     * @param metadata
      * @throws ArgusException Throws an ArgusException when the file cannot be
      * read.
      */
     public static void readRda(MetadataMu metadata) throws ArgusException {
 
         if (metadata.getFileNames().getMetaFileName().length() == 0) {
+            String filename = metadata.getFileNames().getDataFileName();
+            String extension = filename.substring(filename.length() - 3, filename.length());
+            if (extension.equalsIgnoreCase("sav")) {
+                metadata.setDataFileType(DATA_FILE_TYPE_SPSS);
+            }
             return;
         }
 
@@ -135,7 +140,7 @@ public class MetaReader {
         }
 
     }
-        
+
     public static HashMap<String, String> readCodelist(String path, MetadataMu metadata) throws ArgusException {
         BufferedReader reader = null;
         try {
@@ -171,7 +176,7 @@ public class MetaReader {
         }
         return codelist;
     }
-    
+
     /**
      * Reads the global recode file. Sets the recode codes, new missing values
      * and the codelist file.
@@ -220,25 +225,25 @@ public class MetaReader {
 
     }
 
-    
     /**
-     * Reads the first line from a file, and return the content of this line 
-     * as a String array, using the supplied separator
-     * @param path Path to the file that is to be read 
-     * @param separator Separator separating the field names in the first line 
+     * Reads the first line from a file, and return the content of this line as
+     * a String array, using the supplied separator
+     *
+     * @param path Path to the file that is to be read
+     * @param separator Separator separating the field names in the first line
      * @return String array containing the field names
-     * @throws ArgusException 
+     * @throws ArgusException
      */
     public static String[] readHeader(String path, String separator) throws ArgusException {
         try {
             BufferedReader reader = new BufferedReader(new FileReader(new File(path)));
             String firstLine = reader.readLine();
             return firstLine.split(separator);
-            
+
         } catch (IOException ex) {
             //logger.log(Level.SEVERE, null, ex);
             throw new ArgusException("Error reading data file");
         }
     }
-    
+
 }
