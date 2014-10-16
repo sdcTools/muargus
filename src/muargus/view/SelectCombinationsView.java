@@ -729,8 +729,8 @@ public class SelectCombinationsView extends DialogBase<SelectCombinationsControl
                 tableMu.setThreshold(this.model.getThresholds()[threshold]);
                 this.model.getTables().add(tableMu);
 
-                int d = dimension - 1;
-                calculateTablesForDimensions(i + 1, allVariables, d, temp, threshold + 1);
+                // call this method again
+                calculateTablesForDimensions(i + 1, allVariables, dimension - 1, temp, threshold + 1);
             }
         }
     }
@@ -755,6 +755,36 @@ public class SelectCombinationsView extends DialogBase<SelectCombinationsControl
         calculateTablesForID(0, index, _size, currentLevel, variableSubset, numberOfLevels, variables, allValidVariables);
     }
 
+    /**
+     * Starts the recursion equation that calculates the tables for the ID
+     * levels. This equation first checks whether the number of ID-levels with
+     * at least one variable that has been processed in this equation
+     * (_currentLevel) is smaller or equal to the maximum number of ID-levels
+     * with at least one variable. If this is the case, the next idLevel larger
+     * than zero will be found and the number of variables whith that idLevel
+     * will be added to the size. The size contains the amount of variables up
+     * to the current ID-level. Following the equation will loop through all
+     * variables up to the current id-level excluding variables that have
+     * already been used. During each loop the current variable is added to a
+     * tempory array and if the size of this array equals the numberOfLevels, a
+     * table is added.
+     *
+     * @param _i Integer containing the starting point of the for loop.
+     * @param _index Integer containing the index of the next to be searched
+     * ArrayList. In this method it is checked if the next ArrayList with this
+     * index has more than 0 variables.
+     * @param _size Integer containing the number of variables up to the
+     * corresponding ID-Level
+     * @param _currentLevel Integer containing the current ID-level.
+     * @param variableSubset ArrayList of VariableMu's containing between one
+     * variable and as many variables as the number of different ID-levels.
+     * @param numberOfLevels Integer containing the number of ID-levels with at
+     * least one variable.
+     * @param variables ArrayList containing ArrayList's of VariableMu's for
+     * each ID-level. variables.
+     * @param allValidVariables ArrayList of VariableMu's containing all
+     * variables with an ID-level higher than 0
+     */
     private void calculateTablesForID(int _i, int _index, int _size, int _currentLevel, ArrayList<VariableMu> variableSubset,
             int numberOfLevels, ArrayList<ArrayList<VariableMu>> variables, ArrayList<VariableMu> allVariables) {
 
@@ -772,6 +802,7 @@ public class SelectCombinationsView extends DialogBase<SelectCombinationsControl
                 }
             }
 
+            // loop through all variables and add a table if its size equals the number of id-levels with at least one variable.
             for (int i = _i; i < size; i++) {
                 ArrayList<VariableMu> temp = new ArrayList<>();
                 temp.addAll(variableSubset);
@@ -783,6 +814,7 @@ public class SelectCombinationsView extends DialogBase<SelectCombinationsControl
                     tableMu.setThreshold(this.model.getThreshold());
                     this.model.addTable(tableMu);
                 }
+                // call this method again
                 calculateTablesForID(i + 1, index, size, currentLevel, temp, numberOfLevels, variables, allVariables);
             }
         }
@@ -792,6 +824,10 @@ public class SelectCombinationsView extends DialogBase<SelectCombinationsControl
         clear();
     }//GEN-LAST:event_clearButtonActionPerformed
 
+    /**
+     * Gets a list of to be removed tables.
+     * @return Arraylist of TableMu's containing the removed tables.
+     */
     private ArrayList<TableMu> getListOfRemovedTables() {
         ArrayList<TableMu> toBeRemovedTables = new ArrayList<>();
 
