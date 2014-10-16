@@ -3,7 +3,7 @@ niet behandelde opmerkingen/vragen:
 - (prioriteit = laag) Bij de model class wordt bij de private method setSPSS een boolean meegegeven maar bij de andere
   zoals setFixed wordt dit niet gedaan omdat het niet hoeft. Anne, vindt jij dit een mooie manier of 
   heb je een idee hoe het mooier kan? 
-- decimals label en textfield zijn niet altijd goed enabled.
+
 
 16. Hoe gaan we om met het veld van de missing values? Mag het veranderd worden? Als geen missing value is opgegeven moet het.
 
@@ -84,5 +84,5 @@ Gedaan:                                                                         
 23. geen missing bij niet-categoriale variabelen: a la oude Mu (spaties) of foutmelding                      Anne
 15. inlezen free format with data                                                                             Anne
 -minimale grootte scherm instellen                                                                          Jeldrik
-
+- decimals label en textfield zijn niet altijd goed enabled.                                                Jeldrik
 
