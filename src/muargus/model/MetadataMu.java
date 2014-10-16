@@ -29,6 +29,7 @@ public final class MetadataMu {
     private String separator = ";";
 
     private final ArrayList<VariableMu> variables;
+    private final ArrayList<SpssVariable> spssVariables;
     private DataFilePair filenames;
     private Combinations combinations;
     private int recordCount;
@@ -39,9 +40,10 @@ public final class MetadataMu {
      * and makes empty arraylists for the variables and the RecodeMu's.
      */
     public MetadataMu() {
-        variables = new ArrayList<>();
-        replacementSpecs = new ArrayList<>();
-        filenames = new DataFilePair(null, null);
+        this.variables = new ArrayList<>();
+        this.spssVariables = new ArrayList<>();
+        this.replacementSpecs = new ArrayList<>();
+        this.filenames = new DataFilePair(null, null);
     }
 
     /**
@@ -361,6 +363,14 @@ public final class MetadataMu {
         return variables;
     }
 
+    /**
+     * Gets an ArrayList containing all the SpssVariables in the Metadata.
+     * @return ArrayList containing all the SpssVariables in the Metadata.
+     */
+    public ArrayList<SpssVariable> getSpssVariables() {
+        return spssVariables;
+    }
+    
     /**
      * Gets the hashcode. The hashcode is calculated as a addition of the
      * hashcodes from the relevant individual components: separator,

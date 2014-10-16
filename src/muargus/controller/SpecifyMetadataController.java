@@ -126,6 +126,15 @@ public class SpecifyMetadataController extends ControllerBase<MetadataMu> {
         return doubleVariable;
     }
     
+    public void removeVariable(String variableName){
+        for (VariableMu v : this.metadataClone.getVariables()) {
+            if (v.getName().equals(variableName)) {
+                this.metadataClone.getVariables().remove(v);
+                break;
+            }
+        }
+    }
+    
     public String getIntIfPossible(double value) {
         double value_double;
         String value_String = null;

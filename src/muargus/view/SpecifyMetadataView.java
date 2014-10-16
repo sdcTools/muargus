@@ -880,20 +880,21 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
     }//GEN-LAST:event_variablesComboBoxActionPerformed
 
     private List<SpssVariable> getVariablesFromSpss() {
-        ArrayList<SpssVariable> variables = new ArrayList<>();
-        try {
-            StatsUtil.start();
-            StatsUtil.submit("get file = \"" + getMetadata().getFileNames().getDataFileName() + "\".");
-            for (int i = 0; i < StatsUtil.getVariableCount(); i++) {
-                SpssVariable variable = new SpssVariable(StatsUtil.getVariableName(i), StatsUtil.getVariableFormatDecimal(i),
-                        StatsUtil.getVariableFormatWidth(i), StatsUtil.getNumericMissingValues(i), StatsUtil.getVariableMeasurementLevel(i));
-                variables.add(variable);
-            }
-            StatsUtil.stop();
-        } catch (StatsException e) {
+        if (getMetadata().getSpssVariables().size() < 1) {
+            try {
+                StatsUtil.start();
+                StatsUtil.submit("get file = \"" + getMetadata().getFileNames().getDataFileName() + "\".");
+                for (int i = 0; i < StatsUtil.getVariableCount(); i++) {
+                    SpssVariable variable = new SpssVariable(StatsUtil.getVariableName(i), StatsUtil.getVariableFormatDecimal(i),
+                            StatsUtil.getVariableFormatWidth(i), StatsUtil.getNumericMissingValues(i), StatsUtil.getVariableMeasurementLevel(i));
+                    getMetadata().getSpssVariables().add(variable);
+                }
+                StatsUtil.stop();
+            } catch (StatsException e) {
 
+            }
         }
-        return variables;
+        return getMetadata().getSpssVariables();
     }
 
 //    public void testVariable(ArrayList<SpssVariable> variables) {
@@ -936,6 +937,11 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
                         }
                         v.setIdLevel(1);
                         getMetadata().getVariables().add(v);
+                    }
+                } else {
+                    VariableMu v = new VariableMu(variable.getName());
+                    if (getController().doesVariableExist(v)) {
+                        getController().removeVariable(variable.getName());
                     }
                 }
             }

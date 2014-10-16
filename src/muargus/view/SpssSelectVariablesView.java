@@ -17,6 +17,8 @@ import muargus.model.SpssVariable;
 public class SpssSelectVariablesView extends javax.swing.JDialog {
 
     private List<SpssVariable> variables;
+    private boolean allSelected = false;
+    
     /**
      * Creates new form SpssSelectVariablesView
      * @param parent
@@ -144,8 +146,9 @@ public class SpssSelectVariablesView extends javax.swing.JDialog {
     }//GEN-LAST:event_cancelButtonActionPerformed
 
     private void selectAllButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectAllButtonActionPerformed
+        this.allSelected = !this.allSelected;
         for (int i=0; i < this.table.getModel().getRowCount(); i++) {
-            this.table.getModel().setValueAt(true, i, 0);
+            this.table.getModel().setValueAt(this.allSelected, i, 0);
         }
     }//GEN-LAST:event_selectAllButtonActionPerformed
 
