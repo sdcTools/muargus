@@ -54,6 +54,7 @@ public class SpssSelectVariablesView extends javax.swing.JDialog {
         table = new javax.swing.JTable();
         okButton = new javax.swing.JButton();
         cancelButton = new javax.swing.JButton();
+        selectAllButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -92,6 +93,13 @@ public class SpssSelectVariablesView extends javax.swing.JDialog {
             }
         });
 
+        selectAllButton.setText("Select All");
+        selectAllButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                selectAllButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -101,7 +109,8 @@ public class SpssSelectVariablesView extends javax.swing.JDialog {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(scrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(0, 84, Short.MAX_VALUE)
+                        .addComponent(selectAllButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 9, Short.MAX_VALUE)
                         .addComponent(cancelButton)
                         .addGap(18, 18, 18)
                         .addComponent(okButton)))
@@ -115,7 +124,8 @@ public class SpssSelectVariablesView extends javax.swing.JDialog {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(okButton)
-                    .addComponent(cancelButton))
+                    .addComponent(cancelButton)
+                    .addComponent(selectAllButton))
                 .addContainerGap())
         );
 
@@ -132,6 +142,12 @@ public class SpssSelectVariablesView extends javax.swing.JDialog {
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
         this.setVisible(false);
     }//GEN-LAST:event_cancelButtonActionPerformed
+
+    private void selectAllButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectAllButtonActionPerformed
+        for (int i=0; i < this.table.getModel().getRowCount(); i++) {
+            this.table.getModel().setValueAt(true, i, 0);
+        }
+    }//GEN-LAST:event_selectAllButtonActionPerformed
 
 //    /**
 //     * @param args the command line arguments
@@ -179,6 +195,7 @@ public class SpssSelectVariablesView extends javax.swing.JDialog {
     private javax.swing.JButton cancelButton;
     private javax.swing.JButton okButton;
     private javax.swing.JScrollPane scrollPane;
+    private javax.swing.JButton selectAllButton;
     private javax.swing.JTable table;
     // End of variables declaration//GEN-END:variables
 }

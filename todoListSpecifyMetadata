@@ -4,16 +4,16 @@ niet behandelde opmerkingen/vragen:
   zoals setFixed wordt dit niet gedaan omdat het niet hoeft. Anne, vindt jij dit een mooie manier of 
   heb je een idee hoe het mooier kan? 
 
+16. Hoe gaan we om met het veld van de missing values? Mag het veranderd worden? Als geen missing value is opgegeven moet het.
+
 Nog te doen:                                                                                                Mee bezig:
 
 Release 2:
 
 16. inlezen SPSS:
 
--Immuteerbare velden un-editable maken (naam, lengte, startposition, numerical, missings, ..)
 -Indien bestaande rda file wordt aangewezen: controle
 -Inlezen command automatiseren
--spss syntax verbeteren (kan volgens mij sneller) -->zonder dat de println functie wordt gebruikt
 -spssjavaplugin.jar alleen laden als spss wordt gebruikt
 
 
@@ -65,6 +65,8 @@ Gedaan:                                                                         
     -getVariablesFromSpss implementatie: metadatafile door spss laten genereren                             Jeldrik
     -getVariablesFromSpss implementatie: gegenereerde metadatafile lezen en SpssVariables creeren           Jeldrik
     -Resultaten keuze SpssSelectVariablesView verwerken                                                     Jeldrik
+    -Immuteerbare velden un-editable maken (naam, lengte, startposition, numerical, missings, ..)           Jeldrik
+    -spss syntax verbeteren (kan volgens mij sneller)                                                       Jeldrik
 18. code opschonen
 19. javadoc schrijven voor de methodes                                                                      Jeldrik
 20. Foutafhandeling wanneer geen schrijfrechten zijn (zie beschrijving hieronder)                           Anne

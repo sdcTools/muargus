@@ -473,9 +473,9 @@ public class VariableMu {
         this.missing[index] = value;
     }
     
-    public void setMissing(String[] missing) {
-        this.missing = missing;
-    }
+//    public void setMissing(String[] missing) {
+//        this.missing = missing;
+//    }
 
     /**
      * 
