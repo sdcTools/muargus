@@ -6,13 +6,18 @@ package muargus.controller;
 
 import muargus.CalculationService;
 import argus.model.ArgusException;
+import argus.utils.StrUtils;
 import argus.utils.SystemUtils;
 import com.ibm.statistics.plugin.Case;
 import com.ibm.statistics.plugin.DataUtil;
 import com.ibm.statistics.plugin.StatsException;
 import com.ibm.statistics.plugin.StatsUtil;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import muargus.MuARGUS;
@@ -66,7 +71,7 @@ public class SelectCombinationsController extends ControllerBase<Combinations> {
             for (SpssVariable v : this.metadata.getSpssVariables()) {
                 if (v.isSelected() && v.isCategorical()) {
                     selectedVariables = selectedVariables + v.getName() + " ";
-                    
+
                 }
             }
             try {
@@ -74,26 +79,29 @@ public class SelectCombinationsController extends ControllerBase<Combinations> {
                 StatsUtil.submit("get file = \"" + fileName + "\".");
                 DataUtil d = new DataUtil();
                 ArrayList<String> variables = new ArrayList<>();
-                for(SpssVariable v: this.metadata.getSpssVariables()){
-                    if(v.isSelected()){
+                for (SpssVariable v : this.metadata.getSpssVariables()) {
+                    if (v.isSelected()) {
                         variables.add(v.getName());
                     }
                 }
                 String[] variablesArray = new String[variables.size()];
-                for(int i = 0; i< variables.size(); i++){
+                for (int i = 0; i < variables.size(); i++) {
                     variablesArray[i] = variables.get(i);
                 }
-                
+
                 d.setVariableFilter(variablesArray);
-                Case[] data = d.fetchCases(false, 0);
-                System.out.println(Arrays.toString(data));
-//                String[] command = {"SET DECIMAL=DOT.",
-//                    "get file = \"" + fileName + "\".",
-//                    "WRITE OUTFILE= '" + fileName.substring(0, fileName.length() - 3) + "dat'/" + selectedVariables + ".",
-//                    "EXECUTE."
-//                };
-//                System.out.println(Arrays.toString(command));
-//                StatsUtil.submit(command);
+                Case[] data = d.fetchCases(true, 0);
+                try {
+                    String fileNameNew = metadata.getFileNames().getDataFileName();
+                    fileNameNew = fileNameNew.substring(0, fileNameNew.length() - 3) + "asc";
+                    try (PrintWriter writer = new PrintWriter(new File(fileNameNew))) {
+                        for (Case c : data) {
+                            writer.println(c.toString().substring(1, c.toString().length() - 1).replace("null", "").replace(',', ';'));
+                        }
+                    }
+                } catch (FileNotFoundException ex) {
+                    Logger.getLogger(SelectCombinationsController.class.getName()).log(Level.SEVERE, null, ex);
+                }
                 StatsUtil.stop();
             } catch (StatsException ex) {
                 Logger.getLogger(SelectCombinationsController.class.getName()).log(Level.SEVERE, null, ex);

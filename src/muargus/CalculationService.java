@@ -38,7 +38,7 @@ public class CalculationService {
     private class ProgressListener extends IProgressListener {
 
         private final CalculationService service;
-        
+
         public ProgressListener(CalculationService service) {
             this.service = service;
         }
@@ -89,9 +89,9 @@ public class CalculationService {
     public void makeReplacementFile(PropertyChangeListener listener) {
         executeSwingWorker(BackgroundTask.MakeReplacementFile, listener);
     }
-    
+
     private void makeReplacementFileInBackground() throws ArgusException {
-        ReplacementSpec replacement = this.metadata.getReplacementSpecs().get(this.metadata.getReplacementSpecs().size()-1);
+        ReplacementSpec replacement = this.metadata.getReplacementSpecs().get(this.metadata.getReplacementSpecs().size() - 1);
         int[] errorCode = new int[1];
         boolean result = c.WriteVariablesInFile(
                 this.metadata.getFileNames().getDataFileName(),
@@ -104,11 +104,11 @@ public class CalculationService {
             throw new ArgusException("Error creating temporary replacement file: " + getErrorString(errorCode[0]));
         }
     }
-    
+
     private String getErrorString(int errorType) {
-            String[] error = new String[1];
-            c.GetErrorString(errorType, error);
-            return error[0];
+        String[] error = new String[1];
+        c.GetErrorString(errorType, error);
+        return error[0];
     }
 
     public String doRecode(RecodeMu recode) throws ArgusException {
@@ -191,8 +191,8 @@ public class CalculationService {
         int index = 0;
         for (ReplacementSpec replacement : this.metadata.getReplacementSpecs()) {
             index++;
-            result = c.SetChangeFile(index, 
-                    replacement.getReplacementFile().getOutputFilePath(), 
+            result = c.SetChangeFile(index,
+                    replacement.getReplacementFile().getOutputFilePath(),
                     replacement.getVariables().size(),
                     getVarIndicesInFile(replacement.getVariables()),
                     MuARGUS.getDefaultSeparator());
@@ -201,7 +201,7 @@ public class CalculationService {
             }
         }
     }
-    
+
     private void makeFileInBackground() throws ArgusException {
         doChangeFiles();
         ProtectedFile protectedFile = metadata.getCombinations().getProtectedFile();
@@ -267,6 +267,7 @@ public class CalculationService {
         if (variable.isNumeric() && !variable.isWeight() && "".equals(missing0)) {
             missing0 = StringUtils.repeat("X", variable.getVariableLength());
         }
+
         return c.SetVariable(varNr,
                 variable.getStartingPosition(),
                 variable.getVariableLength(),
@@ -379,16 +380,18 @@ public class CalculationService {
         if (!result) {
             throw new ArgusException("Error in SetInFileInfo");
         }
-        if(this.metadata.getDataFileType() == MetadataMu.DATA_FILE_TYPE_SPSS){
-            result = c.ExploreFile(metadata.getFileNames().getDataFileName().substring(0, metadata.getFileNames().getDataFileName().length() - 3) + "dat",
-                errorCodes,
-                lineNumbers,
-                varIndexOut);
+        if (this.metadata.getDataFileType() == MetadataMu.DATA_FILE_TYPE_SPSS) {
+            String fileName = metadata.getFileNames().getDataFileName();
+            fileName = fileName.substring(0, fileName.length() - 3) + "asc";
+            result = c.ExploreFile(fileName,
+                    errorCodes,
+                    lineNumbers,
+                    varIndexOut);
         } else {
-        result = c.ExploreFile(metadata.getFileNames().getDataFileName(),
-                errorCodes,
-                lineNumbers,
-                varIndexOut);
+            result = c.ExploreFile(metadata.getFileNames().getDataFileName(),
+                    errorCodes,
+                    lineNumbers,
+                    varIndexOut);
         }
         if (!result) {
             String var = (varIndexOut[0] > 0)
@@ -465,7 +468,7 @@ public class CalculationService {
         if (!result) {
             String table = (tableIndex[0] > 0)
                     ? "\nTable " + Integer.toString(tableIndex[0]) : "";
-            throw new ArgusException(String.format("Error in ComputeTables: %s%s", 
+            throw new ArgusException(String.format("Error in ComputeTables: %s%s",
                     getErrorString(errorCodes[0]), table));
         }
     }
@@ -700,9 +703,9 @@ public class CalculationService {
         int tableIndex = this.metadata.getCombinations().getTables().indexOf(table) + 1;
         int[] nUnsafe = new int[1];
         int[] dummy = new int[1];
-        boolean result =  household ?
-            c.SetBHRThreshold(tableIndex, Math.log(riskThreshold), nUnsafe, dummy) :
-            c.SetBirThreshold(tableIndex, Math.log(riskThreshold), nUnsafe);
+        boolean result = household
+                ? c.SetBHRThreshold(tableIndex, Math.log(riskThreshold), nUnsafe, dummy)
+                : c.SetBirThreshold(tableIndex, Math.log(riskThreshold), nUnsafe);
         if (!result) {
             throw new ArgusException("Error calculating number of unsafe records");
         }
@@ -723,11 +726,11 @@ public class CalculationService {
         double[] riskThreshold = new double[1];
         int[] errorCode = new int[1];
         //c.SetProgressListener(null);
-        boolean result = household ?
-            c.CalculateBHRFreq(tableIndex, true, c.NumberofRecords() - nUnsafe,c.NumberofRecords() - nUnsafe, riskThreshold, errorCode) :
-            c.CalculateBIRFreq(tableIndex, c.NumberofRecords() - nUnsafe, riskThreshold, errorCode);
+        boolean result = household
+                ? c.CalculateBHRFreq(tableIndex, true, c.NumberofRecords() - nUnsafe, c.NumberofRecords() - nUnsafe, riskThreshold, errorCode)
+                : c.CalculateBIRFreq(tableIndex, c.NumberofRecords() - nUnsafe, riskThreshold, errorCode);
         if (!result) {
-            throw new ArgusException("Error calculating frequency"); 
+            throw new ArgusException("Error calculating frequency");
         }
         return riskThreshold[0];
     }
@@ -767,6 +770,5 @@ public class CalculationService {
         }
         return ksi[0];
     }
-    
 
 }

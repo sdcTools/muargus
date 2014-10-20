@@ -1,13 +1,11 @@
 package muargus.view;
 
 import argus.utils.SingleListSelectionModel;
-import com.ibm.statistics.plugin.Cursor;
 import com.ibm.statistics.plugin.StatsException;
 import com.ibm.statistics.plugin.StatsUtil;
 import java.awt.Component;
 import java.awt.Container;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
@@ -126,6 +124,8 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
         this.lengthTextField.setEnabled(!b);
         if (getController().getMetadata().getDataFileType() != MetadataMu.DATA_FILE_TYPE_SPSS) {
             this.decimalsTextField.setEnabled(this.numericalCheckBox.isSelected());
+        } else {
+            this.decimalsTextField.setEnabled(false);
         }
         this.numericalCheckBox.setEnabled(!b);
         this.missing1TextField.setEnabled(!b);
@@ -929,6 +929,7 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
                         v.setDecimals(variable.getNumberOfDecimals());
                         v.setNumeric(variable.isNumeric());
                         v.setCategorical(variable.isCategorical());
+                        v.setStartingPosition("1");
                         for (int i = 0; i < variable.getMissing().length; i++) {
                             v.setMissing(i, getController().getIntIfPossible(variable.getMissing()[i]));
                             if (variable.getMissing()[i] < 0) {
