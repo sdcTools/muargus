@@ -2,9 +2,14 @@ package muargus.view;
 
 import argus.model.ArgusException;
 import argus.utils.SystemUtils;
+import java.awt.event.ActionEvent;
 import java.io.File;
+import javax.swing.AbstractAction;
+import javax.swing.Action;
+import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.KeyStroke;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import muargus.MuARGUS;
 import muargus.model.MetadataMu;
@@ -29,6 +34,7 @@ public class DialogBase<T> extends javax.swing.JDialog {
         super(parent, modal);
         this.controller = controller;
         initComponents();
+        setHelpAction();
     }
     
     /**
@@ -145,6 +151,27 @@ public class DialogBase<T> extends javax.swing.JDialog {
      */
     private String[] splitFilter(String filter) {
         return filter.split("\\|");
+    }
+    
+    private void setHelpAction() {
+        
+        Action action = new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                showHelp();
+            }
+        };
+        this.rootPane.getActionMap().put("f1action", action);
+        this.rootPane.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(
+                KeyStroke.getKeyStroke("F1"), "f1action");
+    }
+
+    protected String getHelpNamedDestination() {
+        return ContextHelp.fromClassName(this.getClass().getName());
+    }
+    
+    private void showHelp() {
+        MuARGUS.showHelp(getHelpNamedDestination());
     }
     
 //    /**

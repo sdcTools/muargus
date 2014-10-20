@@ -4,12 +4,17 @@ import argus.model.ArgusException;
 import argus.model.DataFilePair;
 import argus.view.DialogOpenMicrodata;
 import java.awt.Component;
+import java.awt.event.ActionEvent;
 import java.util.ArrayList;
+import javax.swing.AbstractAction;
+import javax.swing.Action;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
+import javax.swing.KeyStroke;
 import javax.swing.ListSelectionModel;
 import javax.swing.RowSorter;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -40,6 +45,7 @@ public class MainFrameView extends javax.swing.JFrame {
         initComponents();
         this.controller = new MainFrameController(this);
         this.setLocationRelativeTo(null);
+        setHelpAction();
     }
 
     /**
@@ -999,6 +1005,28 @@ public class MainFrameView extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_unsafeCombinationsTableMouseClicked
 
+    private void setHelpAction() {
+        
+        Action action = new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                showHelp();
+            }
+        };
+        this.rootPane.getActionMap().put("f1action", action);
+        this.rootPane.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(
+                KeyStroke.getKeyStroke("F1"), "f1action");
+    }
+
+    protected String getHelpNamedDestination() {
+        return ContextHelp.fromClassName(this.getClass().getName());
+    }
+    
+    private void showHelp() {
+        MuARGUS.showHelp(getHelpNamedDestination());
+    }
+    
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton ManualButton;
     private javax.swing.JButton aboutButton;

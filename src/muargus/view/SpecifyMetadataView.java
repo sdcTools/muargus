@@ -945,14 +945,17 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
                     }
                 }
             }
+            
             initializeData();
             calculateButtonStates();
+            
             if (!this.variableListModel.isEmpty()) {
                 enableAllControls(true);
+                
                 enableControls(this.attributesPanel, false);
                 enableControls(this.numericalCheckBox, false);
             }
-
+            
             this.newButton.setEnabled(true);
             return;
         }
@@ -1055,7 +1058,7 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
     }//GEN-LAST:event_categoricalCheckBoxStateChanged
 
     private void enableAllControls(boolean enable) {
-        this.categoricalCheckBox.setSelected(false);
+        //this.categoricalCheckBox.setSelected(false);
         enableControls(this.attributesPanel, enable);
         enableControls(this.categoriesPanel, enable);
         enableControls(this.optionsArgusPanel, enable);

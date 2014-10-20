@@ -27,6 +27,7 @@ public class RiskSpecificationView extends DialogBase<RiskSpecificationControlle
     private TableMu riskTable;
     private ChartPanel cp = null;
     private boolean calculating = false;
+    private final boolean isHousehold;
 
     private final int SLIDERKNOBSIZE = 16;
 
@@ -45,6 +46,12 @@ public class RiskSpecificationView extends DialogBase<RiskSpecificationControlle
         initComponents();
         setHouseholdComponents(isHousehold);
         setLocationRelativeTo(null);
+        this.isHousehold = isHousehold;
+    }
+
+    @Override
+    protected String getHelpNamedDestination() {
+        return ContextHelp.fromClassName(this.getClass().getName(), isHousehold);
     }
 
     /**

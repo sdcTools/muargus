@@ -379,11 +379,17 @@ public class CalculationService {
         if (!result) {
             throw new ArgusException("Error in SetInFileInfo");
         }
-
+        if(this.metadata.getDataFileType() == MetadataMu.DATA_FILE_TYPE_SPSS){
+            result = c.ExploreFile(metadata.getFileNames().getDataFileName().substring(0, metadata.getFileNames().getDataFileName().length() - 3) + "dat",
+                errorCodes,
+                lineNumbers,
+                varIndexOut);
+        } else {
         result = c.ExploreFile(metadata.getFileNames().getDataFileName(),
                 errorCodes,
                 lineNumbers,
                 varIndexOut);
+        }
         if (!result) {
             String var = (varIndexOut[0] > 0)
                     ? ", variable " + getVariables().get(varIndexOut[0] - 1).getName() : "";
