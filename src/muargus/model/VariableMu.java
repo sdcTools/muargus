@@ -421,6 +421,14 @@ public class VariableMu {
     public void setStartingPosition(String startingPosition) {
         this.startingPosition = Integer.parseInt(startingPosition);
     }
+    
+    /**
+     * 
+     * @param startingPosition 
+     */
+    public void setStartingPosition(int startingPosition) {
+        this.startingPosition = startingPosition;
+    }
 
     /**
      * 

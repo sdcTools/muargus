@@ -6,7 +6,6 @@ package muargus.controller;
 
 import muargus.CalculationService;
 import argus.model.ArgusException;
-import argus.utils.StrUtils;
 import argus.utils.SystemUtils;
 import com.ibm.statistics.plugin.Case;
 import com.ibm.statistics.plugin.DataUtil;
@@ -16,14 +15,13 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import muargus.MuARGUS;
 import muargus.model.MetadataMu;
 import muargus.model.Combinations;
 import muargus.model.SpssVariable;
+import muargus.model.VariableMu;
 import muargus.view.SelectCombinationsView;
 
 /**
@@ -66,16 +64,20 @@ public class SelectCombinationsController extends ControllerBase<Combinations> {
         saveSettings();
         this.metadata.setCombinations(getModel());
         if (this.metadata.getDataFileType() == MetadataMu.DATA_FILE_TYPE_SPSS) {
-            String fileName = this.metadata.getFileNames().getDataFileName();
-            String selectedVariables = "";
-            for (SpssVariable v : this.metadata.getSpssVariables()) {
-                if (v.isSelected() && v.isCategorical()) {
-                    selectedVariables = selectedVariables + v.getName() + " ";
+            generateSpssData();
+        }
+        CalculationService service = MuARGUS.getCalculationService();
+        service.setMetadata(this.metadata);
+        service.exploreFile(this);
 
-                }
-            }
+    }
+    
+    private void generateSpssData(){
+        String fileName = this.metadata.getFileNames().getDataFileName();
             try {
+                // start spss
                 StatsUtil.start();
+                //        
                 StatsUtil.submit("get file = \"" + fileName + "\".");
                 DataUtil d = new DataUtil();
                 ArrayList<String> variables = new ArrayList<>();
@@ -91,12 +93,13 @@ public class SelectCombinationsController extends ControllerBase<Combinations> {
 
                 d.setVariableFilter(variablesArray);
                 Case[] data = d.fetchCases(true, 0);
+                this.metadata.setSpssNumberOfCases(data.length);
                 try {
                     String fileNameNew = metadata.getFileNames().getDataFileName();
                     this.metadata.setSpssTempDataFileName(fileNameNew.substring(0, fileNameNew.length() - 3) + "asc");
                     try (PrintWriter writer = new PrintWriter(new File(this.metadata.getSpssTempDataFileName()))) {
                         for (Case c : data) {
-                            //todo verander naar fixed format
+                            //TODO: verander naar fixed format??
                             writer.println(c.toString().substring(1, c.toString().length() - 1).replace("null", "").replace(',', ';'));
                         }
                     }
@@ -107,11 +110,8 @@ public class SelectCombinationsController extends ControllerBase<Combinations> {
             } catch (StatsException ex) {
                 Logger.getLogger(SelectCombinationsController.class.getName()).log(Level.SEVERE, null, ex);
             }
-        }
-        CalculationService service = MuARGUS.getCalculationService();
-        service.setMetadata(this.metadata);
-        service.exploreFile(this);
     }
+            
 
     private void getSettings() {
         int[] thresholds = new int[MuARGUS.MAXDIMS];

@@ -6,12 +6,17 @@
 package muargus;
 
 import argus.model.ArgusException;
+import argus.utils.Tokenizer;
 import com.ibm.statistics.plugin.DataUtil;
 import com.ibm.statistics.plugin.StatsException;
 import com.ibm.statistics.plugin.StatsUtil;
 import com.ibm.statistics.plugin.Variable;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
@@ -235,49 +240,42 @@ public class CalculationService {
         }
         if (this.metadata.getDataFileType() == MetadataMu.DATA_FILE_TYPE_SPSS) {
             try {
-                StatsUtil.start();
-                String[] command = {
-                    "TITLE   'MERGECOPYCLEAN'.\n",
-                    "SET DECIMAL=DOT.\n",
-                    "DATA LIST FILE = 'C:\\CBSTEMP\\USER\\SPSSSafe.Dat'/\n",
-                    "      ARG_1   1 -  9\n",
-                    "      ARG_2   10 -  12\n",
-                    "      ARG_3   13 -  15\n",
-                    "      ARG_4   16 -  16\n",
-                    "      ARG_5   17 -  19\n",
-                    "      ARG_6   20 -  21\n",
-                    "      ARG_7   22 -  23\n",
-                    "      ARG_8   24 -  25\n",
-                    "      ARG_9   26 -  37\n",
-                    "      ARG_10   38 -  38\n",
-                    "      ARG_11   39 -  39.\n",
-                    "MATCH FILES FILE = 'S:\\Argus\\prak\\amsterdam\\Amsterdam_rio.sav' /FILE = *.\n",
-                    "\n",
-                    "EXECUTE.\n",
-                    "if (SYSMIS(LFT) EQ 0)  LFT= ARG_2.\n",
-                    "if (SYSMIS(POSHHK) EQ 0)  POSHHK= ARG_3.\n",
-                    "if (SYSMIS(ALLOCHR) EQ 0)  ALLOCHR= ARG_4.\n",
-                    "if (SYSMIS(SECCOAL1) EQ 0)  SECCOAL1= ARG_5.\n",
-                    "if (SYSMIS(BRT) EQ 0)  BRT= ARG_6.\n",
-                    "if (SYSMIS(BBIHALG1) EQ 0)  BBIHALG1= ARG_7.\n",
-                    "if (SYSMIS(SAMHHR) EQ 0)  SAMHHR= ARG_8.\n",
-                    "if (SYSMIS(GS) EQ 0)  GS= ARG_10.\n",
-                    "if (SYSMIS(BS) EQ 0)  BS= ARG_11.\n",
-                    "SAVE OUTFILE='S:\\Argus\\prak\\amsterdam\\yy.sav' /DROP=ARG_1 TO ARG_11."
-                };
-                
-                StatsUtil.submit("get file = \"" + this.metadata.getFileNames().getDataFileName() + "\".");
-//                DataUtil d = new DataUtil();
-//                
-//                //TODO: make double array containing the data by reading the file
-//                
-//                for(VariableMu v: this.metadata.getVariables()){
-//                    String[] data = {"", ""};                     //TODO: change to real data
-//                    Variable temp = new Variable("_Temp_" + v.getName(), 0);
-//                    d.addVariableWithValue(temp, data, 0);
-//                    d.
-//                }
-                StatsUtil.stop();
+
+                try {
+                    File file = new File(metadata.getSpssTempDataFileName());
+                    BufferedReader reader;
+                    reader = new BufferedReader(new FileReader(file));
+                    Tokenizer tokenizer = new Tokenizer(reader);
+                    String[][] data = new String[this.metadata.getVariables().size()][this.metadata.getSpssNumberOfCases()];
+                    for (int i = 0; i < data[0].length; i++) {
+                        String[] temp = tokenizer.nextLine().split(this.metadata.getSeparator());
+                        for (int j = 0; j < data.length; j++) {
+                            if (temp[j].isEmpty()) {
+                                data[j][i] = "";
+                            } else {
+                                data[j][i] = temp[j];
+                            }
+                        }
+                    }
+                    for (String[] list : data) {
+                        for (String s : list) {
+                            System.out.print(s + ";");
+                        }
+                        System.out.println("");
+                    }
+                    StatsUtil.start();
+                    StatsUtil.submit("GET FILE='" + this.metadata.getFileNames().getDataFileName() + "'.");
+                    DataUtil d = new DataUtil();
+                    for (int i = 0; i < this.metadata.getVariables().size(); i++) {
+                        Variable temp = new Variable("TEMP" + this.metadata.getVariables().get(i).getName(), 8);
+                        d.addVariableWithValue(temp, data[i], 0);
+                    }
+                    d.release();
+                    StatsUtil.submit("SAVE OUTFILE='" + this.metadata.getFileNames().getDataFileName() + "'.");
+                    StatsUtil.stop();
+                } catch (FileNotFoundException ex) {
+                    Logger.getLogger(CalculationService.class.getName()).log(Level.SEVERE, null, ex);
+                }
             } catch (StatsException ex) {
                 Logger.getLogger(CalculationService.class.getName()).log(Level.SEVERE, null, ex);
             }

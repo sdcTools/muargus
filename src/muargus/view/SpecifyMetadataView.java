@@ -1,8 +1,6 @@
 package muargus.view;
 
 import argus.utils.SingleListSelectionModel;
-import com.ibm.statistics.plugin.StatsException;
-import com.ibm.statistics.plugin.StatsUtil;
 import java.awt.Component;
 import java.awt.Container;
 import java.util.ArrayList;
@@ -30,7 +28,6 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
     private String[] suppressionWeight;
     private final VariableMu dummyVar = new VariableMu();
     private final java.awt.Frame parent;
-    private final String spssSeparator = ","; //todo: verplaatsen naar metadata
 
     private DefaultListModel variableListModel;
 
@@ -880,24 +877,23 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
         }
     }//GEN-LAST:event_variablesComboBoxActionPerformed
 
-    private List<SpssVariable> getVariablesFromSpss() {
-        if (getMetadata().getSpssVariables().size() < 1) {
-            try {
-                StatsUtil.start();
-                StatsUtil.submit("get file = \"" + getMetadata().getFileNames().getDataFileName() + "\".");
-                for (int i = 0; i < StatsUtil.getVariableCount(); i++) {
-                    SpssVariable variable = new SpssVariable(StatsUtil.getVariableName(i), StatsUtil.getVariableFormatDecimal(i),
-                            StatsUtil.getVariableFormatWidth(i), StatsUtil.getNumericMissingValues(i), StatsUtil.getVariableMeasurementLevel(i));
-                    getMetadata().getSpssVariables().add(variable);
-                }
-                StatsUtil.stop();
-            } catch (StatsException e) {
-
-            }
-        }
-        return getMetadata().getSpssVariables();
-    }
-
+//    private List<SpssVariable> getVariablesFromSpss() {
+//        if (getMetadata().getSpssVariables().size() < 1) {
+//            try {
+//                StatsUtil.start();
+//                StatsUtil.submit("get file = \"" + getMetadata().getFileNames().getDataFileName() + "\".");
+//                for (int i = 0; i < StatsUtil.getVariableCount(); i++) {
+//                    SpssVariable variable = new SpssVariable(StatsUtil.getVariableName(i), StatsUtil.getVariableFormatDecimal(i),
+//                            StatsUtil.getVariableFormatWidth(i), StatsUtil.getNumericMissingValues(i), StatsUtil.getVariableMeasurementLevel(i));
+//                    getMetadata().getSpssVariables().add(variable);
+//                }
+//                StatsUtil.stop();
+//            } catch (StatsException e) {
+//
+//            }
+//        }
+//        return getMetadata().getSpssVariables();
+//    }
 //    public void testVariable(ArrayList<SpssVariable> variables) {
 //        for (SpssVariable v : variables) {
 //            System.out.println("Name: " + v.getName());
@@ -918,62 +914,30 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
     private void newButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newButtonActionPerformed
         this.newButton.setEnabled(false);
         if (this.getMetadata().getDataFileType() == MetadataMu.DATA_FILE_TYPE_SPSS) {
-            List<SpssVariable> variables = getVariablesFromSpss();
+            List<SpssVariable> variables = getController().getVariablesFromSpss();
             SpssSelectVariablesView selectView = new SpssSelectVariablesView(parent, true);
             selectView.showVariables(variables);
             selectView.setVisible(true);
-            getMetadata().setSeparator(this.spssSeparator);
-            for (SpssVariable variable : variables) {
-                if (variable.isSelected()) {
-                    VariableMu v = new VariableMu(variable.getName());
-                    if (!getController().doesVariableExist(v)) {
-                        v.setVariableLength(variable.getVariableLength());
-                        v.setDecimals(variable.getNumberOfDecimals());
-                        v.setNumeric(variable.isNumeric());
-                        v.setCategorical(variable.isCategorical());
-                        v.setStartingPosition("1");
-                        
-                        for (int i = 0; i < variable.getMissing().length; i++) {
-                            if (i == VariableMu.MAX_NUMBER_OF_MISSINGS){
-                                break;
-                            }
-                            v.setMissing(i, getController().getIntIfPossible(variable.getMissing()[i]));
-                            if (variable.getMissing()[i] < 0) {
-                                v.setVariableLength(v.getVariableLength() + 1);
-                            }
-                        }
-                        v.setIdLevel(1);
-                        getMetadata().getVariables().add(v);
-                    }
-                } else {
-                    VariableMu v = new VariableMu(variable.getName());
-                    if (getController().doesVariableExist(v)) {
-                        getController().removeVariable(variable.getName());
-                    }
-                }
-            }
-            
+            getController().setVariablesSpss(variables);
             initializeData();
             calculateButtonStates();
-            
             if (!this.variableListModel.isEmpty()) {
                 enableAllControls(true);
-                
+
                 enableControls(this.attributesPanel, false);
                 enableControls(this.numericalCheckBox, false);
             }
-            
             this.newButton.setEnabled(true);
-            return;
-        }
-        int index = this.variablesList.getSelectedIndex() + 1;
+        } else {
+            int index = this.variablesList.getSelectedIndex() + 1;
 
-        VariableMu variable = new VariableMu("New");
-        this.variableListModel.add(index, variable);
-        enableAllControls(true);
-        this.variablesList.setSelectedIndex(index);
-        updateValues();
-        this.newButton.setEnabled(true);
+            VariableMu variable = new VariableMu("New");
+            this.variableListModel.add(index, variable);
+            enableAllControls(true);
+            this.variablesList.setSelectedIndex(index);
+            updateValues();
+            this.newButton.setEnabled(true);
+        }
     }//GEN-LAST:event_newButtonActionPerformed
 
     private void deleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteButtonActionPerformed

@@ -27,6 +27,10 @@ public final class MetadataMu {
     //default
     private int dataFileType = DATA_FILE_TYPE_FIXED;
     private String separator = ";";
+//    private final String spssSeparator = ",";
+    private final int spssStartingPosition = 1;
+    private int spssNumberOfCases = 0;
+//    private final int spssIdLevel = 1;
 
     private final ArrayList<VariableMu> variables;
     private final ArrayList<SpssVariable> spssVariables;
@@ -157,7 +161,6 @@ public final class MetadataMu {
 //        System.out.println(variables.get(1).getName());
 //        System.out.println(cloneData.get(1).getName());
 //    }
-
 //    /**
 //     *
 //     * @param w
@@ -166,7 +169,6 @@ public final class MetadataMu {
 //    private void writeVariable(Writer w, VariableMu variable) {
 //
 //    }
-
     /**
      * Links variables to each other if this is specified.
      *
@@ -278,11 +280,9 @@ public final class MetadataMu {
      * fixed, free, free with meta and SPSS.
      *
      * @return Integer containing the type of the data file. The integers
-     * correspond to the DATA_FILE_TYPE constants. Possible values: 
-     *   DATA_FILE_TYPE_FIXED
-     *   DATA_FILE_TYPE_FREE
-     *   DATA_FILE_TYPE_FREE_WITH_META
-     *   DATA_FILE_TYPE_SPSS
+     * correspond to the DATA_FILE_TYPE constants. Possible values:
+     * DATA_FILE_TYPE_FIXED DATA_FILE_TYPE_FREE DATA_FILE_TYPE_FREE_WITH_META
+     * DATA_FILE_TYPE_SPSS
      */
     public int getDataFileType() {
         return this.dataFileType;
@@ -294,10 +294,8 @@ public final class MetadataMu {
      *
      * @param dataFileType Integer containing the type of the data file. The
      * integers correspond to the DATA_FILE_TYPE constants. Allowed values:
-     *   DATA_FILE_TYPE_FIXED
-     *   DATA_FILE_TYPE_FREE
-     *   DATA_FILE_TYPE_FREE_WITH_META
-     *   DATA_FILE_TYPE_SPSS
+     * DATA_FILE_TYPE_FIXED DATA_FILE_TYPE_FREE DATA_FILE_TYPE_FREE_WITH_META
+     * DATA_FILE_TYPE_SPSS
      */
     public void setDataFileType(int dataFileType) {
         this.dataFileType = dataFileType;
@@ -321,11 +319,19 @@ public final class MetadataMu {
         this.separator = separator;
     }
 
+    public int getSpssNumberOfCases() {
+        return spssNumberOfCases;
+    }
+
+    public void setSpssNumberOfCases(int spssNumberOfCases) {
+        this.spssNumberOfCases = spssNumberOfCases;
+    }
+
     /**
      * Gets the file names of both the metadata file and the data file
      *
-     * @return DataFilePair instance containing the path of the
-     * metadata file and of the data file.
+     * @return DataFilePair instance containing the path of the metadata file
+     * and of the data file.
      */
     public DataFilePair getFileNames() {
         return this.filenames;
@@ -334,8 +340,8 @@ public final class MetadataMu {
     /**
      * Sets the file names of both the metadata file and the data file
      *
-     * @param filenames DataFilePair instance containing the
-     * path of the metadata file and of the data file.
+     * @param filenames DataFilePair instance containing the path of the
+     * metadata file and of the data file.
      */
     public void setFileNames(DataFilePair filenames) {
         this.filenames = filenames;
@@ -366,6 +372,7 @@ public final class MetadataMu {
 
     /**
      * Gets an ArrayList containing all the SpssVariables in the Metadata.
+     *
      * @return ArrayList containing all the SpssVariables in the Metadata.
      */
     public ArrayList<SpssVariable> getSpssVariables() {
@@ -379,7 +386,11 @@ public final class MetadataMu {
     public void setSpssTempDataFileName(String spssTempDataFileName) {
         this.spssTempDataFileName = spssTempDataFileName;
     }
-    
+
+    public int getSpssStartingPosition() {
+        return spssStartingPosition;
+    }
+
     /**
      * Gets the hashcode. The hashcode is calculated as a addition of the
      * hashcodes from the relevant individual components: separator,
