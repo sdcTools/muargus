@@ -30,6 +30,7 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
     private String[] suppressionWeight;
     private final VariableMu dummyVar = new VariableMu();
     private final java.awt.Frame parent;
+    private final String spssSeparator = ","; //todo: verplaatsen naar metadata
 
     private DefaultListModel variableListModel;
 
@@ -921,6 +922,7 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
             SpssSelectVariablesView selectView = new SpssSelectVariablesView(parent, true);
             selectView.showVariables(variables);
             selectView.setVisible(true);
+            getMetadata().setSeparator(this.spssSeparator);
             for (SpssVariable variable : variables) {
                 if (variable.isSelected()) {
                     VariableMu v = new VariableMu(variable.getName());
@@ -930,7 +932,11 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
                         v.setNumeric(variable.isNumeric());
                         v.setCategorical(variable.isCategorical());
                         v.setStartingPosition("1");
+                        
                         for (int i = 0; i < variable.getMissing().length; i++) {
+                            if (i == VariableMu.MAX_NUMBER_OF_MISSINGS){
+                                break;
+                            }
                             v.setMissing(i, getController().getIntIfPossible(variable.getMissing()[i]));
                             if (variable.getMissing()[i] < 0) {
                                 v.setVariableLength(v.getVariableLength() + 1);

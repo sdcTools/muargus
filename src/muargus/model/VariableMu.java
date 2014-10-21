@@ -1,12 +1,9 @@
 package muargus.model;
 
 import argus.model.ArgusException;
-import argus.utils.StrUtils;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Objects;
-import org.apache.commons.lang3.StringUtils;
 
 /**
  * Model class containing the variable specifications. An instance for each

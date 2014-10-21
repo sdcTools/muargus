@@ -3,20 +3,11 @@ package muargus.controller;
 
 import argus.model.ArgusException;
 import argus.utils.StrUtils;
-import argus.utils.Tokenizer;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import muargus.io.MetaReader;
 import muargus.io.MetaWriter;
 import muargus.model.Combinations;
 import muargus.model.MetadataMu;
-import muargus.model.SpssVariable;
 import muargus.model.VariableMu;
 import muargus.view.SpecifyMetadataView;
 

@@ -14,8 +14,8 @@ Release 2:
 16. inlezen SPSS:
 
 -Indien bestaande rda file wordt aangewezen: controle
--Inlezen command automatiseren
 -spssjavaplugin.jar alleen laden als spss wordt gebruikt
+-hardcoded paths aanpassen
 
 
 
@@ -68,6 +68,7 @@ Gedaan:                                                                         
     -Resultaten keuze SpssSelectVariablesView verwerken                                                     Jeldrik
     -Immuteerbare velden un-editable maken (naam, lengte, startposition, numerical, missings, ..)           Jeldrik
     -spss syntax verbeteren (kan volgens mij sneller)                                                       Jeldrik
+    -Inlezen command automatiseren
 18. code opschonen
 19. javadoc schrijven voor de methodes                                                                      Jeldrik
 20. Foutafhandeling wanneer geen schrijfrechten zijn (zie beschrijving hieronder)                           Anne

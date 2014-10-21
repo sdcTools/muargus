@@ -15,7 +15,6 @@ Release 2
 6. table: 
     - kolommen klikken en sorteren (RowSorter: http://docs.oracle.com/javase/7/docs/api/javax/swing/RowSorter.html) Anne
 19. javadoc schrijven voor de methodes                                                                              Jeldrik
--SPSS: genereer ascii databestand voorafgaand aan explorefile
 
 
 Release 3+:
@@ -120,6 +119,7 @@ Gedaan:                                                                         
     - method setVariables
     - method getUnsafeCombinations(VariableMu ... variable, int dimensions) (dimensions should equal number of variables)
     - iets om het aantal onveilige combinaties per dimensie goed op te slaan (array?)
+-SPSS: genereer ascii databestand voorafgaand aan explorefile
 
 
     

@@ -93,9 +93,10 @@ public class SelectCombinationsController extends ControllerBase<Combinations> {
                 Case[] data = d.fetchCases(true, 0);
                 try {
                     String fileNameNew = metadata.getFileNames().getDataFileName();
-                    fileNameNew = fileNameNew.substring(0, fileNameNew.length() - 3) + "asc";
-                    try (PrintWriter writer = new PrintWriter(new File(fileNameNew))) {
+                    this.metadata.setSpssTempDataFileName(fileNameNew.substring(0, fileNameNew.length() - 3) + "asc");
+                    try (PrintWriter writer = new PrintWriter(new File(this.metadata.getSpssTempDataFileName()))) {
                         for (Case c : data) {
+                            //todo verander naar fixed format
                             writer.println(c.toString().substring(1, c.toString().length() - 1).replace("null", "").replace(',', ';'));
                         }
                     }

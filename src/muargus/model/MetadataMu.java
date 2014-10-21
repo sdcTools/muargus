@@ -31,6 +31,7 @@ public final class MetadataMu {
     private final ArrayList<VariableMu> variables;
     private final ArrayList<SpssVariable> spssVariables;
     private DataFilePair filenames;
+    private String spssTempDataFileName;
     private Combinations combinations;
     private int recordCount;
     private final ArrayList<ReplacementSpec> replacementSpecs;
@@ -369,6 +370,14 @@ public final class MetadataMu {
      */
     public ArrayList<SpssVariable> getSpssVariables() {
         return spssVariables;
+    }
+
+    public String getSpssTempDataFileName() {
+        return spssTempDataFileName;
+    }
+
+    public void setSpssTempDataFileName(String spssTempDataFileName) {
+        this.spssTempDataFileName = spssTempDataFileName;
     }
     
     /**
