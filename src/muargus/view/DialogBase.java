@@ -1,5 +1,6 @@
 package muargus.view;
 
+import muargus.resources.ContextHelp;
 import argus.model.ArgusException;
 import argus.utils.SystemUtils;
 import java.awt.event.ActionEvent;

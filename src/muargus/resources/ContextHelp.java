@@ -1,6 +1,6 @@
 // hoe doen we het met open microdata
 
-package muargus.view;
+package muargus.resources;
 
 /**
  *

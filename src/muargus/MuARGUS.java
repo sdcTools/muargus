@@ -46,7 +46,7 @@ public class MuARGUS {
     }
 
     //private static CMuArgCtrl muArgCrtl = new CMuArgCtrl();
-    private static CalculationService calcService = new CalculationService(new CMuArgCtrl());
+    private static final CalculationService calcService = new CalculationService(new CMuArgCtrl());
 
     public static CalculationService getCalculationService() {
         return calcService;
@@ -115,7 +115,6 @@ public class MuARGUS {
     public static void showHelp(String namedDest) {
         try {
             String cmdString = "\"" + acrordPath + "\" /A \"nameddest=" + namedDest + "\" \"" + manualPath + "\"";
-            System.out.println(cmdString);
             Process p = Runtime.getRuntime().exec(cmdString);
         } catch (IOException ex) {
         } catch (Exception ex2) {

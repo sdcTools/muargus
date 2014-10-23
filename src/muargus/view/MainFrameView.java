@@ -1,5 +1,6 @@
 package muargus.view;
 
+import muargus.resources.ContextHelp;
 import argus.model.ArgusException;
 import argus.model.DataFilePair;
 import argus.view.DialogOpenMicrodata;
@@ -16,11 +17,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.KeyStroke;
 import javax.swing.ListSelectionModel;
-import javax.swing.RowSorter;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableModel;
-import javax.swing.table.TableRowSorter;
 import muargus.CodeTableCellRenderer;
 import muargus.MuARGUS;
 import muargus.controller.MainFrameController;
@@ -219,6 +217,7 @@ public class MainFrameView extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Main Frame");
+        setIconImage(new javax.swing.ImageIcon(getClass().getResource("/muargus/resources/icons/mu.png")).getImage());
 
         toolBar.setRollover(true);
         toolBar.setEnabled(false);
@@ -975,14 +974,10 @@ public class MainFrameView extends javax.swing.JFrame {
 
     private void contentsMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_contentsMenuItemActionPerformed
         controller.contents();
+        
     }//GEN-LAST:event_contentsMenuItemActionPerformed
 
     private void newsMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newsMenuItemActionPerformed
-        System.out.println("clicked");
-        //this.variablesTable.getColumnModel().removeColumn(this.variablesTable.getColumnModel().getColumn(0));
-        //this.variablesTable.updateUI();
-        //this.unsafeCombinationsTable.removeAll();
-
         controller.news();
     }//GEN-LAST:event_newsMenuItemActionPerformed
 

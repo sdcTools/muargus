@@ -1,5 +1,6 @@
 package muargus.view;
 
+import muargus.resources.ContextHelp;
 import argus.model.ArgusException;
 import java.awt.BorderLayout;
 import java.awt.geom.Rectangle2D;

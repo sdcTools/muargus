@@ -2,18 +2,24 @@ package muargus.controller;
 
 import argus.model.ArgusException;
 import argus.utils.StrUtils;
+import argus.utils.Tokenizer;
 import com.ibm.statistics.plugin.Case;
 import com.ibm.statistics.plugin.Cursor;
 import com.ibm.statistics.plugin.DataUtil;
+import com.ibm.statistics.plugin.NumericMissingValueType;
 import com.ibm.statistics.plugin.StatsException;
 import com.ibm.statistics.plugin.StatsUtil;
+import com.ibm.statistics.plugin.Variable;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import muargus.CalculationService;
 import muargus.model.MetadataMu;
 import muargus.model.SpssVariable;
 import muargus.model.VariableMu;
@@ -24,7 +30,7 @@ import muargus.model.VariableMu;
  */
 public class SpssUtils {
 
-    public final static String tempDataFileExtension = "asc";
+    public final static String tempDataFileExtension = "saf";
     public final static int NUMERIC = 0;
 
     public SpssUtils() {
@@ -73,6 +79,7 @@ public class SpssUtils {
      * @param metadata Metadata file.
      */
     public static void setVariablesSpss(List<SpssVariable> variables, MetadataMu metadata) {
+        int startingPos = 1;
         for (SpssVariable variable : variables) {
             // add selected variables
             if (variable.isSelected()) {
@@ -107,7 +114,8 @@ public class SpssUtils {
                     v.setDecimals(variable.getNumberOfDecimals());
                     v.setNumeric(variable.isNumeric());
                     v.setCategorical(variable.isCategorical());
-                    v.setStartingPosition(metadata.getSpssStartingPosition());
+                    v.setStartingPosition(startingPos);
+                    startingPos += variable.getVariableLength();
                     v.setSpssVariable(variable);
                     metadata.getVariables().add(v);
                 }
@@ -182,8 +190,18 @@ public class SpssUtils {
      * Generates temporary data from the spss data file.
      *
      * @param metadata Metadata file.
+     * @param fixed
      */
-    public static void generateSpssData(MetadataMu metadata) {
+    public static void generateSpssData(MetadataMu metadata, boolean fixed) {
+        // choose between fixed or free
+        if (fixed) {
+            SpssUtils.writeFixedFormat(metadata);
+        } else {
+            SpssUtils.writeFreeFormat(metadata);
+        }
+    }
+
+    private static void writeFreeFormat(MetadataMu metadata) {
         try {
             // start spss and make an instance of dataUtil
             StatsUtil.start();
@@ -213,13 +231,13 @@ public class SpssUtils {
                 String fileNameNew = metadata.getFileNames().getDataFileName();
                 metadata.setSpssTempDataFileName(fileNameNew.substring(0, fileNameNew.length() - 3) + SpssUtils.tempDataFileExtension);
 
-                // Writes the spss data to a temporary file
-                // TODO: chang to fixed format
-                try(PrintWriter writer = new PrintWriter(new File(metadata.getSpssTempDataFileName()))){
-                for (Case c : data) {
-                    writer.println(c.toString().substring(1, c.toString().length() - 1).replace("null", "").replace(',', ';'));
+                // choose between fixed or free
+                try (PrintWriter writer = new PrintWriter(new File(metadata.getSpssTempDataFileName()))) {
+                    for (Case c : data) {
+                        writer.println(c.toString().substring(1, c.toString().length() - 1).replace("null", "").replace(',', ';'));
+                    }
                 }
-                }
+
             } catch (FileNotFoundException ex) {
                 Logger.getLogger(SelectCombinationsController.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -229,4 +247,95 @@ public class SpssUtils {
         }
     }
 
+    private static void writeFixedFormat(MetadataMu metadata) {
+        try {
+            // start spss and make an instance of dataUtil
+            StatsUtil.start();
+
+            // Make an array of variable names to use as a filter
+            ArrayList<String> variables = new ArrayList<>();
+            for (SpssVariable v : metadata.getSpssVariables()) {
+                if (v.isSelected()) {
+                    variables.add(v.getName());
+                }
+            }
+
+            String variablesCommand = "";
+            for (String s : variables) {
+                variablesCommand = variablesCommand + s + " ";
+            }
+            String fileName = metadata.getFileNames().getDataFileName();
+            // Sets the temporary filename
+            metadata.setSpssTempDataFileName(fileName.substring(0, fileName.length() - 3) + SpssUtils.tempDataFileExtension);
+
+            String[] command = {"SET DECIMAL=DOT.",
+                "get file = \"" + fileName + "\".",
+                "WRITE OUTFILE= \"" + metadata.getSpssTempDataFileName() + "\"/" + variablesCommand + ".",
+                "EXECUTE."
+            };
+            StatsUtil.submit(command);
+
+            StatsUtil.stop();
+        } catch (StatsException ex) {
+            Logger.getLogger(SelectCombinationsController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public static void makeSafeFileSpss(MetadataMu metadata) {
+        try {
+            try {
+                File file = new File(metadata.getSpssTempDataFileName());
+                BufferedReader reader;
+                reader = new BufferedReader(new FileReader(file));
+                Tokenizer tokenizer = new Tokenizer(reader);
+                String[][] data = new String[metadata.getVariables().size()][metadata.getSpssNumberOfCases()];
+                for (int i = 0; i < data[0].length; i++) {
+                    String[] temp = tokenizer.nextLine().split(metadata.getSeparator());
+                    for (int j = 0; j < data.length; j++) {
+                        if (temp[j].isEmpty()) {
+                            data[j][i] = "";
+                        } else {
+                            data[j][i] = temp[j];
+                        }
+                    }
+                }
+
+                StatsUtil.start();
+                StatsUtil.submit("GET FILE='" + metadata.getFileNames().getDataFileName() + "'.");
+                DataUtil d = new DataUtil();
+                for (int i = 0; i < metadata.getVariables().size(); i++) {
+                    SpssVariable variable = metadata.getVariables().get(i).getSpssVariable();
+                    Variable temp = new Variable("TEMP" + variable.getName(), variable.getVariableType());
+                    temp.setMeasureLevel(variable.getMeasurementLevel());
+                    temp.setVarLabel(variable.getVariableLabel());
+                    temp.setFormatDecimal(variable.getNumberOfDecimals());
+                    temp.setFormatWidth(variable.getVariableLength());
+                    if (variable.getVariableType() == 0) { // 0 is numeric
+                        double[] doubleData = new double[data[i].length];
+                        for (int j = 0; j < data[i].length; j++) {
+                            if (!data[i][j].equals("")) {
+                                doubleData[j] = Double.parseDouble(data[i][j]);
+                            }
+                        }
+                        temp.setNumericVarMissingValues(variable.getNumericMissings(), NumericMissingValueType.DISCRETE);
+                        temp.setNumValueLabels(variable.getNumericValueLabels());
+                        d.addVariableWithValue(temp, doubleData, SpssUtils.NUMERIC);
+                    } else {
+                        d.addVariableWithValue(temp, data[i], 0);
+                    }
+                }
+                d.release();
+//                    for(VariableMu v: this.metadata.getVariables()){
+//                        String name = v.getSpssVariable().getName();
+//                        StatsUtil.submit("if (SYSMIS("+ name +") EQ 0) " + name + "= TEMP"+ name +".");
+//                    }
+                StatsUtil.submit("SAVE OUTFILE='C:\\Users\\Gebruiker\\Desktop\\safe.sav'.");
+                StatsUtil.stop();
+            } catch (FileNotFoundException ex) {
+                Logger.getLogger(CalculationService.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } catch (StatsException ex) {
+            Logger.getLogger(CalculationService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 }

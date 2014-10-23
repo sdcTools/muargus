@@ -52,6 +52,10 @@ public class ViewReportView extends DialogBase<ViewReportController> {
             showErrorMessage(new ArgusException("Error creating report: " + ex.getMessage()));
         }
     }
+    
+    public void showReport(HTMLDocument htmlDoc){
+        htmlPane.setDocument(htmlDoc);
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.

@@ -27,6 +27,7 @@ import muargus.model.Combinations;
 import muargus.model.MetadataMu;
 import muargus.model.RecodeMu;
 import muargus.model.VariableMu;
+import muargus.view.AboutView;
 import muargus.view.MainFrameView;
 import org.w3c.dom.Document;
 
@@ -40,6 +41,8 @@ public class MainFrameController {
 
     private MetadataMu metadata;
     private Document report;
+    private String news;
+    private final String newsLocation = "C:/Users/Gebruiker/Documents/MuArgus/src/muargus/resources/html/NewsAnco.html";
 
     public enum Action {
 
@@ -73,6 +76,8 @@ public class MainFrameController {
         //this.makeProtectedFileModel = null;
         this.metadata = new MetadataMu();
         this.report = null;
+        this.news = "";
+
     }
 
     public MetadataMu getMetadata() {
@@ -100,7 +105,7 @@ public class MainFrameController {
                 break;
             }
         }
-        
+
         view.enableAction(Action.SpecifyMetadata, this.metadata != null);
         view.enableAction(Action.ViewReport, this.report != null);
         view.enableAction(Action.SpecifyCombinations, this.metadata != null
@@ -314,7 +319,6 @@ public class MainFrameController {
 //        return missingCodelists;
 //    }
 
-
     /**
      *
      */
@@ -378,8 +382,9 @@ public class MainFrameController {
     public void qualitativeMicroaggregation() {
         MicroaggregationController controller = new MicroaggregationController(view, metadata, false);
         controller.showView();
-        
+
     }
+
     /**
      *
      */
@@ -432,24 +437,44 @@ public class MainFrameController {
     }
 
     /**
-     *
+     * Opens the manual at the beginning.
      */
     public void contents() {
-
+        MuARGUS.showHelp("");
     }
 
     /**
      *
      */
     public void news() {
+        try {
+            File file = new File(this.newsLocation);
+            BufferedReader reader = new BufferedReader(new FileReader(file));
+            boolean finished = false;
+            do {
+                try {
+                    String temp = reader.readLine();
+                    this.news = this.news + temp;
+                    if (temp.equals("")) {
+                        finished = true;
+                    }
+                } catch (IOException e) {
+                    finished = true;
+                }
+            } while (!finished);
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(MainFrameController.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
+        ViewReportController viewReportController = new ViewReportController(this.view, this.news);
+        viewReportController.showView();
     }
 
     /**
      *
      */
     public void about() {
-
+        new AboutView(this.view, true).setVisible(true);
     }
 
     /**
@@ -457,7 +482,7 @@ public class MainFrameController {
      */
     public void manual() {
         try {
-            
+
             Desktop.getDesktop().browse(new URL("http://neon.vb.cbs.nl/casc/Software/MuManual4.2.pdf#page=13").toURI());
         } catch (URISyntaxException | IOException e) {
         }

@@ -81,7 +81,7 @@ public class HTMLReportWriter {
                 addChildElement(tr, "td", "Bottom coding");
                 addChildElement(tr, "td", spec.getVariable().getName());
                 addChildElement(tr, "td", String.format(
-                        "Top value: %s; Replacement: %s", formatDouble(spec.getBottomValue(),2, false), spec.getBottomReplacement()));
+                        "Top value: %s; Replacement: %s", formatDouble(spec.getBottomValue(), 2, false), spec.getBottomReplacement()));
             }
             //Top coding
             if (!Double.isNaN(spec.getTopValue())) {
@@ -109,34 +109,33 @@ public class HTMLReportWriter {
             }
         }
         for (ReplacementSpec replacement : metadata.getReplacementSpecs()) {
-                tr = addChildElement(table, "tr");
-                addChildElement(tr, "td", replacement instanceof RankSwappingSpec ? 
-                        "Rank swapping" : "Numerical microaggregation");
-                addChildElement(tr, "td", VariableMu.printVariableNames(replacement.getVariables()));
-                if (replacement instanceof RankSwappingSpec) {
-                    addChildElement(tr, "td",
-                        String.format("Percentage: %d %%", ((RankSwappingSpec)replacement).getPercentage()));
-                }
-                else {
-                    MicroaggregationSpec microAggr = (MicroaggregationSpec) replacement;
-                    String optimal =  microAggr.getVariables().size() == 1  ? 
-                            String.format("; Optimal: %s", (microAggr.isOptimal() ? "yes" : "no")) : "";
-                    addChildElement(tr, "td",
+            tr = addChildElement(table, "tr");
+            addChildElement(tr, "td", replacement instanceof RankSwappingSpec
+                    ? "Rank swapping" : "Numerical microaggregation");
+            addChildElement(tr, "td", VariableMu.printVariableNames(replacement.getVariables()));
+            if (replacement instanceof RankSwappingSpec) {
+                addChildElement(tr, "td",
+                        String.format("Percentage: %d %%", ((RankSwappingSpec) replacement).getPercentage()));
+            } else {
+                MicroaggregationSpec microAggr = (MicroaggregationSpec) replacement;
+                String optimal = microAggr.getVariables().size() == 1
+                        ? String.format("; Optimal: %s", (microAggr.isOptimal() ? "yes" : "no")) : "";
+                addChildElement(tr, "td",
                         String.format("Group size: %d%s", microAggr.getMinimalNumberOfRecords(), optimal));
-                    
-                }
-            
+
+            }
+
         }
         return p;
     }
-    
+
     private static boolean hasOtherModifications(MetadataMu metadata) {
         if (metadata.getCombinations().getModifyNumericalVariables().getModifyNumericalVariablesSpec().size() > 0) {
             return true;
         }
-        return metadata.getReplacementSpecs().size() > 0;            
+        return metadata.getReplacementSpecs().size() > 0;
     }
-    
+
     private static Element writeFrequencyTablesTable(MetadataMu metadata) {
         Element p = doc.createElement("p");
         addChildElement(p, "h2", "Frequency tables used");
@@ -196,47 +195,47 @@ public class HTMLReportWriter {
             }
         }
 
-            Element p = doc.createElement("p");
-            if (recoded) {
-                addChildElement(p, "h2", "GlobalRecodings that have been applied:");
-                for (RecodeMu r : metadata.getCombinations().getGlobalRecode().getRecodeMus()) {
-                    if (r.isRecoded()) {
-                        addChildElement(p, "h2", r.getVariable().getName());
-                        Element table = addChildElement(p, "table");
-                        Element tr = addChildElement(table, "tr");
-                        addChildElement(tr, "th", "Code");
-                        addChildElement(tr, "th", "Categories");
-                        try {
-                            MetaReader.readGrc(r.getGrcFile(), r);
-                            BufferedReader reader = new BufferedReader(new StringReader(r.getGrcText()));
-                            Tokenizer tokenizer = new Tokenizer(reader);
-                            String line;
-                            while ((line = tokenizer.nextLine()) != null && !line.substring(0, 1).equals("<")) {
-                                tr = addChildElement(table, "tr");
-                                addChildElement(tr, "td", line.substring(0, line.indexOf(":")));
-                                addChildElement(tr, "td", line.substring(line.indexOf(":") + 1));
-                            }
+        Element p = doc.createElement("p");
+        if (recoded) {
+            addChildElement(p, "h2", "GlobalRecodings that have been applied:");
+            for (RecodeMu r : metadata.getCombinations().getGlobalRecode().getRecodeMus()) {
+                if (r.isRecoded()) {
+                    addChildElement(p, "h2", r.getVariable().getName());
+                    Element table = addChildElement(p, "table");
+                    Element tr = addChildElement(table, "tr");
+                    addChildElement(tr, "th", "Code");
+                    addChildElement(tr, "th", "Categories");
+                    try {
+                        MetaReader.readGrc(r.getGrcFile(), r);
+                        BufferedReader reader = new BufferedReader(new StringReader(r.getGrcText()));
+                        Tokenizer tokenizer = new Tokenizer(reader);
+                        String line;
+                        while ((line = tokenizer.nextLine()) != null && !line.substring(0, 1).equals("<")) {
                             tr = addChildElement(table, "tr");
-                            addChildElement(tr, "td", r.getMissing_1_new());
-                            addChildElement(tr, "td", "Missing 1");
-                            if (!r.getMissing_2_new().isEmpty()) {
-                                tr = addChildElement(table, "tr");
-                                addChildElement(tr, "td", r.getMissing_2_new());
-                                addChildElement(tr, "td", "Missing 2");
-                            }
-
-                        } catch (ArgusException ex) {
-                            //Logger.getLogger(HTMLReportWriter.class.getName()).log(Level.SEVERE, null, ex);
+                            addChildElement(tr, "td", line.substring(0, line.indexOf(":")));
+                            addChildElement(tr, "td", line.substring(line.indexOf(":") + 1));
                         }
-                    } else if (r.isTruncated()) {
-                        addChildElement(p, "h2", r.getVariable().getName());
-                        addChildElement(p, "h2", r.getPositionsTruncated() + " digit has been truncated");
+                        tr = addChildElement(table, "tr");
+                        addChildElement(tr, "td", r.getMissing_1_new());
+                        addChildElement(tr, "td", "Missing 1");
+                        if (!r.getMissing_2_new().isEmpty()) {
+                            tr = addChildElement(table, "tr");
+                            addChildElement(tr, "td", r.getMissing_2_new());
+                            addChildElement(tr, "td", "Missing 2");
+                        }
+
+                    } catch (ArgusException ex) {
+                        //Logger.getLogger(HTMLReportWriter.class.getName()).log(Level.SEVERE, null, ex);
                     }
+                } else if (r.isTruncated()) {
+                    addChildElement(p, "h2", r.getVariable().getName());
+                    addChildElement(p, "h2", r.getPositionsTruncated() + " digit has been truncated");
                 }
-            } else {
-                addChildElement(p, "h2", "No global recodings have been applied");
             }
-            return p;
+        } else {
+            addChildElement(p, "h2", "No global recodings have been applied");
+        }
+        return p;
 //        } catch (Exception e) {
 //            Element p = doc.createElement("p");
 //            addChildElement(p, "h2", "No global recodings have been applied");
@@ -249,7 +248,6 @@ public class HTMLReportWriter {
     //    String format = "%." + decimals + "f";
     //    return String.format(MuARGUS.getLocale(), format, d);
     //}
-
     private static Element writeBaseIndividualRisk(MetadataMu metadata) {
         Element p = doc.createElement("p");
         addChildElement(p, "h2", String.format("Base %s Risk has been applied:",
@@ -265,12 +263,11 @@ public class HTMLReportWriter {
                 RiskSpecification riskSpec = metadata.getCombinations().getRiskSpecifications().get(t);
                 if (metadata.isHouseholdData()) {
                     addChildElement(p, "h2", "Household risk: " + formatDouble(riskSpec == null ? 0 : riskSpec.getRiskThreshold(), 5, true));
-                }
-                else {
+                } else {
                     addChildElement(p, "h2", "Ind. risk: " + formatDouble(riskSpec == null ? 0 : riskSpec.getRiskThreshold(), 5, true));
-                    addChildElement(p, "h2", "Ind. re-ident rate: " + formatDouble(riskSpec == null ? 0 : riskSpec.getReidentRateThreshold()*100, 3, true) + " %");
+                    addChildElement(p, "h2", "Ind. re-ident rate: " + formatDouble(riskSpec == null ? 0 : riskSpec.getReidentRateThreshold() * 100, 3, true) + " %");
                 }
-                    
+
                 addChildElement(p, "h2", "");
             }
         }
@@ -297,7 +294,7 @@ public class HTMLReportWriter {
             tr = addChildElement(table, "tr");
             addChildElement(tr, "td", v.getName());
             if (metadata.getCombinations().getProtectedFile().isWithEntropy()) {
-                addChildElement(tr, "td", formatDouble(v.getEntropy(),2, true));
+                addChildElement(tr, "td", formatDouble(v.getEntropy(), 2, true));
             } else {
                 addChildElement(tr, "td", Integer.toString(v.getSuppressweight()));
             }
@@ -313,14 +310,14 @@ public class HTMLReportWriter {
     }
 
     private static String formatDouble(double d, int decimals, boolean showIfZero) {
-        DecimalFormat decimalFormat = (DecimalFormat)NumberFormat.getNumberInstance(MuARGUS.getLocale());
+        DecimalFormat decimalFormat = (DecimalFormat) NumberFormat.getNumberInstance(MuARGUS.getLocale());
         decimalFormat.setGroupingUsed(false);
         decimalFormat.setMaximumFractionDigits(decimals);
         decimalFormat.setMinimumFractionDigits(showIfZero ? decimals : 0);
         return decimalFormat.format(d);
-        
+
     }
-    
+
     private static Element writeSafeFileMetaTable(MetadataMu metadata) {
         MetadataMu safeMeta = getSafeMeta(metadata);
 
@@ -345,7 +342,7 @@ public class HTMLReportWriter {
     private static Element writeFooter() {
         Element p = doc.createElement("p");
         addChildElement(p, "h2", String.format("μ-ARGUS version: %d.%d.%s (build: %d)",
-            MuARGUS.MAJOR, MuARGUS.MINOR, MuARGUS.REVISION, MuARGUS.BUILD));
+                MuARGUS.MAJOR, MuARGUS.MINOR, MuARGUS.REVISION, MuARGUS.BUILD));
         return p;
     }
 
