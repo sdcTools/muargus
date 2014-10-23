@@ -8,6 +8,7 @@ package muargus;
 import argus.model.ArgusException;
 import argus.utils.Tokenizer;
 import com.ibm.statistics.plugin.DataUtil;
+import com.ibm.statistics.plugin.NumericMissingValueType;
 import com.ibm.statistics.plugin.StatsException;
 import com.ibm.statistics.plugin.StatsUtil;
 import com.ibm.statistics.plugin.Variable;
@@ -34,6 +35,7 @@ import muargus.model.CodeInfo;
 import muargus.model.PramVariableSpec;
 import muargus.model.ReplacementSpec;
 import muargus.model.RiskModelClass;
+import muargus.model.SpssVariable;
 //import muargus.model.UnsafeInfo;
 import muargus.model.VariableMu;
 import org.apache.commons.lang3.StringUtils;
@@ -257,21 +259,42 @@ public class CalculationService {
                             }
                         }
                     }
-                    for (String[] list : data) {
-                        for (String s : list) {
-                            System.out.print(s + ";");
-                        }
-                        System.out.println("");
-                    }
+//                    for (String[] list : data) {
+//                        for (String s : list) {
+//                            System.out.print(s + ";");
+//                        }
+//                        System.out.println("");
+//                    }
                     StatsUtil.start();
                     StatsUtil.submit("GET FILE='" + this.metadata.getFileNames().getDataFileName() + "'.");
                     DataUtil d = new DataUtil();
                     for (int i = 0; i < this.metadata.getVariables().size(); i++) {
-                        Variable temp = new Variable("TEMP" + this.metadata.getVariables().get(i).getName(), 8);
-                        d.addVariableWithValue(temp, data[i], 0);
+                        SpssVariable variable = this.metadata.getVariables().get(i).getSpssVariable();
+                        Variable temp = new Variable("TEMP" + variable.getName(), variable.getVariableType());
+                        temp.setMeasureLevel(variable.getMeasurementLevel());
+                        temp.setVarLabel(variable.getVariableLabel());
+                        temp.setFormatDecimal(variable.getNumberOfDecimals());
+                        temp.setFormatWidth(variable.getVariableLength());
+                        if (variable.getVariableType() == 0) { // 0 is numeric
+                            double[] doubleData = new double[data[i].length];
+                            for (int j = 0; j < data[i].length; j++) {
+                                if (!data[i][j].equals("")) {
+                                    doubleData[j] = Double.parseDouble(data[i][j]);
+                                }
+                            }
+                            temp.setNumericVarMissingValues(variable.getMissing(), NumericMissingValueType.DISCRETE);
+                            temp.setNumValueLabels(variable.getNumericValueLabels());
+                            d.addVariableWithValue(temp, doubleData, 0);
+                        } else {
+                            d.addVariableWithValue(temp, data[i], 0);
+                        }
                     }
                     d.release();
-                    StatsUtil.submit("SAVE OUTFILE='" + this.metadata.getFileNames().getDataFileName() + "'.");
+//                    for(VariableMu v: this.metadata.getVariables()){
+//                        String name = v.getSpssVariable().getName();
+//                        StatsUtil.submit("if (SYSMIS("+ name +") EQ 0) " + name + "= TEMP"+ name +".");
+//                    }
+                    StatsUtil.submit("SAVE OUTFILE='C:\\Users\\Gebruiker\\Desktop\\safe.sav'.");
                     StatsUtil.stop();
                 } catch (FileNotFoundException ex) {
                     Logger.getLogger(CalculationService.class.getName()).log(Level.SEVERE, null, ex);

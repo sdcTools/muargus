@@ -49,6 +49,8 @@ public class VariableMu {
     private double entropy;
 
     private final ArrayList<CodeInfo> codeInfos;
+    
+    private SpssVariable spssVariable;
 
     /**
      * Constructor of the model class VariableMu. Makes an empty arraylists for
@@ -572,6 +574,14 @@ public class VariableMu {
      */
     public ArrayList<CodeInfo> getCodeInfos() {
         return this.codeInfos;
+    }
+
+    public SpssVariable getSpssVariable() {
+        return spssVariable;
+    }
+
+    public void setSpssVariable(SpssVariable spssVariable) {
+        this.spssVariable = spssVariable;
     }
 
     public static String printVariableNames(ArrayList<VariableMu> list) {

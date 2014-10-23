@@ -6,6 +6,8 @@
 package muargus.model;
 
 import com.ibm.statistics.plugin.MeasurementLevel;
+import com.ibm.statistics.plugin.VariableFormat;
+import java.util.Map;
 
 /**
  *
@@ -14,26 +16,39 @@ import com.ibm.statistics.plugin.MeasurementLevel;
 public class SpssVariable {
 
     private final String name;
-    private final MeasurementLevel variableType; //e.g. scale, nominal, ordinal
+    private final MeasurementLevel measurementLevel; //e.g. scale, nominal, ordinal
     private int variableLength = 0;
     private int numberOfDecimals = 0;
     private boolean numeric = false;
     private boolean categorical = false;
     private final double[] missing;
+    private final int variableType;
+    private final String variableLabel;
+    private final String[] variableAttributeNames;
+    private final VariableFormat variableFormat;
+    private Map<String, String> stringValueLabels;
+    private Map<Double, String> numericValueLabels;
+    //private final Map<Double,String> numericValueLabels;
 
     private boolean selected; //indicated whether selected in Argus meta or not
 
-    public SpssVariable(String name, int formatDecimal, int formatWidth, double[] missing, MeasurementLevel variableType) {
+    public SpssVariable(String name, int formatDecimal, int formatWidth, double[] missing, MeasurementLevel measurementLevel,
+            int variableType, String variableLabel, String[] variableAttributeNames, VariableFormat variableFormat){//, Map<Double,String> numericValueLabels) {
         this.name = name;
         this.numberOfDecimals = formatDecimal;
         this.variableLength = formatWidth;
         this.missing = missing;
+        this.measurementLevel = measurementLevel;
         this.variableType = variableType;
+        this.variableLabel = variableLabel;
+        this.variableAttributeNames = variableAttributeNames;
+        this.variableFormat = variableFormat;
+        //this.numericValueLabels = numericValueLabels;
         setMeasurementLevel();
     }
 
     private void setMeasurementLevel() {
-        switch (variableType.toString()) {
+        switch (measurementLevel.toString()) {
             case ("SCALE"):
                 this.numeric = true;
                 break;
@@ -53,8 +68,8 @@ public class SpssVariable {
         return name;
     }
 
-    public MeasurementLevel getVariableType() {
-        return variableType;
+    public MeasurementLevel getMeasurementLevel() {
+        return measurementLevel;
     }
 
     public int getVariableLength() {
@@ -84,4 +99,42 @@ public class SpssVariable {
     public void setSelected(boolean selected) {
         this.selected = selected;
     }
+
+    public int getVariableType() {
+        return variableType;
+    }
+
+    public String getVariableLabel() {
+        return variableLabel;
+    }
+
+    public String[] getVariableAttributeNames() {
+        return variableAttributeNames;
+    }
+
+    public VariableFormat getVariableFormat() {
+        return variableFormat;
+    }
+
+//    public Map<Double,String> getNumericValueLabels() {
+//        return numericValueLabels;
+//    }
+    public Map<String, String> getStringValueLabels() {
+        return stringValueLabels;
+    }
+
+    public void setStringValueLabels(Map<String, String> stringValueLabels) {
+        this.stringValueLabels = stringValueLabels;
+    }
+
+    public Map<Double, String> getNumericValueLabels() {
+        return numericValueLabels;
+    }
+
+    public void setNumericValueLabels(Map<Double, String> numericValueLabels) {
+        this.numericValueLabels = numericValueLabels;
+    }
+
+ 
+
 }

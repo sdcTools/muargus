@@ -3,6 +3,7 @@ package muargus.controller;
 
 import argus.model.ArgusException;
 import argus.utils.StrUtils;
+import com.ibm.statistics.plugin.Cursor;
 import com.ibm.statistics.plugin.StatsException;
 import com.ibm.statistics.plugin.StatsUtil;
 import java.util.List;
@@ -44,9 +45,17 @@ public class SpecifyMetadataController extends ControllerBase<MetadataMu> {
             try {
                 StatsUtil.start();
                 StatsUtil.submit("get file = \"" + this.metadataClone.getFileNames().getDataFileName() + "\".");
+                Cursor c = new Cursor();
                 for (int i = 0; i < StatsUtil.getVariableCount(); i++) {
                     SpssVariable variable = new SpssVariable(StatsUtil.getVariableName(i), StatsUtil.getVariableFormatDecimal(i),
-                            StatsUtil.getVariableFormatWidth(i), StatsUtil.getNumericMissingValues(i), StatsUtil.getVariableMeasurementLevel(i));
+                            StatsUtil.getVariableFormatWidth(i), StatsUtil.getNumericMissingValues(i), StatsUtil.getVariableMeasurementLevel(i),
+                            StatsUtil.getVariableType(i), StatsUtil.getVariableLabel(i), StatsUtil.getVariableAttributeNames(i),
+                            StatsUtil.getVariableFormat(i));
+                    if (variable.getVariableType() == 0) {
+                        variable.setNumericValueLabels(c.getNumericValueLabels(i));
+                    } else {
+                        variable.setStringValueLabels(c.getStringValueLabels(i));
+                    }
                     this.metadataClone.getSpssVariables().add(variable);
                 }
                 StatsUtil.stop();
@@ -78,6 +87,7 @@ public class SpecifyMetadataController extends ControllerBase<MetadataMu> {
                     }
                     v.setVariableLength(variableLength);
                     v.setStartingPosition(this.metadataClone.getSpssStartingPosition());
+                    v.setSpssVariable(variable);
                     this.metadataClone.getVariables().add(v);
                 }
             } else {
