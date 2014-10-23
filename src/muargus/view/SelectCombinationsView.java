@@ -17,6 +17,8 @@ import muargus.model.TableMu;
 import muargus.model.VariableMu;
 import muargus.MuARGUS;
 import muargus.HighlightTableCellRenderer;
+import muargus.controller.SpssUtils;
+import muargus.model.MetadataMu;
 
 /**
  * View class of the SelectCombinations screen.
@@ -119,8 +121,7 @@ public class SelectCombinationsView extends DialogBase<SelectCombinationsControl
             public Class getColumnClass(int i) {
                 return (i == 1 ? Integer.class : String.class);
             }
-            
-            
+
         };
         this.table.setModel(this.tableModel);
 
@@ -532,7 +533,7 @@ public class SelectCombinationsView extends DialogBase<SelectCombinationsControl
         if (this.model.getNumberOfRows() > 0) {
             try {
                 int[] selectedRows = this.table.getSelectedRows();
-                for (int i=0; i < selectedRows.length; i++) {
+                for (int i = 0; i < selectedRows.length; i++) {
                     selectedRows[i] = this.table.convertRowIndexToModel(selectedRows[i]);
                 }
                 this.variablesSelectedListModel.removeAllElements();
@@ -558,7 +559,8 @@ public class SelectCombinationsView extends DialogBase<SelectCombinationsControl
         // checks if there are tables and askes if they need to be removed
         int numberOfOldTables = this.model.getNumberOfRows();
         if (this.model.getNumberOfRows() > 0) {
-            if (JOptionPane.showConfirmDialog(this, "Do you want to delete the current set of tables?", "Mu Argus", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+            if (JOptionPane.showConfirmDialog(this, "Do you want to delete the current set of tables?", "Mu Argus",
+                    JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
                 clear();
             }
         }
@@ -577,9 +579,16 @@ public class SelectCombinationsView extends DialogBase<SelectCombinationsControl
         }
 
         // add all variables with an ID-level higher than 0 to the arrayList of variables.
-        int numberOfLevels = 0; // the number of idLevels higher than 0
+        int numberOfLevels = 0; // the number of idLevels with at least one variable
+        // TODO: dit staat er alleen om makkelijk te testen. verander start naar 1 in de for-loop na het testen.
+        int start;
+        if (getMetadata().getDataFileType() == MetadataMu.DATA_FILE_TYPE_SPSS) {
+            start = 0;
+        } else {
+            start = 1;
+        }
         ArrayList<VariableMu> allValidVariables = new ArrayList<>();
-        for (int i = 1; i < variables.size(); i++) {
+        for (int i = start; i < variables.size(); i++) {
             allValidVariables.addAll(variables.get(i));
             if (variables.get(i).size() > 0) {
                 numberOfLevels++;
@@ -826,6 +835,7 @@ public class SelectCombinationsView extends DialogBase<SelectCombinationsControl
 
     /**
      * Gets a list of to be removed tables.
+     *
      * @return Arraylist of TableMu's containing the removed tables.
      */
     private ArrayList<TableMu> getListOfRemovedTables() {
@@ -899,7 +909,7 @@ public class SelectCombinationsView extends DialogBase<SelectCombinationsControl
 
                 updateValues();
                 this.table.getSelectionModel().setSelectionInterval(index, index);
-                
+
             } catch (Exception e) {
                 showMessage("No table is selected");
             }

@@ -24,6 +24,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.SwingWorker;
 import muargus.controller.SelectCombinationsController;
+import muargus.controller.SpssUtils;
 import muargus.extern.dataengine.CMuArgCtrl;
 import muargus.extern.dataengine.IProgressListener;
 import muargus.model.ProtectedFile;
@@ -282,9 +283,9 @@ public class CalculationService {
                                     doubleData[j] = Double.parseDouble(data[i][j]);
                                 }
                             }
-                            temp.setNumericVarMissingValues(variable.getMissing(), NumericMissingValueType.DISCRETE);
+                            temp.setNumericVarMissingValues(variable.getNumericMissings(), NumericMissingValueType.DISCRETE);
                             temp.setNumValueLabels(variable.getNumericValueLabels());
-                            d.addVariableWithValue(temp, doubleData, 0);
+                            d.addVariableWithValue(temp, doubleData, SpssUtils.NUMERIC);
                         } else {
                             d.addVariableWithValue(temp, data[i], 0);
                         }

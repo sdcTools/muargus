@@ -12,6 +12,7 @@ import javax.swing.JDialog;
 import muargus.VariableNameCellRenderer;
 import muargus.model.MetadataMu;
 import muargus.controller.SpecifyMetadataController;
+import muargus.controller.SpssUtils;
 import muargus.model.SpssVariable;
 import muargus.model.VariableMu;
 
@@ -877,48 +878,14 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
         }
     }//GEN-LAST:event_variablesComboBoxActionPerformed
 
-//    private List<SpssVariable> getVariablesFromSpss() {
-//        if (getMetadata().getSpssVariables().size() < 1) {
-//            try {
-//                StatsUtil.start();
-//                StatsUtil.submit("get file = \"" + getMetadata().getFileNames().getDataFileName() + "\".");
-//                for (int i = 0; i < StatsUtil.getVariableCount(); i++) {
-//                    SpssVariable variable = new SpssVariable(StatsUtil.getVariableName(i), StatsUtil.getVariableFormatDecimal(i),
-//                            StatsUtil.getVariableFormatWidth(i), StatsUtil.getNumericMissingValues(i), StatsUtil.getVariableMeasurementLevel(i));
-//                    getMetadata().getSpssVariables().add(variable);
-//                }
-//                StatsUtil.stop();
-//            } catch (StatsException e) {
-//
-//            }
-//        }
-//        return getMetadata().getSpssVariables();
-//    }
-//    public void testVariable(ArrayList<SpssVariable> variables) {
-//        for (SpssVariable v : variables) {
-//            System.out.println("Name: " + v.getName());
-//            System.out.println("Width: " + v.getVariableLength());
-//            System.out.println("Decimals" + v.getNumberOfDecimals());
-//            System.out.println("Missing Values: " + Arrays.toString(v.getMissing()));
-//            System.out.println("Type: " + v.getVariableType().toString());
-//            if (v.isNumeric()) {
-//                System.out.println("Numeric");
-//            }
-//            if (v.isCategorical()) {
-//                System.out.println("Categorical");
-//            }
-//            System.out.println("");
-//        }
-//    }
-
     private void newButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newButtonActionPerformed
         this.newButton.setEnabled(false);
         if (this.getMetadata().getDataFileType() == MetadataMu.DATA_FILE_TYPE_SPSS) {
-            List<SpssVariable> variables = getController().getVariablesFromSpss();
+            List<SpssVariable> variables = SpssUtils.getVariablesFromSpss(getController().getMetadataClone());
             SpssSelectVariablesView selectView = new SpssSelectVariablesView(parent, true);
             selectView.showVariables(variables);
             selectView.setVisible(true);
-            getController().setVariablesSpss(variables);
+            SpssUtils.setVariablesSpss(variables, getController().getMetadataClone());
             initializeData();
             calculateButtonStates();
             if (!this.variableListModel.isEmpty()) {

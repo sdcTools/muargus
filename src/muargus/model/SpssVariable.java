@@ -21,7 +21,8 @@ public class SpssVariable {
     private int numberOfDecimals = 0;
     private boolean numeric = false;
     private boolean categorical = false;
-    private final double[] missing;
+    private double[] numericMissings;
+    private String[] stringMissings;
     private final int variableType;
     private final String variableLabel;
     private final String[] variableAttributeNames;
@@ -32,12 +33,11 @@ public class SpssVariable {
 
     private boolean selected; //indicated whether selected in Argus meta or not
 
-    public SpssVariable(String name, int formatDecimal, int formatWidth, double[] missing, MeasurementLevel measurementLevel,
+    public SpssVariable(String name, int formatDecimal, int formatWidth, MeasurementLevel measurementLevel,
             int variableType, String variableLabel, String[] variableAttributeNames, VariableFormat variableFormat){//, Map<Double,String> numericValueLabels) {
         this.name = name;
         this.numberOfDecimals = formatDecimal;
         this.variableLength = formatWidth;
-        this.missing = missing;
         this.measurementLevel = measurementLevel;
         this.variableType = variableType;
         this.variableLabel = variableLabel;
@@ -88,10 +88,6 @@ public class SpssVariable {
         return categorical;
     }
 
-    public double[] getMissing() {
-        return missing;
-    }
-
     public boolean isSelected() {
         return selected;
     }
@@ -133,6 +129,22 @@ public class SpssVariable {
 
     public void setNumericValueLabels(Map<Double, String> numericValueLabels) {
         this.numericValueLabels = numericValueLabels;
+    }
+
+    public double[] getNumericMissings() {
+        return numericMissings;
+    }
+
+    public void setNumericMissings(double[] numericMissings) {
+        this.numericMissings = numericMissings;
+    }
+
+    public String[] getStringMissings() {
+        return stringMissings;
+    }
+
+    public void setStringMissings(String[] stringMissings) {
+        this.stringMissings = stringMissings;
     }
 
  

@@ -2,17 +2,11 @@
 package muargus.controller;
 
 import argus.model.ArgusException;
-import argus.utils.StrUtils;
-import com.ibm.statistics.plugin.Cursor;
-import com.ibm.statistics.plugin.StatsException;
-import com.ibm.statistics.plugin.StatsUtil;
-import java.util.List;
 import java.util.logging.Logger;
 import muargus.io.MetaReader;
 import muargus.io.MetaWriter;
 import muargus.model.Combinations;
 import muargus.model.MetadataMu;
-import muargus.model.SpssVariable;
 import muargus.model.VariableMu;
 import muargus.view.SpecifyMetadataView;
 
@@ -38,101 +32,6 @@ public class SpecifyMetadataController extends ControllerBase<MetadataMu> {
         setModel(metadata);
         this.metadataClone = new MetadataMu(metadata);
         getView().setMetadata(this.metadataClone);
-    }
-
-    public List<SpssVariable> getVariablesFromSpss() {
-        if (this.metadataClone.getSpssVariables().size() < 1) {
-            try {
-                StatsUtil.start();
-                StatsUtil.submit("get file = \"" + this.metadataClone.getFileNames().getDataFileName() + "\".");
-                Cursor c = new Cursor();
-                for (int i = 0; i < StatsUtil.getVariableCount(); i++) {
-                    SpssVariable variable = new SpssVariable(StatsUtil.getVariableName(i), StatsUtil.getVariableFormatDecimal(i),
-                            StatsUtil.getVariableFormatWidth(i), StatsUtil.getNumericMissingValues(i), StatsUtil.getVariableMeasurementLevel(i),
-                            StatsUtil.getVariableType(i), StatsUtil.getVariableLabel(i), StatsUtil.getVariableAttributeNames(i),
-                            StatsUtil.getVariableFormat(i));
-                    if (variable.getVariableType() == 0) {
-                        variable.setNumericValueLabels(c.getNumericValueLabels(i));
-                    } else {
-                        variable.setStringValueLabels(c.getStringValueLabels(i));
-                    }
-                    this.metadataClone.getSpssVariables().add(variable);
-                }
-                StatsUtil.stop();
-            } catch (StatsException e) {
-
-            }
-        }
-        return this.metadataClone.getSpssVariables();
-    }
-
-    public void setVariablesSpss(List<SpssVariable> variables) {
-        for (SpssVariable variable : variables) {
-            if (variable.isSelected()) {
-                VariableMu v = new VariableMu(variable.getName());
-                if (!doesVariableExist(v)) {
-                    v.setDecimals(variable.getNumberOfDecimals());
-                    v.setNumeric(variable.isNumeric());
-                    v.setCategorical(variable.isCategorical());
-                    int variableLength = variable.getVariableLength();
-
-                    for (int i = 0; i < variable.getMissing().length; i++) {
-                        if (i == VariableMu.MAX_NUMBER_OF_MISSINGS) {
-                            break;
-                        }
-                        v.setMissing(i, getIntIfPossible(variable.getMissing()[i]));
-                        if (getIntIfPossible(variable.getMissing()[i]).length() > variableLength) {
-                            variableLength = getIntIfPossible(variable.getMissing()[i]).length();
-                        }
-                    }
-                    v.setVariableLength(variableLength);
-                    v.setStartingPosition(this.metadataClone.getSpssStartingPosition());
-                    v.setSpssVariable(variable);
-                    this.metadataClone.getVariables().add(v);
-                }
-            } else {
-                VariableMu v = new VariableMu(variable.getName());
-                if (doesVariableExist(v)) {
-                    removeVariable(variable.getName());
-                }
-            }
-        }
-    }
-
-    public boolean doesVariableExist(VariableMu variable) {
-        boolean doubleVariable = false;
-        for (VariableMu v : this.metadataClone.getVariables()) {
-            if (v.getName().equals(variable.getName())) {
-                doubleVariable = true;
-            }
-        }
-        return doubleVariable;
-    }
-
-    public void removeVariable(String variableName) {
-        for (VariableMu v : this.metadataClone.getVariables()) {
-            if (v.getName().equals(variableName)) {
-                this.metadataClone.getVariables().remove(v);
-                break;
-            }
-        }
-    }
-
-    public String getIntIfPossible(double value) {
-        double value_double;
-        String value_String = null;
-        try {
-            value_double = StrUtils.toDouble(Double.toString(value));
-            if ((value_double == Math.floor(value_double)) && !Double.isInfinite(value_double)) {
-                int value_int = (int) value_double;
-                value_String = Integer.toString(value_int);
-            } else {
-                value_String = Double.toString(value_double);
-            }
-        } catch (ArgusException ex) {
-            System.out.println("warning");
-        }
-        return value_String;
     }
 
     /**
@@ -226,6 +125,14 @@ public class SpecifyMetadataController extends ControllerBase<MetadataMu> {
      */
     public MetadataMu getMetadata() {
         return getModel();
+    }
+
+    /**
+     * Gets the tempory metadata.
+     * @return MetadataMu instance containing the temporary metadata.
+     */
+    public MetadataMu getMetadataClone() {
+        return metadataClone;
     }
 
     /**
