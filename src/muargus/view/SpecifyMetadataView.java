@@ -117,8 +117,8 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
         getMetadata().setDataFileType(MetadataMu.DATA_FILE_TYPE_SPSS);
         this.separatorLabel.setVisible(!b);
         this.separatorTextField.setVisible(!b);
-        this.startingPositionLabel.setVisible(b);
-        this.startingPositionTextField.setVisible(b);
+        this.startingPositionLabel.setVisible(!b);
+        this.startingPositionTextField.setVisible(!b);
         this.nameTextField.setEnabled(!b);
         this.lengthTextField.setEnabled(!b);
         if (getController().getMetadata().getDataFileType() != MetadataMu.DATA_FILE_TYPE_SPSS) {

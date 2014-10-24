@@ -180,6 +180,9 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="Systen Info..."/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="systemInfoButtonActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JLabel" name="iconLabel">
       <Properties>

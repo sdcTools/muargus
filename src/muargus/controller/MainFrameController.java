@@ -444,29 +444,31 @@ public class MainFrameController {
     }
 
     /**
-     *
+     * Shows the news.
      */
     public void news() {
-        try {
-            File file = new File(this.newsLocation);
-            BufferedReader reader = new BufferedReader(new FileReader(file));
-            boolean finished = false;
-            do {
-                try {
-                    String temp = reader.readLine();
-                    this.news = this.news + temp;
-                    if (temp.equals("")) {
+        if (this.news.equals("")) {
+            try {
+                File file = new File(this.newsLocation);
+                BufferedReader reader = new BufferedReader(new FileReader(file));
+                boolean finished = false;
+                do {
+                    try {
+                        String temp = reader.readLine();
+                        this.news = this.news + temp;
+                        if (temp.equals("</html>")) {
+                            finished = true;
+                        }
+                    } catch (IOException e) {
                         finished = true;
                     }
-                } catch (IOException e) {
-                    finished = true;
-                }
-            } while (!finished);
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(MainFrameController.class.getName()).log(Level.SEVERE, null, ex);
+                } while (!finished);
+            } catch (FileNotFoundException ex) {
+                Logger.getLogger(MainFrameController.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
 
-        ViewReportController viewReportController = new ViewReportController(this.view, this.news);
+        ViewReportController viewReportController = new ViewReportController(this.view, this.news, "news");
         viewReportController.showView();
     }
 

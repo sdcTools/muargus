@@ -1,13 +1,16 @@
 package muargus.view;
 
+import java.io.File;
+
 /**
+ * Class of the About screen.
  *
  * @author Statistics Netherlands
  */
 public class AboutView extends DialogBase {
 
     /**
-     * Creates new form HelpAbout
+     * Creates new form AboutView
      *
      * @param parent the Frame of the mainFrame.
      * @param modal boolean to set the modal status
@@ -15,7 +18,7 @@ public class AboutView extends DialogBase {
     public AboutView(java.awt.Frame parent, boolean modal) {
         super(parent, modal, null);
         initComponents();
-        this.setLocationRelativeTo(null);
+        setLocationRelativeTo(null);
     }
 
     /**
@@ -84,6 +87,11 @@ public class AboutView extends DialogBase {
         });
 
         systemInfoButton.setText("Systen Info...");
+        systemInfoButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                systemInfoButtonActionPerformed(evt);
+            }
+        });
 
         iconLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/muargus/resources/icons/mu.png"))); // NOI18N
 
@@ -152,8 +160,31 @@ public class AboutView extends DialogBase {
     }// </editor-fold>//GEN-END:initComponents
 
     private void okButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okButtonActionPerformed
-        this.setVisible(false);
+        setVisible(false);
     }//GEN-LAST:event_okButtonActionPerformed
+
+    /**
+     * Shows the system information in a message dialog.
+     * @param evt Actionevent.
+     */
+    private void systemInfoButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_systemInfoButtonActionPerformed
+        String systemInfo = "";
+        systemInfo += "Available processors (cores): " + Runtime.getRuntime().availableProcessors();
+        systemInfo += "\nFree memory (Megabyte): " + Runtime.getRuntime().freeMemory() / Math.round(Math.pow(2, 20)) + "MB";
+        long maxMemory = Runtime.getRuntime().maxMemory();
+        systemInfo += "\nMaximum memory (Megabyte): " + (maxMemory == Long.MAX_VALUE ? "no limit" : maxMemory / Math.round(Math.pow(2, 20))) + "MB";
+        systemInfo += "\nTotal memory available to JVM (Megabyte): " + Runtime.getRuntime().totalMemory() / Math.round(Math.pow(2, 20)) + "MB";
+
+        for (File root : File.listRoots()) {
+            systemInfo += "\n\nFile system root: " + root.getAbsolutePath();
+            systemInfo += "\nTotal space: " + root.getTotalSpace() / Math.round(Math.pow(2, 30)) + "GB";
+            systemInfo += "\nFree space: " + root.getFreeSpace() / Math.round(Math.pow(2, 30)) + "GB";
+            systemInfo += "\nUsable space: " + root.getUsableSpace() / Math.round(Math.pow(2, 30)) + "GB";
+        }
+
+        showMessage(systemInfo);
+    }//GEN-LAST:event_systemInfoButtonActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel buildLabel;

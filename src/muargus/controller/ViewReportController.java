@@ -37,6 +37,7 @@ public class ViewReportController {
      */
     public ViewReportController(java.awt.Frame parentView, Document xmlDoc) {
         this.view = new ViewReportView(parentView, this, true);
+        
         this.html = createHtmlFromXml(xmlDoc);
     }
 
@@ -44,9 +45,11 @@ public class ViewReportController {
      *
      * @param parentView
      * @param html
+     * @param title
      */
-    public ViewReportController(java.awt.Frame parentView, String html) {
+    public ViewReportController(java.awt.Frame parentView, String html, String title) {
         this.view = new ViewReportView(parentView, this, true);
+        this.view.setTitle(title);
         this.html = html;
     }
 

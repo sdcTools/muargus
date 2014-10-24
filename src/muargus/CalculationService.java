@@ -231,67 +231,6 @@ public class CalculationService {
         }
         if (this.metadata.getDataFileType() == MetadataMu.DATA_FILE_TYPE_SPSS) {
             SpssUtils.makeSafeFileSpss(this.metadata);
-//            try {
-//
-//                try {
-//                    File file = new File(metadata.getSpssTempDataFileName());
-//                    BufferedReader reader;
-//                    reader = new BufferedReader(new FileReader(file));
-//                    Tokenizer tokenizer = new Tokenizer(reader);
-//                    String[][] data = new String[this.metadata.getVariables().size()][this.metadata.getSpssNumberOfCases()];
-//                    for (int i = 0; i < data[0].length; i++) {
-//                        String[] temp = tokenizer.nextLine().split(this.metadata.getSeparator());
-//                        for (int j = 0; j < data.length; j++) {
-//                            if (temp[j].isEmpty()) {
-//                                data[j][i] = "";
-//                            } else {
-//                                data[j][i] = temp[j];
-//                            }
-//                        }
-//                    }
-////                    for (String[] list : data) {
-////                        for (String s : list) {
-////                            System.out.print(s + ";");
-////                        }
-////                        System.out.println("");
-////                    }
-//                    StatsUtil.start();
-//                    StatsUtil.submit("GET FILE='" + this.metadata.getFileNames().getDataFileName() + "'.");
-//                    DataUtil d = new DataUtil();
-//                    for (int i = 0; i < this.metadata.getVariables().size(); i++) {
-//                        SpssVariable variable = this.metadata.getVariables().get(i).getSpssVariable();
-//                        Variable temp = new Variable("TEMP" + variable.getName(), variable.getVariableType());
-//                        temp.setMeasureLevel(variable.getMeasurementLevel());
-//                        temp.setVarLabel(variable.getVariableLabel());
-//                        temp.setFormatDecimal(variable.getNumberOfDecimals());
-//                        temp.setFormatWidth(variable.getVariableLength());
-//                        if (variable.getVariableType() == 0) { // 0 is numeric
-//                            double[] doubleData = new double[data[i].length];
-//                            for (int j = 0; j < data[i].length; j++) {
-//                                if (!data[i][j].equals("")) {
-//                                    doubleData[j] = Double.parseDouble(data[i][j]);
-//                                }
-//                            }
-//                            temp.setNumericVarMissingValues(variable.getNumericMissings(), NumericMissingValueType.DISCRETE);
-//                            temp.setNumValueLabels(variable.getNumericValueLabels());
-//                            d.addVariableWithValue(temp, doubleData, SpssUtils.NUMERIC);
-//                        } else {
-//                            d.addVariableWithValue(temp, data[i], 0);
-//                        }
-//                    }
-//                    d.release();
-////                    for(VariableMu v: this.metadata.getVariables()){
-////                        String name = v.getSpssVariable().getName();
-////                        StatsUtil.submit("if (SYSMIS("+ name +") EQ 0) " + name + "= TEMP"+ name +".");
-////                    }
-//                    StatsUtil.submit("SAVE OUTFILE='C:\\Users\\Gebruiker\\Desktop\\safe.sav'.");
-//                    StatsUtil.stop();
-//                } catch (FileNotFoundException ex) {
-//                    Logger.getLogger(CalculationService.class.getName()).log(Level.SEVERE, null, ex);
-//                }
-//            } catch (StatsException ex) {
-//                Logger.getLogger(CalculationService.class.getName()).log(Level.SEVERE, null, ex);
-//            }
         }
 
     }
