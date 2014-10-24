@@ -42,7 +42,6 @@ public class ViewReportView extends DialogBase<ViewReportController> {
         try {
             Reader stringReader = new StringReader(html);
             HTMLEditorKit htmlKit = new HTMLEditorKit();
-
             HTMLDocument htmlDoc = (HTMLDocument) htmlKit.createDefaultDocument();
             htmlDoc.putProperty("IgnoreCharsetDirective", true);
             htmlKit.read(stringReader, htmlDoc, 0);

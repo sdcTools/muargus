@@ -119,7 +119,7 @@ public class SpssUtils {
                     v.setNumeric(variable.isNumeric());
                     v.setCategorical(variable.isCategorical());
                     v.setStartingPosition(startingPos);
-                    if(SpssUtils.fixed){
+                    if (SpssUtils.fixed) {
                         startingPos += variable.getVariableLength();
                     }
                     v.setSpssVariable(variable);
@@ -131,6 +131,26 @@ public class SpssUtils {
                 if (doesVariableExist(v, metadata)) {
                     removeVariable(variable.getName(), metadata);
                 }
+            }
+        }
+    }
+
+    public static void checkMetadata(MetadataMu metadata) {
+        List<SpssVariable> spssVariables = SpssUtils.getVariablesFromSpss(metadata);
+        for (VariableMu variable : metadata.getVariables()) {
+            boolean found = false;
+            for (SpssVariable spssVariable : spssVariables) {
+                if (variable.getName().equals(spssVariable.getName())) {
+                    //TODO: add some more checks here
+                    variable.setSpssVariable(spssVariable);
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) {
+                metadata.getVariables().removeAll(metadata.getVariables());
+                System.out.println("Metadatafile does not equal the spss metadata");
+                break;
             }
         }
     }
@@ -238,7 +258,6 @@ public class SpssUtils {
                         writer.println(c.toString().substring(1, c.toString().length() - 1).replace("null", "").replace(',', ';'));
                     }
                 }
-
             } catch (FileNotFoundException ex) {
                 Logger.getLogger(SelectCombinationsController.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -281,7 +300,7 @@ public class SpssUtils {
             Logger.getLogger(SelectCombinationsController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     public static void makeSafeFileSpss(MetadataMu metadata) {
         try {
             try {
@@ -322,12 +341,12 @@ public class SpssUtils {
                         d.addVariableWithValue(temp, doubleData, SpssUtils.NUMERIC);
                     } else {
                         temp.setStringVarMissingValues(variable.getStringMissings());
-                        temp.setStrValueLabels(variable.getStringValueLabels()); 
+                        temp.setStrValueLabels(variable.getStringValueLabels());
                         d.addVariableWithValue(temp, data[i], 0);
                     }
                 }
                 d.release();
-                
+
 //                    for(VariableMu v: this.metadata.getVariables()){
 //                        String name = v.getSpssVariable().getName();
 //                        StatsUtil.submit("if (SYSMIS("+ name +") EQ 0) " + name + "= TEMP"+ name +".");
@@ -340,10 +359,9 @@ public class SpssUtils {
         } catch (StatsException ex) {
             Logger.getLogger(CalculationService.class.getName()).log(Level.SEVERE, null, ex);
         }
-        for(VariableMu v: metadata.getVariables()){
+        for (VariableMu v : metadata.getVariables()) {
             System.out.println(v.getName() + ": " + v.getStartingPosition());
         }
     }
-    
-    
+
 }

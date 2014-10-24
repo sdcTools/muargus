@@ -62,8 +62,7 @@ public final class MetadataMu {
         this();
 
         this.dataFileType = metadata.dataFileType;
-        this.filenames = new DataFilePair(
-                metadata.filenames.getDataFileName(), metadata.filenames.getMetaFileName());
+        this.filenames = new DataFilePair(metadata.filenames.getDataFileName(), metadata.filenames.getMetaFileName());
         this.separator = metadata.separator;
         for (VariableMu var : metadata.variables) {
             this.variables.add(new VariableMu(var));

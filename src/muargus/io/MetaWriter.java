@@ -9,12 +9,10 @@ package muargus.io;
 import argus.model.ArgusException;
 import argus.model.DataFilePair;
 import argus.utils.StrUtils;
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.logging.Level;
 import muargus.model.MetadataMu;
 import static muargus.model.MetadataMu.DATA_FILE_TYPE_FREE;
 import static muargus.model.MetadataMu.DATA_FILE_TYPE_SPSS;
@@ -31,11 +29,11 @@ public class MetaWriter {
     
     public static void writeRda(String path, MetadataMu metadata, boolean all) throws ArgusException {
         try {
-            PrintWriter writer = new PrintWriter(new File(path));
-            writeRda(writer, metadata, all);
+            try (PrintWriter writer = new PrintWriter(new File(path))) {
+                writeRda(writer, metadata, all);
+            }
             metadata.setFileNames(new DataFilePair(metadata.getFileNames().getDataFileName(), path));
-        } catch (IOException ex) {
-            //logger.log(Level.SEVERE, null, ex);
+        } catch (FileNotFoundException ex) {
             throw new ArgusException("Error writing to file. Error message: " + ex.getMessage());
         }
     }

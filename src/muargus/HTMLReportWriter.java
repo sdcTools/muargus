@@ -8,9 +8,6 @@ package muargus;
 import argus.model.ArgusException;
 import argus.utils.Tokenizer;
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.StringReader;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -38,9 +35,7 @@ public class HTMLReportWriter {
 
     private static Document doc;
 
-    public static void createReportTree(
-            Document document,
-            MetadataMu metadata) {
+    public static void createReportTree(Document document, MetadataMu metadata) {
         doc = document;
         Element html = addChildElement(doc, "html");
         html.appendChild(writeHeader());

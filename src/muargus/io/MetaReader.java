@@ -14,7 +14,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.logging.Level;
+import muargus.controller.SpssUtils;
 import muargus.model.MetadataMu;
 import static muargus.model.MetadataMu.DATA_FILE_TYPE_FIXED;
 import static muargus.model.MetadataMu.DATA_FILE_TYPE_FREE;
@@ -137,6 +137,10 @@ public class MetaReader {
             System.out.println("file not found");
             //logger.log(Level.SEVERE, null, ex);
             throw new ArgusException("Metadata file not found");
+        }
+        
+        if(metadata.getDataFileType() == MetadataMu.DATA_FILE_TYPE_SPSS){
+            SpssUtils.checkMetadata(metadata);
         }
 
     }
