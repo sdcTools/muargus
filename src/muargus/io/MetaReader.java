@@ -67,7 +67,8 @@ public class MetaReader {
                     variable.setRecodable(false);
                     variable.setName(tokenizer.getValue());
                     metadata.getVariables().add(variable);
-                    if (metadata.getDataFileType() == DATA_FILE_TYPE_FIXED) {
+                    if (metadata.getDataFileType() == DATA_FILE_TYPE_FIXED ||
+                            metadata.getDataFileType() == DATA_FILE_TYPE_SPSS) {
                         variable.setStartingPosition(tokenizer.nextToken());
                     } else {
                         variable.setStartingPosition("1");  //not relevant, but must be >0

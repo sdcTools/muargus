@@ -176,7 +176,6 @@ public class MainFrameView extends javax.swing.JFrame {
         contentsButton = new javax.swing.JButton();
         newsButton = new javax.swing.JButton();
         aboutButton = new javax.swing.JButton();
-        ManualButton = new javax.swing.JButton();
         unsafeCombinationsPanel = new javax.swing.JPanel();
         unsafeCombinationsLabel = new javax.swing.JLabel();
         unsafeCombinationsScrollPane = new javax.swing.JScrollPane();
@@ -211,7 +210,6 @@ public class MainFrameView extends javax.swing.JFrame {
         helpMenu = new javax.swing.JMenu();
         contentsMenuItem = new javax.swing.JMenuItem();
         newsMenuItem = new javax.swing.JMenuItem();
-        manualMenuItem = new javax.swing.JMenuItem();
         helpSeparator = new javax.swing.JPopupMenu.Separator();
         aboutMenuItem = new javax.swing.JMenuItem();
 
@@ -413,17 +411,6 @@ public class MainFrameView extends javax.swing.JFrame {
             }
         });
         toolBar.add(aboutButton);
-
-        ManualButton.setText("Manual");
-        ManualButton.setFocusable(false);
-        ManualButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        ManualButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        ManualButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuHelpActionPerformed(evt);
-            }
-        });
-        toolBar.add(ManualButton);
 
         unsafeCombinationsPanel.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
 
@@ -710,14 +697,6 @@ public class MainFrameView extends javax.swing.JFrame {
             }
         });
         helpMenu.add(newsMenuItem);
-
-        manualMenuItem.setText("Manual");
-        manualMenuItem.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                manualMenuItemActionPerformed(evt);
-            }
-        });
-        helpMenu.add(manualMenuItem);
         helpMenu.add(helpSeparator);
 
         aboutMenuItem.setText("About");
@@ -985,14 +964,6 @@ public class MainFrameView extends javax.swing.JFrame {
         controller.about();
     }//GEN-LAST:event_aboutMenuItemActionPerformed
 
-    private void jMenuHelpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuHelpActionPerformed
-        controller.manual();
-    }//GEN-LAST:event_jMenuHelpActionPerformed
-
-    private void manualMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_manualMenuItemActionPerformed
-        controller.manual();
-    }//GEN-LAST:event_manualMenuItemActionPerformed
-
     private void unsafeCombinationsTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_unsafeCombinationsTableMouseClicked
         if (evt.getClickCount() == 2) {
             int j = this.unsafeCombinationsTable.getSelectionModel().getMinSelectionIndex();
@@ -1023,7 +994,6 @@ public class MainFrameView extends javax.swing.JFrame {
     
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton ManualButton;
     private javax.swing.JButton aboutButton;
     private javax.swing.JMenuItem aboutMenuItem;
     private javax.swing.JMenuItem combinationsMenuItem;
@@ -1042,7 +1012,6 @@ public class MainFrameView extends javax.swing.JFrame {
     private javax.swing.JMenuItem individualRiskSpecificationMenuItem;
     private javax.swing.JButton makeProtectedFileButton;
     private javax.swing.JMenuItem makeProtectedFileMenuItem;
-    private javax.swing.JMenuItem manualMenuItem;
     private javax.swing.JMenuBar menuBar;
     private javax.swing.JMenuItem metaDataMenuItem;
     private javax.swing.JMenu modifyMenu;

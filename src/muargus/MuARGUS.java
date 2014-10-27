@@ -38,7 +38,7 @@ public class MuARGUS {
     private static final String lookAndFeel = "Windows";
 
     private static final String manualPath = "C:\\Users\\Gebruiker\\Desktop\\MUmanual4.3.pdf";
-    private static final String acrordPath = "C:\\Program Files\\Adobe\\Reader 11.0\\Reader\\AcroRd32.exe";
+    private static final String acrord32 = "acrord32.exe"; // finds the acrord32.exe
 
     static {
         System.loadLibrary("libmuargusdll");
@@ -104,17 +104,17 @@ public class MuARGUS {
                 Font font = g.getFont().deriveFont(Font.BOLD, 16.0f);
                 g.setFont(font);
 //             Even geen gevogel aan het splash screen               
-//               g.drawString("Version " + Application.getFullVersion() + " (Build " + Application.BUILD + ")", 160, 105 /*230*/);        
-//               splash.update();
+               g.drawString("Version " + getFullVersion() + " (Build " + BUILD + ")", 160, 105 /*230*/);        
+               splash.update();
                 // Sleep for 1/2 second, so people can see it
-                sleepThread(500);
+                sleepThread(10000);
             }
         }
     }
 
     public static void showHelp(String namedDest) {
         try {
-            String cmdString = "\"" + acrordPath + "\" /A \"nameddest=" + namedDest + "\" \"" + manualPath + "\"";
+            String cmdString = "cmd.exe /c start " + acrord32 + " /A \"nameddest=" + namedDest + "\" \"" + manualPath + "\"";
             Process p = Runtime.getRuntime().exec(cmdString);
         } catch (IOException ex) {
         } catch (Exception ex2) {

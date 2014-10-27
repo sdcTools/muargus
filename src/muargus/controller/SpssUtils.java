@@ -14,6 +14,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,9 +32,10 @@ import org.apache.commons.io.FilenameUtils;
  */
 public class SpssUtils {
 
-    public final static String tempDataFileExtension = "dat";
+    public final static String tempDataFileExtension = ".asc";
     public final static int NUMERIC = 0;
-    public static boolean fixed = false;
+//   public static boolean fixed = false;
+    public static boolean fixed = true;
     public static File safeFile;
     public static File safeSpssFile = new File("C:\\Users\\Gebruiker\\Desktop\\safe.sav");
 
@@ -249,7 +251,7 @@ public class SpssUtils {
 
             try {
                 // Sets the temporary filename
-                metadata.setSpssTempDataFileName(FilenameUtils.removeExtension(fileName) + "." + SpssUtils.tempDataFileExtension);
+                metadata.setSpssTempDataFileName(FilenameUtils.removeExtension(fileName) + SpssUtils.tempDataFileExtension);
                 try (PrintWriter writer = new PrintWriter(new File(metadata.getSpssTempDataFileName()))) {
                     for (Case c : data) {
                         writer.println(c.toString().substring(1, c.toString().length() - 1).replace("null", "").replace(',', ';'));
@@ -283,12 +285,12 @@ public class SpssUtils {
             }
             String fileName = metadata.getFileNames().getDataFileName();
             // Sets the temporary filename
-            metadata.setSpssTempDataFileName(FilenameUtils.removeExtension(fileName) + "." + SpssUtils.tempDataFileExtension);
+            metadata.setSpssTempDataFileName(FilenameUtils.removeExtension(fileName) + SpssUtils.tempDataFileExtension);
             
 
             String[] command = {"SET DECIMAL=DOT.",
                 "get file = '" + fileName + "'.",
-                "WRITE OUTFILE= '" + metadata.getSpssTempDataFileName() + "'/" + variablesCommand + ".",
+                "WRITE BOM=NO OUTFILE= '" + metadata.getSpssTempDataFileName() + "'/" + variablesCommand + ".",
                 "EXECUTE."
             };
             
@@ -362,9 +364,7 @@ public class SpssUtils {
         } catch (StatsException ex) {
             Logger.getLogger(CalculationService.class.getName()).log(Level.SEVERE, null, ex);
         }
-        for (VariableMu v : metadata.getVariables()) {
-            System.out.println(v.getName() + ": " + v.getStartingPosition());
-        }
+        //metadata.getSpssTempDataFileName().delete();
     }
 
 }

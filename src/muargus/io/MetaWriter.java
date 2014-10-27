@@ -70,7 +70,7 @@ public class MetaWriter {
     
     private static void writeVariableToRda(PrintWriter writer, VariableMu variable, int dataFileType, boolean all) {
         writer.print(variable.getName());
-        if (MetadataMu.DATA_FILE_TYPE_FIXED == dataFileType) {
+        if (MetadataMu.DATA_FILE_TYPE_FIXED == dataFileType || dataFileType == MetadataMu.DATA_FILE_TYPE_SPSS) {
             writer.print(String.format(" %d", variable.getStartingPosition()));
         }
         writer.print(String.format(" %d", variable.getVariableLength()));
