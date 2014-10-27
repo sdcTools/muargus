@@ -136,7 +136,6 @@ public class MicroaggregationView extends DialogBase<MicroaggregationController>
         numberOfRecordsLabel = new javax.swing.JLabel();
         numberOfRecordsTextField = new javax.swing.JTextField();
         optimalCheckbox = new javax.swing.JCheckBox();
-        cancelButton = new javax.swing.JButton();
         toSelectedButton = new javax.swing.JButton();
         fromSelectedButton = new javax.swing.JButton();
         undoButton = new javax.swing.JButton();
@@ -263,8 +262,6 @@ public class MicroaggregationView extends DialogBase<MicroaggregationController>
                 .addContainerGap())
         );
 
-        cancelButton.setText("Cancel");
-
         toSelectedButton.setText("→");
         toSelectedButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -312,18 +309,17 @@ public class MicroaggregationView extends DialogBase<MicroaggregationController>
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(downButton, javax.swing.GroupLayout.Alignment.TRAILING)
                                     .addComponent(upButton, javax.swing.GroupLayout.Alignment.TRAILING)))
-                            .addComponent(progressBar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(cancelButton)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(okButton, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(progressBar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(18, 18, 18)
                         .addComponent(stepNameLabel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(undoButton)
                         .addGap(26, 26, 26)
-                        .addComponent(calculateButton)))
+                        .addComponent(calculateButton))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(okButton, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -361,11 +357,9 @@ public class MicroaggregationView extends DialogBase<MicroaggregationController>
                         .addComponent(stepNameLabel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)))
                 .addComponent(progressBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(okButton)
-                    .addComponent(cancelButton))
-                .addContainerGap())
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(okButton)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -434,7 +428,6 @@ public class MicroaggregationView extends DialogBase<MicroaggregationController>
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton calculateButton;
-    private javax.swing.JButton cancelButton;
     private javax.swing.JButton downButton;
     private javax.swing.JButton fromSelectedButton;
     private javax.swing.JPanel jPanel1;

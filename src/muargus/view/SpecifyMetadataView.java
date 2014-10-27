@@ -372,7 +372,7 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
                         .addGap(20, 20, 20)
                         .addComponent(moveDownButton)
                         .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(variablesComboBox, 0, 0, Short.MAX_VALUE)
+                    .addComponent(variablesComboBox, 0, 113, Short.MAX_VALUE)
                     .addComponent(variablesScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, variablesPanelLayout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)

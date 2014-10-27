@@ -129,7 +129,6 @@ public class NumericalRankSwappingView extends DialogBase<NumericalRankSwappingC
         progressBar = new javax.swing.JProgressBar();
         okButton = new javax.swing.JButton();
         calculateButton = new javax.swing.JButton();
-        cancelButton = new javax.swing.JButton();
         toSelectedButton = new javax.swing.JButton();
         fromSelectedButton = new javax.swing.JButton();
         stepNameLabel = new javax.swing.JLabel();
@@ -251,8 +250,6 @@ public class NumericalRankSwappingView extends DialogBase<NumericalRankSwappingC
             }
         });
 
-        cancelButton.setText("Cancel");
-
         toSelectedButton.setText("→");
         toSelectedButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -283,10 +280,7 @@ public class NumericalRankSwappingView extends DialogBase<NumericalRankSwappingC
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(cancelButton)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(okButton, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(okButton, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                         .addGroup(layout.createSequentialGroup()
                             .addGap(10, 10, 10)
@@ -344,9 +338,7 @@ public class NumericalRankSwappingView extends DialogBase<NumericalRankSwappingC
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(progressBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 17, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(okButton)
-                    .addComponent(cancelButton))
+                .addComponent(okButton)
                 .addContainerGap())
         );
 
@@ -419,7 +411,6 @@ public class NumericalRankSwappingView extends DialogBase<NumericalRankSwappingC
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton calculateButton;
-    private javax.swing.JButton cancelButton;
     private javax.swing.JButton downButton;
     private javax.swing.JButton fromSelectedButton;
     private javax.swing.JLabel jLabel1;

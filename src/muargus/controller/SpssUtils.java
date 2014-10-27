@@ -33,12 +33,9 @@ public class SpssUtils {
 
     public final static String tempDataFileExtension = "dat";
     public final static int NUMERIC = 0;
-    public final static boolean fixed = false;
+    public static boolean fixed = false;
     public static File safeFile;
     public static File safeSpssFile = new File("C:\\Users\\Gebruiker\\Desktop\\safe.sav");
-
-    public SpssUtils() {
-    }
 
     /**
      * Gets the variables from spss. For every variable an instance of the
@@ -252,7 +249,7 @@ public class SpssUtils {
 
             try {
                 // Sets the temporary filename
-                metadata.setSpssTempDataFileName(FilenameUtils.removeExtension(fileName) + SpssUtils.tempDataFileExtension);
+                metadata.setSpssTempDataFileName(FilenameUtils.removeExtension(fileName) + "." + SpssUtils.tempDataFileExtension);
                 try (PrintWriter writer = new PrintWriter(new File(metadata.getSpssTempDataFileName()))) {
                     for (Case c : data) {
                         writer.println(c.toString().substring(1, c.toString().length() - 1).replace("null", "").replace(',', ';'));
@@ -286,13 +283,15 @@ public class SpssUtils {
             }
             String fileName = metadata.getFileNames().getDataFileName();
             // Sets the temporary filename
-            metadata.setSpssTempDataFileName(FilenameUtils.removeExtension(fileName) + SpssUtils.tempDataFileExtension);
+            metadata.setSpssTempDataFileName(FilenameUtils.removeExtension(fileName) + "." + SpssUtils.tempDataFileExtension);
+            
 
             String[] command = {"SET DECIMAL=DOT.",
                 "get file = '" + fileName + "'.",
-                "WRITE OUTFILE= '" + metadata.getSpssTempDataFileName() + "\"/" + variablesCommand + ".",
+                "WRITE OUTFILE= '" + metadata.getSpssTempDataFileName() + "'/" + variablesCommand + ".",
                 "EXECUTE."
             };
+            
             StatsUtil.submit(command);
 
             StatsUtil.stop();
@@ -346,12 +345,16 @@ public class SpssUtils {
                     }
                 }
                 d.release();
+                ArrayList<VariableMu> variables = metadata.getVariables();
+                String first = variables.get(0).getSpssVariable().getName();
+                String last = variables.get(variables.size()-1).getSpssVariable().getName();
 
-//                    for(VariableMu v: this.metadata.getVariables()){
-//                        String name = v.getSpssVariable().getName();
-//                        StatsUtil.submit("if (SYSMIS("+ name +") EQ 0) " + name + "= TEMP"+ name +".");
-//                    }
-                StatsUtil.submit("SAVE OUTFILE='" + SpssUtils.safeSpssFile + "'.");
+
+                for (VariableMu v : metadata.getVariables()) {
+                    String name = v.getSpssVariable().getName();
+                    StatsUtil.submit("if (SYSMIS(" + name + ") EQ 0) " + name + "= TEMP" + name + ".");
+                }
+                StatsUtil.submit("SAVE OUTFILE='" + SpssUtils.safeSpssFile + "'/DROP=TEMP" + first + " TO TEMP" + last + ".");
                 StatsUtil.stop();
             } catch (FileNotFoundException ex) {
                 Logger.getLogger(CalculationService.class.getName()).log(Level.SEVERE, null, ex);
