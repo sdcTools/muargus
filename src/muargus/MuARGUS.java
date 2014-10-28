@@ -100,14 +100,14 @@ public class MuARGUS {
                 System.out.println("g is null");
             } else {
                 g.setPaintMode();
-                g.setColor(new Color(0, 0, 200));
-                Font font = g.getFont().deriveFont(Font.BOLD, 16.0f);
+                g.setColor(new Color(200, 0, 0));
+                Font font = g.getFont().deriveFont(Font.BOLD, 14.0f);
                 g.setFont(font);
-//             Even geen gevogel aan het splash screen               
-               g.drawString("Version " + getFullVersion() + " (Build " + BUILD + ")", 160, 105 /*230*/);        
-               splash.update();
+                g.drawString("Version " + getFullVersion() + " (Build " + BUILD + ")", (splash.getSize().width / 2)-100, 230);
+                System.out.println(splash.getSize().width / 2);
+                splash.update();
                 // Sleep for 1/2 second, so people can see it
-                sleepThread(10000);
+                sleepThread(4000);
             }
         }
     }

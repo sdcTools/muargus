@@ -24,7 +24,6 @@ import muargus.CalculationService;
 import muargus.model.MetadataMu;
 import muargus.model.SpssVariable;
 import muargus.model.VariableMu;
-import org.apache.commons.io.FilenameUtils;
 
 /**
  *
@@ -33,9 +32,11 @@ import org.apache.commons.io.FilenameUtils;
 public class SpssUtils {
 
     public final static String tempDataFileExtension = ".asc";
+    public final static String tempName = "temp";
     public final static int NUMERIC = 0;
-//   public static boolean fixed = false;
-    public static boolean fixed = true;
+    public static boolean fixed = false;
+//    public static boolean fixed = true;
+    public static ArrayList<File> spssTempDataFiles = new ArrayList<>();
     public static File safeFile;
     public static File safeSpssFile = new File("C:\\Users\\Gebruiker\\Desktop\\safe.sav");
 
@@ -136,6 +137,12 @@ public class SpssUtils {
 
     public static void checkMetadata(MetadataMu metadata) {
         List<SpssVariable> spssVariables = SpssUtils.getVariablesFromSpss(metadata);
+//        try {
+//            spssTempDataFiles = File.createTempFile("abc", ".dat");
+//        } catch (IOException ex) {
+//            Logger.getLogger(MetadataMu.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+        //metadata.setSpssTempDataFileName(FilenameUtils.removeExtension(metadata.getFileNames().getDataFileName()) + SpssUtils.tempDataFileExtension);
         for (VariableMu variable : metadata.getVariables()) {
             boolean found = false;
             for (SpssVariable spssVariable : spssVariables) {
@@ -251,8 +258,13 @@ public class SpssUtils {
 
             try {
                 // Sets the temporary filename
-                metadata.setSpssTempDataFileName(FilenameUtils.removeExtension(fileName) + SpssUtils.tempDataFileExtension);
-                try (PrintWriter writer = new PrintWriter(new File(metadata.getSpssTempDataFileName()))) {
+                //metadata.setSpssTempDataFileName(FilenameUtils.removeExtension(fileName) + SpssUtils.tempDataFileExtension);
+                try {
+                    spssTempDataFiles.add(File.createTempFile(tempName, tempDataFileExtension));
+                } catch (IOException ex) {
+                    Logger.getLogger(MetadataMu.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                try (PrintWriter writer = new PrintWriter(spssTempDataFiles.get(spssTempDataFiles.size()-1))) {
                     for (Case c : data) {
                         writer.println(c.toString().substring(1, c.toString().length() - 1).replace("null", "").replace(',', ';'));
                     }
@@ -283,17 +295,25 @@ public class SpssUtils {
             for (String s : variables) {
                 variablesCommand = variablesCommand + s + " ";
             }
+
+            if (variablesCommand.equals("")) {
+                variablesCommand = "ALL";
+            }
             String fileName = metadata.getFileNames().getDataFileName();
             // Sets the temporary filename
-            metadata.setSpssTempDataFileName(FilenameUtils.removeExtension(fileName) + SpssUtils.tempDataFileExtension);
-            
+            try {
+                spssTempDataFiles.add(File.createTempFile(tempName, tempDataFileExtension));
+            } catch (IOException ex) {
+                Logger.getLogger(MetadataMu.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            //metadata.setSpssTempDataFileName(FilenameUtils.removeExtension(fileName) + SpssUtils.tempDataFileExtension);
 
             String[] command = {"SET DECIMAL=DOT.",
                 "get file = '" + fileName + "'.",
-                "WRITE BOM=NO OUTFILE= '" + metadata.getSpssTempDataFileName() + "'/" + variablesCommand + ".",
+                "WRITE BOM=NO OUTFILE= '" + spssTempDataFiles.get(spssTempDataFiles.size()-1).getPath() + "'/" + variablesCommand + ".",
                 "EXECUTE."
             };
-            
+
             StatsUtil.submit(command);
 
             StatsUtil.stop();
@@ -349,8 +369,7 @@ public class SpssUtils {
                 d.release();
                 ArrayList<VariableMu> variables = metadata.getVariables();
                 String first = variables.get(0).getSpssVariable().getName();
-                String last = variables.get(variables.size()-1).getSpssVariable().getName();
-
+                String last = variables.get(variables.size() - 1).getSpssVariable().getName();
 
                 for (VariableMu v : metadata.getVariables()) {
                     String name = v.getSpssVariable().getName();
@@ -364,7 +383,9 @@ public class SpssUtils {
         } catch (StatsException ex) {
             Logger.getLogger(CalculationService.class.getName()).log(Level.SEVERE, null, ex);
         }
-        //metadata.getSpssTempDataFileName().delete();
+        for(File temp: spssTempDataFiles){
+            temp.deleteOnExit();
+        }
     }
 
 }

@@ -15,6 +15,7 @@ import java.util.logging.Logger;
 import javax.swing.SwingWorker;
 import muargus.controller.SelectCombinationsController;
 import muargus.controller.SpssUtils;
+import static muargus.controller.SpssUtils.spssTempDataFiles;
 import muargus.extern.dataengine.CMuArgCtrl;
 import muargus.extern.dataengine.IProgressListener;
 import muargus.model.ProtectedFile;
@@ -385,7 +386,7 @@ public class CalculationService {
             throw new ArgusException("Error in SetInFileInfo");
         }
         if (this.metadata.getDataFileType() == MetadataMu.DATA_FILE_TYPE_SPSS) {
-            result = c.ExploreFile(this.metadata.getSpssTempDataFileName(),
+            result = c.ExploreFile(SpssUtils.spssTempDataFiles.get(SpssUtils.spssTempDataFiles.size()-1).getPath(),
                     errorCodes,
                     lineNumbers,
                     varIndexOut);

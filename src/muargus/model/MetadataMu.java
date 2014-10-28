@@ -3,6 +3,7 @@ package muargus.model;
 import argus.model.ArgusException;
 import argus.model.DataFilePair;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.logging.Level;
@@ -35,7 +36,7 @@ public final class MetadataMu {
     private final ArrayList<VariableMu> variables;
     private final ArrayList<SpssVariable> spssVariables;
     private DataFilePair filenames;
-    private String spssTempDataFileName;
+    //private String spssTempDataFileName;
     private Combinations combinations;
     private int recordCount;
     private final ArrayList<ReplacementSpec> replacementSpecs;
@@ -49,6 +50,7 @@ public final class MetadataMu {
         this.spssVariables = new ArrayList<>();
         this.replacementSpecs = new ArrayList<>();
         this.filenames = new DataFilePair(null, null);
+        
     }
 
     /**
@@ -378,13 +380,17 @@ public final class MetadataMu {
         return spssVariables;
     }
 
-    public String getSpssTempDataFileName() {
-        return spssTempDataFileName;
-    }
-
-    public void setSpssTempDataFileName(String spssTempDataFileName) {
-        this.spssTempDataFileName = spssTempDataFileName;
-    }
+//    public String getSpssTempDataFileName() {
+//        return spssTempDataFileName.getPath();
+//    }
+//
+////    public void setSpssTempDataFileName(String spssTempDataFileName) {
+////        this.spssTempDataFileName = spssTempDataFileName;
+////    }
+//    
+//    public void removeTempSpssFile(){
+//        this.spssTempDataFileName.delete();
+//    }
 
     public int getSpssStartingPosition() {
         return spssStartingPosition;

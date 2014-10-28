@@ -170,10 +170,10 @@ public class AboutView extends DialogBase {
     private void systemInfoButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_systemInfoButtonActionPerformed
         String systemInfo = "";
         systemInfo += "Available processors (cores): " + Runtime.getRuntime().availableProcessors();
-        systemInfo += "\nFree memory (Megabyte): " + Runtime.getRuntime().freeMemory() / Math.round(Math.pow(2, 20)) + "MB";
+        systemInfo += "\nFree memory: " + Runtime.getRuntime().freeMemory() / Math.round(Math.pow(2, 20)) + "MB";
         long maxMemory = Runtime.getRuntime().maxMemory();
-        systemInfo += "\nMaximum memory (Megabyte): " + (maxMemory == Long.MAX_VALUE ? "no limit" : maxMemory / Math.round(Math.pow(2, 20))) + "MB";
-        systemInfo += "\nTotal memory available to JVM (Megabyte): " + Runtime.getRuntime().totalMemory() / Math.round(Math.pow(2, 20)) + "MB";
+        systemInfo += "\nMaximum memory: " + (maxMemory == Long.MAX_VALUE ? "no limit" : maxMemory / Math.round(Math.pow(2, 20))) + "MB";
+        systemInfo += "\nTotal memory available to JVM: " + Runtime.getRuntime().totalMemory() / Math.round(Math.pow(2, 20)) + "MB";
 
         for (File root : File.listRoots()) {
             systemInfo += "\n\nFile system root: " + root.getAbsolutePath();

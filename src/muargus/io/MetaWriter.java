@@ -74,7 +74,7 @@ public class MetaWriter {
             writer.print(String.format(" %d", variable.getStartingPosition()));
         }
         writer.print(String.format(" %d", variable.getVariableLength()));
-        if (variable.isCategorical()) {
+        //if (variable.isCategorical()) {
             for (int index = 0; index < VariableMu.MAX_NUMBER_OF_MISSINGS; index++) {
                 String missingValue = variable.getMissing(index);
                 if (!StringUtils.isNotBlank(missingValue)) {
@@ -82,7 +82,7 @@ public class MetaWriter {
                 }
                 writer.print(" " + StrUtils.quote(missingValue));
             }
-        }
+        //}
         writer.println();
         if (variable.isRecodable()) {
             writer.println("    <RECODABLE>");
