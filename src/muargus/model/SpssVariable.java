@@ -29,7 +29,6 @@ public class SpssVariable {
     private final VariableFormat variableFormat;
     private Map<String, String> stringValueLabels;
     private Map<Double, String> numericValueLabels;
-    //private final Map<Double,String> numericValueLabels;
 
     private boolean selected; //indicated whether selected in Argus meta or not
 

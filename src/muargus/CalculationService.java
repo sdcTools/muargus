@@ -207,7 +207,8 @@ public class CalculationService {
         doChangeFiles();
         ProtectedFile protectedFile = metadata.getCombinations().getProtectedFile();
 
-        c.SetOutFileInfo(metadata.getDataFileType() == MetadataMu.DATA_FILE_TYPE_FIXED,
+        c.SetOutFileInfo(metadata.getDataFileType() == MetadataMu.DATA_FILE_TYPE_FIXED 
+                || metadata.getDataFileType() == MetadataMu.DATA_FILE_TYPE_SPSS ,
                 metadata.getSeparator(),
                 "",
                 true
@@ -230,9 +231,9 @@ public class CalculationService {
         if (!result) {
             throw new ArgusException("Error during Make protected file");
         }
-        if (this.metadata.getDataFileType() == MetadataMu.DATA_FILE_TYPE_SPSS) {
-            SpssUtils.makeSafeFileSpss(this.metadata);
-        }
+//        if (this.metadata.getDataFileType() == MetadataMu.DATA_FILE_TYPE_SPSS) {
+//            SpssUtils.makeSafeFileSpss(this.metadata, protectedFile.getSafeMeta());
+//        }
 
     }
 
@@ -379,23 +380,23 @@ public class CalculationService {
         int[] lineNumbers = new int[1];
         int[] varIndexOut = new int[1];
 
-        result = c.SetInFileInfo(metadata.getDataFileType() == MetadataMu.DATA_FILE_TYPE_FIXED,
+        result = c.SetInFileInfo(metadata.getDataFileType() == MetadataMu.DATA_FILE_TYPE_FIXED || metadata.getDataFileType() == MetadataMu.DATA_FILE_TYPE_SPSS,
                 metadata.getSeparator(),
                 metadata.getDataFileType() == MetadataMu.DATA_FILE_TYPE_FREE_WITH_META);
         if (!result) {
             throw new ArgusException("Error in SetInFileInfo");
         }
-        if (this.metadata.getDataFileType() == MetadataMu.DATA_FILE_TYPE_SPSS) {
-            result = c.ExploreFile(SpssUtils.spssTempDataFiles.get(SpssUtils.spssTempDataFiles.size()-1).getPath(),
-                    errorCodes,
-                    lineNumbers,
-                    varIndexOut);
-        } else {
+//        if (this.metadata.getDataFileType() == MetadataMu.DATA_FILE_TYPE_SPSS) {
+//            result = c.ExploreFile(SpssUtils.spssTempDataFiles.get(SpssUtils.spssTempDataFiles.size()-1).getPath(),
+//                    errorCodes,
+//                    lineNumbers,
+//                    varIndexOut);
+//        } else {
             result = c.ExploreFile(metadata.getFileNames().getDataFileName(),
                     errorCodes,
                     lineNumbers,
                     varIndexOut);
-        }
+//        }
         if (!result) {
             String var = (varIndexOut[0] > 0)
                     ? ", variable " + getVariables().get(varIndexOut[0] - 1).getName() : "";

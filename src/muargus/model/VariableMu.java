@@ -111,6 +111,7 @@ public class VariableMu {
         this.truncable = variable.truncable;
         this.variableLength = variable.variableLength;
         this.weight = variable.weight;
+        this.spssVariable = variable.spssVariable;
     }
 
     /**

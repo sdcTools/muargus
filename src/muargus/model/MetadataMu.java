@@ -3,7 +3,6 @@ package muargus.model;
 import argus.model.ArgusException;
 import argus.model.DataFilePair;
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.logging.Level;
@@ -30,12 +29,13 @@ public final class MetadataMu {
     private String separator = ";";
 //    private final String spssSeparator = ",";
     private final int spssStartingPosition = 1;
-    private int spssNumberOfCases = 0;
+    //private int spssNumberOfCases = 0;
 //    private final int spssIdLevel = 1;
 
     private final ArrayList<VariableMu> variables;
     private final ArrayList<SpssVariable> spssVariables;
     private DataFilePair filenames;
+    private String spssDataFileName;
     //private String spssTempDataFileName;
     private Combinations combinations;
     private int recordCount;
@@ -50,7 +50,7 @@ public final class MetadataMu {
         this.spssVariables = new ArrayList<>();
         this.replacementSpecs = new ArrayList<>();
         this.filenames = new DataFilePair(null, null);
-        
+
     }
 
     /**
@@ -66,6 +66,9 @@ public final class MetadataMu {
         this.dataFileType = metadata.dataFileType;
         this.filenames = new DataFilePair(metadata.filenames.getDataFileName(), metadata.filenames.getMetaFileName());
         this.separator = metadata.separator;
+        if (isSpss()) {
+            this.spssDataFileName = metadata.spssDataFileName;
+        }
         for (VariableMu var : metadata.variables) {
             this.variables.add(new VariableMu(var));
         }
@@ -74,6 +77,10 @@ public final class MetadataMu {
         } catch (ArgusException ex) {
             logger.log(Level.SEVERE, null, ex);
         }
+    }
+
+    public boolean isSpss() {
+        return this.dataFileType == MetadataMu.DATA_FILE_TYPE_SPSS;
     }
 
     /**
@@ -320,12 +327,12 @@ public final class MetadataMu {
         this.separator = separator;
     }
 
-    public int getSpssNumberOfCases() {
-        return spssNumberOfCases;
+    public String getSpssDataFileName() {
+        return spssDataFileName;
     }
 
-    public void setSpssNumberOfCases(int spssNumberOfCases) {
-        this.spssNumberOfCases = spssNumberOfCases;
+    public void setSpssDataFileName(String spssDataFileName) {
+        this.spssDataFileName = spssDataFileName;
     }
 
     /**
@@ -391,7 +398,6 @@ public final class MetadataMu {
 //    public void removeTempSpssFile(){
 //        this.spssTempDataFileName.delete();
 //    }
-
     public int getSpssStartingPosition() {
         return spssStartingPosition;
     }

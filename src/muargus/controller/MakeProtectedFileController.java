@@ -111,6 +111,7 @@ public class MakeProtectedFileController extends ControllerBase<ProtectedFile> {
         
         getCalculationService().fillSafeFileMetadata();
         MetadataMu safeMetadata = this.metadata.getCombinations().getProtectedFile().getSafeMeta();
+        SpssUtils.makeSafeFileSpss(safeMetadata);
         try {
             MetaWriter.writeRda(safeMetadata.getFileNames().getMetaFileName(), 
                     safeMetadata, false);

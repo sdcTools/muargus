@@ -12,6 +12,25 @@ Opmerking: Ik heb nu grofweg 1 scherm per week geplaatst maar sommige schermen z
 
 -   Wat te doen met missing values die niet zijn geinitialiseerd binnen spss?
 -   Hoe gaan we om met double values?
+-   Wat te doen met temp files
+
+
+open microdata --> csv toevoegen (Tau?)
+temp data --> zodra aangemaakt aangeven exitOnClose (Anco) 
+SpecifyMetadata --> werkt alles zoals het moet werken
+    - herberekenen startingposition spss
+MainFrame --> icoontjes opschonen
+Global recode --> missing values testen (2e missing als er maar 1 is?)
+PRAM --> variabelen waarvoor riskmodel is weglaten
+Numerical variables --> wat gebeurd er bij spss// wat gebeurd er met system missings
+afvangen als de save file al in gebruik is.
+
+Gefixed
+microaggregation --> record has the wrong length
+datafilename vervangen zodra het kan (spss)
+tempData --> - geen arraylist, vervangen als nieuwe gemaakt wordt en oude verwijderen
+
+
 
 
 Week 1 (1-7 september):                                                         Gedaan:
