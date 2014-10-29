@@ -8,6 +8,7 @@ package muargus.model;
 import com.ibm.statistics.plugin.MeasurementLevel;
 import com.ibm.statistics.plugin.VariableFormat;
 import java.util.Map;
+import muargus.controller.SpssUtils;
 
 /**
  *
@@ -144,6 +145,14 @@ public class SpssVariable {
 
     public void setStringMissings(String[] stringMissings) {
         this.stringMissings = stringMissings;
+    }
+    
+    public String getMissing(int i){
+        if(this.getVariableType() == SpssUtils.NUMERIC){
+            return SpssUtils.getIntIfPossible(getNumericMissings()[i]);
+        } else {
+            return getStringMissings()[i];
+        }
     }
 
  

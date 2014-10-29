@@ -3,25 +3,15 @@ package muargus.controller;
 import argus.model.ArgusException;
 import argus.model.DataFilePair;
 import argus.utils.StrUtils;
-import argus.utils.Tokenizer;
-import com.ibm.statistics.plugin.Case;
 import com.ibm.statistics.plugin.Cursor;
-import com.ibm.statistics.plugin.DataUtil;
-import com.ibm.statistics.plugin.NumericMissingValueType;
 import com.ibm.statistics.plugin.StatsException;
 import com.ibm.statistics.plugin.StatsUtil;
-import com.ibm.statistics.plugin.Variable;
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import muargus.CalculationService;
 import muargus.model.MetadataMu;
 import muargus.model.SpssVariable;
 import muargus.model.VariableMu;
@@ -128,6 +118,10 @@ public class SpssUtils {
 //                    }
                     v.setSpssVariable(variable);
                     metadata.getVariables().add(v);
+                } else {
+                    // reset the startingposition
+                    SpssUtils.getVariable(v, metadata).setStartingPosition(startingPos);
+                    startingPos += variable.getVariableLength();
                 }
             } else {
                 // remove variables that are not selected.
@@ -145,8 +139,13 @@ public class SpssUtils {
             boolean found = false;
             for (SpssVariable spssVariable : spssVariables) {
                 if (variable.getName().equals(spssVariable.getName())
-                        && variable.getVariableLength() == spssVariable.getVariableLength()) {
-                    //TODO: add some more checks here
+                        && variable.getVariableLength() == spssVariable.getVariableLength()
+                        && variable.getDecimals() == spssVariable.getNumberOfDecimals()) {
+                    for (int i = 0; i < variable.getNumberOfMissings(); i++) {
+                        if(!variable.getMissing(0).equals(spssVariable.getMissing(0))){
+                            break;
+                        }
+                    }
                     variable.setSpssVariable(spssVariable);
                     found = true;
                     break;
@@ -178,6 +177,15 @@ public class SpssUtils {
         return doubleVariable;
     }
 
+    public static VariableMu getVariable(VariableMu variable, MetadataMu metadata) {
+        for (VariableMu v : metadata.getVariables()) {
+            if (v.getName().equals(variable.getName())) {
+                return v;
+            }
+        }
+        return null;
+    }
+
     /**
      * Removes a variable from the metadata.
      *
@@ -199,7 +207,7 @@ public class SpssUtils {
      * @param value Double containing the value to be converted to an int.
      * @return String containing the shortest notation of the value.
      */
-    private static String getIntIfPossible(double value) {
+    public static String getIntIfPossible(double value) {
         double value_double;
         String value_String = null;
         try {
@@ -333,7 +341,7 @@ public class SpssUtils {
 
     public static void makeSafeFileSpss(MetadataMu safeMetadata) {
 //        try {
-            try {
+        try {
 //                BufferedReader reader;
 //                reader = new BufferedReader(new FileReader(SpssUtils.safeFile));
 //                Tokenizer tokenizer = new Tokenizer(reader);
@@ -358,7 +366,7 @@ public class SpssUtils {
 //                    }
 //                }
 
-                StatsUtil.start();
+            StatsUtil.start();
 //                StatsUtil.submit("GET FILE='" + safeMetadata.getSpssDataFileName() + "'.");
 //                DataUtil d = new DataUtil();
 //                for (int i = 0; i < safeMetadata.getVariables().size(); i++) {
@@ -385,33 +393,33 @@ public class SpssUtils {
 //                    }
 //                }
 //                d.release();
-                ArrayList<VariableMu> variables = safeMetadata.getVariables();
-                String first = variables.get(0).getSpssVariable().getName();
-                String last = variables.get(variables.size() - 1).getSpssVariable().getName();
+            ArrayList<VariableMu> variables = safeMetadata.getVariables();
+            String first = variables.get(0).getSpssVariable().getName();
+            String last = variables.get(variables.size() - 1).getSpssVariable().getName();
 
-                ArrayList<String> command = new ArrayList<>();
-                command.add("TITLE   'MERGECOPYCLEAN'.");
-                command.add("SET DECIMAL=DOT.");
-                command.add("DATA LIST FILE = '" + safeMetadata.getFileNames().getDataFileName() + "'/");
-                int startPosition = 1;
-                int endPosition;
-                for (VariableMu v : safeMetadata.getVariables()) {
-                    String name = v.getSpssVariable().getName();
-                    endPosition = startPosition + v.getVariableLength() - 1;
-                    //TODO: add string indicator
-                    command.set(command.size()-1, command.get(command.size()-1) 
-                            + " TEMP" + name + " " + startPosition + " - " + endPosition);
-                    startPosition = endPosition + 1;
-                }
-                command.set(command.size()-1, command.get(command.size()-1) + ".");
-                command.add("MATCH FILES FILE = '"+ safeMetadata.getSpssDataFileName() +"' /FILE = *.");
-                command.add("EXECUTE.");
-                for (VariableMu v : safeMetadata.getVariables()) {
-                    String name = v.getSpssVariable().getName();
-                    command.add("if (SYSMIS(" + name + ") EQ 0) " + name + "= TEMP" + name + ".");
-                }
-                command.add("SAVE OUTFILE='" + SpssUtils.safeSpssFile + "'/DROP=TEMP" + first + " TO TEMP" + last + ".");
-                StatsUtil.submit(command.toArray(new String[command.size()]));
+            ArrayList<String> command = new ArrayList<>();
+            command.add("TITLE   'MERGECOPYCLEAN'.");
+            command.add("SET DECIMAL=DOT.");
+            command.add("DATA LIST FILE = '" + safeMetadata.getFileNames().getDataFileName() + "'/");
+            int startPosition = 1;
+            int endPosition;
+            for (VariableMu v : safeMetadata.getVariables()) {
+                String name = v.getSpssVariable().getName();
+                endPosition = startPosition + v.getVariableLength() - 1;
+                //TODO: add string indicator
+                command.set(command.size() - 1, command.get(command.size() - 1)
+                        + " TEMP" + name + " " + startPosition + " - " + endPosition);
+                startPosition = endPosition + 1;
+            }
+            command.set(command.size() - 1, command.get(command.size() - 1) + ".");
+            command.add("MATCH FILES FILE = '" + safeMetadata.getSpssDataFileName() + "' /FILE = *.");
+            command.add("EXECUTE.");
+            for (VariableMu v : safeMetadata.getVariables()) {
+                String name = v.getSpssVariable().getName();
+                command.add("if (SYSMIS(" + name + ") EQ 0) " + name + "= TEMP" + name + ".");
+            }
+            command.add("SAVE OUTFILE='" + SpssUtils.safeSpssFile + "'/DROP=TEMP" + first + " TO TEMP" + last + ".");
+            StatsUtil.submit(command.toArray(new String[command.size()]));
 //                for(String s: command){
 //                    System.out.println(s);
 //                    StatsUtil.submit(s);
@@ -422,12 +430,12 @@ public class SpssUtils {
 //                    StatsUtil.submit("if (SYSMIS(" + name + ") EQ 0) " + name + "= TEMP" + name + ".");
 //                }
 //                StatsUtil.submit("SAVE OUTFILE='" + SpssUtils.safeSpssFile + "'/DROP=TEMP" + first + " TO TEMP" + last + ".");
-                StatsUtil.stop();
+            StatsUtil.stop();
 //            } catch (FileNotFoundException ex) {
 //                Logger.getLogger(CalculationService.class.getName()).log(Level.SEVERE, null, ex);
 //            }
         } catch (StatsException ex) {
-            Logger.getLogger(CalculationService.class.getName()).log(Level.SEVERE, null, ex);
+            //Logger.getLogger(CalculationService.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
