@@ -20,7 +20,8 @@ Opmerking: Ik heb nu grofweg 1 scherm per week geplaatst maar sommige schermen z
 Global recode --> missing values testen (2e missing als er maar 1 is?)
 SpecifyMetadata --> werkt alles zoals het moet werken
 
-open microdata --> csv toevoegen (Tau?)
+open microdata --> csv toevoegen (Tau?) --> als er een nieuwe extensie wordt gebruikt, wordt die toegevoegd via de registry
+ - misschien mooier als alle bestanden die leesbaar zijn zichtbaar zijn (dus alle .asc, .csv, .sav etc.) en dat vervolgens gespecificeerd kan worden.
 temp data --> zodra aangemaakt aangeven exitOnClose (Anco) 
 
 Numerical variables --> wat gebeurd er bij spss// wat gebeurd er met system missings
