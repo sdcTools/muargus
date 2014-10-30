@@ -6,6 +6,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.SplashScreen;
+import java.io.File;
 import java.io.IOException;
 import java.util.Locale;
 import java.util.logging.Logger;
@@ -36,8 +37,7 @@ public class MuARGUS {
     private static final String defaultSeparator = ",";
 
     private static final String lookAndFeel = "Windows";
-
-    private static final String manualPath = "C:\\Users\\Gebruiker\\Desktop\\MUmanual4.3.pdf";
+    private static final File manual = new File("src\\muargus\\resources\\MUmanual4.3.pdf"); // flexibel maken
     private static final String acrord32 = "acrord32.exe"; // finds the acrord32.exe
 
     static {
@@ -114,7 +114,7 @@ public class MuARGUS {
 
     public static void showHelp(String namedDest) {
         try {
-            String cmdString = "cmd.exe /c start " + acrord32 + " /A \"nameddest=" + namedDest + "\" \"" + manualPath + "\"";
+            String cmdString = "cmd.exe /c start " + acrord32 + " /A \"nameddest=" + namedDest + "\" \"" + manual.getAbsolutePath() + "\"";
             System.out.println(cmdString);
             Process p = Runtime.getRuntime().exec(cmdString);
         } catch (IOException ex) {
