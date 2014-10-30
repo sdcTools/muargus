@@ -115,6 +115,7 @@ public class MuARGUS {
     public static void showHelp(String namedDest) {
         try {
             String cmdString = "cmd.exe /c start " + acrord32 + " /A \"nameddest=" + namedDest + "\" \"" + manualPath + "\"";
+            System.out.println(cmdString);
             Process p = Runtime.getRuntime().exec(cmdString);
         } catch (IOException ex) {
         } catch (Exception ex2) {

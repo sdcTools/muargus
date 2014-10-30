@@ -7,20 +7,10 @@ package muargus.controller;
 import muargus.CalculationService;
 import argus.model.ArgusException;
 import argus.utils.SystemUtils;
-import com.ibm.statistics.plugin.Case;
-import com.ibm.statistics.plugin.DataUtil;
-import com.ibm.statistics.plugin.StatsException;
-import com.ibm.statistics.plugin.StatsUtil;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import muargus.MuARGUS;
 import muargus.model.MetadataMu;
 import muargus.model.Combinations;
-import muargus.model.SpssVariable;
 import muargus.view.SelectCombinationsView;
 
 /**

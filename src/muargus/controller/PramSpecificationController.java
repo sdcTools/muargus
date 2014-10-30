@@ -13,6 +13,7 @@ import muargus.model.CodeInfo;
 import muargus.model.MetadataMu;
 import muargus.model.PramSpecification;
 import muargus.model.PramVariableSpec;
+import muargus.model.TableMu;
 import muargus.model.VariableMu;
 import muargus.view.PramSpecificationView;
 
@@ -57,9 +58,19 @@ public class PramSpecificationController extends ControllerBase<PramSpecificatio
      *
      */
     public void makePramVariableSpecs() {
+        ArrayList<VariableMu> riskVariables = new ArrayList<>();
+        for (TableMu table : this.metadata.getCombinations().getTables()) {
+            if (table.isRiskModel()) {
+                for (VariableMu variable : table.getVariables()) {
+                    if (!riskVariables.contains(variable)) {
+                        riskVariables.add(variable);
+                    }
+                }
+            }
+        }
         if (getModel().getPramVarSpec().isEmpty()) {
             for (VariableMu v : this.metadata.getVariables()) {
-                if (v.isCategorical()) {
+                if (!riskVariables.contains(v) && v.isCategorical()) {
                     PramVariableSpec p = new PramVariableSpec(v);
                     getModel().getPramVarSpec().add(p);
                 }
@@ -92,18 +103,15 @@ public class PramSpecificationController extends ControllerBase<PramSpecificatio
      *
      */
     public void setBandwidth() {
-        for (VariableMu v : this.metadata.getVariables()) {
-            if (v.isCategorical()) {
-                int max = v.getCodeInfos().size() - v.getNumberOfMissings();
-                int value;
-                if (max > 5) {
-                    value = 5;
-                } else {
-                    value = max;
-                }
-                getPramVariableSpec(v).setBandwidth(value);
+        for (PramVariableSpec p : getModel().getPramVarSpec()) {
+            int max = p.getVariable().getCodeInfos().size() - p.getVariable().getNumberOfMissings();
+            int value;
+            if (max > 5) {
+                value = 5;
+            } else {
+                value = max;
             }
-
+            p.setBandwidth(value);
         }
     }
 

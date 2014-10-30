@@ -72,72 +72,43 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
         this.identificationComboBox.setModel(new DefaultComboBoxModel(this.idLevel));
         this.weightLocalSuppressionComboBox.setModel(new DefaultComboBoxModel(this.suppressionWeight));
 
-        // check the format and set the appropriate settings
-        switch (getMetadata().getDataFileType()) {
-            case MetadataMu.DATA_FILE_TYPE_FIXED:
-                setFixed();
-                break;
-            case MetadataMu.DATA_FILE_TYPE_FREE:
-                setFree();
-                break;
-            case MetadataMu.DATA_FILE_TYPE_FREE_WITH_META:
-                setFreeWithMeta();
-                break;
-            case MetadataMu.DATA_FILE_TYPE_SPSS:
-                setSpss(true);
-                break;
-        }
-
+        // set the format choise options
         if (getMetadata().isSpss()) {
             String[] tempFormat = {format[3]};
-            this.variablesComboBox.setModel(new DefaultComboBoxModel(tempFormat));
+            this.formatComboBox.setModel(new DefaultComboBoxModel(tempFormat));
         } else {
             String[] tempFormat = {format[0], format[1], format[2]};
-            this.variablesComboBox.setModel(new DefaultComboBoxModel(tempFormat));
+            this.formatComboBox.setModel(new DefaultComboBoxModel(tempFormat));
         }
 
+        // selects the first variable if there are variables
         if (this.variableListModel.getSize() > 0) {
             this.variablesList.setSelectedIndex(0);
         }
-
+        enableControls();
         calculateButtonStates();
 
-        if (getMetadata().getVariables().isEmpty()) {
-            enableAllControls(false);
-        }
         this.variablesList.requestFocus();
     }
 
     /**
      * Method setting the values for when the SPSS mode is set.
-     *
-     * @param b Boolean indicating whether the SPSS mode is set.
      */
-    private void setSpss(boolean b) {
-        //getMetadata().setDataFileType(MetadataMu.DATA_FILE_TYPE_SPSS);
-        this.separatorLabel.setVisible(!b);
-        this.separatorTextField.setVisible(!b);
-        this.startingPositionLabel.setVisible(!b);
-        this.startingPositionTextField.setVisible(!b);
-        this.nameTextField.setEnabled(!b);
-        this.lengthTextField.setEnabled(!b);
-        this.decimalsTextField.setEnabled(!b);
-        //this.numericalCheckBox.setEnabled(b);
-        this.missing1TextField.setEnabled(!b);
-        this.missing2TextField.setEnabled(!b);
-        this.codelistfileTextField.setEnabled(b);
-        this.codelistfileCheckBox.setEnabled(b);
-        this.codelistfileButton.setEnabled(b);
-        this.generateButton.setEnabled(b);
-        this.newButton.setEnabled(!b);
-        this.variablesComboBox.setEnabled(b);
-////        if (this.variableListModel.isEmpty()) {
-//            enableAllControls(false);
-////        }
-        if (!this.variableListModel.isEmpty()) {
-            enableAllControls(true);
-            enableControls(this.attributesPanel, false);
-        }
+    private void setSpss() {
+        // make invisible
+        this.separatorLabel.setVisible(false);
+        this.separatorTextField.setVisible(false);
+        this.startingPositionLabel.setVisible(false);
+        this.startingPositionTextField.setVisible(false);
+
+        // disable or enable
+        enableControls(this.attributesPanel, false);
+        enableControls(this.missingsPanel, false);
+        this.codelistfileCheckBox.setEnabled(false);
+        this.codelistfileButton.setEnabled(false);
+        this.codelistfileTextField.setEnabled(false);
+        this.newButton.setEnabled(false);
+        this.generateButton.setEnabled(true);
     }
 
     /**
@@ -146,36 +117,40 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
      * @param b Boolean indicating whether the SPSS mode is set.
      */
     private void setFixed() {
-        setSpss(false);
+        // set the datatype in case it has been changed
         getMetadata().setDataFileType(MetadataMu.DATA_FILE_TYPE_FIXED);
-        separatorLabel.setVisible(false);
-        separatorTextField.setVisible(false);
-        this.numericalCheckBox.setEnabled(true);
-        this.decimalsTextField.setEnabled(this.numericalCheckBox.isSelected());
-        variablesComboBox.setSelectedIndex(MetadataMu.DATA_FILE_TYPE_FIXED - 1);
-        generateButton.setEnabled(false);
-        this.newButton.setEnabled(true);
-        if (this.variableListModel.isEmpty()) {
-            enableAllControls(false);
-        }
+
+        // make (in)visible
+        this.startingPositionLabel.setVisible(true);
+        this.startingPositionTextField.setVisible(true);
+        this.separatorLabel.setVisible(false);
+        this.separatorTextField.setVisible(false);
+
+        // disable or enable
+        this.generateButton.setEnabled(false);
+
+        // set selected data type
+        this.formatComboBox.setSelectedIndex(MetadataMu.DATA_FILE_TYPE_FIXED - 1);
     }
 
     /**
      * Method setting the values for when free format data is used.
      */
     private void setFree() {
-        setSpss(false);
+        // set the datatype in case it has been changed
         getMetadata().setDataFileType(MetadataMu.DATA_FILE_TYPE_FREE);
-        this.numericalCheckBox.setEnabled(true);
-        startingPositionLabel.setVisible(false);
-        startingPositionTextField.setVisible(false);
-        this.decimalsTextField.setEnabled(this.numericalCheckBox.isSelected());
-        variablesComboBox.setSelectedIndex(MetadataMu.DATA_FILE_TYPE_FREE - 1);
-        generateButton.setEnabled(false);
-        this.newButton.setEnabled(true);
-        if (this.variableListModel.isEmpty()) {
-            enableAllControls(false);
-        }
+
+        // make (in)visible
+        this.startingPositionLabel.setVisible(false);
+        this.startingPositionTextField.setVisible(false);
+        this.separatorLabel.setVisible(true);
+        this.separatorTextField.setVisible(true);
+
+        // disable or enable
+        this.generateButton.setEnabled(false);
+
+        // set selected data type
+        this.formatComboBox.setSelectedIndex(MetadataMu.DATA_FILE_TYPE_FREE - 1);
     }
 
     /**
@@ -184,17 +159,20 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
      * variable names.
      */
     private void setFreeWithMeta() {
-        setSpss(false);
+        // set the datatype in case it has been changed
         getMetadata().setDataFileType(MetadataMu.DATA_FILE_TYPE_FREE_WITH_META);
-        this.numericalCheckBox.setEnabled(true);
-        this.newButton.setEnabled(true);
-        startingPositionLabel.setVisible(false);
-        startingPositionTextField.setVisible(false);
-        this.decimalsTextField.setEnabled(this.numericalCheckBox.isSelected());
-        variablesComboBox.setSelectedIndex(MetadataMu.DATA_FILE_TYPE_FREE_WITH_META - 1);
-        if (this.variableListModel.isEmpty()) {
-            enableAllControls(false);
-        }
+
+        // make (in)visible
+        this.startingPositionLabel.setVisible(false);
+        this.startingPositionTextField.setVisible(false);
+        this.separatorLabel.setVisible(true);
+        this.separatorTextField.setVisible(true);
+
+        // disable or enable
+        this.generateButton.setEnabled(true);
+
+        // set selected data type
+        this.formatComboBox.setSelectedIndex(MetadataMu.DATA_FILE_TYPE_FREE_WITH_META - 1);
     }
 
     /**
@@ -205,9 +183,6 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
         this.nameTextField.setText(selected.getName());
         this.identificationComboBox.setSelectedIndex(selected.getIdLevel());
         this.decimalsTextField.setText(Integer.toString(selected.getDecimals()));
-        if (!getController().getMetadata().isSpss()) {
-            this.decimalsTextField.setEnabled(this.numericalCheckBox.isSelected());
-        }
         this.truncationAllowedCheckBox.setSelected(selected.isTruncable());
         this.codelistfileCheckBox.setSelected(selected.isCodelist());
         this.codelistfileTextField.setText(selected.getCodeListFile());
@@ -251,8 +226,43 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
         this.deleteButton.setEnabled(index != -1);
         this.moveUpButton.setEnabled(index > 0);
         this.moveDownButton.setEnabled((index != -1) && (index < this.variableListModel.getSize() - 1));
-        this.codelistfileButton.setEnabled(this.codelistfileCheckBox.isSelected());
-        this.codelistfileTextField.setEnabled(this.codelistfileCheckBox.isSelected());
+    }
+
+    private void enableControls() {
+        if (getMetadata().getVariables().isEmpty()) {
+            enableAllControls(false);
+            dataFormatCheck();
+        } else {
+            enableAllControls(true);
+            this.codelistfileCheckBox.setEnabled(this.categoricalCheckBox.isSelected());
+            this.codelistfileTextField.setEnabled(this.codelistfileCheckBox.isSelected() && this.categoricalCheckBox.isSelected());
+            this.codelistfileButton.setEnabled(this.codelistfileCheckBox.isSelected() && this.categoricalCheckBox.isSelected());
+            this.codelistfileTextField.setEnabled(this.codelistfileCheckBox.isSelected());
+            this.decimalsTextField.setEnabled(this.numericalCheckBox.isSelected());
+            this.categoricalCheckBox.setEnabled(!(this.weightRadioButton.isSelected() || this.hhIdentifierRadioButton.isSelected()));
+            this.numericalCheckBox.setEnabled(!this.hhIdentifierRadioButton.isSelected());
+            this.missingsPanel.setEnabled(!this.weightRadioButton.isSelected());
+            this.optionsArgusPanel.setEnabled(this.categoricalCheckBox.isSelected());
+            this.truncationAllowedCheckBox.setEnabled(this.categoricalCheckBox.isSelected());
+            dataFormatCheck();
+        }
+    }
+
+    private void dataFormatCheck() {
+        switch (getMetadata().getDataFileType()) {
+            case MetadataMu.DATA_FILE_TYPE_FIXED:
+                setFixed();
+                break;
+            case MetadataMu.DATA_FILE_TYPE_FREE:
+                setFree();
+                break;
+            case MetadataMu.DATA_FILE_TYPE_FREE_WITH_META:
+                setFreeWithMeta();
+                break;
+            case MetadataMu.DATA_FILE_TYPE_SPSS:
+                setSpss();
+                break;
+        }
     }
 
     /**
@@ -276,7 +286,7 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
 
         variableTypeButtonGroup = new javax.swing.ButtonGroup();
         variablesPanel = new javax.swing.JPanel();
-        variablesComboBox = new javax.swing.JComboBox();
+        formatComboBox = new javax.swing.JComboBox();
         variablesScrollPane = new javax.swing.JScrollPane();
         variablesList = new javax.swing.JList<>();
         moveUpButton = new javax.swing.JButton();
@@ -326,10 +336,10 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
         setTitle("Specify Metadata");
         setMinimumSize(new java.awt.Dimension(560, 490));
 
-        variablesComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Fixed format", "Free format", "Free with meta", "SPSS system file" }));
-        variablesComboBox.addActionListener(new java.awt.event.ActionListener() {
+        formatComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Fixed format", "Free format", "Free with meta", "SPSS system file" }));
+        formatComboBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                variablesComboBoxActionPerformed(evt);
+                formatComboBoxActionPerformed(evt);
             }
         });
 
@@ -375,7 +385,7 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
                         .addGap(20, 20, 20)
                         .addComponent(moveDownButton)
                         .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(variablesComboBox, 0, 113, Short.MAX_VALUE)
+                    .addComponent(formatComboBox, 0, 113, Short.MAX_VALUE)
                     .addComponent(variablesScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, variablesPanelLayout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
@@ -388,7 +398,7 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
             variablesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(variablesPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(variablesComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(formatComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(variablesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(separatorTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -838,13 +848,6 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
             selectView.setVisible(true);
             SpssUtils.setVariablesSpss(variables, getController().getMetadataClone());
             initializeData();
-            calculateButtonStates();
-            if (!this.variableListModel.isEmpty()) {
-                enableAllControls(true);
-                enableControls(this.attributesPanel, false);
-                //enableControls(this.numericalCheckBox, false);
-            }
-            this.generateButton.setEnabled(true);
         } else {
             GenerateParameters generateView = new GenerateParameters(this.parent, true);
             generateView.setSeparator(this.separatorTextField.getText());
@@ -882,8 +885,8 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
         calculateButtonStates();
     }//GEN-LAST:event_moveUpButtonActionPerformed
 
-    private void variablesComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_variablesComboBoxActionPerformed
-        switch (this.variablesComboBox.getSelectedIndex()) {
+    private void formatComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_formatComboBoxActionPerformed
+        switch (this.formatComboBox.getSelectedIndex()) {
             case MetadataMu.DATA_FILE_TYPE_FIXED - 1:
                 setFixed();
                 break;
@@ -894,29 +897,14 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
                 setFreeWithMeta();
                 break;
             case MetadataMu.DATA_FILE_TYPE_SPSS - 1:
-                setSpss(true);
+                setSpss();
                 break;
         }
-    }//GEN-LAST:event_variablesComboBoxActionPerformed
+    }//GEN-LAST:event_formatComboBoxActionPerformed
 
     private void newButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newButtonActionPerformed
-//        this.newButton.setEnabled(false);
-//        if (this.getMetadata().getDataFileType() == MetadataMu.DATA_FILE_TYPE_SPSS) {
-//            List<SpssVariable> variables = SpssUtils.getVariablesFromSpss(getController().getMetadataClone());
-//            SpssSelectVariablesView selectView = new SpssSelectVariablesView(parent, true);
-//            selectView.showVariables(variables);
-//            selectView.setVisible(true);
-//            SpssUtils.setVariablesSpss(variables, getController().getMetadataClone());
-//            initializeData();
-//            calculateButtonStates();
-//            if (!this.variableListModel.isEmpty()) {
-//                enableAllControls(true);
-//
-//                enableControls(this.attributesPanel, false);
-//                enableControls(this.numericalCheckBox, false);
-//            }
-//            this.newButton.setEnabled(true);
-//        } else {
+//TODO: check this        
+        this.newButton.setEnabled(false);
         int index = this.variablesList.getSelectedIndex() + 1;
 
         VariableMu variable = new VariableMu("New");
@@ -924,8 +912,7 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
         enableAllControls(true);
         this.variablesList.setSelectedIndex(index);
         updateValues();
-//            this.newButton.setEnabled(true);
-//        }
+        this.newButton.setEnabled(true);
     }//GEN-LAST:event_newButtonActionPerformed
 
     private void deleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteButtonActionPerformed
@@ -996,6 +983,8 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
             this.numericalCheckBox.setSelected(true);
             this.numericalCheckBox.setEnabled(false);
         }
+        enableControls(this.missingsPanel, !this.weightRadioButton.isSelected());
+        dataFormatCheck();
     }//GEN-LAST:event_weightRadioButtonStateChanged
 
     private void otherRadioButtonStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_otherRadioButtonStateChanged
@@ -1008,12 +997,12 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
 
     private void categoricalCheckBoxStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_categoricalCheckBoxStateChanged
         getSelectedVariable().setCategorical(this.categoricalCheckBox.isSelected());
-        //boolean enable = categoricalCheckBox.isSelected();
-        //enableControls(this.categoriesPanel, enable);
-        //enableControls(this.optionsArgusPanel, enable);
-//        if (!getSelectedVariable().isWeight() && !getSelectedVariable().isHouse_id()) {
-//            enableControls(this.missingsPanel, false);
-//        }
+        this.codelistfileCheckBox.setEnabled(this.categoricalCheckBox.isSelected());
+        this.codelistfileTextField.setEnabled(this.categoricalCheckBox.isSelected() && this.codelistfileCheckBox.isSelected());
+        this.codelistfileButton.setEnabled(this.codelistfileCheckBox.isSelected() && this.categoricalCheckBox.isSelected());
+        enableControls(this.optionsArgusPanel, this.categoricalCheckBox.isSelected());
+        this.truncationAllowedCheckBox.setEnabled(this.categoricalCheckBox.isSelected());
+        dataFormatCheck();
     }//GEN-LAST:event_categoricalCheckBoxStateChanged
 
     private void enableAllControls(boolean enable) {
@@ -1023,9 +1012,6 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
         enableControls(this.variableTypePanel, enable);
         enableControls(this.relatedToPanel, enable);
         enableControls(this.relatedToComboBox, enable);
-        if (getMetadata().isSpss()) {
-            enableControls(this.missingsPanel, false);
-        }
     }
 
     private void enableControls(Component control, boolean enable) {
@@ -1042,9 +1028,8 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
 
     private void numericalCheckBoxStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_numericalCheckBoxStateChanged
         getSelectedVariable().setNumeric(this.numericalCheckBox.isSelected());
-        if (!getController().getMetadata().isSpss()) {
-            this.decimalsTextField.setEnabled(this.numericalCheckBox.isSelected());
-        }
+        this.decimalsTextField.setEnabled(this.numericalCheckBox.isSelected());
+        dataFormatCheck();
     }//GEN-LAST:event_numericalCheckBoxStateChanged
 
     private void truncationAllowedCheckBoxStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_truncationAllowedCheckBoxStateChanged
@@ -1053,7 +1038,9 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
 
     private void codelistfileCheckBoxStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_codelistfileCheckBoxStateChanged
         getSelectedVariable().setCodelist(this.codelistfileCheckBox.isSelected());
-        calculateButtonStates();
+        this.codelistfileButton.setEnabled(this.codelistfileCheckBox.isSelected());
+        this.codelistfileTextField.setEnabled(this.codelistfileCheckBox.isSelected());
+        dataFormatCheck();
     }//GEN-LAST:event_codelistfileCheckBoxStateChanged
 
     private void variablesListValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_variablesListValueChanged
@@ -1091,15 +1078,11 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
     }//GEN-LAST:event_decimalsTextFieldCaretUpdate
 
     private void missing1TextFieldCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_missing1TextFieldCaretUpdate
-        //if (getMetadata().getDataFileType() != MetadataMu.DATA_FILE_TYPE_SPSS) {
         getSelectedVariable().setMissing(0, this.missing1TextField.getText());
-        //}
     }//GEN-LAST:event_missing1TextFieldCaretUpdate
 
     private void missing2TextFieldCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_missing2TextFieldCaretUpdate
-        // if (getMetadata().getDataFileType() != MetadataMu.DATA_FILE_TYPE_SPSS) {
         getSelectedVariable().setMissing(1, this.missing2TextField.getText());
-        //}
     }//GEN-LAST:event_missing2TextFieldCaretUpdate
 
     private void codelistfileTextFieldCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_codelistfileTextFieldCaretUpdate
@@ -1143,6 +1126,7 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
     private javax.swing.JLabel decimalsLabel;
     private javax.swing.JTextField decimalsTextField;
     private javax.swing.JButton deleteButton;
+    private javax.swing.JComboBox formatComboBox;
     private javax.swing.JButton generateButton;
     private javax.swing.JRadioButton hhIdentifierRadioButton;
     private javax.swing.JRadioButton hhvariableRadioButton;
@@ -1173,7 +1157,6 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
     private javax.swing.JCheckBox truncationAllowedCheckBox;
     private javax.swing.ButtonGroup variableTypeButtonGroup;
     private javax.swing.JPanel variableTypePanel;
-    private javax.swing.JComboBox variablesComboBox;
     private javax.swing.JList variablesList;
     private javax.swing.JPanel variablesPanel;
     private javax.swing.JScrollPane variablesScrollPane;

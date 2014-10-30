@@ -19,7 +19,6 @@ Opmerking: Ik heb nu grofweg 1 scherm per week geplaatst maar sommige schermen z
 
 Global recode --> missing values testen (2e missing als er maar 1 is?)
 SpecifyMetadata --> werkt alles zoals het moet werken
-PRAM --> variabelen waarvoor riskmodel is weglaten
 
 open microdata --> csv toevoegen (Tau?)
 temp data --> zodra aangemaakt aangeven exitOnClose (Anco) 
@@ -34,6 +33,7 @@ microaggregation --> record has the wrong length
 datafilename vervangen zodra het kan (spss)
 tempData --> - geen arraylist, vervangen als nieuwe gemaakt wordt en oude verwijderen
 SpecifyMetadata --> - herberekenen startingposition spss
+PRAM --> variabelen waarvoor riskmodel is weglaten
 
 
 
