@@ -27,16 +27,12 @@ public final class MetadataMu {
     //default
     private int dataFileType = DATA_FILE_TYPE_FIXED;
     private String separator = ";";
-//    private final String spssSeparator = ",";
     private final int spssStartingPosition = 1;
-    //private int spssNumberOfCases = 0;
-//    private final int spssIdLevel = 1;
 
     private final ArrayList<VariableMu> variables;
-    private final ArrayList<SpssVariable> spssVariables;
+    
     private DataFilePair filenames;
-    private String spssDataFileName;
-    //private String spssTempDataFileName;
+    //private String spssDataFileName;
     private Combinations combinations;
     private int recordCount;
     private final ArrayList<ReplacementSpec> replacementSpecs;
@@ -47,7 +43,6 @@ public final class MetadataMu {
      */
     public MetadataMu() {
         this.variables = new ArrayList<>();
-        this.spssVariables = new ArrayList<>();
         this.replacementSpecs = new ArrayList<>();
         this.filenames = new DataFilePair(null, null);
 
@@ -66,9 +61,9 @@ public final class MetadataMu {
         this.dataFileType = metadata.dataFileType;
         this.filenames = new DataFilePair(metadata.filenames.getDataFileName(), metadata.filenames.getMetaFileName());
         this.separator = metadata.separator;
-        if (isSpss()) {
-            this.spssDataFileName = metadata.spssDataFileName;
-        }
+//        if (isSpss()) {
+//            this.spssDataFileName = metadata.spssDataFileName;
+//        }
         for (VariableMu var : metadata.variables) {
             this.variables.add(new VariableMu(var));
         }
@@ -327,13 +322,13 @@ public final class MetadataMu {
         this.separator = separator;
     }
 
-    public String getSpssDataFileName() {
-        return spssDataFileName;
-    }
-
-    public void setSpssDataFileName(String spssDataFileName) {
-        this.spssDataFileName = spssDataFileName;
-    }
+//    public String getSpssDataFileName() {
+//        return spssDataFileName;
+//    }
+//
+//    public void setSpssDataFileName(String spssDataFileName) {
+//        this.spssDataFileName = spssDataFileName;
+//    }
 
     /**
      * Gets the file names of both the metadata file and the data file
@@ -378,26 +373,6 @@ public final class MetadataMu {
         return variables;
     }
 
-    /**
-     * Gets an ArrayList containing all the SpssVariables in the Metadata.
-     *
-     * @return ArrayList containing all the SpssVariables in the Metadata.
-     */
-    public ArrayList<SpssVariable> getSpssVariables() {
-        return spssVariables;
-    }
-
-//    public String getSpssTempDataFileName() {
-//        return spssTempDataFileName.getPath();
-//    }
-//
-////    public void setSpssTempDataFileName(String spssTempDataFileName) {
-////        this.spssTempDataFileName = spssTempDataFileName;
-////    }
-//    
-//    public void removeTempSpssFile(){
-//        this.spssTempDataFileName.delete();
-//    }
     public int getSpssStartingPosition() {
         return spssStartingPosition;
     }

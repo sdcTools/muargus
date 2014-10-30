@@ -115,7 +115,7 @@ public class MakeProtectedFileController extends ControllerBase<ProtectedFile> {
                 SpssUtils.makeSafeFileSpss(safeMetadata);
             }
         } catch (Exception e) {
-
+            //TODO: change exception type and show warning
         }
         try {
             MetaWriter.writeRda(safeMetadata.getFileNames().getMetaFileName(),

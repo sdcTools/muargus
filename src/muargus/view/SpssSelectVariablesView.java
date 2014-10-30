@@ -8,7 +8,7 @@ package muargus.view;
 
 import java.util.List;
 import javax.swing.table.DefaultTableModel;
-import muargus.model.SpssVariable;
+import argus.model.SpssVariable;
 
 /**
  *

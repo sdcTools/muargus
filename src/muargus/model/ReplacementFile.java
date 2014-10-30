@@ -64,7 +64,9 @@ public class ReplacementFile {
      */
     private File createFile() throws ArgusException {
         try {
-            return File.createTempFile("MuArgus", ".rpl");
+            File file = File.createTempFile("MuArgus", ".rpl");
+            file.deleteOnExit();
+            return file;
         } catch (IOException ex) {
             throw new ArgusException("Replacement file cannot be created: " + ex.getMessage());
         }

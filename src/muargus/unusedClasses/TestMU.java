@@ -25,6 +25,7 @@ public class TestMU {
     public void make() {
         try {
             tmp = File.createTempFile("abctest", ".txt");
+            tmp.deleteOnExit();
             System.out.println("Temp file : " + tmp.getAbsolutePath());
         } catch (IOException ex) {
             System.out.println("oepsie");

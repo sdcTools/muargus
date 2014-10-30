@@ -13,7 +13,7 @@ import muargus.VariableNameCellRenderer;
 import muargus.model.MetadataMu;
 import muargus.controller.SpecifyMetadataController;
 import muargus.controller.SpssUtils;
-import muargus.model.SpssVariable;
+import argus.model.SpssVariable;
 import muargus.model.VariableMu;
 
 /**
@@ -108,6 +108,7 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
         this.codelistfileButton.setEnabled(false);
         this.codelistfileTextField.setEnabled(false);
         this.newButton.setEnabled(false);
+        this.numericalCheckBox.setEnabled(false);
         this.generateButton.setEnabled(true);
     }
 
@@ -962,8 +963,9 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
         if (this.hhIdentifierRadioButton.isSelected()) {
             this.categoricalCheckBox.setSelected(false);
             this.categoricalCheckBox.setEnabled(false);
-            this.numericalCheckBox.setSelected(false);
-            this.numericalCheckBox.setEnabled(false);
+//            this.numericalCheckBox.setSelected(false);
+            this.numericalCheckBox.setEnabled(true);
+            dataFormatCheck();
         }
     }//GEN-LAST:event_hhIdentifierRadioButtonStateChanged
 
@@ -972,6 +974,7 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
         if (this.hhvariableRadioButton.isSelected()) {
             this.categoricalCheckBox.setEnabled(true);
             this.numericalCheckBox.setEnabled(true);
+            dataFormatCheck();
         }
     }//GEN-LAST:event_hhvariableRadioButtonStateChanged
 
@@ -992,6 +995,7 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
         if (this.otherRadioButton.isSelected()) {
             this.categoricalCheckBox.setEnabled(true);
             this.numericalCheckBox.setEnabled(true);
+            dataFormatCheck();
         }
     }//GEN-LAST:event_otherRadioButtonStateChanged
 

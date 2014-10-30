@@ -23,8 +23,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import muargus.model.MetadataMu;
-import muargus.model.SpssVariable;
+import argus.model.SpssVariable;
 import muargus.model.VariableMu;
 
 /**
@@ -37,6 +38,8 @@ public class SpssUtils {
     public final static String tempName = "temp";
     public final static int NUMERIC = 0;
     public static boolean fixed = true;
+    private final static ArrayList<SpssVariable> spssVariables = new ArrayList<>();
+    private static String spssDataFileName;
     public static File spssTempDataFiles;
     public static File safeFile;
     public static File safeSpssFile = new File("C:\\Users\\Gebruiker\\Desktop\\safe.sav");
@@ -50,11 +53,11 @@ public class SpssUtils {
      * @return List List containing the SpssVariable instances.
      */
     public static List<SpssVariable> getVariablesFromSpss(MetadataMu metadata) {
-        if (metadata.getSpssVariables().size() < 1) {
-            metadata.setSpssDataFileName(metadata.getFileNames().getDataFileName());
+        if (SpssUtils.spssVariables.size() < 1) {
+            SpssUtils.spssDataFileName = metadata.getFileNames().getDataFileName();
             try {
                 StatsUtil.start();
-                StatsUtil.submit("get file = \"" + metadata.getSpssDataFileName() + "\".");
+                StatsUtil.submit("get file = \"" + SpssUtils.spssDataFileName + "\".");
                 Cursor c = new Cursor();
                 for (int i = 0; i < StatsUtil.getVariableCount(); i++) {
                     SpssVariable variable = new SpssVariable(StatsUtil.getVariableName(i), StatsUtil.getVariableFormatDecimal(i),
@@ -69,7 +72,7 @@ public class SpssUtils {
                         variable.setStringValueLabels(c.getStringValueLabels(i));
                         variable.setStringMissings(StatsUtil.getStringMissingValues(i));
                     }
-                    metadata.getSpssVariables().add(variable);
+                    SpssUtils.spssVariables.add(variable);
                 }
                 metadata.setRecordCount(StatsUtil.getCaseCount());
                 StatsUtil.stop();
@@ -77,7 +80,7 @@ public class SpssUtils {
 
             }
         }
-        return metadata.getSpssVariables();
+        return SpssUtils.spssVariables;
     }
 
     /**
@@ -88,77 +91,84 @@ public class SpssUtils {
      */
     public static void setVariablesSpss(List<SpssVariable> variables, MetadataMu metadata) {
         int startingPos = 1;
-        for (SpssVariable variable : variables) {
+        for (SpssVariable spssVariable : variables) {
             // add selected variables
-            if (variable.isSelected()) {
-                VariableMu v = new VariableMu(variable.getName());
-                if (!doesVariableExist(v, metadata)) {
+            if (spssVariable.isSelected()) {
+                VariableMu variable = new VariableMu(spssVariable.getName());
+                if (!doesVariableExist(variable, metadata)) {
                     // Set the missing values and variableLength either for numeric or for string missing values
-                    int variableLength = variable.getVariableLength();
+                    int variableLength = spssVariable.getVariableLength();
                     //TODO: add time/date type
-                    if (variable.getVariableType() == SpssUtils.NUMERIC) {
-                        for (int i = 0; i < variable.getNumericMissings().length; i++) {
+                    if (spssVariable.getVariableType() == SpssUtils.NUMERIC) {
+                        for (int i = 0; i < spssVariable.getNumericMissings().length; i++) {
                             if (i == VariableMu.MAX_NUMBER_OF_MISSINGS) {
                                 break;
                             }
-                            v.setMissing(i, getIntIfPossible(variable.getNumericMissings()[i]));
-                            if (getIntIfPossible(variable.getNumericMissings()[i]).length() > variableLength) {
-                                variableLength = getIntIfPossible(variable.getNumericMissings()[i]).length();
+                            variable.setMissing(i, getIntIfPossible(spssVariable.getNumericMissings()[i]));
+                            if (getIntIfPossible(spssVariable.getNumericMissings()[i]).length() > variableLength) {
+                                variableLength = getIntIfPossible(spssVariable.getNumericMissings()[i]).length();
                             }
                         }
                     } else {
-                        for (int i = 0; i < variable.getStringMissings().length; i++) {
+                        for (int i = 0; i < spssVariable.getStringMissings().length; i++) {
                             if (i == VariableMu.MAX_NUMBER_OF_MISSINGS) {
                                 break;
                             }
-                            v.setMissing(i, variable.getStringMissings()[i]);
-                            if (variable.getStringMissings()[i].length() > variableLength) {
-                                variableLength = variable.getStringMissings()[i].length();
+                            variable.setMissing(i, spssVariable.getStringMissings()[i]);
+                            if (spssVariable.getStringMissings()[i].length() > variableLength) {
+                                variableLength = spssVariable.getStringMissings()[i].length();
                             }
                         }
                     }
 
                     // Set all other relevant information.
-                    v.setVariableLength(variableLength);
-                    v.setDecimals(variable.getNumberOfDecimals());
-                    v.setNumeric(variable.isNumeric());
-                    v.setCategorical(variable.isCategorical());
-                    v.setStartingPosition(startingPos);
+                    variable.setVariableLength(variableLength);
+                    variable.setDecimals(spssVariable.getNumberOfDecimals());
+                    variable.setNumeric(spssVariable.isNumeric());
+                    variable.setCategorical(spssVariable.isCategorical());
+                    variable.setStartingPosition(startingPos);
                     if (SpssUtils.fixed) {
-                        startingPos += variable.getVariableLength();
+                        startingPos += spssVariable.getVariableLength();
                     }
-                    v.setSpssVariable(variable);
-                    metadata.getVariables().add(v);
+                    variable.setSpssVariable(spssVariable);
+                    metadata.getVariables().add(variable);
                 } else {
                     // reset the startingposition
-                    SpssUtils.getVariable(v, metadata).setStartingPosition(startingPos);
-                    startingPos += variable.getVariableLength();
+                    SpssUtils.getVariable(variable, metadata).setStartingPosition(startingPos);
+                    startingPos += spssVariable.getVariableLength();
                 }
             } else {
                 // remove variables that are not selected.
-                VariableMu v = new VariableMu(variable.getName());
+                VariableMu v = new VariableMu(spssVariable.getName());
                 if (doesVariableExist(v, metadata)) {
-                    removeVariable(variable.getName(), metadata);
+                    removeVariable(spssVariable.getName(), metadata);
                 }
             }
         }
     }
 
     /**
-     * 
-     * @param metadata 
+     *
+     * @param metadata
      */
     public static void checkMetadata(MetadataMu metadata) {
-        List<SpssVariable> spssVariables = SpssUtils.getVariablesFromSpss(metadata);
+        SpssUtils.getVariablesFromSpss(metadata);
         for (VariableMu variable : metadata.getVariables()) {
             boolean found = false;
-            for (SpssVariable spssVariable : spssVariables) {
+            outerloop:
+            for (SpssVariable spssVariable : SpssUtils.spssVariables) {
                 if (variable.getName().equals(spssVariable.getName())
                         && variable.getVariableLength() == spssVariable.getVariableLength()
                         && variable.getDecimals() == spssVariable.getNumberOfDecimals()) {
                     for (int i = 0; i < variable.getNumberOfMissings(); i++) {
-                        if (!variable.getMissing(0).equals(spssVariable.getMissing(0))) {
-                            break;
+                        String missing;
+                        if (spssVariable.getVariableType() == SpssUtils.NUMERIC) {
+                            missing = SpssUtils.getIntIfPossible(spssVariable.getNumericMissings()[i]);
+                        } else {
+                            missing = spssVariable.getStringMissings()[i];
+                        }
+                        if (!variable.getMissing(i).equals(missing)) {
+                            break outerloop;
                         }
                     }
                     variable.setSpssVariable(spssVariable);
@@ -168,8 +178,8 @@ public class SpssUtils {
             }
             if (!found) {
                 metadata.getVariables().removeAll(metadata.getVariables());
-                //TODO: verander naar pop-up schermpje
-                System.out.println("Metadatafile does not equal the spss metadata");
+                JOptionPane.showMessageDialog(null, "Metadatafile does not equal the spss metadata."
+                        + "\nReload the metadata via specify metadata.", "Spss metadata error", JOptionPane.ERROR_MESSAGE);
                 break;
             }
         }
@@ -183,7 +193,7 @@ public class SpssUtils {
      * @param metadata Metadata file.
      * @return Boolean indicating whether the variable already exists.
      */
-    public static boolean doesVariableExist(VariableMu variable, MetadataMu metadata) {
+    private static boolean doesVariableExist(VariableMu variable, MetadataMu metadata) {
         boolean doubleVariable = false;
         for (VariableMu v : metadata.getVariables()) {
             if (v.getName().equals(variable.getName())) {
@@ -194,12 +204,12 @@ public class SpssUtils {
     }
 
     /**
-     * 
+     *
      * @param variable
      * @param metadata
-     * @return 
+     * @return
      */
-    public static VariableMu getVariable(VariableMu variable, MetadataMu metadata) {
+    private static VariableMu getVariable(VariableMu variable, MetadataMu metadata) {
         for (VariableMu v : metadata.getVariables()) {
             if (v.getName().equals(variable.getName())) {
                 return v;
@@ -214,7 +224,7 @@ public class SpssUtils {
      * @param variableName String containing the variableName.
      * @param metadata Metadata file.
      */
-    public static void removeVariable(String variableName, MetadataMu metadata) {
+    private static void removeVariable(String variableName, MetadataMu metadata) {
         for (VariableMu v : metadata.getVariables()) {
             if (v.getName().equals(variableName)) {
                 metadata.getVariables().remove(v);
@@ -241,8 +251,7 @@ public class SpssUtils {
                 value_String = Double.toString(value_double);
             }
         } catch (ArgusException ex) {
-            //TODO: change warning message
-            System.out.println("warning");
+            JOptionPane.showMessageDialog(null, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
         return value_String;
     }
@@ -261,14 +270,14 @@ public class SpssUtils {
     }
 
     /**
-     * 
+     *
      * @param metadata
-     * @return 
+     * @return
      */
-    private static String getFilter(MetadataMu metadata) {
+    private static String getFilter() {
         // check if variables are selected
         boolean noVariablesSelected = true;
-        for (SpssVariable variable : metadata.getSpssVariables()) {
+        for (SpssVariable variable : SpssUtils.spssVariables) {
             if (variable.isSelected()) {
                 noVariablesSelected = false;
                 break;
@@ -279,7 +288,7 @@ public class SpssUtils {
          are selected (when a .rda file exists), use all variables specified
          in the metadata, otherwise only the selected variables */
         String variableFilter = "";
-        for (SpssVariable v : metadata.getSpssVariables()) {
+        for (SpssVariable v : SpssUtils.spssVariables) {
             if (noVariablesSelected || v.isSelected()) {
                 variableFilter += v.getName() + " ";
             }
@@ -289,8 +298,8 @@ public class SpssUtils {
     }
 
     /**
-     * 
-     * @param metadata 
+     *
+     * @param metadata
      */
     private static void writeFixedFormat(MetadataMu metadata) {
         try {
@@ -301,9 +310,9 @@ public class SpssUtils {
             SpssUtils.spssTempDataFiles.deleteOnExit();
             /* make te commands for spss to write the data from the selected variables to a fixed format data file. */
             String[] command = {"SET DECIMAL=DOT.",
-                "get file = '" + metadata.getSpssDataFileName() + "'.",
+                "get file = '" + SpssUtils.spssDataFileName + "'.",
                 "WRITE BOM=NO OUTFILE= '" + SpssUtils.spssTempDataFiles.getPath()
-                + "'/" + SpssUtils.getFilter(metadata) + ".",
+                + "'/" + SpssUtils.getFilter() + ".",
                 "EXECUTE."
             };
             StatsUtil.submit(command);
@@ -317,8 +326,8 @@ public class SpssUtils {
     }
 
     /**
-     * 
-     * @param metadata 
+     *
+     * @param metadata
      */
     private static void setNewDataFile(MetadataMu metadata) {
         DataFilePair filenames = new DataFilePair(SpssUtils.spssTempDataFiles.getPath(), metadata.getFileNames().getMetaFileName());
@@ -326,8 +335,8 @@ public class SpssUtils {
     }
 
     /**
-     * 
-     * @param safeMetadata 
+     *
+     * @param safeMetadata
      */
     public static void makeSafeFileSpss(MetadataMu safeMetadata) {
         try {
@@ -342,20 +351,20 @@ public class SpssUtils {
             command.add("DATA LIST FILE = '" + safeMetadata.getFileNames().getDataFileName() + "'/");
             int startPosition = 1;
             int endPosition;
-            for (VariableMu v : safeMetadata.getVariables()) {
+            for (VariableMu v : variables) {
                 String name = v.getSpssVariable().getName();
                 endPosition = startPosition + v.getVariableLength() - 1;
                 command.set(command.size() - 1, command.get(command.size() - 1)
                         + " TEMP" + name + " " + startPosition + " - " + endPosition);
-                if(v.getSpssVariable().getVariableFormat().equals(VariableFormat.A)){
-                     command.set(command.size() - 1, command.get(command.size() - 1) + " (A) ");
+                if (v.getSpssVariable().getVariableFormat().equals(VariableFormat.A)) {
+                    command.set(command.size() - 1, command.get(command.size() - 1) + " (A) ");
                 }
                 startPosition = endPosition + 1;
             }
             command.set(command.size() - 1, command.get(command.size() - 1) + ".");
-            command.add("MATCH FILES FILE = '" + safeMetadata.getSpssDataFileName() + "' /FILE = *.");
+            command.add("MATCH FILES FILE = '" + SpssUtils.spssDataFileName + "' /FILE = *.");
             command.add("EXECUTE.");
-            for (VariableMu v : safeMetadata.getVariables()) {
+            for (VariableMu v : variables) {
                 String name = v.getSpssVariable().getName();
                 command.add("if (SYSMIS(" + name + ") EQ 0) " + name + "= TEMP" + name + ".");
             }
@@ -369,8 +378,8 @@ public class SpssUtils {
 
     // WARNING: this has not been properly tested
     /**
-     * 
-     * @param metadata 
+     *
+     * @param metadata
      */
     private static void writeFreeFormat(MetadataMu metadata) {
         try {
@@ -383,7 +392,7 @@ public class SpssUtils {
 
             // Make an array of variable names to use as a filter
             ArrayList<String> variables = new ArrayList<>();
-            for (SpssVariable v : metadata.getSpssVariables()) {
+            for (SpssVariable v : SpssUtils.spssVariables) {
                 if (v.isSelected()) {
                     variables.add(v.getName());
                 }
@@ -393,9 +402,6 @@ public class SpssUtils {
 
             // fetch an array of cases. One case contains the data for the variables specified in the filter.
             Case[] data = dataUtil.fetchCases(true, 0);
-
-            // sets the number of cases in the metadata (this is used during the writing of the safe data file).
-            metadata.setRecordCount(data.length);
 
             try {
                 // Sets the temporary filename
@@ -419,8 +425,8 @@ public class SpssUtils {
 
     // WARNING: this has not been properly tested
     /**
-     * 
-     * @param safeMetadata 
+     *
+     * @param safeMetadata
      */
     public static void makeSafeFileFreeformat(MetadataMu safeMetadata) {
         try {
@@ -450,7 +456,7 @@ public class SpssUtils {
                 }
 
                 StatsUtil.start();
-                StatsUtil.submit("GET FILE='" + safeMetadata.getSpssDataFileName() + "'.");
+                StatsUtil.submit("GET FILE='" + SpssUtils.spssDataFileName + "'.");
                 DataUtil d = new DataUtil();
                 for (int i = 0; i < safeMetadata.getVariables().size(); i++) {
                     SpssVariable variable = safeMetadata.getVariables().get(i).getSpssVariable();
@@ -480,7 +486,7 @@ public class SpssUtils {
                 String first = variables.get(0).getSpssVariable().getName();
                 String last = variables.get(variables.size() - 1).getSpssVariable().getName();
 
-                for (VariableMu v : safeMetadata.getVariables()) {
+                for (VariableMu v : variables) {
                     String name = v.getSpssVariable().getName();
                     StatsUtil.submit("if (SYSMIS(" + name + ") EQ 0) " + name + "= TEMP" + name + ".");
                 }
