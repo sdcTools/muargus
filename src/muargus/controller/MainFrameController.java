@@ -1,4 +1,3 @@
-// TODO: change the open view methods to one method that takes an argument Classname
 package muargus.controller;
 
 import argus.model.ArgusException;

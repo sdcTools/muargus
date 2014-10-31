@@ -130,7 +130,6 @@ public class MicroaggregationController extends ControllerBase<Microaggregation>
                     getModel().getMicroaggregations().remove(microaggregation);
                     this.metadata.getReplacementSpecs().remove(microaggregation);
                     getMicroaggregationView().updateVariableRows(microaggregation);
-                    //TODO: remove temporary files?
                     return;
                 }
             }
