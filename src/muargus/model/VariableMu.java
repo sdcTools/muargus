@@ -50,7 +50,7 @@ public class VariableMu {
     private double entropy;
 
     private final ArrayList<CodeInfo> codeInfos;
-    
+
     private SpssVariable spssVariable;
 
     /**
@@ -80,8 +80,8 @@ public class VariableMu {
     }
 
     /**
-     * 
-     * @param name 
+     *
+     * @param name
      */
     public VariableMu(String name) {
         this();
@@ -90,8 +90,8 @@ public class VariableMu {
     }
 
     /**
-     * 
-     * @param variable 
+     *
+     * @param variable
      */
     public VariableMu(VariableMu variable) {
         this();
@@ -142,227 +142,232 @@ public class VariableMu {
     }
 
     /**
-     * 
+     *
      */
     public void clearCodeInfos() {
         this.codeInfos.clear();
     }
 
     /**
-     * 
-     * @param codeInfo 
+     *
+     * @param codeInfo
      */
     public void addCodeInfo(CodeInfo codeInfo) {
         this.codeInfos.add(codeInfo);
     }
 
     /**
-     * 
-     * @param recodable 
+     *
+     * @param recodable
      */
     public void setRecodable(boolean recodable) {
         this.categorical = recodable;
     }
 
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     public boolean isCodelist() {
         return codelist;
     }
 
     /**
-     * 
-     * @param codelist 
+     *
+     * @param codelist
      */
     public void setCodelist(boolean codelist) {
         this.codelist = codelist;
     }
 
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     public String getCodeListFile() {
         return codeListFile;
     }
 
     /**
-     * 
-     * @param codeListFile 
+     *
+     * @param codeListFile
      */
     public void setCodeListFile(String codeListFile) {
         this.codeListFile = codeListFile;
     }
 
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     public int getIdLevel() {
         return idLevel;
     }
 
     /**
-     * 
-     * @param idLevel 
+     *
+     * @param idLevel
      */
     public void setIdLevel(String idLevel) {
         this.idLevel = Integer.parseInt(idLevel);
     }
-    
+
+    /**
+     *
+     * @param idLevel
+     */
     public void setIdLevel(int idLevel) {
         this.idLevel = idLevel;
     }
 
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     public int getSuppressweight() {
         return suppressweight;
     }
 
     /**
-     * 
-     * @param suppressweight 
+     *
+     * @param suppressweight
      */
     public void setSuppressweight(String suppressweight) {
         this.suppressweight = Integer.parseInt(suppressweight);
     }
 
     /**
-     * 
-     * @param suppressweight 
+     *
+     * @param suppressweight
      */
     public void setSuppressweight(int suppressweight) {
         this.suppressweight = suppressweight;
     }
 
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     public boolean isTruncable() {
         return truncable;
     }
 
     /**
-     * 
-     * @param truncable 
+     *
+     * @param truncable
      */
     public void setTruncable(boolean truncable) {
         this.truncable = truncable;
     }
 
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     public boolean isNumeric() {
         return numeric;
     }
 
     /**
-     * 
-     * @param numeric 
+     *
+     * @param numeric
      */
     public void setNumeric(boolean numeric) {
         this.numeric = numeric;
     }
 
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     public boolean isCategorical() {
         return categorical;
     }
 
     /**
-     * 
-     * @param categorical 
+     *
+     * @param categorical
      */
     public void setCategorical(boolean categorical) {
         this.categorical = categorical;
     }
 
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     public int getDecimals() {
         return decimals;
     }
 
     /**
-     * 
-     * @param decimals 
+     *
+     * @param decimals
      */
     public void setDecimals(String decimals) {
         this.decimals = Integer.parseInt(decimals);
     }
-    
+
     /**
-     * 
-     * @param decimals 
+     *
+     * @param decimals
      */
     public void setDecimals(int decimals) {
         this.decimals = decimals;
     }
 
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     public boolean isWeight() {
         return weight;
     }
 
     /**
-     * 
-     * @param weight 
+     *
+     * @param weight
      */
     public void setWeight(boolean weight) {
         this.weight = weight;
     }
 
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     public boolean isHouse_id() {
         return house_id;
     }
-/**
- * 
- * @param house_id 
- */
+
+    /**
+     *
+     * @param house_id
+     */
     public void setHouse_id(boolean house_id) {
         this.house_id = house_id;
     }
 
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     public boolean isHousehold() {
         return household;
     }
 
     /**
-     * 
-     * @param household 
+     *
+     * @param household
      */
     public void setHousehold(boolean household) {
         this.household = household;
     }
 
     /**
-     * 
+     *
      * @param variables
-     * @throws ArgusException 
+     * @throws ArgusException
      */
     public void linkRelatedVariable(ArrayList<VariableMu> variables) throws ArgusException {
         if (this.relatedVariableName == null) {
@@ -379,80 +384,80 @@ public class VariableMu {
     }
 
     /**
-     * 
-     * @param relatedVariable 
+     *
+     * @param relatedVariable
      */
     public void setRelatedVariable(VariableMu relatedVariable) {
         this.relatedVariable = relatedVariable;
     }
 
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     public VariableMu getRelatedVariable() {
         return this.relatedVariable;
     }
 
     /**
-     * 
-     * @param relatedVariableName 
+     *
+     * @param relatedVariableName
      */
     public void setRelatedVariableName(String relatedVariableName) {
         this.relatedVariableName = relatedVariableName;
     }
 
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     public boolean isRelated() {
         return (this.relatedVariable != null);
     }
 
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     public int getStartingPosition() {
         return startingPosition;
     }
 
     /**
-     * 
-     * @param startingPosition 
+     *
+     * @param startingPosition
      */
     public void setStartingPosition(String startingPosition) {
         this.startingPosition = Integer.parseInt(startingPosition);
     }
-    
+
     /**
-     * 
-     * @param startingPosition 
+     *
+     * @param startingPosition
      */
     public void setStartingPosition(int startingPosition) {
         this.startingPosition = startingPosition;
     }
 
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     public int getVariableLength() {
         return variableLength;
     }
 
     /**
-     * 
-     * @param variableLength 
+     *
+     * @param variableLength
      */
     public void setVariableLength(int variableLength) {
         this.variableLength = variableLength;
     }
 
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     public int getNumberOfMissings() {
         int numberOfMissings = 0;
@@ -465,38 +470,34 @@ public class VariableMu {
     }
 
     /**
-     * 
+     *
      * @param index
-     * @return 
+     * @return
      */
     public String getMissing(int index) {
         return missing[index];
     }
 
     /**
-     * 
+     *
      * @param index
-     * @param value 
+     * @param value
      */
     public void setMissing(int index, String value) {
         this.missing[index] = value;
     }
-    
-//    public void setMissing(String[] missing) {
-//        this.missing = missing;
-//    }
 
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     public boolean isOther() {
         return !this.house_id && !this.household && !this.weight;
     }
 
     /**
-     * 
-     * @param other 
+     *
+     * @param other
      */
     public void setOther(boolean other) {
         if (other) {
@@ -507,99 +508,111 @@ public class VariableMu {
     }
 
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     public int getnOfSuppressions() {
         return nOfSuppressions;
     }
 
     /**
-     * 
-     * @param nOfSuppressions 
+     *
+     * @param nOfSuppressions
      */
     public void setnOfSuppressions(int nOfSuppressions) {
         this.nOfSuppressions = nOfSuppressions;
     }
 
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     public int getBandwidth() {
         return bandwidth;
     }
 
     /**
-     * 
-     * @param bandwidth 
+     *
+     * @param bandwidth
      */
     public void setBandwidth(int bandwidth) {
         this.bandwidth = bandwidth;
     }
 
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     public int getnOfCodes() {
         return nOfCodes;
     }
 
     /**
-     * 
-     * @param nOfCodes 
+     *
+     * @param nOfCodes
      */
     public void setnOfCodes(int nOfCodes) {
         this.nOfCodes = nOfCodes;
     }
 
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     public double getEntropy() {
         return entropy;
     }
 
     /**
-     * 
-     * @param entropy 
+     *
+     * @param entropy
      */
     public void setEntropy(double entropy) {
         this.entropy = entropy;
     }
 
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     public ArrayList<CodeInfo> getCodeInfos() {
         return this.codeInfos;
     }
 
+    /**
+     * 
+     * @return 
+     */
     public SpssVariable getSpssVariable() {
         return spssVariable;
     }
 
+    /**
+     * 
+     * @param spssVariable 
+     */
     public void setSpssVariable(SpssVariable spssVariable) {
         this.spssVariable = spssVariable;
     }
 
+    /**
+     * 
+     * @param list
+     * @return 
+     */
     public static String printVariableNames(ArrayList<VariableMu> list) {
         StringBuilder b = new StringBuilder(list.get(0).getName());
-        for (int i=1; i < list.size(); i++) {
+        for (int i = 1; i < list.size(); i++) {
             b.append(", ");
             b.append(list.get(i).getName());
         }
         return b.toString();
     }
 
-    
     /**
-     * 
+     *
      * @param o
-     * @return 
+     * @return
      */
     @Override
     public boolean equals(Object o) {
@@ -621,7 +634,7 @@ public class VariableMu {
                 && (this.name == null ? cmp.name == null : this.name.equals(cmp.name))
                 && (this.numeric == cmp.numeric)
                 && (this.relatedVariable == null ? cmp.relatedVariable == null
-                : this.relatedVariable.getName().equals(cmpRelatedVariableName))
+                        : this.relatedVariable.getName().equals(cmpRelatedVariableName))
                 && (this.startingPosition == cmp.startingPosition)
                 && (this.suppressweight == cmp.suppressweight)
                 && (this.truncable == cmp.truncable)
@@ -630,8 +643,8 @@ public class VariableMu {
     }
 
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     @Override
     public int hashCode() {

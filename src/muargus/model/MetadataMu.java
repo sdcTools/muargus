@@ -27,12 +27,10 @@ public final class MetadataMu {
     //default
     private int dataFileType = DATA_FILE_TYPE_FIXED;
     private String separator = ";";
-    private final int spssStartingPosition = 1;
 
     private final ArrayList<VariableMu> variables;
     
     private DataFilePair filenames;
-    //private String spssDataFileName;
     private Combinations combinations;
     private int recordCount;
     private final ArrayList<ReplacementSpec> replacementSpecs;
@@ -45,7 +43,6 @@ public final class MetadataMu {
         this.variables = new ArrayList<>();
         this.replacementSpecs = new ArrayList<>();
         this.filenames = new DataFilePair(null, null);
-
     }
 
     /**
@@ -61,19 +58,21 @@ public final class MetadataMu {
         this.dataFileType = metadata.dataFileType;
         this.filenames = new DataFilePair(metadata.filenames.getDataFileName(), metadata.filenames.getMetaFileName());
         this.separator = metadata.separator;
-//        if (isSpss()) {
-//            this.spssDataFileName = metadata.spssDataFileName;
-//        }
         for (VariableMu var : metadata.variables) {
             this.variables.add(new VariableMu(var));
         }
         try {
             linkRelatedVariables();
         } catch (ArgusException ex) {
+            //TODO: Show message
             logger.log(Level.SEVERE, null, ex);
         }
     }
 
+    /**
+     * Checks whether the data file type equals spss.
+     * @return Boolean indicating whether the data file type equals spss.
+     */
     public boolean isSpss() {
         return this.dataFileType == MetadataMu.DATA_FILE_TYPE_SPSS;
     }
@@ -322,14 +321,6 @@ public final class MetadataMu {
         this.separator = separator;
     }
 
-//    public String getSpssDataFileName() {
-//        return spssDataFileName;
-//    }
-//
-//    public void setSpssDataFileName(String spssDataFileName) {
-//        this.spssDataFileName = spssDataFileName;
-//    }
-
     /**
      * Gets the file names of both the metadata file and the data file
      *
@@ -371,10 +362,6 @@ public final class MetadataMu {
      */
     public ArrayList<VariableMu> getVariables() {
         return variables;
-    }
-
-    public int getSpssStartingPosition() {
-        return spssStartingPosition;
     }
 
     /**

@@ -85,7 +85,6 @@ public class PramSpecificationView extends DialogBase<PramSpecificationControlle
                 }
             }
         });
-
     }
 
     /**
@@ -131,8 +130,6 @@ public class PramSpecificationView extends DialogBase<PramSpecificationControlle
             public Class getColumnClass(int i) {
                 return i == 2 ? Integer.class : String.class;
             }
-            
-            
         };
         this.codesTable.setModel(this.codesTableModel);
 
@@ -156,6 +153,43 @@ public class PramSpecificationView extends DialogBase<PramSpecificationControlle
         this.codesTable.getColumn("Prob.").setCellRenderer(rightRenderer);
 
         this.variablesTable.setDefaultRenderer(Object.class, new HighlightTableCellRenderer());
+    }
+
+    private void setProbability(int probability) {
+        for (CodeInfo c : getSelectedPramVariableSpec().getVariable().getCodeInfos()) {
+            c.setPramProbability(probability);
+        }
+
+        for (int i = 0; i < this.codesTableModel.getRowCount(); i++) {
+            this.codesTable.setValueAt(Integer.toString(probability), i, 2);
+        }
+        this.codesSlider.setValue(getSelectedCodeInfo().getPramProbability());
+    }
+
+    private void variablesSelectionChanged() {
+        this.codesTable.getSelectionModel().setSelectionInterval(0, 0);
+        this.selectedRow = 0;
+        int value = getSelectedPramVariableSpec().getBandwidth();
+        int max = getSelectedPramVariableSpec().getVariable().getCodeInfos().size() - getSelectedPramVariableSpec().getVariable().getNumberOfMissings();
+        if (value > max) {
+            value = max;
+        }
+        String[] numbers = new String[max];
+        for (int i = 0; i < numbers.length; i++) {
+            numbers[i] = Integer.toString(i + 1);
+        }
+        this.bandwidthComboBox.setModel(new javax.swing.DefaultComboBoxModel(numbers));
+        this.bandwidthComboBox.getModel().setSelectedItem(numbers[value - 1]);
+        this.codesSlider.setValue(getSelectedCodeInfo().getPramProbability());
+
+        updateCodesTable();
+    }
+
+    private void codesSelectionChanged() {
+        if (this.codesTable.getSelectedRow() >= 0) {
+            this.selectedRow = this.codesTable.getSelectedRow();
+        }
+        this.codesSlider.setValue(getSelectedCodeInfo().getPramProbability());
     }
 
     /**
@@ -475,7 +509,6 @@ public class PramSpecificationView extends DialogBase<PramSpecificationControlle
 
     private void bandwidthCheckBoxStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_bandwidthCheckBoxStateChanged
         this.bandwidthComboBox.setEnabled(this.bandwidthCheckBox.isSelected());
-        //this.model.setUseBandwidth(this.bandwidthCheckBox.isSelected());
     }//GEN-LAST:event_bandwidthCheckBoxStateChanged
 
     private void applyButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_applyButtonActionPerformed
@@ -500,7 +533,6 @@ public class PramSpecificationView extends DialogBase<PramSpecificationControlle
                 break;
             }
         }
-
         this.codesTable.setValueAt(this.codesSlider.getValue(), this.codesTable.getSelectedRow(), 2);
     }//GEN-LAST:event_codesSliderStateChanged
 
@@ -508,17 +540,6 @@ public class PramSpecificationView extends DialogBase<PramSpecificationControlle
         setProbability(this.defaultProbabilityComboBox.getSelectedIndex());
     }//GEN-LAST:event_defaultProbabilityButtonActionPerformed
 
-    private void setProbability(int probability){
-        for (CodeInfo c : getSelectedPramVariableSpec().getVariable().getCodeInfos()) {
-            c.setPramProbability(probability);
-        }
-
-        for (int i = 0; i < this.codesTableModel.getRowCount(); i++) {
-            this.codesTable.setValueAt(Integer.toString(probability), i, 2);
-        }
-        this.codesSlider.setValue(getSelectedCodeInfo().getPramProbability());
-    }
-    
     private void undoButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_undoButtonActionPerformed
         if (getSelectedPramVariableSpec().isApplied()) {
             getSelectedPramVariableSpec().setApplied(false);
@@ -527,35 +548,8 @@ public class PramSpecificationView extends DialogBase<PramSpecificationControlle
             this.variablesTable.setValueAt("", selected, 0);
             this.variablesTable.setValueAt("", selected, 1);
             setProbability(0);
-            //this.controller.undo(getSelectedPramVariableSpec());
         }
     }//GEN-LAST:event_undoButtonActionPerformed
-
-    private void variablesSelectionChanged() {
-        this.codesTable.getSelectionModel().setSelectionInterval(0, 0);
-        this.selectedRow = 0;
-        int value = getSelectedPramVariableSpec().getBandwidth();
-        int max = getSelectedPramVariableSpec().getVariable().getCodeInfos().size() - getSelectedPramVariableSpec().getVariable().getNumberOfMissings();
-        if (value > max) {
-            value = max;
-        }
-        String[] numbers = new String[max];
-        for (int i = 0; i < numbers.length; i++) {
-            numbers[i] = Integer.toString(i + 1);
-        }
-        this.bandwidthComboBox.setModel(new javax.swing.DefaultComboBoxModel(numbers));
-        this.bandwidthComboBox.getModel().setSelectedItem(numbers[value - 1]);
-        this.codesSlider.setValue(getSelectedCodeInfo().getPramProbability());
-
-        updateCodesTable();
-    }
-
-    private void codesSelectionChanged() {
-        if (this.codesTable.getSelectedRow() >= 0) {
-            this.selectedRow = this.codesTable.getSelectedRow();
-        }
-        this.codesSlider.setValue(getSelectedCodeInfo().getPramProbability());
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel CodesPanel;

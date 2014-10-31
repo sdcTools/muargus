@@ -208,7 +208,6 @@ public class Combinations {
         } else {
             this.qualitativeMicroaggregation = new Microaggregation();
         }
-
     }
 
     /*
@@ -390,13 +389,6 @@ public class Combinations {
         return this.tables.size();
     }
 
-//     /**
-//     * Sets the number of rows.
-//     * @param n Integer containing the number of rows.
-//     */
-//    public void setNumberOfRows(int n) {
-//        //Deprecated, do not use
-//    }
     /**
      * Gets the maximum numbers of tables for which double tables will be
      * removed if the riskModel is not active.

@@ -51,8 +51,13 @@ public class ViewReportView extends DialogBase<ViewReportController> {
             showErrorMessage(new ArgusException("Error creating report: " + ex.getMessage()));
         }
     }
-    
-    public void showReport(HTMLDocument htmlDoc){
+
+    /**
+     * Shows a report if a htmlDocument already exists.
+     *
+     * @param htmlDoc HTMLDocument containing the document to be shown.
+     */
+    public void showReport(HTMLDocument htmlDoc) {
         htmlPane.setDocument(htmlDoc);
     }
 

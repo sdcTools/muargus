@@ -1,4 +1,7 @@
-package muargus.view;
+package muargus.unusedClasses;
+
+import muargus.view.DialogBase;
+import muargus.view.MainFrameView;
 
 /**
  * Splash Screen.
@@ -64,8 +67,8 @@ public class Splash extends DialogBase {
         });
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/muargus/view/Splash.png"))); // NOI18N
+        jLayeredPane2.add(jLabel1);
         jLabel1.setBounds(0, 0, 418, 280);
-        jLayeredPane2.add(jLabel1, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);

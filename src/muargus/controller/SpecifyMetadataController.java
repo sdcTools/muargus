@@ -1,4 +1,3 @@
-// TODO: Combine buttonlist methods
 package muargus.controller;
 
 import argus.model.ArgusException;
@@ -19,8 +18,7 @@ public class SpecifyMetadataController extends ControllerBase<MetadataMu> {
 
     private final MetadataMu metadataClone;
 
-    private static final Logger logger = Logger.getLogger(SpecifyMetadataController.class.getName());
-
+    //private static final Logger logger = Logger.getLogger(SpecifyMetadataController.class.getName());
     /**
      * Constructor for the SpecifyMetadataController.
      *
@@ -64,7 +62,6 @@ public class SpecifyMetadataController extends ControllerBase<MetadataMu> {
      * Checks whether tables are specified.
      *
      * @return Boolean indicating whether tables are specified.
-     *
      */
     private boolean areTablesSpecified() {
         Combinations combinations = getModel().getCombinations();
@@ -129,6 +126,7 @@ public class SpecifyMetadataController extends ControllerBase<MetadataMu> {
 
     /**
      * Gets the tempory metadata.
+     *
      * @return MetadataMu instance containing the temporary metadata.
      */
     public MetadataMu getMetadataClone() {

@@ -134,6 +134,7 @@ public class PramSpecificationController extends ControllerBase<PramSpecificatio
     /**
      *
      * @param variableName
+     * @return 
      */
     public Object[][] getCodesData(String variableName) {
         PramVariableSpec pramVariableSpec = getSelectedPramVarSpec(variableName);

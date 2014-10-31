@@ -1,3 +1,4 @@
+//TODO: check if the new variable button works correctly
 package muargus.view;
 
 import argus.utils.SingleListSelectionModel;
@@ -201,6 +202,7 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
         this.lengthTextField.setText(Integer.toString(selected.getVariableLength()));
         this.separatorTextField.setText(getMetadata().getSeparator());
 
+        // Fills the relatedToComboBox with all variables except the selected one
         this.related = new ArrayList<>();
         this.related.add(new VariableMu("--none--"));
         for (Object o : this.variableListModel.toArray()) {
@@ -226,9 +228,16 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
         int index = this.variablesList.getSelectedIndex();
         this.deleteButton.setEnabled(index != -1);
         this.moveUpButton.setEnabled(index > 0);
-        this.moveDownButton.setEnabled((index != -1) && (index < this.variableListModel.getSize() - 1));
+        this.moveDownButton.setEnabled((index != -1)
+                && (index < this.variableListModel.getSize() - 1));
     }
 
+    /**
+     * Enables/disables the controls. If there are no variables, everything
+     * except the buttons are disabled. If there are variables, the components
+     * are enabled/disabled depending on the metadata from the selected
+     * variable.
+     */
     private void enableControls() {
         if (getMetadata().getVariables().isEmpty()) {
             enableAllControls(false);
@@ -236,11 +245,14 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
         } else {
             enableAllControls(true);
             this.codelistfileCheckBox.setEnabled(this.categoricalCheckBox.isSelected());
-            this.codelistfileTextField.setEnabled(this.codelistfileCheckBox.isSelected() && this.categoricalCheckBox.isSelected());
-            this.codelistfileButton.setEnabled(this.codelistfileCheckBox.isSelected() && this.categoricalCheckBox.isSelected());
+            this.codelistfileTextField.setEnabled(this.codelistfileCheckBox.isSelected()
+                    && this.categoricalCheckBox.isSelected());
+            this.codelistfileButton.setEnabled(this.codelistfileCheckBox.isSelected()
+                    && this.categoricalCheckBox.isSelected());
             this.codelistfileTextField.setEnabled(this.codelistfileCheckBox.isSelected());
             this.decimalsTextField.setEnabled(this.numericalCheckBox.isSelected());
-            this.categoricalCheckBox.setEnabled(!(this.weightRadioButton.isSelected() || this.hhIdentifierRadioButton.isSelected()));
+            this.categoricalCheckBox.setEnabled(!(this.weightRadioButton.isSelected()
+                    || this.hhIdentifierRadioButton.isSelected()));
             this.numericalCheckBox.setEnabled(!this.hhIdentifierRadioButton.isSelected());
             this.missingsPanel.setEnabled(!this.weightRadioButton.isSelected());
             this.optionsArgusPanel.setEnabled(this.categoricalCheckBox.isSelected());
@@ -249,6 +261,44 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
         }
     }
 
+    /**
+     * Enables/Disables all controls.
+     *
+     * @param enable Boolean indicating whether all controls should be enabled.
+     */
+    private void enableAllControls(boolean enable) {
+        enableControls(this.attributesPanel, enable);
+        enableControls(this.categoriesPanel, enable);
+        enableControls(this.optionsArgusPanel, enable);
+        enableControls(this.variableTypePanel, enable);
+        enableControls(this.relatedToPanel, enable);
+        enableControls(this.relatedToComboBox, enable);
+    }
+
+    /**
+     * Enables/Disables all controls and sub controls from a component.
+     *
+     * @param control Component for which all sub-components should be
+     * enabled/disabled.
+     * @param enable Boolean indicating whether the component and its
+     * sub-components should be enabled.
+     */
+    private void enableControls(Component control, boolean enable) {
+        if (!(control instanceof JComponent) && !(control instanceof JDialog)) {
+            return;
+        }
+        control.setEnabled(enable);
+        if (control instanceof Container) {
+            for (Component c : ((Container) control).getComponents()) {
+                enableControls(c, enable);
+            }
+        }
+    }
+
+    /**
+     * Sets components (in)visible and buttons enabled, depending on the format
+     * of the data.
+     */
     private void dataFormatCheck() {
         switch (getMetadata().getDataFileType()) {
             case MetadataMu.DATA_FILE_TYPE_FIXED:
@@ -274,6 +324,17 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
     private VariableMu getSelectedVariable() {
         VariableMu selected = (VariableMu) this.variablesList.getSelectedValue();
         return selected == null ? this.dummyVar : selected;
+    }
+
+    /**
+     * Updates the metadata. The existing variables in the metadata are removed
+     * and only the variables in the variable list are added.
+     */
+    private void updateMetadata() {
+        getMetadata().getVariables().clear();
+        for (Object o : this.variableListModel.toArray()) {
+            getMetadata().getVariables().add((VariableMu) o);
+        }
     }
 
     /**
@@ -865,13 +926,6 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
         }
     }//GEN-LAST:event_generateButtonActionPerformed
 
-    private void updateMetadata() {
-        getMetadata().getVariables().clear();
-        for (Object o : this.variableListModel.toArray()) {
-            getMetadata().getVariables().add((VariableMu) o);
-        }
-    }
-
     private void okButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okButtonActionPerformed
         updateMetadata();
         getController().ok();
@@ -963,7 +1017,6 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
         if (this.hhIdentifierRadioButton.isSelected()) {
             this.categoricalCheckBox.setSelected(false);
             this.categoricalCheckBox.setEnabled(false);
-//            this.numericalCheckBox.setSelected(false);
             this.numericalCheckBox.setEnabled(true);
             dataFormatCheck();
         }
@@ -1002,33 +1055,14 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
     private void categoricalCheckBoxStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_categoricalCheckBoxStateChanged
         getSelectedVariable().setCategorical(this.categoricalCheckBox.isSelected());
         this.codelistfileCheckBox.setEnabled(this.categoricalCheckBox.isSelected());
-        this.codelistfileTextField.setEnabled(this.categoricalCheckBox.isSelected() && this.codelistfileCheckBox.isSelected());
-        this.codelistfileButton.setEnabled(this.codelistfileCheckBox.isSelected() && this.categoricalCheckBox.isSelected());
+        this.codelistfileTextField.setEnabled(this.categoricalCheckBox.isSelected()
+                && this.codelistfileCheckBox.isSelected());
+        this.codelistfileButton.setEnabled(this.codelistfileCheckBox.isSelected()
+                && this.categoricalCheckBox.isSelected());
         enableControls(this.optionsArgusPanel, this.categoricalCheckBox.isSelected());
         this.truncationAllowedCheckBox.setEnabled(this.categoricalCheckBox.isSelected());
         dataFormatCheck();
     }//GEN-LAST:event_categoricalCheckBoxStateChanged
-
-    private void enableAllControls(boolean enable) {
-        enableControls(this.attributesPanel, enable);
-        enableControls(this.categoriesPanel, enable);
-        enableControls(this.optionsArgusPanel, enable);
-        enableControls(this.variableTypePanel, enable);
-        enableControls(this.relatedToPanel, enable);
-        enableControls(this.relatedToComboBox, enable);
-    }
-
-    private void enableControls(Component control, boolean enable) {
-        if (!(control instanceof JComponent) && !(control instanceof JDialog)) {
-            return;
-        }
-        control.setEnabled(enable);
-        if (control instanceof Container) {
-            for (Component c : ((Container) control).getComponents()) {
-                enableControls(c, enable);
-            }
-        }
-    }
 
     private void numericalCheckBoxStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_numericalCheckBoxStateChanged
         getSelectedVariable().setNumeric(this.numericalCheckBox.isSelected());

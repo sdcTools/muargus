@@ -15,6 +15,8 @@ public class TableMu {
     private int threshold;
     private final ArrayList<VariableMu> variables = new ArrayList<>();
     private int nrOfUnsafeCombinations;
+    private final int defaultThreshold = 1;
+    
 
     /**
      * Constructor for the model class TableMu. Sets the default values for the
@@ -22,7 +24,7 @@ public class TableMu {
      */
     public TableMu() {
         this.riskModel = false;
-        this.threshold = 1;
+        this.threshold = this.defaultThreshold;
     }
 
     /**

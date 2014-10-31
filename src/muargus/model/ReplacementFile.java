@@ -56,7 +56,8 @@ public class ReplacementFile {
     }
 
     /**
-     * Creates a replacement file.
+     * Creates a temporary replacement file. The replacement file is placed in
+     * the temp directory and removed when the java virtual machine is closed.
      *
      * @return File instance containing the replacement file.
      * @throws ArgusException Throws an ArgusException when the replacement file

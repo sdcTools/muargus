@@ -69,7 +69,6 @@ public class RiskSpecificationView extends DialogBase<RiskSpecificationControlle
         this.cp.getChart().addProgressListener(this);
         this.jPanelChart.add(this.cp, BorderLayout.CENTER);
         this.jPanelChart.repaint();
-
     }
 
     /**
@@ -192,7 +191,6 @@ public class RiskSpecificationView extends DialogBase<RiskSpecificationControlle
     private void showCumulative(boolean cumulative) {
         getController().fillModelHistogramData(cumulative);
         showChart();
-
     }
 
     /**

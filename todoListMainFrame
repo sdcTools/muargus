@@ -3,8 +3,6 @@ niet behandelde opmerkingen/vragen:
 
 10. wat doen met knoppen tijdens achtergrondprocessen? --> ANCO
 
-11. de extensies bij open microdata komen niet overeen met oude mu: wat moeten we doen? (.csv)
-
 
 Nog te doen:                                                                                                    Mee bezig:
 
@@ -34,6 +32,7 @@ Gedaan:                                                                         
 7. kolommen met cijfers rechts uitlijnen                                                                    Anne
 3. als op variabele dubbel wordt geklikt opent global recode en is de variabele geselecteerd die veranderd is. Anne
 4. kolommen klikken en sorteren (RowSorter: http://docs.oracle.com/javase/7/docs/api/javax/swing/RowSorter.html) Anne
+11. de extensies bij open microdata komen niet overeen met oude mu: wat moeten we doen? (.csv)
 
 
 wishlish:

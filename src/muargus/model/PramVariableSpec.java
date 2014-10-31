@@ -57,7 +57,7 @@ public class PramVariableSpec {
     /**
      * Sets the bandwidth
      *
-     * @param bandwidth INteger containing the bandwidth.
+     * @param bandwidth Integer containing the bandwidth.
      */
     public void setBandwidth(int bandwidth) {
         this.bandwidth = bandwidth;

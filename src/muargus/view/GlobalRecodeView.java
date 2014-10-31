@@ -83,7 +83,7 @@ public class GlobalRecodeView extends DialogBase<GlobalRecodeController> {
     private void updateTable() {
         String[][] data = new String[this.model.getRecodeMus().size()][2];
         int index = 0;
-        for (RecodeMu r : model.getRecodeMus()) {
+        for (RecodeMu r : this.model.getRecodeMus()) {
             data[index] = r.getTableRow();
             index++;
         }
@@ -102,10 +102,6 @@ public class GlobalRecodeView extends DialogBase<GlobalRecodeController> {
      * text and enables/disables the truncated and undo button.
      */
     private void updateValues() {
-        //this.updateTable();
-        //System.out.println(variablesTable.getSelectedRow());
-        //this.variablesTable.getSelectionModel().setSelectionInterval(variablesTable.getSelectedRow(), variablesTable.getSelectedRow());
-
         RecodeMu selected = this.getSelectedRecode();
         if (selected == null) {
             return;
@@ -197,6 +193,96 @@ public class GlobalRecodeView extends DialogBase<GlobalRecodeController> {
             }
             showMessage(message);
         }
+    }
+
+    /**
+     * Shows the warning text in the warning textField.
+     *
+     * @param warning String containing the warning message.
+     */
+    public void showWarning(String warning) {
+        this.warningTextArea.setText(warning);
+    }
+
+    /**
+     * Sets the selected index.
+     *
+     * @param index Integer containing the selected index.
+     */
+    public void setSelectedIndex(int index) {
+        index = this.variablesTable.convertColumnIndexToView(index);
+        this.variablesTable.getSelectionModel().setSelectionInterval(index, index);
+    }
+
+    /**
+     * Gets the selected index.
+     *
+     * @return Integer containing the selected index.
+     */
+    public int getSelectedVariableIndex() {
+        int index = this.variablesTable.getSelectionModel().getMaxSelectionIndex();
+        return this.variablesTable.convertRowIndexToModel(index);
+    }
+
+    /**
+     * Gets the index of the selected row.
+     *
+     * @return Integer containing the index of the selected row
+     */
+    private int getSelectedRowIndex() {
+        return this.model.getVariables().indexOf(getSelectedRecode().getVariable());
+    }
+
+    /**
+     * Sets the global recode file text.
+     *
+     * @param recode Recodemu containing the information of the selected
+     * variable.
+     */
+    private void fixGrcReturns(RecodeMu recode) {
+        recode.setGrcText(recode.getGrcText().replace("\r\n", "\n").replace("\n", "\r\n"));
+    }
+
+    /**
+     * Saves the global recode file.
+     */
+    private void saveGrcFile() {
+        String filePath = showFileDialog("Save Recode File", true, new String[]{"Recode files (*.grc)|grc"});
+        if (filePath != null) {
+            try {
+                this.selectedRecode.write(new File(filePath));
+            } catch (ArgusException ex) {
+                showErrorMessage(ex);
+            }
+        }
+    }
+
+    /**
+     * Handler that is activated when a different variable is selected. Askes if
+     * the recode information needs to be safed when it has been changed,
+     * changes the selected recodeMu, selected recodeMu clone and updates the
+     * values.
+     */
+    private void handleSelectionChanged() {
+        if (this.selectedRecodeClone != null) {
+            if (!selectedRecodeClone.equals(getSelectedRecode())) {
+                if (showConfirmDialog("Recode information has been changed.\nSave recode file?")) {
+                    saveGrcFile();
+                }
+            }
+        }
+        this.selectedRecode = model.getRecodeMus().get(getSelectedVariableIndex());
+        this.selectedRecodeClone = new RecodeMu(getSelectedRecode());
+        updateValues();
+    }
+
+    /**
+     * Sets the file name of the Codelist.
+     *
+     * @param filename String containing the file name of the Codelist.
+     */
+    private void setCodelistText(String filename) {
+        this.codelistRecodeTextField.setText(filename);
     }
 
     /**
@@ -636,8 +722,8 @@ public class GlobalRecodeView extends DialogBase<GlobalRecodeController> {
             if (positions > 0) {
                 getController().truncate(getSelectedRecode(), positions);
                 int rowIndex = getSelectedRowIndex();
-                variablesTable.getModel().setValueAt("T", rowIndex, 0);
-                variablesTable.getModel().setValueAt(getSelectedRecode().getVariable().getName(), rowIndex, 1);
+                this.variablesTable.getModel().setValueAt("T", rowIndex, 0);
+                this.variablesTable.getModel().setValueAt(getSelectedRecode().getVariable().getName(), rowIndex, 1);
                 updateValues();
             }
 
@@ -645,7 +731,6 @@ public class GlobalRecodeView extends DialogBase<GlobalRecodeController> {
             showErrorMessage(ex);
         }
     }//GEN-LAST:event_truncateButtonActionPerformed
-
 
     private void readButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_readButtonActionPerformed
         String path = askForGrcPath();
@@ -660,46 +745,13 @@ public class GlobalRecodeView extends DialogBase<GlobalRecodeController> {
         }
     }//GEN-LAST:event_readButtonActionPerformed
 
-    /**
-     * Shows the warning text in the warning textField.
-     *
-     * @param warning String containing the warning message.
-     */
-    public void showWarning(String warning) {
-        warningTextArea.setText(warning);
-    }
-
-    /**
-     * Sets the selected index.
-     *
-     * @param index Integer containing the selected index.
-     */
-    public void setSelectedIndex(int index) {
-        index = this.variablesTable.convertColumnIndexToView(index);
-        this.variablesTable.getSelectionModel().setSelectionInterval(index, index);
-    }
-
-    /**
-     * Gets the selected index.
-     *
-     * @return Integer containing the selected index.
-     */
-    public int getSelectedVariableIndex() {
-        int index = this.variablesTable.getSelectionModel().getMaxSelectionIndex();
-        return this.variablesTable.convertRowIndexToModel(index);
-    }
-
-    private int getSelectedRowIndex() {
-        return this.model.getVariables().indexOf(getSelectedRecode().getVariable());
-    }
-    
     private void applyButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_applyButtonActionPerformed
         try {
             fixGrcReturns(getSelectedRecode());
             getController().apply(getSelectedRecode());
             int rowIndex = getSelectedRowIndex();
-            variablesTable.getModel().setValueAt("R", rowIndex, 0);
-            variablesTable.getModel().setValueAt(getSelectedRecode().getVariable().getName(), rowIndex, 1);
+            this.variablesTable.getModel().setValueAt("R", rowIndex, 0);
+            this.variablesTable.getModel().setValueAt(getSelectedRecode().getVariable().getName(), rowIndex, 1);
             updateValues();
         } catch (ArgusException ex) {
             showErrorMessage(ex);
@@ -710,55 +762,12 @@ public class GlobalRecodeView extends DialogBase<GlobalRecodeController> {
         try {
             getController().undo(getSelectedRecode());
             int rowIndex = getSelectedRowIndex();
-            variablesTable.getModel().setValueAt("", rowIndex, 0);
-            variablesTable.getModel().setValueAt(getSelectedRecode().getVariable().getName(), rowIndex, 1);
+            this.variablesTable.getModel().setValueAt("", rowIndex, 0);
+            this.variablesTable.getModel().setValueAt(getSelectedRecode().getVariable().getName(), rowIndex, 1);
         } catch (ArgusException ex) {
             showErrorMessage(ex);
         }
     }//GEN-LAST:event_undoButtonActionPerformed
-
-    /**
-     * Sets the global recode file text.
-     *
-     * @param recode Recodemu containing the information of the selected
-     * variable.
-     */
-    private void fixGrcReturns(RecodeMu recode) {
-        recode.setGrcText(recode.getGrcText().replace("\r\n", "\n").replace("\n", "\r\n"));
-    }
-
-    /**
-     * Saves the global recode file.
-     */
-    private void saveGrcFile() {
-        String filePath = showFileDialog("Save Recode File", true, new String[]{"Recode files (*.grc)|grc"});
-        if (filePath != null) {
-            try {
-                this.selectedRecode.write(new File(filePath));
-            } catch (ArgusException ex) {
-                showErrorMessage(ex);
-            }
-        }
-    }
-
-    /**
-     * Handler that is activated when a different variable is selected. Askes if
-     * the recode information needs to be safed when it has been changed,
-     * changes the selected recodeMu, selected recodeMu clone and updates the
-     * values.
-     */
-    private void handleSelectionChanged() {
-        if (this.selectedRecodeClone != null) {
-            if (!selectedRecodeClone.equals(getSelectedRecode())) {
-                if (showConfirmDialog("Recode information has been changed.\nSave recode file?")) {
-                    saveGrcFile();
-                }
-            }
-        }
-        this.selectedRecode = model.getRecodeMus().get(getSelectedVariableIndex());
-        this.selectedRecodeClone = new RecodeMu(getSelectedRecode());
-        updateValues();
-    }
 
     private void editTextAreaCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_editTextAreaCaretUpdate
         getSelectedRecode().setGrcText(this.editTextArea.getText());
@@ -776,15 +785,6 @@ public class GlobalRecodeView extends DialogBase<GlobalRecodeController> {
     private void codelistRecodeTextFieldCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_codelistRecodeTextFieldCaretUpdate
         getSelectedRecode().setCodeListFile(this.codelistRecodeTextField.getText());
     }//GEN-LAST:event_codelistRecodeTextFieldCaretUpdate
-
-    /**
-     * Sets the file name of the Codelist.
-     *
-     * @param filename String containing the file name of the Codelist.
-     */
-    private void setCodelistText(String filename) {
-        codelistRecodeTextField.setText(filename);
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton applyButton;

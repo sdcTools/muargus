@@ -32,7 +32,6 @@ import muargus.model.VariableMu;
  */
 public class MainFrameView extends javax.swing.JFrame {
 
-    //private DataFilePair dataFilePair;
     private final MainFrameController controller;
     private Combinations model;
 
@@ -47,55 +46,55 @@ public class MainFrameView extends javax.swing.JFrame {
     }
 
     /**
-     * 
+     *
      * @param action
-     * @param enable 
+     * @param enable
      */
     public void enableAction(MainFrameController.Action action, boolean enable) {
         switch (action) {
             case SpecifyMetadata:
-                doEnable(specifyMetaDataButton, metaDataMenuItem, enable);
+                doEnable(this.specifyMetaDataButton, this.metaDataMenuItem, enable);
                 return;
             case SpecifyCombinations:
-                doEnable(specifyCombinationsButton, combinationsMenuItem, enable);
+                doEnable(this.specifyCombinationsButton, this.combinationsMenuItem, enable);
                 return;
             case GlobalRecode:
-                doEnable(globalRecodeButton, globalRecodeMenuItem, enable);
+                doEnable(this.globalRecodeButton, this.globalRecodeMenuItem, enable);
                 return;
             case ShowTableCollection:
-                doEnable(showTableCollectionButton, showTableCollectionMenuItem, enable);
+                doEnable(this.showTableCollectionButton, this.showTableCollectionMenuItem, enable);
                 return;
             case PramSpecification:
-                doEnable(pramSpecificationButton, pramSpecificationMenuItem, enable);
+                doEnable(this.pramSpecificationButton, this.pramSpecificationMenuItem, enable);
                 return;
             case IndividualRiskSpecification:
-                doEnable(individualRiskSpecificationButton, individualRiskSpecificationMenuItem, enable);
+                doEnable(this.individualRiskSpecificationButton, this.individualRiskSpecificationMenuItem, enable);
                 return;
             case HouseholdRiskSpecification:
-                doEnable(householdRiskSpecificationButton, householdRiskSpecificationMenuItem, enable);
+                doEnable(this.householdRiskSpecificationButton, this.householdRiskSpecificationMenuItem, enable);
                 return;
             case ModifyNumericalVariables:
-                doEnable(modifyNumericalVariablesButton, numericalVariablesMenuItem, enable); //TODO: verander naamgeving voor deze klasses
+                doEnable(this.modifyNumericalVariablesButton, this.numericalVariablesMenuItem, enable); //TODO: verander naamgeving voor deze klasses
                 return;
             case NumericalMicroAggregation:
-                doEnable(numericalMicroaggregationButton, numericalMicroaggregationMenuItem, enable);
+                doEnable(this.numericalMicroaggregationButton, this.numericalMicroaggregationMenuItem, enable);
                 return;
             case NumericalRankSwapping:
-                doEnable(numericalRankSwappingButton, numericalRankSwappingMenuItem, enable);
+                doEnable(this.numericalRankSwappingButton, this.numericalRankSwappingMenuItem, enable);
                 return;
             case MakeProtectedFile:
-                doEnable(makeProtectedFileButton, makeProtectedFileMenuItem, enable);
+                doEnable(this.makeProtectedFileButton, this.makeProtectedFileMenuItem, enable);
                 return;
             case ViewReport:
-                doEnable(viewReportButton, viewReportMenuItem, enable);
+                doEnable(this.viewReportButton, this.viewReportMenuItem, enable);
         }
     }
 
     /**
-     * 
+     *
      * @param button
      * @param item
-     * @param enable 
+     * @param enable
      */
     private void doEnable(JButton button, JMenuItem item, boolean enable) {
         if (button != null) {
@@ -107,43 +106,216 @@ public class MainFrameView extends javax.swing.JFrame {
     }
 
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     public JTable getUnsafeCombinationsTable() {
         return unsafeCombinationsTable;
     }
 
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     public JTable getVariablesTable() {
         return variablesTable;
     }
 
     /**
-     * 
-     * @param variableNameLabel 
+     *
+     * @param variableNameLabel
      */
     public void setVariableNameLabel(String variableNameLabel) {
         this.variableNameLabel.setText(variableNameLabel);
     }
 
     /**
-     * 
-     * @param ex 
+     *
+     * @param ex
      */
     public void showErrorMessage(ArgusException ex) {
         JOptionPane.showMessageDialog(this, ex.getMessage(), MuARGUS.getMessageTitle(), JOptionPane.ERROR_MESSAGE);
     }
 
     /**
-     * 
-     * @param message 
+     *
+     * @param message
      */
     public void showMessage(String message) {
         JOptionPane.showMessageDialog(null, message, MuARGUS.getMessageTitle(), JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    /**
+     *
+     * @param filenames
+     * @return
+     */
+    public DataFilePair showOpenMicrodataDialog(DataFilePair filenames) {
+        DialogOpenMicrodata dialog = new DialogOpenMicrodata(this, true);
+        dialog.setDataFileNames(filenames.getDataFileName(), filenames.getMetaFileName());
+        if (dialog.showDialog() == DialogOpenMicrodata.APPROVE_OPTION) {
+            return dialog.getMicrodataFilePair();
+        }
+        return null;
+    }
+
+    /**
+     *
+     * @param model
+     * @param selectedIndex
+     * @param redraw
+     */
+    public void showUnsafeCombinations(Combinations model, int selectedIndex, boolean redraw) {
+        this.model = model;
+        ArrayList<String> columnNames = new ArrayList<>();
+        columnNames.add("Variable");
+        int nDims = model.getMaxDimsInTables();
+        for (int dimNr = 1; dimNr <= nDims; dimNr++) {
+            columnNames.add("dim " + dimNr);
+        }
+
+        Object[][] data = new Object[model.getVariablesInTables().size()][];
+        int rowIndex = 0;
+        for (VariableMu variable : model.getVariablesInTables()) {
+            data[rowIndex] = toObjectArray(model, variable); //TODO mooier
+            rowIndex++;
+        }
+        if (!redraw) {
+            for (int varIndex = 0; varIndex < data.length; varIndex++) {
+                for (int dimIndex = 1; dimIndex <= columnNames.size() - 1; dimIndex++) {
+                    this.unsafeCombinationsTable.getModel().setValueAt(data[varIndex][dimIndex],
+                            varIndex, dimIndex);
+                }
+            }
+        } else {
+            DefaultTableModel tableModel = new DefaultTableModel(data, columnNames.toArray()) {
+                @Override
+                public boolean isCellEditable(int rowIndex, int columnIndex) {
+                    return false;
+                }
+
+                @Override
+                public Class getColumnClass(int columnIndex) {
+                    return columnIndex == 0 ? String.class : Integer.class;
+                }
+            };
+            this.unsafeCombinationsTable.setModel(tableModel);
+
+            DefaultTableCellRenderer renderer = new DefaultTableCellRenderer() {
+
+                @Override
+                public Component getTableCellRendererComponent(JTable jtable, Object o, boolean bln, boolean bln1, int i, int i1) {
+                    Object o2 = (new Integer(-1).equals(o) ? "-" : o);
+                    return super.getTableCellRendererComponent(jtable, o2, bln, bln1, i, i1); //To change body of generated methods, choose Tools | Templates.
+                }
+
+                @Override
+                public int getHorizontalAlignment() {
+                    return JLabel.RIGHT;
+                }
+            };
+
+            //renderer.setHorizontalAlignment(JLabel.RIGHT);
+            for (int index = 1; index < columnNames.size(); index++) {
+
+                this.unsafeCombinationsTable.getColumn(String.format("dim %d", index)).setCellRenderer(renderer);
+            }
+
+            this.unsafeCombinationsTable.getSelectionModel().addListSelectionListener(
+                    new javax.swing.event.ListSelectionListener() {
+                        @Override
+                        public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+                            selectionChanged(evt);
+                        }
+                    });
+
+        }
+        int i = this.unsafeCombinationsTable.convertRowIndexToView(selectedIndex);
+        this.unsafeCombinationsTable.getSelectionModel().setSelectionInterval(i, i);
+    }
+
+    private Object[] toObjectArray(Combinations combinations, VariableMu variable) {
+        int nDims = combinations.getMaxDimsInTables();
+        Object[] objArr = new Object[nDims + 1];
+        objArr[0] = variable.getName();
+        for (int dimNr = 1; dimNr <= nDims; dimNr++) {
+            objArr[dimNr] = combinations.getUnsafeCombinations().get(variable).length < dimNr
+                    ? -1 : combinations.getUnsafeCombinations().get(variable)[dimNr - 1];
+        }
+        return objArr;
+    }
+
+    private void selectionChanged(javax.swing.event.ListSelectionEvent evt) {
+        if (evt.getValueIsAdjusting()) {
+            return;
+        }
+        int j = ((ListSelectionModel) evt.getSource()).getMinSelectionIndex();
+        if (0 > j || j >= this.model.getVariablesInTables().size()) {
+            return;
+        }
+        j = this.unsafeCombinationsTable.convertRowIndexToModel(j);
+        VariableMu variable = this.model.getVariablesInTables().get(j);
+        //UnsafeInfo unsafeInfo = this.model.getUnsafe(variable);
+        this.variableNameLabel.setText(variable.getName());
+
+        ArrayList<String> columnNames = new ArrayList<>();
+        columnNames.add("Code");
+        columnNames.add("Label");
+        columnNames.add("Freq");
+        int nDims = this.model.getMaxDimsInTables();
+        for (int dimNr = 1; dimNr <= nDims; dimNr++) {
+            columnNames.add("dim " + dimNr);
+        }
+
+        Object[][] data = new Object[variable.getCodeInfos().size()][];
+        int rowIndex = 0;
+        for (CodeInfo codeInfo : variable.getCodeInfos()) {
+            data[rowIndex] = codeInfo.toObjectArray(nDims);
+            rowIndex++;
+        }
+
+        DefaultTableModel tableModel = new DefaultTableModel(data, columnNames.toArray()) {
+            @Override
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return false;
+            }
+
+            @Override
+            public Class getColumnClass(int column) {
+                switch (column) {
+                    case 0:
+                        return CodeInfo.class;
+                    case 1:
+                        return String.class;
+                    default:
+                        return Integer.class;
+                }
+            }
+        };
+        this.variablesTable.setModel(tableModel);
+        this.variablesTable.setDefaultRenderer(Integer.class, new CodeTableCellRenderer());
+        this.variablesTable.setDefaultRenderer(Object.class, new CodeTableCellRenderer());
+    }
+    
+     private void setHelpAction() {
+
+        Action action = new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                showHelp();
+            }
+        };
+        this.rootPane.getActionMap().put("f1action", action);
+        this.rootPane.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(
+                KeyStroke.getKeyStroke("F1"), "f1action");
+    }
+
+    private String getHelpNamedDestination() {
+        return ContextHelp.fromClassName(this.getClass().getName());
+    }
+
+    private void showHelp() {
+        MuARGUS.showHelp(getHelpNamedDestination());
     }
 
     /**
@@ -740,259 +912,83 @@ public class MainFrameView extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void openMicrodataMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openMicrodataMenuItemActionPerformed
-        controller.openMicrodata();
+        this.controller.openMicrodata();
     }//GEN-LAST:event_openMicrodataMenuItemActionPerformed
 
-    /**
-     * 
-     * @param filenames
-     * @return 
-     */
-    public DataFilePair showOpenMicrodataDialog(DataFilePair filenames) {
-        DialogOpenMicrodata dialog = new DialogOpenMicrodata(this, true);
-        dialog.setDataFileNames(filenames.getDataFileName(), filenames.getMetaFileName());
-        if (dialog.showDialog() == DialogOpenMicrodata.APPROVE_OPTION) {
-            return dialog.getMicrodataFilePair();
-        }
-        return null;
-    }
-
-    /**
-     *
-     * @param model
-     * @param selectedIndex
-     * @param redraw
-     */
-    public void showUnsafeCombinations(Combinations model, int selectedIndex, boolean redraw) {
-        this.model = model;
-        ArrayList<String> columnNames = new ArrayList<>();
-        columnNames.add("Variable");
-        int nDims = model.getMaxDimsInTables();
-        for (int dimNr = 1; dimNr <= nDims; dimNr++) {
-            columnNames.add("dim " + dimNr);
-        }
-
-        Object[][] data = new Object[model.getVariablesInTables().size()][];
-        int rowIndex = 0;
-        for (VariableMu variable : model.getVariablesInTables()) {
-            data[rowIndex] = toObjectArray(model, variable); //TODO mooier
-            rowIndex++;
-        }
-        if (!redraw) {
-            for (int varIndex = 0; varIndex < data.length; varIndex++) {
-                for (int dimIndex=1; dimIndex <= columnNames.size() - 1; dimIndex++) {
-                    this.unsafeCombinationsTable.getModel().setValueAt(data[varIndex][dimIndex],
-                            varIndex, dimIndex);
-                }
-            }
-        }
-        else {
-            DefaultTableModel tableModel = new DefaultTableModel(data, columnNames.toArray()) {
-                @Override
-                public boolean isCellEditable(int rowIndex, int columnIndex) {
-                    return false;
-                }
-
-                @Override
-                public Class getColumnClass(int columnIndex) {
-                    return columnIndex == 0 ? String.class : Integer.class;
-                }
-            };
-            this.unsafeCombinationsTable.setModel(tableModel);
-
-            DefaultTableCellRenderer renderer = new DefaultTableCellRenderer() {
-
-                @Override
-                public Component getTableCellRendererComponent(JTable jtable, Object o, boolean bln, boolean bln1, int i, int i1) {
-                    Object o2 = (new Integer(-1).equals(o) ? "-" : o);
-                    return super.getTableCellRendererComponent(jtable, o2, bln, bln1, i, i1); //To change body of generated methods, choose Tools | Templates.
-                }
-
-                @Override
-                public int getHorizontalAlignment() {
-                    return JLabel.RIGHT;
-                }
-            };
-
-            //renderer.setHorizontalAlignment(JLabel.RIGHT);
-            for (int index = 1; index < columnNames.size(); index++) {
-
-                this.unsafeCombinationsTable.getColumn(String.format("dim %d", index)).setCellRenderer(renderer);
-            }
-
-            this.unsafeCombinationsTable.getSelectionModel().addListSelectionListener(
-                    new javax.swing.event.ListSelectionListener() {
-                        @Override
-                        public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
-                            selectionChanged(evt);
-                        }
-                    });
-        
-        }
-        int i = this.unsafeCombinationsTable.convertRowIndexToView(selectedIndex);
-        this.unsafeCombinationsTable.getSelectionModel().setSelectionInterval(i, i);
-    }
-
-    private Object[] toObjectArray(Combinations combinations, VariableMu variable) {
-        int nDims = combinations.getMaxDimsInTables();
-        Object[] objArr = new Object[nDims + 1];
-        objArr[0] = variable.getName();
-        for (int dimNr = 1; dimNr <= nDims; dimNr++) {
-            objArr[dimNr] = combinations.getUnsafeCombinations().get(variable).length < dimNr
-                    ? -1 : combinations.getUnsafeCombinations().get(variable)[dimNr - 1];
-        }
-        return objArr;
-    }
-
-    private void selectionChanged(javax.swing.event.ListSelectionEvent evt) {
-        if (evt.getValueIsAdjusting()) {
-            return;
-        }
-        int j = ((ListSelectionModel) evt.getSource()).getMinSelectionIndex();
-        if (0 > j || j >= this.model.getVariablesInTables().size()) {
-            return;
-        }
-        j = unsafeCombinationsTable.convertRowIndexToModel(j);
-        VariableMu variable = this.model.getVariablesInTables().get(j);
-        //UnsafeInfo unsafeInfo = this.model.getUnsafe(variable);
-        this.variableNameLabel.setText(variable.getName());
-
-        ArrayList<String> columnNames = new ArrayList<>();
-        columnNames.add("Code");
-        columnNames.add("Label");
-        columnNames.add("Freq");
-        int nDims = model.getMaxDimsInTables();
-        for (int dimNr = 1; dimNr <= nDims; dimNr++) {
-            columnNames.add("dim " + dimNr);
-        }
-
-        Object[][] data = new Object[variable.getCodeInfos().size()][];
-        int rowIndex = 0;
-        for (CodeInfo codeInfo : variable.getCodeInfos()) {
-            data[rowIndex] = codeInfo.toObjectArray(nDims);
-            rowIndex++;
-        }
-
-        DefaultTableModel tableModel = new DefaultTableModel(data, columnNames.toArray()) {
-            @Override
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return false;
-            }
-
-            @Override
-            public Class getColumnClass(int column) {
-                switch (column) {
-                    case 0:
-                        return CodeInfo.class;
-                    case 1:
-                        return String.class;
-                    default:
-                        return Integer.class;
-                }
-            }
-        };
-        variablesTable.setModel(tableModel);
-        variablesTable.setDefaultRenderer(Integer.class, new CodeTableCellRenderer());
-        variablesTable.setDefaultRenderer(Object.class, new CodeTableCellRenderer());
-    }
-
     private void exitMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitMenuItemActionPerformed
-        controller.exit();
+        this.controller.exit();
     }//GEN-LAST:event_exitMenuItemActionPerformed
 
     private void metaDataMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_metaDataMenuItemActionPerformed
-        controller.specifyMetaData();
+        this.controller.specifyMetaData();
     }//GEN-LAST:event_metaDataMenuItemActionPerformed
 
     private void combinationsMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_combinationsMenuItemActionPerformed
-        controller.specifyCombinations();
+        this.controller.specifyCombinations();
     }//GEN-LAST:event_combinationsMenuItemActionPerformed
 
     private void showTableCollectionMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showTableCollectionMenuItemActionPerformed
-        controller.showTableCollection();
+        this.controller.showTableCollection();
     }//GEN-LAST:event_showTableCollectionMenuItemActionPerformed
 
     private void globalRecodeMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_globalRecodeMenuItemActionPerformed
         int j = this.unsafeCombinationsTable.getSelectionModel().getMinSelectionIndex();
         if (j >= 0) {
-            controller.globalRecode(this.unsafeCombinationsTable.convertRowIndexToModel(j));
+            this.controller.globalRecode(this.unsafeCombinationsTable.convertRowIndexToModel(j));
         }
     }//GEN-LAST:event_globalRecodeMenuItemActionPerformed
 
     private void pramSpecificationMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pramSpecificationMenuItemActionPerformed
-        controller.pramSpecification();
+        this.controller.pramSpecification();
     }//GEN-LAST:event_pramSpecificationMenuItemActionPerformed
 
     private void individualRiskSpecificationMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_individualRiskSpecificationMenuItemActionPerformed
-        controller.individualRiskSpecification();
+        this.controller.individualRiskSpecification();
     }//GEN-LAST:event_individualRiskSpecificationMenuItemActionPerformed
 
     private void householdRiskSpecificationMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_householdRiskSpecificationMenuItemActionPerformed
-        controller.householdRiskSpecification();
+        this.controller.householdRiskSpecification();
     }//GEN-LAST:event_householdRiskSpecificationMenuItemActionPerformed
 
     private void numericalVariablesMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_numericalVariablesMenuItemActionPerformed
-        controller.numericalVariables();
+        this.controller.numericalVariables();
     }//GEN-LAST:event_numericalVariablesMenuItemActionPerformed
 
     private void numericalMicroaggregationMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_numericalMicroaggregationMenuItemActionPerformed
-        controller.numericalMicroaggregation();
+        this.controller.numericalMicroaggregation();
     }//GEN-LAST:event_numericalMicroaggregationMenuItemActionPerformed
 
     private void numericalRankSwappingMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_numericalRankSwappingMenuItemActionPerformed
-        controller.numericalRankSwapping();
+        this.controller.numericalRankSwapping();
     }//GEN-LAST:event_numericalRankSwappingMenuItemActionPerformed
 
     private void makeProtectedFileMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_makeProtectedFileMenuItemActionPerformed
-        controller.makeProtectedFile();
+        this.controller.makeProtectedFile();
     }//GEN-LAST:event_makeProtectedFileMenuItemActionPerformed
 
     private void viewReportMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewReportMenuItemActionPerformed
-        controller.viewReport(false);
+        this.controller.viewReport(false);
     }//GEN-LAST:event_viewReportMenuItemActionPerformed
 
     private void contentsMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_contentsMenuItemActionPerformed
-        controller.contents();
-        
+        this.controller.contents();
     }//GEN-LAST:event_contentsMenuItemActionPerformed
 
     private void newsMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newsMenuItemActionPerformed
-        controller.news();
+        this.controller.news();
     }//GEN-LAST:event_newsMenuItemActionPerformed
 
     private void aboutMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_aboutMenuItemActionPerformed
-        controller.about();
+        this.controller.about();
     }//GEN-LAST:event_aboutMenuItemActionPerformed
 
     private void unsafeCombinationsTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_unsafeCombinationsTableMouseClicked
         if (evt.getClickCount() == 2) {
             int j = this.unsafeCombinationsTable.getSelectionModel().getMinSelectionIndex();
-            controller.globalRecode(this.unsafeCombinationsTable.convertRowIndexToModel(j));
+            this.controller.globalRecode(this.unsafeCombinationsTable.convertRowIndexToModel(j));
         }
     }//GEN-LAST:event_unsafeCombinationsTableMouseClicked
 
-    private void setHelpAction() {
-        
-        Action action = new AbstractAction() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                showHelp();
-            }
-        };
-        this.rootPane.getActionMap().put("f1action", action);
-        this.rootPane.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(
-                KeyStroke.getKeyStroke("F1"), "f1action");
-    }
-
-    protected String getHelpNamedDestination() {
-        return ContextHelp.fromClassName(this.getClass().getName());
-    }
-    
-    private void showHelp() {
-        MuARGUS.showHelp(getHelpNamedDestination());
-    }
-    
-    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton aboutButton;
     private javax.swing.JMenuItem aboutMenuItem;

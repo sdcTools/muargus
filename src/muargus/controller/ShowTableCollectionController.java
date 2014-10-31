@@ -13,8 +13,6 @@ import muargus.view.ShowTableCollectionView;
  */
 public class ShowTableCollectionController extends ControllerBase<TableCollection> {
 
-    //private final MetadataMu metadata;
-
     /**
      * Constructor for the ShowTableCollectionController. This constructor makes
      * a new view and sets the metadata for the view.
@@ -25,7 +23,6 @@ public class ShowTableCollectionController extends ControllerBase<TableCollectio
      */
     public ShowTableCollectionController(java.awt.Frame parentView, MetadataMu metadata) {
         super.setView(new ShowTableCollectionView(parentView, true, this));
-        //this.metadata = metadata;
         setModel(metadata.getCombinations().getTableCollection());
         getView().setMetadata(metadata);
     }

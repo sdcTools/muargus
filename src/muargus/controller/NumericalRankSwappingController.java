@@ -110,7 +110,6 @@ public class NumericalRankSwappingController extends ControllerBase<NumericalRan
                     getModel().getRankSwappings().remove(swapping);
                     this.metadata.getReplacementSpecs().remove(swapping);
                     getNumericalRankSwappingView().updateVariableRows(swapping);
-                    //TODO: remove temporary files?
                     return;
                 }
             }

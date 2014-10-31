@@ -19,11 +19,7 @@ Release 2:
 - Variables removed: hhIdentifier --> weergeven aan het eind als gekozen wordt voor remove from safe file
 - Pram in rapport tonen
 
-SPSS: genereer safe SAV file
-- voeg nieuwe temp variabelen toe
-- vervang de oude
-- verwijder de temp 
-- safe as spssSafe
+
    
 15. html viewer vervangen: de html/css wordt nu brak getoond
 16. javadocs schrijven                                                                                          Jeldrik
@@ -94,7 +90,11 @@ Gedaan:                                                                         
 - writeBaseIndividualRisk: risk van meerdere tabellen wordt nog niet getoond
 - writeBaseHHRisk: risk van meerdere tabellen wordt nog niet getoond
 - is de check in de methode getNameOfSafeFile van de model klasse wel goed genoeg. Het checkt nu alleen of er een punt zit.
-
+SPSS: genereer safe SAV file
+- voeg nieuwe temp variabelen toe
+- vervang de oude
+- verwijder de temp 
+- safe as spssSafe
 -Scherm resizable maken en minimale grootte scherm instellen 
 - Gegevens numerical variables scherm in rapport tonen
 - Gegevens microaggregatie in rapport tonen

@@ -14,8 +14,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.SwingWorker;
 import muargus.controller.SelectCombinationsController;
-import muargus.controller.SpssUtils;
-import static muargus.controller.SpssUtils.spssTempDataFiles;
 import muargus.extern.dataengine.CMuArgCtrl;
 import muargus.extern.dataengine.IProgressListener;
 import muargus.model.ProtectedFile;
@@ -53,6 +51,7 @@ public class CalculationService {
     }
 
     private enum BackgroundTask {
+
         ExploreFile,
         CalculateTables,
         MakeProtectedFile,
@@ -207,8 +206,8 @@ public class CalculationService {
         doChangeFiles();
         ProtectedFile protectedFile = metadata.getCombinations().getProtectedFile();
 
-        c.SetOutFileInfo(metadata.getDataFileType() == MetadataMu.DATA_FILE_TYPE_FIXED 
-                || metadata.getDataFileType() == MetadataMu.DATA_FILE_TYPE_SPSS ,
+        c.SetOutFileInfo(metadata.getDataFileType() == MetadataMu.DATA_FILE_TYPE_FIXED
+                || metadata.getDataFileType() == MetadataMu.DATA_FILE_TYPE_SPSS,
                 metadata.getSeparator(),
                 "",
                 true
@@ -231,10 +230,6 @@ public class CalculationService {
         if (!result) {
             throw new ArgusException("Error during Make protected file");
         }
-//        if (this.metadata.getDataFileType() == MetadataMu.DATA_FILE_TYPE_SPSS) {
-//            SpssUtils.makeSafeFileSpss(this.metadata, protectedFile.getSafeMeta());
-//        }
-
     }
 
     public void calculateTables(PropertyChangeListener listener) {
@@ -313,21 +308,6 @@ public class CalculationService {
 
     public ArrayList<VariableMu> getVariables() {
         return metadata.getVariables();
-//        if (metadata.getDataFileType() != MetadataMu.DATA_FILE_TYPE_FIXED) {
-//            return metadata.getVariables();
-//        }
-//        ArrayList<VariableMu> variables = new ArrayList<>(metadata.getCombinations().getVariablesInTables());
-//        if (metadata.getCombinations().isRiskModel()) {
-//            for (VariableMu weightVar : metadata.getVariables()) {
-//                if (weightVar.isWeight()) {
-//                    if (!variables.contains(weightVar)) {
-//                        variables.add(weightVar);
-//                    }
-//                    break;
-//                }
-//            }
-//        }
-//        return variables;
     }
 
     private int getRiskVarIndex(ArrayList<VariableMu> variables) {
@@ -357,7 +337,6 @@ public class CalculationService {
                 makeReplacementFileInBackground();
                 break;
         }
-
     }
 
     private void exploreInBackground() throws ArgusException {
@@ -386,17 +365,10 @@ public class CalculationService {
         if (!result) {
             throw new ArgusException("Error in SetInFileInfo");
         }
-//        if (this.metadata.getDataFileType() == MetadataMu.DATA_FILE_TYPE_SPSS) {
-//            result = c.ExploreFile(SpssUtils.spssTempDataFiles.get(SpssUtils.spssTempDataFiles.size()-1).getPath(),
-//                    errorCodes,
-//                    lineNumbers,
-//                    varIndexOut);
-//        } else {
-            result = c.ExploreFile(metadata.getFileNames().getDataFileName(),
-                    errorCodes,
-                    lineNumbers,
-                    varIndexOut);
-//        }
+        result = c.ExploreFile(metadata.getFileNames().getDataFileName(),
+                errorCodes,
+                lineNumbers,
+                varIndexOut);
         if (!result) {
             String var = (varIndexOut[0] > 0)
                     ? ", variable " + getVariables().get(varIndexOut[0] - 1).getName() : "";

@@ -31,7 +31,7 @@ public class MicroaggregationView extends DialogBase<MicroaggregationController>
         setLocationRelativeTo(null);
         this.variablesTable.setDefaultRenderer(Object.class, new HighlightTableCellRenderer());
         this.selectedVariableList.setCellRenderer(new VariableNameCellRenderer());
-        this.setTitle(controller.isNumerical() ? "Numerical Micro Aggregation" : "Qualitative Micro Aggregation");
+        this.setTitle(controller.isNumerical() ? "Numerical Micro Aggregation" : "Qualitative Micro Aggregation"); //TODO: Qualitative micro aggregation er uit slopen
         this.optimalCheckbox.setVisible(controller.isNumerical());
     }
 
@@ -40,7 +40,7 @@ public class MicroaggregationView extends DialogBase<MicroaggregationController>
         this.model = getMetadata().getCombinations().getMicroaggregation(getController().isNumerical());
         String[][] data = new String[this.model.getVariables().size()][2];
         int index = 0;
-        for (VariableMu variable : model.getVariables()) {
+        for (VariableMu variable : this.model.getVariables()) {
             data[index] = new String[]{getModifiedText(variable), variable.getName()};
             index++;
         }
@@ -55,7 +55,7 @@ public class MicroaggregationView extends DialogBase<MicroaggregationController>
 //        }
 //        variableList.setModel(this.variableListModel);
         this.selectedListModel = new DefaultListModel<>();
-        selectedVariableList.setModel(this.selectedListModel);
+        this.selectedVariableList.setModel(this.selectedListModel);
         //variableList.setSelectedIndex(0);
         updateValues();
     }
@@ -63,8 +63,8 @@ public class MicroaggregationView extends DialogBase<MicroaggregationController>
     public void updateVariableRows(ReplacementSpec replacement) {
         for (VariableMu variableMu : replacement.getVariables()) {
             int index = this.model.getVariables().indexOf(variableMu);
-            variablesTable.setValueAt(getModifiedText(variableMu), index, 0);
-            variablesTable.setValueAt(variableMu.getName(), index, 1);
+            this.variablesTable.setValueAt(getModifiedText(variableMu), index, 0);
+            this.variablesTable.setValueAt(variableMu.getName(), index, 1);
         }
     }
 
@@ -91,25 +91,25 @@ public class MicroaggregationView extends DialogBase<MicroaggregationController>
 
     public ArrayList<VariableMu> getSelectedVariables() {
         ArrayList<VariableMu> selected = new ArrayList<>();
-        for (Object variable : ((DefaultListModel) selectedVariableList.getModel()).toArray()) {
+        for (Object variable : ((DefaultListModel) this.selectedVariableList.getModel()).toArray()) {
             selected.add((VariableMu) variable);
         }
         return selected;
     }
 
     private void updateValues() {
-        optimalCheckbox.setEnabled(this.selectedListModel.size() == 1);
-        calculateButton.setEnabled(this.selectedListModel.size() > 0);
+        this.optimalCheckbox.setEnabled(this.selectedListModel.size() == 1);
+        this.calculateButton.setEnabled(this.selectedListModel.size() > 0);
     }
 
     @Override
     public void setProgress(int progress) {
-        progressBar.setValue(progress);
+        this.progressBar.setValue(progress);
     }
 
     @Override
     public void showStepName(String stepName) {
-        stepNameLabel.setText(stepName);
+        this.stepNameLabel.setText(stepName);
     }
 
     /**
@@ -373,8 +373,8 @@ public class MicroaggregationView extends DialogBase<MicroaggregationController>
         boolean added = false;
         for (int index : this.variablesTable.getSelectedRows()) {
             VariableMu variable = this.model.getVariables().get(index);
-            if (!selectedListModel.contains(variable)) {
-                selectedListModel.addElement(variable);
+            if (!this.selectedListModel.contains(variable)) {
+                this.selectedListModel.addElement(variable);
                 added = true;
             }
         }
@@ -382,38 +382,38 @@ public class MicroaggregationView extends DialogBase<MicroaggregationController>
 
         if (added) {
             //Change selection of variables list
-            for (int varIndex = 0; varIndex < variablesTable.getModel().getRowCount(); varIndex++) {
-                if (!selectedListModel.contains(this.model.getVariables().get(varIndex))) {
-                    variablesTable.getSelectionModel().setSelectionInterval(varIndex, varIndex);
+            for (int varIndex = 0; varIndex < this.variablesTable.getModel().getRowCount(); varIndex++) {
+                if (!this.selectedListModel.contains(this.model.getVariables().get(varIndex))) {
+                    this.variablesTable.getSelectionModel().setSelectionInterval(varIndex, varIndex);
                     return;
                 }
             }
-            variablesTable.getSelectionModel().setSelectionInterval(0, 0);
+            this.variablesTable.getSelectionModel().setSelectionInterval(0, 0);
         }
     }//GEN-LAST:event_toSelectedButtonActionPerformed
 
     private void fromSelectedButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fromSelectedButtonActionPerformed
-        for (Object variable : selectedVariableList.getSelectedValuesList()) {
-            selectedListModel.removeElement((VariableMu) variable);
+        for (Object variable : this.selectedVariableList.getSelectedValuesList()) {
+            this.selectedListModel.removeElement((VariableMu) variable);
         }
         updateValues();
     }//GEN-LAST:event_fromSelectedButtonActionPerformed
 
     private void upButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_upButtonActionPerformed
-        int index = selectedVariableList.getSelectedIndex();
+        int index = this.selectedVariableList.getSelectedIndex();
         if (index > 0) {
-            VariableMu variable = selectedListModel.remove(index);
-            selectedListModel.add(index - 1, variable);
-            selectedVariableList.setSelectedIndex(index - 1);
+            VariableMu variable = this.selectedListModel.remove(index);
+            this.selectedListModel.add(index - 1, variable);
+            this.selectedVariableList.setSelectedIndex(index - 1);
         }
     }//GEN-LAST:event_upButtonActionPerformed
 
     private void downButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_downButtonActionPerformed
-        int index = selectedVariableList.getSelectedIndex();
-        if (index > -1 && index < selectedListModel.getSize() - 1) {
-            VariableMu variable = selectedListModel.remove(index);
-            selectedListModel.add(index + 1, variable);
-            selectedVariableList.setSelectedIndex(index + 1);
+        int index = this.selectedVariableList.getSelectedIndex();
+        if (index > -1 && index < this.selectedListModel.getSize() - 1) {
+            VariableMu variable = this.selectedListModel.remove(index);
+            this.selectedListModel.add(index + 1, variable);
+            this.selectedVariableList.setSelectedIndex(index + 1);
         }
     }//GEN-LAST:event_downButtonActionPerformed
 

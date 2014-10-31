@@ -193,13 +193,6 @@ public class ProtectedFile {
         return this.safeMeta;
     }
 
-//    public String getNameOfSafeFile() {
-//        return nameOfSafeFile;
-//    }
-//
-//    public String getNameOfSafeMetaFile() {
-//        return FilenameUtils.removeExtension(nameOfSafeFile) + ".rds";
-//    }
     /**
      * Gets the name of the safe file.
      *

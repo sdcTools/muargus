@@ -30,7 +30,7 @@ public class MakeProtectedFileView extends DialogBase<MakeProtectedFileControlle
     public MakeProtectedFileView(java.awt.Frame parent, boolean modal, MakeProtectedFileController controller) {
         super(parent, modal, controller);
         initComponents();
-        this.setLocationRelativeTo(null);
+        setLocationRelativeTo(null);
         this.suppressionWeightTable.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     }
 

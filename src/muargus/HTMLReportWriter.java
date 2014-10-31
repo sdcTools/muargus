@@ -181,7 +181,6 @@ public class HTMLReportWriter {
 
     private static Element writeGlobalRecodeTables(MetadataMu metadata) {
         boolean recoded = false;
-//        try {
         if (metadata.getCombinations().getGlobalRecode() != null) {
             for (RecodeMu r : metadata.getCombinations().getGlobalRecode().getRecodeMus()) {
                 if (r.isRecoded() || r.isTruncated()) {

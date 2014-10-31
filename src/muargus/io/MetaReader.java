@@ -135,7 +135,7 @@ public class MetaReader {
 
             metadata.linkRelatedVariables();
         } catch (FileNotFoundException ex) {
-            System.out.println("file not found");
+            //System.out.println("file not found");
             //logger.log(Level.SEVERE, null, ex);
             throw new ArgusException("Metadata file not found");
         }
@@ -156,7 +156,7 @@ public class MetaReader {
             }
             reader = new BufferedReader(new FileReader(file));
         } catch (FileNotFoundException ex) {
-            System.out.println("file not found");
+            //System.out.println("file not found");
             //logger.log(Level.SEVERE, null, ex);
             throw new ArgusException(String.format("Codelist %s not found", path));
         }
@@ -172,10 +172,11 @@ public class MetaReader {
             reader.close();
         } catch (IOException ex) {
             //logger.log(Level.SEVERE, null, ex);
+            //TODO: Is dit niet een beetje dubbelop?
             try {
                 reader.close();
             } catch (IOException e) {
-                ;
+                
             }
             throw new ArgusException(String.format("Error in codelist file (%s)", path));
         }

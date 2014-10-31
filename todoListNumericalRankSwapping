@@ -4,12 +4,11 @@ niet behandelde opmerkingen/vragen:
 
 - de undo button werkt alleen als de variabele in het selected field staat. Misschien is het mooi als
   je ook undo kan doen door alleen de variabele(n) te selecteren?
-- waarschuwing geven als meerdere variabelen bij elkaar horen en 1 undoed word
+- waarschuwing geven als meerdere variabelen bij elkaar horen en 1 undoed wordt
 
 Nog te doen:                                                                                                Mee bezig:
 
 Release 2:
-- cancel button kan weg
 10. Calculate button:
     -Catalaan dll aanroepen
     -percentage in/uit registry
@@ -50,5 +49,6 @@ Gedaan:                                                                         
     - sluit het scherm                                                                                      Anne
 - bug: knalt er uit. Maak een tabel, zet risk model aan, open risk specification, 
   maak het scherm groter/kleiner, voer rankswapping uit.
+- cancel button kan weg
 
 wishlish:

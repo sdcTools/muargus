@@ -1,8 +1,5 @@
 niet behandelde opmerkingen/vragen:
 24. inhoudelijke fout in ingelezen metadata: wat doen? knoppen uitzetten?
-- (prioriteit = laag) Bij de model class wordt bij de private method setSPSS een boolean meegegeven maar bij de andere
-  zoals setFixed wordt dit niet gedaan omdat het niet hoeft. Anne, vindt jij dit een mooie manier of 
-  heb je een idee hoe het mooier kan? 
 
 
 16. Hoe gaan we om met het veld van de missing values? Mag het veranderd worden? Als geen missing value is opgegeven moet het.
@@ -18,9 +15,6 @@ Release 2:
 -hardcoded paths aanpassen
 
 
-
- 
-
 Release 3+:
 - implement significant difference
 - TODO'tjes in MetadataMu
@@ -29,6 +23,9 @@ Behandelde opmerkingen/vragen:                                                  
 - wat is een goede default directory                                                                        Documenten
 - wanneer de metadata wordt aangepast als er al tabellen zijn gespecificeerd, 
   wat moet er dan wanneer gebeuren?                                                                         Alle gegevens waar meta is gebruikt resetten (geef eerst een waarschuwing)
+- (prioriteit = laag) Bij de model class wordt bij de private method setSPSS een boolean meegegeven maar bij de andere
+  zoals setFixed wordt dit niet gedaan omdat het niet hoeft. Anne, vindt jij dit een mooie manier of 
+  heb je een idee hoe het mooier kan? 
 
 Gedaan:                                                                                                     Door:
 

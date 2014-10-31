@@ -65,6 +65,7 @@ public class ModifyNumericalVariablesController extends ControllerBase<ModifyNum
         return min_max;
     }
 
+    //Todo: verander 
     public String getMin(ModifyNumericalVariablesSpec selected) {
         if (selected.getMin() == 0) {
             System.out.println("test");
@@ -159,7 +160,8 @@ public class ModifyNumericalVariablesController extends ControllerBase<ModifyNum
                 value_String = Double.toString(value_double);
             }
         } catch (ArgusException ex) {
-            System.out.println("warning");
+            //System.out.println("warning");
+            getView().showErrorMessage(ex);
             //Logger.getLogger(ModifyNumericalVariablesController.class.getName()).log(Level.SEVERE, null, ex);
         }
         return value_String;
@@ -174,7 +176,7 @@ public class ModifyNumericalVariablesController extends ControllerBase<ModifyNum
                     getCalculationService().setWeightNoise(selected.getVariable(), selected.getWeightNoisePercentage());
                 }
         } catch (ArgusException ex) {
-            System.out.println("error");
+            //System.out.println("error");
             getView().showErrorMessage(ex);
             //Logger.getLogger(ModifyNumericalVariablesController.class.getName()).log(Level.SEVERE, null, ex);
         }

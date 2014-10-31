@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package muargus;
+package muargus.unusedClasses;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
