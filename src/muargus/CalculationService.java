@@ -514,40 +514,40 @@ public class CalculationService {
         return delta;
     }
 
-    public void setTopBottomCoding(VariableMu variable, boolean top, double value, String replacement) throws ArgusException {
+    public void setTopBottomCoding(VariableMu variable, boolean top, double value, String replacement, boolean undo) throws ArgusException {
         boolean result;
         if (top) {
             result = c.SetCodingTop(
                     getVariables().indexOf(variable) + 1,
                     value,
                     replacement,
-                    !Double.isNaN(value));
+                    undo);
         } else {
             result = c.SetCodingBottom(
                     getVariables().indexOf(variable) + 1,
                     value,
                     replacement,
-                    !Double.isNaN(value));
+                    undo);
         }
         if (!result) {
             throw new ArgusException("Error in Set Top/Bottom coding");
         }
     }
 
-    public void setRounding(VariableMu variable, Double base, int nDecimals) throws ArgusException {
+    public void setRounding(VariableMu variable, Double base, int nDecimals, boolean undo) throws ArgusException {
         boolean result = c.SetRound(getVariables().indexOf(variable) + 1,
                 base,
                 nDecimals,
-                !Double.isNaN(base));
+                undo); 
         if (!result) {
             throw new ArgusException("Error in Set Rounding");
         }
     }
 
-    public void setWeightNoise(VariableMu variable, double noise) throws ArgusException {
+    public void setWeightNoise(VariableMu variable, double noise, boolean undo) throws ArgusException {
         boolean result = c.SetWeightNoise(getVariables().indexOf(variable) + 1,
                 noise,
-                !Double.isNaN(noise));
+                undo);
         if (!result) {
             throw new ArgusException("Error in Set Weight noise");
         }

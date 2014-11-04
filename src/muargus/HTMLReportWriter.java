@@ -17,6 +17,7 @@ import muargus.io.MetaReader;
 import muargus.model.MetadataMu;
 import muargus.model.MicroaggregationSpec;
 import muargus.model.ModifyNumericalVariablesSpec;
+import muargus.model.ProtectedFile;
 import muargus.model.RankSwappingSpec;
 import muargus.model.RecodeMu;
 import muargus.model.ReplacementSpec;
@@ -55,6 +56,10 @@ public class HTMLReportWriter {
         }
         if (hasOtherModifications(metadata)) {
             body.appendChild(writeOtherModificationsTable(metadata));
+        } else {
+            Element p = doc.createElement("p");
+            addChildElement(p, "h2", "No other modifications");
+            body.appendChild(p);
         }
         body.appendChild(writeSuppressionTable(metadata));
         body.appendChild(writeSafeFileMetaTable(metadata));
@@ -119,13 +124,40 @@ public class HTMLReportWriter {
                         String.format("Group size: %d%s", microAggr.getMinimalNumberOfRecords(), optimal));
 
             }
-
+        }
+        ProtectedFile protectedFile = metadata.getCombinations().getProtectedFile();
+        if (protectedFile.isRandomizeOutput()) {
+            tr = addChildElement(table, "tr");
+            addChildElement(tr, "td", "Make safe file");
+            addChildElement(tr, "td", "All");
+            addChildElement(tr, "td", "Records have been written in random order");
+        } else if (protectedFile.isPrintBHR()) {
+            tr = addChildElement(table, "tr");
+            addChildElement(tr, "td", "Make safe file");
+            addChildElement(tr, "td", "All");
+            addChildElement(tr, "td", "Risk has been added to output file");
+        }
+        if (protectedFile.getHouseholdType() == ProtectedFile.CHANGE_INTO_SEQUENCE_NUMBER) {
+            tr = addChildElement(table, "tr");
+            addChildElement(tr, "td", "Make safe file");
+            for(VariableMu v: metadata.getVariables()){
+                if(v.isHouse_id()){
+                    addChildElement(tr, "td", v.getName());
+                    break;
+                }
+            }
+            addChildElement(tr, "td", "HouseHold Identification variable has been changed into a sequence number");
         }
         return p;
     }
 
     private static boolean hasOtherModifications(MetadataMu metadata) {
-        if (metadata.getCombinations().getModifyNumericalVariables().getModifyNumericalVariablesSpec().size() > 0) {
+        ProtectedFile protectedFile = metadata.getCombinations().getProtectedFile();
+        if (metadata.getCombinations().getModifyNumericalVariables().getModifyNumericalVariablesSpec().size() > 0 
+                || protectedFile.isPrintBHR()
+                || protectedFile.isRandomizeOutput()
+                ||(protectedFile.getHouseholdType() != ProtectedFile.NOT_HOUSEHOLD_DATA
+                && protectedFile.getHouseholdType() != ProtectedFile.KEEP_IN_SAFE_FILE)){
             return true;
         }
         return metadata.getReplacementSpecs().size() > 0;
@@ -285,15 +317,17 @@ public class HTMLReportWriter {
 
         int suppressions = 0;
         for (VariableMu v : safeMeta.getVariables()) {
-            tr = addChildElement(table, "tr");
-            addChildElement(tr, "td", v.getName());
-            if (metadata.getCombinations().getProtectedFile().isWithEntropy()) {
-                addChildElement(tr, "td", formatDouble(v.getEntropy(), 2, true));
-            } else {
-                addChildElement(tr, "td", Integer.toString(v.getSuppressweight()));
+            if (v.isCategorical()) {
+                tr = addChildElement(table, "tr");
+                addChildElement(tr, "td", v.getName());
+                if (metadata.getCombinations().getProtectedFile().isWithEntropy()) {
+                    addChildElement(tr, "td", formatDouble(v.getEntropy(), 2, true));
+                } else {
+                    addChildElement(tr, "td", Integer.toString(v.getSuppressweight()));
+                }
+                addChildElement(tr, "td", Integer.toString(v.getnOfSuppressions()));
+                suppressions += v.getnOfSuppressions();
             }
-            addChildElement(tr, "td", Integer.toString(v.getnOfSuppressions()));
-            suppressions += v.getnOfSuppressions();
         }
         tr = addChildElement(table, "tr");
         addChildElement(tr, "td", "Total");

@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package muargus.controller;
 
 import argus.model.ArgusException;
@@ -21,6 +16,11 @@ public class ModifyNumericalVariablesController extends ControllerBase<ModifyNum
 
     private final MetadataMu metadata;
 
+    /**
+     * 
+     * @param parentView
+     * @param metadata 
+     */
     public ModifyNumericalVariablesController(java.awt.Frame parentView, MetadataMu metadata) {
         super.setView(new ModifyNumericalVariablesView(parentView, true, this));
         this.metadata = metadata;
@@ -47,6 +47,9 @@ public class ModifyNumericalVariablesController extends ControllerBase<ModifyNum
         }
     }
 
+    /**
+     * 
+     */
     public void setVariablesData() {
         if (getModel().getVariablesData() == null) {
             String variablesData[][] = new String[getModel().getModifyNumericalVariablesSpec().size()][2];
@@ -60,25 +63,45 @@ public class ModifyNumericalVariablesController extends ControllerBase<ModifyNum
         }
     }
 
+    /**
+     * 
+     * @param variable
+     * @return 
+     */
     public double[] getMinMax(VariableMu variable) {
         double[] min_max = getCalculationService().getMinMax(variable);
         return min_max;
     }
 
-    //Todo: verander 
+    /**
+     * 
+     * @param selected
+     * @return 
+     */
     public String getMin(ModifyNumericalVariablesSpec selected) {
-        if (selected.getMin() == 0) {
-            System.out.println("test");
-            return "";
-        } else {
-            return getIntIfPossible(selected.getMin());
-        }
+        return getIntIfPossible(selected.getMin());
     }
 
+    /**
+     * 
+     * @param selected
+     * @return 
+     */
     public String getMax(ModifyNumericalVariablesSpec selected) {
         return getIntIfPossible(selected.getMax());
     }
 
+    /**
+     * 
+     * @param selected
+     * @param bottomValue
+     * @param topValue
+     * @param bottomReplacement
+     * @param topReplacement
+     * @param roundingBase
+     * @param weightNoisePercentage
+     * @return 
+     */
     public String getWarningMessage(ModifyNumericalVariablesSpec selected, String bottomValue, String topValue,
             String bottomReplacement, String topReplacement, String roundingBase, String weightNoisePercentage) {
 
@@ -139,7 +162,7 @@ public class ModifyNumericalVariablesController extends ControllerBase<ModifyNum
         if (!Double.isNaN(selected.getWeightNoisePercentage())) {
             if (selected.getWeightNoisePercentage() <= 0 || selected.getWeightNoisePercentage() > 100) {
                 warningMessage += "Illegal Value for the weight noise percentage\n"
-                        + "Percentage needs to be a number larger than 0 and smaller than or equal to 100";
+                        + "Percentage needs to be a number greater than 0 and less than or equal to 100";
             }
         } else if (!weightNoisePercentage.equals("")) {
             warningMessage += "Illegal value for the weight noise percentage\n";
@@ -148,6 +171,11 @@ public class ModifyNumericalVariablesController extends ControllerBase<ModifyNum
         return warningMessage;
     }
 
+    /**
+     * 
+     * @param value
+     * @return 
+     */
     public String getIntIfPossible(double value) {
         double value_double;
         String value_String = null;
@@ -160,25 +188,42 @@ public class ModifyNumericalVariablesController extends ControllerBase<ModifyNum
                 value_String = Double.toString(value_double);
             }
         } catch (ArgusException ex) {
-            //System.out.println("warning");
             getView().showErrorMessage(ex);
-            //Logger.getLogger(ModifyNumericalVariablesController.class.getName()).log(Level.SEVERE, null, ex);
         }
         return value_String;
     }
 
+    /**
+     * 
+     * @param selected 
+     */
     public void apply(ModifyNumericalVariablesSpec selected) {
         try {
-                getCalculationService().setRounding(selected.getVariable(), selected.getRoundingBase(), selected.getVariable().getDecimals());
-                getCalculationService().setTopBottomCoding(selected.getVariable(), true, selected.getTopValue(), selected.getTopReplacement());
-                getCalculationService().setTopBottomCoding(selected.getVariable(), false, selected.getBottomValue(), selected.getBottomReplacement());
-                if (selected.getVariable().isWeight()) {
-                    getCalculationService().setWeightNoise(selected.getVariable(), selected.getWeightNoisePercentage());
-                }
+            getCalculationService().setRounding(
+                    selected.getVariable(),
+                    selected.getRoundingBase(),
+                    selected.getVariable().getDecimals(),
+                    Double.isNaN(selected.getRoundingBase())); // als het geen normaal getal is, dan is undo true
+            getCalculationService().setTopBottomCoding(
+                    selected.getVariable(),
+                    true,
+                    selected.getTopValue(),
+                    selected.getTopReplacement(),
+                    Double.isNaN(selected.getTopValue()));
+            getCalculationService().setTopBottomCoding(
+                    selected.getVariable(),
+                    false,
+                    selected.getBottomValue(),
+                    selected.getBottomReplacement(),
+                    Double.isNaN(selected.getBottomValue()));
+            if (selected.getVariable().isWeight()) {
+                getCalculationService().setWeightNoise(
+                        selected.getVariable(),
+                        selected.getWeightNoisePercentage(),
+                        Double.isNaN(selected.getWeightNoisePercentage()));
+            }
         } catch (ArgusException ex) {
-            //System.out.println("error");
             getView().showErrorMessage(ex);
-            //Logger.getLogger(ModifyNumericalVariablesController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 }

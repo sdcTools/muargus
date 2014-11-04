@@ -92,7 +92,8 @@ public class ModifyNumericalVariablesView extends DialogBase<ModifyNumericalVari
     private void makeVariablesTable() {
         getController().setVariablesData();
 
-        TableModel variablesTableModel = new DefaultTableModel(this.model.getVariablesData(), this.model.getVariablesColumnNames()) {
+        TableModel variablesTableModel = new DefaultTableModel(
+                this.model.getVariablesData(), this.model.getVariablesColumnNames()) {
             @Override
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return false;
@@ -106,11 +107,11 @@ public class ModifyNumericalVariablesView extends DialogBase<ModifyNumericalVari
             this.variablesTable.getColumnModel().getColumn(i).setPreferredWidth(this.variablesColumnWidth[i]);
         }
 
-        this.variablesTable.setDefaultRenderer(Object.class, new HighlightTableCellRenderer());
-        for (int i = 0; i < this.model.getModifyNumericalVariablesSpec().size(); i++) {
-            this.selectedRow = i;
-            showModified();
-        }
+        //this.variablesTable.setDefaultRenderer(Object.class, new HighlightTableCellRenderer());
+//        for (int i = 0; i < this.model.getModifyNumericalVariablesSpec().size(); i++) {
+//            this.selectedRow = i;
+//            showModified();
+//        }
 
         this.variablesTable.getSelectionModel().setSelectionInterval(0, 0);
         this.selectedRow = 0;
@@ -149,7 +150,7 @@ public class ModifyNumericalVariablesView extends DialogBase<ModifyNumericalVari
     private boolean checkValidAnswer() {
         setValuesInModel();
         ModifyNumericalVariablesSpec selected = getModifyNumericalVariablesSpec();
-        boolean hasValue = valueEntered();
+        boolean hasValue = valueEntered(); 
         if (hasValue) {
             String message = getController().getWarningMessage(selected,
                     this.bottomValueTextField.getText(),

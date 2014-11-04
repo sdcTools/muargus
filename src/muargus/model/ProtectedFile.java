@@ -14,15 +14,15 @@ import org.apache.commons.io.FilenameUtils;
 public class ProtectedFile {
 
     private int suppressionType;
-    public final int NO_SUPPRESSION = 0;
-    public final int USE_WEIGHT = 1;
-    public final int USE_ENTROPY = 2;
+    public final static int NO_SUPPRESSION = 0;
+    public final static int USE_WEIGHT = 1;
+    public final static int USE_ENTROPY = 2;
 
     private int householdType;
-    public final int NOT_HOUSEHOLD_DATA = 0;
-    public final int KEEP_IN_SAFE_FILE = 1;
-    public final int CHANGE_INTO_SEQUENCE_NUMBER = 2;
-    public final int REMOVE_FROM_SAFE_FILE = 3;
+    public final static int NOT_HOUSEHOLD_DATA = 0;
+    public final static int KEEP_IN_SAFE_FILE = 1;
+    public final static int CHANGE_INTO_SEQUENCE_NUMBER = 2;
+    public final static int REMOVE_FROM_SAFE_FILE = 3;
 
     private final ArrayList<VariableMu> variables;
     private String[][] data;

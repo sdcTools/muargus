@@ -11,7 +11,6 @@ Nog te doen:                                                                    
 Release 2:
 - nu wordt bij de tabel nog gebruik gemaakt van een keyReleased en MouseClicked event maar dit moet een         Jeldrik
   selectionsChanged event worden.
-- waarschuwing als geen riskModel is gedefinieerd.                                                              Anne
 
 10. makeFileButton:
 - otherModifications toevoegen (gebeurd wanneer de optie change into sequence number wordt gekozen)
@@ -99,6 +98,8 @@ SPSS: genereer safe SAV file
 - Gegevens numerical variables scherm in rapport tonen
 - Gegevens microaggregatie in rapport tonen
 - Gegevens rank swapping in rapport tonen
+- waarschuwing als geen riskModel is gedefinieerd.                                                              Anne
+
 
 Whishlist:
 -   weights automatisch bepalen door middel van entropie? Ik weet niet precies hoe dit zou moeten maar hierdoor
