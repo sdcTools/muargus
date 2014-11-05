@@ -17,9 +17,9 @@ public class ModifyNumericalVariablesController extends ControllerBase<ModifyNum
     private final MetadataMu metadata;
 
     /**
-     * 
+     *
      * @param parentView
-     * @param metadata 
+     * @param metadata
      */
     public ModifyNumericalVariablesController(java.awt.Frame parentView, MetadataMu metadata) {
         super.setView(new ModifyNumericalVariablesView(parentView, true, this));
@@ -48,7 +48,7 @@ public class ModifyNumericalVariablesController extends ControllerBase<ModifyNum
     }
 
     /**
-     * 
+     *
      */
     public void setVariablesData() {
         if (getModel().getVariablesData() == null) {
@@ -64,9 +64,9 @@ public class ModifyNumericalVariablesController extends ControllerBase<ModifyNum
     }
 
     /**
-     * 
+     *
      * @param variable
-     * @return 
+     * @return
      */
     public double[] getMinMax(VariableMu variable) {
         double[] min_max = getCalculationService().getMinMax(variable);
@@ -74,25 +74,25 @@ public class ModifyNumericalVariablesController extends ControllerBase<ModifyNum
     }
 
     /**
-     * 
+     *
      * @param selected
-     * @return 
+     * @return
      */
     public String getMin(ModifyNumericalVariablesSpec selected) {
         return getIntIfPossible(selected.getMin());
     }
 
     /**
-     * 
+     *
      * @param selected
-     * @return 
+     * @return
      */
     public String getMax(ModifyNumericalVariablesSpec selected) {
         return getIntIfPossible(selected.getMax());
     }
 
     /**
-     * 
+     *
      * @param selected
      * @param bottomValue
      * @param topValue
@@ -100,7 +100,7 @@ public class ModifyNumericalVariablesController extends ControllerBase<ModifyNum
      * @param topReplacement
      * @param roundingBase
      * @param weightNoisePercentage
-     * @return 
+     * @return
      */
     public String getWarningMessage(ModifyNumericalVariablesSpec selected, String bottomValue, String topValue,
             String bottomReplacement, String topReplacement, String roundingBase, String weightNoisePercentage) {
@@ -108,73 +108,135 @@ public class ModifyNumericalVariablesController extends ControllerBase<ModifyNum
         String warningMessage = "";
 
         boolean bottom = false;
-        if (!Double.isNaN(selected.getBottomValue())) {
-            if (bottomReplacement.equals("")) {
+        try {
+            Double temp = Double.parseDouble(bottomValue);
+            bottom = true;
+            if (temp < selected.getMin() || temp > selected.getMax()) {
+                warningMessage += "Bottom Value needs to be in the range between the minimum and maximum value\n";
+                bottom = false;
+            }
+        } catch (NumberFormatException e) {
+            if (bottomReplacement.equals("") && !bottomValue.equals("")) {
                 warningMessage += "Bottom replacement value cannot be empty\n";
-            } else {
-                bottom = true;
-                if (selected.getBottomValue() < selected.getMin() || selected.getBottomValue() > selected.getMax()) {
-                    warningMessage += "Bottom Value needs to be in the range between the minimum and maximum value\n";
-                    bottom = false;
-                }
+            } else if (!bottomValue.equals("")) {
+                warningMessage += "Illegal value for the bottom value\n";
+                bottom = false;
+            } else if (!bottomReplacement.equals("")) {
+                warningMessage += "Bottom value cannot be empty\n";
+                bottom = false;
             }
-        } else if (!bottomValue.equals("")) {
-            warningMessage += "Illegal value for the bottom value\n";
-            bottom = false;
-        } else if (!bottomReplacement.equals("")) {
-            warningMessage += "Bottom value cannot be empty\n";
-            bottom = false;
         }
 
+        //TODO: change into try-catch
+//        if (!Double.isNaN(Double.parseDouble(bottomValue))) {
+//            if (bottomReplacement.equals("")) {
+//                warningMessage += "Bottom replacement value cannot be empty\n";
+//            } else {
+//                bottom = true;
+//                if (Double.parseDouble(bottomValue) < selected.getMin()
+//                        || Double.parseDouble(bottomValue) > selected.getMax()) {
+//                    warningMessage += "Bottom Value needs to be in the range between the minimum and maximum value\n";
+//                    bottom = false;
+//                }
+//            }
+//        } else if (!bottomValue.equals("")) {
+//            warningMessage += "Illegal value for the bottom value\n";
+//            bottom = false;
+//        } else if (!bottomReplacement.equals("")) {
+//            warningMessage += "Bottom value cannot be empty\n";
+//            bottom = false;
+//        }
         boolean top = false;
-        if (!Double.isNaN(selected.getTopValue())) {
-            if (topReplacement.equals("")) {
-                warningMessage += "Top replacement value cannot be empty\n";
-            } else {
-                top = true;
-                if (selected.getTopValue() < selected.getMin() || selected.getTopValue() > selected.getMax()) {
-                    warningMessage += "Top Value needs to be in the range between the minimum and maximum value\n";
-                    top = false;
-                }
+        try {
+            Double temp = Double.parseDouble(topValue);
+            top = true;
+            if (temp < selected.getMin() || temp > selected.getMax()) {
+                warningMessage += "Top Value needs to be in the range between the minimum and maximum value\n";
+                top = false;
             }
-        } else if (!topValue.equals("")) {
-            warningMessage += "Illegal value for the top value\n";
-            top = false;
-        } else if (!topReplacement.equals("")) {
-            warningMessage += "Top value cannot be empty\n";
-            top = false;
+        } catch (NumberFormatException e) {
+            if (topReplacement.equals("") && !topValue.equals("")) {
+                warningMessage += "Top replacement value cannot be empty\n";
+            } else if (!topValue.equals("")) {
+                warningMessage += "Illegal value for the top value\n";
+                top = false;
+            } else if (!topReplacement.equals("")) {
+                warningMessage += "Top value cannot be empty\n";
+                top = false;
+            }
         }
 
+        // top = false;
+//        if (!Double.isNaN(Double.parseDouble(topValue))) {
+//            if (topReplacement.equals("")) {
+//                warningMessage += "Top replacement value cannot be empty\n";
+//            } else {
+//                top = true;
+//                if (Double.parseDouble(topValue) < selected.getMin()
+//                        || Double.parseDouble(topValue) > selected.getMax()) {
+//                    warningMessage += "Top Value needs to be in the range between the minimum and maximum value\n";
+//                    top = false;
+//                }
+//            }
+//        } else if (!topValue.equals("")) {
+//            warningMessage += "Illegal value for the top value\n";
+//            top = false;
+//        } else if (!topReplacement.equals("")) {
+//            warningMessage += "Top value cannot be empty\n";
+//            top = false;
+//        }
         if (top && bottom) {
-            if (selected.getTopValue() <= selected.getBottomValue()) {
+            if (Double.parseDouble(topValue) <= Double.parseDouble(bottomValue)) {
                 warningMessage += "Top value needs to be larger than the bottom value\n";
             }
         }
 
-        if (!Double.isNaN(selected.getRoundingBase())) {
-            if (selected.getRoundingBase() <= 0) {
+        try {
+            Double temp = Double.parseDouble(roundingBase);
+            if (temp <= 0) {
                 warningMessage += "Illegal Value for rounding\n";
             }
-        } else if (!roundingBase.equals("")) {
-            warningMessage += "Illegal value for the rounding base\n";
+        } catch (NumberFormatException e) {
+            if (!roundingBase.equals("")) {
+                warningMessage += "Illegal value for the rounding base\n";
+            }
         }
 
-        if (!Double.isNaN(selected.getWeightNoisePercentage())) {
-            if (selected.getWeightNoisePercentage() <= 0 || selected.getWeightNoisePercentage() > 100) {
+//        if (!Double.isNaN(Double.parseDouble(roundingBase))) {
+//            if (Double.parseDouble(roundingBase) <= 0) {
+//                warningMessage += "Illegal Value for rounding\n";
+//            }
+//        } else if (!roundingBase.equals("")) {
+//            warningMessage += "Illegal value for the rounding base\n";
+//        }
+        try {
+            Double temp = Double.parseDouble(weightNoisePercentage);
+            if (temp <= 0 || temp > 100) {
                 warningMessage += "Illegal Value for the weight noise percentage\n"
                         + "Percentage needs to be a number greater than 0 and less than or equal to 100";
             }
-        } else if (!weightNoisePercentage.equals("")) {
-            warningMessage += "Illegal value for the weight noise percentage\n";
+        } catch (NumberFormatException e) {
+            if (!weightNoisePercentage.equals("")) {
+                warningMessage += "Illegal value for the weight noise percentage\n";
+            }
         }
 
+//        if (!Double.isNaN(Double.parseDouble(weightNoisePercentage))) {
+//            if (Double.parseDouble(weightNoisePercentage) <= 0
+//                    || Double.parseDouble(weightNoisePercentage) > 100) {
+//                warningMessage += "Illegal Value for the weight noise percentage\n"
+//                        + "Percentage needs to be a number greater than 0 and less than or equal to 100";
+//            }
+//        } else if (!weightNoisePercentage.equals("")) {
+//            warningMessage += "Illegal value for the weight noise percentage\n";
+//        }
         return warningMessage;
     }
 
     /**
-     * 
+     *
      * @param value
-     * @return 
+     * @return
      */
     public String getIntIfPossible(double value) {
         double value_double;
@@ -194,8 +256,8 @@ public class ModifyNumericalVariablesController extends ControllerBase<ModifyNum
     }
 
     /**
-     * 
-     * @param selected 
+     *
+     * @param selected
      */
     public void apply(ModifyNumericalVariablesSpec selected) {
         try {

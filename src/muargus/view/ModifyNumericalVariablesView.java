@@ -107,11 +107,11 @@ public class ModifyNumericalVariablesView extends DialogBase<ModifyNumericalVari
             this.variablesTable.getColumnModel().getColumn(i).setPreferredWidth(this.variablesColumnWidth[i]);
         }
 
-        //this.variablesTable.setDefaultRenderer(Object.class, new HighlightTableCellRenderer());
-//        for (int i = 0; i < this.model.getModifyNumericalVariablesSpec().size(); i++) {
-//            this.selectedRow = i;
-//            showModified();
-//        }
+        this.variablesTable.setDefaultRenderer(Object.class, new HighlightTableCellRenderer());
+        for (int i = 0; i < this.model.getModifyNumericalVariablesSpec().size(); i++) {
+            this.selectedRow = i;
+            showModified();
+        }
 
         this.variablesTable.getSelectionModel().setSelectionInterval(0, 0);
         this.selectedRow = 0;
@@ -148,7 +148,7 @@ public class ModifyNumericalVariablesView extends DialogBase<ModifyNumericalVari
      * @return Boolean indicating whether the answers entered are valid.
      */
     private boolean checkValidAnswer() {
-        setValuesInModel();
+        //setValuesInModel();
         ModifyNumericalVariablesSpec selected = getModifyNumericalVariablesSpec();
         boolean hasValue = valueEntered(); 
         if (hasValue) {
@@ -165,6 +165,7 @@ public class ModifyNumericalVariablesView extends DialogBase<ModifyNumericalVari
                 return false;
             }
         }
+        setValuesInModel();
         selected.setModified(hasValue);
         showModified();
         getController().apply(selected);
@@ -222,6 +223,12 @@ public class ModifyNumericalVariablesView extends DialogBase<ModifyNumericalVari
         return valueEntered;
     }
 
+    /**
+     * 
+     * @param text
+     * @param d
+     * @return 
+     */
     private boolean doubleEquals(String text, double d) {
         return text.equals(formatDouble(d));
     }
@@ -509,6 +516,11 @@ public class ModifyNumericalVariablesView extends DialogBase<ModifyNumericalVari
     private void closeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_closeButtonActionPerformed
         if (valueEntered() && valueChanged()) {
             if (showConfirmDialog("Do you want to apply?")) {
+                checkValidAnswer();
+            }
+        } else if (valueChanged() && !valueEntered()){
+            if (showConfirmDialog("Do you want to undo the modification of ?" 
+                    + getModifyNumericalVariablesSpec().getVariable().getName() + "?")) {
                 checkValidAnswer();
             }
         }
