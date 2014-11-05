@@ -8,7 +8,6 @@ Klasse:                                 Regel(s):   Taak/opmerking:             
                                         41          acrord32.exe aanpassen  
 - HTMLReportWriter                      445         Hardcoded path muargus.css
                                                     Andere html-viewer
-- MakeProtectedFileController           117         Change Exception type and show warning
 - MainFrameView                                     Labels verwijderen na global recode
 - PramSpecificationView                             Labels verwijderen na global recode
 - MakeProtectedFileView                             listEventListener aanpassen                     Jeldrik
@@ -47,3 +46,4 @@ Klasse:                                 Regel(s):   Taak/opmerking:             
 - HTMLReportWriter                                  TempDataFile spss fixen                         Jeldrik
 - HTMLReportWriter                                  PRAM toevoegen                                  Jeldrik
 - HTMLReportWriter                                  Variables removed toevoegen                     Jeldrik
+- MakeProtectedFileController           117         Change Exception type and show warning          Jeldrik
