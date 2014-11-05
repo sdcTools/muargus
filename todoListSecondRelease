@@ -19,8 +19,7 @@ Klasse:                                 Regel(s):   Taak/opmerking:             
 - SpssSelectVariablesView                           Verplaats naar ArgusLib
 - lines.png in view directory                       Verplaatsen naar resources?
 - CalculationService                    472         er staat een TODO: ??
-- HTMLReportWriter                                  PRAM toevoegen                                  Jeldrik
-                                        445         Hardcoded path muargus.css
+- HTMLReportWriter                      445         Hardcoded path muargus.css
                                                     Variables removed toevoegen                     Jeldrik
                                                     Andere html-viewer
 - MuARGUS                               40          Hardcoded path manual
@@ -45,3 +44,4 @@ Klasse:                                 Regel(s):   Taak/opmerking:             
 - ModifyNumericalVariablesController    82          getMin() aanpassen                              Jeldrik
 - ContextHelp                                       Springen binnen pdf                             Jeldrik
 - HTMLReportWriter                                  TempDataFile spss fixen                         Jeldrik
+- HTMLReportWriter                                  PRAM toevoegen                                  Jeldrik

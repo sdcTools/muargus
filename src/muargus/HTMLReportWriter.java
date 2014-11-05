@@ -12,12 +12,15 @@ import java.io.StringReader;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import muargus.controller.SpssUtils;
 import muargus.io.MetaReader;
+import muargus.model.CodeInfo;
 import muargus.model.MetadataMu;
 import muargus.model.MicroaggregationSpec;
 import muargus.model.ModifyNumericalVariablesSpec;
+import muargus.model.PramVariableSpec;
 import muargus.model.ProtectedFile;
 import muargus.model.RankSwappingSpec;
 import muargus.model.RecodeMu;
@@ -62,6 +65,7 @@ public class HTMLReportWriter {
             addChildElement(p, "h2", "No other modifications");
             body.appendChild(p);
         }
+        //body.appendChild(writePRAMTable(metadata));
         body.appendChild(writeSuppressionTable(metadata));
         body.appendChild(writeSafeFileMetaTable(metadata));
         body.appendChild(writeFooter());
@@ -149,14 +153,88 @@ public class HTMLReportWriter {
             }
             addChildElement(tr, "td", "HouseHold Identification variable has been changed into a sequence number");
         }
+
+        return writePRAMTable(metadata, table, tr, p);
+    }
+
+    private static Element writePRAMTable(MetadataMu metadata, Element table, Element tr, Element p) {
+        boolean pram = false;
+        if (metadata.getCombinations().getPramSpecification() != null) {
+            for (PramVariableSpec pramSpec : metadata.getCombinations().getPramSpecification().getPramVarSpec()) {
+                if (pramSpec.isApplied()) {
+                    pram = true;
+                }
+            }
+        }
+
+        if (pram) {
+            ArrayList<PramVariableSpec> unequalProbability = new ArrayList<>();
+            for (PramVariableSpec pramSpec : metadata.getCombinations().getPramSpecification().getPramVarSpec()) {
+                if (pramSpec.isApplied()) {
+                    int probability = pramSpec.getVariable().getCodeInfos().get(0).getPramProbability();
+                    boolean equalProbability = true;
+                    for (CodeInfo c : pramSpec.getVariable().getCodeInfos()) {
+                        if (probability != c.getPramProbability()) {
+                            equalProbability = false;
+                            break;
+                        }
+                    }
+                    tr = addChildElement(table, "tr");
+                    addChildElement(tr, "td", "PRAM");
+                    addChildElement(tr, "td", pramSpec.getVariable().getName());
+                    if (equalProbability) {
+                        addChildElement(tr, "td", "Diagonal probabilities are all " + probability);
+                    } else {
+                        addChildElement(tr, "td", "Unequal probabilities. See specifications below.");
+                        unequalProbability.add(pramSpec);
+                    }
+                }
+            }
+
+            for (PramVariableSpec pramSpec : unequalProbability) {
+                addChildElement(p, "h2", "");
+                addChildElement(p, "h2", "PRAM-probability overview for " + pramSpec.getVariable().getName());
+                Element table2 = addChildElement(p, "table");
+                Element tr2 = addChildElement(table2, "tr");
+                addChildElement(tr2, "th", "Code");
+                addChildElement(tr2, "th", "Label");
+                addChildElement(tr2, "th", "Probability");
+                for (CodeInfo c : pramSpec.getVariable().getCodeInfos()) {
+                    boolean missing = false;
+                    for (int i = 0; i < pramSpec.getVariable().getNumberOfMissings(); i++) {
+                        if (c.getCode().equals(pramSpec.getVariable().getMissing(i))) {
+                            missing = true;
+                            break;
+                        }
+                    }
+                    if (!missing) {
+                        tr2 = addChildElement(table2, "tr");
+                        addChildElement(tr2, "td", c.getCode());
+                        addChildElement(tr2, "td", c.getLabel());
+                        addChildElement(tr2, "td", "" + c.getPramProbability());
+                    }
+                }
+
+            }
+        }
         return p;
+
     }
 
     private static boolean hasOtherModifications(MetadataMu metadata) {
         ProtectedFile protectedFile = metadata.getCombinations().getProtectedFile();
+        boolean pram = false;
+        if (metadata.getCombinations().getPramSpecification() != null) {
+            for (PramVariableSpec pramSpec : metadata.getCombinations().getPramSpecification().getPramVarSpec()) {
+                if (pramSpec.isApplied()) {
+                    pram = true;
+                }
+            }
+        }
         if (metadata.getCombinations().getModifyNumericalVariables().getModifyNumericalVariablesSpec().size() > 0
                 || protectedFile.isPrintBHR()
                 || protectedFile.isRandomizeOutput()
+                || pram
                 || (protectedFile.getHouseholdType() != ProtectedFile.NOT_HOUSEHOLD_DATA
                 && protectedFile.getHouseholdType() != ProtectedFile.KEEP_IN_SAFE_FILE)) {
             return true;
