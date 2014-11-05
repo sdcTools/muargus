@@ -20,7 +20,6 @@ Klasse:                                 Regel(s):   Taak/opmerking:             
 - lines.png in view directory                       Verplaatsen naar resources?
 - CalculationService                    472         er staat een TODO: ??
 - HTMLReportWriter                      445         Hardcoded path muargus.css
-                                                    Variables removed toevoegen                     Jeldrik
                                                     Andere html-viewer
 - MuARGUS                               40          Hardcoded path manual
                                         41          acrord32.exe aanpassen      
@@ -45,3 +44,4 @@ Klasse:                                 Regel(s):   Taak/opmerking:             
 - ContextHelp                                       Springen binnen pdf                             Jeldrik
 - HTMLReportWriter                                  TempDataFile spss fixen                         Jeldrik
 - HTMLReportWriter                                  PRAM toevoegen                                  Jeldrik
+- HTMLReportWriter                                  Variables removed toevoegen                     Jeldrik

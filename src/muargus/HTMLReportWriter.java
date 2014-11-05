@@ -78,7 +78,7 @@ public class HTMLReportWriter {
         Element tr = addChildElement(table, "tr");
         addChildElement(tr, "th", "Method");
         addChildElement(tr, "th", "Variables");
-        addChildElement(tr, "th", "Parameters");
+        addChildElement(tr, "th", "Parameters/Remarks");
         for (ModifyNumericalVariablesSpec spec : metadata.getCombinations().getModifyNumericalVariables().getModifyNumericalVariablesSpec()) {
             //Bottom coding
             if (!Double.isNaN(spec.getBottomValue())) {
@@ -152,6 +152,16 @@ public class HTMLReportWriter {
                 }
             }
             addChildElement(tr, "td", "HouseHold Identification variable has been changed into a sequence number");
+        } else if (protectedFile.getHouseholdType() == ProtectedFile.REMOVE_FROM_SAFE_FILE){
+            tr = addChildElement(table, "tr");
+            addChildElement(tr, "td", "Make safe file");
+            for (VariableMu v : metadata.getVariables()) {
+                if (v.isHouse_id()) {
+                    addChildElement(tr, "td", v.getName());
+                    break;
+                }
+            }
+            addChildElement(tr, "td", "HouseHold Identification variable has been removed from the safe file");
         }
 
         return writePRAMTable(metadata, table, tr, p);
