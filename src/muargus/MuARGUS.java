@@ -114,6 +114,12 @@ public class MuARGUS {
 
     public static void showHelp(String namedDest) {
         try {
+            String exit = "taskkill /IM " + acrord32;
+            Process p = Runtime.getRuntime().exec(exit);
+        } catch (IOException ex) {
+        } catch (Exception ex2) {
+        }
+        try {
             String cmdString = "cmd.exe /c start " + acrord32 + " /A \"nameddest=" + namedDest + "\" \"" + manual.getAbsolutePath() + "\"";
             System.out.println(cmdString);
             Process p = Runtime.getRuntime().exec(cmdString);
