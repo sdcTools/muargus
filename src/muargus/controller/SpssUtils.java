@@ -39,7 +39,7 @@ public class SpssUtils {
     public final static int NUMERIC = 0;
     public static boolean fixed = true;
     private final static ArrayList<SpssVariable> spssVariables = new ArrayList<>();
-    private static String spssDataFileName;
+    public static String spssDataFileName;
     public static File spssTempDataFiles;
     public static File safeFile;
     public static File safeSpssFile = new File("C:\\Users\\Gebruiker\\Desktop\\safe.sav");

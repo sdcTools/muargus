@@ -11,7 +11,6 @@ Klasse:                                 Regel(s):   Taak/opmerking:             
 - MetaReader                            176-180     Exception wordt dubbel gegeven. Zinvol?
 - MetadataMu                            68          Show error message/throw argusexception
                                         94          TODO: some initialization
-- ContextHelp                                       Springen binnen pdf                             Jeldrik
 - MainFrameView                                     Labels verwijderen na global recode
 - PramSpecificationView                             Labels verwijderen na global recode
 - MakeProtectedFileView                             listEventListener aanpassen
@@ -20,10 +19,9 @@ Klasse:                                 Regel(s):   Taak/opmerking:             
 - SpssSelectVariablesView                           Verplaats naar ArgusLib
 - lines.png in view directory                       Verplaatsen naar resources?
 - CalculationService                    472         er staat een TODO: ??
-- HTMLReportWriter                                  TempDataFile spss fixen
-                                                    PRAM toevoegen
+- HTMLReportWriter                                  PRAM toevoegen                                  Jeldrik
                                         445         Hardcoded path muargus.css
-                                                    Variables removed toevoegen
+                                                    Variables removed toevoegen                     Jeldrik
                                                     Andere html-viewer
 - MuARGUS                               40          Hardcoded path manual
                                         41          acrord32.exe aanpassen      
@@ -45,3 +43,5 @@ Overige
 Gedaan:
 Klasse:                                 Regel(s):   Taak/opmerking:                                 Persoon:
 - ModifyNumericalVariablesController    82          getMin() aanpassen                              Jeldrik
+- ContextHelp                                       Springen binnen pdf                             Jeldrik
+- HTMLReportWriter                                  TempDataFile spss fixen                         Jeldrik

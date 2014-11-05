@@ -13,6 +13,7 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import muargus.controller.SpssUtils;
 import muargus.io.MetaReader;
 import muargus.model.MetadataMu;
 import muargus.model.MicroaggregationSpec;
@@ -140,8 +141,8 @@ public class HTMLReportWriter {
         if (protectedFile.getHouseholdType() == ProtectedFile.CHANGE_INTO_SEQUENCE_NUMBER) {
             tr = addChildElement(table, "tr");
             addChildElement(tr, "td", "Make safe file");
-            for(VariableMu v: metadata.getVariables()){
-                if(v.isHouse_id()){
+            for (VariableMu v : metadata.getVariables()) {
+                if (v.isHouse_id()) {
                     addChildElement(tr, "td", v.getName());
                     break;
                 }
@@ -153,11 +154,11 @@ public class HTMLReportWriter {
 
     private static boolean hasOtherModifications(MetadataMu metadata) {
         ProtectedFile protectedFile = metadata.getCombinations().getProtectedFile();
-        if (metadata.getCombinations().getModifyNumericalVariables().getModifyNumericalVariablesSpec().size() > 0 
+        if (metadata.getCombinations().getModifyNumericalVariables().getModifyNumericalVariablesSpec().size() > 0
                 || protectedFile.isPrintBHR()
                 || protectedFile.isRandomizeOutput()
-                ||(protectedFile.getHouseholdType() != ProtectedFile.NOT_HOUSEHOLD_DATA
-                && protectedFile.getHouseholdType() != ProtectedFile.KEEP_IN_SAFE_FILE)){
+                || (protectedFile.getHouseholdType() != ProtectedFile.NOT_HOUSEHOLD_DATA
+                && protectedFile.getHouseholdType() != ProtectedFile.KEEP_IN_SAFE_FILE)) {
             return true;
         }
         return metadata.getReplacementSpecs().size() > 0;
@@ -419,7 +420,11 @@ public class HTMLReportWriter {
         Element table = addChildElement(p, "table");
         Element tr = addChildElement(table, "tr");
         addChildElement(tr, "td", "Original data file");
-        addChildElement(tr, "td", metadata.getFileNames().getDataFileName());
+        if (metadata.isSpss()) {
+            addChildElement(tr, "td", SpssUtils.spssDataFileName);
+        } else {
+            addChildElement(tr, "td", metadata.getFileNames().getDataFileName());
+        }
         tr = addChildElement(table, "tr");
         addChildElement(tr, "td", "Original meta file");
         addChildElement(tr, "td", metadata.getFileNames().getMetaFileName());
