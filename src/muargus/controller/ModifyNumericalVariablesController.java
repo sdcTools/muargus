@@ -114,6 +114,9 @@ public class ModifyNumericalVariablesController extends ControllerBase<ModifyNum
             if (temp < selected.getMin() || temp > selected.getMax()) {
                 warningMessage += "Bottom Value needs to be in the range between the minimum and maximum value\n";
                 bottom = false;
+            } else if (bottomReplacement.equals("")) {
+                selected.setBottomValue(bottomValue);
+                warningMessage += "Bottom replacement value cannot be empty\n";
             }
         } catch (NumberFormatException e) {
             if (bottomReplacement.equals("") && !bottomValue.equals("")) {
@@ -153,6 +156,9 @@ public class ModifyNumericalVariablesController extends ControllerBase<ModifyNum
             if (temp < selected.getMin() || temp > selected.getMax()) {
                 warningMessage += "Top Value needs to be in the range between the minimum and maximum value\n";
                 top = false;
+            } else if (bottomReplacement.equals("")) {
+                warningMessage += "Top replacement value cannot be empty\n";
+                selected.setBottomValue(topValue);
             }
         } catch (NumberFormatException e) {
             if (topReplacement.equals("") && !topValue.equals("")) {
