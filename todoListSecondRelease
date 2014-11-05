@@ -32,10 +32,10 @@ Overige
 - ReleaseNotes schrijven + news.html aanpassen
 - Afvangen spss gebruiken wanneer men geen spss geinstalleerd heeft
 - Versie nummer veranderen
-- hoe om te gaan met missings --> missings wegschrijven naar spss (release 3?)
+- wat te doen met de spssjavaplugin? --> in releasnotes schrijven hoe dit gefixed moet worden?
 - Afvangen als de safe.sav file in gebruik is --> dan kan namelijk niet worden weggeschreven
+- hoe om te gaan met missings --> missings wegschrijven naar spss (release 3?)
 - dingen toevoegen aan registry zoals NumericalRankSwapping, PRAM, etc. (release 3?)
-- wat te doen met de spssjavaplugin?
 
 
 
