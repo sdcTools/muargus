@@ -121,7 +121,7 @@ public class MuARGUS {
         }
         try {
             String cmdString = "cmd.exe /c start " + acrord32 + " /A \"nameddest=" + namedDest + "\" \"" + manual.getAbsolutePath() + "\"";
-            System.out.println(cmdString);
+            //System.out.println(cmdString);
             Process p = Runtime.getRuntime().exec(cmdString);
         } catch (IOException ex) {
         } catch (Exception ex2) {
