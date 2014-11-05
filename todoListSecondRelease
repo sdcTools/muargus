@@ -2,29 +2,31 @@
 
 Klasse:                                 Regel(s):   Taak/opmerking:                                 Persoon:
 - MainFrameController                   44          Hardcoded Path newsLocation aanpassen
-- MakeProtectedFileController           117         Change Exception type and show warning
-- MicroaggregationController            59          TODO: de catalaan --> is dat gedaan?
 - SpssUtils                             45          Hardcoded Path Safe.sav aanpassen + naam anders:
                                                     Bijvoorbeeld: Ge90.sav wordt Ge90Safe.sav
-- MuArgusCtrl                                       Is leeg, wordt dit ergens voor gebruikt?
-- NumericalDll                                      Is leeg, wordt dit ergens voor gebruikt?
-- MetaReader                            176-180     Exception wordt dubbel gegeven. Zinvol?
-- MetadataMu                            68          Show error message/throw argusexception
-                                        94          TODO: some initialization
-- MainFrameView                                     Labels verwijderen na global recode
-- PramSpecificationView                             Labels verwijderen na global recode
-- MakeProtectedFileView                             listEventListener aanpassen
-- Splash.png in view directory                      Wordt deze gebruikt voor het splashscreen 
-                                                    of gebruiken we die uit de resources?
-- SpssSelectVariablesView                           Verplaats naar ArgusLib
-- lines.png in view directory                       Verplaatsen naar resources?
-- CalculationService                    472         er staat een TODO: ??
+- MuARGUS                               40          Hardcoded path manual
+                                        41          acrord32.exe aanpassen  
 - HTMLReportWriter                      445         Hardcoded path muargus.css
                                                     Andere html-viewer
-- MuARGUS                               40          Hardcoded path manual
-                                        41          acrord32.exe aanpassen      
+- MakeProtectedFileController           117         Change Exception type and show warning
+- MainFrameView                                     Labels verwijderen na global recode
+- PramSpecificationView                             Labels verwijderen na global recode
+- MakeProtectedFileView                             listEventListener aanpassen                     Jeldrik
 - SelectCombinations                                Bugs fixen (zie todolist) 
-- ShowTableCollection                               sorteren kolommen                                     
+- ShowTableCollection                               sorteren kolommen    
+- SpssSelectVariablesView                           Verplaats naar ArgusLib                         Anne, ik kan het niet testen, wil jij dit doen?
+- MicroaggregationController            59          TODO: de catalaan --> is dat gedaan?            Anne
+- MuArgusCtrl                                       Is leeg, wordt dit ergens voor gebruikt?        Anne
+- NumericalDll                                      Is leeg, wordt dit ergens voor gebruikt?        Anne
+- MetaReader                            176-180     Exception wordt dubbel gegeven. Zinvol?         Anne
+- Splash.png in view directory                      Wordt deze gebruikt voor het splashscreen       Anne
+                                                    of gebruiken we die uit de resources?
+- lines.png in view directory                       Verplaatsen naar resources?                     Anne
+- CalculationService                    472         er staat een TODO: ??                           Anne
+- MetadataMu                            68          Show error message/throw argusexception
+                                        94          TODO: some initialization                       Anne
+
+                                 
 
 Overige
 - ReleaseNotes schrijven + news.html aanpassen
