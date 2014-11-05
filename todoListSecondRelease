@@ -1,0 +1,47 @@
+
+
+Klasse:                                 Regel(s):   Taak/opmerking:                                 Persoon:
+- MainFrameController                   44          Hardcoded Path newsLocation aanpassen
+- MakeProtectedFileController           117         Change Exception type and show warning
+- MicroaggregationController            59          TODO: de catalaan --> is dat gedaan?
+- SpssUtils                             45          Hardcoded Path Safe.sav aanpassen + naam anders:
+                                                    Bijvoorbeeld: Ge90.sav wordt Ge90Safe.sav
+- MuArgusCtrl                                       Is leeg, wordt dit ergens voor gebruikt?
+- NumericalDll                                      Is leeg, wordt dit ergens voor gebruikt?
+- MetaReader                            176-180     Exception wordt dubbel gegeven. Zinvol?
+- MetadataMu                            68          Show error message/throw argusexception
+                                        94          TODO: some initialization
+- ContextHelp                                       Springen binnen pdf                             Jeldrik
+- MainFrameView                                     Labels verwijderen na global recode
+- PramSpecificationView                             Labels verwijderen na global recode
+- MakeProtectedFileView                             listEventListener aanpassen
+- Splash.png in view directory                      Wordt deze gebruikt voor het splashscreen 
+                                                    of gebruiken we die uit de resources?
+- SpssSelectVariablesView                           Verplaats naar ArgusLib
+- lines.png in view directory                       Verplaatsen naar resources?
+- CalculationService                    472         er staat een TODO: ??
+- HTMLReportWriter                                  TempDataFile spss fixen
+                                                    PRAM toevoegen
+                                        445         Hardcoded path muargus.css
+                                                    Variables removed toevoegen
+                                                    Andere html-viewer
+- MuARGUS                               40          Hardcoded path manual
+                                        41          acrord32.exe aanpassen      
+- SelectCombinations                                Bugs fixen (zie todolist) 
+- ShowTableCollection                               sorteren kolommen                                     
+
+Overige
+- ReleaseNotes schrijven + news.html aanpassen
+- Afvangen spss gebruiken wanneer men geen spss geinstalleerd heeft
+- Versie nummer veranderen
+- hoe om te gaan met missings --> missings wegschrijven naar spss (release 3?)
+- Afvangen als de safe.sav file in gebruik is --> dan kan namelijk niet worden weggeschreven
+- dingen toevoegen aan registry zoals NumericalRankSwapping, PRAM, etc. (release 3?)
+- wat te doen met de spssjavaplugin?
+
+
+
+
+Gedaan:
+Klasse:                                 Regel(s):   Taak/opmerking:                                 Persoon:
+- ModifyNumericalVariablesController    82          getMin() aanpassen                              Jeldrik
