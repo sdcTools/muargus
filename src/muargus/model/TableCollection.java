@@ -15,8 +15,8 @@ public class TableCollection {
     private ArrayList<TableMu> originalTables;
     private ArrayList<TableMu> allTables;
     private String[] columnNames;
-    private String[][] data;
-    private String[][] subdata;
+    private Object[][] data;
+    private Object[][] subdata;
     private int dimensions;
 
     /**
@@ -167,7 +167,7 @@ public class TableCollection {
      *
      * @return the double Array containing all the data from all tables.
      */
-    public String[][] getData() {
+    public Object[][] getData() {
         return this.data;
     }
 
@@ -176,7 +176,7 @@ public class TableCollection {
      *
      * @param data the double Array containing all the data from all tables.
      */
-    public void setData(String[][] data) {
+    public void setData(Object[][] data) {
         this.data = data;
     }
 
@@ -187,7 +187,7 @@ public class TableCollection {
      * @return the double Array containing the data from the tables that will be
      * displayed.
      */
-    public String[][] getSubdata() {
+    public Object[][] getSubdata() {
         return subdata;
     }
 
@@ -198,7 +198,7 @@ public class TableCollection {
      * @param subdata the double Array containing the data from the tables that
      * will be displayed.
      */
-    public void setSubdata(String[][] subdata) {
+    public void setSubdata(Object[][] subdata) {
         this.subdata = subdata;
     }
 

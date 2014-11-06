@@ -1,6 +1,7 @@
 //TODO: check if the new variable button works correctly
 package muargus.view;
 
+import argus.view.SpssSelectVariablesView;
 import argus.utils.SingleListSelectionModel;
 import java.awt.Component;
 import java.awt.Container;

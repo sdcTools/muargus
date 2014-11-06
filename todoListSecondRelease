@@ -1,34 +1,26 @@
 
 
 Klasse:                                 Regel(s):   Taak/opmerking:                                 Persoon:
-- MainFrameController                   44          Hardcoded Path newsLocation aanpassen
+- MainFrameController                   44          Hardcoded Path newsLocation aanpassen: 
+                                                    uit externe map resources
 - SpssUtils                             45          Hardcoded Path Safe.sav aanpassen + naam anders:
-                                                    Bijvoorbeeld: Ge90.sav wordt Ge90Safe.sav
+                                                    Algoritme: Ge90.sav wordt Ge90Safe.sav
+                                                    Map: zelfde als .saf
 - MuARGUS                               40          Hardcoded path manual
-                                        41          acrord32.exe aanpassen  
+                                                    uit externe map resources
+                                        41          acrord32.exe aanpassen 
+                                                    Linux: andere extensie
+                                                    Linux: geen cmd.exe    
 - HTMLReportWriter                      445         Hardcoded path muargus.css
-                                                    Andere html-viewer
-- MainFrameView                                     Labels verwijderen na global recode
-- PramSpecificationView                             Labels verwijderen na global recode
+                                                    uit externe map resources
+- MainFrame                                         Rechterscherm wordt niet bijgewerkt na recode 
 - MakeProtectedFileView                             listEventListener aanpassen                     Jeldrik
-- SelectCombinations                                Bugs fixen (zie todolist) 
-- ShowTableCollection                               sorteren kolommen    
-- SpssSelectVariablesView                           Verplaats naar ArgusLib                         Anne, ik kan het niet testen, wil jij dit doen?
-- MicroaggregationController            59          TODO: de catalaan --> is dat gedaan?            Anne
-- MuArgusCtrl                                       Is leeg, wordt dit ergens voor gebruikt?        Anne
-- NumericalDll                                      Is leeg, wordt dit ergens voor gebruikt?        Anne
-- MetaReader                            176-180     Exception wordt dubbel gegeven. Zinvol?         Anne
-- Splash.png in view directory                      Wordt deze gebruikt voor het splashscreen       Anne
-                                                    of gebruiken we die uit de resources?
-- lines.png in view directory                       Verplaatsen naar resources?                     Anne
-- CalculationService                    472         er staat een TODO: ??                           Anne
-- MetadataMu                            68          Show error message/throw argusexception
-                                        94          TODO: some initialization                       Anne
-
+- SpssUtils                             59          werkt niet als niet in ontwikkelomgeving        
                                  
 
 Overige
-- ReleaseNotes schrijven + news.html aanpassen
+- ReleaseNotes schrijven 
+- news.html aanpassen
 - Afvangen spss gebruiken wanneer men geen spss geinstalleerd heeft
 - Versie nummer veranderen
 - wat te doen met de spssjavaplugin? --> in releasnotes schrijven hoe dit gefixed moet worden?
@@ -47,3 +39,26 @@ Klasse:                                 Regel(s):   Taak/opmerking:             
 - HTMLReportWriter                                  PRAM toevoegen                                  Jeldrik
 - HTMLReportWriter                                  Variables removed toevoegen                     Jeldrik
 - MakeProtectedFileController           117         Change Exception type and show warning          Jeldrik
+- MicroaggregationController            59          TODO: de catalaan --> is dat gedaan?            Anne
+- MetaReader                            176-180     Exception wordt dubbel gegeven. Zinvol? ja      Anne
+- Splash.png in view directory                      uit resources wordt gebruikt                    Anne
+- lines.png in view directory                       Weg                                             Anne
+- CalculationService                    472         er staat een TODO: don                          Anne
+- MetadataMu                            68          Show error message/throw argusexception
+                                        94          TODO: some initialization   nier nodig          Anne
+- ShowTableCollection                               sorteren kolommen    
+- SpssSelectVariablesView                           Verplaats naar ArgusLib                         Anne, ik kan het niet testen, wil jij dit doen?
+
+
+
+
+
+Release 3 uitzoeken:
+- MuArgusCtrl                                      Is leeg, wordt dit ergens voor gebruikt?        Anne
+                                       Is leeg, wordt dit ergens voor gebruikt?        Anne
+- NumericalDll
+-Andere html-viewer
+- MainFrameView                                     Labels verwijderen na global recode
+- PramSpecificationView                             Labels verwijderen na global recode
+- SelectCombinations                                Bugs fixen (zie todolist) 
+

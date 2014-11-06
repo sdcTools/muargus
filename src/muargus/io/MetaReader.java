@@ -172,7 +172,7 @@ public class MetaReader {
             reader.close();
         } catch (IOException ex) {
             //logger.log(Level.SEVERE, null, ex);
-            //TODO: Is dit niet een beetje dubbelop?
+            //Try to close the reader
             try {
                 reader.close();
             } catch (IOException e) {

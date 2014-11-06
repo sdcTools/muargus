@@ -80,6 +80,13 @@ public class ShowTableCollectionView extends DialogBase<ShowTableCollectionContr
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return false;
             }
+
+            @Override
+            public Class<?> getColumnClass(int i) {
+                return i == 0 ? Integer.class : String.class;
+            }
+            
+            
         };
         this.table.setModel(tableModel);
         DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
@@ -108,6 +115,7 @@ public class ShowTableCollectionView extends DialogBase<ShowTableCollectionContr
         setMinimumSize(new java.awt.Dimension(420, 350));
         setPreferredSize(new java.awt.Dimension(420, 350));
 
+        table.setAutoCreateRowSorter(true);
         table.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null},
@@ -117,6 +125,7 @@ public class ShowTableCollectionView extends DialogBase<ShowTableCollectionContr
                 "# unsafe cells", "Var 1", "Var 2", "Var 3", "Var 4"
             }
         ));
+        table.getTableHeader().setReorderingAllowed(false);
         scrollPane.setViewportView(table);
 
         showAllTablesCheckBox.setText("Show all tables");

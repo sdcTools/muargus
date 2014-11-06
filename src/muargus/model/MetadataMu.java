@@ -64,8 +64,7 @@ public final class MetadataMu {
         try {
             linkRelatedVariables();
         } catch (ArgusException ex) {
-            //TODO: Show message
-            logger.log(Level.SEVERE, null, ex);
+            //Cannot occur, since metadata was already checked to be valid
         }
     }
 
@@ -91,7 +90,6 @@ public final class MetadataMu {
      */
     public void createCombinations() {
         this.combinations = new Combinations();
-        //TODO: some initialization
     }
 
     /**

@@ -93,11 +93,11 @@ public class ShowTableCollectionController extends ControllerBase<TableCollectio
      * @return A double array containing the data that will be displayed on the
      * table
      */
-    public String[][] getData(ArrayList<TableMu> tables) {
-        String[][] data = new String[tables.size()][getModel().getColumnNames().length];
+    public Object[][] getData(ArrayList<TableMu> tables) {
+        Object[][] data = new Object[tables.size()][getModel().getColumnNames().length];
         for (int i = 0; i < tables.size(); i++) {
             TableMu t = tables.get(i);
-            data[i][0] = Integer.toString(t.getNrOfUnsafeCombinations());
+            data[i][0] = t.getNrOfUnsafeCombinations();
             for (int j = 0; j < t.getVariables().size(); j++) {
                 data[i][j + 1] = t.getVariables().get(j).getName();
             }

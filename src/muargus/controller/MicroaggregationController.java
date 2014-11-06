@@ -56,8 +56,6 @@ public class MicroaggregationController extends ControllerBase<Microaggregation>
 
     @Override
     protected void doNextStep(boolean success) {
-            //TODO: de catalaan
-            //for now: just copy the file
             MicroaggregationSpec microaggregation = getModel().getMicroaggregations().get(getModel().getMicroaggregations().size()-1);
             //try {
 //                double[][] data = readVariablesFromFile(

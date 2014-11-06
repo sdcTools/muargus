@@ -469,8 +469,8 @@ public class CalculationService {
         if (variable.getRelatedVariable() == null) {
             return 0;
         }
-        //TODO
-        return 1;
+        return this.metadata.getVariables().indexOf(variable.getRelatedVariable()) + 1;
+        
     }
 
     private int setSafeFileProperties(final int index, final VariableMu variable, MetadataMu metadata, int delta) {
