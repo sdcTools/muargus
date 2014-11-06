@@ -1,3 +1,5 @@
+//TODO: make news reader better
+
 package muargus.controller;
 
 import argus.model.ArgusException;
@@ -41,7 +43,7 @@ public class MainFrameController {
     private MetadataMu metadata;
     private Document report;
     private String news;
-    private final String newsLocation = "C:/Users/Gebruiker/Documents/MuArgus/src/muargus/resources/html/NewsAnco.html";
+    private final String newsLocation = "./resources/html/MuNews.html";
 
     public enum Action {
 
@@ -136,7 +138,7 @@ public class MainFrameController {
         MetadataMu newMetadata = new MetadataMu();
         newMetadata.setFileNames(filenames);
         try {
-            MetaReader.readRda(newMetadata);
+            MetaReader.readRda(newMetadata, view);
         } catch (ArgusException ex) {
             this.view.showErrorMessage(new ArgusException("Error reading metadata file: " + ex.getMessage()));
             return;
@@ -454,6 +456,9 @@ public class MainFrameController {
                 do {
                     try {
                         String temp = reader.readLine();
+                        if(temp.contains("<link href=")){
+                            temp = "<link href=\"file:///" + HTMLReportWriter.css.getAbsolutePath() + "\" rel=\"stylesheet\" type=\"text/css\">";
+                        }
                         this.news = this.news + temp;
                         if (temp.equals("</html>")) {
                             finished = true;

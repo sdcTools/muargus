@@ -8,6 +8,7 @@ package muargus.io;
 import argus.model.ArgusException;
 import argus.utils.StrUtils;
 import argus.utils.Tokenizer;
+import java.awt.Frame;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -40,7 +41,7 @@ public class MetaReader {
      * @throws ArgusException Throws an ArgusException when the file cannot be
      * read.
      */
-    public static void readRda(MetadataMu metadata) throws ArgusException {
+    public static void readRda(MetadataMu metadata, Frame parent) throws ArgusException {
 
         if (metadata.getFileNames().getMetaFileName().length() == 0) {
             String filename = metadata.getFileNames().getDataFileName();
@@ -141,7 +142,7 @@ public class MetaReader {
         }
         
         if(metadata.getDataFileType() == MetadataMu.DATA_FILE_TYPE_SPSS){
-            SpssUtils.checkMetadata(metadata);
+            SpssUtils.checkMetadata(metadata, parent);
         }
 
     }

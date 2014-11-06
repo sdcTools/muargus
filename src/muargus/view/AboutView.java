@@ -1,6 +1,7 @@
 package muargus.view;
 
 import java.io.File;
+import muargus.MuARGUS;
 
 /**
  * Class of the About screen.
@@ -19,6 +20,7 @@ public class AboutView extends DialogBase {
         super(parent, modal, null);
         initComponents();
         setLocationRelativeTo(null);
+        this.versionLabel.setText("Version " + MuARGUS.getFullVersion());
     }
 
     /**

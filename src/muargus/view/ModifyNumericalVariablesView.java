@@ -518,12 +518,14 @@ public class ModifyNumericalVariablesView extends DialogBase<ModifyNumericalVari
             if (showConfirmDialog("Do you want to apply?")) {
                 checkValidAnswer();
             }
-        } else if (valueChanged() && !valueEntered()){
-            if (showConfirmDialog("Do you want to undo the modification of ?" 
-                    + getModifyNumericalVariablesSpec().getVariable().getName() + "?")) {
-                checkValidAnswer();
-            }
         }
+        //TODO: check if undo should be applied when no value has been entered.
+//        else if (valueChanged() && !valueEntered()){
+//            if (showConfirmDialog("Do you want to undo the modification of " 
+//                    + getModifyNumericalVariablesSpec().getVariable().getName() + "?")) {
+//                checkValidAnswer();
+//            }
+//        }
         getController().close();
     }//GEN-LAST:event_closeButtonActionPerformed
 

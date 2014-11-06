@@ -268,6 +268,12 @@ public class CalculationService {
         if (variable.isNumeric() && !variable.isWeight() && "".equals(missing0)) {
             missing0 = StringUtils.repeat("X", variable.getVariableLength());
         }
+        
+        //TODO: fixen dat ordinale variabelen goed werken bij rounding (ModifyNumericalVariables)
+//        boolean isCategorical = variable.isCategorical();
+//        if(variable.isNumeric() && variable.isCategorical()){
+//            isCategorical = false;
+//        }
 
         return c.SetVariable(varNr,
                 variable.getStartingPosition(),

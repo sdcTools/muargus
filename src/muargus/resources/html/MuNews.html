@@ -1,0 +1,38 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"  "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>&micro;-ARGUS Report</title>
+<META content="Statistics; Netherlands" name="author">
+<link href="file:///C:\Users\Gebruiker\Documents\MuArgus\dist\resources\muargus.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+<h1>&micro;-ARGUS New developments </h1><p>
+<hr>
+<h2>Last modified:December 2013</h2>
+<hr><i>December 2013: </i> The procedures to read SPSS have been upgraded for SPSS20.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<b>Attention:</b> the files 'clientscriptingcfg.ini' and 'spssdxcfg.ini' must have been installed
+ in 'C:\Program Files\IBM\SPSS\Statistics\20'.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;This is part of the SPSS installation (Python extension)
+<hr><i>March 2010: </i> Reading SPSS was not correct. Related vars were not stored correctly in the output file.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;     Not used variables could cause a problem. 
+<hr><i>December 2009: </i> Synthetic data generator (R-procedure) included
+<hr><i>November 2009: </i> Record linkage pocedure included
+<hr><i>October 2009: </i> Blocking mechanism has beenincluded for several numerical procedures
+<hr><i>April 2009: </i> Reading and writing SPSS-system files has been improved
+<hr><i>April 2009: </i> A first step in partitioning has been made for microaggregation and rank swapping
+<hr><i>December 2008: </i> Reading and writing SPSS-system files in now possible
+<hr><i>December 2008: </i>Several minor inconevniences have been corrected thanks to the ESSNet testing
+<hr><i>8 Jan 2007: </i> Some improvements in the user-interface.
+<hr><i>18 May 2005: </i> The suppression procedure in combination with the household risk gave undesirable results. <br>
+Argus only suppressed records where the <i>BIR > threshold/hhsize</i>.<br>
+New insights have resulted in the following procedure:<br>
+Only records for which <i>BIR>threshold/hhsize and BHR>threshold</i> are suppressed now.<br>
+In these formulas is <i>BIR</i> the BaseIndividualRisk and <i>BHR</i> the BaseHouseholdRisk.
+<hr>
+<i>1 May 2005: </i> The Household risk procedure in combination with the SAS input format resulted in an error. This has been corrected.
+<hr>
+<i>22 March 2005: </i> The report file did not show nicely when FireFox is the default browser. This has been corrected.
+<hr>
+</body>
+</html>

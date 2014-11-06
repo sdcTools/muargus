@@ -4,6 +4,8 @@ import java.awt.Color;
 import java.io.File;
 import javax.swing.JRadioButton;
 import javax.swing.ListSelectionModel;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import muargus.controller.MakeProtectedFileController;
@@ -45,6 +47,7 @@ public class MakeProtectedFileView extends DialogBase<MakeProtectedFileControlle
         this.removeFromSafeFileRadioButton.setEnabled(this.model.isHouseholdData());
         this.addRiskToOutputFileCheckBox.setVisible(this.model.isRiskModel());
         this.writeRecordRandomOrderCheckBox.setEnabled(getMetadata().getDataFileType() == MetadataMu.DATA_FILE_TYPE_FIXED);
+//        variablesSelectionChanged();
         this.updateValues();
     }
 
@@ -72,6 +75,15 @@ public class MakeProtectedFileView extends DialogBase<MakeProtectedFileControlle
         this.suppressionWeightTable.setModel(this.tableModel);
         this.suppressionWeightTable.getSelectionModel().setSelectionInterval(this.selectedRow, this.selectedRow);
         this.suppressionWeightSlider.setValue(Integer.parseInt(this.model.getData()[this.selectedRow][1]));
+//        this.suppressionWeightTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+//
+//            @Override
+//            public void valueChanged(ListSelectionEvent lse) {
+//                if (!lse.getValueIsAdjusting()) {
+//                    variablesSelectionChanged();
+//                }
+//            }
+//        });
     }
 
     @Override
@@ -90,6 +102,11 @@ public class MakeProtectedFileView extends DialogBase<MakeProtectedFileControlle
         }
         return null;
     }
+    
+//    private void variablesSelectionChanged() {
+//        this.selectedRow = this.suppressionWeightTable.getSelectedRow();
+//        updateValues();
+//    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -368,16 +385,6 @@ public class MakeProtectedFileView extends DialogBase<MakeProtectedFileControlle
         updateValues();
     }//GEN-LAST:event_suppressionWeightSliderStateChanged
 
-    private void suppressionWeightTableKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_suppressionWeightTableKeyReleased
-        this.selectedRow = this.suppressionWeightTable.getSelectedRow();
-        updateValues();
-    }//GEN-LAST:event_suppressionWeightTableKeyReleased
-
-    private void suppressionWeightTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_suppressionWeightTableMouseClicked
-        this.selectedRow = this.suppressionWeightTable.getSelectedRow();
-        updateValues();
-    }//GEN-LAST:event_suppressionWeightTableMouseClicked
-
     private void useEntropyRadioButtonItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_useEntropyRadioButtonItemStateChanged
         if (this.useEntropyRadioButton.isSelected()) {
             this.model.setSuppressionType(this.model.USE_ENTROPY);
@@ -431,6 +438,16 @@ public class MakeProtectedFileView extends DialogBase<MakeProtectedFileControlle
     private void writeRecordRandomOrderCheckBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_writeRecordRandomOrderCheckBoxItemStateChanged
         this.model.setRandomizeOutput(this.writeRecordRandomOrderCheckBox.isSelected());
     }//GEN-LAST:event_writeRecordRandomOrderCheckBoxItemStateChanged
+
+    private void suppressionWeightTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_suppressionWeightTableMouseClicked
+        this.selectedRow = this.suppressionWeightTable.getSelectedRow();
+        updateValues();
+    }//GEN-LAST:event_suppressionWeightTableMouseClicked
+
+    private void suppressionWeightTableKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_suppressionWeightTableKeyReleased
+        this.selectedRow = this.suppressionWeightTable.getSelectedRow();
+        updateValues();
+    }//GEN-LAST:event_suppressionWeightTableKeyReleased
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

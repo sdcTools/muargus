@@ -8,6 +8,7 @@ package muargus;
 import argus.model.ArgusException;
 import argus.utils.Tokenizer;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.StringReader;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -39,6 +40,7 @@ import org.w3c.dom.Node;
 public class HTMLReportWriter {
 
     private static Document doc;
+    public static final File css = new File("resources/muargus.css"); 
 
     public static void createReportTree(Document document, MetadataMu metadata) {
         doc = document;
@@ -535,7 +537,8 @@ public class HTMLReportWriter {
         meta.setAttribute("content", "Statistics; Netherlands");
         Element link = addChildElement(elm, "link", "rel", "stylesheet");
         link.setAttribute("type", "text/css");
-        link.setAttribute("href", "file:///c:/program files/mu_argus/muargus.css");    //TODO
+        link.setAttribute("href", "file:///" + css.getAbsolutePath());//c:/program files/mu_argus/muargus.css");    //TODO
+        System.out.println(css.getAbsolutePath());
         return elm;
     }
 

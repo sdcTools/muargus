@@ -26,6 +26,8 @@ import com.ibm.statistics.plugin.StatsException;
 import com.ibm.statistics.plugin.StatsUtil;
 import com.ibm.statistics.plugin.Variable;
 import com.ibm.statistics.plugin.VariableFormat;
+import java.awt.Frame;
+import javax.swing.JFileChooser;
 import muargus.model.VariableMu;
 
 /**
@@ -41,8 +43,8 @@ public class SpssUtils {
     private final static ArrayList<SpssVariable> spssVariables = new ArrayList<>();
     public static String spssDataFileName;
     public static File spssTempDataFiles;
-    public static File safeFile;
-    public static File safeSpssFile = new File("C:\\Users\\Gebruiker\\Desktop\\safe.sav");
+    public static File safFile;
+    public static File safeSpssFile;// = new File("C:\\Users\\Gebruiker\\Desktop\\safe.sav");
 
     /**
      * Gets the variables from spss. For every variable an instance of the
@@ -50,9 +52,11 @@ public class SpssUtils {
      * variable.
      *
      * @param metadata Metadata file.
+     * @param parent
      * @return List List containing the SpssVariable instances.
      */
-    public static List<SpssVariable> getVariablesFromSpss(MetadataMu metadata) {
+    public static List<SpssVariable> getVariablesFromSpss(MetadataMu metadata, Frame parent) {
+        //getSpssInstallationDirectory(parent);
         if (SpssUtils.spssVariables.size() < 1) {
             SpssUtils.spssDataFileName = metadata.getFileNames().getDataFileName();
             try {
@@ -150,9 +154,10 @@ public class SpssUtils {
     /**
      *
      * @param metadata
+     * @param parent
      */
-    public static void checkMetadata(MetadataMu metadata) {
-        SpssUtils.getVariablesFromSpss(metadata);
+    public static void checkMetadata(MetadataMu metadata, Frame parent) {
+        SpssUtils.getVariablesFromSpss(metadata, parent);
         for (VariableMu variable : metadata.getVariables()) {
             boolean found = false;
             outerloop:
@@ -432,7 +437,7 @@ public class SpssUtils {
         try {
             try {
                 BufferedReader reader;
-                reader = new BufferedReader(new FileReader(SpssUtils.safeFile));
+                reader = new BufferedReader(new FileReader(SpssUtils.safFile));
                 Tokenizer tokenizer = new Tokenizer(reader);
                 String[][] data = new String[safeMetadata.getVariables().size()][safeMetadata.getRecordCount()];
                 for (int i = 0; i < data[0].length; i++) {
@@ -498,6 +503,15 @@ public class SpssUtils {
         } catch (StatsException ex) {
             //Logger.getLogger(CalculationService.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    private static void getSpssInstallationDirectory(Frame parent) {
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setDialogTitle("Set IBM SPSS directory");
+        fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        fileChooser.setMultiSelectionEnabled(false);
+        fileChooser.showOpenDialog(parent);
+        System.out.println(fileChooser.getSelectedFile().getPath());
     }
 
 }

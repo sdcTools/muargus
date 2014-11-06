@@ -1,18 +1,10 @@
 
 
 Klasse:                                 Regel(s):   Taak/opmerking:                                 Persoon:
-- MainFrameController                   44          Hardcoded Path newsLocation aanpassen: 
-                                                    uit externe map resources
-- SpssUtils                             45          Hardcoded Path Safe.sav aanpassen + naam anders:
-                                                    Algoritme: Ge90.sav wordt Ge90Safe.sav
-                                                    Map: zelfde als .saf
-- MuARGUS                               40          Hardcoded path manual
-                                                    uit externe map resources
-                                        41          acrord32.exe aanpassen 
+
+- MuARGUS                               41          acrord32.exe aanpassen 
                                                     Linux: andere extensie
                                                     Linux: geen cmd.exe    
-- HTMLReportWriter                      445         Hardcoded path muargus.css
-                                                    uit externe map resources
 - MainFrame                                         Rechterscherm wordt niet bijgewerkt na recode 
 - MakeProtectedFileView                             listEventListener aanpassen                     Jeldrik
 - SpssUtils                             59          werkt niet als niet in ontwikkelomgeving        
@@ -20,14 +12,9 @@ Klasse:                                 Regel(s):   Taak/opmerking:             
 
 Overige
 - ReleaseNotes schrijven 
-- news.html aanpassen
 - Afvangen spss gebruiken wanneer men geen spss geinstalleerd heeft
-- Versie nummer veranderen
 - wat te doen met de spssjavaplugin? --> in releasnotes schrijven hoe dit gefixed moet worden?
 - Afvangen als de safe.sav file in gebruik is --> dan kan namelijk niet worden weggeschreven
-- hoe om te gaan met missings --> missings wegschrijven naar spss (release 3?)
-- dingen toevoegen aan registry zoals NumericalRankSwapping, PRAM, etc. (release 3?)
-
 
 
 
@@ -48,17 +35,26 @@ Klasse:                                 Regel(s):   Taak/opmerking:             
                                         94          TODO: some initialization   nier nodig          Anne
 - ShowTableCollection                               sorteren kolommen    
 - SpssSelectVariablesView                           Verplaats naar ArgusLib                         Anne, ik kan het niet testen, wil jij dit doen?
-
-
-
+- MainFrameController                   44          Hardcoded Path newsLocation aanpassen:          Jeldrik
+                                                    uit externe map resources
+- MuARGUS                               40          Hardcoded path manual                           Jeldrik
+                                                    uit externe map resources
+- HTMLReportWriter                      445         Hardcoded path muargus.css                      Jeldrik
+                                                    uit externe map resources
+- Versie nummer veranderen                                                                          Jeldrik
+- news.html aanpassen                                                                               Jeldrik
+- SpssUtils                             45          Hardcoded Path Safe.sav aanpassen + naam anders:Jeldrik
+                                                    Algoritme: Ge90.sav wordt Ge90Safe.sav
+                                                    Map: zelfde als .saf
 
 
 Release 3 uitzoeken:
 - MuArgusCtrl                                      Is leeg, wordt dit ergens voor gebruikt?        Anne
-                                       Is leeg, wordt dit ergens voor gebruikt?        Anne
+                                                   Is leeg, wordt dit ergens voor gebruikt?        Anne
 - NumericalDll
--Andere html-viewer
+- Andere html-viewer
 - MainFrameView                                     Labels verwijderen na global recode
 - PramSpecificationView                             Labels verwijderen na global recode
 - SelectCombinations                                Bugs fixen (zie todolist) 
-
+- hoe om te gaan met missings --> missings wegschrijven naar spss (release 3?)
+- dingen toevoegen aan registry zoals NumericalRankSwapping, PRAM, etc. (release 3?)

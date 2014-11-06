@@ -53,7 +53,11 @@ public class MakeProtectedFileController extends ControllerBase<ProtectedFile> {
         }
         this.metadata.getCombinations().getProtectedFile().initSafeMeta(file, this.metadata);
         removeRedundentReplacementSpecs();
-        SpssUtils.safeFile = file;
+        if (this.metadata.isSpss()) {
+            SpssUtils.safFile = file;
+            int lastDot = SpssUtils.safFile.getAbsolutePath().lastIndexOf(".");
+            SpssUtils.safeSpssFile = new File(SpssUtils.safFile.getAbsolutePath().substring(0, lastDot) + "Safe.sav");
+        }
         getCalculationService().makeProtectedFile(this);
     }
 
