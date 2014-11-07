@@ -253,11 +253,21 @@ public class MainFrameView extends javax.swing.JFrame {
         if (0 > j || j >= this.model.getVariablesInTables().size()) {
             return;
         }
+        updateVariablesTable(j);
+    }
+    
+    public void updateVariablesTable(){
+        updateVariablesTable(this.unsafeCombinationsTable.getSelectedRow());
+    }
+    
+    
+    
+    private void updateVariablesTable(int j){
         j = this.unsafeCombinationsTable.convertRowIndexToModel(j);
         VariableMu variable = this.model.getVariablesInTables().get(j);
         //UnsafeInfo unsafeInfo = this.model.getUnsafe(variable);
         this.variableNameLabel.setText(variable.getName());
-
+        
         ArrayList<String> columnNames = new ArrayList<>();
         columnNames.add("Code");
         columnNames.add("Label");
@@ -266,14 +276,14 @@ public class MainFrameView extends javax.swing.JFrame {
         for (int dimNr = 1; dimNr <= nDims; dimNr++) {
             columnNames.add("dim " + dimNr);
         }
-
+        
         Object[][] data = new Object[variable.getCodeInfos().size()][];
         int rowIndex = 0;
         for (CodeInfo codeInfo : variable.getCodeInfos()) {
             data[rowIndex] = codeInfo.toObjectArray(nDims);
             rowIndex++;
         }
-
+        
         DefaultTableModel tableModel = new DefaultTableModel(data, columnNames.toArray()) {
             @Override
             public boolean isCellEditable(int rowIndex, int columnIndex) {

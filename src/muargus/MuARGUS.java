@@ -39,6 +39,7 @@ public class MuARGUS {
     private static final String lookAndFeel = "Windows";
     private static final File manual = new File("./resources/MUmanual4.3.pdf"); 
     private static final String acrord32 = "acrord32.exe"; // finds the acrord32.exe
+    private static final int sleepTime = 2000;
 
     static {
         System.loadLibrary("libmuargusdll");
@@ -107,7 +108,7 @@ public class MuARGUS {
                 System.out.println(splash.getSize().width / 2);
                 splash.update();
                 // Sleep for 1/2 second, so people can see it
-                sleepThread(4000);
+                sleepThread(MuARGUS.sleepTime);
             }
         }
     }

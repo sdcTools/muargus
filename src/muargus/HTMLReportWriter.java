@@ -538,7 +538,7 @@ public class HTMLReportWriter {
         Element link = addChildElement(elm, "link", "rel", "stylesheet");
         link.setAttribute("type", "text/css");
         link.setAttribute("href", "file:///" + css.getAbsolutePath());//c:/program files/mu_argus/muargus.css");    //TODO
-        System.out.println(css.getAbsolutePath());
+        //System.out.println(css.getAbsolutePath());
         return elm;
     }
 

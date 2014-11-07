@@ -202,8 +202,14 @@ public class MainFrameController {
                 this.view, this.metadata);
         controller.showView(selectedVariableIndex);
         showUnsafeCombinations(controller.getSelectedVariableIndex(), false);
+        this.view.updateVariablesTable();
     }
 
+    /**
+     * 
+     * @param variableIndex
+     * @param redraw 
+     */
     private void showUnsafeCombinations(int variableIndex, boolean redraw) {
         try {
             MuARGUS.getCalculationService().getVariableInfo();
@@ -483,16 +489,16 @@ public class MainFrameController {
         new AboutView(this.view, true).setVisible(true);
     }
 
-    /**
-     *
-     */
-    public void manual() {
-        try {
-
-            Desktop.getDesktop().browse(new URL("http://neon.vb.cbs.nl/casc/Software/MuManual4.2.pdf#page=13").toURI());
-        } catch (URISyntaxException | IOException e) {
-        }
-    }
+//    /**
+//     *
+//     */
+//    public void manual() {
+//        try {
+//
+//            Desktop.getDesktop().browse(new URL("http://neon.vb.cbs.nl/casc/Software/MuManual4.2.pdf#page=13").toURI());
+//        } catch (URISyntaxException | IOException e) {
+//        }
+//    }
 
     private void clearDataBeforeSelectCombinations() {
 

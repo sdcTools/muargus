@@ -2,20 +2,8 @@
 
 Klasse:                                 Regel(s):   Taak/opmerking:                                 Persoon:
 
-- MuARGUS                               41          acrord32.exe aanpassen 
-                                                    Linux: andere extensie
-                                                    Linux: geen cmd.exe    
-- MainFrame                                         Rechterscherm wordt niet bijgewerkt na recode 
-- MakeProtectedFileView                             listEventListener aanpassen                     Jeldrik
-- SpssUtils                             59          werkt niet als niet in ontwikkelomgeving        
-                                 
-
 Overige
 - ReleaseNotes schrijven 
-- Afvangen spss gebruiken wanneer men geen spss geinstalleerd heeft
-- wat te doen met de spssjavaplugin? --> in releasnotes schrijven hoe dit gefixed moet worden?
-- Afvangen als de safe.sav file in gebruik is --> dan kan namelijk niet worden weggeschreven
-
 
 
 Gedaan:
@@ -46,15 +34,24 @@ Klasse:                                 Regel(s):   Taak/opmerking:             
 - SpssUtils                             45          Hardcoded Path Safe.sav aanpassen + naam anders:Jeldrik
                                                     Algoritme: Ge90.sav wordt Ge90Safe.sav
                                                     Map: zelfde als .saf
+- SpssUtils                             59          werkt niet als niet in ontwikkelomgeving        Anne
+- MainFrame                                         Rechterscherm wordt niet bijgewerkt na recode   Jeldrik
 
 
 Release 3 uitzoeken:
-- MuArgusCtrl                                      Is leeg, wordt dit ergens voor gebruikt?        Anne
-                                                   Is leeg, wordt dit ergens voor gebruikt?        Anne
+- MuArgusCtrl                                      Is leeg, wordt dit ergens voor gebruikt?         Anne
+                                                   Is leeg, wordt dit ergens voor gebruikt?         Anne
 - NumericalDll
 - Andere html-viewer
 - MainFrameView                                     Labels verwijderen na global recode
 - PramSpecificationView                             Labels verwijderen na global recode
 - SelectCombinations                                Bugs fixen (zie todolist) 
-- hoe om te gaan met missings --> missings wegschrijven naar spss (release 3?)
-- dingen toevoegen aan registry zoals NumericalRankSwapping, PRAM, etc. (release 3?)
+- hoe om te gaan met missings --> missings wegschrijven naar spss 
+- dingen toevoegen aan registry zoals NumericalRankSwapping, PRAM, etc. 
+- MuARGUS                               41          acrord32.exe aanpassen 
+                                                    Linux: andere extensie
+                                                    Linux: geen cmd.exe    
+- MakeProtectedFileView                             listEventListener aanpassen                     Jeldrik
+- Afvangen als de safe.sav file in gebruik is --> dan kan namelijk niet worden weggeschreven
+- Afvangen spss gebruiken wanneer men geen spss geinstalleerd heeft
+- wat te doen met de spssjavaplugin? --> in releasnotes schrijven hoe dit gefixed moet worden?
