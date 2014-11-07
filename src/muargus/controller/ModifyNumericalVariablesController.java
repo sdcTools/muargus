@@ -156,7 +156,7 @@ public class ModifyNumericalVariablesController extends ControllerBase<ModifyNum
             if (temp < selected.getMin() || temp > selected.getMax()) {
                 warningMessage += "Top Value needs to be in the range between the minimum and maximum value\n";
                 top = false;
-            } else if (bottomReplacement.equals("")) {
+            } else if (topReplacement.equals("")) {
                 warningMessage += "Top replacement value cannot be empty\n";
                 selected.setBottomValue(topValue);
             }
