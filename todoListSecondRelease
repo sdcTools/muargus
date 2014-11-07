@@ -55,3 +55,5 @@ Release 3 uitzoeken:
 - Afvangen als de safe.sav file in gebruik is --> dan kan namelijk niet worden weggeschreven
 - Afvangen spss gebruiken wanneer men geen spss geinstalleerd heeft
 - wat te doen met de spssjavaplugin? --> in releasnotes schrijven hoe dit gefixed moet worden?
+- Bug bij Spss: wanneer spss data is geopend en tabellen zijn gemaakt via select combinations veranderd 
+  de dataFileName
