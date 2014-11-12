@@ -31,13 +31,14 @@ public class MicroaggregationView extends DialogBase<MicroaggregationController>
         setLocationRelativeTo(null);
         this.variablesTable.setDefaultRenderer(Object.class, new HighlightTableCellRenderer());
         this.selectedVariableList.setCellRenderer(new VariableNameCellRenderer());
-        this.setTitle(controller.isNumerical() ? "Numerical Micro Aggregation" : "Qualitative Micro Aggregation"); //TODO: Qualitative micro aggregation er uit slopen
-        this.optimalCheckbox.setVisible(controller.isNumerical());
+        this.setTitle("Numerical Micro Aggregation"); 
+        //this.setTitle(controller.isNumerical() ? "Numerical Micro Aggregation" : "Qualitative Micro Aggregation"); //TODO: Qualitative micro aggregation er uit slopen
+        //this.optimalCheckbox.setVisible(controller.isNumerical());
     }
 
     @Override
     public void initializeData() {
-        this.model = getMetadata().getCombinations().getMicroaggregation(getController().isNumerical());
+        this.model = getMetadata().getCombinations().getMicroaggregation();
         String[][] data = new String[this.model.getVariables().size()][2];
         int index = 0;
         for (VariableMu variable : this.model.getVariables()) {

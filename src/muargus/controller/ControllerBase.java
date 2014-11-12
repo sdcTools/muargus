@@ -15,6 +15,7 @@ import muargus.view.DialogBase;
 /**
  *
  * @author Statistics Netherlands
+ * @param <T>
  */
 public class ControllerBase<T> implements PropertyChangeListener {
 

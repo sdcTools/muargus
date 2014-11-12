@@ -68,11 +68,15 @@ public class MetaReader {
                     variable.setRecodable(false);
                     variable.setName(tokenizer.getValue());
                     metadata.getVariables().add(variable);
-                    if (metadata.getDataFileType() == DATA_FILE_TYPE_FIXED ||
-                            metadata.getDataFileType() == DATA_FILE_TYPE_SPSS) {
-                        variable.setStartingPosition(tokenizer.nextToken());
+                    if (metadata.getDataFileType() == DATA_FILE_TYPE_FIXED
+                            || metadata.getDataFileType() == DATA_FILE_TYPE_SPSS) {
+                        try {
+                            variable.setStartingPosition(Integer.parseInt(tokenizer.nextToken()));
+                        } catch (NumberFormatException e) {
+                            throw new ArgusException(String.format("Starting position of the variable %s is not an integer", variable.getName()));
+                        }
                     } else {
-                        variable.setStartingPosition("1");  //not relevant, but must be >0
+                        variable.setStartingPosition(1);  //not relevant, but must be >0
                     }
                     variable.setVariableLength(Integer.parseInt(tokenizer.nextToken()));
                     variable.setMissing(0, tokenizer.nextToken());
@@ -101,7 +105,11 @@ public class MetaReader {
                             variable.setCodeListFile(tokenizer.nextToken());
                             break;
                         case "<IDLEVEL>":
-                            variable.setIdLevel(tokenizer.nextToken());
+                            try {
+                                variable.setIdLevel(Integer.parseInt(tokenizer.nextToken()));
+                            } catch (NumberFormatException e) {
+                                throw new ArgusException(String.format("id-level of the variable %s is not an integer", variable.getName()));
+                            }
                             break;
                         case "<TRUNCABLE>":
                             variable.setTruncable(true);
@@ -110,7 +118,11 @@ public class MetaReader {
                             variable.setNumeric(true);
                             break;
                         case "<DECIMALS>":
-                            variable.setDecimals(tokenizer.nextToken());
+                            try {
+                                variable.setDecimals(Integer.parseInt(tokenizer.nextToken()));
+                            } catch (NumberFormatException e) {
+                                throw new ArgusException(String.format("Number of decimals of the variable %s is not an integer", variable.getName()));
+                            }
                             break;
                         case "<WEIGHT>":
                             variable.setWeight(true);
@@ -122,7 +134,11 @@ public class MetaReader {
                             variable.setHousehold(true);
                             break;
                         case "<SUPPRESSWEIGHT>":
-                            variable.setSuppressweight(tokenizer.nextToken());
+                            try {
+                                variable.setSuppressweight(Integer.parseInt(tokenizer.nextToken()));
+                            } catch (NumberFormatException e) {
+                                throw new ArgusException(String.format("Suppressweight of the variable %s is not an integer", variable.getName()));
+                            }
                             break;
                         case "<RELATED>":
                             variable.setRelatedVariableName(tokenizer.nextToken());
@@ -140,8 +156,8 @@ public class MetaReader {
             //logger.log(Level.SEVERE, null, ex);
             throw new ArgusException("Metadata file not found");
         }
-        
-        if(metadata.getDataFileType() == MetadataMu.DATA_FILE_TYPE_SPSS){
+
+        if (metadata.getDataFileType() == MetadataMu.DATA_FILE_TYPE_SPSS) {
             SpssUtils.checkMetadata(metadata, parent);
         }
 
@@ -177,7 +193,7 @@ public class MetaReader {
             try {
                 reader.close();
             } catch (IOException e) {
-                
+
             }
             throw new ArgusException(String.format("Error in codelist file (%s)", path));
         }
@@ -239,7 +255,8 @@ public class MetaReader {
      * @param path Path to the file that is to be read
      * @param separator Separator separating the field names in the first line
      * @return String array containing the field names
-     * @throws ArgusException
+     * @throws ArgusException Throws an ArgusException when an error occurs
+     * during reading.
      */
     public static String[] readHeader(String path, String separator) throws ArgusException {
         try {

@@ -105,7 +105,7 @@ public class MakeProtectedFileController extends ControllerBase<ProtectedFile> {
                 this.metadata.getCombinations().getNumericalRankSwapping().getRankSwappings().remove((RankSwappingSpec) replacement);
             } else {
                 MicroaggregationSpec spec = (MicroaggregationSpec) replacement;
-                this.metadata.getCombinations().getMicroaggregation(spec.isNumerical()).getMicroaggregations().remove(spec);
+                this.metadata.getCombinations().getMicroaggregation().getMicroaggregations().remove(spec);
             }
         }
     }

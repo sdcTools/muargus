@@ -482,7 +482,7 @@ public class CalculationService {
     private int setSafeFileProperties(final int index, final VariableMu variable, MetadataMu metadata, int delta) {
         if (index == 0) {
             //Variable was not in dll
-            variable.setStartingPosition(Integer.toString(variable.getStartingPosition() + delta));
+            variable.setStartingPosition(variable.getStartingPosition() + delta);
         } else {
             int[] startPos = new int[1];
             int[] nPos = new int[1];
@@ -494,7 +494,7 @@ public class CalculationService {
             int[] nOfCodes = new int[1];
             int[] nOfMissing = new int[1];
             c.GetVarProperties(index, startPos, nPos, nSuppressions, entropy, bandwidth, missing1, missing2, nOfCodes, nOfMissing);
-            variable.setStartingPosition(Integer.toString(startPos[0]));
+            variable.setStartingPosition(startPos[0]);
             delta += nPos[0] - variable.getVariableLength();
             variable.setVariableLength(nPos[0]);
             variable.setnOfSuppressions(nSuppressions[0]);
@@ -576,7 +576,7 @@ public class CalculationService {
         model.getUnsafeCombinations().clear();
         for (int varIndex = 0; varIndex < getVariables().size(); varIndex++) {
             VariableMu variable = getVariables().get(varIndex);
-            variable.clearCodeInfos();
+            variable.getCodeInfos().clear();
             if (variable.isCategorical()) {
                 if (model.getVariablesInTables().contains(variable)) {
                     //If the variable is in one of the specified tables, get the unsafe combinations 
@@ -611,7 +611,7 @@ public class CalculationService {
                         CodeInfo codeInfo = new CodeInfo(code[0], isMissing[0] != 0);
                         codeInfo.setFrequency(freq[0]);
                         codeInfo.setUnsafeCombinations(nDims[0], unsafeCount);
-                        variable.addCodeInfo(codeInfo);
+                        variable.getCodeInfos().add(codeInfo);
                     }
                     result = c.UnsafeVariableClose(varIndex + 1);
                     if (!result) {
@@ -628,13 +628,13 @@ public class CalculationService {
                         if (!result) {
                             break;
                         }
-                        variable.addCodeInfo(new CodeInfo(code[0], false));
+                        variable.getCodeInfos().add(new CodeInfo(code[0], false));
                     }
                     //Add the missings
                     for (int i = 0; i < 2; i++) {
                         if (!"".equals(variable.getMissing(i))) {
                             CodeInfo codeInfo = new CodeInfo(variable.getMissing(i), true);
-                            variable.addCodeInfo(codeInfo);
+                            variable.getCodeInfos().add(codeInfo);
                         }
                     }
                 }

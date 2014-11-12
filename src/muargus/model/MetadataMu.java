@@ -5,7 +5,6 @@ import argus.model.DataFilePair;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Objects;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -29,7 +28,7 @@ public final class MetadataMu {
     private String separator = ";";
 
     private final ArrayList<VariableMu> variables;
-    
+
     private DataFilePair filenames;
     private Combinations combinations;
     private int recordCount;
@@ -70,6 +69,7 @@ public final class MetadataMu {
 
     /**
      * Checks whether the data file type equals spss.
+     *
      * @return Boolean indicating whether the data file type equals spss.
      */
     public boolean isSpss() {

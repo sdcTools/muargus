@@ -90,7 +90,7 @@ public class SelectCombinationsView extends DialogBase<SelectCombinationsControl
      * Updates the table by filling it with the array of tables.
      */
     private void updateValues() {
-        this.thresholdTextField.setText(this.model.getThreshold());
+        this.thresholdTextField.setText(Integer.toString(this.model.getThreshold()));
         // gets the tables from Combinations and adds these to a double array, containing the data
         ArrayList<TableMu> tables = this.model.getTables();
         Object[][] data = new Object[this.model.getTables().size()][this.model.getNumberOfColumns()];
@@ -921,7 +921,7 @@ public class SelectCombinationsView extends DialogBase<SelectCombinationsControl
 
     private void thresholdTextFieldCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_thresholdTextFieldCaretUpdate
         try {
-            this.model.setThreshold(this.thresholdTextField.getText());
+            this.model.setThreshold(Integer.parseInt(this.thresholdTextField.getText()));
         } catch (NumberFormatException e) {
         }
     }//GEN-LAST:event_thresholdTextFieldCaretUpdate

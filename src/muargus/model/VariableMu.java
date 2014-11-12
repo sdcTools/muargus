@@ -1,3 +1,5 @@
+//TODO: change codeList File from String to File??
+//TODO: trucable or truncatable?
 package muargus.model;
 
 import argus.model.SpssVariable;
@@ -27,8 +29,8 @@ public class VariableMu {
     private int idLevel;
     private int suppressweight;
     private int decimals;
-    private String codeListFile;
-    //    private int truncLevels;
+    private String codeListFile; //TODO: change to File??
+    //    private int truncLevels; 
 
     private boolean numeric;
     private boolean categorical;
@@ -80,8 +82,10 @@ public class VariableMu {
     }
 
     /**
+     * Constructor of the model class VariableMu. Does the same as the empty
+     * constructor and sets the name and missings.
      *
-     * @param name
+     * @param name String containing the variable name
      */
     public VariableMu(String name) {
         this();
@@ -90,8 +94,10 @@ public class VariableMu {
     }
 
     /**
+     * Constructor of the model class VariableMu used to clone the instance
+     * given as a parameter.
      *
-     * @param variable
+     * @param variable VariableMu instance used to clone.
      */
     public VariableMu(VariableMu variable) {
         this();
@@ -134,240 +140,249 @@ public class VariableMu {
     }
 
     /**
+     * Returns whether the variable is recodable.
      *
-     * @return
+     * @return Boolean indicating whether the variable is recodable.
      */
     public boolean isRecodable() {
         return categorical;
     }
 
     /**
+     * Sets whether the variable is recodable.
      *
-     */
-    public void clearCodeInfos() {
-        this.codeInfos.clear();
-    }
-
-    /**
-     *
-     * @param codeInfo
-     */
-    public void addCodeInfo(CodeInfo codeInfo) {
-        this.codeInfos.add(codeInfo);
-    }
-
-    /**
-     *
-     * @param recodable
+     * @param recodable Boolean indicating whether the variable is recodable.
      */
     public void setRecodable(boolean recodable) {
         this.categorical = recodable;
     }
 
     /**
+     * Returns whether the variable has a codelist.
      *
-     * @return
+     * @return Boolean indicating whether the variable has a codelist.
      */
     public boolean isCodelist() {
         return codelist;
     }
 
     /**
+     * Returns whether the variable has a codelist.
      *
-     * @param codelist
+     * @param codelist Boolean indicating whether the variable has a codelist.
      */
     public void setCodelist(boolean codelist) {
         this.codelist = codelist;
     }
 
     /**
+     * Gets a String containing path from the codelist file.
      *
-     * @return
+     * @return String containing path from the codelist file.
      */
     public String getCodeListFile() {
         return codeListFile;
     }
 
     /**
+     * Sets the codelist file.
      *
-     * @param codeListFile
+     * @param codeListFile String containing the path from the codelist file.
      */
     public void setCodeListFile(String codeListFile) {
         this.codeListFile = codeListFile;
     }
 
     /**
+     * Gets the identification level. The identification level is a measure of
+     * how identifying a variable is and can range from 0 to 5. It is an option
+     * to easily generate the set of tables to be inspected in the disclosure
+     * control process. Zero (0) means that an individual cannot be identified
+     * by this variable and it will not play a role in the disclosure control
+     * proces. 1: the variable is most identifying. 2: the variable is more
+     * identifying. 3: the variable is identifying. 4: the variable is somewhat
+     * identifying. 5: the variable is least identifing.
      *
-     * @return
+     * @return Integer containing the identification level.
      */
     public int getIdLevel() {
         return idLevel;
     }
 
     /**
+     * Sets the identification level. The identification level is a measure of
+     * how identifying a variable is and can range from 0 to 5. It is an option
+     * to easily generate the set of tables to be inspected in the disclosure
+     * control process. Zero (0) means that an individual cannot be identified
+     * by this variable and it will not play a role in the disclosure control
+     * proces. 1: the variable is most identifying. 2: the variable is more
+     * identifying. 3: the variable is identifying. 4: the variable is somewhat
+     * identifying. 5: the variable is least identifing.
      *
-     * @param idLevel
-     */
-    public void setIdLevel(String idLevel) {
-        this.idLevel = Integer.parseInt(idLevel);
-    }
-
-    /**
-     *
-     * @param idLevel
+     * @param idLevel Integer containing the identification level.
      */
     public void setIdLevel(int idLevel) {
         this.idLevel = idLevel;
     }
 
     /**
+     * Gets the suppression weight.
      *
-     * @return
+     * @return Integer containing the suppression weight.
      */
     public int getSuppressweight() {
         return suppressweight;
     }
 
     /**
+     * Sets the suppression weight.
      *
-     * @param suppressweight
-     */
-    public void setSuppressweight(String suppressweight) {
-        this.suppressweight = Integer.parseInt(suppressweight);
-    }
-
-    /**
-     *
-     * @param suppressweight
+     * @param suppressweight Integer containing the suppression weight.
      */
     public void setSuppressweight(int suppressweight) {
         this.suppressweight = suppressweight;
     }
 
     /**
+     * Returns whether this variable is truncable.
      *
-     * @return
+     * @return Boolean indicating whether this variable is truncable.
      */
     public boolean isTruncable() {
         return truncable;
     }
 
     /**
+     * Sets whether this variable is truncable.
      *
-     * @param truncable
+     * @param truncable Boolean indicating whether this variable is truncable.
      */
     public void setTruncable(boolean truncable) {
         this.truncable = truncable;
     }
 
     /**
+     * Returns whether this variable is numeric.
      *
-     * @return
+     * @return Boolean indicating whether this variable is numeric.
      */
     public boolean isNumeric() {
         return numeric;
     }
 
     /**
+     * Sets whether this variable is numeric.
      *
-     * @param numeric
+     * @param numeric Boolean indicating whether this variable is numeric.
      */
     public void setNumeric(boolean numeric) {
         this.numeric = numeric;
     }
 
     /**
+     * Returns whether this variable is categorical.
      *
-     * @return
+     * @return Boolean indicating whether this variable is categorical.
      */
     public boolean isCategorical() {
         return categorical;
     }
 
     /**
+     * Sets whether this variable is categorical.
      *
-     * @param categorical
+     * @param categorical Boolean indicating whether this variable is
+     * categorical.
      */
     public void setCategorical(boolean categorical) {
         this.categorical = categorical;
     }
 
     /**
+     * Gets the number of decimals.
      *
-     * @return
+     * @return Integer containing the number of decimals.
      */
     public int getDecimals() {
         return decimals;
     }
 
     /**
+     * Sets the number of decimals.
      *
-     * @param decimals
-     */
-    public void setDecimals(String decimals) {
-        this.decimals = Integer.parseInt(decimals);
-    }
-
-    /**
-     *
-     * @param decimals
+     * @param decimals Integer containing the number of decimals.
      */
     public void setDecimals(int decimals) {
         this.decimals = decimals;
     }
 
     /**
+     * Returns whether this variable is a weight variable.
      *
-     * @return
+     * @return Boolean indicating whether this variable is a weight variable.
      */
     public boolean isWeight() {
         return weight;
     }
 
     /**
+     * Sets whether this variable is a weight variable.
      *
-     * @param weight
+     * @param weight Boolean indicating whether this variable is a weight
+     * variable.
      */
     public void setWeight(boolean weight) {
         this.weight = weight;
     }
 
     /**
+     * Returns whether this variable is a household identifier.
      *
-     * @return
+     * @return Boolean indicating whether this variable is a household
+     * identifier.
      */
     public boolean isHouse_id() {
         return house_id;
     }
 
     /**
+     * Sets whether this variable is a household identifier.
      *
-     * @param house_id
+     * @param house_id Boolean indicating whether this variable is a household
+     * identifier.
      */
     public void setHouse_id(boolean house_id) {
         this.house_id = house_id;
     }
 
     /**
+     * Returns whether this variable is a household variable. A household
+     * variable is a variable that is equal for the entire household.
      *
-     * @return
+     * @return Boolean indicating whether this variable is a household variable.
      */
     public boolean isHousehold() {
         return household;
     }
 
     /**
+     * Sets whether this variable is a household variable. A household variable
+     * is a variable that is equal for the entire household.
      *
-     * @param household
+     * @param household Boolean indicating whether this variable is a household
+     * variable.
      */
     public void setHousehold(boolean household) {
         this.household = household;
     }
 
     /**
+     * Links this variable to it's related variable using the name of the
+     * related variable.
      *
-     * @param variables
-     * @throws ArgusException
+     * @param variables ArrayList containing all variables in the metadata.
+     * @throws ArgusException Throws an ArgusException when the name of the
+     * related variable does not equal any variable in the metadata.
      */
     public void linkRelatedVariable(ArrayList<VariableMu> variables) throws ArgusException {
         if (this.relatedVariableName == null) {
@@ -384,80 +399,87 @@ public class VariableMu {
     }
 
     /**
+     * Sets the related variable.
      *
-     * @param relatedVariable
+     * @param relatedVariable VariableMu instance of the related variable.
      */
     public void setRelatedVariable(VariableMu relatedVariable) {
         this.relatedVariable = relatedVariable;
     }
 
     /**
+     * Gets the related variable.
      *
-     * @return
+     * @return VariableMu instance of the related variable.
      */
     public VariableMu getRelatedVariable() {
         return this.relatedVariable;
     }
 
     /**
+     * Sets the related variable name.
      *
-     * @param relatedVariableName
+     * @param relatedVariableName String containing the name of the related
+     * variable
      */
     public void setRelatedVariableName(String relatedVariableName) {
         this.relatedVariableName = relatedVariableName;
     }
 
     /**
+     * Returns whether this variable is related to another variable.
      *
-     * @return
+     * @return Boolean indicating whether this variable is related to another
+     * variable.
      */
     public boolean isRelated() {
         return (this.relatedVariable != null);
     }
 
     /**
+     * Gets the starting position. The starting position is the position of
+     * variable inside the data file. The starting position is only relevant if
+     * the data file has a fixed format.
      *
-     * @return
+     * @return Integer containing the starting position.
      */
     public int getStartingPosition() {
         return startingPosition;
     }
 
     /**
+     * Sets the starting position. The starting position is the position of
+     * variable inside the data file. The starting position is only relevant if
+     * the data file has a fixed format.
      *
-     * @param startingPosition
-     */
-    public void setStartingPosition(String startingPosition) {
-        this.startingPosition = Integer.parseInt(startingPosition);
-    }
-
-    /**
-     *
-     * @param startingPosition
+     * @param startingPosition Integer containing the starting position.
      */
     public void setStartingPosition(int startingPosition) {
         this.startingPosition = startingPosition;
     }
 
     /**
+     * Gets the length of this variable as written in the data file.
      *
-     * @return
+     * @return Integer containing the length of this variable.
      */
     public int getVariableLength() {
         return variableLength;
     }
 
     /**
+     * Gets the length of this variable as written in the data file.
      *
-     * @param variableLength
+     * @param variableLength Integer containing the length of this variable.
      */
     public void setVariableLength(int variableLength) {
         this.variableLength = variableLength;
     }
 
     /**
+     * Gets the number of missing values.
      *
-     * @return
+     * @return Integer containing the number of missing values.
      */
     public int getNumberOfMissings() {
         int numberOfMissings = 0;
@@ -470,34 +492,42 @@ public class VariableMu {
     }
 
     /**
+     * Gets a particular missing value.
      *
-     * @param index
-     * @return
+     * @param index Integer containig the index of the missing value.
+     * @return String containing the missing value.
      */
     public String getMissing(int index) {
         return missing[index];
     }
 
     /**
+     * Sets a particular missing value.
      *
-     * @param index
-     * @param value
+     * @param index Integer containig the index of the missing value.
+     * @param value String containing the missing value.
      */
     public void setMissing(int index, String value) {
         this.missing[index] = value;
     }
 
     /**
+     * Returns whether a variable is not a houshold identifier, household
+     * variable or weight variable.
      *
-     * @return
+     * @return Boolean indicating whether a variable is not a houshold
+     * identifier, household variable or weight variable.
      */
     public boolean isOther() {
         return !this.house_id && !this.household && !this.weight;
     }
 
     /**
+     * Sets whether a variable is not a houshold identifier, household variable
+     * or weight variable.
      *
-     * @param other
+     * @param other Boolean indicating whether a variable is not a houshold
+     * identifier, household variable or weight variable.
      */
     public void setOther(boolean other) {
         if (other) {
@@ -508,97 +538,130 @@ public class VariableMu {
     }
 
     /**
+     * Gets the number of supressions.
      *
-     * @return
+     * @return Integer containing the number of suppressions.
      */
     public int getnOfSuppressions() {
         return nOfSuppressions;
     }
 
     /**
+     * Sets the number of supressions.
      *
-     * @param nOfSuppressions
+     * @param nOfSuppressions Integer containing the number of suppressions.
      */
     public void setnOfSuppressions(int nOfSuppressions) {
         this.nOfSuppressions = nOfSuppressions;
     }
 
     /**
+     * Sets the bandwidth
      *
-     * @return
+     * @return Integer containing the bandwidth.
      */
     public int getBandwidth() {
         return bandwidth;
     }
 
     /**
+     * Sets the bandwidth
      *
-     * @param bandwidth
+     * @param bandwidth Integer containing the bandwidth.
      */
     public void setBandwidth(int bandwidth) {
         this.bandwidth = bandwidth;
     }
 
     /**
+     * Gets the number of codes. The number of codes are the number of different
+     * values (including missings) that this variable has.
      *
-     * @return
+     * @return Integer containing the number of codes.
      */
     public int getnOfCodes() {
         return nOfCodes;
     }
 
     /**
+     * Sets the number of codes. The number of codes are the number of different
+     * values (including missings) that this variable has.
      *
-     * @param nOfCodes
+     * @param nOfCodes Integer containing the number of codes.
      */
     public void setnOfCodes(int nOfCodes) {
         this.nOfCodes = nOfCodes;
     }
 
     /**
+     * Gets the entropy value or this variable. The entropy value is calculated
+     * (in the .dll) through the entropy function. This entropy H(x) is defined
+     * as H(x) = -(1/N) * Sum( f(x) * log2* f(x)/N) where f(x) is the frequency
+     * of category x of variable X and N the total number of records. The
+     * variable with the lowest value of the entropy function will be suppressed
+     * when a safe file is made.
      *
-     * @return
+     * @return Double containing the entropy value or this variable.
      */
     public double getEntropy() {
         return entropy;
     }
 
     /**
+     * Sets the entropy value or this variable. The entropy value is calculated
+     * (in the .dll) through the entropy function. This entropy H(x) is defined
+     * as H(x) = -(1/N) * Sum( f(x) * log2* f(x)/N) where f(x) is the frequency
+     * of category x of variable X and N the total number of records. The
+     * variable with the lowest value of the entropy function will be suppressed
+     * when a safe file is made.
      *
-     * @param entropy
+     * @param entropy Double containing the entropy value or this variable.
      */
     public void setEntropy(double entropy) {
         this.entropy = entropy;
     }
 
     /**
+     * Gets the ArryaList containing the instances of CodeInfo. An instance of
+     * CodeInfo contains basic info for a single code. Each categorical variable
+     * contains an array of CodeInfo instances.
      *
-     * @return
+     * @return ArryaList containing the instances of CodeInfo.
      */
     public ArrayList<CodeInfo> getCodeInfos() {
         return this.codeInfos;
     }
 
     /**
-     * 
-     * @return 
+     * Gets the SpssVariable. The SpssVariable contains all metadata available
+     * inside the spss data file.
+     *
+     * @return SpssVariable instance containing all metadata available inside
+     * the spss data file.
      */
     public SpssVariable getSpssVariable() {
         return spssVariable;
     }
 
     /**
-     * 
-     * @param spssVariable 
+     * Sets the SpssVariable. The SpssVariable contains all metadata available
+     * inside the spss data file.
+     *
+     * @param spssVariable SpssVariable instance containing all metadata
+     * available inside the spss data file.
+     *
      */
     public void setSpssVariable(SpssVariable spssVariable) {
         this.spssVariable = spssVariable;
     }
 
     /**
-     * 
-     * @param list
-     * @return 
+     * Appends the given variable(s) together with a comma and a space.
+     *
+     * @param list ArrayList containing the variable(s) that needs to be
+     * appended.
+     * @return String containing all variable names separated with a comma and a
+     * space.
      */
     public static String printVariableNames(ArrayList<VariableMu> list) {
         StringBuilder b = new StringBuilder(list.get(0).getName());
@@ -610,9 +673,10 @@ public class VariableMu {
     }
 
     /**
+     * Checks whether an object is equal to this variable.
      *
-     * @param o
-     * @return
+     * @param o Object instance that will be compaired to this variable.
+     * @return Boolean indicating whether the object is equal to this variable.
      */
     @Override
     public boolean equals(Object o) {
@@ -634,7 +698,7 @@ public class VariableMu {
                 && (this.name == null ? cmp.name == null : this.name.equals(cmp.name))
                 && (this.numeric == cmp.numeric)
                 && (this.relatedVariable == null ? cmp.relatedVariable == null
-                        : this.relatedVariable.getName().equals(cmpRelatedVariableName))
+                : this.relatedVariable.getName().equals(cmpRelatedVariableName))
                 && (this.startingPosition == cmp.startingPosition)
                 && (this.suppressweight == cmp.suppressweight)
                 && (this.truncable == cmp.truncable)
@@ -643,13 +707,15 @@ public class VariableMu {
     }
 
     /**
+     * Gets the hashcode. The hashcode is calculated as a addition of the
+     * hashcodes from the relevant individual components.
      *
-     * @return
+     * @return Integer containing the hashcode.
      */
     @Override
     public int hashCode() {
         int hash = 3;
-        String relatedVariableName = this.relatedVariable == null
+        String cmpRelatedVariableName = this.relatedVariable == null
                 ? null : this.relatedVariable.getName();
         hash = 41 * hash + Objects.hashCode(this.categorical);
         hash = 41 * hash + Objects.hashCode(this.codelist);
@@ -661,7 +727,7 @@ public class VariableMu {
         hash = 41 * hash + Objects.hashCode(this.missing);
         hash = 41 * hash + Objects.hashCode(this.name);
         hash = 41 * hash + Objects.hashCode(this.numeric);
-        hash = 41 * hash + Objects.hashCode(relatedVariableName);
+        hash = 41 * hash + Objects.hashCode(cmpRelatedVariableName);
         hash = 41 * hash + this.startingPosition;
         hash = 41 * hash + Objects.hashCode(this.suppressweight);
         hash = 41 * hash + Objects.hashCode(this.truncable);

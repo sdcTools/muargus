@@ -1,4 +1,4 @@
-
+opmerking: zoeken of spss in de registry heeft weggeschreven waar het staat en dat gebruiken voor de locatie van de plugin.
 
 Klasse:                                 Regel(s):   Taak/opmerking:                                 Persoon:
 
@@ -18,7 +18,7 @@ Klasse:                                 Regel(s):   Taak/opmerking:             
 - MetaReader                            176-180     Exception wordt dubbel gegeven. Zinvol? ja      Anne
 - Splash.png in view directory                      uit resources wordt gebruikt                    Anne
 - lines.png in view directory                       Weg                                             Anne
-- CalculationService                    472         er staat een TODO: don                          Anne
+- CalculationService                    472         er staat een TODO: done                          Anne
 - MetadataMu                            68          Show error message/throw argusexception
                                         94          TODO: some initialization   nier nodig          Anne
 - ShowTableCollection                               sorteren kolommen    
@@ -57,3 +57,4 @@ Release 3 uitzoeken:
 - wat te doen met de spssjavaplugin? --> in releasnotes schrijven hoe dit gefixed moet worden?
 - Bug bij Spss: wanneer spss data is geopend en tabellen zijn gemaakt via select combinations veranderd 
   de dataFileName
+- Bug: Bij ordinale data (zowel numeric als categoric) gaat het fout bij modifyNumericalVariables --> geeft error vanwege problemen met rounding.

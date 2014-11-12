@@ -69,14 +69,14 @@ public class TableMu {
         return threshold;
     }
 
-    /**
-     * Sets the threshold.
-     *
-     * @param threshold Integer containing the threshold.
-     */
-    public void setThreshold(String threshold) {
-        this.threshold = Integer.parseInt(threshold);
-    }
+//    /**
+//     * Sets the threshold.
+//     *
+//     * @param threshold Integer containing the threshold.
+//     */
+//    public void setThreshold(String threshold) {
+//        this.threshold = Integer.parseInt(threshold);
+//    }
 
     /**
      * Sets the threshold.
@@ -160,7 +160,7 @@ public class TableMu {
     
     /**
      * Constructs the title of the table, containing of the table dimension 
-     * names separated by x
+     * names separated by x.
      * 
      * @return title of the table
      */

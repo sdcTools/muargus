@@ -1,7 +1,8 @@
-package muargus.view;
+package muargus.unusedClasses;
 
 import javax.swing.JOptionPane;
 import muargus.model.Combinations;
+import muargus.view.DialogBase;
 
 /**
  *
@@ -25,7 +26,7 @@ public class ArgusInput extends DialogBase {
         super(parent, modal, null);
         this.isThreshold = isThreshold;
         initComponents();
-        textField.setText(model.getThreshold());
+        this.textField.setText(Integer.toString(model.getThreshold()));
         this.setLocationRelativeTo(null);
     }
 

@@ -58,7 +58,7 @@ public class MainFrameController {
         ModifyNumericalVariables,
         NumericalMicroAggregation,
         NumericalRankSwapping,
-        QualitativeMicroAggregation,
+        //QualitativeMicroAggregation,
         MakeProtectedFile,
         ViewReport,
         Contents,
@@ -122,7 +122,7 @@ public class MainFrameController {
         view.enableAction(Action.ModifyNumericalVariables, tablesCalculated && hasNumericalVariables);
         view.enableAction(Action.NumericalMicroAggregation, tablesCalculated && hasNumericalVariables);
         view.enableAction(Action.NumericalRankSwapping, tablesCalculated && hasNumericalVariables);
-        view.enableAction(Action.QualitativeMicroAggregation, tablesCalculated);
+        //view.enableAction(Action.QualitativeMicroAggregation, tablesCalculated);
 
     }
 
@@ -373,7 +373,7 @@ public class MainFrameController {
      */
     public void numericalMicroaggregation() {
         MicroaggregationController controller = new MicroaggregationController(
-                this.view, this.metadata, true);
+                this.view, this.metadata);
         controller.showView();
     }
 
@@ -386,11 +386,11 @@ public class MainFrameController {
         controller.showView();
     }
 
-    public void qualitativeMicroaggregation() {
-        MicroaggregationController controller = new MicroaggregationController(view, metadata, false);
-        controller.showView();
-
-    }
+//    public void qualitativeMicroaggregation() {
+//        MicroaggregationController controller = new MicroaggregationController(view, metadata, false);
+//        controller.showView();
+//
+//    }
 
     /**
      *

@@ -42,8 +42,8 @@ public class ProtectedFile {
     public ProtectedFile() {
         this.variables = new ArrayList<>();
         this.columnames = new String[]{"Variables", "Priority"};
-        this.householdType = this.NOT_HOUSEHOLD_DATA;
-        this.suppressionType = this.USE_ENTROPY;
+        this.householdType = ProtectedFile.NOT_HOUSEHOLD_DATA;
+        this.suppressionType = ProtectedFile.USE_ENTROPY;
     }
 
     /**
@@ -101,7 +101,7 @@ public class ProtectedFile {
      * @return Boolean indicating whether the option 'use weight' is selected.
      */
     public boolean isWithPrior() {
-        return this.suppressionType == this.USE_WEIGHT;
+        return this.suppressionType == ProtectedFile.USE_WEIGHT;
     }
 
     /**
@@ -110,7 +110,7 @@ public class ProtectedFile {
      * @return Boolean indicating whether the option 'use entropy' is selected.
      */
     public boolean isWithEntropy() {
-        return this.suppressionType == this.USE_ENTROPY;
+        return this.suppressionType == ProtectedFile.USE_ENTROPY;
     }
 
     /**
@@ -257,7 +257,7 @@ public class ProtectedFile {
      * @return Boolean indicating whether de data is household data.
      */
     public boolean isHouseholdData() {
-        return this.householdType != this.NOT_HOUSEHOLD_DATA;
+        return this.householdType != ProtectedFile.NOT_HOUSEHOLD_DATA;
     }
 
     /**
@@ -268,9 +268,9 @@ public class ProtectedFile {
      */
     public void setHouseholdData(boolean householdData) {
         if (!householdData) {
-            this.householdType = this.NOT_HOUSEHOLD_DATA;
+            this.householdType = ProtectedFile.NOT_HOUSEHOLD_DATA;
         } else {
-            this.householdType = this.KEEP_IN_SAFE_FILE;
+            this.householdType = ProtectedFile.KEEP_IN_SAFE_FILE;
         }
     }
 

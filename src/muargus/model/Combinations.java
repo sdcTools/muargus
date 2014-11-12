@@ -27,7 +27,7 @@ public class Combinations {
     private final HashMap<TableMu, RiskSpecification> riskSpecifications;
     private ModifyNumericalVariables modifyNumericalVariables;
     private Microaggregation numericalMicroaggregation;
-    private Microaggregation qualitativeMicroaggregation;
+    //private Microaggregation qualitativeMicroaggregation;
     private NumericalRankSwapping numericalRankSwapping;
     private PramSpecification pramSpecification;
 
@@ -189,11 +189,15 @@ public class Combinations {
      * variables.
      * @return Returns the NumbericalMicroaggregation model class.
      */
-    public Microaggregation getMicroaggregation(boolean numerical) {
-        if ((numerical ? this.numericalMicroaggregation : this.qualitativeMicroaggregation) == null) {
-            createMicroaggregation(numerical);
+    public Microaggregation getMicroaggregation() {
+        if(this.numericalMicroaggregation == null){
+            createMicroaggregation();
         }
-        return numerical ? this.numericalMicroaggregation : this.qualitativeMicroaggregation;
+        return this.numericalMicroaggregation;
+//        if ((numerical ? this.numericalMicroaggregation : this.qualitativeMicroaggregation) == null) {
+//            createMicroaggregation(numerical);
+//        }
+//        return numerical ? this.numericalMicroaggregation : this.qualitativeMicroaggregation;
     }
 
     /**
@@ -202,12 +206,12 @@ public class Combinations {
      * @param numerical Boolean indication whether there are numerical
      * variables.
      */
-    private void createMicroaggregation(boolean numerical) {
-        if (numerical) {
+    private void createMicroaggregation() {
+//        if (numerical) {
             this.numericalMicroaggregation = new Microaggregation();
-        } else {
-            this.qualitativeMicroaggregation = new Microaggregation();
-        }
+//        } else {
+//            this.qualitativeMicroaggregation = new Microaggregation();
+//        }
     }
 
     /*
@@ -276,13 +280,22 @@ public class Combinations {
 //        return this.unsafe.get(variable);
 //    }
 
+//    /**
+//     * Gets the threshold.
+//     *
+//     * @return String containing the threshold.
+//     */
+//    public String getThreshold() {
+//        return Integer.toString(threshold);
+//    }
+    
     /**
      * Gets the threshold.
      *
      * @return String containing the threshold.
      */
-    public String getThreshold() {
-        return Integer.toString(threshold);
+    public int getThreshold() {
+        return threshold;
     }
 
     /**

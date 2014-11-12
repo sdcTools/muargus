@@ -1,7 +1,6 @@
 package muargus.controller;
 
 import argus.model.ArgusException;
-import java.util.logging.Logger;
 import muargus.io.MetaReader;
 import muargus.io.MetaWriter;
 import muargus.model.Combinations;

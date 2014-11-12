@@ -1097,21 +1097,21 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
 
     private void startingPositionTextFieldCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_startingPositionTextFieldCaretUpdate
         try {
-            getSelectedVariable().setStartingPosition(this.startingPositionTextField.getText());
+            getSelectedVariable().setStartingPosition(Integer.parseInt(this.startingPositionTextField.getText()));
         } catch (NumberFormatException e) {
         }
     }//GEN-LAST:event_startingPositionTextFieldCaretUpdate
 
     private void lengthTextFieldCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_lengthTextFieldCaretUpdate
         try {
-            getSelectedVariable().setVariableLength(Integer.parseInt(lengthTextField.getText()));
+            getSelectedVariable().setVariableLength(Integer.parseInt(this.lengthTextField.getText()));
         } catch (NumberFormatException e) {
         }
     }//GEN-LAST:event_lengthTextFieldCaretUpdate
 
     private void decimalsTextFieldCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_decimalsTextFieldCaretUpdate
         try {
-            getSelectedVariable().setDecimals(this.decimalsTextField.getText());
+            getSelectedVariable().setDecimals(Integer.parseInt(this.decimalsTextField.getText()));
         } catch (NumberFormatException e) {
         }
     }//GEN-LAST:event_decimalsTextFieldCaretUpdate
@@ -1133,11 +1133,17 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
     }//GEN-LAST:event_separatorTextFieldCaretUpdate
 
     private void identificationComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_identificationComboBoxActionPerformed
-        getSelectedVariable().setIdLevel((String) this.identificationComboBox.getSelectedItem());
+        try {
+            getSelectedVariable().setIdLevel(Integer.parseInt((String) this.identificationComboBox.getSelectedItem()));
+        } catch (NumberFormatException e) {
+        }
     }//GEN-LAST:event_identificationComboBoxActionPerformed
 
     private void weightLocalSuppressionComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_weightLocalSuppressionComboBoxActionPerformed
-        getSelectedVariable().setSuppressweight((String) this.weightLocalSuppressionComboBox.getSelectedItem());
+        try {
+            getSelectedVariable().setSuppressweight(Integer.parseInt((String) this.weightLocalSuppressionComboBox.getSelectedItem()));
+        } catch (NumberFormatException e) {
+        }
     }//GEN-LAST:event_weightLocalSuppressionComboBoxActionPerformed
 
     private void relatedToComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_relatedToComboBoxActionPerformed

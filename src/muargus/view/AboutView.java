@@ -1,3 +1,5 @@
+//TODO: Wat is het copyright jaar ... 2002 of 2004?
+
 package muargus.view;
 
 import java.io.File;
@@ -20,7 +22,15 @@ public class AboutView extends DialogBase {
         super(parent, modal, null);
         initComponents();
         setLocationRelativeTo(null);
+        updateVersion();
+    }
+    
+    /**
+     * Updates the version and build number.
+     */
+    private void updateVersion(){
         this.versionLabel.setText("Version " + MuARGUS.getFullVersion());
+        this.buildLabel.setText("build: " + MuARGUS.BUILD);
     }
 
     /**
@@ -167,6 +177,7 @@ public class AboutView extends DialogBase {
 
     /**
      * Shows the system information in a message dialog.
+     *
      * @param evt Actionevent.
      */
     private void systemInfoButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_systemInfoButtonActionPerformed

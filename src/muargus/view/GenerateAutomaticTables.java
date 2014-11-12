@@ -1,7 +1,9 @@
 package muargus.view;
 
-import java.awt.Frame;
+import argus.model.ArgusException;
+import java.awt.HeadlessException;
 import javax.swing.JOptionPane;
+import muargus.MuARGUS;
 import muargus.model.Combinations;
 
 /**
@@ -12,7 +14,6 @@ public class GenerateAutomaticTables extends DialogBase {
 
     private final Combinations model;
     private boolean valid; // is used to continue with the calculation
-    private final Frame parent;
     private final int numberOfVariables;
 
     /**
@@ -28,7 +29,6 @@ public class GenerateAutomaticTables extends DialogBase {
         super(parent, modal, null);
         this.model = model;
         this.valid = false;
-        this.parent = parent;
         this.numberOfVariables = numberOfVariables;
         initComponents();
         this.setLocationRelativeTo(null);
@@ -36,23 +36,103 @@ public class GenerateAutomaticTables extends DialogBase {
     }
 
     public int getDimensionTextField() {
-        return Integer.parseInt(dimensionTextField.getText());
+        return Integer.parseInt(this.dimensionTextField.getText());
     }
 
     public boolean isMakeUpToDimensionRadioButton() {
-        return makeUpToDimensionRadioButton.isSelected();
+        return this.makeUpToDimensionRadioButton.isSelected();
     }
 
     public boolean isUseIdentificatinLevelRadioButton() {
-        return useIdentificatinLevelRadioButton.isSelected();
+        return this.useIdentificatinLevelRadioButton.isSelected();
     }
 
     public boolean isValid() {
         return this.valid;
     }
 
-    public void setValid(boolean valid) {
+    private void setValid(boolean valid) {
         this.valid = valid;
+    }
+
+    private int getThreshold(int threshold, String message) throws ArgusException {
+        String result = JOptionPane.showInputDialog(null, message, threshold);
+        if (result == null || result.length() == 0) {
+            return 0;
+        }
+        try {
+            return Integer.parseInt(result);
+        } catch (NumberFormatException e) {
+            throw new ArgusException("Illegal value for the threshold, please enter a positive integer");
+        }
+    }
+
+    private int checkDimensions(int dimensions) {
+        try {
+            dimensions = Integer.parseInt(this.dimensionTextField.getText());
+
+            if (dimensions <= 0) {
+                JOptionPane.showMessageDialog(this, "Illegal value for the dimension, dimension cannot be less than 1");
+                this.setValid(false);
+            } else if (dimensions > MuARGUS.MAXDIMS) {
+                JOptionPane.showMessageDialog(this, "Illegal value for the dimension, dimension cannot be greater than " + MuARGUS.MAXDIMS);
+                this.setValid(false);
+            } else if (dimensions > this.numberOfVariables) {
+                JOptionPane.showMessageDialog(this, "Not enough identifying variables for this request");
+                this.setValid(false);
+            }
+        } catch (NumberFormatException | HeadlessException e) {
+            JOptionPane.showMessageDialog(this, "Illegal value for the dimension, please enter a positive integer");
+            this.setValid(false);
+        }
+        return dimensions;
+    }
+
+    private void getThresholdIdLevel() {
+        while (!this.isValid()) {
+            try {
+                int result = getThreshold(this.model.getThreshold(), "Threshold:");
+                if (result > 0) {
+                    this.model.setThreshold(result);
+                    this.setValid(true);
+                } else {
+                    showErrorMessage(new ArgusException("Threshold needs to greater than 0"));
+                }
+            } catch (ArgusException ex) {
+                showErrorMessage(ex);
+            }
+        }
+    }
+
+    private void getThresholdDimensions(int dimensions) {
+        int[] thresholds = this.model.getThresholds();
+        breakpoint:
+        for (int i = 0; i < dimensions; i++) {
+            this.setValid(false);
+            while (!this.isValid()) {
+                try {
+                    int result = getThreshold(thresholds[i], "Threshold dimension " + (i + 1) + ":");
+                    if (result == 0) {
+                        this.setValid(false);
+                        break breakpoint;
+                    }
+                    if (result > 0) {
+                        if (i > 0 && result < thresholds[i - 1]) {
+                            showErrorMessage(new ArgusException("The threshold needs to be equal to or larger than " + thresholds[i - 1]));
+                        } else {
+                            thresholds[i] = result;
+                            this.setValid(true);
+                        }
+                    } else {
+                        showErrorMessage(new ArgusException("Threshold needs to greater than 0"));
+                    }
+                } catch (ArgusException ex) {
+                    showErrorMessage(ex);
+                }
+            }
+        }
+        this.model.setThresholds(thresholds);
+        this.model.setThreshold(thresholds[0]);
     }
 
     /**
@@ -175,56 +255,16 @@ public class GenerateAutomaticTables extends DialogBase {
     private void okButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okButtonActionPerformed
         this.setValid(true);
         int dimensions = 0;
-        if (makeUpToDimensionRadioButton.isSelected()) {
-            try {
-                dimensions = Integer.parseInt(dimensionTextField.getText());
-
-                if (dimensions <= 0) {
-                    JOptionPane.showMessageDialog(this, "Illegal value for the dimension, dimension cannot be smaller than 1");
-                    this.setValid(false);
-                } else if (dimensions > this.numberOfVariables) {
-                    JOptionPane.showMessageDialog(this, "Not enough identifying variables for this request");
-                    this.setValid(false);
-                }
-            } catch (Exception e) {
-                JOptionPane.showMessageDialog(this, "Illegal value for the dimension, please enter a positive integer");
-                this.setValid(false);
-            }
+        if (this.makeUpToDimensionRadioButton.isSelected()) {
+            dimensions = checkDimensions(dimensions);
         }
 
         if (isValid()) {
             this.setValid(false);
-            if (useIdentificatinLevelRadioButton.isSelected()) {
-                ArgusInput getThreshold = new ArgusInput(parent, true, this.model, true);
-                getThreshold.setLabelText("Threshold");
-                getThreshold.setTitle("Threshold");
-                getThreshold.setVisible(true);
-                if (getThreshold.isThresholdValid() && getThreshold.isOkButtonPressed()) {
-                    model.setThreshold(getThreshold.getTextField());
-                    this.setValid(true);
-                }
-            } else if (makeUpToDimensionRadioButton.isSelected()) {
-                int[] thresholds = model.getThresholds();
-                for (int i = 0; i < dimensions; i++) {
-                    this.setValid(false);
-                    ArgusInput getThreshold = new ArgusInput(parent, true, this.model, true);
-                    getThreshold.setLabelText("Threshold for dim" + (i + 1));
-                    getThreshold.setTitle("Threshold");
-                    getThreshold.setTextField(Integer.toString(thresholds[i]));
-                    if (i > 0) {
-                        getThreshold.setPreviousThreshold(thresholds[i - 1]);
-                        if (thresholds[i] < thresholds[i - 1]) {
-                            getThreshold.setTextField(Integer.toString(thresholds[i - 1]));
-                        }
-                    }
-                    getThreshold.setVisible(true);
-                    if (getThreshold.isThresholdValid() && getThreshold.isOkButtonPressed()) {
-                        thresholds[i] = Integer.parseInt(getThreshold.getTextField());
-                        this.setValid(true);
-                    }
-                }
-                model.setThresholds(thresholds);
-                model.setThreshold(thresholds[0]);
+            if (this.useIdentificatinLevelRadioButton.isSelected()) {
+                getThresholdIdLevel();
+            } else if (this.makeUpToDimensionRadioButton.isSelected()) {
+                getThresholdDimensions(dimensions);
             }
         }
 
@@ -234,12 +274,12 @@ public class GenerateAutomaticTables extends DialogBase {
     }//GEN-LAST:event_okButtonActionPerformed
 
     private void dimensionTextFieldFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_dimensionTextFieldFocusGained
-        makeUpToDimensionRadioButton.setSelected(true);
+        this.makeUpToDimensionRadioButton.setSelected(true);
     }//GEN-LAST:event_dimensionTextFieldFocusGained
 
     private void useIdentificatinLevelRadioButtonStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_useIdentificatinLevelRadioButtonStateChanged
-        if (useIdentificatinLevelRadioButton.isSelected()) {
-            dimensionTextField.setText("");
+        if (this.useIdentificatinLevelRadioButton.isSelected()) {
+            this.dimensionTextField.setText("");
         }
     }//GEN-LAST:event_useIdentificatinLevelRadioButtonStateChanged
 
