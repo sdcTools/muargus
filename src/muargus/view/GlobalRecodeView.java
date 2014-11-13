@@ -11,6 +11,7 @@ import javax.swing.table.TableModel;
 import muargus.HighlightTableCellRenderer;
 import muargus.controller.GlobalRecodeController;
 import muargus.io.MetaReader;
+import muargus.io.MetaWriter;
 import muargus.model.GlobalRecode;
 import muargus.model.RecodeMu;
 import muargus.model.VariableMu;
@@ -250,7 +251,8 @@ public class GlobalRecodeView extends DialogBase<GlobalRecodeController> {
         String filePath = showFileDialog("Save Recode File", true, new String[]{"Recode files (*.grc)|grc"});
         if (filePath != null) {
             try {
-                this.selectedRecode.write(new File(filePath));
+                MetaWriter.writeGrc(new File(filePath), this.selectedRecode);
+                //this.selectedRecode.write(new File(filePath));
             } catch (ArgusException ex) {
                 showErrorMessage(ex);
             }
