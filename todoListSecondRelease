@@ -8,7 +8,6 @@ Release 3 uitzoeken:
 - Andere html-viewer
 - MainFrameView                                     Labels verwijderen na global recode
 - PramSpecificationView                             Labels verwijderen na global recode
-- hoe om te gaan met missings --> missings wegschrijven naar spss 
 - dingen toevoegen aan registry zoals NumericalRankSwapping, PRAM, etc. 
 - MuARGUS                               41          acrord32.exe aanpassen 
                                                     Linux: andere extensie
@@ -60,6 +59,7 @@ Klasse:                                 Regel(s):   Taak/opmerking:             
                                                     Map: zelfde als .saf
 - SpssUtils                             59          werkt niet als niet in ontwikkelomgeving        Anne
 - MainFrame                                         Rechterscherm wordt niet bijgewerkt na recode   Jeldrik
-- SelectCombinations                                Bugs fixen (zie todolist) 
+- SelectCombinations                                Bugs fixen (zie todolist)                       Jeldrik
+- hoe om te gaan met missings --> missings wegschrijven naar spss                                   Jeldrik
 
 
