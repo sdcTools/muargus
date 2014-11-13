@@ -15,6 +15,7 @@ import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import javax.swing.JOptionPane;
 import muargus.controller.SpssUtils;
 import muargus.io.MetaReader;
 import muargus.model.CodeInfo;
@@ -342,6 +343,7 @@ public class HTMLReportWriter {
                         }
 
                     } catch (ArgusException ex) {
+                        //JOptionPane.showMessageDialog(null, ex.getMessage(), MuARGUS.getMessageTitle(), JOptionPane.ERROR_MESSAGE);
                         //Logger.getLogger(HTMLReportWriter.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 } else if (r.isTruncated()) {

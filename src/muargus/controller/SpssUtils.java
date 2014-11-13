@@ -356,24 +356,38 @@ public class SpssUtils {
             command.add("DATA LIST FILE = '" + safeMetadata.getFileNames().getDataFileName() + "'/");
             int startPosition = 1;
             int endPosition;
+            
             for (VariableMu v : variables) {
                 String name = v.getSpssVariable().getName();
                 endPosition = startPosition + v.getVariableLength() - 1;
-                command.set(command.size() - 1, command.get(command.size() - 1)
-                        + " TEMP" + name + " " + startPosition + " - " + endPosition);
+                command.add(" TEMP" + name + " " + startPosition + " - " + endPosition);
                 if (v.getSpssVariable().getVariableFormat().equals(VariableFormat.A)) {
                     command.set(command.size() - 1, command.get(command.size() - 1) + " (A) ");
                 }
                 startPosition = endPosition + 1;
             }
+            
             command.set(command.size() - 1, command.get(command.size() - 1) + ".");
             command.add("MATCH FILES FILE = '" + SpssUtils.spssDataFileName + "' /FILE = *.");
             command.add("EXECUTE.");
             for (VariableMu v : variables) {
                 String name = v.getSpssVariable().getName();
                 command.add("if (SYSMIS(" + name + ") EQ 0) " + name + "= TEMP" + name + ".");
+                String missing = "";
+                for (int i = 0; i < v.getNumberOfMissings(); i++) {
+                    if (!missing.equals("")) {
+                        missing += ", ";
+                    }
+                    missing += "\"" + v.getMissing(i) + "\"";
+                }
+                command.add("MISSING VALUE " + name + "(" + missing + ").");
             }
             command.add("SAVE OUTFILE='" + SpssUtils.safeSpssFile + "'/DROP=TEMP" + first + " TO TEMP" + last + ".");
+            command.add("EXECUTE.");
+            for(String s: command){
+                System.out.println(s);
+            }
+            
             StatsUtil.submit(command.toArray(new String[command.size()]));
             StatsUtil.stop();
         } catch (StatsException ex) {

@@ -5,7 +5,6 @@ import argus.model.DataFilePair;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Objects;
-import java.util.logging.Logger;
 
 /**
  * Model class of the SpecifyMetadata screen. This model class contains all
@@ -15,7 +14,7 @@ import java.util.logging.Logger;
  */
 public final class MetadataMu {
 
-    private static final Logger logger = Logger.getLogger(MetadataMu.class.getName());
+    //private static final Logger logger = Logger.getLogger(MetadataMu.class.getName());
 
     // file types 
     public static final int DATA_FILE_TYPE_FIXED = 1;

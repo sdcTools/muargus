@@ -105,7 +105,7 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
 
         // disable or enable
         enableControls(this.attributesPanel, false);
-        enableControls(this.missingsPanel, false);
+        //enableControls(this.missingsPanel, false);
         this.codelistfileCheckBox.setEnabled(false);
         this.codelistfileButton.setEnabled(false);
         this.codelistfileTextField.setEnabled(false);
@@ -274,6 +274,7 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
         enableControls(this.variableTypePanel, enable);
         enableControls(this.relatedToPanel, enable);
         enableControls(this.relatedToComboBox, enable);
+        enableControls(this.missingsPanel, enable);
     }
 
     /**
@@ -959,7 +960,6 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
     }//GEN-LAST:event_formatComboBoxActionPerformed
 
     private void newButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newButtonActionPerformed
-//TODO: check this        
         this.newButton.setEnabled(false);
         int index = this.variablesList.getSelectedIndex() + 1;
 

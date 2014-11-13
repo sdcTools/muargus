@@ -20,6 +20,11 @@ Release 3 uitzoeken:
 - Bug bij Spss: wanneer spss data is geopend en tabellen zijn gemaakt via select combinations veranderd 
   de dataFileName
 - Bug: Bij ordinale data (zowel numeric als categoric) gaat het fout bij modifyNumericalVariables --> geeft error vanwege problemen met rounding.
+        --> aanpassing in de dll? -->
+    if (v < 0 || v >= m_nvar || !m_var[v].IsNumeric || (m_var[v].IsCategorical && !m_var[v].IsNumeric)|| RoundBase <= 0 || nDec < 0) {
+	return false;
+    }
+        --> rounding verbieden bij ordinale variabelen? --> voorbeeld: leeftijd
 
 Overige
 - ReleaseNotes schrijven 

@@ -17,10 +17,6 @@ import java.io.IOException;
 import java.util.HashMap;
 import muargus.controller.SpssUtils;
 import muargus.model.MetadataMu;
-import static muargus.model.MetadataMu.DATA_FILE_TYPE_FIXED;
-import static muargus.model.MetadataMu.DATA_FILE_TYPE_FREE;
-import static muargus.model.MetadataMu.DATA_FILE_TYPE_FREE_WITH_META;
-import static muargus.model.MetadataMu.DATA_FILE_TYPE_SPSS;
 import muargus.model.RecodeMu;
 import muargus.model.VariableMu;
 
@@ -38,6 +34,7 @@ public class MetaReader {
      * (is it recodable, what is it's ID_level etc).
      *
      * @param metadata
+     * @param parent
      * @throws ArgusException Throws an ArgusException when the file cannot be
      * read.
      */
@@ -47,12 +44,12 @@ public class MetaReader {
             String filename = metadata.getFileNames().getDataFileName();
             String extension = filename.substring(filename.length() - 3, filename.length());
             if (extension.equalsIgnoreCase("sav")) {
-                metadata.setDataFileType(DATA_FILE_TYPE_SPSS);
+                metadata.setDataFileType(MetadataMu.DATA_FILE_TYPE_SPSS);
             }
             return;
         }
 
-        metadata.setDataFileType(DATA_FILE_TYPE_FIXED);
+        metadata.setDataFileType(MetadataMu.DATA_FILE_TYPE_FIXED);
         VariableMu variable = null;
 
         try {
@@ -68,8 +65,8 @@ public class MetaReader {
                     variable.setRecodable(false);
                     variable.setName(tokenizer.getValue());
                     metadata.getVariables().add(variable);
-                    if (metadata.getDataFileType() == DATA_FILE_TYPE_FIXED
-                            || metadata.getDataFileType() == DATA_FILE_TYPE_SPSS) {
+                    if (metadata.getDataFileType() == MetadataMu.DATA_FILE_TYPE_FIXED
+                            || metadata.getDataFileType() == MetadataMu.DATA_FILE_TYPE_SPSS) {
                         try {
                             variable.setStartingPosition(Integer.parseInt(tokenizer.nextToken()));
                         } catch (NumberFormatException e) {
@@ -84,14 +81,14 @@ public class MetaReader {
                 } else if (variable == null) {
                     switch (value) {
                         case "<SEPARATOR>":
-                            metadata.setDataFileType(DATA_FILE_TYPE_FREE);
+                            metadata.setDataFileType(MetadataMu.DATA_FILE_TYPE_FREE);
                             metadata.setSeparator(tokenizer.nextToken());
                             break;
                         case "<SPSS>":
-                            metadata.setDataFileType(DATA_FILE_TYPE_SPSS);
+                            metadata.setDataFileType(MetadataMu.DATA_FILE_TYPE_SPSS);
                             break;
                         case "<NAMESINFRONT>":
-                            metadata.setDataFileType(DATA_FILE_TYPE_FREE_WITH_META);
+                            metadata.setDataFileType(MetadataMu.DATA_FILE_TYPE_FREE_WITH_META);
                             break;
                     }
                 } else {
