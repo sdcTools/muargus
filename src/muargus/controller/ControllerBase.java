@@ -7,9 +7,10 @@ import java.beans.PropertyChangeListener;
 import muargus.view.DialogBase;
 
 /**
+ * Base class of the controllers.
  *
  * @author Statistics Netherlands
- * @param <T>
+ * @param <T> Generic model type
  */
 public class ControllerBase<T> implements PropertyChangeListener {
 
@@ -18,14 +19,9 @@ public class ControllerBase<T> implements PropertyChangeListener {
     private T model;
 
     /**
+     * Gets the model class.
      *
-     */
-    public ControllerBase() {
-    }
-
-    /**
-     *
-     * @return
+     * @return Generic instance of the model class.
      */
     protected T getModel() {
         return model;
@@ -33,7 +29,8 @@ public class ControllerBase<T> implements PropertyChangeListener {
 
     /**
      * Sets the Model class.
-     * @param model
+     *
+     * @param model Generic instance of the model class.
      */
     protected void setModel(T model) {
         this.model = model;
