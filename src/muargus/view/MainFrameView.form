@@ -250,7 +250,10 @@
           <SubComponents>
             <MenuItem class="javax.swing.JMenuItem" name="contentsMenuItem">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Contents"/>
+                <Property name="accelerator" type="javax.swing.KeyStroke" editor="org.netbeans.modules.form.editors.KeyStrokeEditor">
+                  <KeyStroke key="F1"/>
+                </Property>
+                <Property name="text" type="java.lang.String" value="Content help"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="contentsMenuItemActionPerformed"/>
@@ -347,6 +350,7 @@
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
               <Image iconType="3" name="/muargus/resources/icons/OpenMicrodata.png"/>
             </Property>
+            <Property name="toolTipText" type="java.lang.String" value="Open micro data"/>
             <Property name="focusable" type="boolean" value="false"/>
             <Property name="horizontalTextPosition" type="int" value="0"/>
             <Property name="verticalTextPosition" type="int" value="3"/>
@@ -362,6 +366,7 @@
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
               <Image iconType="3" name="/muargus/resources/icons/SpecifyMetadata.png"/>
             </Property>
+            <Property name="toolTipText" type="java.lang.String" value="Specify metadata"/>
             <Property name="enabled" type="boolean" value="false"/>
             <Property name="focusable" type="boolean" value="false"/>
             <Property name="horizontalTextPosition" type="int" value="0"/>
@@ -376,6 +381,7 @@
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
               <Image iconType="3" name="/muargus/resources/icons/SpecifyCombinations.png"/>
             </Property>
+            <Property name="toolTipText" type="java.lang.String" value="Specify combinations"/>
             <Property name="enabled" type="boolean" value="false"/>
             <Property name="focusable" type="boolean" value="false"/>
             <Property name="horizontalTextPosition" type="int" value="0"/>
@@ -392,6 +398,7 @@
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
               <Image iconType="3" name="/muargus/resources/icons/ShowTable.png"/>
             </Property>
+            <Property name="toolTipText" type="java.lang.String" value="Show table collection"/>
             <Property name="enabled" type="boolean" value="false"/>
             <Property name="focusable" type="boolean" value="false"/>
             <Property name="horizontalTextPosition" type="int" value="0"/>
@@ -406,6 +413,7 @@
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
               <Image iconType="3" name="/muargus/resources/icons/globrec_1_16x16x4.png"/>
             </Property>
+            <Property name="toolTipText" type="java.lang.String" value="Global recode"/>
             <Property name="enabled" type="boolean" value="false"/>
             <Property name="focusable" type="boolean" value="false"/>
             <Property name="horizontalTextPosition" type="int" value="0"/>
@@ -420,6 +428,7 @@
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
               <Image iconType="3" name="/muargus/resources/icons/pram_1_16x16x4.png"/>
             </Property>
+            <Property name="toolTipText" type="java.lang.String" value="PRAM specification"/>
             <Property name="enabled" type="boolean" value="false"/>
             <Property name="focusable" type="boolean" value="false"/>
             <Property name="horizontalTextPosition" type="int" value="0"/>
@@ -434,6 +443,7 @@
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
               <Image iconType="3" name="/muargus/resources/icons/Risk_1_16x16x4.png"/>
             </Property>
+            <Property name="toolTipText" type="java.lang.String" value="Individual risk specification"/>
             <Property name="enabled" type="boolean" value="false"/>
             <Property name="focusable" type="boolean" value="false"/>
             <Property name="horizontalTextPosition" type="int" value="0"/>
@@ -448,6 +458,7 @@
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
               <Image iconType="3" name="/muargus/resources/icons/hr.png"/>
             </Property>
+            <Property name="toolTipText" type="java.lang.String" value="Household risk specification"/>
             <Property name="enabled" type="boolean" value="false"/>
             <Property name="focusable" type="boolean" value="false"/>
             <Property name="horizontalTextPosition" type="int" value="0"/>
@@ -462,6 +473,7 @@
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
               <Image iconType="3" name="/muargus/resources/icons/Numeric_1_16x16x4.png"/>
             </Property>
+            <Property name="toolTipText" type="java.lang.String" value="Modify numerical variables"/>
             <Property name="enabled" type="boolean" value="false"/>
             <Property name="focusable" type="boolean" value="false"/>
             <Property name="horizontalTextPosition" type="int" value="0"/>
@@ -476,6 +488,7 @@
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
               <Image iconType="3" name="/muargus/resources/icons/MA.png"/>
             </Property>
+            <Property name="toolTipText" type="java.lang.String" value="Numerical microaggregation"/>
             <Property name="enabled" type="boolean" value="false"/>
             <Property name="focusable" type="boolean" value="false"/>
             <Property name="horizontalTextPosition" type="int" value="0"/>
@@ -490,6 +503,7 @@
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
               <Image iconType="3" name="/muargus/resources/icons/RS.png"/>
             </Property>
+            <Property name="toolTipText" type="java.lang.String" value="Numerical rank swapping"/>
             <Property name="enabled" type="boolean" value="false"/>
             <Property name="focusable" type="boolean" value="false"/>
             <Property name="horizontalTextPosition" type="int" value="0"/>
@@ -504,8 +518,9 @@
         <Component class="javax.swing.JButton" name="makeProtectedFileButton">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="3" name="/muargus/resources/icons/MakeSafeFile.png"/>
+              <Image iconType="3" name="/muargus/resources/icons/safefile.png"/>
             </Property>
+            <Property name="toolTipText" type="java.lang.String" value="Make protected file"/>
             <Property name="enabled" type="boolean" value="false"/>
             <Property name="focusable" type="boolean" value="false"/>
             <Property name="horizontalTextPosition" type="int" value="0"/>
@@ -520,6 +535,7 @@
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
               <Image iconType="3" name="/muargus/resources/icons/ViewReport.png"/>
             </Property>
+            <Property name="toolTipText" type="java.lang.String" value="View report"/>
             <Property name="enabled" type="boolean" value="false"/>
             <Property name="focusable" type="boolean" value="false"/>
             <Property name="horizontalTextPosition" type="int" value="0"/>
@@ -533,7 +549,10 @@
         </Component>
         <Component class="javax.swing.JButton" name="contentsButton">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Content"/>
+            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+              <Image iconType="3" name="/muargus/resources/icons/Help_symbol.png"/>
+            </Property>
+            <Property name="toolTipText" type="java.lang.String" value="Content help"/>
             <Property name="focusable" type="boolean" value="false"/>
             <Property name="horizontalTextPosition" type="int" value="0"/>
             <Property name="verticalTextPosition" type="int" value="3"/>
@@ -544,7 +563,10 @@
         </Component>
         <Component class="javax.swing.JButton" name="newsButton">
           <Properties>
-            <Property name="text" type="java.lang.String" value="News"/>
+            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+              <Image iconType="3" name="/muargus/resources/icons/news-16.png"/>
+            </Property>
+            <Property name="toolTipText" type="java.lang.String" value="News"/>
             <Property name="focusable" type="boolean" value="false"/>
             <Property name="horizontalTextPosition" type="int" value="0"/>
             <Property name="verticalTextPosition" type="int" value="3"/>
@@ -555,7 +577,10 @@
         </Component>
         <Component class="javax.swing.JButton" name="aboutButton">
           <Properties>
-            <Property name="text" type="java.lang.String" value="About"/>
+            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+              <Image iconType="3" name="/muargus/resources/icons/1415898538_info-16.png"/>
+            </Property>
+            <Property name="toolTipText" type="java.lang.String" value="About"/>
             <Property name="focusable" type="boolean" value="false"/>
             <Property name="horizontalTextPosition" type="int" value="0"/>
             <Property name="verticalTextPosition" type="int" value="3"/>

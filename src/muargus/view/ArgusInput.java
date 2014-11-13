@@ -1,8 +1,7 @@
-package muargus.unusedClasses;
+package muargus.view;
 
 import javax.swing.JOptionPane;
 import muargus.model.Combinations;
-import muargus.view.DialogBase;
 
 /**
  *

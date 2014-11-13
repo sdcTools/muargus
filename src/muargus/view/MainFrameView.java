@@ -403,6 +403,7 @@ public class MainFrameView extends javax.swing.JFrame {
         toolBar.setEnabled(false);
 
         openMicrodataButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/muargus/resources/icons/OpenMicrodata.png"))); // NOI18N
+        openMicrodataButton.setToolTipText("Open micro data");
         openMicrodataButton.setFocusable(false);
         openMicrodataButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         openMicrodataButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -415,6 +416,7 @@ public class MainFrameView extends javax.swing.JFrame {
         toolBar.add(toolBarSeparator1);
 
         specifyMetaDataButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/muargus/resources/icons/SpecifyMetadata.png"))); // NOI18N
+        specifyMetaDataButton.setToolTipText("Specify metadata");
         specifyMetaDataButton.setEnabled(false);
         specifyMetaDataButton.setFocusable(false);
         specifyMetaDataButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -427,6 +429,7 @@ public class MainFrameView extends javax.swing.JFrame {
         toolBar.add(specifyMetaDataButton);
 
         specifyCombinationsButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/muargus/resources/icons/SpecifyCombinations.png"))); // NOI18N
+        specifyCombinationsButton.setToolTipText("Specify combinations");
         specifyCombinationsButton.setEnabled(false);
         specifyCombinationsButton.setFocusable(false);
         specifyCombinationsButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -440,6 +443,7 @@ public class MainFrameView extends javax.swing.JFrame {
         toolBar.add(toolBarSeparator2);
 
         showTableCollectionButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/muargus/resources/icons/ShowTable.png"))); // NOI18N
+        showTableCollectionButton.setToolTipText("Show table collection");
         showTableCollectionButton.setEnabled(false);
         showTableCollectionButton.setFocusable(false);
         showTableCollectionButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -452,6 +456,7 @@ public class MainFrameView extends javax.swing.JFrame {
         toolBar.add(showTableCollectionButton);
 
         globalRecodeButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/muargus/resources/icons/globrec_1_16x16x4.png"))); // NOI18N
+        globalRecodeButton.setToolTipText("Global recode");
         globalRecodeButton.setEnabled(false);
         globalRecodeButton.setFocusable(false);
         globalRecodeButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -464,6 +469,7 @@ public class MainFrameView extends javax.swing.JFrame {
         toolBar.add(globalRecodeButton);
 
         pramSpecificationButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/muargus/resources/icons/pram_1_16x16x4.png"))); // NOI18N
+        pramSpecificationButton.setToolTipText("PRAM specification");
         pramSpecificationButton.setEnabled(false);
         pramSpecificationButton.setFocusable(false);
         pramSpecificationButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -476,6 +482,7 @@ public class MainFrameView extends javax.swing.JFrame {
         toolBar.add(pramSpecificationButton);
 
         individualRiskSpecificationButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/muargus/resources/icons/Risk_1_16x16x4.png"))); // NOI18N
+        individualRiskSpecificationButton.setToolTipText("Individual risk specification");
         individualRiskSpecificationButton.setEnabled(false);
         individualRiskSpecificationButton.setFocusable(false);
         individualRiskSpecificationButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -488,6 +495,7 @@ public class MainFrameView extends javax.swing.JFrame {
         toolBar.add(individualRiskSpecificationButton);
 
         householdRiskSpecificationButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/muargus/resources/icons/hr.png"))); // NOI18N
+        householdRiskSpecificationButton.setToolTipText("Household risk specification");
         householdRiskSpecificationButton.setEnabled(false);
         householdRiskSpecificationButton.setFocusable(false);
         householdRiskSpecificationButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -500,6 +508,7 @@ public class MainFrameView extends javax.swing.JFrame {
         toolBar.add(householdRiskSpecificationButton);
 
         modifyNumericalVariablesButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/muargus/resources/icons/Numeric_1_16x16x4.png"))); // NOI18N
+        modifyNumericalVariablesButton.setToolTipText("Modify numerical variables");
         modifyNumericalVariablesButton.setEnabled(false);
         modifyNumericalVariablesButton.setFocusable(false);
         modifyNumericalVariablesButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -512,6 +521,7 @@ public class MainFrameView extends javax.swing.JFrame {
         toolBar.add(modifyNumericalVariablesButton);
 
         numericalMicroaggregationButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/muargus/resources/icons/MA.png"))); // NOI18N
+        numericalMicroaggregationButton.setToolTipText("Numerical microaggregation");
         numericalMicroaggregationButton.setEnabled(false);
         numericalMicroaggregationButton.setFocusable(false);
         numericalMicroaggregationButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -524,6 +534,7 @@ public class MainFrameView extends javax.swing.JFrame {
         toolBar.add(numericalMicroaggregationButton);
 
         numericalRankSwappingButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/muargus/resources/icons/RS.png"))); // NOI18N
+        numericalRankSwappingButton.setToolTipText("Numerical rank swapping");
         numericalRankSwappingButton.setEnabled(false);
         numericalRankSwappingButton.setFocusable(false);
         numericalRankSwappingButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -536,7 +547,8 @@ public class MainFrameView extends javax.swing.JFrame {
         toolBar.add(numericalRankSwappingButton);
         toolBar.add(toolBarSeparator3);
 
-        makeProtectedFileButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/muargus/resources/icons/MakeSafeFile.png"))); // NOI18N
+        makeProtectedFileButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/muargus/resources/icons/safefile.png"))); // NOI18N
+        makeProtectedFileButton.setToolTipText("Make protected file");
         makeProtectedFileButton.setEnabled(false);
         makeProtectedFileButton.setFocusable(false);
         makeProtectedFileButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -549,6 +561,7 @@ public class MainFrameView extends javax.swing.JFrame {
         toolBar.add(makeProtectedFileButton);
 
         viewReportButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/muargus/resources/icons/ViewReport.png"))); // NOI18N
+        viewReportButton.setToolTipText("View report");
         viewReportButton.setEnabled(false);
         viewReportButton.setFocusable(false);
         viewReportButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -561,7 +574,8 @@ public class MainFrameView extends javax.swing.JFrame {
         toolBar.add(viewReportButton);
         toolBar.add(toolBarSeparator4);
 
-        contentsButton.setText("Content");
+        contentsButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/muargus/resources/icons/Help_symbol.png"))); // NOI18N
+        contentsButton.setToolTipText("Content help");
         contentsButton.setFocusable(false);
         contentsButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         contentsButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -572,7 +586,8 @@ public class MainFrameView extends javax.swing.JFrame {
         });
         toolBar.add(contentsButton);
 
-        newsButton.setText("News");
+        newsButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/muargus/resources/icons/news-16.png"))); // NOI18N
+        newsButton.setToolTipText("News");
         newsButton.setFocusable(false);
         newsButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         newsButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -583,7 +598,8 @@ public class MainFrameView extends javax.swing.JFrame {
         });
         toolBar.add(newsButton);
 
-        aboutButton.setText("About");
+        aboutButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/muargus/resources/icons/1415898538_info-16.png"))); // NOI18N
+        aboutButton.setToolTipText("About");
         aboutButton.setFocusable(false);
         aboutButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         aboutButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -864,7 +880,8 @@ public class MainFrameView extends javax.swing.JFrame {
 
         helpMenu.setText("Help");
 
-        contentsMenuItem.setText("Contents");
+        contentsMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F1, 0));
+        contentsMenuItem.setText("Content help");
         contentsMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 contentsMenuItemActionPerformed(evt);
