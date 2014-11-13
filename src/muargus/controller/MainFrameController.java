@@ -231,14 +231,15 @@ public class MainFrameController {
         for (VariableMu variable : this.metadata.getVariables()) {
             if (variable.isCategorical()) {
                 String codelistFile = "";
+                
+                if (variable.isCodelist()) {
+                    codelistFile = variable.getCodeListFile();
+                }
                 if (hasRecode) {
                     RecodeMu recode = model.getGlobalRecode().getRecodeByVariableName(variable.getName());
                     if (recode != null && (recode.isRecoded() || recode.isTruncated())) {
                         codelistFile = recode.getCodeListFile();
                     }
-                }
-                if ("".equals(codelistFile) && variable.isCodelist()) {
-                    codelistFile = variable.getCodeListFile();
                 }
                 if (!"".equals(codelistFile)) {
                     try {
