@@ -3,10 +3,7 @@ niet behandelde opmerkingen/vragen:
     - checken of hier nog iets aan gedaan moet worden bij heel veel tabellen?
     - moet deze ook gekoppeld worden aan automatic generate tables? Ik denk dat het beter is om in plaats 
       daarvan het maximum aantal tabellen kleiner te maken.
-bug: als bij generateAutomaticTables meer dan 10 dimensies worden gekozen wordt het aantal tabellen groter 
-    dan in de long past en crashed die.
-bug: als tijdens het specificeren van de thresholds op cancel wordt gedrukt moet er voor alle volgende
-    dimensies ook op cancel gedrukt worden. 
+
 
 
 Nog te doen:                                                                                                    Mee bezig:
@@ -124,6 +121,9 @@ Gedaan:                                                                         
     - method getUnsafeCombinations(VariableMu ... variable, int dimensions) (dimensions should equal number of variables)
     - iets om het aantal onveilige combinaties per dimensie goed op te slaan (array?)
 -SPSS: genereer ascii databestand voorafgaand aan explorefile
-
+bug: als bij generateAutomaticTables meer dan 10 dimensies worden gekozen wordt het aantal tabellen groter      Jeldrik
+    dan in de long past en crashed die.
+bug: als tijdens het specificeren van de thresholds op cancel wordt gedrukt moet er voor alle volgende          Jeldrik
+    dimensies ook op cancel gedrukt worden. 
 
     
