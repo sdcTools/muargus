@@ -31,8 +31,9 @@ import javax.swing.JFileChooser;
 import muargus.model.VariableMu;
 
 /**
+ * SpssUtils class.
  *
- * @author pibd05
+ * @author Statistics Netherlands
  */
 public class SpssUtils {
 
@@ -44,7 +45,7 @@ public class SpssUtils {
     public static String spssDataFileName;
     public static File spssTempDataFiles;
     public static File safFile;
-    public static File safeSpssFile;// = new File("C:\\Users\\Gebruiker\\Desktop\\safe.sav");
+    public static File safeSpssFile;
 
     /**
      * Gets the variables from spss. For every variable an instance of the
@@ -52,7 +53,7 @@ public class SpssUtils {
      * variable.
      *
      * @param metadata Metadata file.
-     * @param parent
+     * @param parent the Frame of the mainFrame.
      * @return List List containing the SpssVariable instances.
      */
     public static List<SpssVariable> getVariablesFromSpss(MetadataMu metadata, Frame parent) {
@@ -152,9 +153,12 @@ public class SpssUtils {
     }
 
     /**
+     * Checks whether the metadata in the .rda file si conform the spss
+     * metadata.
      *
-     * @param metadata
-     * @param parent
+     * @param metadata MetadataMu instance containing the metadata as specified
+     * in the .rda file.
+     * @param parent the Frame of the mainFrame.
      */
     public static void checkMetadata(MetadataMu metadata, Frame parent) {
         SpssUtils.getVariablesFromSpss(metadata, parent);
@@ -209,10 +213,12 @@ public class SpssUtils {
     }
 
     /**
+     * Gets the double variable.
      *
-     * @param variable
-     * @param metadata
-     * @return
+     * @param variable VariableMu instance for which the double variable needs
+     * to be found.
+     * @param metadata MetadataMu instance containing the metadata.
+     * @return VariableMu instance of the double variable.
      */
     private static VariableMu getVariable(VariableMu variable, MetadataMu metadata) {
         for (VariableMu v : metadata.getVariables()) {
@@ -275,9 +281,10 @@ public class SpssUtils {
     }
 
     /**
+     * Gets the filter for which the data needs to be imported.
      *
-     * @param metadata
-     * @return
+     * @param metadata MetadataMu instance containing the metadata.
+     * @return String containing all variables that are selected.
      */
     private static String getFilter() {
         // check if variables are selected
@@ -303,8 +310,10 @@ public class SpssUtils {
     }
 
     /**
+     * Extracts the data from spss and writes this to a temporary fixed format
+     * file.
      *
-     * @param metadata
+     * @param metadata MetadataMu instance containing the metadata.
      */
     private static void writeFixedFormat(MetadataMu metadata) {
         try {
@@ -331,8 +340,9 @@ public class SpssUtils {
     }
 
     /**
+     * Sets the temp data file as the new data file.
      *
-     * @param metadata
+     * @param metadata MetadataMu instance containing the metadata.
      */
     private static void setNewDataFile(MetadataMu metadata) {
         DataFilePair filenames = new DataFilePair(SpssUtils.spssTempDataFiles.getPath(), metadata.getFileNames().getMetaFileName());
@@ -340,8 +350,9 @@ public class SpssUtils {
     }
 
     /**
+     * Makes the safe file using fixed format.
      *
-     * @param safeMetadata
+     * @param safeMetadata MetadataMu instance containing the safe metadata.
      */
     public static void makeSafeFileSpss(MetadataMu safeMetadata) {
         try {
@@ -356,7 +367,7 @@ public class SpssUtils {
             command.add("DATA LIST FILE = '" + safeMetadata.getFileNames().getDataFileName() + "'/");
             int startPosition = 1;
             int endPosition;
-            
+
             for (VariableMu v : variables) {
                 String name = v.getSpssVariable().getName();
                 endPosition = startPosition + v.getVariableLength() - 1;
@@ -366,7 +377,7 @@ public class SpssUtils {
                 }
                 startPosition = endPosition + 1;
             }
-            
+
             command.set(command.size() - 1, command.get(command.size() - 1) + ".");
             command.add("MATCH FILES FILE = '" + SpssUtils.spssDataFileName + "' /FILE = *.");
             command.add("EXECUTE.");
@@ -384,10 +395,10 @@ public class SpssUtils {
             }
             command.add("SAVE OUTFILE='" + SpssUtils.safeSpssFile + "'/DROP=TEMP" + first + " TO TEMP" + last + ".");
             command.add("EXECUTE.");
-            for(String s: command){
+            for (String s : command) {
                 System.out.println(s);
             }
-            
+
             StatsUtil.submit(command.toArray(new String[command.size()]));
             StatsUtil.stop();
         } catch (StatsException ex) {
@@ -397,8 +408,10 @@ public class SpssUtils {
 
     // WARNING: this has not been properly tested
     /**
+     * Extracts the data from spss and writes this to a comma separated file
+     * (free format).
      *
-     * @param metadata
+     * @param metadata MetadataMu instance containing the metadata.
      */
     private static void writeFreeFormat(MetadataMu metadata) {
         try {
@@ -444,8 +457,9 @@ public class SpssUtils {
 
     // WARNING: this has not been properly tested
     /**
+     * Makes the safe file using free format.
      *
-     * @param safeMetadata
+     * @param safeMetadata MetadataMu instance of the safe metadata.
      */
     public static void makeSafeFileFreeformat(MetadataMu safeMetadata) {
         try {
@@ -519,6 +533,11 @@ public class SpssUtils {
         }
     }
 
+    /**
+     * Asks for the directory where spss is installed.
+     *
+     * @param parent the Frame of the mainFrame.
+     */
     private static void getSpssInstallationDirectory(Frame parent) {
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setDialogTitle("Set IBM SPSS directory");
