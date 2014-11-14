@@ -129,7 +129,12 @@ public class MainFrameController {
      *
      */
     public void openMicrodata() {
-        DataFilePair filenames = view.showOpenMicrodataDialog(this.metadata.getFileNames());
+        DataFilePair old = this.metadata.getFileNames();
+        if (this.metadata.getDataFileType() == MetadataMu.DATA_FILE_TYPE_SPSS) {
+            old = new DataFilePair(this.metadata.getSpssDataFile(), 
+                this.metadata.getFileNames().getMetaFileName());
+        }
+        DataFilePair filenames = view.showOpenMicrodataDialog(old);
         if (filenames == null) {
             return;
         }
@@ -141,6 +146,9 @@ public class MainFrameController {
         } catch (ArgusException ex) {
             this.view.showErrorMessage(new ArgusException("Error reading metadata file: " + ex.getMessage()));
             return;
+        }
+        if (newMetadata.getDataFileType() == MetadataMu.DATA_FILE_TYPE_SPSS) {
+            newMetadata.setSpssDataFile(filenames.getDataFileName());
         }
         try {
             newMetadata.verify();

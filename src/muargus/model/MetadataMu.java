@@ -32,6 +32,7 @@ public final class MetadataMu {
     private Combinations combinations;
     private int recordCount;
     private final ArrayList<ReplacementSpec> replacementSpecs;
+    private String spssDataFile;
 
     /**
      * Constructor of the model class MetadataMu. Initializes the DataFilePair
@@ -55,6 +56,7 @@ public final class MetadataMu {
 
         this.dataFileType = metadata.dataFileType;
         this.filenames = new DataFilePair(metadata.filenames.getDataFileName(), metadata.filenames.getMetaFileName());
+        this.spssDataFile = metadata.spssDataFile;
         this.separator = metadata.separator;
         for (VariableMu var : metadata.variables) {
             this.variables.add(new VariableMu(var));
@@ -338,6 +340,27 @@ public final class MetadataMu {
         this.filenames = filenames;
     }
 
+    /**
+     * Gets the spss data file path
+     * Only relevant if SPSS file type has been chosen
+     * 
+     * @return Full path of the spss data file
+     */
+    public String getSpssDataFile() {
+        return spssDataFile;
+    }
+
+    /**
+     * Gets the spss data file path
+     * Only relevant if SPSS file type has been chosen
+     * 
+     * @param spssDataFile path of the spss data file
+     */
+    public void setSpssDataFile(String spssDataFile) {
+        this.spssDataFile = spssDataFile;
+    }
+
+    
     /**
      * Returns whether the data is Household data.
      *
