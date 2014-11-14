@@ -129,7 +129,17 @@ public class MainFrameController {
      *
      */
     public void openMicrodata() {
-        DataFilePair filenames = view.showOpenMicrodataDialog(this.metadata.getFileNames());
+        DataFilePair filenames;
+        if (this.metadata.isSpss() && this.metadata.getCombinations() != null) {
+            if (this.metadata.getCombinations().getTables().size() > 0) {
+                filenames = view.showOpenMicrodataDialog(
+                        new DataFilePair(MuARGUS.getSpssUtils().spssDataFileName, this.metadata.getFileNames().getMetaFileName()));
+            } else {
+                filenames = view.showOpenMicrodataDialog(this.metadata.getFileNames());
+            }
+        } else {
+            filenames = view.showOpenMicrodataDialog(this.metadata.getFileNames());
+        }
         if (filenames == null) {
             return;
         }
@@ -460,7 +470,6 @@ public class MainFrameController {
 //        }
 //        return temp;
 //    }
-
     /**
      * Shows the news.
      */

@@ -5,6 +5,7 @@ import argus.model.DataFilePair;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Objects;
+import muargus.MuARGUS;
 
 /**
  * Model class of the SpecifyMetadata screen. This model class contains all
