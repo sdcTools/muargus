@@ -14,8 +14,8 @@ import javax.swing.JDialog;
 import muargus.VariableNameCellRenderer;
 import muargus.model.MetadataMu;
 import muargus.controller.SpecifyMetadataController;
-import muargus.controller.SpssUtils;
 import argus.model.SpssVariable;
+import muargus.MuARGUS;
 import muargus.model.VariableMu;
 
 /**
@@ -906,11 +906,11 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
     private void generateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generateButtonActionPerformed
         if (getMetadata().isSpss()) {
             this.generateButton.setEnabled(false);
-            List<SpssVariable> variables = SpssUtils.getVariablesFromSpss(getController().getMetadataClone(), parent);
+            List<SpssVariable> variables = MuARGUS.getSpssUtils().getVariablesFromSpss(getController().getMetadataClone(), parent);
             SpssSelectVariablesView selectView = new SpssSelectVariablesView(parent, true);
             selectView.showVariables(variables);
             selectView.setVisible(true);
-            SpssUtils.setVariablesSpss(variables, getController().getMetadataClone());
+            MuARGUS.getSpssUtils().setVariablesSpss(variables, getController().getMetadataClone());
             initializeData();
         } else {
             GenerateParameters generateView = new GenerateParameters(this.parent, true);

@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.util.Locale;
 import java.util.logging.Logger;
 import javax.swing.UnsupportedLookAndFeelException;
+import muargus.controller.SpssUtils;
 import muargus.extern.dataengine.CMuArgCtrl;
 import muargus.view.MainFrameView;
 import org.apache.commons.io.FilenameUtils;
@@ -37,7 +38,7 @@ public class MuARGUS {
     private static final String defaultSeparator = ",";
 
     private static final String lookAndFeel = "Windows";
-    private static final File manual = new File(MuARGUS.class.getResource("/muargus/resources/MUmanual4.3.pdf").getFile());
+    private static final File manual = new File("./resources/MUmanual4.3.pdf");
     private static final String acrord32 = "acrord32.exe"; // finds the acrord32.exe
     private static final int sleepTime = 2000;
 
@@ -48,9 +49,16 @@ public class MuARGUS {
 
     //private static CMuArgCtrl muArgCrtl = new CMuArgCtrl();
     private static final CalculationService calcService = new CalculationService(new CMuArgCtrl());
+    
 
     public static CalculationService getCalculationService() {
         return calcService;
+    }
+    
+    private static final SpssUtils spssUtils = new SpssUtils();
+    
+    public static SpssUtils getSpssUtils() {
+        return spssUtils;
     }
 
     public static String getFullVersion() {

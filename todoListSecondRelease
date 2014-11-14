@@ -6,8 +6,6 @@ Release 3 uitzoeken:
 - MuArgusCtrl                                      Is leeg, wordt dit ergens voor gebruikt?         Anne
 - NumericalDll                                     Is leeg, wordt dit ergens voor gebruikt?         Anne
 - Andere html-viewer
-- MainFrameView                                     Labels verwijderen na global recode
-- PramSpecificationView                             Labels verwijderen na global recode
 - dingen toevoegen aan registry zoals NumericalRankSwapping, PRAM, etc. 
 - MuARGUS                               41          acrord32.exe aanpassen 
                                                     Linux: andere extensie
@@ -15,15 +13,9 @@ Release 3 uitzoeken:
 - MakeProtectedFileView                             listEventListener aanpassen                     Jeldrik
 - Afvangen als de safe.sav file in gebruik is --> dan kan namelijk niet worden weggeschreven
 - Afvangen spss gebruiken wanneer men geen spss geinstalleerd heeft
-- wat te doen met de spssjavaplugin? --> in releasnotes schrijven hoe dit gefixed moet worden?
-- Bug bij Spss: wanneer spss data is geopend en tabellen zijn gemaakt via select combinations veranderd 
-  de dataFileName
-- Bug: Bij ordinale data (zowel numeric als categoric) gaat het fout bij modifyNumericalVariables --> geeft error vanwege problemen met rounding.
-        --> aanpassing in de dll? -->
-    if (v < 0 || v >= m_nvar || !m_var[v].IsNumeric || (m_var[v].IsCategorical && !m_var[v].IsNumeric)|| RoundBase <= 0 || nDec < 0) {
-	return false;
-    }
-        --> rounding verbieden bij ordinale variabelen? --> voorbeeld: leeftijd
+- Bug bij Spss: wanneer spss data is geopend en tabellen zijn gemaakt via select combinations       Anne
+  veranderd de dataFileName
+
 
 Overige
 - ReleaseNotes schrijven 
@@ -61,5 +53,12 @@ Klasse:                                 Regel(s):   Taak/opmerking:             
 - MainFrame                                         Rechterscherm wordt niet bijgewerkt na recode   Jeldrik
 - SelectCombinations                                Bugs fixen (zie todolist)                       Jeldrik
 - hoe om te gaan met missings --> missings wegschrijven naar spss                                   Jeldrik
-
-
+- MainFrameView                                     Labels verwijderen na global recode
+- PramSpecificationView                             Labels verwijderen na global recode
+- Bug: Bij ordinale data (zowel numeric als categoric) gaat het fout bij modifyNumericalVariables --> geeft error vanwege problemen met rounding.
+        --> aanpassing in de dll? -->
+    if (v < 0 || v >= m_nvar || !m_var[v].IsNumeric || (m_var[v].IsCategorical && !m_var[v].IsNumeric)|| RoundBase <= 0 || nDec < 0) {
+	return false;
+    }
+        --> rounding verbieden bij ordinale variabelen? --> voorbeeld: leeftijd
+- wat te doen met de spssjavaplugin? --> in releasnotes schrijven hoe dit gefixed moet worden?

@@ -15,7 +15,6 @@ import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import javax.swing.JOptionPane;
 import muargus.controller.SpssUtils;
 import muargus.io.MetaReader;
 import muargus.model.CodeInfo;
@@ -41,7 +40,7 @@ import org.w3c.dom.Node;
 public class HTMLReportWriter {
 
     private static Document doc;
-    public static final File css = new File(HTMLReportWriter.class.getResource("/muargus/resources/muargus.css").getFile());
+    public static final File css = new File("./resources/muargus.css");
 
     public static void createReportTree(Document document, MetadataMu metadata) {
         doc = document;
@@ -513,7 +512,7 @@ public class HTMLReportWriter {
         Element tr = addChildElement(table, "tr");
         addChildElement(tr, "td", "Original data file");
         if (metadata.isSpss()) {
-            addChildElement(tr, "td", SpssUtils.spssDataFileName);
+            addChildElement(tr, "td", MuARGUS.getSpssUtils().spssDataFileName);
         } else {
             addChildElement(tr, "td", metadata.getFileNames().getDataFileName());
         }

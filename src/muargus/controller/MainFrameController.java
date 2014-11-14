@@ -22,7 +22,6 @@ import muargus.io.MetaReader;
 import muargus.model.CodeInfo;
 import muargus.model.Combinations;
 import muargus.model.MetadataMu;
-import muargus.model.RSpecification;
 import muargus.model.RecodeMu;
 import muargus.model.VariableMu;
 import muargus.view.AboutView;
@@ -39,8 +38,9 @@ public class MainFrameController {
 
     private MetadataMu metadata;
     private Document report;
-    private String news;        
-    private final File newsLocation = new File(getClass().getResource("/muargus/resources/html/MuNews.html").getFile());
+    private String news;
+    //private String test = getClass().getResource("/muargus/resources/html/MuNews.html").toString();
+    private final File newsLocation = new File("./resources/html/MuNews.html");
 
     public enum Action {
 
@@ -449,20 +449,33 @@ public class MainFrameController {
         MuARGUS.showHelp("");
     }
 
+//    public String getFile(String location) {
+//        String temp;
+//        try {
+//            temp = location.substring(location.indexOf("file"), location.indexOf("!"))
+//                    + location.substring(location.indexOf("!") + 1);
+//            System.out.println(temp);
+//        } catch (Exception e) {
+//            temp = location.substring(location.indexOf("file") + 6);
+//        }
+//        return temp;
+//    }
+
     /**
      * Shows the news.
      */
     public void news() {
+
         if (this.news.equals("")) {
             try {
-                File file = this.newsLocation;
-                BufferedReader reader = new BufferedReader(new FileReader(file));
+                //File file = new File(this.newsLocation);
+                BufferedReader reader = new BufferedReader(new FileReader(this.newsLocation));
                 boolean finished = false;
                 do {
                     try {
+
                         String temp = reader.readLine();
                         if (temp.contains("<link href=")) {
-                            temp = "<link href=\"file:///" + HTMLReportWriter.css.getAbsolutePath() + "\" rel=\"stylesheet\" type=\"text/css\">";
                             temp = "<link href=\"file:///" + HTMLReportWriter.css.getAbsolutePath() + "\" rel=\"stylesheet\" type=\"text/css\">";
                         }
                         this.news = this.news + temp;
@@ -493,8 +506,6 @@ public class MainFrameController {
         RController controller = new RController(this.view, this.metadata);
         controller.showView();
     }
-
-    
 
 //    /**
 //     *

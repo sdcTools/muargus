@@ -7,6 +7,7 @@ package muargus.controller;
 import argus.model.ArgusException;
 import java.io.File;
 import java.util.ArrayList;
+import muargus.MuARGUS;
 import muargus.io.MetaWriter;
 import muargus.model.MetadataMu;
 import muargus.model.Combinations;
@@ -54,9 +55,9 @@ public class MakeProtectedFileController extends ControllerBase<ProtectedFile> {
         this.metadata.getCombinations().getProtectedFile().initSafeMeta(file, this.metadata);
         removeRedundentReplacementSpecs();
         if (this.metadata.isSpss()) {
-            SpssUtils.safFile = file;
-            int lastDot = SpssUtils.safFile.getAbsolutePath().lastIndexOf(".");
-            SpssUtils.safeSpssFile = new File(SpssUtils.safFile.getAbsolutePath().substring(0, lastDot) + "Safe.sav");
+            MuARGUS.getSpssUtils().safFile = file;
+            int lastDot = MuARGUS.getSpssUtils().safFile.getAbsolutePath().lastIndexOf(".");
+            MuARGUS.getSpssUtils().safeSpssFile = new File(MuARGUS.getSpssUtils().safFile.getAbsolutePath().substring(0, lastDot) + "Safe.sav");
         }
         getCalculationService().makeProtectedFile(this);
     }
@@ -115,7 +116,7 @@ public class MakeProtectedFileController extends ControllerBase<ProtectedFile> {
         getCalculationService().fillSafeFileMetadata();
         MetadataMu safeMetadata = this.metadata.getCombinations().getProtectedFile().getSafeMeta();
         if (this.metadata.isSpss()) {
-            SpssUtils.makeSafeFileSpss(safeMetadata);
+            MuARGUS.getSpssUtils().makeSafeFileSpss(safeMetadata);
         }
         try {
             MetaWriter.writeRda(safeMetadata.getFileNames().getMetaFileName(),

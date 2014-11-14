@@ -53,7 +53,7 @@ public class SelectCombinationsController extends ControllerBase<Combinations> {
         saveSettings();
         this.metadata.setCombinations(getModel());
         if (this.metadata.getDataFileType() == MetadataMu.DATA_FILE_TYPE_SPSS) {
-            SpssUtils.generateSpssData(this.metadata);
+            MuARGUS.getSpssUtils().generateSpssData(this.metadata);
         }
         CalculationService service = MuARGUS.getCalculationService();
         service.setMetadata(this.metadata);

@@ -75,14 +75,10 @@ public class ModifyNumericalVariablesView extends DialogBase<ModifyNumericalVari
         this.maximumTextField.setText(getController().getMax(selected));
         enableControls(this.weightNoisePanel,selected.getVariable().isWeight());
         enableControls(this.roundPanel, !selected.getVariable().isCategorical());
-//        this.weightNoisePanel.setEnabled(selected.getVariable().isWeight());
-//        this.percentageLabel.setEnabled(selected.getVariable().isWeight());
-//        this.percentageTextField.setEnabled(selected.getVariable().isWeight());
         this.bottomValueTextField.setText(formatDouble(selected.getBottomValue()));
         this.bottomCodingReplacementTextField.setText(selected.getBottomReplacement());
         this.topValueTextField.setText(formatDouble(selected.getTopValue()));
         this.topCodingReplacementTextField.setText(selected.getTopReplacement());
-//        this.roundingBaseTextField.setEnabled(!selected.getVariable().isCategorical());
         this.roundingBaseTextField.setText(formatDouble(selected.getRoundingBase()));
         this.percentageTextField.setText(formatDouble(selected.getWeightNoisePercentage()));
     }

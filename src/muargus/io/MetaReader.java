@@ -15,6 +15,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
+import muargus.MuARGUS;
 import muargus.controller.SpssUtils;
 import muargus.model.MetadataMu;
 import muargus.model.RecodeMu;
@@ -155,7 +156,7 @@ public class MetaReader {
         }
 
         if (metadata.getDataFileType() == MetadataMu.DATA_FILE_TYPE_SPSS) {
-            SpssUtils.checkMetadata(metadata, parent);
+            MuARGUS.getSpssUtils().checkMetadata(metadata, parent);
         }
 
     }
