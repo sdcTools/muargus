@@ -1,5 +1,5 @@
 //TODO: test for String format and add the possibility to add/read/write date/time format
-package muargus.controller;
+package muargus;
 
 import argus.model.ArgusException;
 import argus.model.DataFilePair;
@@ -28,6 +28,7 @@ import com.ibm.statistics.plugin.Variable;
 import com.ibm.statistics.plugin.VariableFormat;
 import java.awt.Frame;
 import javax.swing.JFileChooser;
+import muargus.controller.SelectCombinationsController;
 import muargus.model.VariableMu;
 
 /**
@@ -395,9 +396,9 @@ public class SpssUtils {
             }
             command.add("SAVE OUTFILE='" + this.safeSpssFile + "'/DROP=TEMP" + first + " TO TEMP" + last + ".");
             command.add("EXECUTE.");
-            for (String s : command) {
-                System.out.println(s);
-            }
+//            for (String s : command) {
+//                System.out.println(s);
+//            }
 
             StatsUtil.submit(command.toArray(new String[command.size()]));
             StatsUtil.stop();

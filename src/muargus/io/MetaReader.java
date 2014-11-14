@@ -16,7 +16,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
 import muargus.MuARGUS;
-import muargus.controller.SpssUtils;
+import muargus.SpssUtils;
 import muargus.model.MetadataMu;
 import muargus.model.RecodeMu;
 import muargus.model.VariableMu;

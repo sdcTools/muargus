@@ -7,6 +7,7 @@ import muargus.MuARGUS;
 import muargus.model.Combinations;
 
 /**
+ * Dialog used for generating tables automatically.
  *
  * @author Statistics Netherlands
  */
@@ -21,8 +22,10 @@ public class GenerateAutomaticTables extends DialogBase {
      *
      * @param parent the Frame of the mainFrame.
      * @param modal boolean to set the modal status
-     * @param model
-     * @param numberOfVariables
+     * @param model Combinations instance containing the model class of the
+     * select combinations screen
+     * @param numberOfVariables Integer containing the number of categorical
+     * variables.
      */
     public GenerateAutomaticTables(java.awt.Frame parent, boolean modal, Combinations model,
             int numberOfVariables) {
@@ -35,26 +38,53 @@ public class GenerateAutomaticTables extends DialogBase {
         this.setTitle("Method for generating tables");
     }
 
+    /**
+     * 
+     * @return 
+     */
     public int getDimensionTextField() {
         return Integer.parseInt(this.dimensionTextField.getText());
     }
 
+    /**
+     * 
+     * @return 
+     */
     public boolean isMakeUpToDimensionRadioButton() {
         return this.makeUpToDimensionRadioButton.isSelected();
     }
 
+    /**
+     * 
+     * @return 
+     */
     public boolean isUseIdentificatinLevelRadioButton() {
         return this.useIdentificatinLevelRadioButton.isSelected();
     }
 
+    /**
+     * 
+     * @return 
+     */
     public boolean isValid() {
         return this.valid;
     }
 
+    /**
+     * 
+     * @param valid 
+     */
     private void setValid(boolean valid) {
         this.valid = valid;
     }
 
+    /**
+     * 
+     * @param threshold
+     * @param message
+     * @return
+     * @throws ArgusException 
+     */
     private int getThreshold(int threshold, String message) throws ArgusException {
         String result = JOptionPane.showInputDialog(null, message, threshold);
         if (result == null || result.length() == 0) {
@@ -67,6 +97,11 @@ public class GenerateAutomaticTables extends DialogBase {
         }
     }
 
+    /**
+     * 
+     * @param dimensions
+     * @return 
+     */
     private int checkDimensions(int dimensions) {
         try {
             dimensions = Integer.parseInt(this.dimensionTextField.getText());
@@ -88,6 +123,9 @@ public class GenerateAutomaticTables extends DialogBase {
         return dimensions;
     }
 
+    /**
+     * 
+     */
     private void getThresholdIdLevel() {
         while (!this.isValid()) {
             try {
@@ -104,6 +142,10 @@ public class GenerateAutomaticTables extends DialogBase {
         }
     }
 
+    /**
+     * 
+     * @param dimensions 
+     */
     private void getThresholdDimensions(int dimensions) {
         int[] thresholds = this.model.getThresholds();
         breakpoint:

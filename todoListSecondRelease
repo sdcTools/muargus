@@ -13,8 +13,7 @@ Release 3 uitzoeken:
 - MakeProtectedFileView                             listEventListener aanpassen                     Jeldrik
 - Afvangen als de safe.sav file in gebruik is --> dan kan namelijk niet worden weggeschreven
 - Afvangen spss gebruiken wanneer men geen spss geinstalleerd heeft
-- Bug bij Spss: wanneer spss data is geopend en tabellen zijn gemaakt via select combinations       Anne
-  veranderd de dataFileName
+
 
 
 Overige
@@ -62,3 +61,5 @@ Klasse:                                 Regel(s):   Taak/opmerking:             
     }
         --> rounding verbieden bij ordinale variabelen? --> voorbeeld: leeftijd
 - wat te doen met de spssjavaplugin? --> in releasnotes schrijven hoe dit gefixed moet worden?
+- Bug bij Spss: wanneer spss data is geopend en tabellen zijn gemaakt via select combinations       Jeldrik
+  veranderd de dataFileName
