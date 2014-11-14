@@ -37,7 +37,7 @@ public class MuARGUS {
     private static final String defaultSeparator = ",";
 
     private static final String lookAndFeel = "Windows";
-    private static final File manual = new File("./resources/MUmanual4.3.pdf"); 
+    private static final File manual = new File(MuARGUS.class.getResource("/muargus/resources/MUmanual4.3.pdf").getFile());
     private static final String acrord32 = "acrord32.exe"; // finds the acrord32.exe
     private static final int sleepTime = 2000;
 
@@ -123,7 +123,6 @@ public class MuARGUS {
         }
         try {
             String cmdString = "cmd.exe /c start " + acrord32 + " /A \"nameddest=" + namedDest + "\" \"" + manual.getAbsolutePath() + "\"";
-            //System.out.println(cmdString);
             Process p = Runtime.getRuntime().exec(cmdString);
         } catch (IOException ex) {
         } catch (Exception ex2) {

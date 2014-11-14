@@ -41,7 +41,7 @@ import org.w3c.dom.Node;
 public class HTMLReportWriter {
 
     private static Document doc;
-    public static final File css = new File("resources/muargus.css"); 
+    public static final File css = new File(HTMLReportWriter.class.getResource("/muargus/resources/muargus.css").getFile());
 
     public static void createReportTree(Document document, MetadataMu metadata) {
         doc = document;

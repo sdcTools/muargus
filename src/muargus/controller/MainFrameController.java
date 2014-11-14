@@ -39,8 +39,8 @@ public class MainFrameController {
 
     private MetadataMu metadata;
     private Document report;
-    private String news;
-    private final String newsLocation = "./resources/html/MuNews.html";
+    private String news;        
+    private final File newsLocation = new File(getClass().getResource("/muargus/resources/html/MuNews.html").getFile());
 
     public enum Action {
 
@@ -455,13 +455,14 @@ public class MainFrameController {
     public void news() {
         if (this.news.equals("")) {
             try {
-                File file = new File(this.newsLocation);
+                File file = this.newsLocation;
                 BufferedReader reader = new BufferedReader(new FileReader(file));
                 boolean finished = false;
                 do {
                     try {
                         String temp = reader.readLine();
                         if (temp.contains("<link href=")) {
+                            temp = "<link href=\"file:///" + HTMLReportWriter.css.getAbsolutePath() + "\" rel=\"stylesheet\" type=\"text/css\">";
                             temp = "<link href=\"file:///" + HTMLReportWriter.css.getAbsolutePath() + "\" rel=\"stylesheet\" type=\"text/css\">";
                         }
                         this.news = this.news + temp;
