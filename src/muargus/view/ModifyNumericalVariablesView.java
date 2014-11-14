@@ -76,6 +76,7 @@ public class ModifyNumericalVariablesView extends DialogBase<ModifyNumericalVari
         this.bottomCodingReplacementTextField.setText(selected.getBottomReplacement());
         this.topValueTextField.setText(formatDouble(selected.getTopValue()));
         this.topCodingReplacementTextField.setText(selected.getTopReplacement());
+        this.roundingBaseTextField.setEnabled(!selected.getVariable().isCategorical());
         this.roundingBaseTextField.setText(formatDouble(selected.getRoundingBase()));
         this.percentageTextField.setText(formatDouble(selected.getWeightNoisePercentage()));
     }
@@ -94,11 +95,11 @@ public class ModifyNumericalVariablesView extends DialogBase<ModifyNumericalVari
 
         TableModel variablesTableModel = new DefaultTableModel(
                 this.model.getVariablesData(), this.model.getVariablesColumnNames()) {
-            @Override
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return false;
-            }
-        };
+                    @Override
+                    public boolean isCellEditable(int rowIndex, int columnIndex) {
+                        return false;
+                    }
+                };
         this.variablesTable.setDefaultRenderer(Object.class, new HighlightTableCellRenderer());
         this.variablesTable.setModel(variablesTableModel);
 
@@ -150,7 +151,7 @@ public class ModifyNumericalVariablesView extends DialogBase<ModifyNumericalVari
     private boolean checkValidAnswer() {
         //setValuesInModel();
         ModifyNumericalVariablesSpec selected = getModifyNumericalVariablesSpec();
-        boolean hasValue = valueEntered(); 
+        boolean hasValue = valueEntered();
         if (hasValue) {
             String message = getController().getWarningMessage(selected,
                     this.bottomValueTextField.getText(),
@@ -224,10 +225,10 @@ public class ModifyNumericalVariablesView extends DialogBase<ModifyNumericalVari
     }
 
     /**
-     * 
+     *
      * @param text
      * @param d
-     * @return 
+     * @return
      */
     private boolean doubleEquals(String text, double d) {
         return text.equals(formatDouble(d));

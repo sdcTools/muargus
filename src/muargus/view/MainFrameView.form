@@ -253,6 +253,9 @@
                 <Property name="accelerator" type="javax.swing.KeyStroke" editor="org.netbeans.modules.form.editors.KeyStrokeEditor">
                   <KeyStroke key="F1"/>
                 </Property>
+                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                  <Image iconType="3" name="/muargus/resources/icons/Contents.png"/>
+                </Property>
                 <Property name="text" type="java.lang.String" value="Content help"/>
               </Properties>
               <Events>
@@ -261,6 +264,9 @@
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="newsMenuItem">
               <Properties>
+                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                  <Image iconType="3" name="/muargus/resources/icons/news.png"/>
+                </Property>
                 <Property name="text" type="java.lang.String" value="News"/>
               </Properties>
               <Events>
@@ -271,10 +277,32 @@
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="aboutMenuItem">
               <Properties>
+                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                  <Image iconType="3" name="/muargus/resources/icons/about.png"/>
+                </Property>
                 <Property name="text" type="java.lang.String" value="About"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="aboutMenuItemActionPerformed"/>
+              </Events>
+            </MenuItem>
+          </SubComponents>
+        </Menu>
+        <Menu class="javax.swing.JMenu" name="externMenu">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Extern"/>
+          </Properties>
+          <SubComponents>
+            <MenuItem class="javax.swing.JMenuItem" name="rScriptMenuItem">
+              <Properties>
+                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                  <Image iconType="3" name="/muargus/resources/icons/Rlogo.png"/>
+                </Property>
+                <Property name="text" type="java.lang.String" value="load R script"/>
+                <Property name="enabled" type="boolean" value="false"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="rScriptMenuItemActionPerformed"/>
               </Events>
             </MenuItem>
           </SubComponents>
@@ -553,7 +581,7 @@
         <Component class="javax.swing.JButton" name="contentsButton">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="3" name="/muargus/resources/icons/Help_symbol.png"/>
+              <Image iconType="3" name="/muargus/resources/icons/Contents.png"/>
             </Property>
             <Property name="toolTipText" type="java.lang.String" value="Content help"/>
             <Property name="focusable" type="boolean" value="false"/>
@@ -581,7 +609,7 @@
         <Component class="javax.swing.JButton" name="aboutButton">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="3" name="/muargus/resources/icons/1415898538_info-16.png"/>
+              <Image iconType="3" name="/muargus/resources/icons/about.png"/>
             </Property>
             <Property name="toolTipText" type="java.lang.String" value="About"/>
             <Property name="focusable" type="boolean" value="false"/>
@@ -590,6 +618,23 @@
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="aboutMenuItemActionPerformed"/>
+          </Events>
+        </Component>
+        <Component class="javax.swing.JToolBar$Separator" name="toolBarSeparator5">
+        </Component>
+        <Component class="javax.swing.JButton" name="rScriptButton">
+          <Properties>
+            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+              <Image iconType="3" name="/muargus/resources/icons/Rlogo.png"/>
+            </Property>
+            <Property name="toolTipText" type="java.lang.String" value="R script"/>
+            <Property name="enabled" type="boolean" value="false"/>
+            <Property name="focusable" type="boolean" value="false"/>
+            <Property name="horizontalTextPosition" type="int" value="0"/>
+            <Property name="verticalTextPosition" type="int" value="3"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="rScriptMenuItemActionPerformed"/>
           </Events>
         </Component>
       </SubComponents>

@@ -87,6 +87,8 @@ public class MainFrameView extends javax.swing.JFrame {
                 return;
             case ViewReport:
                 doEnable(this.viewReportButton, this.viewReportMenuItem, enable);
+            case RScript:
+                doEnable(this.rScriptButton, this.rScriptMenuItem, enable);
         }
     }
 
@@ -358,6 +360,8 @@ public class MainFrameView extends javax.swing.JFrame {
         contentsButton = new javax.swing.JButton();
         newsButton = new javax.swing.JButton();
         aboutButton = new javax.swing.JButton();
+        toolBarSeparator5 = new javax.swing.JToolBar.Separator();
+        rScriptButton = new javax.swing.JButton();
         unsafeCombinationsPanel = new javax.swing.JPanel();
         unsafeCombinationsLabel = new javax.swing.JLabel();
         unsafeCombinationsScrollPane = new javax.swing.JScrollPane();
@@ -394,6 +398,8 @@ public class MainFrameView extends javax.swing.JFrame {
         newsMenuItem = new javax.swing.JMenuItem();
         helpSeparator = new javax.swing.JPopupMenu.Separator();
         aboutMenuItem = new javax.swing.JMenuItem();
+        externMenu = new javax.swing.JMenu();
+        rScriptMenuItem = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Main Frame");
@@ -575,7 +581,7 @@ public class MainFrameView extends javax.swing.JFrame {
         toolBar.add(viewReportButton);
         toolBar.add(toolBarSeparator4);
 
-        contentsButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/muargus/resources/icons/Help_symbol.png"))); // NOI18N
+        contentsButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/muargus/resources/icons/Contents.png"))); // NOI18N
         contentsButton.setToolTipText("Content help");
         contentsButton.setFocusable(false);
         contentsButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -599,7 +605,7 @@ public class MainFrameView extends javax.swing.JFrame {
         });
         toolBar.add(newsButton);
 
-        aboutButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/muargus/resources/icons/1415898538_info-16.png"))); // NOI18N
+        aboutButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/muargus/resources/icons/about.png"))); // NOI18N
         aboutButton.setToolTipText("About");
         aboutButton.setFocusable(false);
         aboutButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -610,6 +616,20 @@ public class MainFrameView extends javax.swing.JFrame {
             }
         });
         toolBar.add(aboutButton);
+        toolBar.add(toolBarSeparator5);
+
+        rScriptButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/muargus/resources/icons/Rlogo.png"))); // NOI18N
+        rScriptButton.setToolTipText("R script");
+        rScriptButton.setEnabled(false);
+        rScriptButton.setFocusable(false);
+        rScriptButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        rScriptButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        rScriptButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rScriptMenuItemActionPerformed(evt);
+            }
+        });
+        toolBar.add(rScriptButton);
 
         unsafeCombinationsPanel.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
 
@@ -882,6 +902,7 @@ public class MainFrameView extends javax.swing.JFrame {
         helpMenu.setText("Help");
 
         contentsMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F1, 0));
+        contentsMenuItem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/muargus/resources/icons/Contents.png"))); // NOI18N
         contentsMenuItem.setText("Content help");
         contentsMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -890,6 +911,7 @@ public class MainFrameView extends javax.swing.JFrame {
         });
         helpMenu.add(contentsMenuItem);
 
+        newsMenuItem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/muargus/resources/icons/news.png"))); // NOI18N
         newsMenuItem.setText("News");
         newsMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -899,6 +921,7 @@ public class MainFrameView extends javax.swing.JFrame {
         helpMenu.add(newsMenuItem);
         helpMenu.add(helpSeparator);
 
+        aboutMenuItem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/muargus/resources/icons/about.png"))); // NOI18N
         aboutMenuItem.setText("About");
         aboutMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -908,6 +931,20 @@ public class MainFrameView extends javax.swing.JFrame {
         helpMenu.add(aboutMenuItem);
 
         menuBar.add(helpMenu);
+
+        externMenu.setText("Extern");
+
+        rScriptMenuItem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/muargus/resources/icons/Rlogo.png"))); // NOI18N
+        rScriptMenuItem.setText("load R script");
+        rScriptMenuItem.setEnabled(false);
+        rScriptMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rScriptMenuItemActionPerformed(evt);
+            }
+        });
+        externMenu.add(rScriptMenuItem);
+
+        menuBar.add(externMenu);
 
         setJMenuBar(menuBar);
 
@@ -1017,6 +1054,10 @@ public class MainFrameView extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_unsafeCombinationsTableMouseClicked
 
+    private void rScriptMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rScriptMenuItemActionPerformed
+        this.controller.rScript();
+    }//GEN-LAST:event_rScriptMenuItemActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton aboutButton;
     private javax.swing.JMenuItem aboutMenuItem;
@@ -1024,6 +1065,7 @@ public class MainFrameView extends javax.swing.JFrame {
     private javax.swing.JButton contentsButton;
     private javax.swing.JMenuItem contentsMenuItem;
     private javax.swing.JMenuItem exitMenuItem;
+    private javax.swing.JMenu externMenu;
     private javax.swing.JMenu fileMenu;
     private javax.swing.JPopupMenu.Separator fileSeparator;
     private javax.swing.JButton globalRecodeButton;
@@ -1054,6 +1096,8 @@ public class MainFrameView extends javax.swing.JFrame {
     private javax.swing.JMenu outputMenu;
     private javax.swing.JButton pramSpecificationButton;
     private javax.swing.JMenuItem pramSpecificationMenuItem;
+    private javax.swing.JButton rScriptButton;
+    private javax.swing.JMenuItem rScriptMenuItem;
     private javax.swing.JButton showTableCollectionButton;
     private javax.swing.JMenuItem showTableCollectionMenuItem;
     private javax.swing.JButton specifyCombinationsButton;
@@ -1064,6 +1108,7 @@ public class MainFrameView extends javax.swing.JFrame {
     private javax.swing.JToolBar.Separator toolBarSeparator2;
     private javax.swing.JToolBar.Separator toolBarSeparator3;
     private javax.swing.JToolBar.Separator toolBarSeparator4;
+    private javax.swing.JToolBar.Separator toolBarSeparator5;
     private javax.swing.JLabel unsafeCombinationsLabel;
     private javax.swing.JPanel unsafeCombinationsPanel;
     private javax.swing.JScrollPane unsafeCombinationsScrollPane;

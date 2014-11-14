@@ -30,6 +30,7 @@ public class Combinations {
     //private Microaggregation qualitativeMicroaggregation;
     private NumericalRankSwapping numericalRankSwapping;
     private PramSpecification pramSpecification;
+    private RSpecification rSpecification;
 
     // tot dit aantal kan die het redelijk goed hebben, maar is die wel +/- 5 seconden aan het rekenen. 
     private final int maximumNumberOfTables = 25000;
@@ -143,6 +144,17 @@ public class Combinations {
      */
     private void createPramSpecification() {
         this.pramSpecification = new PramSpecification();
+    }
+    
+    public RSpecification getRSpecification() {
+        if (this.rSpecification == null) {
+            createRSpecification();
+        }
+        return this.rSpecification;
+    }
+    
+    private void createRSpecification(){
+        this.rSpecification = new RSpecification();
     }
 
     /**

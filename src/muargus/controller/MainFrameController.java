@@ -1,18 +1,14 @@
 //TODO: make news reader better
-
 package muargus.controller;
 
 import argus.model.ArgusException;
 import argus.model.DataFilePair;
 import argus.utils.StrUtils;
-import java.awt.Desktop;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.net.URISyntaxException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.logging.Level;
@@ -26,6 +22,7 @@ import muargus.io.MetaReader;
 import muargus.model.CodeInfo;
 import muargus.model.Combinations;
 import muargus.model.MetadataMu;
+import muargus.model.RSpecification;
 import muargus.model.RecodeMu;
 import muargus.model.VariableMu;
 import muargus.view.AboutView;
@@ -64,6 +61,7 @@ public class MainFrameController {
         Contents,
         News,
         About,
+        RScript
     }
 
     /**
@@ -115,6 +113,7 @@ public class MainFrameController {
         view.enableAction(Action.MakeProtectedFile, tablesCalculated);
         view.enableAction(Action.ShowTableCollection, tablesCalculated);
         view.enableAction(Action.PramSpecification, tablesCalculated);
+        view.enableAction(Action.RScript, tablesCalculated);
         view.enableAction(Action.IndividualRiskSpecification,
                 tablesCalculated && metadata.getCombinations().isRiskModel() && !metadata.isHouseholdData());
         view.enableAction(Action.HouseholdRiskSpecification,
@@ -206,9 +205,9 @@ public class MainFrameController {
     }
 
     /**
-     * 
+     *
      * @param variableIndex
-     * @param redraw 
+     * @param redraw
      */
     private void showUnsafeCombinations(int variableIndex, boolean redraw) {
         try {
@@ -231,7 +230,7 @@ public class MainFrameController {
         for (VariableMu variable : this.metadata.getVariables()) {
             if (variable.isCategorical()) {
                 String codelistFile = "";
-                
+
                 if (variable.isCodelist()) {
                     codelistFile = variable.getCodeListFile();
                 }
@@ -392,7 +391,6 @@ public class MainFrameController {
 //        controller.showView();
 //
 //    }
-
     /**
      *
      */
@@ -463,7 +461,7 @@ public class MainFrameController {
                 do {
                     try {
                         String temp = reader.readLine();
-                        if(temp.contains("<link href=")){
+                        if (temp.contains("<link href=")) {
                             temp = "<link href=\"file:///" + HTMLReportWriter.css.getAbsolutePath() + "\" rel=\"stylesheet\" type=\"text/css\">";
                         }
                         this.news = this.news + temp;
@@ -490,6 +488,13 @@ public class MainFrameController {
         new AboutView(this.view, true).setVisible(true);
     }
 
+    public void rScript() {
+        RController controller = new RController(this.view, this.metadata);
+        controller.showView();
+    }
+
+    
+
 //    /**
 //     *
 //     */
@@ -500,7 +505,6 @@ public class MainFrameController {
 //        } catch (URISyntaxException | IOException e) {
 //        }
 //    }
-
     private void clearDataBeforeSelectCombinations() {
 
         //this.selectCombinationsModel = null;

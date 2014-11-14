@@ -130,25 +130,6 @@ public class ModifyNumericalVariablesController extends ControllerBase<ModifyNum
             }
         }
 
-        //TODO: change into try-catch
-//        if (!Double.isNaN(Double.parseDouble(bottomValue))) {
-//            if (bottomReplacement.equals("")) {
-//                warningMessage += "Bottom replacement value cannot be empty\n";
-//            } else {
-//                bottom = true;
-//                if (Double.parseDouble(bottomValue) < selected.getMin()
-//                        || Double.parseDouble(bottomValue) > selected.getMax()) {
-//                    warningMessage += "Bottom Value needs to be in the range between the minimum and maximum value\n";
-//                    bottom = false;
-//                }
-//            }
-//        } else if (!bottomValue.equals("")) {
-//            warningMessage += "Illegal value for the bottom value\n";
-//            bottom = false;
-//        } else if (!bottomReplacement.equals("")) {
-//            warningMessage += "Bottom value cannot be empty\n";
-//            bottom = false;
-//        }
         boolean top = false;
         try {
             Double temp = Double.parseDouble(topValue);
@@ -172,25 +153,6 @@ public class ModifyNumericalVariablesController extends ControllerBase<ModifyNum
             }
         }
 
-        // top = false;
-//        if (!Double.isNaN(Double.parseDouble(topValue))) {
-//            if (topReplacement.equals("")) {
-//                warningMessage += "Top replacement value cannot be empty\n";
-//            } else {
-//                top = true;
-//                if (Double.parseDouble(topValue) < selected.getMin()
-//                        || Double.parseDouble(topValue) > selected.getMax()) {
-//                    warningMessage += "Top Value needs to be in the range between the minimum and maximum value\n";
-//                    top = false;
-//                }
-//            }
-//        } else if (!topValue.equals("")) {
-//            warningMessage += "Illegal value for the top value\n";
-//            top = false;
-//        } else if (!topReplacement.equals("")) {
-//            warningMessage += "Top value cannot be empty\n";
-//            top = false;
-//        }
         if (top && bottom) {
             if (Double.parseDouble(topValue) <= Double.parseDouble(bottomValue)) {
                 warningMessage += "Top value needs to be larger than the bottom value\n";
@@ -208,13 +170,6 @@ public class ModifyNumericalVariablesController extends ControllerBase<ModifyNum
             }
         }
 
-//        if (!Double.isNaN(Double.parseDouble(roundingBase))) {
-//            if (Double.parseDouble(roundingBase) <= 0) {
-//                warningMessage += "Illegal Value for rounding\n";
-//            }
-//        } else if (!roundingBase.equals("")) {
-//            warningMessage += "Illegal value for the rounding base\n";
-//        }
         try {
             Double temp = Double.parseDouble(weightNoisePercentage);
             if (temp <= 0 || temp > 100) {
@@ -227,15 +182,6 @@ public class ModifyNumericalVariablesController extends ControllerBase<ModifyNum
             }
         }
 
-//        if (!Double.isNaN(Double.parseDouble(weightNoisePercentage))) {
-//            if (Double.parseDouble(weightNoisePercentage) <= 0
-//                    || Double.parseDouble(weightNoisePercentage) > 100) {
-//                warningMessage += "Illegal Value for the weight noise percentage\n"
-//                        + "Percentage needs to be a number greater than 0 and less than or equal to 100";
-//            }
-//        } else if (!weightNoisePercentage.equals("")) {
-//            warningMessage += "Illegal value for the weight noise percentage\n";
-//        }
         return warningMessage;
     }
 
@@ -267,11 +213,13 @@ public class ModifyNumericalVariablesController extends ControllerBase<ModifyNum
      */
     public void apply(ModifyNumericalVariablesSpec selected) {
         try {
-            getCalculationService().setRounding(
-                    selected.getVariable(),
-                    selected.getRoundingBase(),
-                    selected.getVariable().getDecimals(),
-                    Double.isNaN(selected.getRoundingBase())); // als het geen normaal getal is, dan is undo true
+            if (!selected.getVariable().isCategorical()) { // verbied bij ordinale data
+                getCalculationService().setRounding(
+                        selected.getVariable(),
+                        selected.getRoundingBase(),
+                        selected.getVariable().getDecimals(),
+                        Double.isNaN(selected.getRoundingBase())); // als het geen normaal getal is, dan is undo true
+            }
             getCalculationService().setTopBottomCoding(
                     selected.getVariable(),
                     true,
