@@ -16,6 +16,8 @@ import muargus.MuARGUS;
 import muargus.model.MetadataMu;
 
 /**
+ * Basic dialog class. This class contains standard methods useable by all view
+ * classes that extend this class.
  *
  * @author Statistics Netherlands
  * @param <T>
@@ -24,9 +26,10 @@ public class DialogBase<T> extends javax.swing.JDialog {
 
     private MetadataMu metadata;
     private final T controller;
-    
+
     /**
      * Creates new form DialogBase
+     *
      * @param parent the Frame of the mainFrame.
      * @param modal boolean to set the modal status
      * @param controller the controller of the view.
@@ -37,10 +40,11 @@ public class DialogBase<T> extends javax.swing.JDialog {
         initComponents();
         setHelpAction();
     }
-    
+
     /**
-     * 
-     * @param metadata 
+     * Sets the metadata.
+     *
+     * @param metadata MetadataMu instance containing the metadata.
      */
     public void setMetadata(MetadataMu metadata) {
         this.metadata = metadata;
@@ -48,20 +52,157 @@ public class DialogBase<T> extends javax.swing.JDialog {
     }
 
     /**
-     * 
-     * @return 
+     * Gets the metadata.
+     *
+     * @return MetadataMu instance containing the metadata.
      */
     protected MetadataMu getMetadata() {
         return this.metadata;
     }
-    
+
     /**
-     * 
+     * Initilizes the data. This class can be implemented inside the specific
+     * view classes.
      */
     protected void initializeData() {
         //Base class implementation is empty
     }
-    
+
+    /**
+     * Shows an error message.
+     *
+     * @param ex ArgusException.
+     */
+    public void showErrorMessage(ArgusException ex) {
+        JOptionPane.showMessageDialog(null, ex.getMessage(), MuARGUS.getMessageTitle(), JOptionPane.ERROR_MESSAGE);
+    }
+
+    /**
+     * Shows a confirm dialog.
+     *
+     * @param message String containing the message for which confirmation is
+     * needed.
+     * @return Boolean indicating whether the user confirmed the message.
+     */
+    public boolean showConfirmDialog(String message) {
+        return (JOptionPane.showConfirmDialog(null, message, MuARGUS.getMessageTitle(), JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION);
+    }
+
+    /**
+     * Shows a message.
+     *
+     * @param message String containing the message
+     */
+    public void showMessage(String message) {
+        JOptionPane.showMessageDialog(null, message, MuARGUS.getMessageTitle(), JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    /**
+     * Shows a file chooser dialog.
+     *
+     * @param title String instance containing the title of the file chooser
+     * dialog.
+     * @param forSaving Boolean indicating whether the dialog is for saving.
+     * @param filter Array of Strings containing the filter extensions. These
+     * extensions are used to filter the files in the directory.
+     * @return String containing the path of the chosen file.
+     */
+    public String showFileDialog(String title, boolean forSaving, String[] filter) {
+        JFileChooser fileChooser = new JFileChooser();
+        String hs = SystemUtils.getRegString("general", "datadir", "");
+        if (!hs.equals("")) {
+            File file = new File(hs);
+            fileChooser.setCurrentDirectory(file);
+        }
+        fileChooser.setDialogTitle(title);
+        fileChooser.resetChoosableFileFilters();
+        String[] firstFilter = splitFilter(filter[0]);
+        fileChooser.setFileFilter(new FileNameExtensionFilter(firstFilter[0], firstFilter[1]));
+        for (int index = 1; index < filter.length; index++) {
+            String[] otherFilter = splitFilter(filter[index]);
+            fileChooser.addChoosableFileFilter(new FileNameExtensionFilter(otherFilter[0], otherFilter[1]));
+        }
+        int result = forSaving ? fileChooser.showSaveDialog(this) : fileChooser.showOpenDialog(this);
+        if (result != JFileChooser.APPROVE_OPTION) {
+            return null;
+        }
+        hs = fileChooser.getSelectedFile().getParent();
+        if (!"".equals(hs)) {
+            SystemUtils.putRegString("general", "datadir", hs);
+        }
+        return fileChooser.getSelectedFile().getPath();
+    }
+
+    /**
+     * Splits the extensions into separate strings.
+     *
+     * @param filter String containing all extensions.
+     * @return Array of Strings containing the filter extensions.
+     */
+    private String[] splitFilter(String filter) {
+        return filter.split("\\|");
+    }
+
+    /**
+     * Sets the help action. When F1 is pushed the help action will be
+     * performed.
+     */
+    private void setHelpAction() {
+
+        Action action = new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                showHelp();
+            }
+        };
+        this.rootPane.getActionMap().put("f1action", action);
+        this.rootPane.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(
+                KeyStroke.getKeyStroke("F1"), "f1action");
+    }
+
+    /**
+     * Gets the named destination linked to the visible view.
+     *
+     * @return String containing the named destination.
+     */
+    protected String getHelpNamedDestination() {
+        return ContextHelp.fromClassName(this.getClass().getName());
+    }
+
+    /**
+     * Shows the content sensitive help.
+     */
+    private void showHelp() {
+        MuARGUS.showHelp(getHelpNamedDestination());
+    }
+
+    /**
+     * Shows the step name.
+     *
+     * @param stepName Sting containing the step name.
+     */
+    public void showStepName(String stepName) {
+        //Base class implementation is empty
+    }
+
+    /**
+     * Sets the progress.
+     *
+     * @param progress Integer containing the progress
+     */
+    public void setProgress(int progress) {
+        //Base class implementation is empty
+    }
+
+    /**
+     * Gets the controller belonging to the view.
+     *
+     * @return Generic class containing the controller belonging to the view.
+     */
+    protected T getController() {
+        return this.controller;
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -86,118 +227,7 @@ public class DialogBase<T> extends javax.swing.JDialog {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-    
-    /**
-     * 
-     * @param ex 
-     */
-    public void showErrorMessage(ArgusException ex) {
-        JOptionPane.showMessageDialog(null, ex.getMessage(), MuARGUS.getMessageTitle(), JOptionPane.ERROR_MESSAGE);
-    }
-    
-    /**
-     * 
-     * @param message
-     * @return 
-     */
-    public boolean showConfirmDialog(String message) {
-        return (JOptionPane.showConfirmDialog(null, message, MuARGUS.getMessageTitle(), JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION);
-    }
-    
-    /**
-     * 
-     * @param message 
-     */
-    public void showMessage(String message) {
-        JOptionPane.showMessageDialog(null, message, MuARGUS.getMessageTitle(), JOptionPane.INFORMATION_MESSAGE);
-    }
-    
-    /**
-     * 
-     * @param title
-     * @param forSaving
-     * @param filter
-     * @return 
-     */
-    public String showFileDialog(String title, boolean forSaving, String[] filter) {
-        JFileChooser fileChooser = new JFileChooser();
-        String hs = SystemUtils.getRegString("general", "datadir", "");
-        if (!hs.equals("")){
-            File file = new File(hs); 
-            fileChooser.setCurrentDirectory(file);
-        }
-        fileChooser.setDialogTitle(title);
-        fileChooser.resetChoosableFileFilters();
-        String[] firstFilter = splitFilter(filter[0]);
-        fileChooser.setFileFilter(new FileNameExtensionFilter(firstFilter[0], firstFilter[1]));
-        for (int index=1; index < filter.length; index++) {
-            String[] otherFilter = splitFilter(filter[index]);
-            fileChooser.addChoosableFileFilter(new FileNameExtensionFilter(otherFilter[0], otherFilter[1]));
-        }
-        int result = forSaving ? fileChooser.showSaveDialog(this) : fileChooser.showOpenDialog(this);
-        if (result != JFileChooser.APPROVE_OPTION) {
-            return null;
-        }
-        hs = fileChooser.getSelectedFile().getParent();
-        if (!"".equals(hs)){
-            SystemUtils.putRegString("general", "datadir", hs);
-        }
-        return fileChooser.getSelectedFile().getPath();
-    } 
-    
-    /**
-     * 
-     * @param filter
-     * @return 
-     */
-    private String[] splitFilter(String filter) {
-        return filter.split("\\|");
-    }
-    
-    private void setHelpAction() {
-        
-        Action action = new AbstractAction() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                showHelp();
-            }
-        };
-        this.rootPane.getActionMap().put("f1action", action);
-        this.rootPane.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(
-                KeyStroke.getKeyStroke("F1"), "f1action");
-    }
 
-    protected String getHelpNamedDestination() {
-        return ContextHelp.fromClassName(this.getClass().getName());
-    }
-    
-    private void showHelp() {
-        MuARGUS.showHelp(getHelpNamedDestination());
-    }
-
-    /**
-     * 
-     * @param stepName 
-     */
-    public void showStepName(String stepName) {
-        //Base class implementation is empty
-    }
-
-    /**
-     * 
-     * @param progress 
-     */
-    public void setProgress(int progress) {
-        //Base class implementation is empty
-    }
-
-    /**
-     * 
-     * @return 
-     */
-    protected T getController() {
-        return this.controller;
-    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     // End of variables declaration//GEN-END:variables
 }
