@@ -1,6 +1,10 @@
 package muargus.view;
 
+import java.awt.Component;
+import java.awt.Container;
 import java.text.DecimalFormat;
+import javax.swing.JComponent;
+import javax.swing.JDialog;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -69,14 +73,16 @@ public class ModifyNumericalVariablesView extends DialogBase<ModifyNumericalVari
         selected.setMin_max(min_max);
         this.minimumTextField.setText(getController().getMin(selected));
         this.maximumTextField.setText(getController().getMax(selected));
-        this.weightNoisePanel.setEnabled(selected.getVariable().isWeight());
-        this.percentageLabel.setEnabled(selected.getVariable().isWeight());
-        this.percentageTextField.setEnabled(selected.getVariable().isWeight());
+        enableControls(this.weightNoisePanel,selected.getVariable().isWeight());
+        enableControls(this.roundPanel, !selected.getVariable().isCategorical());
+//        this.weightNoisePanel.setEnabled(selected.getVariable().isWeight());
+//        this.percentageLabel.setEnabled(selected.getVariable().isWeight());
+//        this.percentageTextField.setEnabled(selected.getVariable().isWeight());
         this.bottomValueTextField.setText(formatDouble(selected.getBottomValue()));
         this.bottomCodingReplacementTextField.setText(selected.getBottomReplacement());
         this.topValueTextField.setText(formatDouble(selected.getTopValue()));
         this.topCodingReplacementTextField.setText(selected.getTopReplacement());
-        this.roundingBaseTextField.setEnabled(!selected.getVariable().isCategorical());
+//        this.roundingBaseTextField.setEnabled(!selected.getVariable().isCategorical());
         this.roundingBaseTextField.setText(formatDouble(selected.getRoundingBase()));
         this.percentageTextField.setText(formatDouble(selected.getWeightNoisePercentage()));
     }
@@ -261,6 +267,26 @@ public class ModifyNumericalVariablesView extends DialogBase<ModifyNumericalVari
             valueChanged = true;
         }
         return valueChanged;
+    }
+    
+    /**
+     * Enables/Disables all controls and sub controls from a component.
+     *
+     * @param control Component for which all sub-components should be
+     * enabled/disabled.
+     * @param enable Boolean indicating whether the component and its
+     * sub-components should be enabled.
+     */
+    private void enableControls(Component control, boolean enable) {
+        if (!(control instanceof JComponent) && !(control instanceof JDialog)) {
+            return;
+        }
+        control.setEnabled(enable);
+        if (control instanceof Container) {
+            for (Component c : ((Container) control).getComponents()) {
+                enableControls(c, enable);
+            }
+        }
     }
 
     /**
