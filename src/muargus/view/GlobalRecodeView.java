@@ -144,25 +144,6 @@ public class GlobalRecodeView extends DialogBase<GlobalRecodeController> {
      */
     private String askForGrcPath() {
         return showFileDialog("Open Recode File", false, new String[]{"Recode files (*.grc)|grc"});
-//        JFileChooser fileChooser = new JFileChooser();
-//        String hs = SystemUtils.getRegString("general", "datadir", "");
-//        if (!hs.equals("")){
-//            File file = new File(hs);
-//            fileChooser.setCurrentDirectory(file);
-//        }
-//        fileChooser.setDialogTitle("Open Codelist File");
-//        fileChooser.setSelectedFile(new File(""));
-//        fileChooser.resetChoosableFileFilters();
-//        fileChooser.setFileFilter(new FileNameExtensionFilter("Recode files (*.grc)", "grc"));
-//        if (fileChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
-//            //codelistfileTextField.setText(fileChooser.getSelectedFile().toString());
-//            hs = fileChooser.getSelectedFile().getPath();
-//            if (!hs.equals("")){
-//                SystemUtils.putRegString("general", "datadir", hs);
-//            }
-//            return fileChooser.getSelectedFile().toString();
-//        }
-//        return null;
     }
 
     /**
@@ -252,7 +233,6 @@ public class GlobalRecodeView extends DialogBase<GlobalRecodeController> {
         if (filePath != null) {
             try {
                 MetaWriter.writeGrc(new File(filePath), this.selectedRecode);
-                //this.selectedRecode.write(new File(filePath));
             } catch (ArgusException ex) {
                 showErrorMessage(ex);
             }
@@ -699,23 +679,6 @@ public class GlobalRecodeView extends DialogBase<GlobalRecodeController> {
         if (filePath != null) {
             setCodelistText(filePath);
         }
-//        JFileChooser fileChooser = new JFileChooser();
-//        fileChooser.setFileFilter(new FileNameExtensionFilter("Codelist (*.cdl)", "cdl"));
-//        String hs = SystemUtils.getRegString("general", "datadir", "");
-//        if (!hs.equals("")){
-//            File file = new File(hs);
-//            fileChooser.setCurrentDirectory(file);
-//        }
-//        fileChooser.showOpenDialog(null);
-//
-//        String filename;
-//        File f = fileChooser.getSelectedFile();
-//        if (fileChooser.getSelectedFile() == null) {
-//            filename = "";
-//        } else {
-//            filename = f.getAbsolutePath();
-//        }
-//        view.setCodelistText(filename);
     }//GEN-LAST:event_codelistRecodeButtonActionPerformed
 
     private void truncateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_truncateButtonActionPerformed
