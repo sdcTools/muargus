@@ -27,6 +27,7 @@ import muargus.model.CodeInfo;
 import muargus.model.VariableMu;
 
 /**
+ * View class of the main frame.
  *
  * @author Statistics Netherlands
  */
@@ -46,9 +47,10 @@ public class MainFrameView extends javax.swing.JFrame {
     }
 
     /**
+     * Enables the buttons & menu items for the specified screen.
      *
-     * @param action
-     * @param enable
+     * @param action Enumerated option/screen.
+     * @param enable Boolean indicating whether this option should be enabled.
      */
     public void enableAction(MainFrameController.Action action, boolean enable) {
         switch (action) {
@@ -93,10 +95,12 @@ public class MainFrameView extends javax.swing.JFrame {
     }
 
     /**
+     * Enables/disables buttons and menu items.
      *
-     * @param button
-     * @param item
-     * @param enable
+     * @param button JButton instance that will be enabled/disabled.
+     * @param item JMenuItem instance that will be enabled/disabled.
+     * @param enable Boolean indicating whether the button and the menu item
+     * will be enabled.
      */
     private void doEnable(JButton button, JMenuItem item, boolean enable) {
         if (button != null) {
@@ -108,49 +112,62 @@ public class MainFrameView extends javax.swing.JFrame {
     }
 
     /**
+     * Gets the unsafe combinations table containing the number of unsafe
+     * combinations for each categorical variable.
      *
-     * @return
+     * @return JTable instance containing the number of unsafe combinations for
+     * each categorical variable.
      */
     public JTable getUnsafeCombinationsTable() {
         return unsafeCombinationsTable;
     }
 
     /**
+     * Gets the variables table containing the code specifications for the
+     * selected variable.
      *
-     * @return
+     * @return JTable instance containing the code specifications for the
+     * selected variable.
      */
     public JTable getVariablesTable() {
         return variablesTable;
     }
 
     /**
+     * Sets the variable name label.
      *
-     * @param variableNameLabel
+     * @param variableNameLabel String containing the name of selected the
+     * variable.
      */
     public void setVariableNameLabel(String variableNameLabel) {
         this.variableNameLabel.setText(variableNameLabel);
     }
 
     /**
+     * Shows an error message.
      *
-     * @param ex
+     * @param ex ArgusException.
      */
     public void showErrorMessage(ArgusException ex) {
         JOptionPane.showMessageDialog(this, ex.getMessage(), MuARGUS.getMessageTitle(), JOptionPane.ERROR_MESSAGE);
     }
 
     /**
+     * Shows a message.
      *
-     * @param message
+     * @param message String containing the message.
      */
     public void showMessage(String message) {
         JOptionPane.showMessageDialog(null, message, MuARGUS.getMessageTitle(), JOptionPane.INFORMATION_MESSAGE);
     }
 
     /**
+     * Show the open microdata dialob.
      *
-     * @param filenames
-     * @return
+     * @param filenames DataFilePair instance containing the filenames that are
+     * currently loaded. This is empty if no filenames are specified.
+     * @return DataFilePair instance containing the filnemas after
+     * (re)specification of the filenames.
      */
     public DataFilePair showOpenMicrodataDialog(DataFilePair filenames) {
         DialogOpenMicrodata dialog = new DialogOpenMicrodata(this, true);
@@ -162,10 +179,13 @@ public class MainFrameView extends javax.swing.JFrame {
     }
 
     /**
+     * Shows the unsafe combinations for each categorical variable.
      *
-     * @param model
-     * @param selectedIndex
-     * @param redraw
+     * @param model Combinations model class.
+     * @param selectedIndex Integer containing the index of the selected
+     * variable.
+     * @param redraw Boolean indicating whether the number of unsafe
+     * combinations needs the be changed.
      */
     public void showUnsafeCombinations(Combinations model, int selectedIndex, boolean redraw) {
         this.model = model;
@@ -236,6 +256,15 @@ public class MainFrameView extends javax.swing.JFrame {
         this.unsafeCombinationsTable.getSelectionModel().setSelectionInterval(i, i);
     }
 
+    /**
+     * Gets an array containing the variable name and the number of unsafe
+     * combinations for each dimension.
+     *
+     * @param combinations Combinations model class.
+     * @param variable VariableMu instance for which data will be shown.
+     * @return Array of objects containing the variable name and the number of
+     * unsafe combinations for each dimension.
+     */
     private Object[] toObjectArray(Combinations combinations, VariableMu variable) {
         int nDims = combinations.getMaxDimsInTables();
         Object[] objArr = new Object[nDims + 1];
@@ -247,6 +276,12 @@ public class MainFrameView extends javax.swing.JFrame {
         return objArr;
     }
 
+    /**
+     * Selection changed event handler. Updates the variables table containing
+     * the code specification if a different variable is selected.
+     *
+     * @param evt
+     */
     private void selectionChanged(javax.swing.event.ListSelectionEvent evt) {
         if (evt.getValueIsAdjusting()) {
             return;
@@ -257,19 +292,26 @@ public class MainFrameView extends javax.swing.JFrame {
         }
         updateVariablesTable(j);
     }
-    
-    public void updateVariablesTable(){
+
+    /**
+     * Updates the variables table.
+     */
+    public void updateVariablesTable() {
         updateVariablesTable(this.unsafeCombinationsTable.getSelectedRow());
     }
-    
-    
-    
-    private void updateVariablesTable(int j){
+
+    /**
+     * Updates the variables table.
+     *
+     * @param j Integer containing the selected variable for which the code
+     * specification needs to be shown.
+     */
+    private void updateVariablesTable(int j) {
         j = this.unsafeCombinationsTable.convertRowIndexToModel(j);
         VariableMu variable = this.model.getVariablesInTables().get(j);
         //UnsafeInfo unsafeInfo = this.model.getUnsafe(variable);
         this.variableNameLabel.setText(variable.getName());
-        
+
         ArrayList<String> columnNames = new ArrayList<>();
         columnNames.add("Code");
         columnNames.add("Label");
@@ -278,14 +320,14 @@ public class MainFrameView extends javax.swing.JFrame {
         for (int dimNr = 1; dimNr <= nDims; dimNr++) {
             columnNames.add("dim " + dimNr);
         }
-        
+
         Object[][] data = new Object[variable.getCodeInfos().size()][];
         int rowIndex = 0;
         for (CodeInfo codeInfo : variable.getCodeInfos()) {
             data[rowIndex] = codeInfo.toObjectArray(nDims);
             rowIndex++;
         }
-        
+
         DefaultTableModel tableModel = new DefaultTableModel(data, columnNames.toArray()) {
             @Override
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -308,8 +350,11 @@ public class MainFrameView extends javax.swing.JFrame {
         this.variablesTable.setDefaultRenderer(Integer.class, new CodeTableCellRenderer());
         this.variablesTable.setDefaultRenderer(Object.class, new CodeTableCellRenderer());
     }
-    
-     private void setHelpAction() {
+
+    /**
+     * Sets the help action event. If the F1 key is pushed this event is fired.
+     */
+    private void setHelpAction() {
 
         Action action = new AbstractAction() {
             @Override
@@ -322,10 +367,18 @@ public class MainFrameView extends javax.swing.JFrame {
                 KeyStroke.getKeyStroke("F1"), "f1action");
     }
 
+    /**
+     * Gets the named destination belonging to this screen.
+     *
+     * @return String containing the named destination belonging to this screen.
+     */
     private String getHelpNamedDestination() {
         return ContextHelp.fromClassName(this.getClass().getName());
     }
 
+    /**
+     * Shows the content sensitive help.
+     */
     private void showHelp() {
         MuARGUS.showHelp(getHelpNamedDestination());
     }
@@ -731,7 +784,7 @@ public class MainFrameView extends javax.swing.JFrame {
 
         fileMenu.setText("File");
 
-        openMicrodataMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_O, java.awt.event.InputEvent.CTRL_MASK));
+        openMicrodataMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_O, java.awt.event.InputEvent.ALT_MASK));
         openMicrodataMenuItem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/muargus/resources/icons/OpenMicrodata.png"))); // NOI18N
         openMicrodataMenuItem.setText("Open micro data");
         openMicrodataMenuItem.addActionListener(new java.awt.event.ActionListener() {
@@ -742,7 +795,7 @@ public class MainFrameView extends javax.swing.JFrame {
         fileMenu.add(openMicrodataMenuItem);
         fileMenu.add(fileSeparator);
 
-        exitMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_E, java.awt.event.InputEvent.CTRL_MASK));
+        exitMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_E, java.awt.event.InputEvent.ALT_MASK));
         exitMenuItem.setText("Exit");
         exitMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -755,7 +808,7 @@ public class MainFrameView extends javax.swing.JFrame {
 
         specifyMenu.setText("Specify");
 
-        metaDataMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_M, java.awt.event.InputEvent.CTRL_MASK));
+        metaDataMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_M, java.awt.event.InputEvent.ALT_MASK));
         metaDataMenuItem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/muargus/resources/icons/SpecifyMetadata.png"))); // NOI18N
         metaDataMenuItem.setText("MetaData");
         metaDataMenuItem.setEnabled(false);
@@ -766,7 +819,7 @@ public class MainFrameView extends javax.swing.JFrame {
         });
         specifyMenu.add(metaDataMenuItem);
 
-        combinationsMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_C, java.awt.event.InputEvent.CTRL_MASK));
+        combinationsMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_C, java.awt.event.InputEvent.ALT_MASK));
         combinationsMenuItem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/muargus/resources/icons/SpecifyCombinations.png"))); // NOI18N
         combinationsMenuItem.setText("Combinations");
         combinationsMenuItem.setEnabled(false);
@@ -781,7 +834,7 @@ public class MainFrameView extends javax.swing.JFrame {
 
         modifyMenu.setText("Modify");
 
-        showTableCollectionMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_T, java.awt.event.InputEvent.CTRL_MASK));
+        showTableCollectionMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_T, java.awt.event.InputEvent.ALT_MASK));
         showTableCollectionMenuItem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/muargus/resources/icons/ShowTable.png"))); // NOI18N
         showTableCollectionMenuItem.setText("Show Table Collection");
         showTableCollectionMenuItem.setEnabled(false);
@@ -792,7 +845,7 @@ public class MainFrameView extends javax.swing.JFrame {
         });
         modifyMenu.add(showTableCollectionMenuItem);
 
-        globalRecodeMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_G, java.awt.event.InputEvent.CTRL_MASK));
+        globalRecodeMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_G, java.awt.event.InputEvent.ALT_MASK));
         globalRecodeMenuItem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/muargus/resources/icons/globrec.png"))); // NOI18N
         globalRecodeMenuItem.setText("Global Recode");
         globalRecodeMenuItem.setEnabled(false);
@@ -804,7 +857,7 @@ public class MainFrameView extends javax.swing.JFrame {
         modifyMenu.add(globalRecodeMenuItem);
         modifyMenu.add(modifySeparator1);
 
-        pramSpecificationMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_P, java.awt.event.InputEvent.CTRL_MASK));
+        pramSpecificationMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_P, java.awt.event.InputEvent.ALT_MASK));
         pramSpecificationMenuItem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/muargus/resources/icons/pram.png"))); // NOI18N
         pramSpecificationMenuItem.setText("PRAM Specification");
         pramSpecificationMenuItem.setEnabled(false);
@@ -815,7 +868,7 @@ public class MainFrameView extends javax.swing.JFrame {
         });
         modifyMenu.add(pramSpecificationMenuItem);
 
-        individualRiskSpecificationMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_R, java.awt.event.InputEvent.CTRL_MASK));
+        individualRiskSpecificationMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_R, java.awt.event.InputEvent.ALT_MASK));
         individualRiskSpecificationMenuItem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/muargus/resources/icons/Risk.png"))); // NOI18N
         individualRiskSpecificationMenuItem.setText("Individual Risk Specification");
         individualRiskSpecificationMenuItem.setEnabled(false);
@@ -826,7 +879,7 @@ public class MainFrameView extends javax.swing.JFrame {
         });
         modifyMenu.add(individualRiskSpecificationMenuItem);
 
-        householdRiskSpecificationMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_H, java.awt.event.InputEvent.CTRL_MASK));
+        householdRiskSpecificationMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_H, java.awt.event.InputEvent.ALT_MASK));
         householdRiskSpecificationMenuItem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/muargus/resources/icons/hr.png"))); // NOI18N
         householdRiskSpecificationMenuItem.setText("Household Risk Specification");
         householdRiskSpecificationMenuItem.setEnabled(false);
@@ -838,7 +891,7 @@ public class MainFrameView extends javax.swing.JFrame {
         modifyMenu.add(householdRiskSpecificationMenuItem);
         modifyMenu.add(modifySeparator2);
 
-        numericalVariablesMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_N, java.awt.event.InputEvent.CTRL_MASK));
+        numericalVariablesMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_N, java.awt.event.InputEvent.ALT_MASK));
         numericalVariablesMenuItem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/muargus/resources/icons/Numeric.png"))); // NOI18N
         numericalVariablesMenuItem.setText("Modify Numerical Variables");
         numericalVariablesMenuItem.setEnabled(false);
@@ -849,7 +902,7 @@ public class MainFrameView extends javax.swing.JFrame {
         });
         modifyMenu.add(numericalVariablesMenuItem);
 
-        numericalMicroaggregationMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_M, java.awt.event.InputEvent.CTRL_MASK));
+        numericalMicroaggregationMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_A, java.awt.event.InputEvent.ALT_MASK));
         numericalMicroaggregationMenuItem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/muargus/resources/icons/MA.png"))); // NOI18N
         numericalMicroaggregationMenuItem.setText("Numerical Micro Aggregation");
         numericalMicroaggregationMenuItem.setEnabled(false);
@@ -860,7 +913,7 @@ public class MainFrameView extends javax.swing.JFrame {
         });
         modifyMenu.add(numericalMicroaggregationMenuItem);
 
-        numericalRankSwappingMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_MASK));
+        numericalRankSwappingMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.ALT_MASK));
         numericalRankSwappingMenuItem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/muargus/resources/icons/RS.png"))); // NOI18N
         numericalRankSwappingMenuItem.setText("Numerical Rank Swapping");
         numericalRankSwappingMenuItem.setEnabled(false);
@@ -875,7 +928,7 @@ public class MainFrameView extends javax.swing.JFrame {
 
         outputMenu.setText("Output");
 
-        makeProtectedFileMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_M, java.awt.event.InputEvent.CTRL_MASK));
+        makeProtectedFileMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.ALT_MASK | java.awt.event.InputEvent.CTRL_MASK));
         makeProtectedFileMenuItem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/muargus/resources/icons/makeSafeFile.png"))); // NOI18N
         makeProtectedFileMenuItem.setText("Make protected file");
         makeProtectedFileMenuItem.setEnabled(false);
@@ -886,7 +939,7 @@ public class MainFrameView extends javax.swing.JFrame {
         });
         outputMenu.add(makeProtectedFileMenuItem);
 
-        viewReportMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_V, java.awt.event.InputEvent.CTRL_MASK));
+        viewReportMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_V, java.awt.event.InputEvent.ALT_MASK));
         viewReportMenuItem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/muargus/resources/icons/ViewReport.png"))); // NOI18N
         viewReportMenuItem.setText("View report");
         viewReportMenuItem.setEnabled(false);
@@ -901,7 +954,7 @@ public class MainFrameView extends javax.swing.JFrame {
 
         helpMenu.setText("Help");
 
-        contentsMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F1, 0));
+        contentsMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F1, java.awt.event.InputEvent.ALT_MASK));
         contentsMenuItem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/muargus/resources/icons/Contents.png"))); // NOI18N
         contentsMenuItem.setText("Content help");
         contentsMenuItem.addActionListener(new java.awt.event.ActionListener() {
@@ -921,6 +974,7 @@ public class MainFrameView extends javax.swing.JFrame {
         helpMenu.add(newsMenuItem);
         helpMenu.add(helpSeparator);
 
+        aboutMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_I, java.awt.event.InputEvent.ALT_MASK));
         aboutMenuItem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/muargus/resources/icons/about.png"))); // NOI18N
         aboutMenuItem.setText("About");
         aboutMenuItem.addActionListener(new java.awt.event.ActionListener() {

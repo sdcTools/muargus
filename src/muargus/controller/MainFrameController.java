@@ -55,7 +55,6 @@ public class MainFrameController {
         ModifyNumericalVariables,
         NumericalMicroAggregation,
         NumericalRankSwapping,
-        //QualitativeMicroAggregation,
         MakeProtectedFile,
         ViewReport,
         Contents,
