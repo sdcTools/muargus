@@ -13,6 +13,7 @@ import muargus.model.ProtectedFile;
 import muargus.model.MetadataMu;
 
 /**
+ * View class of the MakeProtectedFile screen.
  *
  * @author Statistics Netherlands
  */
@@ -23,7 +24,7 @@ public class MakeProtectedFileView extends DialogBase<MakeProtectedFileControlle
     private int selectedRow;
 
     /**
-     * Creates new form MakeProtectedFileView
+     * Creates new form MakeProtectedFileView.
      *
      * @param parent the Frame of the mainFrame.
      * @param modal boolean to set the modal status
@@ -36,6 +37,10 @@ public class MakeProtectedFileView extends DialogBase<MakeProtectedFileControlle
         this.suppressionWeightTable.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     }
 
+    /**
+     * Initializes the data. Enables/disables elements, sets the table values
+     * and sets the selected row to zero.
+     */
     @Override
     public void initializeData() {
         this.model = getMetadata().getCombinations().getProtectedFile();
@@ -47,11 +52,43 @@ public class MakeProtectedFileView extends DialogBase<MakeProtectedFileControlle
         this.removeFromSafeFileRadioButton.setEnabled(this.model.isHouseholdData());
         this.addRiskToOutputFileCheckBox.setVisible(this.model.isRiskModel());
         this.writeRecordRandomOrderCheckBox.setEnabled(getMetadata().getDataFileType() == MetadataMu.DATA_FILE_TYPE_FIXED);
-//        variablesSelectionChanged();
-        this.updateValues();
+        this.selectedRow = 0;
+        this.suppressionWeightTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+
+            @Override
+            public void valueChanged(ListSelectionEvent lse) {
+                if (!lse.getValueIsAdjusting()) {
+                    handleSelectionChanged();
+                }
+            }
+        });
+
+        this.tableModel = new DefaultTableModel(this.model.getData(), this.model.getColumnames()) {
+            @Override
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return false;
+            }
+        };
+        this.suppressionWeightTable.setModel(this.tableModel);
+        this.suppressionWeightTable.getSelectionModel().setSelectionInterval(this.selectedRow, this.selectedRow);
+        this.suppressionWeightSlider.setValue(Integer.parseInt(this.model.getData()[this.selectedRow][1]));
+
+        enableSuppressionTable();
     }
 
-    private void updateValues() {
+    /**
+     * Evenet handler for when the selection changed.
+     */
+    private void handleSelectionChanged() {
+        this.selectedRow = this.suppressionWeightTable.getSelectedRow();
+        this.suppressionWeightSlider.setValue(Integer.parseInt(this.model.getData()[this.selectedRow][1]));
+    }
+
+    /**
+     * Enables/disables the suppressionTable, slider and label and changes the
+     * backgroundcolor.
+     */
+    private void enableSuppressionTable() {
         boolean suppression = this.useWeightRadioButton.isSelected();
         this.suppressionWeightPerVariableLabel.setEnabled(suppression);
         this.suppressionWeightScrollPane.setEnabled(suppression);
@@ -64,33 +101,23 @@ public class MakeProtectedFileView extends DialogBase<MakeProtectedFileControlle
         } else {
             this.suppressionWeightTable.setBackground(new Color(240, 240, 240));
         }
-
-        // makes it impossible to change values in the table (during usage)
-        this.tableModel = new DefaultTableModel(this.model.getData(), this.model.getColumnames()) {
-            @Override
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return false;
-            }
-        };
-        this.suppressionWeightTable.setModel(this.tableModel);
-        this.suppressionWeightTable.getSelectionModel().setSelectionInterval(this.selectedRow, this.selectedRow);
-        this.suppressionWeightSlider.setValue(Integer.parseInt(this.model.getData()[this.selectedRow][1]));
-//        this.suppressionWeightTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
-//
-//            @Override
-//            public void valueChanged(ListSelectionEvent lse) {
-//                if (!lse.getValueIsAdjusting()) {
-//                    variablesSelectionChanged();
-//                }
-//            }
-//        });
     }
 
+    /**
+     * Sets the progress bar's current value to the give value.
+     *
+     * @param progress Integer containing the value of the progress.
+     */
     @Override
     public void setProgress(int progress) {
         this.progressbar.setValue(progress);
     }
 
+    /**
+     * Gets the radioButton belonging to the suppressiontype.
+     *
+     * @return JRadioButton belonging tot the suppressiontype.
+     */
     private JRadioButton getSuppressionRadioButton() {
         switch (this.model.getSuppressionType()) {
             case (0):
@@ -102,11 +129,6 @@ public class MakeProtectedFileView extends DialogBase<MakeProtectedFileControlle
         }
         return null;
     }
-    
-//    private void variablesSelectionChanged() {
-//        this.selectedRow = this.suppressionWeightTable.getSelectedRow();
-//        updateValues();
-//    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -186,16 +208,6 @@ public class MakeProtectedFileView extends DialogBase<MakeProtectedFileControlle
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
-            }
-        });
-        suppressionWeightTable.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                suppressionWeightTableMouseClicked(evt);
-            }
-        });
-        suppressionWeightTable.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                suppressionWeightTableKeyReleased(evt);
             }
         });
         suppressionWeightScrollPane.setViewportView(suppressionWeightTable);
@@ -377,53 +389,50 @@ public class MakeProtectedFileView extends DialogBase<MakeProtectedFileControlle
     }//GEN-LAST:event_makeFileButtonActionPerformed
 
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
-        this.setVisible(false);
+        setVisible(false);
     }//GEN-LAST:event_cancelButtonActionPerformed
 
     private void suppressionWeightSliderStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_suppressionWeightSliderStateChanged
-        this.model.setPriority(this.selectedRow, suppressionWeightSlider.getValue());
-        updateValues();
+        this.model.setPriority(this.selectedRow, this.suppressionWeightSlider.getValue());
+        this.suppressionWeightTable.setValueAt(this.suppressionWeightSlider.getValue(), this.selectedRow, 1);
     }//GEN-LAST:event_suppressionWeightSliderStateChanged
 
     private void useEntropyRadioButtonItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_useEntropyRadioButtonItemStateChanged
         if (this.useEntropyRadioButton.isSelected()) {
-            this.model.setSuppressionType(this.model.USE_ENTROPY);
-            this.updateValues();
+            this.model.setSuppressionType(ProtectedFile.USE_ENTROPY);
+            enableSuppressionTable();
         }
     }//GEN-LAST:event_useEntropyRadioButtonItemStateChanged
 
     private void useWeightRadioButtonItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_useWeightRadioButtonItemStateChanged
         if (this.useWeightRadioButton.isSelected()) {
-            this.model.setSuppressionType(this.model.USE_WEIGHT);
-            this.updateValues();
+            this.model.setSuppressionType(ProtectedFile.USE_WEIGHT);
+            enableSuppressionTable();
         }
     }//GEN-LAST:event_useWeightRadioButtonItemStateChanged
 
     private void noSuppressionRadioButtonItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_noSuppressionRadioButtonItemStateChanged
         if (this.noSuppressionRadioButton.isSelected()) {
-            this.model.setSuppressionType(this.model.NO_SUPPRESSION);
-            this.updateValues();
+            this.model.setSuppressionType(ProtectedFile.NO_SUPPRESSION);
+            enableSuppressionTable();
         }
     }//GEN-LAST:event_noSuppressionRadioButtonItemStateChanged
 
     private void keepInSafeFileRadioButtonItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_keepInSafeFileRadioButtonItemStateChanged
         if (this.keepInSafeFileRadioButton.isSelected()) {
-            this.model.setHouseholdType(this.model.KEEP_IN_SAFE_FILE);
-            this.updateValues();
+            this.model.setHouseholdType(ProtectedFile.KEEP_IN_SAFE_FILE);
         }
     }//GEN-LAST:event_keepInSafeFileRadioButtonItemStateChanged
 
     private void changeIntoSequenceNumberRadioButtonItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_changeIntoSequenceNumberRadioButtonItemStateChanged
         if (this.changeIntoSequenceNumberRadioButton.isSelected()) {
-            this.model.setHouseholdType(this.model.CHANGE_INTO_SEQUENCE_NUMBER);
-            this.updateValues();
+            this.model.setHouseholdType(ProtectedFile.CHANGE_INTO_SEQUENCE_NUMBER);
         }
     }//GEN-LAST:event_changeIntoSequenceNumberRadioButtonItemStateChanged
 
     private void removeFromSafeFileRadioButtonItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_removeFromSafeFileRadioButtonItemStateChanged
         if (this.removeFromSafeFileRadioButton.isSelected()) {
-            this.model.setHouseholdType(this.model.REMOVE_FROM_SAFE_FILE);
-            this.updateValues();
+            this.model.setHouseholdType(ProtectedFile.REMOVE_FROM_SAFE_FILE);
         }
     }//GEN-LAST:event_removeFromSafeFileRadioButtonItemStateChanged
 
@@ -438,16 +447,6 @@ public class MakeProtectedFileView extends DialogBase<MakeProtectedFileControlle
     private void writeRecordRandomOrderCheckBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_writeRecordRandomOrderCheckBoxItemStateChanged
         this.model.setRandomizeOutput(this.writeRecordRandomOrderCheckBox.isSelected());
     }//GEN-LAST:event_writeRecordRandomOrderCheckBoxItemStateChanged
-
-    private void suppressionWeightTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_suppressionWeightTableMouseClicked
-        this.selectedRow = this.suppressionWeightTable.getSelectedRow();
-        updateValues();
-    }//GEN-LAST:event_suppressionWeightTableMouseClicked
-
-    private void suppressionWeightTableKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_suppressionWeightTableKeyReleased
-        this.selectedRow = this.suppressionWeightTable.getSelectedRow();
-        updateValues();
-    }//GEN-LAST:event_suppressionWeightTableKeyReleased
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
