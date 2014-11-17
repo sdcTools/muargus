@@ -38,7 +38,7 @@ public class GlobalRecodeView extends DialogBase<GlobalRecodeController> {
     public GlobalRecodeView(java.awt.Frame parent, boolean modal, GlobalRecodeController controller) {
         super(parent, modal, controller);
         initComponents();
-        this.setLocationRelativeTo(null);
+        setLocationRelativeTo(null);
         this.variablesTable.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     }
 
@@ -57,7 +57,7 @@ public class GlobalRecodeView extends DialogBase<GlobalRecodeController> {
             }
         }
 
-        this.updateTable();
+        updateTable();
         this.variablesTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
 
             @Override
@@ -103,7 +103,7 @@ public class GlobalRecodeView extends DialogBase<GlobalRecodeController> {
      * text and enables/disables the truncated and undo button.
      */
     private void updateValues() {
-        RecodeMu selected = this.getSelectedRecode();
+        RecodeMu selected = getSelectedRecode();
         if (selected == null) {
             return;
         }
@@ -701,7 +701,7 @@ public class GlobalRecodeView extends DialogBase<GlobalRecodeController> {
         String path = askForGrcPath();
         if (path != null) {
             try {
-                MetaReader.readGrc(path, this.getSelectedRecode());
+                MetaReader.readGrc(path, getSelectedRecode());
                 this.selectedRecodeClone = new RecodeMu(this.selectedRecode);
                 updateValues();
             } catch (ArgusException ex) {
