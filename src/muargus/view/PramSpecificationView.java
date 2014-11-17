@@ -15,6 +15,7 @@ import muargus.model.PramVariableSpec;
 import muargus.model.VariableMu;
 
 /**
+ * View class of the PramSpecification screen.
  *
  * @author Statistics Netherlands
  */
@@ -27,6 +28,7 @@ public class PramSpecificationView extends DialogBase<PramSpecificationControlle
     private int selectedRow;
 
     /**
+     * Creates new form PramSpecificationView.
      *
      * @param parent the Frame of the mainFrame.
      * @param modal boolean to set the modal status
@@ -41,7 +43,8 @@ public class PramSpecificationView extends DialogBase<PramSpecificationControlle
     }
 
     /**
-     *
+     * Initializes the data. Sets the model, sets the table values and updates
+     * the values.
      */
     @Override
     public void initializeData() {
@@ -57,7 +60,7 @@ public class PramSpecificationView extends DialogBase<PramSpecificationControlle
     }
 
     /**
-     *
+     * Makes the variables table.
      */
     private void makeVariablesTable() {
         getController().makeVariablesData();
@@ -88,8 +91,9 @@ public class PramSpecificationView extends DialogBase<PramSpecificationControlle
     }
 
     /**
+     * Gets the PramVariableSpec belonging to the selected variable.
      *
-     * @return
+     * @return PramVariableSpec instance belonging to the selected variable.
      */
     private PramVariableSpec getSelectedPramVariableSpec() {
         return getController().getSelectedPramVarSpec(
@@ -97,25 +101,23 @@ public class PramSpecificationView extends DialogBase<PramSpecificationControlle
     }
 
     /**
+     * Gets the CodeInfo belonging to the selected code.
      *
-     * @return
+     * @return CodeInfo instance belonging to the selected code.
      */
     private CodeInfo getSelectedCodeInfo() {
         return getSelectedPramVariableSpec().getVariable().getCodeInfos().get(this.selectedRow);
     }
 
-    private CodeInfo getSelectedCodeInfo(VariableMu variable) {
-        return variable.getCodeInfos().get(this.selectedRow);
-    }
-
     /**
-     *
+     * Updates the codes table. The codes table shows the codes, labels and PRAM
+     * probabilities belonging to the selected variable.
      */
     private void updateCodesTable() {
         if (this.codesTable.getSelectedRowCount() > 0) {
-            selectedRow = this.codesTable.getSelectedRow();
+            this.selectedRow = this.codesTable.getSelectedRow();
         } else {
-            selectedRow = 0;
+            this.selectedRow = 0;
         }
 
         Object[][] codesData = getController().getCodesData(getSelectedPramVariableSpec().getVariable().getName());
@@ -137,7 +139,7 @@ public class PramSpecificationView extends DialogBase<PramSpecificationControlle
             this.codesTable.getColumnModel().getColumn(i).setMinWidth(this.codesColumnWidth[i]);
             this.codesTable.getColumnModel().getColumn(i).setPreferredWidth(this.codesColumnWidth[i]);
         }
-        this.codesTable.getSelectionModel().setSelectionInterval(selectedRow, selectedRow);
+        this.codesTable.getSelectionModel().setSelectionInterval(this.selectedRow, this.selectedRow);
 
         this.codesTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
 
@@ -155,6 +157,11 @@ public class PramSpecificationView extends DialogBase<PramSpecificationControlle
         this.variablesTable.setDefaultRenderer(Object.class, new HighlightTableCellRenderer());
     }
 
+    /**
+     * Sets the probability for all codes to a given probability.
+     *
+     * @param probability Integer containing the PRAM probability.
+     */
     private void setProbability(int probability) {
         for (CodeInfo c : getSelectedPramVariableSpec().getVariable().getCodeInfos()) {
             c.setPramProbability(probability);
@@ -166,11 +173,17 @@ public class PramSpecificationView extends DialogBase<PramSpecificationControlle
         this.codesSlider.setValue(getSelectedCodeInfo().getPramProbability());
     }
 
+    /**
+     * Event handler for when the variable selection changes. Updates the
+     * bandwidthComboBox, sets the value of the slider and updates the codes
+     * table.
+     */
     private void variablesSelectionChanged() {
         this.codesTable.getSelectionModel().setSelectionInterval(0, 0);
         this.selectedRow = 0;
         int value = getSelectedPramVariableSpec().getBandwidth();
-        int max = getSelectedPramVariableSpec().getVariable().getCodeInfos().size() - getSelectedPramVariableSpec().getVariable().getNumberOfMissings();
+        int max = getSelectedPramVariableSpec().getVariable().getCodeInfos().size()
+                - getSelectedPramVariableSpec().getVariable().getNumberOfMissings();
         if (value > max) {
             value = max;
         }
@@ -185,6 +198,10 @@ public class PramSpecificationView extends DialogBase<PramSpecificationControlle
         updateCodesTable();
     }
 
+    /**
+     * Event handler for when the codes selection changes. Sets the selected row
+     * and updates the value of the slider.
+     */
     private void codesSelectionChanged() {
         if (this.codesTable.getSelectedRow() >= 0) {
             this.selectedRow = this.codesTable.getSelectedRow();
@@ -529,7 +546,7 @@ public class PramSpecificationView extends DialogBase<PramSpecificationControlle
     private void codesSliderStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_codesSliderStateChanged
         for (VariableMu v : getMetadata().getVariables()) {
             if (getSelectedPramVariableSpec().getVariable().equals(v)) {
-                getSelectedCodeInfo(v).setPramProbability(this.codesSlider.getValue());
+                getSelectedCodeInfo().setPramProbability(this.codesSlider.getValue());
                 break;
             }
         }

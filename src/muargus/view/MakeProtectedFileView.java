@@ -77,7 +77,7 @@ public class MakeProtectedFileView extends DialogBase<MakeProtectedFileControlle
     }
 
     /**
-     * Evenet handler for when the selection changed.
+     * Event handler for when the selection changes.
      */
     private void handleSelectionChanged() {
         this.selectedRow = this.suppressionWeightTable.getSelectedRow();
