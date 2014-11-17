@@ -17,6 +17,7 @@ import muargus.model.ModifyNumericalVariables;
 import muargus.model.ModifyNumericalVariablesSpec;
 
 /**
+ * View class of the ModifyNumericalVariables screen.
  *
  * @author Statistics Netherlands
  */
@@ -27,6 +28,7 @@ public class ModifyNumericalVariablesView extends DialogBase<ModifyNumericalVari
     private int selectedRow = 0;
 
     /**
+     * Creates new form ModifyNumericalVariablesView.
      *
      * @param parent the Frame of the mainFrame.
      * @param modal boolean to set the modal status
@@ -40,7 +42,8 @@ public class ModifyNumericalVariablesView extends DialogBase<ModifyNumericalVari
     }
 
     /**
-     *
+     * Initializes the data. Sets the model, makes the variables table and
+     * updates the values.
      */
     @Override
     public void initializeData() {
@@ -53,8 +56,11 @@ public class ModifyNumericalVariablesView extends DialogBase<ModifyNumericalVari
     }
 
     /**
+     * Gets the ModifyNumericalVariablesSpec belonging tot the selected
+     * variable.
      *
-     * @return
+     * @return ModifyNumericalVariablesSpec instance belonging tot the selected
+     * variable.
      */
     private ModifyNumericalVariablesSpec getModifyNumericalVariablesSpec() {
         ModifyNumericalVariablesSpec selected = this.model.getModifyNumericalVariablesSpec().get(this.selectedRow);
@@ -62,7 +68,7 @@ public class ModifyNumericalVariablesView extends DialogBase<ModifyNumericalVari
     }
 
     /**
-     *
+     * Updates the values.
      */
     private void updateValues() {
         int selectedIndex = this.variablesTable.convertRowIndexToModel(this.variablesTable.getSelectedRow());
@@ -73,7 +79,7 @@ public class ModifyNumericalVariablesView extends DialogBase<ModifyNumericalVari
         selected.setMin_max(min_max);
         this.minimumTextField.setText(getController().getMin(selected));
         this.maximumTextField.setText(getController().getMax(selected));
-        enableControls(this.weightNoisePanel,selected.getVariable().isWeight());
+        enableControls(this.weightNoisePanel, selected.getVariable().isWeight());
         enableControls(this.roundPanel, !selected.getVariable().isCategorical());
         this.bottomValueTextField.setText(formatDouble(selected.getBottomValue()));
         this.bottomCodingReplacementTextField.setText(selected.getBottomReplacement());
@@ -83,6 +89,13 @@ public class ModifyNumericalVariablesView extends DialogBase<ModifyNumericalVari
         this.percentageTextField.setText(formatDouble(selected.getWeightNoisePercentage()));
     }
 
+    /**
+     * Gets the string format for a double value.
+     *
+     * @param d Double value that will be converted to a string.
+     * @return String containing either the double value as a string or a empty
+     * string if the double value is invalid.
+     */
     private String formatDouble(double d) {
         DecimalFormat f = (DecimalFormat) DecimalFormat.getNumberInstance(MuARGUS.getLocale());
         f.setGroupingUsed(false);
@@ -90,7 +103,7 @@ public class ModifyNumericalVariablesView extends DialogBase<ModifyNumericalVari
     }
 
     /**
-     *
+     * Makes the variables table and sets its values.
      */
     private void makeVariablesTable() {
         getController().setVariablesData();
@@ -151,7 +164,6 @@ public class ModifyNumericalVariablesView extends DialogBase<ModifyNumericalVari
      * @return Boolean indicating whether the answers entered are valid.
      */
     private boolean checkValidAnswer() {
-        //setValuesInModel();
         ModifyNumericalVariablesSpec selected = getModifyNumericalVariablesSpec();
         boolean hasValue = valueEntered();
         if (hasValue) {
@@ -178,7 +190,6 @@ public class ModifyNumericalVariablesView extends DialogBase<ModifyNumericalVari
 
     /**
      * Sets whether this variable has been modified.
-     *
      */
     private void showModified() {
         this.variablesTable.getModel().setValueAt(getModifyNumericalVariablesSpec().getModifiedText(), this.selectedRow, 0);
@@ -227,10 +238,11 @@ public class ModifyNumericalVariablesView extends DialogBase<ModifyNumericalVari
     }
 
     /**
+     * Checks whether a double and a string are equal.
      *
-     * @param text
-     * @param d
-     * @return
+     * @param text String containing the text to be compaired.
+     * @param d Double containing the number to be compaired.
+     * @return Boolean indicating whether the string and the double are equal.
      */
     private boolean doubleEquals(String text, double d) {
         return text.equals(formatDouble(d));
@@ -264,7 +276,7 @@ public class ModifyNumericalVariablesView extends DialogBase<ModifyNumericalVari
         }
         return valueChanged;
     }
-    
+
     /**
      * Enables/Disables all controls and sub controls from a component.
      *
