@@ -52,7 +52,7 @@ public class RiskSpecificationView extends DialogBase<RiskSpecificationControlle
 
     @Override
     protected String getHelpNamedDestination() {
-        return ContextHelp.fromClassName(this.getClass().getName(), isHousehold);
+        return ContextHelp.fromClassName(getClass().getName(), isHousehold);
     }
 
     /**
@@ -89,14 +89,6 @@ public class RiskSpecificationView extends DialogBase<RiskSpecificationControlle
         this.nUnsafeLabel.setText(isHousehold ? "# unsafe HH:" : "# unsafe records");
     }
 
-//    @Override
-//    public void setVisible(boolean bln) {
-//        super.setVisible(bln); //To change body of generated methods, choose Tools | Templates.
-//        Rectangle2D r = cp.getChartRenderingInfo().getPlotInfo().getDataArea();
-//        double min = r.getMinX();
-//        double max = r.getMaxX();
-//        JOptionPane.showMessageDialog(null, min);
-//    }
     /**
      * Initializes the data. This method sets the model, the label of the table,
      * the values and the chart.
@@ -105,8 +97,6 @@ public class RiskSpecificationView extends DialogBase<RiskSpecificationControlle
     public void initializeData() {
         this.model = getMetadata().getCombinations().getRiskSpecifications().get(this.riskTable);
         this.tableLabel.setText(this.riskTable.getTableTitle());
-        //this.maxRiskTextField.setText(formatDouble(this.model.getMaxRisk()));
-        //this.maxReidentRateTextField.setText(formatDoublePrc(100*this.model.getMaxReidentRate()));
         updateValues();
         showChart();
     }
@@ -129,11 +119,23 @@ public class RiskSpecificationView extends DialogBase<RiskSpecificationControlle
         return Integer.parseInt(this.decimalsCombo.getSelectedItem().toString());
     }
 
+    /**
+     * Converts a double value to a string format. 
+     *
+     * @param d Double value that will be converted to a string.
+     * @return String containing the double value as a string
+     */
     private String formatDouble(double d) {
         String format = "%." + getDecimals() + "f";
         return String.format(MuARGUS.getLocale(), format, d);
     }
 
+    /**
+     * Converts a double percentage to a string format.
+     *
+     * @param d Double value that will be converted to a string.
+     * @return String containing the double value as a string
+     */
     private String formatDoublePrc(double d) {
         String format = "%." + Integer.toString(getDecimals() - 2) + "f";
         return String.format(MuARGUS.getLocale(), format, d * 100);
@@ -492,7 +494,7 @@ public class RiskSpecificationView extends DialogBase<RiskSpecificationControlle
     }// </editor-fold>//GEN-END:initComponents
 
     private void okButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okButtonActionPerformed
-        this.setVisible(false);
+        setVisible(false);
     }//GEN-LAST:event_okButtonActionPerformed
 
     private void riskSliderStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_riskSliderStateChanged
