@@ -911,7 +911,7 @@ public class SelectCombinationsView extends DialogBase<SelectCombinationsControl
                 updateValues();
                 this.table.getSelectionModel().setSelectionInterval(index, index);
 
-            } catch (Exception e) {
+            } catch (IndexOutOfBoundsException e) {
                 showMessage("No table is selected");
             }
         }
