@@ -11,6 +11,7 @@ import muargus.model.ReplacementSpec;
 import muargus.model.VariableMu;
 
 /**
+ * View class of the NumericalRankSwapping screen.
  *
  * @author Statistics Netherlands
  */
@@ -20,6 +21,7 @@ public class NumericalRankSwappingView extends DialogBase<NumericalRankSwappingC
     private DefaultListModel<VariableMu> selectedListModel;
 
     /**
+     * Creates new form NumericalRankSwappingView.
      *
      * @param parent the Frame of the mainFrame.
      * @param modal boolean to set the modal status
@@ -33,43 +35,58 @@ public class NumericalRankSwappingView extends DialogBase<NumericalRankSwappingC
         this.selectedVariableList.setCellRenderer(new VariableNameCellRenderer());
     }
 
+    /**
+     * Initializes the data. Sets the model, sets the table values and updates
+     * the values.
+     */
     @Override
     public void initializeData() {
         this.model = getMetadata().getCombinations().getNumericalRankSwapping();
         String[][] data = new String[this.model.getVariables().size()][2];
         int index = 0;
-        for (VariableMu variable : model.getVariables()) {
+        for (VariableMu variable : this.model.getVariables()) {
             data[index] = new String[]{getModifiedText(variable), variable.getName()};
             index++;
         }
 
         this.variablesTable.setModel(new DefaultTableModel(data, new Object[]{"Modified", "Variable"}));
         this.variablesTable.getSelectionModel().setSelectionInterval(0, 0);
-//        this.variableListModel = (DefaultListModel<VariableMu>) new DefaultListModel();
-//        for (VariableMu variable : getMetadata().getVariables()) {
-//            if (variable.isNumeric()) {
-//                this.variableListModel.addElement(variable);
-//            }
-//        }
-//        variableList.setModel(this.variableListModel);
         this.selectedListModel = new DefaultListModel<>();
-        selectedVariableList.setModel(this.selectedListModel);
-        //variableList.setSelectedIndex(0);
+        this.selectedVariableList.setModel(this.selectedListModel);
         updateValues();
     }
 
+    /**
+     * Enables/disables the calculate button.
+     */
     private void updateValues() {
-        calculateButton.setEnabled(getSelectedVariables().size() > 0);
+        this.calculateButton.setEnabled(getSelectedVariables().size() > 0);
     }
 
+    /**
+     * Updates the values inside the table.
+     *
+     * @param replacement ReplacementSpec instance containing the
+     * RankSwappingSpec.
+     */
     public void updateVariableRows(ReplacementSpec replacement) {
         for (VariableMu variableMu : replacement.getVariables()) {
             int index = this.model.getVariables().indexOf(variableMu);
-            variablesTable.setValueAt(getModifiedText(variableMu), index, 0);
-            variablesTable.setValueAt(variableMu.getName(), index, 1);
+            this.variablesTable.setValueAt(getModifiedText(variableMu), index, 0);
+            this.variablesTable.setValueAt(variableMu.getName(), index, 1);
         }
     }
 
+    /**
+     * Gets the modification text belonging to this particular variable. If a
+     * variable is modified "X" is returned, otherwise an empty string is
+     * returned.
+     *
+     * @param variable VariableMu instance of the varible for which the modified
+     * text is requested.
+     * @return String containing the modified text. If a variable is modified
+     * "X" is returned, otherwise an empty string is returned.
+     */
     private String getModifiedText(VariableMu variable) {
         for (ReplacementSpec spec : this.model.getRankSwappings()) {
             if (spec.getVariables().contains(variable)) {
@@ -79,30 +96,50 @@ public class NumericalRankSwappingView extends DialogBase<NumericalRankSwappingC
         return "";
     }
 
+    /**
+     * Gets the selected variables.
+     *
+     * @return Arraylist of VariableMu's containing the selected variables.
+     */
     public ArrayList<VariableMu> getSelectedVariables() {
         ArrayList<VariableMu> selected = new ArrayList<>();
-        for (Object variable : ((DefaultListModel) selectedVariableList.getModel()).toArray()) {
+        for (Object variable : ((DefaultListModel) this.selectedVariableList.getModel()).toArray()) {
             selected.add((VariableMu) variable);
         }
         return selected;
     }
 
+    /**
+     * Gets the rank swapping percentage.
+     *
+     * @return Integer containing the rank swapping percentage.
+     */
     public int getPercentage() {
         try {
-            return Integer.parseInt(percentageTextField.getText());
+            return Integer.parseInt(this.percentageTextField.getText());
         } catch (NumberFormatException ex) {
             return 0;
         }
     }
 
+    /**
+     * Sets the progress bar's current value to the give value.
+     *
+     * @param progress Integer containing the value of the progress.
+     */
     @Override
     public void setProgress(int progress) {
-        progressBar.setValue(progress);
+        this.progressBar.setValue(progress);
     }
 
+    /**
+     * Shows the step name.
+     *
+     * @param stepName Sting containing the step name.
+     */
     @Override
     public void showStepName(String stepName) {
-        stepNameLabel.setText(stepName);
+        this.stepNameLabel.setText(stepName);
     }
 
     /**
@@ -353,8 +390,8 @@ public class NumericalRankSwappingView extends DialogBase<NumericalRankSwappingC
         boolean added = false;
         for (int index : this.variablesTable.getSelectedRows()) {
             VariableMu variable = this.model.getVariables().get(index);
-            if (!selectedListModel.contains(variable)) {
-                selectedListModel.addElement(variable);
+            if (!this.selectedListModel.contains(variable)) {
+                this.selectedListModel.addElement(variable);
                 added = true;
             }
         }
@@ -362,22 +399,22 @@ public class NumericalRankSwappingView extends DialogBase<NumericalRankSwappingC
         updateValues();
         if (added) {
             //Change selection of variables list
-            for (int varIndex = 0; varIndex < variablesTable.getModel().getRowCount(); varIndex++) {
-                if (!selectedListModel.contains(this.model.getVariables().get(varIndex))) {
-                    variablesTable.getSelectionModel().setSelectionInterval(varIndex, varIndex);
+            for (int varIndex = 0; varIndex < this.variablesTable.getModel().getRowCount(); varIndex++) {
+                if (!this.selectedListModel.contains(this.model.getVariables().get(varIndex))) {
+                    this.variablesTable.getSelectionModel().setSelectionInterval(varIndex, varIndex);
                     return;
                 }
             }
-            variablesTable.getSelectionModel().setSelectionInterval(0, 0);
+            this.variablesTable.getSelectionModel().setSelectionInterval(0, 0);
         }
     }//GEN-LAST:event_toSelectedButtonActionPerformed
 
     private void fromSelectedButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fromSelectedButtonActionPerformed
-        for (Object variable : selectedVariableList.getSelectedValuesList()) {
-            selectedListModel.removeElement((VariableMu) variable);
+        for (Object variable : this.selectedVariableList.getSelectedValuesList()) {
+            this.selectedListModel.removeElement((VariableMu) variable);
         }
-        if (selectedVariableList.getModel().getSize() > 0) {
-            selectedVariableList.setSelectedIndex(0);
+        if (this.selectedVariableList.getModel().getSize() > 0) {
+            this.selectedVariableList.setSelectedIndex(0);
         }
         updateValues();
     }//GEN-LAST:event_fromSelectedButtonActionPerformed
@@ -387,20 +424,20 @@ public class NumericalRankSwappingView extends DialogBase<NumericalRankSwappingC
     }//GEN-LAST:event_calculateButtonActionPerformed
 
     private void upButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_upButtonActionPerformed
-        int index = selectedVariableList.getSelectedIndex();
+        int index = this.selectedVariableList.getSelectedIndex();
         if (index > 0) {
-            VariableMu variable = selectedListModel.remove(index);
-            selectedListModel.add(index - 1, variable);
-            selectedVariableList.setSelectedIndex(index - 1);
+            VariableMu variable = this.selectedListModel.remove(index);
+            this.selectedListModel.add(index - 1, variable);
+            this.selectedVariableList.setSelectedIndex(index - 1);
         }
     }//GEN-LAST:event_upButtonActionPerformed
 
     private void downButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_downButtonActionPerformed
-        int index = selectedVariableList.getSelectedIndex();
-        if (index > -1 && index < selectedListModel.getSize() - 1) {
-            VariableMu variable = selectedListModel.remove(index);
-            selectedListModel.add(index + 1, variable);
-            selectedVariableList.setSelectedIndex(index + 1);
+        int index = this.selectedVariableList.getSelectedIndex();
+        if (index > -1 && index < this.selectedListModel.getSize() - 1) {
+            VariableMu variable = this.selectedListModel.remove(index);
+            this.selectedListModel.add(index + 1, variable);
+            this.selectedVariableList.setSelectedIndex(index + 1);
         }
     }//GEN-LAST:event_downButtonActionPerformed
 
