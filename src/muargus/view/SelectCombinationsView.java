@@ -31,9 +31,9 @@ public class SelectCombinationsView extends DialogBase<SelectCombinationsControl
     private DefaultListModel variablesSelectedListModel;
     private TableModel tableModel;
     private final Frame parent;
-    private long numberOfTables;
+    //private long numberOfTables;
     // gives the width of column 1, 2 and the final value is the width of all the other columns
-    private final int[] columnWidth = {30, 45, 65}; 
+    private final int[] columnWidth = {30, 45, 65};
 
     /**
      * Creates new form SelectCombinationsView
@@ -140,103 +140,101 @@ public class SelectCombinationsView extends DialogBase<SelectCombinationsControl
         }
     }
 
-    /**
-     * Removes all the tables
-     */
-    private void clear() {
-        int size = this.model.getTables().size();
-        for (int i = size - 1; i >= 0; i--) {
-            this.model.removeTable(i);
-        }
-        updateValues();
-    }
-    
-    /**
-     * Checks if a threshold is valid.
-     *
-     * @return Boolean indicating whether the threshold is valid.
-     */
-    public boolean validThreshold() {
-        boolean valid;
-        try {
-            int threshold = Integer.parseInt(this.thresholdTextField.getText());
-            valid = threshold > 0;
-        } catch (NumberFormatException e) {
-            valid = false;
-        }
-        return valid;
-    }
-    
-    /**
-     * This function compares the different tables with a new table (VariableMu
-     * array) if the table is different (enough), which depends on the
-     * riskmodel, it returns true if the table has to much overlap, it returns
-     * false
-     *
-     * @param tableMuNew TableMu instance of new table that will be added if the
-     * table is valid.
-     * @param tableMuOld TableMu instance of the already existing table
-     * @return It returns if a table can be added
-     */
-    private boolean compareRows(TableMu tableMuNew, TableMu tableMuOld) {
-        boolean isValid = true;
-        int numberOfDoubleVariables = 0;
-
-        for (VariableMu oldVariable : tableMuOld.getVariables()) {
-            for (VariableMu newVariable : tableMuNew.getVariables()) {
-                if (oldVariable.equals(newVariable)) {
-                    numberOfDoubleVariables++;
-                    if (tableMuOld.isRiskModel()) {
-                        return false;
-                    }
-                }
-            }
-        }
-        if (tableMuNew.getVariables().size() == tableMuOld.getVariables().size()
-                && numberOfDoubleVariables == tableMuNew.getVariables().size()) {
-            int thresholdOld = tableMuOld.getThreshold();
-            int thresholdNew = tableMuNew.getThreshold();
-            if (thresholdNew > thresholdOld) {
-                tableMuOld.setThreshold(thresholdNew);
-            } else {
-                tableMuNew.setThreshold(thresholdOld);
-            }
-            isValid = false;
-        }
-        return isValid;
-    }
-
-    private long getNumberOfTables() {
-        return this.numberOfTables;
-    }
-
-    private void setNumberOfTables(int dimensions, int numberOfVariables) {
-        numberOfTabels(1, dimensions, numberOfVariables);
-    }
-
-    private void numberOfTabels(long numberOfTables, int dimensions, int numberOfVariables) {
-        if (dimensions > 0) {
-            try {
-                long tempNumber = numberOfTables * numberOfVariables;
-                int tempNumberOfVariables = numberOfVariables - 1;
-                int tempDimensions = dimensions - 1;
-                numberOfTabels(tempNumber, tempDimensions, tempNumberOfVariables);
-            } catch (Exception e) {
-                //TODO: fixen dat een waarschuwing wordt gegeven bij teveel dimensies op de goede plek.
-                JOptionPane.showMessageDialog(this, "To ... many ... dimensions ...\nCan't ... visualize :-(");
-            }
-//            if (tempNumber < 0) {
-//                JOptionPane.showMessageDialog(this, "To ... many ... dimensions ...\nCan't ... visualize :-(");
+//    /**
+//     * Removes all the tables
+//     */
+//    private void clear() {
+//        int size = this.model.getTables().size();
+//        for (int i = size - 1; i >= 0; i--) {
+//            this.model.removeTable(i);
+//        }
+//        updateValues();
+//    }
+//    /**
+//     * Checks if a threshold is valid.
+//     *
+//     * @return Boolean indicating whether the threshold is valid.
+//     */
+//    public boolean validThreshold() {
+//        boolean valid;
+//        try {
+//            int threshold = Integer.parseInt(this.thresholdTextField.getText());
+//            valid = threshold > 0;
+//        } catch (NumberFormatException e) {
+//            valid = false;
+//        }
+//        return valid;
+//    }
+//    /**
+//     * This function compares the different tables with a new table (VariableMu
+//     * array) if the table is different (enough), which depends on the
+//     * riskmodel, it returns true if the table has to much overlap, it returns
+//     * false
+//     *
+//     * @param tableMuNew TableMu instance of new table that will be added if the
+//     * table is valid.
+//     * @param tableMuOld TableMu instance of the already existing table
+//     * @return It returns if a table can be added
+//     */
+//    private boolean compareRows(TableMu tableMuNew, TableMu tableMuOld) {
+//        boolean isValid = true;
+//        int numberOfDoubleVariables = 0;
+//
+//        for (VariableMu oldVariable : tableMuOld.getVariables()) {
+//            for (VariableMu newVariable : tableMuNew.getVariables()) {
+//                if (oldVariable.equals(newVariable)) {
+//                    numberOfDoubleVariables++;
+//                    if (tableMuOld.isRiskModel()) {
+//                        return false;
+//                    }
+//                }
+//            }
+//        }
+//        if (tableMuNew.getVariables().size() == tableMuOld.getVariables().size()
+//                && numberOfDoubleVariables == tableMuNew.getVariables().size()) {
+//            int thresholdOld = tableMuOld.getThreshold();
+//            int thresholdNew = tableMuNew.getThreshold();
+//            if (thresholdNew > thresholdOld) {
+//                tableMuOld.setThreshold(thresholdNew);
 //            } else {
+//                tableMuNew.setThreshold(thresholdOld);
+//            }
+//            isValid = false;
+//        }
+//        return isValid;
+//    }
+//    private long getNumberOfTables() {
+//        return this.numberOfTables;
+//    }
+//
+//    private void setNumberOfTables(int dimensions, int numberOfVariables) {
+//        numberOfTabels(1, dimensions, numberOfVariables);
+//    }
+
+//    /**
+//     * Calculates the number of tables that will be generated for a given number
+//     * of dimensions. This is a recursive method that will calculate the
+//     * equation: N * (N-1) * ... (N-D+1) where N is the number of variables and
+//     * D is the number of dimensions.
+//     *
+//     * @param numberOfTables
+//     * @param dimensions
+//     * @param numberOfVariables
+//     */
+//    private void numberOfTabels(long numberOfTables, int dimensions, int numberOfVariables) {
+//        if (dimensions > 0) {
+//            try {
+//                long tempNumber = numberOfTables * numberOfVariables;
 //                int tempNumberOfVariables = numberOfVariables - 1;
 //                int tempDimensions = dimensions - 1;
 //                numberOfTabels(tempNumber, tempDimensions, tempNumberOfVariables);
+//            } catch (Exception e) {
+//                JOptionPane.showMessageDialog(this, "To ... many ... dimensions ...\nCan't ... visualize :-(");
 //            }
-
-        } else if (dimensions == 0) {
-            this.numberOfTables = numberOfTables;
-        }
-    }
+//        } else if (dimensions == 0) {
+//            this.numberOfTables = numberOfTables;
+//        }
+//    }
 
     /**
      * Sets the progress of the progressbar.
@@ -258,180 +256,180 @@ public class SelectCombinationsView extends DialogBase<SelectCombinationsControl
         this.progressLabel.setText(value);
     }
 
-    /**
-     * Starts the recursion equation that calculates the tables for the
-     * specified number of dimensions. Assings an empty Arraylist of
-     * variableMu's, the starting position and the threshold.
-     *
-     * @param allVariables ArrayList of VariableMu's containing all variables.
-     * @param dimensions Integer containing the number of dimensions.
-     */
-    private void calculateTablesForDimensions(ArrayList<VariableMu> allVariables, int dimensions) {
-        ArrayList<VariableMu> variableSubset = new ArrayList<>();
-        int startPos = 0;
-        int threshold = 0;
-        calculateTablesForDimensions(startPos, allVariables, dimensions, variableSubset, threshold);
-    }
+//    /**
+//     * Starts the recursion equation that calculates the tables for the
+//     * specified number of dimensions. Assings an empty Arraylist of
+//     * variableMu's, the starting position and the threshold.
+//     *
+//     * @param allVariables ArrayList of VariableMu's containing all variables.
+//     * @param dimensions Integer containing the number of dimensions.
+//     */
+//    private void calculateTablesForDimensions(ArrayList<VariableMu> allVariables, int dimensions) {
+//        ArrayList<VariableMu> variableSubset = new ArrayList<>();
+//        int startPos = 0;
+//        int threshold = 0;
+//        calculateTablesForDimensions(startPos, allVariables, dimensions, variableSubset, threshold);
+//    }
+//
+//    /**
+//     * Main body of the recursion equation that calculates the tables for the
+//     * specified number of dimensions. This recursion equation starts with
+//     * looping through all variables. Whithin the loop the equation adds the
+//     * variable to the varibleSubset, makes a table, calls itself and passes the
+//     * variableSubset on. Every time this equation calls itself the
+//     * variableSubset will add a variable until the number of dimensions are
+//     * higher than the number of calls of this function.
+//     *
+//     * @param startPos
+//     * @param allVariables ArrayList of VariableMu's containing all variables.
+//     * @param dimensions Integer containing the number of dimensions.
+//     * @param variableSubset ArrayList of VariableMu's containing between one
+//     * variable and as many variables as the number of dimensions.
+//     * @param threshold Integer containing the threshold for the specified
+//     * dimension.
+//     */
+//    private void calculateTablesForDimensions(int startPos, ArrayList<VariableMu> allVariables, int dimension,
+//            ArrayList<VariableMu> variableSubset, int threshold) {
+//        if (dimension > 0) {
+//            for (int i = startPos; i < allVariables.size(); i++) {
+//                //make variable array 
+//                ArrayList<VariableMu> temp = new ArrayList<>();
+//                VariableMu s = allVariables.get(i);
+//                temp.addAll(variableSubset);
+//                temp.add(s);
+//
+//                //Make table, add the variable array and add this table to the table array
+//                TableMu tableMu = new TableMu();
+//                tableMu.getVariables().addAll(temp);
+//                tableMu.setThreshold(this.model.getThresholds()[threshold]);
+//                this.model.getTables().add(tableMu);
+//
+//                // call this method again
+//                calculateTablesForDimensions(i + 1, allVariables, dimension - 1, temp, threshold + 1);
+//            }
+//        }
+//    }
+//
+//    /**
+//     * Starts the recursion equation that calculates the tables for the ID
+//     * levels.
+//     *
+//     * @param numberOfLevels Integer containing the number of ID-levels with at
+//     * least one variable.
+//     * @param variables ArrayList containing ArrayList's of VariableMu's for
+//     * each ID-level. variables.
+//     * @param allValidVariables ArrayList of VariableMu's containing all
+//     * variables with an ID-level higher than 0
+//     */
+//    private void calculateTablesForID(int numberOfLevels, ArrayList<ArrayList<VariableMu>> variables, ArrayList<VariableMu> allValidVariables) {
+//        int index = 1; // don't add the variables with an ID number of 0
+//        int _size = 0;
+//        int currentLevel = 0;
+//        ArrayList<VariableMu> variableSubset = new ArrayList<>();
+//
+//        calculateTablesForID(0, index, _size, currentLevel, variableSubset, numberOfLevels, variables, allValidVariables);
+//    }
+//
+//    /**
+//     * Starts the recursion equation that calculates the tables for the ID
+//     * levels. This equation first checks whether the number of ID-levels with
+//     * at least one variable that has been processed in this equation
+//     * (_currentLevel) is smaller or equal to the maximum number of ID-levels
+//     * with at least one variable. If this is the case, the next idLevel larger
+//     * than zero will be found and the number of variables whith that idLevel
+//     * will be added to the size. The size contains the amount of variables up
+//     * to the current ID-level. Following the equation will loop through all
+//     * variables up to the current id-level excluding variables that have
+//     * already been used. During each loop the current variable is added to a
+//     * tempory array and if the size of this array equals the numberOfLevels, a
+//     * table is added.
+//     *
+//     * @param _i Integer containing the starting point of the for loop.
+//     * @param _index Integer containing the index of the next to be searched
+//     * ArrayList. In this method it is checked if the next ArrayList with this
+//     * index has more than 0 variables.
+//     * @param _size Integer containing the number of variables up to the
+//     * corresponding ID-Level
+//     * @param _currentLevel Integer containing the current ID-level.
+//     * @param variableSubset ArrayList of VariableMu's containing between one
+//     * variable and as many variables as the number of different ID-levels.
+//     * @param numberOfLevels Integer containing the number of ID-levels with at
+//     * least one variable.
+//     * @param variables ArrayList containing ArrayList's of VariableMu's for
+//     * each ID-level. variables.
+//     * @param allValidVariables ArrayList of VariableMu's containing all
+//     * variables with an ID-level higher than 0
+//     */
+//    private void calculateTablesForID(int _i, int _index, int _size, int _currentLevel, ArrayList<VariableMu> variableSubset,
+//            int numberOfLevels, ArrayList<ArrayList<VariableMu>> variables, ArrayList<VariableMu> allVariables) {
+//
+//        int currentLevel = _currentLevel + 1;
+//        if (currentLevel <= numberOfLevels) {
+//            int index = _index;
+//            int size = _size;
+//
+//            // find the next idLevel larger than zero and add the number of variables to the size
+//            for (int u = index; u < variables.size(); u++) {
+//                if (variables.get(u).size() > 0) {
+//                    size = size + variables.get(u).size();
+//                    index = u + 1;
+//                    break;
+//                }
+//            }
+//
+//            // loop through all variables and add a table if its size equals the number of id-levels with at least one variable.
+//            for (int i = _i; i < size; i++) {
+//                ArrayList<VariableMu> temp = new ArrayList<>();
+//                temp.addAll(variableSubset);
+//                temp.add(allVariables.get(i));
+//
+//                if (temp.size() == numberOfLevels) {
+//                    TableMu tableMu = new TableMu();
+//                    tableMu.getVariables().addAll(temp);
+//                    tableMu.setThreshold(this.model.getThreshold());
+//                    this.model.addTable(tableMu);
+//                }
+//                // call this method again
+//                calculateTablesForID(i + 1, index, size, currentLevel, temp, numberOfLevels, variables, allVariables);
+//            }
+//        }
+//    }
 
-    /**
-     * Main body of the recursion equation that calculates the tables for the
-     * specified number of dimensions. This recursion equation starts with
-     * looping through all variables. Whithin the loop the equation adds the
-     * variable to the varibleSubset, makes a table, calls itself and passes the
-     * variableSubset on. Every time this equation calls itself the
-     * variableSubset will add a variable until the number of dimensions are
-     * higher than the number of calls of this function.
-     *
-     * @param startPos
-     * @param allVariables ArrayList of VariableMu's containing all variables.
-     * @param dimensions Integer containing the number of dimensions.
-     * @param variableSubset ArrayList of VariableMu's containing between one
-     * variable and as many variables as the number of dimensions.
-     * @param threshold Integer containing the threshold for the specified
-     * dimension.
-     */
-    private void calculateTablesForDimensions(int startPos, ArrayList<VariableMu> allVariables, int dimension,
-            ArrayList<VariableMu> variableSubset, int threshold) {
-        if (dimension > 0) {
-            for (int i = startPos; i < allVariables.size(); i++) {
-                //make variable array 
-                ArrayList<VariableMu> temp = new ArrayList<>();
-                VariableMu s = allVariables.get(i);
-                temp.addAll(variableSubset);
-                temp.add(s);
+//    /**
+//     * Gets a list of to be removed tables.
+//     *
+//     * @return Arraylist of TableMu's containing the removed tables.
+//     */
+//    private ArrayList<TableMu> getListOfRemovedTables() {
+//        ArrayList<TableMu> toBeRemovedTables = new ArrayList<>();
+//
+//        for (int i = this.model.getNumberOfRows() - 1; i >= 0; i--) {
+//            TableMu t = this.model.getTables().get(i);
+//            if (!t.isRiskModel()) {
+//                if (t.contains(this.model.getRiskModelVariables())) {
+//                    toBeRemovedTables.add(t);
+//                }
+//            }
+//        }
+//        return toBeRemovedTables;
+//    }
 
-                //Make table, add the variable array and add this table to the table array
-                TableMu tableMu = new TableMu();
-                tableMu.getVariables().addAll(temp);
-                tableMu.setThreshold(this.model.getThresholds()[threshold]);
-                this.model.getTables().add(tableMu);
-
-                // call this method again
-                calculateTablesForDimensions(i + 1, allVariables, dimension - 1, temp, threshold + 1);
-            }
-        }
-    }
-
-    /**
-     * Starts the recursion equation that calculates the tables for the ID
-     * levels.
-     *
-     * @param numberOfLevels Integer containing the number of ID-levels with at
-     * least one variable.
-     * @param variables ArrayList containing ArrayList's of VariableMu's for
-     * each ID-level. variables.
-     * @param allValidVariables ArrayList of VariableMu's containing all
-     * variables with an ID-level higher than 0
-     */
-    private void calculateTablesForID(int numberOfLevels, ArrayList<ArrayList<VariableMu>> variables, ArrayList<VariableMu> allValidVariables) {
-        int index = 1; // don't add the variables with an ID number of 0
-        int _size = 0;
-        int currentLevel = 0;
-        ArrayList<VariableMu> variableSubset = new ArrayList<>();
-
-        calculateTablesForID(0, index, _size, currentLevel, variableSubset, numberOfLevels, variables, allValidVariables);
-    }
-
-    /**
-     * Starts the recursion equation that calculates the tables for the ID
-     * levels. This equation first checks whether the number of ID-levels with
-     * at least one variable that has been processed in this equation
-     * (_currentLevel) is smaller or equal to the maximum number of ID-levels
-     * with at least one variable. If this is the case, the next idLevel larger
-     * than zero will be found and the number of variables whith that idLevel
-     * will be added to the size. The size contains the amount of variables up
-     * to the current ID-level. Following the equation will loop through all
-     * variables up to the current id-level excluding variables that have
-     * already been used. During each loop the current variable is added to a
-     * tempory array and if the size of this array equals the numberOfLevels, a
-     * table is added.
-     *
-     * @param _i Integer containing the starting point of the for loop.
-     * @param _index Integer containing the index of the next to be searched
-     * ArrayList. In this method it is checked if the next ArrayList with this
-     * index has more than 0 variables.
-     * @param _size Integer containing the number of variables up to the
-     * corresponding ID-Level
-     * @param _currentLevel Integer containing the current ID-level.
-     * @param variableSubset ArrayList of VariableMu's containing between one
-     * variable and as many variables as the number of different ID-levels.
-     * @param numberOfLevels Integer containing the number of ID-levels with at
-     * least one variable.
-     * @param variables ArrayList containing ArrayList's of VariableMu's for
-     * each ID-level. variables.
-     * @param allValidVariables ArrayList of VariableMu's containing all
-     * variables with an ID-level higher than 0
-     */
-    private void calculateTablesForID(int _i, int _index, int _size, int _currentLevel, ArrayList<VariableMu> variableSubset,
-            int numberOfLevels, ArrayList<ArrayList<VariableMu>> variables, ArrayList<VariableMu> allVariables) {
-
-        int currentLevel = _currentLevel + 1;
-        if (currentLevel <= numberOfLevels) {
-            int index = _index;
-            int size = _size;
-
-            // find the next idLevel larger than zero and add the number of variables to the size
-            for (int u = index; u < variables.size(); u++) {
-                if (variables.get(u).size() > 0) {
-                    size = size + variables.get(u).size();
-                    index = u + 1;
-                    break;
-                }
-            }
-
-            // loop through all variables and add a table if its size equals the number of id-levels with at least one variable.
-            for (int i = _i; i < size; i++) {
-                ArrayList<VariableMu> temp = new ArrayList<>();
-                temp.addAll(variableSubset);
-                temp.add(allVariables.get(i));
-
-                if (temp.size() == numberOfLevels) {
-                    TableMu tableMu = new TableMu();
-                    tableMu.getVariables().addAll(temp);
-                    tableMu.setThreshold(this.model.getThreshold());
-                    this.model.addTable(tableMu);
-                }
-                // call this method again
-                calculateTablesForID(i + 1, index, size, currentLevel, temp, numberOfLevels, variables, allVariables);
-            }
-        }
-    }
-    
-    /**
-     * Gets a list of to be removed tables.
-     *
-     * @return Arraylist of TableMu's containing the removed tables.
-     */
-    private ArrayList<TableMu> getListOfRemovedTables() {
-        ArrayList<TableMu> toBeRemovedTables = new ArrayList<>();
-
-        for (int i = this.model.getNumberOfRows() - 1; i >= 0; i--) {
-            TableMu t = this.model.getTables().get(i);
-            if (!t.isRiskModel()) {
-                if (t.contains(this.model.getRiskModelVariables())) {
-                    toBeRemovedTables.add(t);
-                }
-            }
-        }
-        return toBeRemovedTables;
-    }
-
-    private boolean overlappingTables(ArrayList<TableMu> toBeRemovedTables, TableMu tableMu) {
-        boolean valid = false;
-        if (toBeRemovedTables.size() > 0) {
-            if (JOptionPane.showConfirmDialog(this, "Overlapping tables found with this risk table\nDo you want to remove them?", "Mu Argus", JOptionPane.YES_NO_OPTION) == JOptionPane.NO_OPTION) {
-                tableMu.setRiskModel(!tableMu.isRiskModel());  //Revert the change
-                valid = true;
-            }
-        }
-        return valid;
-    }
-
-    private void removeTableRiskModel(ArrayList<TableMu> toBeRemovedTables) {
-        for (TableMu t : toBeRemovedTables) {
-            this.model.removeTable(t);
-        }
-    }
+//    private boolean overlappingTables(ArrayList<TableMu> toBeRemovedTables, TableMu tableMu) {
+//        boolean valid = false;
+//        if (toBeRemovedTables.size() > 0) {
+//            if (JOptionPane.showConfirmDialog(this, "Overlapping tables found with this risk table\nDo you want to remove them?", "Mu Argus", JOptionPane.YES_NO_OPTION) == JOptionPane.NO_OPTION) {
+//                tableMu.setRiskModel(!tableMu.isRiskModel());  //Revert the change
+//                valid = true;
+//            }
+//        }
+//        return valid;
+//    }
+//
+//    private void removeTableRiskModel(ArrayList<TableMu> toBeRemovedTables) {
+//        for (TableMu t : toBeRemovedTables) {
+//            this.model.removeTable(t);
+//        }
+//    }
 
     /**
      * Enables/Disables the calculate tables button.
@@ -443,15 +441,15 @@ public class SelectCombinationsView extends DialogBase<SelectCombinationsControl
         this.calculateTablesButton.setEnabled(enabled);
     }
 
-    private boolean weightVariableExists() {
-        for (VariableMu variable : getMetadata().getVariables()) {
-            if (variable.isWeight()) {
-                return true;
-            }
-        }
-        return false;
-    }
-    
+//    private boolean weightVariableExists() {
+//        for (VariableMu variable : getMetadata().getVariables()) {
+//            if (variable.isWeight()) {
+//                return true;
+//            }
+//        }
+//        return false;
+//    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -728,7 +726,7 @@ public class SelectCombinationsView extends DialogBase<SelectCombinationsControl
          of dimensions and if the threshold is valid. */
         if (this.variablesSelectedListModel.size() > MuARGUS.MAXDIMS) {
             JOptionPane.showMessageDialog(this, String.format("Cannot add more than %d variables", MuARGUS.MAXDIMS));
-        } else if (!validThreshold()) {
+        } else if (!getController().validThreshold(this.thresholdTextField.getText())) {
             JOptionPane.showMessageDialog(this, "The threshold is not valid, please enter a positive integer");
         } else {
             /* copy the selected variables into a VariableMu array and make a 
@@ -744,7 +742,7 @@ public class SelectCombinationsView extends DialogBase<SelectCombinationsControl
             if (this.model.getNumberOfRows() > 0 && this.model.getNumberOfRows() < this.model.getMaximumSizeBeforeUserConfirmation()) {
                 for (int i = 0; i < this.model.getNumberOfRows(); i++) {
                     TableMu tableMuOld = this.model.getTables().get(i);
-                    add = compareRows(tableMuNew, tableMuOld);
+                    add = getController().compareRows(tableMuNew, tableMuOld);
                     if (!add) {
                         if (tableMuOld.isRiskModel()) {
                             JOptionPane.showMessageDialog(this,
@@ -769,7 +767,7 @@ public class SelectCombinationsView extends DialogBase<SelectCombinationsControl
 
             updateValues();
             this.table.getSelectionModel().setSelectionInterval(this.model.getNumberOfRows() - 1, this.model.getNumberOfRows() - 1);
-            table.scrollRectToVisible(new Rectangle(table.getCellRect(this.model.getNumberOfRows() - 1, 0, true)));
+            this.table.scrollRectToVisible(new Rectangle(this.table.getCellRect(this.model.getNumberOfRows() - 1, 0, true)));
         }
     }//GEN-LAST:event_addRowButtonActionPerformed
 
@@ -792,7 +790,8 @@ public class SelectCombinationsView extends DialogBase<SelectCombinationsControl
                 this.model.removeTable(this.model.getNumberOfRows());
             }
             if (this.model.getNumberOfRows() == 0) {
-                clear();
+                getController().clear();
+                updateValues();
             }
         }
         updateValues();
@@ -805,7 +804,8 @@ public class SelectCombinationsView extends DialogBase<SelectCombinationsControl
         if (this.model.getNumberOfRows() > 0) {
             if (JOptionPane.showConfirmDialog(this, "Do you want to delete the current set of tables?", "Mu Argus",
                     JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
-                clear();
+                getController().clear();
+                updateValues();
             }
         }
 
@@ -825,14 +825,14 @@ public class SelectCombinationsView extends DialogBase<SelectCombinationsControl
         // add all variables with an ID-level higher than 0 to the arrayList of variables.
         int numberOfLevels = 0; // the number of idLevels with at least one variable
         // TODO: dit staat er alleen om makkelijk te testen. verander start naar 1 in de for-loop na het testen.
-        int start;
-        if (getMetadata().getDataFileType() == MetadataMu.DATA_FILE_TYPE_SPSS) {
-            start = 0;
-        } else {
-            start = 1;
-        }
+//        int start;
+//        if (getMetadata().getDataFileType() == MetadataMu.DATA_FILE_TYPE_SPSS) {
+//            start = 0;
+//        } else {
+//            start = 1;
+//        }
         ArrayList<VariableMu> allValidVariables = new ArrayList<>();
-        for (int i = start; i < variables.size(); i++) {
+        for (int i = 1; i < variables.size(); i++) {
             allValidVariables.addAll(variables.get(i));
             if (variables.get(i).size() > 0) {
                 numberOfLevels++;
@@ -847,17 +847,19 @@ public class SelectCombinationsView extends DialogBase<SelectCombinationsControl
         if (generateAutomaticTables.isInputValid()) {
             if (generateAutomaticTables.isMakeUpToDimensionRadioButton()) {
                 int dimensions = generateAutomaticTables.getDimensions();
-                setNumberOfTables(dimensions, numberOfVariables);
-                if (getNumberOfTables() > this.model.getMaximumSizeBeforeUserConfirmation()) {
-                    if (JOptionPane.showConfirmDialog(this, "Are you sure that you want to generate " + getNumberOfTables() + " tables?", "Mu Argus", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
-                        calculateTablesForDimensions(allValidVariables, dimensions);
+                getController().setNumberOfTables(dimensions, numberOfVariables);
+                if (getController().getNumberOfTables() > this.model.getMaximumSizeBeforeUserConfirmation()) {
+                    if (JOptionPane.showConfirmDialog(this, "Are you sure that you want to generate " 
+                            + getController().getNumberOfTables() + " tables?", "Mu Argus", 
+                            JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+                        getController().calculateTablesForDimensions(allValidVariables, dimensions);
                     }
                 } else {
-                    calculateTablesForDimensions(allValidVariables, dimensions);
+                    getController().calculateTablesForDimensions(allValidVariables, dimensions);
                 }
             }
             if (generateAutomaticTables.isUseIdentificationLevelRadioButton()) {
-                calculateTablesForID(numberOfLevels, variables, allValidVariables);
+                getController().calculateTablesForID(numberOfLevels, variables, allValidVariables);
             }
         }
 
@@ -866,7 +868,7 @@ public class SelectCombinationsView extends DialogBase<SelectCombinationsControl
         if (numberOfOldTables < this.model.getMaximumNumberOfTables()) {
             for (int i = 0; i < numberOfOldTables; i++) {
                 for (int j = this.model.getNumberOfRows() - 1; j >= numberOfOldTables; j--) {
-                    if (!compareRows(this.model.getTables().get(i), this.model.getTables().get(j))) {
+                    if (!getController().compareRows(this.model.getTables().get(i), this.model.getTables().get(j))) {
                         this.model.removeTable(this.model.getTables().get(j));
                     }
                 }
@@ -875,7 +877,7 @@ public class SelectCombinationsView extends DialogBase<SelectCombinationsControl
 
         boolean risk = this.model.isRiskModel();
         if (risk && numberOfOldTables < this.model.getMaximumNumberOfTables()) {
-            removeTableRiskModel(getListOfRemovedTables());
+            getController().removeTableRiskModel(getController().getListOfRemovedTables());
         }
 
         updateValues();
@@ -883,7 +885,8 @@ public class SelectCombinationsView extends DialogBase<SelectCombinationsControl
     }//GEN-LAST:event_automaticSpecificationButtonActionPerformed
 
     private void clearButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearButtonActionPerformed
-        clear();
+        getController().clear();
+        updateValues();
     }//GEN-LAST:event_clearButtonActionPerformed
 
     private void setTableRiskModelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_setTableRiskModelButtonActionPerformed
@@ -893,16 +896,16 @@ public class SelectCombinationsView extends DialogBase<SelectCombinationsControl
                 int index = this.table.getSelectedRow();
                 index = this.table.convertRowIndexToModel(index);
                 TableMu tableMu = this.model.getTables().get(index);
-                if (!weightVariableExists()) {
+                if (!getController().weightVariableExists()) {
                     showMessage("No weight variable has been specified, so the risk-model cannot be applied");
                     return;
                 }
                 tableMu.setRiskModel(!tableMu.isRiskModel());
 
                 if (tableMu.isRiskModel()) {  //The table is added to the risk model
-                    ArrayList<TableMu> toBeRemovedTables = getListOfRemovedTables();
-                    overlappingTables(toBeRemovedTables, tableMu);
-                    removeTableRiskModel(toBeRemovedTables);
+                    ArrayList<TableMu> toBeRemovedTables = getController().getListOfRemovedTables();
+                    getController().overlappingTables(toBeRemovedTables, tableMu);
+                    getController().removeTableRiskModel(toBeRemovedTables);
                 }
 
                 updateValues();
@@ -915,7 +918,8 @@ public class SelectCombinationsView extends DialogBase<SelectCombinationsControl
     }//GEN-LAST:event_setTableRiskModelButtonActionPerformed
 
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
-        clear();
+        getController().clear();
+        updateValues();
         getController().cancel();
     }//GEN-LAST:event_cancelButtonActionPerformed
 

@@ -45,7 +45,7 @@ public class ViewReportView extends DialogBase<ViewReportController> {
             HTMLDocument htmlDoc = (HTMLDocument) htmlKit.createDefaultDocument();
             htmlDoc.putProperty("IgnoreCharsetDirective", true);
             htmlKit.read(stringReader, htmlDoc, 0);
-            htmlPane.setDocument(htmlDoc);
+            this.htmlPane.setDocument(htmlDoc);
         } catch (IOException | BadLocationException ex) {
             Logger.getLogger(MainFrameController.class.getName()).log(Level.SEVERE, null, ex);
             showErrorMessage(new ArgusException("Error creating report: " + ex.getMessage()));
@@ -58,7 +58,7 @@ public class ViewReportView extends DialogBase<ViewReportController> {
      * @param htmlDoc HTMLDocument containing the document to be shown.
      */
     public void showReport(HTMLDocument htmlDoc) {
-        htmlPane.setDocument(htmlDoc);
+        this.htmlPane.setDocument(htmlDoc);
     }
 
     /**
@@ -137,7 +137,7 @@ public class ViewReportView extends DialogBase<ViewReportController> {
 
     private void printButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_printButtonActionPerformed
         try {
-            htmlPane.print();
+            this.htmlPane.print();
         } catch (PrinterException ex) {
             showMessage("Error printing report: " + ex.getMessage());
         }

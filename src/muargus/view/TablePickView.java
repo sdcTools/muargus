@@ -118,12 +118,12 @@ public class TablePickView extends DialogBase {
 
     private void okButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okButtonActionPerformed
         this.cancelled = false;
-        this.setVisible(false);
+        setVisible(false);
     }//GEN-LAST:event_okButtonActionPerformed
 
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
         this.cancelled = true;
-        this.setVisible(false);
+        setVisible(false);
     }//GEN-LAST:event_cancelButtonActionPerformed
 
 

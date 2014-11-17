@@ -85,8 +85,6 @@ public class ShowTableCollectionView extends DialogBase<ShowTableCollectionContr
             public Class<?> getColumnClass(int i) {
                 return i == 0 ? Integer.class : String.class;
             }
-            
-            
         };
         this.table.setModel(tableModel);
         DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
