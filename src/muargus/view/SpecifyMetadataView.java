@@ -275,6 +275,8 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
         enableControls(this.relatedToPanel, enable);
         enableControls(this.relatedToComboBox, enable);
         enableControls(this.missingsPanel, enable);
+        this.separatorLabel.setEnabled(enable);
+        this.separatorTextField.setEnabled(enable);
     }
 
     /**
