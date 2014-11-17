@@ -75,7 +75,7 @@
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" attributes="0">
-                          <Component id="useIdentificatinLevelRadioButton" min="-2" max="-2" attributes="0"/>
+                          <Component id="useIdentificationLevelRadioButton" min="-2" max="-2" attributes="0"/>
                           <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
@@ -92,7 +92,7 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="useIdentificatinLevelRadioButton" min="-2" max="-2" attributes="0"/>
+                  <Component id="useIdentificationLevelRadioButton" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="makeUpToDimensionRadioButton" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -104,7 +104,7 @@
         </DimensionLayout>
       </Layout>
       <SubComponents>
-        <Component class="javax.swing.JRadioButton" name="useIdentificatinLevelRadioButton">
+        <Component class="javax.swing.JRadioButton" name="useIdentificationLevelRadioButton">
           <Properties>
             <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
               <ComponentRef name="methodButtonGroup"/>
@@ -113,7 +113,7 @@
             <Property name="text" type="java.lang.String" value="Use identification level"/>
           </Properties>
           <Events>
-            <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="useIdentificatinLevelRadioButtonStateChanged"/>
+            <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="useIdentificationLevelRadioButtonStateChanged"/>
           </Events>
         </Component>
         <Component class="javax.swing.JRadioButton" name="makeUpToDimensionRadioButton">

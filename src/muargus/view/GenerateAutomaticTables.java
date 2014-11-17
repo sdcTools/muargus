@@ -34,56 +34,69 @@ public class GenerateAutomaticTables extends DialogBase {
         this.valid = false;
         this.numberOfVariables = numberOfVariables;
         initComponents();
-        this.setLocationRelativeTo(null);
-        this.setTitle("Method for generating tables");
+        setLocationRelativeTo(null);
+        setTitle("Method for generating tables");
     }
 
     /**
-     * 
-     * @return 
+     * Gets the number of dimensions.
+     *
+     * @return Integer containing the number of dimensions.
      */
-    public int getDimensionTextField() {
+    public int getDimensions() {
         return Integer.parseInt(this.dimensionTextField.getText());
     }
 
     /**
-     * 
-     * @return 
+     * Returns whether tables should be generated up to a defined number of
+     * dimensions.
+     *
+     * @return Boolean indicating whether tables should be made up to a defined
+     * number of dimensions.
      */
     public boolean isMakeUpToDimensionRadioButton() {
         return this.makeUpToDimensionRadioButton.isSelected();
     }
 
     /**
-     * 
-     * @return 
+     * Returns whether tables should be generated using the identification
+     * level.
+     *
+     * @return Boolean indicating whether tables should be generated using the
+     * identification level.
      */
-    public boolean isUseIdentificatinLevelRadioButton() {
-        return this.useIdentificatinLevelRadioButton.isSelected();
+    public boolean isUseIdentificationLevelRadioButton() {
+        return this.useIdentificationLevelRadioButton.isSelected();
     }
 
     /**
-     * 
-     * @return 
+     * Returns whether the values entered are valid.
+     *
+     * @return Boolean indicating whether the values entered are valid.
      */
-    public boolean isValid() {
+    public boolean isInputValid() {
         return this.valid;
     }
 
     /**
-     * 
-     * @param valid 
+     * Sets whether the values entered are valid.
+     *
+     * @param valid Boolean indicating whether the values entered are valid.
      */
-    private void setValid(boolean valid) {
+    private void setInputValid(boolean valid) {
         this.valid = valid;
     }
 
     /**
-     * 
-     * @param threshold
-     * @param message
-     * @return
-     * @throws ArgusException 
+     * Gets the user input for the threshold. Returns a value of zero if no or
+     * an empty value is entered. Non-valid input throw an exception.
+     *
+     * @param threshold Integer containign the default threshold as been spefor
+     * the given dimension.
+     * @param message String containing the input message.
+     * @return Integer containing the user input for the threshold.
+     * @throws ArgusException Throws an ArgusException when a non-integer value
+     * is entered.
      */
     private int getThreshold(int threshold, String message) throws ArgusException {
         String result = JOptionPane.showInputDialog(null, message, threshold);
@@ -98,41 +111,45 @@ public class GenerateAutomaticTables extends DialogBase {
     }
 
     /**
-     * 
-     * @param dimensions
-     * @return 
+     * Checks if the entered value for dimensions is valid. The number of
+     * dimensions cannot be less than 1 or greater than the maximum number of
+     * dimensions or the number of identifying variables.
+     *
+     * @return Integer containing the number of dimensions.
      */
-    private int checkDimensions(int dimensions) {
+    private int checkDimensions() {
+        int dimensions = 0;
         try {
             dimensions = Integer.parseInt(this.dimensionTextField.getText());
 
             if (dimensions <= 0) {
                 JOptionPane.showMessageDialog(this, "Illegal value for the dimension, dimension cannot be less than 1");
-                this.setValid(false);
+                setInputValid(false);
             } else if (dimensions > MuARGUS.MAXDIMS) {
                 JOptionPane.showMessageDialog(this, "Illegal value for the dimension, dimension cannot be greater than " + MuARGUS.MAXDIMS);
-                this.setValid(false);
+                setInputValid(false);
             } else if (dimensions > this.numberOfVariables) {
                 JOptionPane.showMessageDialog(this, "Not enough identifying variables for this request");
-                this.setValid(false);
+                setInputValid(false);
             }
         } catch (NumberFormatException | HeadlessException e) {
             JOptionPane.showMessageDialog(this, "Illegal value for the dimension, please enter a positive integer");
-            this.setValid(false);
+            setInputValid(false);
         }
         return dimensions;
     }
 
     /**
-     * 
+     * Gets the threshold value for generating tables using the identification
+     * level.
      */
     private void getThresholdIdLevel() {
-        while (!this.isValid()) {
+        while (!isInputValid()) {
             try {
                 int result = getThreshold(this.model.getThreshold(), "Threshold:");
                 if (result > 0) {
                     this.model.setThreshold(result);
-                    this.setValid(true);
+                    setInputValid(true);
                 } else {
                     showErrorMessage(new ArgusException("Threshold needs to greater than 0"));
                 }
@@ -143,19 +160,22 @@ public class GenerateAutomaticTables extends DialogBase {
     }
 
     /**
-     * 
-     * @param dimensions 
+     * Gets the threshold values for generating tables up to a given number of
+     * dimensions.
+     *
+     * @param dimensions Integer containing the number of dimensions for which
+     * tables should be generated.
      */
     private void getThresholdDimensions(int dimensions) {
         int[] thresholds = this.model.getThresholds();
         breakpoint:
         for (int i = 0; i < dimensions; i++) {
-            this.setValid(false);
-            while (!this.isValid()) {
+            setInputValid(false);
+            while (!isInputValid()) {
                 try {
                     int result = getThreshold(thresholds[i], "Threshold dimension " + (i + 1) + ":");
                     if (result == 0) {
-                        this.setValid(false);
+                        setInputValid(false);
                         break breakpoint;
                     }
                     if (result > 0) {
@@ -163,7 +183,7 @@ public class GenerateAutomaticTables extends DialogBase {
                             showErrorMessage(new ArgusException("The threshold needs to be equal to or larger than " + thresholds[i - 1]));
                         } else {
                             thresholds[i] = result;
-                            this.setValid(true);
+                            setInputValid(true);
                         }
                     } else {
                         showErrorMessage(new ArgusException("Threshold needs to greater than 0"));
@@ -188,7 +208,7 @@ public class GenerateAutomaticTables extends DialogBase {
 
         methodButtonGroup = new javax.swing.ButtonGroup();
         methodPanel = new javax.swing.JPanel();
-        useIdentificatinLevelRadioButton = new javax.swing.JRadioButton();
+        useIdentificationLevelRadioButton = new javax.swing.JRadioButton();
         makeUpToDimensionRadioButton = new javax.swing.JRadioButton();
         dimensionTextField = new javax.swing.JTextField();
         okButton = new javax.swing.JButton();
@@ -199,12 +219,12 @@ public class GenerateAutomaticTables extends DialogBase {
 
         methodPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Method"));
 
-        methodButtonGroup.add(useIdentificatinLevelRadioButton);
-        useIdentificatinLevelRadioButton.setSelected(true);
-        useIdentificatinLevelRadioButton.setText("Use identification level");
-        useIdentificatinLevelRadioButton.addChangeListener(new javax.swing.event.ChangeListener() {
+        methodButtonGroup.add(useIdentificationLevelRadioButton);
+        useIdentificationLevelRadioButton.setSelected(true);
+        useIdentificationLevelRadioButton.setText("Use identification level");
+        useIdentificationLevelRadioButton.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
-                useIdentificatinLevelRadioButtonStateChanged(evt);
+                useIdentificationLevelRadioButtonStateChanged(evt);
             }
         });
 
@@ -225,7 +245,7 @@ public class GenerateAutomaticTables extends DialogBase {
                 .addContainerGap()
                 .addGroup(methodPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(methodPanelLayout.createSequentialGroup()
-                        .addComponent(useIdentificatinLevelRadioButton)
+                        .addComponent(useIdentificationLevelRadioButton)
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(methodPanelLayout.createSequentialGroup()
                         .addComponent(makeUpToDimensionRadioButton)
@@ -237,7 +257,7 @@ public class GenerateAutomaticTables extends DialogBase {
             methodPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(methodPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(useIdentificatinLevelRadioButton)
+                .addComponent(useIdentificationLevelRadioButton)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(methodPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(makeUpToDimensionRadioButton)
@@ -290,28 +310,28 @@ public class GenerateAutomaticTables extends DialogBase {
     }// </editor-fold>//GEN-END:initComponents
 
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
-        this.setValid(false);
-        this.setVisible(false);
+        setInputValid(false);
+        setVisible(false);
     }//GEN-LAST:event_cancelButtonActionPerformed
 
     private void okButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okButtonActionPerformed
-        this.setValid(true);
+        setInputValid(true);
         int dimensions = 0;
         if (this.makeUpToDimensionRadioButton.isSelected()) {
-            dimensions = checkDimensions(dimensions);
+            dimensions = checkDimensions();
         }
 
-        if (isValid()) {
-            this.setValid(false);
-            if (this.useIdentificatinLevelRadioButton.isSelected()) {
+        if (isInputValid()) {
+            setInputValid(false);
+            if (this.useIdentificationLevelRadioButton.isSelected()) {
                 getThresholdIdLevel();
             } else if (this.makeUpToDimensionRadioButton.isSelected()) {
                 getThresholdDimensions(dimensions);
             }
         }
 
-        if (isValid()) {
-            this.setVisible(false);
+        if (isInputValid()) {
+            setVisible(false);
         }
     }//GEN-LAST:event_okButtonActionPerformed
 
@@ -319,11 +339,11 @@ public class GenerateAutomaticTables extends DialogBase {
         this.makeUpToDimensionRadioButton.setSelected(true);
     }//GEN-LAST:event_dimensionTextFieldFocusGained
 
-    private void useIdentificatinLevelRadioButtonStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_useIdentificatinLevelRadioButtonStateChanged
-        if (this.useIdentificatinLevelRadioButton.isSelected()) {
+    private void useIdentificationLevelRadioButtonStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_useIdentificationLevelRadioButtonStateChanged
+        if (this.useIdentificationLevelRadioButton.isSelected()) {
             this.dimensionTextField.setText("");
         }
-    }//GEN-LAST:event_useIdentificatinLevelRadioButtonStateChanged
+    }//GEN-LAST:event_useIdentificationLevelRadioButtonStateChanged
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton cancelButton;
@@ -332,6 +352,6 @@ public class GenerateAutomaticTables extends DialogBase {
     private javax.swing.ButtonGroup methodButtonGroup;
     private javax.swing.JPanel methodPanel;
     private javax.swing.JButton okButton;
-    private javax.swing.JRadioButton useIdentificatinLevelRadioButton;
+    private javax.swing.JRadioButton useIdentificationLevelRadioButton;
     // End of variables declaration//GEN-END:variables
 }

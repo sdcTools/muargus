@@ -844,9 +844,9 @@ public class SelectCombinationsView extends DialogBase<SelectCombinationsControl
         GenerateAutomaticTables generateAutomaticTables = new GenerateAutomaticTables(this.parent, true, this.model, numberOfVariables);
         generateAutomaticTables.setVisible(true);
 
-        if (generateAutomaticTables.isValid()) {
+        if (generateAutomaticTables.isInputValid()) {
             if (generateAutomaticTables.isMakeUpToDimensionRadioButton()) {
-                int dimensions = generateAutomaticTables.getDimensionTextField();
+                int dimensions = generateAutomaticTables.getDimensions();
                 setNumberOfTables(dimensions, numberOfVariables);
                 if (getNumberOfTables() > this.model.getMaximumSizeBeforeUserConfirmation()) {
                     if (JOptionPane.showConfirmDialog(this, "Are you sure that you want to generate " + getNumberOfTables() + " tables?", "Mu Argus", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
@@ -856,7 +856,7 @@ public class SelectCombinationsView extends DialogBase<SelectCombinationsControl
                     calculateTablesForDimensions(allValidVariables, dimensions);
                 }
             }
-            if (generateAutomaticTables.isUseIdentificatinLevelRadioButton()) {
+            if (generateAutomaticTables.isUseIdentificationLevelRadioButton()) {
                 calculateTablesForID(numberOfLevels, variables, allValidVariables);
             }
         }
