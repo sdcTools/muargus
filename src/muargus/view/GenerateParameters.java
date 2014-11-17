@@ -1,15 +1,15 @@
 package muargus.view;
 
-import javax.swing.JOptionPane;
-
 /**
+ * Input screen for values used to generates metadata from a comma separated
+ * values (CSV) file.
  *
  * @author Statistics Netherlands
  */
 public class GenerateParameters extends DialogBase {
 
     private boolean ok = false;
-    
+
     /**
      * Creates new form GenerateParameters
      *
@@ -21,27 +21,51 @@ public class GenerateParameters extends DialogBase {
         initComponents();
         this.setLocationRelativeTo(null);
     }
-    
+
+    /**
+     * Gets the separator.
+     *
+     * @return String containing the sepatrator.
+     */
     public String getSeparator() {
         return this.separatorTextField.getText();
     }
-    
+
+    /**
+     * Sets the separator.
+     *
+     * @param separator String containing the sepatrator.
+     */
     public void setSeparator(String separator) {
         this.separatorTextField.setText(separator);
     }
-    
+
+    /**
+     * Gets the default variable length.
+     *
+     * @return Integer containing the default variable length.
+     */
     public int getDefaultLength() {
         return Integer.parseInt(this.fieldLengthTextField.getText());
     }
-    
+
+    /**
+     * Gets the default missing value.
+     *
+     * @return String containing the default missingn value.
+     */
     public String getDefaultMissing() {
-        return this.missingValuesTextField.getText();
+        return this.missingValueTextField.getText();
     }
-    
+
+    /**
+     * Returns whether the ok button is pressed.
+     *
+     * @return Boolean indicating whether the ok button is pressed.
+     */
     public boolean isOk() {
         return ok;
-    } 
-    
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -58,7 +82,7 @@ public class GenerateParameters extends DialogBase {
         missingValueLabel = new javax.swing.JLabel();
         separatorTextField = new javax.swing.JTextField();
         fieldLengthTextField = new javax.swing.JTextField();
-        missingValuesTextField = new javax.swing.JTextField();
+        missingValueTextField = new javax.swing.JTextField();
         cancelButton = new javax.swing.JButton();
         okButton = new javax.swing.JButton();
 
@@ -77,7 +101,7 @@ public class GenerateParameters extends DialogBase {
 
         fieldLengthTextField.setText("5");
 
-        missingValuesTextField.setText(".");
+        missingValueTextField.setText(".");
 
         cancelButton.setText("Cancel");
         cancelButton.addActionListener(new java.awt.event.ActionListener() {
@@ -116,7 +140,7 @@ public class GenerateParameters extends DialogBase {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(separatorTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(fieldLengthTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(missingValuesTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(missingValueTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -135,7 +159,7 @@ public class GenerateParameters extends DialogBase {
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(missingValueLabel)
-                    .addComponent(missingValuesTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(missingValueTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(okButton)
@@ -157,8 +181,8 @@ public class GenerateParameters extends DialogBase {
                 this.setVisible(false);
                 return;
             }
+        } catch (NumberFormatException ex) {
         }
-        catch (NumberFormatException ex) { }
         showMessage("Please enter a nonzero field length");
     }//GEN-LAST:event_okButtonActionPerformed
 
@@ -173,7 +197,7 @@ public class GenerateParameters extends DialogBase {
     private javax.swing.JTextField fieldLengthTextField;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel missingValueLabel;
-    private javax.swing.JTextField missingValuesTextField;
+    private javax.swing.JTextField missingValueTextField;
     private javax.swing.JButton okButton;
     private javax.swing.JLabel separatorLabel;
     private javax.swing.JTextField separatorTextField;

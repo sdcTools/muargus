@@ -45,7 +45,7 @@
                       <Group type="103" groupAlignment="1" attributes="0">
                           <Component id="separatorTextField" min="-2" pref="31" max="-2" attributes="0"/>
                           <Component id="fieldLengthTextField" min="-2" pref="31" max="-2" attributes="0"/>
-                          <Component id="missingValuesTextField" alignment="1" min="-2" pref="31" max="-2" attributes="0"/>
+                          <Component id="missingValueTextField" alignment="1" min="-2" pref="31" max="-2" attributes="0"/>
                       </Group>
                   </Group>
               </Group>
@@ -71,7 +71,7 @@
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="missingValueLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="missingValuesTextField" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="missingValueTextField" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
@@ -114,7 +114,7 @@
         <Property name="text" type="java.lang.String" value="5"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JTextField" name="missingValuesTextField">
+    <Component class="javax.swing.JTextField" name="missingValueTextField">
       <Properties>
         <Property name="text" type="java.lang.String" value="."/>
       </Properties>
