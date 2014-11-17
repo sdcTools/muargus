@@ -13,7 +13,6 @@ import muargus.view.GlobalRecodeView;
  */
 public class GlobalRecodeController extends ControllerBase<GlobalRecode> {
 
-    //private final MetadataMu metadata;
     /**
      * Constructor for the GlobalRecodeController. This constructor makes a new
      * view and sets the metadata for the view.
@@ -24,10 +23,7 @@ public class GlobalRecodeController extends ControllerBase<GlobalRecode> {
      */
     public GlobalRecodeController(java.awt.Frame parentView, MetadataMu metadata) {
         super.setView(new GlobalRecodeView(parentView, true, this));
-        //this.metadata = metadata;
         getView().setMetadata(metadata);
-        //this.selectCombinationsModel = selectCombinationsModel;
-        //this.view = view;
     }
 
     /**
@@ -67,9 +63,9 @@ public class GlobalRecodeController extends ControllerBase<GlobalRecode> {
         return (GlobalRecodeView) getView();
     }
 
-    /**
-     *
-     */
+//    /**
+//     *
+//     */
 //    public void codelistRecode() {
 //        JFileChooser fileChooser = new JFileChooser();
 //        fileChooser.setFileFilter(new FileNameExtensionFilter("Codelist (*.cdl)", "cdl"));

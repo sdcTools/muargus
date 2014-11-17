@@ -17,7 +17,6 @@ public class SpecifyMetadataController extends ControllerBase<MetadataMu> {
 
     private final MetadataMu metadataClone;
 
-    //private static final Logger logger = Logger.getLogger(SpecifyMetadataController.class.getName());
     /**
      * Constructor for the SpecifyMetadataController.
      *

@@ -1,15 +1,8 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package muargus.controller;
 
 import argus.model.ArgusException;
-import java.io.File;
 import java.util.ArrayList;
 import muargus.extern.dataengine.Numerical;
-import muargus.extern.dataengine.NumericalDllConstants;
 import muargus.model.MetadataMu;
 import muargus.model.MicroaggregationSpec;
 import muargus.model.Microaggregation;
@@ -19,27 +12,35 @@ import muargus.model.VariableMu;
 import muargus.view.MicroaggregationView;
 
 /**
+ * The Controller class of the Microaggregation screen.
  *
  * @author Statistics Netherlands
  */
 public class MicroaggregationController extends ControllerBase<Microaggregation> {
 
     private final MetadataMu metadata;
-    //private final boolean numerical;
 
-    public MicroaggregationController(java.awt.Frame parentView, MetadataMu metadata) {//, boolean numerical) {
-        //this.numerical = numerical;
+    /**
+     * Constructor for the MicroaggregationController.
+     *
+     * @param parentView the Frame of the mainFrame.
+     * @param metadata the orginal metadata.
+     */
+    public MicroaggregationController(java.awt.Frame parentView, MetadataMu metadata) {
         super.setView(new MicroaggregationView(parentView, true, this));
         this.metadata = metadata;
         fillModel();
         getView().setMetadata(this.metadata);
     }
 
+    /**
+     * Gets the model and fills the model with the numeric variables if the
+     * model is empty.
+     */
     private void fillModel() {
-        Microaggregation model = metadata.getCombinations().getMicroaggregation();
+        Microaggregation model = this.metadata.getCombinations().getMicroaggregation();
         if (model.getVariables().isEmpty()) {
             for (VariableMu variable : this.metadata.getVariables()) {
-                //if (isNumerical() ? variable.isNumeric() : variable.isCategorical()) {
                 if (variable.isNumeric()) {
                     model.getVariables().add(variable);
                 }
@@ -55,15 +56,15 @@ public class MicroaggregationController extends ControllerBase<Microaggregation>
         getView().setVisible(false);
     }
 
+    /**
+     * Does the next step if the previous step was succesful.
+     *
+     * @param success Boolean indicating whether the previous step was
+     * succesful.
+     */
     @Override
     protected void doNextStep(boolean success) {
         MicroaggregationSpec microaggregation = getModel().getMicroaggregations().get(getModel().getMicroaggregations().size() - 1);
-            //try {
-//                double[][] data = readVariablesFromFile(
-//                        new File(microaggregation.getReplacementFile().getInputFilePath()),
-//                        muargus.MuARGUS.getDefaultSeparator(), 
-//                        microaggregation.getVariables().size());
-
         Numerical num = new Numerical();
         int[] errorCode = new int[1];
         int[] nColPerGroup = new int[]{microaggregation.getVariables().size()};
@@ -83,21 +84,22 @@ public class MicroaggregationController extends ControllerBase<Microaggregation>
         getView().setProgress(0);
         getView().showStepName("");
         getMicroaggregationView().updateVariableRows(microaggregation);
-            //}
-        //catch (ArgusException ex) {
-        //    getView().showErrorMessage(ex);
-        //getView().showErrorMessage(new ArgusException(ex.getMessage()));
-        //}
     }
 
-//    public boolean isNumerical() {
-//        return numerical;
-//    }
-
+    /**
+     * Gets the Microaggregation view.
+     *
+     * @return MicroaggregationView
+     */
     private MicroaggregationView getMicroaggregationView() {
         return (MicroaggregationView) getView();
     }
 
+    /**
+     * Checks whether there are enough records per group.
+     *
+     * @return Boolean indicating whether there are enough records per group.
+     */
     private boolean checkFields() {
         int nRecords = getMicroaggregationView().getMinimalNumberOfRecords();
         if (nRecords < 2) {
@@ -107,6 +109,9 @@ public class MicroaggregationController extends ControllerBase<Microaggregation>
         return true;
     }
 
+    /**
+     * Undo's the microaggregation.
+     */
     public void undo() {
         ArrayList<VariableMu> selected = getMicroaggregationView().getSelectedVariables();
         if (selected.isEmpty()) {
@@ -136,6 +141,9 @@ public class MicroaggregationController extends ControllerBase<Microaggregation>
         getView().showMessage(String.format("Micro aggregation involving %s not found", VariableMu.printVariableNames(selected)));
     }
 
+    /**
+     * Calculates the microaggregation.
+     */
     public void calculate() {
         if (!checkFields()) {
             return;
@@ -161,6 +169,12 @@ public class MicroaggregationController extends ControllerBase<Microaggregation>
         }
     }
 
+    /**
+     * Returns whether at least one variable is used.
+     *
+     * @param variables Arraylist of VariableMu's.
+     * @return Boolean indicating whether at least one variable is used.
+     */
     private boolean variablesAreUsed(ArrayList<VariableMu> variables) {
         for (VariableMu variable : variables) {
             for (ReplacementSpec replacement : this.metadata.getReplacementSpecs()) {

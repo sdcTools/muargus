@@ -17,7 +17,6 @@ import muargus.model.TableMu;
 import muargus.model.VariableMu;
 import muargus.MuARGUS;
 import muargus.HighlightTableCellRenderer;
-import muargus.model.MetadataMu;
 
 /**
  * View class of the SelectCombinations screen.

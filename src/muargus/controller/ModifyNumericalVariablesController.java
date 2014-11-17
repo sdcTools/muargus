@@ -9,6 +9,7 @@ import muargus.model.VariableMu;
 import muargus.view.ModifyNumericalVariablesView;
 
 /**
+ * The Controller class of the ModifyNumericalVariables screen.
  *
  * @author Statistics Netherlands
  */
@@ -17,9 +18,10 @@ public class ModifyNumericalVariablesController extends ControllerBase<ModifyNum
     private final MetadataMu metadata;
 
     /**
+     * Constructor for the ModifyNumericalVariablesController.
      *
-     * @param parentView
-     * @param metadata
+     * @param parentView the Frame of the mainFrame.
+     * @param metadata the orginal metadata.
      */
     public ModifyNumericalVariablesController(java.awt.Frame parentView, MetadataMu metadata) {
         super.setView(new ModifyNumericalVariablesView(parentView, true, this));
@@ -36,7 +38,7 @@ public class ModifyNumericalVariablesController extends ControllerBase<ModifyNum
     }
 
     /**
-     *
+     * Sets the ModifyNumericalVariablesSpecs for each numeric variable.
      */
     public void setModifyNumericalVariablesSpecs() {
         for (VariableMu v : this.metadata.getVariables()) {
@@ -48,7 +50,8 @@ public class ModifyNumericalVariablesController extends ControllerBase<ModifyNum
     }
 
     /**
-     *
+     * Sets the variables data. Each row in the variables data consists of the
+     * modification text and the variable name.
      */
     public void setVariablesData() {
         if (getModel().getVariablesData() == null) {
@@ -64,9 +67,11 @@ public class ModifyNumericalVariablesController extends ControllerBase<ModifyNum
     }
 
     /**
+     * Gets the minimum and maximum values for the selected variable.
      *
-     * @param variable
-     * @return
+     * @param variable VariableMu instance of the selected variable.
+     * @return Array of doubles containing both the minimum and the maximum
+     * value.
      */
     public double[] getMinMax(VariableMu variable) {
         double[] min_max = getCalculationService().getMinMax(variable);
@@ -74,39 +79,51 @@ public class ModifyNumericalVariablesController extends ControllerBase<ModifyNum
     }
 
     /**
+     * Gets the minimum value for the selected variable.
      *
-     * @param selected
-     * @return
+     * @param selected ModifyNumericalVariablesSpec instance of the selected
+     * variable.
+     * @return String containing the minimum value for the selected variable.
      */
     public String getMin(ModifyNumericalVariablesSpec selected) {
         return getIntIfPossible(selected.getMin());
     }
 
     /**
+     * Gets the maximum value for the selected variable.
      *
-     * @param selected
-     * @return
+     * @param selected ModifyNumericalVariablesSpec instance of the selected
+     * variable.
+     * @return String containing the maximum value for the selected variable.
      */
     public String getMax(ModifyNumericalVariablesSpec selected) {
         return getIntIfPossible(selected.getMax());
     }
 
     /**
+     * Checks for all values if they are valid and if not returns the relevant
+     * warning message(s).
      *
-     * @param selected
-     * @param bottomValue
-     * @param topValue
-     * @param bottomReplacement
-     * @param topReplacement
-     * @param roundingBase
-     * @param weightNoisePercentage
-     * @return
+     * @param selected ModifyNumericalVariablesSpec instance of the selected
+     * variable.
+     * @param bottomValue String containing the user input of the bottom value.
+     * @param topValue String containing the user input of the top value.
+     * @param bottomReplacement String containing the user input of the bottom
+     * replacement value.
+     * @param topReplacement String containing the user input of the top
+     * replacement value.
+     * @param roundingBase String containing the user input for the rounding
+     * base.
+     * @param weightNoisePercentage String containing the user input for the
+     * weight noise percentage.
+     * @return String containing all relevant warning message(s).
      */
     public String getWarningMessage(ModifyNumericalVariablesSpec selected, String bottomValue, String topValue,
             String bottomReplacement, String topReplacement, String roundingBase, String weightNoisePercentage) {
 
         String warningMessage = "";
 
+        //Check whether the bottom value and the bottom replacement value are valid.
         boolean bottom = false;
         try {
             Double temp = Double.parseDouble(bottomValue);
@@ -130,6 +147,7 @@ public class ModifyNumericalVariablesController extends ControllerBase<ModifyNum
             }
         }
 
+        //Check whether the top value and the top replacement value are valid.
         boolean top = false;
         try {
             Double temp = Double.parseDouble(topValue);
@@ -153,12 +171,14 @@ public class ModifyNumericalVariablesController extends ControllerBase<ModifyNum
             }
         }
 
+        //If both top and bottom values are valid, check if the bottom value is less than the top value.
         if (top && bottom) {
             if (Double.parseDouble(topValue) <= Double.parseDouble(bottomValue)) {
                 warningMessage += "Top value needs to be larger than the bottom value\n";
             }
         }
 
+        //Check whether the rounding base is valid.
         try {
             Double temp = Double.parseDouble(roundingBase);
             if (temp <= 0) {
@@ -170,6 +190,7 @@ public class ModifyNumericalVariablesController extends ControllerBase<ModifyNum
             }
         }
 
+        //Check whether the weight noise percentage is valid.
         try {
             Double temp = Double.parseDouble(weightNoisePercentage);
             if (temp <= 0 || temp > 100) {
@@ -186,9 +207,12 @@ public class ModifyNumericalVariablesController extends ControllerBase<ModifyNum
     }
 
     /**
+     * Gets the String format for the double value and sets this to an integer
+     * if possible.
      *
-     * @param value
-     * @return
+     * @param value Double value that will be converted to a String.
+     * @return String containing the integer value if possible and otherwise the
+     * double value.
      */
     public String getIntIfPossible(double value) {
         double value_double;
@@ -208,17 +232,23 @@ public class ModifyNumericalVariablesController extends ControllerBase<ModifyNum
     }
 
     /**
+     * Apply's the numerical modifications. If a variable is ordinal, rounding
+     * will not be done and the weightnoise will only be applied when a variable
+     * is a weight variable. The final parameter of each modifiation (rounding,
+     * weightnoise and top & bottom coding) indicates that this modification
+     * should be undone if the value is not a double (NaN).
      *
-     * @param selected
+     * @param selected ModifyNumericalVariablesSpec instance of the variable for
+     * which the modifications are made.
      */
     public void apply(ModifyNumericalVariablesSpec selected) {
         try {
-            if (!selected.getVariable().isCategorical()) { // verbied bij ordinale data
+            if (!selected.getVariable().isCategorical()) {
                 getCalculationService().setRounding(
                         selected.getVariable(),
                         selected.getRoundingBase(),
                         selected.getVariable().getDecimals(),
-                        Double.isNaN(selected.getRoundingBase())); // als het geen normaal getal is, dan is undo true
+                        Double.isNaN(selected.getRoundingBase()));
             }
             getCalculationService().setTopBottomCoding(
                     selected.getVariable(),

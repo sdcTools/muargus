@@ -1,7 +1,4 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+//TODO: Change constructor news document
 package muargus.controller;
 
 import argus.model.ArgusException;
@@ -22,6 +19,7 @@ import org.apache.commons.io.FilenameUtils;
 import org.w3c.dom.Document;
 
 /**
+ * Controller class of the ViewReport screen.
  *
  * @author Statistics Netherlands
  */
@@ -31,21 +29,22 @@ public class ViewReportController {
     private final String html;
 
     /**
+     * Constructor for the ViewReportController.
      *
-     * @param parentView
-     * @param xmlDoc
+     * @param parentView the Frame of the mainFrame.
+     * @param xmlDoc Document containing the report as a xml document.
      */
     public ViewReportController(java.awt.Frame parentView, Document xmlDoc) {
         this.view = new ViewReportView(parentView, this, true);
-        
         this.html = createHtmlFromXml(xmlDoc);
     }
 
     /**
+     * Constructor for the ViewReportController.
      *
-     * @param parentView
-     * @param html
-     * @param title
+     * @param parentView the Frame of the mainFrame.
+     * @param html String containing the html news report.
+     * @param title String containing the title of the screen.
      */
     public ViewReportController(java.awt.Frame parentView, String html, String title) {
         this.view = new ViewReportView(parentView, this, true);
@@ -53,35 +52,54 @@ public class ViewReportController {
         this.html = html;
     }
 
+    /**
+     * Shows the view.
+     */
     public void showView() {
-        if (html != null) {
-            this.view.showReport(html);
+        if (this.html != null) {
+            this.view.showReport(this.html);
             this.view.setVisible(true);
         }
     }
 
-    public void showView(HTMLDocument htmlDoc) {
-        this.view.showReport(htmlDoc);
-        this.view.setVisible(true);
-    }
-
+//    /**
+//     * Shows the view using a html document.
+//     * @param htmlDoc HTMLDocument instance containing the html-document.
+//     */
+//    public void showView(HTMLDocument htmlDoc) {
+//        this.view.showReport(htmlDoc);
+//        this.view.setVisible(true);
+//    }
+    /**
+     * Saves the report.
+     *
+     * @param metadata MetadataMu instance containing the metadata.
+     * @throws ArgusException Throws an ArgusException when an error occurs
+     * while writing/saving the report.
+     */
     public void saveReport(MetadataMu metadata) throws ArgusException {
         String path = metadata.getCombinations().getProtectedFile().getSafeMeta().getFileNames().getDataFileName();
         String htmlPath = FilenameUtils.removeExtension(path) + ".html";
         try (FileWriter writer = new FileWriter(new File(htmlPath))) {
-            writer.write(html);
+            writer.write(this.html);
         } catch (IOException ex) {
             throw new ArgusException("Error saving report: " + ex.getMessage());
         }
     }
 
     /**
-     *
+     * Closes the view.
      */
     public void close() {
-        view.setVisible(false);
+        this.view.setVisible(false);
     }
 
+    /**
+     * Creates a html code from a xml document.
+     *
+     * @param xmlDoc Document containing the report as a xml document.
+     * @return String containing the converted xml document as html.
+     */
     private String createHtmlFromXml(Document xmlDoc) {
         try {
             Transformer tr = TransformerFactory.newInstance().newTransformer();

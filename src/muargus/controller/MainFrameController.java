@@ -29,6 +29,7 @@ import muargus.view.MainFrameView;
 import org.w3c.dom.Document;
 
 /**
+ * Controller class of the Main Frame.
  *
  * @author Statistics Netherlands
  */
@@ -39,9 +40,11 @@ public class MainFrameController {
     private MetadataMu metadata;
     private Document report;
     private String news;
-    //private String test = getClass().getResource("/muargus/resources/html/MuNews.html").toString();
     private final File newsLocation = new File("./resources/html/MuNews.html");
 
+    /**
+     * 
+     */
     public enum Action {
 
         OpenMicrodata,
@@ -64,29 +67,37 @@ public class MainFrameController {
     }
 
     /**
+     * Constructor for the MainFrameController.
      *
-     * @param view
+     * @param view the Frame of the mainFrame.
      */
     public MainFrameController(MainFrameView view) {
         this.view = view;
-        //this.selectCombinationsModel = new Combinations();
-        //this.globalRecodeModel = null;
-        //this.makeProtectedFileModel = null;
         this.metadata = new MetadataMu();
         this.report = null;
         this.news = "";
-
     }
 
+    /**
+     *
+     * @return
+     */
     public MetadataMu getMetadata() {
         return metadata;
     }
 
+    /**
+     *
+     * @param metadata
+     */
     public void setMetadata(MetadataMu metadata) {
         this.metadata = metadata;
         organise();
     }
 
+    /**
+     *
+     */
     private void organise() {
         if (this.metadata.getCombinations() == null) {
             clearDataBeforeSelectCombinations();
@@ -104,23 +115,22 @@ public class MainFrameController {
             }
         }
 
-        view.enableAction(Action.SpecifyMetadata, this.metadata != null);
-        view.enableAction(Action.ViewReport, this.report != null);
-        view.enableAction(Action.SpecifyCombinations, this.metadata != null
+        this.view.enableAction(Action.SpecifyMetadata, this.metadata != null);
+        this.view.enableAction(Action.ViewReport, this.report != null);
+        this.view.enableAction(Action.SpecifyCombinations, this.metadata != null
                 && this.metadata.getVariables().size() > 0);
-        view.enableAction(Action.GlobalRecode, tablesCalculated);
-        view.enableAction(Action.MakeProtectedFile, tablesCalculated);
-        view.enableAction(Action.ShowTableCollection, tablesCalculated);
-        view.enableAction(Action.PramSpecification, tablesCalculated);
-        view.enableAction(Action.RScript, tablesCalculated);
-        view.enableAction(Action.IndividualRiskSpecification,
+        this.view.enableAction(Action.GlobalRecode, tablesCalculated);
+        this.view.enableAction(Action.MakeProtectedFile, tablesCalculated);
+        this.view.enableAction(Action.ShowTableCollection, tablesCalculated);
+        this.view.enableAction(Action.PramSpecification, tablesCalculated);
+        this.view.enableAction(Action.RScript, tablesCalculated);
+        this.view.enableAction(Action.IndividualRiskSpecification,
                 tablesCalculated && metadata.getCombinations().isRiskModel() && !metadata.isHouseholdData());
-        view.enableAction(Action.HouseholdRiskSpecification,
+        this.view.enableAction(Action.HouseholdRiskSpecification,
                 tablesCalculated && metadata.getCombinations().isRiskModel() && metadata.isHouseholdData());
-        view.enableAction(Action.ModifyNumericalVariables, tablesCalculated && hasNumericalVariables);
-        view.enableAction(Action.NumericalMicroAggregation, tablesCalculated && hasNumericalVariables);
-        view.enableAction(Action.NumericalRankSwapping, tablesCalculated && hasNumericalVariables);
-        //view.enableAction(Action.QualitativeMicroAggregation, tablesCalculated);
+        this.view.enableAction(Action.ModifyNumericalVariables, tablesCalculated && hasNumericalVariables);
+        this.view.enableAction(Action.NumericalMicroAggregation, tablesCalculated && hasNumericalVariables);
+        this.view.enableAction(Action.NumericalRankSwapping, tablesCalculated && hasNumericalVariables);
 
     }
 
@@ -131,13 +141,13 @@ public class MainFrameController {
         DataFilePair filenames;
         if (this.metadata.isSpss() && this.metadata.getCombinations() != null) {
             if (this.metadata.getCombinations().getTables().size() > 0) {
-                filenames = view.showOpenMicrodataDialog(
+                filenames = this.view.showOpenMicrodataDialog(
                         new DataFilePair(MuARGUS.getSpssUtils().spssDataFileName, this.metadata.getFileNames().getMetaFileName()));
             } else {
-                filenames = view.showOpenMicrodataDialog(this.metadata.getFileNames());
+                filenames = this.view.showOpenMicrodataDialog(this.metadata.getFileNames());
             }
         } else {
-            filenames = view.showOpenMicrodataDialog(this.metadata.getFileNames());
+            filenames = this.view.showOpenMicrodataDialog(this.metadata.getFileNames());
         }
         if (filenames == null) {
             return;
@@ -146,7 +156,7 @@ public class MainFrameController {
         MetadataMu newMetadata = new MetadataMu();
         newMetadata.setFileNames(filenames);
         try {
-            MetaReader.readRda(newMetadata, view);
+            MetaReader.readRda(newMetadata, this.view);
         } catch (ArgusException ex) {
             this.view.showErrorMessage(new ArgusException("Error reading metadata file: " + ex.getMessage()));
             return;
@@ -223,15 +233,19 @@ public class MainFrameController {
             MuARGUS.getCalculationService().getVariableInfo();
             ArrayList<String> missingCodelists = addCodelistInfo();
             if (!missingCodelists.isEmpty()) {
-                view.showMessage(StrUtils.join("\n", missingCodelists));
+                this.view.showMessage(StrUtils.join("\n", missingCodelists));
             }
-            view.showUnsafeCombinations(this.metadata.getCombinations(), variableIndex, redraw);
+            this.view.showUnsafeCombinations(this.metadata.getCombinations(), variableIndex, redraw);
             organise();
         } catch (ArgusException ex) {
-            view.showErrorMessage(ex);
+            this.view.showErrorMessage(ex);
         }
     }
 
+    /**
+     *
+     * @return
+     */
     public ArrayList<String> addCodelistInfo() {
         ArrayList<String> missingCodelists = new ArrayList<>();
         Combinations model = this.metadata.getCombinations();
@@ -364,6 +378,9 @@ public class MainFrameController {
         riskSpecification(true);
     }
 
+    /**
+     *
+     */
     public void individualRiskSpecification() {
         riskSpecification(false);
     }
@@ -395,11 +412,6 @@ public class MainFrameController {
         controller.showView();
     }
 
-//    public void qualitativeMicroaggregation() {
-//        MicroaggregationController controller = new MicroaggregationController(view, metadata, false);
-//        controller.showView();
-//
-//    }
     /**
      *
      */
@@ -415,12 +427,13 @@ public class MainFrameController {
             }
             organise();
         } catch (ArgusException ex) {
-            view.showErrorMessage(ex);
+            this.view.showErrorMessage(ex);
         }
     }
 
     /**
      *
+     * @param save
      */
     public void viewReport(boolean save) {
         try {
@@ -434,6 +447,10 @@ public class MainFrameController {
         }
     }
 
+    /**
+     *
+     * @return @throws ArgusException
+     */
     private Document createReport() throws ArgusException {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder;
@@ -458,17 +475,6 @@ public class MainFrameController {
         MuARGUS.showHelp("");
     }
 
-//    public String getFile(String location) {
-//        String temp;
-//        try {
-//            temp = location.substring(location.indexOf("file"), location.indexOf("!"))
-//                    + location.substring(location.indexOf("!") + 1);
-//            System.out.println(temp);
-//        } catch (Exception e) {
-//            temp = location.substring(location.indexOf("file") + 6);
-//        }
-//        return temp;
-//    }
     /**
      * Shows the news.
      */
@@ -476,7 +482,6 @@ public class MainFrameController {
 
         if (this.news.equals("")) {
             try {
-                //File file = new File(this.newsLocation);
                 BufferedReader reader = new BufferedReader(new FileReader(this.newsLocation));
                 boolean finished = false;
                 do {
@@ -510,24 +515,18 @@ public class MainFrameController {
         new AboutView(this.view, true).setVisible(true);
     }
 
+    /**
+     *
+     */
     public void rScript() {
         RController controller = new RController(this.view, this.metadata);
         controller.showView();
     }
 
-//    /**
-//     *
-//     */
-//    public void manual() {
-//        try {
-//
-//            Desktop.getDesktop().browse(new URL("http://neon.vb.cbs.nl/casc/Software/MuManual4.2.pdf#page=13").toURI());
-//        } catch (URISyntaxException | IOException e) {
-//        }
-//    }
+    /**
+     *
+     */
     private void clearDataBeforeSelectCombinations() {
-
-        //this.selectCombinationsModel = null;
         for (int i = this.view.getUnsafeCombinationsTable().getColumnCount() - 1; i >= 0; i--) {
             this.view.getUnsafeCombinationsTable().getColumnModel().removeColumn(this.view.getUnsafeCombinationsTable().getColumnModel().getColumn(i));
         }
@@ -535,11 +534,6 @@ public class MainFrameController {
             this.view.getVariablesTable().getColumnModel().removeColumn(this.view.getVariablesTable().getColumnModel().getColumn(i));
         }
         this.view.setVariableNameLabel("");
-        //this.clearDataAfterSelectCombinations();
     }
 
-//    public void clearDataAfterSelectCombinations() {
-//        this.globalRecodeModel = null;
-//        this.makeProtectedFileModel = null;
-//    }
 }

@@ -14,6 +14,7 @@ import muargus.model.VariableMu;
 import muargus.view.SelectCombinationsView;
 
 /**
+ * The Controller class of the SelectCombinations screen.
  *
  * @author Statistics Netherlands
  */
@@ -22,12 +23,12 @@ public class SelectCombinationsController extends ControllerBase<Combinations> {
     private final MetadataMu metadata;
     private long numberOfTables;
 
-    private static final Logger logger = Logger.getLogger(SelectCombinationsController.class.getName());
-
+    ///private static final Logger logger = Logger.getLogger(SelectCombinationsController.class.getName());
     /**
+     * Constructor for the SelectCombinationsController.
      *
-     * @param parentView
-     * @param metadata
+     * @param parentView the Frame of the mainFrame.
+     * @param metadata the orginal metadata.
      */
     public SelectCombinationsController(java.awt.Frame parentView, MetadataMu metadata) {
         super.setView(new SelectCombinationsView(parentView, true, this));
@@ -37,20 +38,24 @@ public class SelectCombinationsController extends ControllerBase<Combinations> {
         setModel(new Combinations(this.metadata.getCombinations()));
 
         getView().setMetadata(this.metadata);
+
         getSelectCombinationsView().setModel(getModel()); // the view gets a copy of the current Combinations
     }
 
     /**
+     * Gets the SelectCombinationsView.
      *
-     * @return
+     * @return SelectCombinationsView.
      */
     private SelectCombinationsView getSelectCombinationsView() {
         return (SelectCombinationsView) getView();
     }
 
     /**
+     * Calculates the unsafe combinations for all tables.
      *
-     * @throws argus.model.ArgusException
+     * @throws ArgusException Throws an argusException when an error occurs
+     * during setMetadata and/or exploreFile.
      */
     public void calculateTables() throws ArgusException {
         getSelectCombinationsView().enableCalculateTables(false);
@@ -64,6 +69,9 @@ public class SelectCombinationsController extends ControllerBase<Combinations> {
         service.exploreFile(this);
     }
 
+    /**
+     * Clears the tables.
+     */
     public void clear() {
         int size = getModel().getTables().size();
         for (int i = size - 1; i >= 0; i--) {
@@ -127,10 +135,27 @@ public class SelectCombinationsController extends ControllerBase<Combinations> {
         return isValid;
     }
 
+    /**
+     * Gets the number of tables that will be generated for a given number of
+     * dimensions (See setNumberOfTables).
+     *
+     * @return Long containing the number of tables that will be generated for a
+     * given number of dimensions.
+     */
     public long getNumberOfTables() {
         return this.numberOfTables;
     }
 
+    /**
+     * Sets the number of tables that will be generated for a given number of
+     * dimensions. This is the start of a recursive method. It wil call the
+     * method numberOfTables and sets the initial value for numberOfTables to
+     * one.
+     *
+     * @param dimensions Integer containing the number of dimensions for which
+     * tables need to be generated.
+     * @param numberOfVariables Integere containing the number of variables.
+     */
     public void setNumberOfTables(int dimensions, int numberOfVariables) {
         numberOfTabels(1, dimensions, numberOfVariables);
     }
@@ -317,7 +342,12 @@ public class SelectCombinationsController extends ControllerBase<Combinations> {
         }
         return toBeRemovedTables;
     }
-    
+
+    /**
+     * Returns whether a weight variable exists.
+     *
+     * @return Boolean indicating whether a weight variable exists.
+     */
     public boolean weightVariableExists() {
         for (VariableMu variable : this.metadata.getVariables()) {
             if (variable.isWeight()) {
@@ -327,6 +357,16 @@ public class SelectCombinationsController extends ControllerBase<Combinations> {
         return false;
     }
 
+    /**
+     * Checks if there are overlapping tables and askes if they need to be
+     * removed.
+     *
+     * @param toBeRemovedTables ArrayList of TableMu's that overlap the given
+     * tableMu.
+     * @param tableMu TableMu instance that overlap the toBeRemovedTables.
+     * @return Boolean indicating whether the overlapping tables will be
+     * removed.
+     */
     public boolean overlappingTables(ArrayList<TableMu> toBeRemovedTables, TableMu tableMu) {
         boolean valid = false;
         if (toBeRemovedTables.size() > 0) {
@@ -339,6 +379,12 @@ public class SelectCombinationsController extends ControllerBase<Combinations> {
         return valid;
     }
 
+    /**
+     * Removes overlapping tables.
+     *
+     * @param toBeRemovedTables ArrayList of TableMu's containing the tables
+     * that will be removed.
+     */
     public void removeTableRiskModel(ArrayList<TableMu> toBeRemovedTables) {
         for (TableMu t : toBeRemovedTables) {
             getModel().removeTable(t);
@@ -346,7 +392,7 @@ public class SelectCombinationsController extends ControllerBase<Combinations> {
     }
 
     /**
-     *
+     * Gets the settings for the thresholds from the registry.
      */
     private void getSettings() {
         int[] thresholds = new int[MuARGUS.MAXDIMS];
@@ -357,7 +403,7 @@ public class SelectCombinationsController extends ControllerBase<Combinations> {
     }
 
     /**
-     *
+     * Saves the settings for the threshold to the registry.
      */
     private void saveSettings() {
         int[] thresholds = this.metadata.getCombinations().getThresholds();
@@ -369,23 +415,25 @@ public class SelectCombinationsController extends ControllerBase<Combinations> {
         }
     }
 
-    /**
-     *
-     */
-    public void automaticSpecification() {
-        //het zou mooier zijn als de berekening niet in de view zou gebeuren
-    }
+//    /**
+//     *
+//     */
+//    public void automaticSpecification() {
+//        //het zou mooier zijn als de berekening niet in de view zou gebeuren
+//    }
 
     /**
-     *
+     * Closes the view.
      */
     public void cancel() {
         getView().setVisible(false);
     }
 
     /**
+     * Does the next step if the previous step was succesful.
      *
-     * @param success
+     * @param success Boolean indicating whether the previous step was
+     * succesful.
      */
     @Override
     protected void doNextStep(boolean success) {

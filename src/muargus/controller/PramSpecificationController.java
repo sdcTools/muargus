@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package muargus.controller;
 
 import argus.model.ArgusException;
@@ -18,6 +13,7 @@ import muargus.model.VariableMu;
 import muargus.view.PramSpecificationView;
 
 /**
+ * The Controller class of the PramSpecification screen.
  *
  * @author Statistics Netherlands
  */
@@ -25,6 +21,12 @@ public class PramSpecificationController extends ControllerBase<PramSpecificatio
 
     private final MetadataMu metadata;
 
+    /**
+     * Constructor for the PramSpecificationController
+     *
+     * @param parentView the Frame of the mainFrame.
+     * @param metadata the orginal metadata.
+     */
     public PramSpecificationController(java.awt.Frame parentView, MetadataMu metadata) {
         super.setView(new PramSpecificationView(parentView, true, this));
         this.metadata = metadata;
@@ -40,9 +42,11 @@ public class PramSpecificationController extends ControllerBase<PramSpecificatio
     }
 
     /**
+     * Gets the PramVariableSpec of to the selected variable.
      *
-     * @param variableName
-     * @return
+     * @param variableName String containing the variable name for which the
+     * PramvariableSpec is requested.
+     * @return PramVariableSpec instance of to the selected variable.
      */
     public PramVariableSpec getSelectedPramVarSpec(String variableName) {
         PramVariableSpec temp = null;
@@ -55,7 +59,8 @@ public class PramSpecificationController extends ControllerBase<PramSpecificatio
     }
 
     /**
-     *
+     * Makes a PramVariableSpec for all variable that are categorical and for
+     * which no risk model is set.
      */
     public void makePramVariableSpecs() {
         ArrayList<VariableMu> riskVariables = new ArrayList<>();
@@ -79,7 +84,9 @@ public class PramSpecificationController extends ControllerBase<PramSpecificatio
     }
 
     /**
-     *
+     * Makes a double String array containing the data for the variables table.
+     * Each row contains an indicator indicating whether the variable has been
+     * applied, the bandwidth used and the variable name.
      */
     public void makeVariablesData() {
         ArrayList<PramVariableSpec> pramVarSpec = getModel().getPramVarSpec();
@@ -100,7 +107,7 @@ public class PramSpecificationController extends ControllerBase<PramSpecificatio
     }
 
     /**
-     *
+     * Sets the bandwidth.
      */
     public void setBandwidth() {
         for (PramVariableSpec p : getModel().getPramVarSpec()) {
@@ -115,26 +122,29 @@ public class PramSpecificationController extends ControllerBase<PramSpecificatio
         }
     }
 
+//    /**
+//     * Gets the PramVariableSpec
+//     * @param variable
+//     * @return
+//     */
+//    public PramVariableSpec getPramVariableSpec(VariableMu variable) {
+//        PramVariableSpec temp = null;
+//        for (PramVariableSpec p : getModel().getPramVarSpec()) {
+//            if (p.getVariable().equals(variable)) {
+//                temp = p;
+//                break;
+//            }
+//        }
+//        return temp;
+//    }
     /**
+     * Gets a double Object array containing the data for the codes table. Each
+     * row contains the code, it's label and the PRAM probability.
      *
-     * @param variable
-     * @return
-     */
-    public PramVariableSpec getPramVariableSpec(VariableMu variable) {
-        PramVariableSpec temp = null;
-        for (PramVariableSpec p : getModel().getPramVarSpec()) {
-            if (p.getVariable().equals(variable)) {
-                temp = p;
-                break;
-            }
-        }
-        return temp;
-    }
-
-    /**
-     *
-     * @param variableName
-     * @return 
+     * @param variableName String containing the variable name for which the
+     * codesData should be generated.
+     * @return Double Array of Objects containing the data for the codes table.
+     * Each row contains the code, it's label and the PRAM probability.
      */
     public Object[][] getCodesData(String variableName) {
         PramVariableSpec pramVariableSpec = getSelectedPramVarSpec(variableName);
@@ -156,9 +166,11 @@ public class PramSpecificationController extends ControllerBase<PramSpecificatio
     }
 
     /**
+     * Checks whether all probabilities are zero.
      *
-     * @param pramVariableSpec
-     * @return
+     * @param pramVariableSpec PramVariableSpec instance for which the PRAM
+     * probabilities need to be checked.
+     * @return Boolean indicating whether all probabilities are zero.
      */
     public boolean areAllProbabilitiesZero(PramVariableSpec pramVariableSpec) {
         boolean valid = true;
