@@ -37,7 +37,7 @@ public class MainFrameView extends javax.swing.JFrame {
     private Combinations model;
 
     /**
-     * Creates new form MainFrameView
+     * Creates new form MainFrameView.
      */
     public MainFrameView() {
         initComponents();
