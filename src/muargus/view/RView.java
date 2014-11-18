@@ -6,6 +6,7 @@
 
 package muargus.view;
 
+import argus.model.ArgusException;
 import muargus.controller.RController;
 import muargus.model.RSpecification;
 
@@ -26,7 +27,7 @@ public class RView extends DialogBase<RController> {
     public RView(java.awt.Frame parent, boolean modal, RController controller) {
         super(parent, modal, controller);
         initComponents();
-        this.setLocationRelativeTo(null);
+        setLocationRelativeTo(null);
     }
     
     /**
@@ -40,7 +41,7 @@ public class RView extends DialogBase<RController> {
     
     private void updateValues(){
         this.scriptPathTextField.setText(this.model.getRScriptPath());
-        this.scriptTextArea.setText(getController().getRScript());
+        this.scriptTextArea.setText(this.model.getrScript());
     }
     
 
@@ -129,6 +130,11 @@ public class RView extends DialogBase<RController> {
     private void loadRscriptButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loadRscriptButtonActionPerformed
         String path = showFileDialog("Open R Script", false, new String[]{"R script (*.r)|r"});
         this.model.setRScriptPath(path);
+        try {
+            getController().readRScript(path);
+        } catch (ArgusException ex) {
+            showErrorMessage(ex);
+        }
         updateValues();
     }//GEN-LAST:event_loadRscriptButtonActionPerformed
 

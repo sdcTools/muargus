@@ -43,7 +43,7 @@ public class MainFrameController {
     private final File newsLocation = new File("./resources/html/MuNews.html");
 
     /**
-     * 
+     * Enumeration for the main functionality of Mu-Argus.
      */
     public enum Action {
 
@@ -63,7 +63,8 @@ public class MainFrameController {
         Contents,
         News,
         About,
-        RScript
+        RScript,
+        SyntheticData
     }
 
     /**
@@ -79,16 +80,18 @@ public class MainFrameController {
     }
 
     /**
+     * Gets the metadata.
      *
-     * @return
+     * @return MetadataMu instance containing the metadata.
      */
     public MetadataMu getMetadata() {
         return metadata;
     }
 
     /**
+     * Sets the metadata.
      *
-     * @param metadata
+     * @param metadata MetadataMu instance containing the metadata.
      */
     public void setMetadata(MetadataMu metadata) {
         this.metadata = metadata;
@@ -124,6 +127,7 @@ public class MainFrameController {
         this.view.enableAction(Action.ShowTableCollection, tablesCalculated);
         this.view.enableAction(Action.PramSpecification, tablesCalculated);
         this.view.enableAction(Action.RScript, tablesCalculated);
+        this.view.enableAction(Action.SyntheticData, tablesCalculated);
         this.view.enableAction(Action.IndividualRiskSpecification,
                 tablesCalculated && metadata.getCombinations().isRiskModel() && !metadata.isHouseholdData());
         this.view.enableAction(Action.HouseholdRiskSpecification,
@@ -520,6 +524,14 @@ public class MainFrameController {
      */
     public void rScript() {
         RController controller = new RController(this.view, this.metadata);
+        controller.showView();
+    }
+    
+    /**
+     *
+     */
+    public void syntheticData() {
+        SyntheticDataController controller = new SyntheticDataController(this.view, this.metadata);
         controller.showView();
     }
 

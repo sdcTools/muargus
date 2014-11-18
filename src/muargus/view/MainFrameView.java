@@ -76,7 +76,7 @@ public class MainFrameView extends javax.swing.JFrame {
                 doEnable(this.householdRiskSpecificationButton, this.householdRiskSpecificationMenuItem, enable);
                 return;
             case ModifyNumericalVariables:
-                doEnable(this.modifyNumericalVariablesButton, this.numericalVariablesMenuItem, enable); //TODO: verander naamgeving voor deze klasses
+                doEnable(this.modifyNumericalVariablesButton, this.modifyNumericalVariablesMenuItem, enable); 
                 return;
             case NumericalMicroAggregation:
                 doEnable(this.numericalMicroaggregationButton, this.numericalMicroaggregationMenuItem, enable);
@@ -91,6 +91,8 @@ public class MainFrameView extends javax.swing.JFrame {
                 doEnable(this.viewReportButton, this.viewReportMenuItem, enable);
             case RScript:
                 doEnable(this.rScriptButton, this.rScriptMenuItem, enable);
+            case SyntheticData:
+                doEnable(this.syntheticDataButton, this.syntheticDataMenuItem, enable);
         }
     }
 
@@ -415,6 +417,7 @@ public class MainFrameView extends javax.swing.JFrame {
         aboutButton = new javax.swing.JButton();
         toolBarSeparator5 = new javax.swing.JToolBar.Separator();
         rScriptButton = new javax.swing.JButton();
+        syntheticDataButton = new javax.swing.JButton();
         unsafeCombinationsPanel = new javax.swing.JPanel();
         unsafeCombinationsLabel = new javax.swing.JLabel();
         unsafeCombinationsScrollPane = new javax.swing.JScrollPane();
@@ -440,7 +443,7 @@ public class MainFrameView extends javax.swing.JFrame {
         individualRiskSpecificationMenuItem = new javax.swing.JMenuItem();
         householdRiskSpecificationMenuItem = new javax.swing.JMenuItem();
         modifySeparator2 = new javax.swing.JPopupMenu.Separator();
-        numericalVariablesMenuItem = new javax.swing.JMenuItem();
+        modifyNumericalVariablesMenuItem = new javax.swing.JMenuItem();
         numericalMicroaggregationMenuItem = new javax.swing.JMenuItem();
         numericalRankSwappingMenuItem = new javax.swing.JMenuItem();
         outputMenu = new javax.swing.JMenu();
@@ -453,6 +456,7 @@ public class MainFrameView extends javax.swing.JFrame {
         aboutMenuItem = new javax.swing.JMenuItem();
         externMenu = new javax.swing.JMenu();
         rScriptMenuItem = new javax.swing.JMenuItem();
+        syntheticDataMenuItem = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Main Frame");
@@ -575,7 +579,7 @@ public class MainFrameView extends javax.swing.JFrame {
         modifyNumericalVariablesButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         modifyNumericalVariablesButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                numericalVariablesMenuItemActionPerformed(evt);
+                modifyNumericalVariablesMenuItemActionPerformed(evt);
             }
         });
         toolBar.add(modifyNumericalVariablesButton);
@@ -683,6 +687,18 @@ public class MainFrameView extends javax.swing.JFrame {
             }
         });
         toolBar.add(rScriptButton);
+
+        syntheticDataButton.setText("Synthetic data");
+        syntheticDataButton.setEnabled(false);
+        syntheticDataButton.setFocusable(false);
+        syntheticDataButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        syntheticDataButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        syntheticDataButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                syntheticDataMenuItemActionPerformed(evt);
+            }
+        });
+        toolBar.add(syntheticDataButton);
 
         unsafeCombinationsPanel.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
 
@@ -891,16 +907,16 @@ public class MainFrameView extends javax.swing.JFrame {
         modifyMenu.add(householdRiskSpecificationMenuItem);
         modifyMenu.add(modifySeparator2);
 
-        numericalVariablesMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_N, java.awt.event.InputEvent.ALT_MASK));
-        numericalVariablesMenuItem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/muargus/resources/icons/Numeric.png"))); // NOI18N
-        numericalVariablesMenuItem.setText("Modify Numerical Variables");
-        numericalVariablesMenuItem.setEnabled(false);
-        numericalVariablesMenuItem.addActionListener(new java.awt.event.ActionListener() {
+        modifyNumericalVariablesMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_N, java.awt.event.InputEvent.ALT_MASK));
+        modifyNumericalVariablesMenuItem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/muargus/resources/icons/Numeric.png"))); // NOI18N
+        modifyNumericalVariablesMenuItem.setText("Modify Numerical Variables");
+        modifyNumericalVariablesMenuItem.setEnabled(false);
+        modifyNumericalVariablesMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                numericalVariablesMenuItemActionPerformed(evt);
+                modifyNumericalVariablesMenuItemActionPerformed(evt);
             }
         });
-        modifyMenu.add(numericalVariablesMenuItem);
+        modifyMenu.add(modifyNumericalVariablesMenuItem);
 
         numericalMicroaggregationMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_A, java.awt.event.InputEvent.ALT_MASK));
         numericalMicroaggregationMenuItem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/muargus/resources/icons/MA.png"))); // NOI18N
@@ -998,6 +1014,15 @@ public class MainFrameView extends javax.swing.JFrame {
         });
         externMenu.add(rScriptMenuItem);
 
+        syntheticDataMenuItem.setText("Synthetic data");
+        syntheticDataMenuItem.setEnabled(false);
+        syntheticDataMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                syntheticDataMenuItemActionPerformed(evt);
+            }
+        });
+        externMenu.add(syntheticDataMenuItem);
+
         menuBar.add(externMenu);
 
         setJMenuBar(menuBar);
@@ -1069,9 +1094,9 @@ public class MainFrameView extends javax.swing.JFrame {
         this.controller.householdRiskSpecification();
     }//GEN-LAST:event_householdRiskSpecificationMenuItemActionPerformed
 
-    private void numericalVariablesMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_numericalVariablesMenuItemActionPerformed
+    private void modifyNumericalVariablesMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_modifyNumericalVariablesMenuItemActionPerformed
         this.controller.numericalVariables();
-    }//GEN-LAST:event_numericalVariablesMenuItemActionPerformed
+    }//GEN-LAST:event_modifyNumericalVariablesMenuItemActionPerformed
 
     private void numericalMicroaggregationMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_numericalMicroaggregationMenuItemActionPerformed
         this.controller.numericalMicroaggregation();
@@ -1112,6 +1137,10 @@ public class MainFrameView extends javax.swing.JFrame {
         this.controller.rScript();
     }//GEN-LAST:event_rScriptMenuItemActionPerformed
 
+    private void syntheticDataMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_syntheticDataMenuItemActionPerformed
+        this.controller.syntheticData();
+    }//GEN-LAST:event_syntheticDataMenuItemActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton aboutButton;
     private javax.swing.JMenuItem aboutMenuItem;
@@ -1136,6 +1165,7 @@ public class MainFrameView extends javax.swing.JFrame {
     private javax.swing.JMenuItem metaDataMenuItem;
     private javax.swing.JMenu modifyMenu;
     private javax.swing.JButton modifyNumericalVariablesButton;
+    private javax.swing.JMenuItem modifyNumericalVariablesMenuItem;
     private javax.swing.JPopupMenu.Separator modifySeparator1;
     private javax.swing.JPopupMenu.Separator modifySeparator2;
     private javax.swing.JButton newsButton;
@@ -1144,7 +1174,6 @@ public class MainFrameView extends javax.swing.JFrame {
     private javax.swing.JMenuItem numericalMicroaggregationMenuItem;
     private javax.swing.JButton numericalRankSwappingButton;
     private javax.swing.JMenuItem numericalRankSwappingMenuItem;
-    private javax.swing.JMenuItem numericalVariablesMenuItem;
     private javax.swing.JButton openMicrodataButton;
     private javax.swing.JMenuItem openMicrodataMenuItem;
     private javax.swing.JMenu outputMenu;
@@ -1157,6 +1186,8 @@ public class MainFrameView extends javax.swing.JFrame {
     private javax.swing.JButton specifyCombinationsButton;
     private javax.swing.JMenu specifyMenu;
     private javax.swing.JButton specifyMetaDataButton;
+    private javax.swing.JButton syntheticDataButton;
+    private javax.swing.JMenuItem syntheticDataMenuItem;
     private javax.swing.JToolBar toolBar;
     private javax.swing.JToolBar.Separator toolBarSeparator1;
     private javax.swing.JToolBar.Separator toolBarSeparator2;

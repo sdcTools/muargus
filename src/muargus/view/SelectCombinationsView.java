@@ -63,6 +63,7 @@ public class SelectCombinationsView extends DialogBase<SelectCombinationsControl
     /**
      * Fills the selecCombinationsScreen with it's default values
      */
+    @Override
     public void initializeData() {
         // make listModels and add the variables that are categorical
         this.variablesListModel = new DefaultListModel<>();

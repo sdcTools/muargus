@@ -31,6 +31,7 @@ public class Combinations {
     private NumericalRankSwapping numericalRankSwapping;
     private PramSpecification pramSpecification;
     private RSpecification rSpecification;
+    private SyntheticData syntheticData;
 
     // tot dit aantal kan die het redelijk goed hebben, maar is die wel +/- 5 seconden aan het rekenen. 
     private final int maximumNumberOfTables = 25000;
@@ -146,6 +147,11 @@ public class Combinations {
         this.pramSpecification = new PramSpecification();
     }
     
+    /**
+     * Gets the model class of the RSpecification screen.
+     *
+     * @return Returns the RSpecification model class.
+     */
     public RSpecification getRSpecification() {
         if (this.rSpecification == null) {
             createRSpecification();
@@ -153,10 +159,32 @@ public class Combinations {
         return this.rSpecification;
     }
     
+    /**
+     * Creates a new instance of the RSpecification class.
+     */
     private void createRSpecification(){
         this.rSpecification = new RSpecification();
     }
 
+    /**
+     * Gets the model class of the SyntheticData screen.
+     *
+     * @return Returns the SyntheticData model class.
+     */
+    public SyntheticData getSyntheticData() {
+        if (this.syntheticData == null) {
+            createSyntheticData();
+        }
+        return this.syntheticData;
+    }
+    
+    /**
+     * Creates a new instance of the SyntheticData class.
+     */
+    private void createSyntheticData(){
+        this.syntheticData = new SyntheticData();
+    }
+    
     /**
      * Gets the model class of the RiskSpecification screen.
      *

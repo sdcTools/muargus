@@ -159,7 +159,7 @@
             </MenuItem>
             <MenuItem class="javax.swing.JPopupMenu$Separator" name="modifySeparator2">
             </MenuItem>
-            <MenuItem class="javax.swing.JMenuItem" name="numericalVariablesMenuItem">
+            <MenuItem class="javax.swing.JMenuItem" name="modifyNumericalVariablesMenuItem">
               <Properties>
                 <Property name="accelerator" type="javax.swing.KeyStroke" editor="org.netbeans.modules.form.editors.KeyStrokeEditor">
                   <KeyStroke key="Alt+N"/>
@@ -171,7 +171,7 @@
                 <Property name="enabled" type="boolean" value="false"/>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="numericalVariablesMenuItemActionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="modifyNumericalVariablesMenuItemActionPerformed"/>
               </Events>
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="numericalMicroaggregationMenuItem">
@@ -306,6 +306,15 @@
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="rScriptMenuItemActionPerformed"/>
+              </Events>
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="syntheticDataMenuItem">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Synthetic data"/>
+                <Property name="enabled" type="boolean" value="false"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="syntheticDataMenuItemActionPerformed"/>
               </Events>
             </MenuItem>
           </SubComponents>
@@ -514,7 +523,7 @@
             <Property name="verticalTextPosition" type="int" value="3"/>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="numericalVariablesMenuItemActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="modifyNumericalVariablesMenuItemActionPerformed"/>
           </Events>
         </Component>
         <Component class="javax.swing.JButton" name="numericalMicroaggregationButton">
@@ -638,6 +647,18 @@
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="rScriptMenuItemActionPerformed"/>
+          </Events>
+        </Component>
+        <Component class="javax.swing.JButton" name="syntheticDataButton">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Synthetic data"/>
+            <Property name="enabled" type="boolean" value="false"/>
+            <Property name="focusable" type="boolean" value="false"/>
+            <Property name="horizontalTextPosition" type="int" value="0"/>
+            <Property name="verticalTextPosition" type="int" value="3"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="syntheticDataMenuItemActionPerformed"/>
           </Events>
         </Component>
       </SubComponents>

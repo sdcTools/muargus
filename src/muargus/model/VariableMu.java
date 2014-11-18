@@ -51,6 +51,8 @@ public class VariableMu {
     private int bandwidth;
     private double entropy;
 
+    private double alpha; // is used for synthetic data
+
     private final ArrayList<CodeInfo> codeInfos;
 
     private SpssVariable spssVariable;
@@ -79,6 +81,7 @@ public class VariableMu {
         this.household = false;
         this.relatedVariableName = null;
         this.relatedVariable = null;
+        this.alpha = 0.9;
     }
 
     /**
@@ -653,6 +656,26 @@ public class VariableMu {
      */
     public void setSpssVariable(SpssVariable spssVariable) {
         this.spssVariable = spssVariable;
+    }
+
+    /**
+     * Gets the alpha value. The alpha value is used for generating synthetic
+     * data.
+     *
+     * @return Double containing the alpha value.
+     */
+    public double getAlpha() {
+        return alpha;
+    }
+
+    /**
+     * Sets the alpha value. The alpha value is used for generating synthetic
+     * data.
+     *
+     * @param alpha Double containing the alpha value.
+     */
+    public void setAlpha(double alpha) {
+        this.alpha = alpha;
     }
 
     /**
