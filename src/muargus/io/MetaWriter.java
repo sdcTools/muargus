@@ -14,6 +14,9 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import muargus.model.MetadataMu;
 import muargus.model.RecodeMu;
 import muargus.model.VariableMu;
@@ -158,4 +161,43 @@ public class MetaWriter {
      * @throws ArgusException Throws an ArgusException when an error occurs
      * during writing.
      */
+    /**
+     *
+     * @param path
+     * @param sensitiveVariables
+     * @throws ArgusException
+     */
+    public static void writeAlpha(String path, ArrayList<VariableMu> sensitiveVariables) throws ArgusException {
+        try (PrintWriter writer = new PrintWriter(new File(path))) {
+            for (int i = 0; i < sensitiveVariables.size(); i++) {
+                String line = "";
+                for (int j = 0; j < sensitiveVariables.size(); j++) {
+                    if (i == j) {
+                        line += Double.toString(sensitiveVariables.get(i).getAlpha());
+                    } else {
+                        line += "0.0";
+                    }
+                    if (j != sensitiveVariables.size() - 1) {
+                        line += ", ";
+                    }
+                }
+                writer.println(line);
+            }
+        } catch (FileNotFoundException ex) {
+            throw new ArgusException("Error writing to file. Error message: " + ex.getMessage());
+        }
+    }
+
+    public static void writeSynthetic(String pathSynth, String pathAlpha, String pathSynthData, int numberOfNonSensitiveVariables) throws ArgusException {
+        try {
+            try (PrintWriter writer = new PrintWriter(new File(pathSynth))) {
+                writer.println("setwd(\"D:/TEMP/\" )");
+                writer.println("require(\"hybridIPSO3\")");
+                writer.println("hybrid_IPSO(\"" + pathAlpha + "\",\"SynthData.txt\", K=" 
+                        + numberOfNonSensitiveVariables + ",  out=TRUE, out_file=\"temp.txt\", separator=\",\")");
+            }
+        } catch (FileNotFoundException ex) {
+            throw new ArgusException("Error writing to file. Error message: " + ex.getMessage());
+        }
+    }
 }

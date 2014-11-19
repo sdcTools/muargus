@@ -1,8 +1,13 @@
 package muargus.controller;
 
+import argus.model.ArgusException;
+import java.io.File;
 import java.util.ArrayList;
+import muargus.io.MetaWriter;
 import muargus.model.MetadataMu;
+import muargus.model.ReplacementFile;
 import muargus.model.SyntheticData;
+import muargus.model.SyntheticDataSpec;
 import muargus.model.VariableMu;
 import muargus.view.SyntheticDataView;
 
@@ -13,6 +18,10 @@ import muargus.view.SyntheticDataView;
 public class SyntheticDataController extends ControllerBase<SyntheticData> {
 
     private final MetadataMu metadata;
+    private final String pathAlpha = "C:\\Users\\Gebruiker\\Desktop\\Alpha.txt";
+    private final String pathSynthetic = "C:\\Users\\Gebruiker\\Desktop\\Synth.R";
+    private final String pathSyntheticData = "C:\\Users\\Gebruiker\\Desktop\\SynthData.txt";
+    
     
     
     /**
@@ -53,7 +62,33 @@ public class SyntheticDataController extends ControllerBase<SyntheticData> {
     }
     
     public void runSyntheticData(){
-        /* synthetic data: sensitive variables are numbered from x1 to xn, non-sensitive variables are numbered from s1 to sn*/
+        try {
+            /* synthetic data: sensitive variables are numbered from x1 to xn,
+            non-sensitive variables are numbered from s1 to sn.
+            */
+            MetaWriter.writeAlpha(this.pathAlpha, getSensitiveVariables());
+            MetaWriter.writeSynthetic(this.pathSynthetic, this.pathAlpha, this.pathSyntheticData, getNonSensitiveVariables().size());
+            writeSyntheticData();
+            close();
+        } catch (ArgusException ex) {
+            //Logger.getLogger(SyntheticDataController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+    }
+    
+    public void writeSyntheticData(){
+        try {
+            SyntheticDataSpec syntheticData = new SyntheticDataSpec();
+            syntheticData.getVariables().addAll(getSensitiveVariables());
+            syntheticData.getVariables().addAll(getNonSensitiveVariables());
+            syntheticData.setReplacementFile(new ReplacementFile("SyntheticData"));
+            this.metadata.getReplacementSpecs().add(syntheticData);
+            getCalculationService().makeReplacementFile(this);
+            File file = new File(syntheticData.getReplacementFile().getOutputFilePath());
+            file.renameTo(new File(this.pathSyntheticData));
+        } catch (ArgusException ex) {
+            getView().showErrorMessage(ex);
+        }
     }
     
 }
