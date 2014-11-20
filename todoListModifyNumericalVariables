@@ -3,16 +3,8 @@ niet behandelde opmerkingen/vragen:
 
 Nog te doen:                                                                                                Mee bezig:
 
-Release 2
-
-    
-11. schrijf javadocs                                                                                        Jeldrik
-12. Refactoren (kijken of alles volgens de MVC is gedaan, het weghalen van overbodige code etc.) 
-
-
 
 Release 3
-Undo/clear button toevoegen?
 
 
 
@@ -53,6 +45,8 @@ Gedaan:                                                                         
     - geef ook een waarschuwing als al een keer applied is en een verandering is gemaakt.
 13. Overig
     - Minimale grootte scherm instellen
+12. Refactoren (kijken of alles volgens de MVC is gedaan, het weghalen van overbodige code etc.) 
+11. schrijf javadocs                                                                                        Jeldrik
 
 wishlish:
 
@@ -60,3 +54,4 @@ Behandelde opmerkingen/vragen:                                                  
 
 - checken wanneer de dll uitgevoerd wordt (oude mu is volgens mij pas bij makeSafeFile                      Gebeurd nu bij apply
 - Is het een idee om een close button toe te voegen en de ok button te veranderen in een apply button?      Ja
+- Undo/clear button toevoegen?                                                                              Nee

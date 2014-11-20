@@ -10,7 +10,6 @@ Release 2
 12. closebutton
     - waarschuwing geven als dingen zijn aangepast: wil je dit nog toepassen?                               Jeldrik
 13. schrijf javadocs                                                                                        Jeldrik
-14. Refactoren (kijken of alles volgens de MVC is gedaan, het weghalen van overbodige code etc.) 
 -minimale grootte scherm instellen
 
 
@@ -69,6 +68,7 @@ Gedaan:                                                                         
 
 12. closebutton
     - sluit scherm
+14. Refactoren (kijken of alles volgens de MVC is gedaan, het weghalen van overbodige code etc.) 
 
 wishlish:
     - geselecteerde variabele onthouden

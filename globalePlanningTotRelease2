@@ -6,7 +6,6 @@ Opmerking:
 -   Wat te doen met missing values die niet zijn geinitialiseerd binnen spss? 
     --> numeric maken of niets en de gebruiker binnen argus missings initialiseren?
 -   afvangen als de save file al in gebruik is.
--   MainFrame --> icoontjes opschonen
 -   open microdata --> als er een nieuwe extensie wordt gebruikt, wordt die toegevoegd via de registry
     - misschien mooier als alle bestanden die leesbaar zijn zichtbaar zijn (dus alle .asc, .csv, .sav etc.) en dat vervolgens gespecificeerd kan worden.
 -   Numerical variables --> wat gebeurd er bij spss// wat gebeurd er met system missings
@@ -76,6 +75,7 @@ Ik heb nu grofweg 1 scherm per week geplaatst maar sommige schermen zijn vrij mo
 -   open microdata --> csv toevoegen (Tau?)
 -   SpecifyMetadata --> werkt alles zoals het moet werken
 -   temp data --> zodra aangemaakt aangeven exitOnClose (Anco) 
+-   MainFrame --> icoontjes opschonen
 
 wishlist:
     - R-script toevoegen --> duidelijk krijgen hoe en wat.

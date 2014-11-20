@@ -8,13 +8,6 @@ niet behandelde opmerkingen/vragen:
 
 Nog te doen:                                                                                                    Mee bezig:
 
-Release 2
-
-6. table: 
-    - kolommen klikken en sorteren (RowSorter: http://docs.oracle.com/javase/7/docs/api/javax/swing/RowSorter.html) Anne
-19. javadoc schrijven voor de methodes                                                                              Jeldrik
-
-
 Release 3+:
 12. setTableRiskModelButton
     - risk model zetten voor meerder tabellen tegelijkertijd mogelijk maken
@@ -125,5 +118,7 @@ bug: als bij generateAutomaticTables meer dan 10 dimensies worden gekozen wordt 
     dan in de long past en crashed die.
 bug: als tijdens het specificeren van de thresholds op cancel wordt gedrukt moet er voor alle volgende          Jeldrik
     dimensies ook op cancel gedrukt worden. 
-
-    
+6. table: 
+    - kolommen klikken en sorteren (RowSorter: http://docs.oracle.com/javase/7/docs/api/javax/swing/RowSorter.html) Anne
+  19. javadoc schrijven voor de methodes                                                                              Jeldrik
+  

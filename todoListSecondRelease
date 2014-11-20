@@ -10,7 +10,6 @@ Release 3 uitzoeken:
 - MuARGUS                               41          acrord32.exe aanpassen 
                                                     Linux: andere extensie
                                                     Linux: geen cmd.exe    
-- MakeProtectedFileView                             listEventListener aanpassen                     Jeldrik
 - Afvangen als de safe.sav file in gebruik is --> dan kan namelijk niet worden weggeschreven
 - Afvangen spss gebruiken wanneer men geen spss geinstalleerd heeft
 
@@ -63,3 +62,4 @@ Klasse:                                 Regel(s):   Taak/opmerking:             
 - wat te doen met de spssjavaplugin? --> in releasnotes schrijven hoe dit gefixed moet worden?
 - Bug bij Spss: wanneer spss data is geopend en tabellen zijn gemaakt via select combinations       Jeldrik
   veranderd de dataFileName
+- MakeProtectedFileView                             listEventListener aanpassen                     Jeldrik

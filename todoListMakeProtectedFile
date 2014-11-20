@@ -1,25 +1,14 @@
 niet behandelde opmerkingen/vragen:
-- Verschillen oud-nieuw in report:
-    - Records have been written in random order
-    - pram mist
-
 - willen we de voorkeurs opties zoals 'use entropy' en 'keep in safe file' in de registry?
-- nu worden de woorden 'priority' en 'weight' door gebruikt maar is er een verschil?            Anco??
+- nu worden de woorden 'priority' en 'weight' door gebruikt maar is er een verschil?     
+--> bij make protected file + suppression weight priority noemen: use weight wordt use priority, 
+weight for local suppression wordt priority for local suppression       Anco??
        
 Nog te doen:                                                                                                    Mee bezig:
 
 Release 2:
-- nu wordt bij de tabel nog gebruik gemaakt van een keyReleased en MouseClicked event maar dit moet een         Jeldrik
-  selectionsChanged event worden.
-
-10. makeFileButton:
-- otherModifications toevoegen (gebeurd wanneer de optie change into sequence number wordt gekozen)
-    --> write records in random order zou ik hier ook bij stoppen. (net als het volgende puntje)
-- Variables removed: hhIdentifier --> weergeven aan het eind als gekozen wordt voor remove from safe file
-- Pram in rapport tonen
 
 
-   
 15. html viewer vervangen: de html/css wordt nu brak getoond
 16. javadocs schrijven                                                                                          Jeldrik
 
@@ -99,7 +88,15 @@ SPSS: genereer safe SAV file
 - Gegevens microaggregatie in rapport tonen
 - Gegevens rank swapping in rapport tonen
 - waarschuwing als geen riskModel is gedefinieerd.                                                              Anne
-
+- Verschillen oud-nieuw in report:
+    - Records have been written in random order
+    - pram mist
+- nu wordt bij de tabel nog gebruik gemaakt van een keyReleased en MouseClicked event maar dit moet een         Jeldrik
+  selectionsChanged event worden.
+- otherModifications toevoegen (gebeurd wanneer de optie change into sequence number wordt gekozen)
+    --> write records in random order zou ik hier ook bij stoppen. (net als het volgende puntje)
+- Variables removed: hhIdentifier --> weergeven aan het eind als gekozen wordt voor remove from safe file
+- Pram in rapport tonen
 
 Whishlist:
 -   weights automatisch bepalen door middel van entropie? Ik weet niet precies hoe dit zou moeten maar hierdoor
