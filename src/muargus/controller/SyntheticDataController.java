@@ -93,17 +93,6 @@ public class SyntheticDataController extends ControllerBase<SyntheticData> {
             syntheticData.setReplacementFile(new ReplacementFile("SyntheticData"));
             this.metadata.getReplacementSpecs().add(syntheticData);
             getCalculationService().makeReplacementFile(this);
-            File file = new File(syntheticData.getReplacementFile().getInputFilePath());
-            System.out.println(syntheticData.getReplacementFile().getInputFilePath());
-//            try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
-//                String line;
-//                while ((line = reader.readLine()) != null) {
-//                    System.out.println(line);
-//                }
-//            } catch (IOException ex) {
-//                throw new ArgusException("Error during reading file. Error message: " + ex.getMessage());
-//            }
-            file.renameTo(new File(this.pathSyntheticData));
         } catch (ArgusException ex) {
             getView().showErrorMessage(ex);
         }
@@ -111,24 +100,24 @@ public class SyntheticDataController extends ControllerBase<SyntheticData> {
 
     public void adjustSyntheticData() {
         File file = new File(this.metadata.getReplacementSpecs().get(this.metadata.getReplacementSpecs().size() - 1).getReplacementFile().getInputFilePath());
-                try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
-                    String line = "";
-                    for(int i = 0; i < this.metadata.getCombinations().getSyntheticData().getSensitiveVariables().size(); i++){
-                        line += "x" + (i+1) + " ,";
-                    }
-                    for(int i = 0; i < this.metadata.getCombinations().getSyntheticData().getNonSensitiveVariables().size(); i++){
-                        line += "s" + (i+1) + " ,";
-                    }
-                    line = line.substring(0, line.length()-1);
-                    try (PrintWriter writer = new PrintWriter(new File(SyntheticDataController.pathSyntheticData))) {
-                        writer.println(line);
-                        while ((line = reader.readLine()) != null) {
-                            writer.println(line);
-                        }
-                    }
-                } catch (IOException ex) {
-                    //throw new ArgusException("Error during reading file. Error message: " + ex.getMessage());
+        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+            String line = "";
+            for (int i = 0; i < this.metadata.getCombinations().getSyntheticData().getSensitiveVariables().size(); i++) {
+                line += "x" + (i + 1) + " ,";
+            }
+            for (int i = 0; i < this.metadata.getCombinations().getSyntheticData().getNonSensitiveVariables().size(); i++) {
+                line += "s" + (i + 1) + " ,";
+            }
+            line = line.substring(0, line.length() - 1);
+            try (PrintWriter writer = new PrintWriter(new File(SyntheticDataController.pathSyntheticData))) {
+                writer.println(line);
+                while ((line = reader.readLine()) != null) {
+                    writer.println(line);
                 }
+            }
+        } catch (IOException ex) {
+            //throw new ArgusException("Error during reading file. Error message: " + ex.getMessage());
+        }
     }
 
 }

@@ -108,28 +108,6 @@ public class CalculationService {
                 errorCode);
         if (!result) {
             throw new ArgusException("Error creating temporary replacement file: " + getErrorString(errorCode[0]));
-        } else {
-//            if (replacement.getReplacementFile().getReplacementType().equals("SyntheticData")) {
-//                File file = new File(this.metadata.getReplacementSpecs().get(this.metadata.getReplacementSpecs().size() - 1).getReplacementFile().getInputFilePath());
-//                try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
-//                    String line = "";
-//                    for(int i = 0; i < this.metadata.getCombinations().getSyntheticData().getSensitiveVariables().size(); i++){
-//                        line += "x" + (i+1) + " ,";
-//                    }
-//                    for(int i = 0; i < this.metadata.getCombinations().getSyntheticData().getNonSensitiveVariables().size(); i++){
-//                        line += "s" + (i+1) + " ,";
-//                    }
-//                    line = line.substring(0, line.length()-1);
-//                    try (PrintWriter writer = new PrintWriter(new File(SyntheticDataController.pathSyntheticData))) {
-//                        writer.println(line);
-//                        while ((line = reader.readLine()) != null) {
-//                            writer.println(line);
-//                        }
-//                    }
-//                } catch (IOException ex) {
-//                    //throw new ArgusException("Error during reading file. Error message: " + ex.getMessage());
-//                }
-//            }
         }
     }
 
