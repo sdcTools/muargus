@@ -84,7 +84,8 @@ public class SyntheticDataController extends ControllerBase<SyntheticData> {
             syntheticData.setReplacementFile(new ReplacementFile("SyntheticData"));
             this.metadata.getReplacementSpecs().add(syntheticData);
             getCalculationService().makeReplacementFile(this);
-            File file = new File(syntheticData.getReplacementFile().getOutputFilePath());
+            File file = new File(syntheticData.getReplacementFile().getInputFilePath());
+            
             file.renameTo(new File(this.pathSyntheticData));
         } catch (ArgusException ex) {
             getView().showErrorMessage(ex);
