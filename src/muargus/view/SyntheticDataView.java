@@ -44,9 +44,16 @@ public class SyntheticDataView extends DialogBase<SyntheticDataController> {
         // make listModels and add the variables that are numeric
         this.variablesListModel = new DefaultListModel<>();
         this.nonSensitiveVariablesListModel = new DefaultListModel<>();
+        for (VariableMu variable : getController().getNonSensitiveVariables()) {
+            this.nonSensitiveVariablesListModel.addElement(variable);
+        }
         for (VariableMu variable : getMetadata().getVariables()) {
             if (variable.isNumeric()) {
-                this.variablesListModel.addElement(variable);
+                if (!getController().getNonSensitiveVariables().contains(variable) 
+                        && !getController().getSensitiveVariables().contains(variable)) {
+                    this.variablesListModel.addElement(variable);
+
+                }
             }
         }
         this.variablesList.setModel(this.variablesListModel);
@@ -55,7 +62,7 @@ public class SyntheticDataView extends DialogBase<SyntheticDataController> {
         if (this.variablesListModel.getSize() > 0) {
             this.variablesList.setSelectedIndex(0);
         }
-        
+
         this.sensitiveVariablesTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
 
             @Override
@@ -65,7 +72,7 @@ public class SyntheticDataView extends DialogBase<SyntheticDataController> {
                 }
             }
         });
-        
+        updateTable();
         updateValues();
     }
 
@@ -96,8 +103,8 @@ public class SyntheticDataView extends DialogBase<SyntheticDataController> {
         this.moveFromSensitiveVariablesButton.setEnabled(!getController().getSensitiveVariables().isEmpty());
         this.sensitiveVariablesSlider.setEnabled(!getController().getSensitiveVariables().isEmpty());
     }
-    
-    private void variablesSelectionChanged(){
+
+    private void variablesSelectionChanged() {
         if (!getController().getSensitiveVariables().isEmpty()) {
             int[] index = this.sensitiveVariablesTable.getSelectedRows();
             for (int i : index) {

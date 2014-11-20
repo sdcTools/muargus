@@ -211,7 +211,6 @@ public class NumericalRankSwappingView extends DialogBase<NumericalRankSwappingC
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Selected"));
 
-        selectedVariableList.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jScrollPane2.setViewportView(selectedVariableList);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -386,10 +385,23 @@ public class NumericalRankSwappingView extends DialogBase<NumericalRankSwappingC
         this.setVisible(false);
     }//GEN-LAST:event_okButtonActionPerformed
 
+    private int getIndex(int[] index, int size) {
+        int selected;
+        if (index.length < 1) {
+            selected = 0;
+        } else if (size == index[index.length - 1] + 1) {
+            selected = 0;
+        } else {
+            selected = index[index.length - 1] + 1;
+        }
+        return selected;
+    }
+
     private void toSelectedButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_toSelectedButtonActionPerformed
         boolean added = false;
-        for (int index : this.variablesTable.getSelectedRows()) {
-            VariableMu variable = this.model.getVariables().get(index);
+        int index[] = this.variablesTable.getSelectedRows();
+        for (int i : index) {
+            VariableMu variable = this.model.getVariables().get(i);
             if (!this.selectedListModel.contains(variable)) {
                 this.selectedListModel.addElement(variable);
                 added = true;
@@ -398,24 +410,34 @@ public class NumericalRankSwappingView extends DialogBase<NumericalRankSwappingC
 
         updateValues();
         if (added) {
-            //Change selection of variables list
-            for (int varIndex = 0; varIndex < this.variablesTable.getModel().getRowCount(); varIndex++) {
-                if (!this.selectedListModel.contains(this.model.getVariables().get(varIndex))) {
-                    this.variablesTable.getSelectionModel().setSelectionInterval(varIndex, varIndex);
-                    return;
-                }
+            int selected;
+            if (index.length < 1 || this.variablesTable.getRowCount() == index[index.length - 1] + 1) {
+                selected = 0;
+            } else {
+                selected = index[index.length - 1] + 1;
             }
-            this.variablesTable.getSelectionModel().setSelectionInterval(0, 0);
+            this.variablesTable.getSelectionModel().setSelectionInterval(selected, selected);
         }
     }//GEN-LAST:event_toSelectedButtonActionPerformed
 
     private void fromSelectedButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fromSelectedButtonActionPerformed
+        int[] index = this.selectedVariableList.getSelectedIndices();
         for (Object variable : this.selectedVariableList.getSelectedValuesList()) {
             this.selectedListModel.removeElement((VariableMu) variable);
         }
         if (this.selectedVariableList.getModel().getSize() > 0) {
-            this.selectedVariableList.setSelectedIndex(0);
+            int selected;
+            if (index.length != 1) {
+                selected = 0;
+            } else if (this.selectedListModel.size() == index[index.length - 1]) {
+                selected = this.selectedListModel.size() - 1;
+            } else {
+                selected = index[index.length - 1];
+            }
+
+            this.selectedVariableList.setSelectedIndex(selected);
         }
+
         updateValues();
     }//GEN-LAST:event_fromSelectedButtonActionPerformed
 

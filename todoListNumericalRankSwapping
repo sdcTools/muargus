@@ -1,5 +1,5 @@
 niet behandelde opmerkingen/vragen:
-- is percentage int of double?
+- is percentage int of double? --> in de model is het nu een double
 - de undo button werkt alleen als de variabele in het selected field staat. Misschien is het mooi als
   je ook undo kan doen door alleen de variabele(n) te selecteren?
 - waarschuwing geven als meerdere variabelen bij elkaar horen en 1 undoed wordt

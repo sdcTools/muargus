@@ -906,7 +906,8 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
     private void generateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generateButtonActionPerformed
         if (getMetadata().isSpss()) {
             this.generateButton.setEnabled(false);
-            List<SpssVariable> variables = MuARGUS.getSpssUtils().getVariablesFromSpss(getController().getMetadataClone(), parent);
+            //List<SpssVariable> variables = MuARGUS.getSpssUtils().getVariablesFromSpss(getController().getMetadataClone(), parent);
+            List<SpssVariable> variables = MuARGUS.getSpssUtils().getSpssVariables();
             SpssSelectVariablesView selectView = new SpssSelectVariablesView(this.parent, true);
             selectView.showVariables(variables);
             selectView.setVisible(true);

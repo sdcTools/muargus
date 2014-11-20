@@ -82,12 +82,16 @@ public class SpssUtils {
                 }
                 metadata.setRecordCount(StatsUtil.getCaseCount());
                 StatsUtil.stop();
-            } catch (StatsException e) {
-
-            }
+            } catch (StatsException e) { }
         }
         return this.spssVariables;
     }
+
+    public ArrayList<SpssVariable> getSpssVariables() {
+        return spssVariables;
+    }
+    
+    
 
     /**
      * Sets the variables for use whithin argus.
@@ -384,7 +388,13 @@ public class SpssUtils {
             command.add("EXECUTE.");
             for (VariableMu v : variables) {
                 String name = v.getSpssVariable().getName();
-                command.add("if (SYSMIS(" + name + ") EQ 0) " + name + "= TEMP" + name + ".");
+                String statement;
+                if(v.getSpssVariable().getVariableType() == this.NUMERIC){
+                    statement= "if (SYSMIS(" + name + ") EQ 0) ";
+                } else {
+                    statement = "COMPUTE ";
+                }
+                command.add(statement + name + "= TEMP" + name + ".");
                 String missing = "";
                 for (int i = 0; i < v.getNumberOfMissings(); i++) {
                     if (!missing.equals("")) {
@@ -396,9 +406,9 @@ public class SpssUtils {
             }
             command.add("SAVE OUTFILE='" + this.safeSpssFile + "'/DROP=TEMP" + first + " TO TEMP" + last + ".");
             command.add("EXECUTE.");
-//            for (String s : command) {
-//                System.out.println(s);
-//            }
+            for (String s : command) {
+                System.out.println(s);
+            }
 
             StatsUtil.submit(command.toArray(new String[command.size()]));
             StatsUtil.stop();

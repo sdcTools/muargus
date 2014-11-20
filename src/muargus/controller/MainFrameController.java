@@ -161,6 +161,7 @@ public class MainFrameController {
         newMetadata.setFileNames(filenames);
         try {
             MetaReader.readRda(newMetadata, this.view);
+
         } catch (ArgusException ex) {
             this.view.showErrorMessage(new ArgusException("Error reading metadata file: " + ex.getMessage()));
             return;
@@ -171,6 +172,9 @@ public class MainFrameController {
             this.view.showErrorMessage(new ArgusException("Metadata contains error(s): " + ex.getMessage()));
         }
         this.metadata = newMetadata;
+        if (this.metadata.getDataFileType() == MetadataMu.DATA_FILE_TYPE_SPSS) {
+            MuARGUS.getSpssUtils().checkMetadata(this.metadata, this.view);
+        }
         organise();
     }
 
@@ -526,7 +530,7 @@ public class MainFrameController {
         RController controller = new RController(this.view, this.metadata);
         controller.showView();
     }
-    
+
     /**
      *
      */

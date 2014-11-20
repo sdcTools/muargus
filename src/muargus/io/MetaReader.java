@@ -154,9 +154,9 @@ public class MetaReader {
             throw new ArgusException("Metadata file not found");
         }
 
-        if (metadata.getDataFileType() == MetadataMu.DATA_FILE_TYPE_SPSS) {
-            MuARGUS.getSpssUtils().checkMetadata(metadata, parent);
-        }
+//        if (metadata.getDataFileType() == MetadataMu.DATA_FILE_TYPE_SPSS) {
+//            MuARGUS.getSpssUtils().checkMetadata(metadata, parent);
+//        }
 
     }
 
