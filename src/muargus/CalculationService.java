@@ -8,12 +8,18 @@ package muargus;
 import argus.model.ArgusException;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.SwingWorker;
 import muargus.controller.SelectCombinationsController;
+import muargus.controller.SyntheticDataController;
 import muargus.extern.dataengine.CMuArgCtrl;
 import muargus.extern.dataengine.IProgressListener;
 import muargus.model.ProtectedFile;
@@ -102,6 +108,28 @@ public class CalculationService {
                 errorCode);
         if (!result) {
             throw new ArgusException("Error creating temporary replacement file: " + getErrorString(errorCode[0]));
+        } else {
+//            if (replacement.getReplacementFile().getReplacementType().equals("SyntheticData")) {
+//                File file = new File(this.metadata.getReplacementSpecs().get(this.metadata.getReplacementSpecs().size() - 1).getReplacementFile().getInputFilePath());
+//                try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+//                    String line = "";
+//                    for(int i = 0; i < this.metadata.getCombinations().getSyntheticData().getSensitiveVariables().size(); i++){
+//                        line += "x" + (i+1) + " ,";
+//                    }
+//                    for(int i = 0; i < this.metadata.getCombinations().getSyntheticData().getNonSensitiveVariables().size(); i++){
+//                        line += "s" + (i+1) + " ,";
+//                    }
+//                    line = line.substring(0, line.length()-1);
+//                    try (PrintWriter writer = new PrintWriter(new File(SyntheticDataController.pathSyntheticData))) {
+//                        writer.println(line);
+//                        while ((line = reader.readLine()) != null) {
+//                            writer.println(line);
+//                        }
+//                    }
+//                } catch (IOException ex) {
+//                    //throw new ArgusException("Error during reading file. Error message: " + ex.getMessage());
+//                }
+//            }
         }
     }
 
@@ -268,13 +296,12 @@ public class CalculationService {
         if (variable.isNumeric() && !variable.isWeight() && "".equals(missing0)) {
             missing0 = StringUtils.repeat("X", variable.getVariableLength());
         }
-        
+
         //TODO: fixen dat ordinale variabelen goed werken bij rounding (ModifyNumericalVariables)
 //        boolean isCategorical = variable.isCategorical();
 //        if(variable.isNumeric() && variable.isCategorical()){
 //            isCategorical = false;
 //        }
-
         return c.SetVariable(varNr,
                 variable.getStartingPosition(),
                 variable.getVariableLength(),
@@ -476,7 +503,7 @@ public class CalculationService {
             return 0;
         }
         return this.metadata.getVariables().indexOf(variable.getRelatedVariable()) + 1;
-        
+
     }
 
     private int setSafeFileProperties(final int index, final VariableMu variable, MetadataMu metadata, int delta) {
@@ -544,7 +571,7 @@ public class CalculationService {
         boolean result = c.SetRound(getVariables().indexOf(variable) + 1,
                 base,
                 nDecimals,
-                undo); 
+                undo);
         if (!result) {
             throw new ArgusException("Error in Set Rounding");
         }
