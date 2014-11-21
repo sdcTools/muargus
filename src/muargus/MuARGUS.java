@@ -1,19 +1,25 @@
 package muargus;
 
 //import javax.swing.SwingUtilities;
+import argus.model.ArgusException;
 import argus.utils.SystemUtils;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.SplashScreen;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 import java.util.logging.Logger;
 import javax.swing.UnsupportedLookAndFeelException;
 import muargus.extern.dataengine.CMuArgCtrl;
 import muargus.view.MainFrameView;
 import org.apache.commons.io.FilenameUtils;
+import org.icepdf.ri.viewer.Launcher;
+
 
 /**
  *
@@ -37,13 +43,15 @@ public class MuARGUS {
     private static final String defaultSeparator = ",";
 
     private static final String lookAndFeel = "Windows";
-    private static final File manual = new File("./resources/MUmanual4.3.pdf");
+    //private static final File manual = new File("./resources/MUmanual4.3.pdf");
+    private static final File manual = new File("resources/MUmanual4.3.pdf");
     private static final String acrord32 = "acrord32.exe"; // finds the acrord32.exe
     private static final int sleepTime = 2000;
+    private static Process helpViewerProcess;
 
     static {
-        System.loadLibrary("libmuargusdll");
-        System.loadLibrary("libnumericaldll");
+        System.loadLibrary("lib/libmuargusdll");
+        System.loadLibrary("lib/libnumericaldll");
     }
 
     //private static CMuArgCtrl muArgCrtl = new CMuArgCtrl();
@@ -54,9 +62,12 @@ public class MuARGUS {
         return calcService;
     }
     
-    private static final SpssUtils spssUtils = new SpssUtils();
+    private static  SpssUtils spssUtils;// = new SpssUtils();
     
     public static SpssUtils getSpssUtils() {
+        if (spssUtils == null) {
+            spssUtils = new SpssUtils();
+        }
         return spssUtils;
     }
 
@@ -120,22 +131,69 @@ public class MuARGUS {
         }
     }
 
-    public static void showHelp(String namedDest) {
-        try {
-            String cmdString = "taskkill /IM " + acrord32;
-            //System.out.println(cmdString);
-            Process p = Runtime.getRuntime().exec(cmdString);
-        } catch (IOException ex) {
-        } catch (Exception ex2) {
-        }
-        try {
-            String cmdString = "cmd.exe /c start " + acrord32 + " /A \"nameddest=" + namedDest + "\" \"" + manual.getAbsolutePath() + "\"";
-            Process p = Runtime.getRuntime().exec(cmdString);
-        } catch (IOException ex) {
-        } catch (Exception ex2) {
-        }
-    }
+    public static void showHelp(String namedDest) throws ArgusException {
+//        if (namedDest == null) {
+//            Launcher.main(new String[] {"-loadfile", manual.getAbsolutePath()});
+//        }
+//        else{
+//            Launcher.main(new String[] {"-loadfile", manual.getAbsolutePath(), "-nameddest", namedDest});
+//        }
+//    }
+        //try {            
+            ArrayList<String> args = new ArrayList<String>();
+            args.add("-loadfile");
+            args.add(manual.getAbsolutePath());
+            if (namedDest != null) {
+            args.add("-nameddest");
+            args.add(namedDest);
+            }
 
+            try {
+            execClass(
+                    "org.icepdf.ri.viewer.Main",
+                    "lib\\ICEpdf.jar",
+                    args);
+            }
+            catch (IOException | InterruptedException ex) {
+                throw new ArgusException("Error trying to display help file");
+            }
+    }
+            //String cmdString = "taskkill /IM " + acrord32;
+            //System.out.println(cmdString);
+            //Process p = Runtim.e.getRuntime().exec(cmdString);
+//        } catch (IOException ex) {
+//        } catch (Exception ex2) {
+//        }
+//        try {
+//            String cmdString = "cmd.exe /c start " + acrord32 + " /A \"nameddest=" + namedDest + "\" \"" + manual.getAbsolutePath() + "\"";
+//            Process p = Runtime.getRuntime().exec(cmdString);
+//        } catch (IOException ex) {
+//        } catch (Exception ex2) {
+//        }
+    
+
+        public static void execClass(String className, String classPath, List<String> arguments) throws IOException,
+                                               InterruptedException {
+        if (helpViewerProcess != null) {
+            helpViewerProcess.destroy();
+            helpViewerProcess = null;
+        }    
+            
+        String javaHome = System.getProperty("java.home");
+        String javaBin = javaHome +
+                File.separator + "bin" +
+                File.separator + "java";
+        //String classpath = System.getProperty("java.class.path");
+        //String className = klass.getCanonicalName();
+        arguments.add(0, javaBin);
+        arguments.add(1, "-cp");
+        arguments.add(2, classPath);
+        arguments.add(3, className);
+        ProcessBuilder builder = new ProcessBuilder( arguments );
+
+        helpViewerProcess = builder.start();
+    }
+        
     private static void sleepThread(int milliSecs) {
         try {
             Thread.sleep(milliSecs);
