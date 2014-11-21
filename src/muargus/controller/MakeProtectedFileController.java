@@ -46,7 +46,7 @@ public class MakeProtectedFileController extends ControllerBase<ProtectedFile> {
      * safe data will be written.
      */
     public void makeFile(File file) {
-        System.out.println(file.getAbsolutePath());
+        //System.out.println(file.getAbsolutePath());
         if (!isRiskThresholdSpecified()) {
             return;
         }
