@@ -479,7 +479,12 @@ public class MainFrameController {
      * Opens the manual at the beginning.
      */
     public void contents() {
-        MuARGUS.showHelp("");
+        try {
+            MuARGUS.showHelp(null);
+        }
+        catch (ArgusException ex) {
+            view.showErrorMessage(ex);
+        }
     }
 
     /**

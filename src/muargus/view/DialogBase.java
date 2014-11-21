@@ -173,7 +173,12 @@ public class DialogBase<T> extends javax.swing.JDialog {
      * Shows the content sensitive help.
      */
     private void showHelp() {
-        MuARGUS.showHelp(getHelpNamedDestination());
+        try {
+            MuARGUS.showHelp(getHelpNamedDestination());
+        }
+        catch (ArgusException ex) {
+            showErrorMessage(ex);
+        }
     }
 
     /**
