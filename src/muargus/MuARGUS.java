@@ -112,7 +112,7 @@ public class MuARGUS {
                 Font font = g.getFont().deriveFont(Font.BOLD, 14.0f);
                 g.setFont(font);
                 g.drawString("Version " + getFullVersion() + " (Build " + BUILD + ")", (splash.getSize().width / 2) - 100, 230);
-                System.out.println(splash.getSize().width / 2);
+                //System.out.println(splash.getSize().width / 2);
                 splash.update();
                 // Sleep for 1/2 second, so people can see it
                 sleepThread(MuARGUS.sleepTime);
