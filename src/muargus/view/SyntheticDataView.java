@@ -1,6 +1,8 @@
 //TODO: fixen zodat sorteren goed werkt --> de variabele wordt gesorteerd en niet de variabele naam zoals de renderer laat zien.
 package muargus.view;
 
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.DefaultListModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -8,6 +10,7 @@ import javax.swing.table.DefaultTableModel;
 import muargus.VariableNameCellRenderer;
 import muargus.VariableNameTableCellRenderer;
 import muargus.controller.SyntheticDataController;
+import muargus.model.SyntheticDataSpec;
 import muargus.model.VariableMu;
 
 /**
@@ -19,7 +22,7 @@ public class SyntheticDataView extends DialogBase<SyntheticDataController> {
     private DefaultListModel variablesListModel;
     private DefaultListModel nonSensitiveVariablesListModel;
     private final int[] columnWidth = {80, 30};
-
+    
     /**
      * Creates new form RView
      *
@@ -37,24 +40,19 @@ public class SyntheticDataView extends DialogBase<SyntheticDataController> {
     }
 
     /**
-     * Fills the selecCombinationsScreen with it's default values
+     * Fills the screen with its default values
      */
     @Override
     public void initializeData() {
         // make listModels and add the variables that are numeric
+        SyntheticDataSpec model = this.getMetadata().getCombinations().getSyntheticData();
         this.variablesListModel = new DefaultListModel<>();
         this.nonSensitiveVariablesListModel = new DefaultListModel<>();
-        for (VariableMu variable : getController().getNonSensitiveVariables()) {
+        for (VariableMu variable : model.getNonSensitiveVariables()) {
             this.nonSensitiveVariablesListModel.addElement(variable);
         }
-        for (VariableMu variable : getMetadata().getVariables()) {
-            if (variable.isNumeric()) {
-                if (!getController().getNonSensitiveVariables().contains(variable) 
-                        && !getController().getSensitiveVariables().contains(variable)) {
-                    this.variablesListModel.addElement(variable);
-
-                }
-            }
+        for (VariableMu variable : model.getOtherVariables()) {
+            this.variablesListModel.addElement(variable);
         }
         this.variablesList.setModel(this.variablesListModel);
 
@@ -76,36 +74,53 @@ public class SyntheticDataView extends DialogBase<SyntheticDataController> {
         updateValues();
     }
 
+    public List<VariableMu> getSelectedSensitiveVariables() {
+        List<VariableMu> variables = new ArrayList<>();
+        
+        for (int rowIndex=0; rowIndex < this.sensitiveVariablesTable.getModel().getRowCount(); rowIndex++) {
+            variables.add((VariableMu)this.sensitiveVariablesTable.getModel().getValueAt(rowIndex, 0));
+        }
+        return variables;
+    }
+    
+     public List<VariableMu> getSelectedNonSensitiveVariables() {
+        List<VariableMu> variables = new ArrayList<>();
+        for (int rowIndex=0; rowIndex < this.nonSensitiveVariablesListModel.size(); rowIndex++) {
+            variables.add((VariableMu)this.nonSensitiveVariablesListModel.get(rowIndex));
+        }
+        return variables;
+    }
+
     private void updateTable() {
 
-        this.sensitiveVariablesTable.setModel(new DefaultTableModel(getController().getSensitiveData(), new Object[]{"Variable", "Alpha"}) {
-            @Override
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return false;
-            }
-
-            @Override
-            public Class getColumnClass(int i) {
-                return (i == 1 ? Double.class : VariableMu.class); //TODO: fixen zodat sorteren goed werkt --> renderer zet het nu als string
-            }
-        });
-        for (int i = 0; i < this.columnWidth.length; i++) {
-            this.sensitiveVariablesTable.getColumnModel().getColumn(i).setMinWidth(this.columnWidth[i]);
-            this.sensitiveVariablesTable.getColumnModel().getColumn(i).setPreferredWidth(this.columnWidth[i]);
-        }
+//        this.sensitiveVariablesTable.setModel(new DefaultTableModel(getController().getSensitiveData(), new Object[]{"Variable", "Alpha"}) {
+//            @Override
+//            public boolean isCellEditable(int rowIndex, int columnIndex) {
+//                return false;
+//            }
+//
+//            @Override
+//            public Class getColumnClass(int i) {
+//                return (i == 1 ? Double.class : VariableMu.class); //TODO: fixen zodat sorteren goed werkt --> renderer zet het nu als string
+//            }
+//        });
+//        for (int i = 0; i < this.columnWidth.length; i++) {
+//            this.sensitiveVariablesTable.getColumnModel().getColumn(i).setMinWidth(this.columnWidth[i]);
+//            this.sensitiveVariablesTable.getColumnModel().getColumn(i).setPreferredWidth(this.columnWidth[i]);
+//        }
 
     }
 
     private void updateValues() {
         this.moveToNonSensitiveVariablesButton.setEnabled(this.variablesListModel.getSize() > 0);
         this.moveToSensitiveVariablesButton.setEnabled(this.variablesListModel.getSize() > 0);
-        this.moveFromNonSensitiveVariablesButton.setEnabled(!getController().getNonSensitiveVariables().isEmpty());
-        this.moveFromSensitiveVariablesButton.setEnabled(!getController().getSensitiveVariables().isEmpty());
-        this.sensitiveVariablesSlider.setEnabled(!getController().getSensitiveVariables().isEmpty());
+        this.moveFromNonSensitiveVariablesButton.setEnabled(!this.nonSensitiveVariablesListModel.isEmpty());
+        this.moveFromSensitiveVariablesButton.setEnabled(this.sensitiveVariablesTable.getRowCount() > 0);
+        this.sensitiveVariablesSlider.setEnabled(this.sensitiveVariablesTable.getRowCount() > 0);
     }
 
     private void variablesSelectionChanged() {
-        if (!getController().getSensitiveVariables().isEmpty()) {
+        if (this.sensitiveVariablesTable.getRowCount() > 0) {
             int[] index = this.sensitiveVariablesTable.getSelectedRows();
             for (int i : index) {
                 this.sensitiveVariablesSlider.setValue((int) Math.round(
@@ -346,12 +361,14 @@ public class SyntheticDataView extends DialogBase<SyntheticDataController> {
 
     private void moveFromSensitiveVariablesButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_moveFromSensitiveVariablesButtonActionPerformed
         int[] index = this.sensitiveVariablesTable.getSelectedRows();
-        for (int i : index) {
-            getController().getSensitiveVariables().remove((VariableMu) this.sensitiveVariablesTable.getValueAt(i, 0));
-            this.variablesListModel.addElement((VariableMu) this.sensitiveVariablesTable.getValueAt(i, 0));
+        for (int i = 1; i <= index.length; i++) {
+            int rowIndex = index[index.length - i];
+            this.variablesListModel.addElement((VariableMu) this.sensitiveVariablesTable.getValueAt(rowIndex, 0));
+            ((DefaultTableModel)this.sensitiveVariablesTable.getModel()).removeRow(rowIndex);
+            //getController().getSensitiveVariables().remove((VariableMu) this.sensitiveVariablesTable.getValueAt(i, 0));
         }
         updateTable();
-        int selected = getIndex(index, getController().getSensitiveVariables().size());
+        int selected = getIndex(index, this.sensitiveVariablesTable.getRowCount());
         this.sensitiveVariablesTable.getSelectionModel().setSelectionInterval(selected, selected);
         updateValues();
     }//GEN-LAST:event_moveFromSensitiveVariablesButtonActionPerformed
@@ -360,15 +377,18 @@ public class SyntheticDataView extends DialogBase<SyntheticDataController> {
         int[] index = this.variablesList.getSelectedIndices();
         Object[] variableMu = this.variablesList.getSelectedValuesList().toArray();
 
-        for (Object variable : variableMu) {
-            getController().getSensitiveVariables().add((VariableMu) variable);
-            this.variablesListModel.removeElement((VariableMu) variable);
+        for (Object variableObj : variableMu) {
+            VariableMu variable = (VariableMu) variableObj;
+            ((DefaultTableModel)this.sensitiveVariablesTable.getModel()).addRow(
+                    new Object[] {variable, variable.getAlpha()});
+            //getController().getSensitiveVariables().add((VariableMu) variable);
+            this.variablesListModel.removeElement(variable);
         }
         updateTable();
         int selected = getIndex(index, this.variablesListModel.size());
         this.variablesList.setSelectedIndex(selected);
         this.sensitiveVariablesTable.getSelectionModel().setSelectionInterval(
-                getController().getSensitiveVariables().size() - 1, getController().getSensitiveVariables().size() - 1);
+                this.sensitiveVariablesTable.getRowCount() - 1, this.sensitiveVariablesTable.getRowCount() - 1);
         updateValues();
     }//GEN-LAST:event_moveToSensitiveVariablesButtonActionPerformed
 
@@ -378,7 +398,7 @@ public class SyntheticDataView extends DialogBase<SyntheticDataController> {
 
         for (Object variable : variableMu) {
             this.nonSensitiveVariablesListModel.add(this.nonSensitiveVariablesListModel.getSize(), (VariableMu) variable);
-            getController().getNonSensitiveVariables().add((VariableMu) variable);
+            //getController().getNonSensitiveVariables().add((VariableMu) variable);
             this.variablesListModel.removeElement((VariableMu) variable);
         }
         int selected = getIndex(index, this.variablesListModel.size());
@@ -390,7 +410,7 @@ public class SyntheticDataView extends DialogBase<SyntheticDataController> {
         int[] index = this.nonSensitiveVariablesList.getSelectedIndices();
         for (Object o : this.nonSensitiveVariablesList.getSelectedValuesList()) {
             this.nonSensitiveVariablesListModel.removeElement(o);
-            getController().getNonSensitiveVariables().remove((VariableMu) o);
+            //getController().getNonSensitiveVariables().remove((VariableMu) o);
             this.variablesListModel.addElement((VariableMu) o);
         }
         int selected = getIndex(index, this.nonSensitiveVariablesListModel.size());

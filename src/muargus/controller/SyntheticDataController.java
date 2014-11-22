@@ -6,11 +6,11 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
+import java.util.List;
 import muargus.io.MetaWriter;
 import muargus.model.MetadataMu;
 import muargus.model.ReplacementFile;
-import muargus.model.SyntheticData;
+//import muargus.model.SyntheticData;
 import muargus.model.SyntheticDataSpec;
 import muargus.model.VariableMu;
 import muargus.view.SyntheticDataView;
@@ -19,12 +19,13 @@ import muargus.view.SyntheticDataView;
  *
  * @author pibd05
  */
-public class SyntheticDataController extends ControllerBase<SyntheticData> {
+public class SyntheticDataController extends ControllerBase<SyntheticDataSpec> {
 
     private final MetadataMu metadata;
-    private final String pathAlpha = "C:\\Users\\Gebruiker\\Desktop\\Alpha.txt";
-    private final String pathSynthetic = "C:\\Users\\Gebruiker\\Desktop\\Synth.R";
-    public final static String pathSyntheticData = "C:\\Users\\Gebruiker\\Desktop\\SynthData.txt";
+    //private final String pathAlpha = "C:\\Users\\Gebruiker\\Desktop\\Alpha.txt";
+    //private final String pathSynthetic = "C:\\Users\\Gebruiker\\Desktop\\Synth.R";
+    //public final static String pathSyntheticData = "C:\\Users\\Gebruiker\\Desktop\\SynthData.txt";
+    private final static String pathRexe = "C:\\Program Files\\R\\R-2.15.0\\bin\\RScript.exe";
 
     /**
      * Constructor for the RController.
@@ -36,6 +37,7 @@ public class SyntheticDataController extends ControllerBase<SyntheticData> {
         super.setView(new SyntheticDataView(parentView, true, this));
         this.metadata = metadata;
         setModel(this.metadata.getCombinations().getSyntheticData());
+        fillModel();
         getView().setMetadata(this.metadata);
     }
 
@@ -46,30 +48,30 @@ public class SyntheticDataController extends ControllerBase<SyntheticData> {
         getView().setVisible(false);
     }
 
-    public ArrayList<VariableMu> getNonSensitiveVariables() {
-        return getModel().getNonSensitiveVariables();
-    }
-
-    public ArrayList<VariableMu> getSensitiveVariables() {
-        return getModel().getSensitiveVariables();
-    }
-
-    public Object[][] getSensitiveData() {
-        Object[][] data = new Object[getSensitiveVariables().size()][2];
-        for (int i = 0; i < getSensitiveVariables().size(); i++) {
-            data[i][0] = getSensitiveVariables().get(i);
-            data[i][1] = getSensitiveVariables().get(i).getAlpha();
-        }
-        return data;
-    }
+//    public Object[][] getSensitiveData() {
+//        Object[][] data = new Object[getSensitiveVariables().size()][2];
+//        for (int i = 0; i < getSensitiveVariables().size(); i++) {
+//            data[i][0] = getSensitiveVariables().get(i);
+//            data[i][1] = getSensitiveVariables().get(i).getAlpha();
+//        }
+//        return data;
+//    }
 
     public void runSyntheticData() {
         try {
+            SyntheticDataSpec syntheticData = getModel();
+                    
+            syntheticData.getSensitiveVariables().addAll(getSensitiveVariables());
+            syntheticData.getNonSensitiveVariables().addAll(getNonSensitiveVariables());
+            syntheticData.setReplacementFile(new ReplacementFile("SyntheticData"));
+            this.metadata.getReplacementSpecs().add(syntheticData);
+            
             /* synthetic data: sensitive variables are numbered from x1 to xn,
              non-sensitive variables are numbered from s1 to sn.
              */
-            MetaWriter.writeAlpha(this.pathAlpha, getSensitiveVariables());
-            MetaWriter.writeSynthetic(this.pathSynthetic, this.pathAlpha, this.pathSyntheticData, getNonSensitiveVariables().size());
+            //this.getModel().getSensitiveVariables().addAll(this)
+            MetaWriter.writeAlpha(syntheticData);
+            MetaWriter.writeSynthetic(syntheticData);
             writeSyntheticData();
             //adjustSyntheticData();
             close();
@@ -78,38 +80,40 @@ public class SyntheticDataController extends ControllerBase<SyntheticData> {
         }
 
     }
+    
+    private List<VariableMu> getSensitiveVariables() {
+        return ((SyntheticDataView)getView()).getSelectedSensitiveVariables();
+    }
+
+    private List<VariableMu> getNonSensitiveVariables() {
+        return ((SyntheticDataView)getView()).getSelectedNonSensitiveVariables();
+    }
 
     @Override
     protected void doNextStep(boolean success) {
-        super.doNextStep(success); //To change body of generated methods, choose Tools | Templates.
+        //Add header
         adjustSyntheticData();
+        //Run the R script
+        //RunRScript()
     }
 
-    public void writeSyntheticData() {
-        try {
-            SyntheticDataSpec syntheticData = new SyntheticDataSpec();
-            syntheticData.getVariables().addAll(getSensitiveVariables());
-            syntheticData.getVariables().addAll(getNonSensitiveVariables());
-            syntheticData.setReplacementFile(new ReplacementFile("SyntheticData"));
-            this.metadata.getReplacementSpecs().add(syntheticData);
+    private void writeSyntheticData() {
             getCalculationService().makeReplacementFile(this);
-        } catch (ArgusException ex) {
-            getView().showErrorMessage(ex);
-        }
     }
 
     public void adjustSyntheticData() {
+        //Adds a header containing the variable names that the R script expects
         File file = new File(this.metadata.getReplacementSpecs().get(this.metadata.getReplacementSpecs().size() - 1).getReplacementFile().getInputFilePath());
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
             String line = "";
-            for (int i = 0; i < this.metadata.getCombinations().getSyntheticData().getSensitiveVariables().size(); i++) {
+            for (int i = 0; i < getModel().getSensitiveVariables().size(); i++) {
                 line += "x" + (i + 1) + " ,";
             }
-            for (int i = 0; i < this.metadata.getCombinations().getSyntheticData().getNonSensitiveVariables().size(); i++) {
+            for (int i = 0; i < getModel().getNonSensitiveVariables().size(); i++) {
                 line += "s" + (i + 1) + " ,";
             }
             line = line.substring(0, line.length() - 1);
-            try (PrintWriter writer = new PrintWriter(new File(SyntheticDataController.pathSyntheticData))) {
+            try (PrintWriter writer = new PrintWriter(new File(getModel().getReplacementFile().getInputFilePath() + "2"))) {
                 writer.println(line);
                 while ((line = reader.readLine()) != null) {
                     writer.println(line);
@@ -119,5 +123,20 @@ public class SyntheticDataController extends ControllerBase<SyntheticData> {
             //throw new ArgusException("Error during reading file. Error message: " + ex.getMessage());
         }
     }
+    
+        /**
+     * Gets the model and fills the model with the numeric variables if the
+     * model is empty.
+     */
+    private void fillModel() {
+        if (getModel().getAllVariables().isEmpty()) {
+            for (VariableMu variable : this.metadata.getVariables()) {
+                if (variable.isNumeric()) {
+                    getModel().getAllVariables().add(variable);
+                }
+            }
+        }
+    }
+
 
 }

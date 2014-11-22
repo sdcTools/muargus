@@ -14,11 +14,10 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.List;
 import muargus.model.MetadataMu;
 import muargus.model.RecodeMu;
+import muargus.model.SyntheticDataSpec;
 import muargus.model.VariableMu;
 import org.apache.commons.lang3.StringUtils;
 
@@ -167,17 +166,17 @@ public class MetaWriter {
      * @param sensitiveVariables
      * @throws ArgusException
      */
-    public static void writeAlpha(String path, ArrayList<VariableMu> sensitiveVariables) throws ArgusException {
-        try (PrintWriter writer = new PrintWriter(new File(path))) {
-            for (int i = 0; i < sensitiveVariables.size(); i++) {
+    public static void writeAlpha(SyntheticDataSpec synthData) throws ArgusException {
+        try (PrintWriter writer = new PrintWriter(synthData.getAlphaFile())) {
+            for (int i = 0; i < synthData.getSensitiveVariables().size(); i++) {
                 String line = "";
-                for (int j = 0; j < sensitiveVariables.size(); j++) {
+                for (int j = 0; j < synthData.getSensitiveVariables().size(); j++) {
                     if (i == j) {
-                        line += Double.toString(sensitiveVariables.get(i).getAlpha());
+                        line += Double.toString(synthData.getSensitiveVariables().get(i).getAlpha());
                     } else {
                         line += "0.0";
                     }
-                    if (j != sensitiveVariables.size() - 1) {
+                    if (j != synthData.getSensitiveVariables().size() - 1) {
                         line += ", ";
                     }
                 }
@@ -188,14 +187,18 @@ public class MetaWriter {
         }
     }
 
-    public static void writeSynthetic(String pathSynth, String pathAlpha, String pathSynthData, int numberOfNonSensitiveVariables) throws ArgusException {
-        try {
-            try (PrintWriter writer = new PrintWriter(new File(pathSynth))) {
-                writer.println("setwd(\"D:/TEMP/\" )");
+    public static void writeSynthetic(SyntheticDataSpec synthData) throws ArgusException {
+            //String pathSynth, String pathAlpha, String pathSynthData, 
+            //int numberOfNonSensitiveVariables, String pathOutfile) throws ArgusException {
+            try (PrintWriter writer = new PrintWriter(synthData.getrScriptFile())) {
+                //writer.println("setwd(\"D:/TEMP/\" )");
                 writer.println("require(\"hybridIPSO3\")");
-                writer.println("hybrid_IPSO(\"" + pathAlpha + "\",\"SynthData.txt\", K=" 
-                        + numberOfNonSensitiveVariables + ",  out=TRUE, out_file=\"temp.txt\", separator=\",\")");
-            }
+                writer.println(String.format("hybrid_IPSO(\"%s\",\"%s\", K=%d,  out=TRUE, out_file=\"%s\", separator=\",\")",
+                        synthData.getAlphaFile().getAbsolutePath(), 
+                        synthData.getReplacementFile().getInputFilePath(),
+                        synthData.getNonSensitiveVariables().size(), 
+                        synthData.getReplacementFile().getOutputFilePath()));
+            
         } catch (FileNotFoundException ex) {
             throw new ArgusException("Error writing to file. Error message: " + ex.getMessage());
         }
