@@ -108,7 +108,7 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
         this.codelistfileButton.setEnabled(false);
         this.codelistfileTextField.setEnabled(false);
         this.newButton.setEnabled(false);
-        this.numericalCheckBox.setEnabled(false);
+        //this.numericalCheckBox.setEnabled(false);
         this.generateButton.setEnabled(true);
     }
 
