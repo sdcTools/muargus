@@ -54,7 +54,7 @@ public class MakeProtectedFileController extends ControllerBase<ProtectedFile> {
         removeRedundentReplacementSpecs();
         if (this.metadata.isSpss()) {
             MuARGUS.getSpssUtils().safFile = file;
-            String path = this.metadata.getCombinations().getProtectedFile().getNameOfSafeFile(file);
+            String path = this.metadata.getCombinations().getProtectedFile().getSafeMeta().getFileNames().getDataFileName();
             //FilenameUtils.removeExtension
 //            String safeSpssFile;
 //            if (path.substring(path.length() - 4, path.length()).equals(".saf")) {

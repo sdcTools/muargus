@@ -180,7 +180,7 @@ public class ProtectedFile {
      */
     public void initSafeMeta(File file, MetadataMu meta) {
         this.safeMeta = new MetadataMu(meta);
-        String path = getNameOfSafeFile(file);
+        String path = StrUtils.replaceExtension(file.getPath(), ".saf");
         DataFilePair pair = new DataFilePair(path, FilenameUtils.removeExtension(path) + ".rds");
         this.safeMeta.setFileNames(pair);
     }
@@ -194,21 +194,21 @@ public class ProtectedFile {
         return this.safeMeta;
     }
 
-    /**
-     * Gets the name of the safe file.
-     *
-     * @param file File instance choosen by the user for the safe file.
-     * @return String containing the path name of the safe file.
-     */
-    public String getNameOfSafeFile(File file) {
-        return StrUtils.replaceExtension(file.getPath(), ".saf");
-//        if (file.getName().contains(".")) {
-//            StrUtils.replaceExtension(file.getPath(), ".saf");
-//            return file.getPath();
-//        } else {
-//            return file.getPath() + ".saf";
-//        }
-    }
+//    /**
+//     * Gets the name of the safe file.
+//     *
+//     * @param file File instance choosen by the user for the safe file.
+//     * @return String containing the path name of the safe file.
+//     */
+//    public String getNameOfSafeFile(File file) {
+//        return StrUtils.replaceExtension(file.getPath(), ".saf");
+////        if (file.getName().contains(".")) {
+////            StrUtils.replaceExtension(file.getPath(), ".saf");
+////            return file.getPath();
+////        } else {
+////            return file.getPath() + ".saf";
+////        }
+//    }
 
     /**
      * Gets the type of suppression.
