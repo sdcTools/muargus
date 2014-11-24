@@ -17,7 +17,7 @@ import muargus.model.VariableMu;
  */
 public class MicroaggregationView extends DialogBase<MicroaggregationController> {
 
-    Microaggregation model;
+    private Microaggregation model;
     private DefaultListModel<VariableMu> selectedListModel;
 
     /**

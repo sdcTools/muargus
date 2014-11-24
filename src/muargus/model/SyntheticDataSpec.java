@@ -6,6 +6,9 @@
 
 package muargus.model;
 
+import argus.model.ArgusException;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -14,15 +17,21 @@ import java.util.ArrayList;
  */
 public class SyntheticDataSpec extends ReplacementSpec {
     
-    private final ArrayList<VariableMu> variables;
-    private ReplacementFile replacementFile;
+    private final ArrayList<VariableMu> allVariables;
+    private final ArrayList<VariableMu> sensitiveVariables;
+    private final ArrayList<VariableMu> nonSensitiveVariables;
+    private File alphaFile;
+    private File rScriptFile; 
+
 
     /**
-     * Constructor of the model class SyntheticDataSpec. Makes an empty arraylists
-     * for the variables.
+     * Constructor of the model class SyntheticDataSpec. 
+     * Initializes its variables.
      */
     public SyntheticDataSpec() {
-        this.variables = new ArrayList<>();
+        this.sensitiveVariables = new ArrayList<>();
+        this.nonSensitiveVariables = new ArrayList<>();
+        this.allVariables = new ArrayList<>();
     }
 
     /**
@@ -31,28 +40,58 @@ public class SyntheticDataSpec extends ReplacementSpec {
      *
      * @return ArrayList containing the variables.
      */
+    public ArrayList<VariableMu> getNonSensitiveVariables() {
+        return this.nonSensitiveVariables;
+    }
+    
+    public ArrayList<VariableMu> getSensitiveVariables() {
+        return this.sensitiveVariables;
+    }
+
+    public File getAlphaFile() throws ArgusException {
+        if (alphaFile == null) {
+            alphaFile = createFile(".txt");
+        }
+        return alphaFile;
+    }
+
+    public File getrScriptFile() throws ArgusException {
+        if (rScriptFile == null) {
+            rScriptFile = createFile(".R");
+        }
+        return rScriptFile;
+    }
+    
+    private File createFile(String extension) throws ArgusException {
+        try {
+            File file = File.createTempFile("MuArgus", extension);
+            file.deleteOnExit();
+            return file;
+        } catch (IOException ex) {
+            throw new ArgusException("Temporary file cannot be created: " + ex.getMessage());
+        }
+    }
+
+    public ArrayList<VariableMu> getOtherVariables() {
+        ArrayList<VariableMu> other = new ArrayList<>();
+        for (VariableMu variable : allVariables) {
+            if (!this.sensitiveVariables.contains(variable) && (!this.nonSensitiveVariables.contains(variable))) {
+                other.add(variable);
+            }
+        }
+        return other;
+    }
+
+    public ArrayList<VariableMu> getAllVariables() {
+        return allVariables;
+    }
+
+    @Override
     public ArrayList<VariableMu> getVariables() {
+        ArrayList<VariableMu> variables = new ArrayList<>(this.sensitiveVariables);
+        variables.addAll(this.nonSensitiveVariables);
         return variables;
     }
 
-    /**
-     * Gets the replacementFile.
-     *
-     * @return ReplacementFile containing the replacement type and the input &
-     * output file.
-     */
-    public ReplacementFile getReplacementFile() {
-        return replacementFile;
-    }
-
-    /**
-     * Sets the replacementFile.
-     *
-     * @param replacementFile ReplacementFile containing the replacement type
-     * and the input & output file.
-     */
-    public void setReplacementFile(ReplacementFile replacementFile) {
-        this.replacementFile = replacementFile;
-    }
-    
+        
 }
