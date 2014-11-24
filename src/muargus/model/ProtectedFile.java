@@ -1,6 +1,7 @@
 package muargus.model;
 
 import argus.model.DataFilePair;
+import argus.utils.StrUtils;
 import java.io.File;
 import java.util.ArrayList;
 import org.apache.commons.io.FilenameUtils;
@@ -199,12 +200,14 @@ public class ProtectedFile {
      * @param file File instance choosen by the user for the safe file.
      * @return String containing the path name of the safe file.
      */
-    private String getNameOfSafeFile(File file) {
-        if (file.getName().contains(".")) {
-            return file.getPath();
-        } else {
-            return file.getPath() + ".saf";
-        }
+    public String getNameOfSafeFile(File file) {
+        return StrUtils.replaceExtension(file.getPath(), ".saf");
+//        if (file.getName().contains(".")) {
+//            StrUtils.replaceExtension(file.getPath(), ".saf");
+//            return file.getPath();
+//        } else {
+//            return file.getPath() + ".saf";
+//        }
     }
 
     /**
