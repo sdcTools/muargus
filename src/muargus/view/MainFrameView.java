@@ -1093,11 +1093,11 @@ public class MainFrameView extends javax.swing.JFrame {
     }//GEN-LAST:event_pramSpecificationMenuItemActionPerformed
 
     private void individualRiskSpecificationMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_individualRiskSpecificationMenuItemActionPerformed
-        this.controller.individualRiskSpecification();
+        this.controller.riskSpecification();
     }//GEN-LAST:event_individualRiskSpecificationMenuItemActionPerformed
 
     private void householdRiskSpecificationMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_householdRiskSpecificationMenuItemActionPerformed
-        this.controller.householdRiskSpecification();
+        this.controller.riskSpecification();
     }//GEN-LAST:event_householdRiskSpecificationMenuItemActionPerformed
 
     private void modifyNumericalVariablesMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_modifyNumericalVariablesMenuItemActionPerformed

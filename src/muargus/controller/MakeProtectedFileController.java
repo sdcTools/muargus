@@ -46,6 +46,7 @@ public class MakeProtectedFileController extends ControllerBase<ProtectedFile> {
      * safe data will be written.
      */
     public void makeFile(File file) {
+        //System.out.println(file.getAbsolutePath());
         if (!isRiskThresholdSpecified()) {
             return;
         }
@@ -53,8 +54,16 @@ public class MakeProtectedFileController extends ControllerBase<ProtectedFile> {
         removeRedundentReplacementSpecs();
         if (this.metadata.isSpss()) {
             MuARGUS.getSpssUtils().safFile = file;
-            int lastDot = MuARGUS.getSpssUtils().safFile.getAbsolutePath().lastIndexOf(".");
-            MuARGUS.getSpssUtils().safeSpssFile = new File(MuARGUS.getSpssUtils().safFile.getAbsolutePath().substring(0, lastDot) + "Safe.sav");
+            String path = MuARGUS.getSpssUtils().safFile.getAbsolutePath();
+            //FilenameUtils.removeExtension
+            String safeSpssFile;
+            if (path.substring(path.length() - 4, path.length()).equals(".saf")) {
+                int lastDot = path.lastIndexOf(".");
+                safeSpssFile = path.substring(0, lastDot) + "Safe.sav";
+            } else {
+                safeSpssFile = path + "Safe.sav";
+            }
+            MuARGUS.getSpssUtils().safeSpssFile = new File(safeSpssFile);
         }
         getCalculationService().makeProtectedFile(this);
     }
@@ -146,6 +155,7 @@ public class MakeProtectedFileController extends ControllerBase<ProtectedFile> {
 
     /**
      * Gets the combinations model.
+     *
      * @return Combinations model.
      */
     public Combinations getCombinations() {
@@ -154,6 +164,7 @@ public class MakeProtectedFileController extends ControllerBase<ProtectedFile> {
 
     /**
      * Returns whether the save file is created.
+     *
      * @return Boolean indicating whether the save file is created.
      */
     public boolean isFileCreated() {

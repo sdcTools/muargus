@@ -179,14 +179,14 @@ public class MainFrameController {
     }
 
     /**
-     *
+     * Exits the application.
      */
     public void exit() {
         System.exit(0);
     }
 
     /**
-     *
+     * Opens the specify metadata screen.
      */
     public void specifyMetaData() {
         SpecifyMetadataController controller = new SpecifyMetadataController(this.view, this.metadata);
@@ -196,7 +196,7 @@ public class MainFrameController {
     }
 
     /**
-     *
+     * Opens the specify combinations screen.
      */
     public void specifyCombinations() {
         if (this.metadata.getCombinations() == null) {
@@ -211,7 +211,7 @@ public class MainFrameController {
     }
 
     /**
-     *
+     * Opens the show table collection screen.
      */
     public void showTableCollection() {
         ShowTableCollectionController controller = new ShowTableCollectionController(
@@ -369,7 +369,7 @@ public class MainFrameController {
     /**
      *
      */
-    private void riskSpecification(boolean household) {
+    public void riskSpecification() {
         if (this.metadata.getCombinations().getRiskSpecifications().isEmpty()) {
             this.metadata.getCombinations().fillRiskSpecifications();
         }
@@ -379,19 +379,19 @@ public class MainFrameController {
         controller.showView();
     }
 
-    /**
-     *
-     */
-    public void householdRiskSpecification() {
-        riskSpecification(true);
-    }
-
-    /**
-     *
-     */
-    public void individualRiskSpecification() {
-        riskSpecification(false);
-    }
+//    /**
+//     *
+//     */
+//    public void householdRiskSpecification() {
+//        riskSpecification();
+//    }
+//
+//    /**
+//     *
+//     */
+//    public void individualRiskSpecification() {
+//        riskSpecification();
+//    }
 
     /**
      *
@@ -425,7 +425,6 @@ public class MainFrameController {
      */
     public void makeProtectedFile() {
         try {
-
             MakeProtectedFileController controller = new MakeProtectedFileController(
                     this.view, this.metadata);
             controller.showView();

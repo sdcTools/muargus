@@ -59,6 +59,7 @@ public class ViewReportController {
         if (this.html != null) {
             this.view.showReport(this.html);
             this.view.setVisible(true);
+            
         }
     }
 
