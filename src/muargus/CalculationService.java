@@ -1,25 +1,14 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package muargus;
 
 import argus.model.ArgusException;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.SwingWorker;
 import muargus.controller.SelectCombinationsController;
-import muargus.controller.SyntheticDataController;
 import muargus.extern.dataengine.CMuArgCtrl;
 import muargus.extern.dataengine.IProgressListener;
 import muargus.model.ProtectedFile;
@@ -37,10 +26,13 @@ import org.apache.commons.lang3.StringUtils;
 
 /**
  *
- * @author pibd05
+ * @author Statistics Netherlands
  */
 public class CalculationService {
 
+    /**
+     *
+     */
     private class ProgressListener extends IProgressListener {
 
         private final CalculationService service;
@@ -56,6 +48,9 @@ public class CalculationService {
 
     }
 
+    /**
+     *
+     */
     private enum BackgroundTask {
 
         ExploreFile,
@@ -69,37 +64,74 @@ public class CalculationService {
     private MetadataMu metadata;
     private final ProgressListener progressListener; //must remain in scope, or will be garbage collected 
 
+    /**
+     *
+     * @param muArgCtrl
+     */
     public CalculationService(final CMuArgCtrl muArgCtrl) {
-        c = muArgCtrl;
+        this.c = muArgCtrl;
         this.progressListener = new ProgressListener(this);
-        c.SetProgressListener(this.progressListener);
+        this.c.SetProgressListener(this.progressListener);
         this.metadata = null;
     }
 
     private PropertyChangeListener listener;
 
+    /**
+     *
+     * @param listener
+     */
     public void makeProtectedFile(PropertyChangeListener listener) {
         executeSwingWorker(BackgroundTask.MakeProtectedFile, listener);
     }
 
+    /**
+     * Gets the index (1-based) of the variable in the dll.
+     *
+     * @param variable VariableMu instance.
+     * @return Integer containing the index (1-based) of the variable in the
+     * dll.
+     */
     private int getIndexOf(VariableMu variable) {
-        //Get the index (1-based) of the variable in the dll
         return getVariables().indexOf(variable) + 1;
     }
 
-    public void setMetadata(MetadataMu metadata) {
-        this.metadata = metadata;
-        c.CleanAll();
+    /**
+     * Gets the index (1-based) of the table in the dll.
+     *
+     * @param table TableMu instance.
+     * @return Integer containing the index (1-based) of the variable in the
+     * dll.
+     */
+    private int getIndexOf(TableMu table) {
+        return getTables().indexOf(table) + 1;
     }
 
+    /**
+     *
+     * @param metadata
+     */
+    public void setMetadata(MetadataMu metadata) {
+        this.metadata = metadata;
+        this.c.CleanAll();
+    }
+
+    /**
+     *
+     * @param listener
+     */
     public void makeReplacementFile(PropertyChangeListener listener) {
         executeSwingWorker(BackgroundTask.MakeReplacementFile, listener);
     }
 
+    /**
+     *
+     * @throws ArgusException
+     */
     private void makeReplacementFileInBackground() throws ArgusException {
         ReplacementSpec replacement = this.metadata.getReplacementSpecs().get(this.metadata.getReplacementSpecs().size() - 1);
         int[] errorCode = new int[1];
-        boolean result = c.WriteVariablesInFile(
+        boolean result = this.c.WriteVariablesInFile(
                 this.metadata.getFileNames().getDataFileName(),
                 replacement.getReplacementFile().getInputFilePath(),
                 replacement.getVariables().size(),
@@ -111,19 +143,30 @@ public class CalculationService {
         }
     }
 
+    /**
+     *
+     * @param errorType
+     * @return
+     */
     private String getErrorString(int errorType) {
         String[] error = new String[1];
-        c.GetErrorString(errorType, error);
+        this.c.GetErrorString(errorType, error);
         return error[0];
     }
 
+    /**
+     *
+     * @param recode
+     * @return
+     * @throws ArgusException
+     */
     public String doRecode(RecodeMu recode) throws ArgusException {
         int index = getIndexOf(recode.getVariable());
         int[] errorType = new int[]{0};
         int[] errorLine = new int[]{0};
         int[] errorPos = new int[]{0};
         String[] warning = new String[1];
-        boolean result = c.DoRecode(index,
+        boolean result = this.c.DoRecode(index,
                 recode.getGrcText(),
                 recode.getMissing_1_new(),
                 recode.getMissing_2_new(),
@@ -138,6 +181,11 @@ public class CalculationService {
         return warning[0];
     }
 
+    /**
+     *
+     * @param dimensions
+     * @return
+     */
     public ArrayList<TableMu> getTableUnsafeCombinations(int dimensions) {
         int index = 1;
         boolean[] baseTable = new boolean[1];
@@ -145,7 +193,7 @@ public class CalculationService {
         int[] varList = new int[MuARGUS.MAXDIMS];
         ArrayList<TableMu> tables = new ArrayList<>();
         while (true) {
-            boolean result = c.GetTableUC(dimensions, index, baseTable, nUC, varList);
+            boolean result = this.c.GetTableUC(dimensions, index, baseTable, nUC, varList);
             if (!result) {
                 return tables;
             }
@@ -160,28 +208,43 @@ public class CalculationService {
         }
     }
 
+    /**
+     *
+     * @throws ArgusException
+     */
     public void applyRecode() throws ArgusException {
         //c.SetProgressListener(null);
-        boolean result = c.ApplyRecode();
+        boolean result = this.c.ApplyRecode();
         if (!result) {
             throw new ArgusException("Error during Apply recode");
         }
         //return getUnsafeCombinations(metadata);
     }
 
+    /**
+     *
+     * @param recode
+     * @throws ArgusException
+     */
     public void undoRecode(RecodeMu recode) throws ArgusException {
         //c.SetProgressListener(null);
         int index = getIndexOf(recode.getVariable());
-        boolean result = c.UndoRecode(index);
+        boolean result = this.c.UndoRecode(index);
         if (!result) {
             throw new ArgusException("Error while undoing recode");
         }
         applyRecode();
     }
 
+    /**
+     *
+     * @param recode
+     * @param positions
+     * @throws ArgusException
+     */
     public void truncate(RecodeMu recode, int positions) throws ArgusException {
         int index = getIndexOf(recode.getVariable());
-        boolean result = c.DoTruncate(index, positions);
+        boolean result = this.c.DoTruncate(index, positions);
         if (!result) {
             throw new ArgusException("Error during Truncate");
         }
@@ -189,15 +252,19 @@ public class CalculationService {
         applyRecode();
     }
 
+    /**
+     *
+     * @throws ArgusException
+     */
     private void doChangeFiles() throws ArgusException {
-        boolean result = c.SetNumberOfChangeFiles(this.metadata.getReplacementSpecs().size());
+        boolean result = this.c.SetNumberOfChangeFiles(this.metadata.getReplacementSpecs().size());
         if (!result) {
             throw new ArgusException("Error during SetNumberOfChangeFiles");
         }
         int index = 0;
         for (ReplacementSpec replacement : this.metadata.getReplacementSpecs()) {
             index++;
-            result = c.SetChangeFile(index,
+            result = this.c.SetChangeFile(index,
                     replacement.getReplacementFile().getOutputFilePath(),
                     replacement.getVariables().size(),
                     getVarIndicesInFile(replacement.getVariables()),
@@ -208,25 +275,29 @@ public class CalculationService {
         }
     }
 
+    /**
+     *
+     * @throws ArgusException
+     */
     private void makeFileInBackground() throws ArgusException {
         doChangeFiles();
-        ProtectedFile protectedFile = metadata.getCombinations().getProtectedFile();
+        ProtectedFile protectedFile = this.metadata.getCombinations().getProtectedFile();
 
-        c.SetOutFileInfo(metadata.getDataFileType() == MetadataMu.DATA_FILE_TYPE_FIXED
-                || metadata.getDataFileType() == MetadataMu.DATA_FILE_TYPE_SPSS,
-                metadata.getSeparator(),
+        this.c.SetOutFileInfo(this.metadata.getDataFileType() == MetadataMu.DATA_FILE_TYPE_FIXED
+                || this.metadata.getDataFileType() == MetadataMu.DATA_FILE_TYPE_SPSS,
+                this.metadata.getSeparator(),
                 "",
                 true
         );
         int index = 0;
-        for (VariableMu variable : metadata.getVariables()) {
+        for (VariableMu variable : this.metadata.getVariables()) {
             index++;
             if (protectedFile.getVariables().contains(variable)) {
-                c.SetSuppressPrior(index, variable.getSuppressweight());
+                this.c.SetSuppressPrior(index, variable.getSuppressweight());
             }
         }
 
-        boolean result = c.MakeFileSafe(protectedFile.getSafeMeta().getFileNames().getDataFileName(),
+        boolean result = this.c.MakeFileSafe(protectedFile.getSafeMeta().getFileNames().getDataFileName(),
                 protectedFile.isWithPrior(),
                 protectedFile.isWithEntropy(),
                 protectedFile.getHouseholdType(),
@@ -238,10 +309,18 @@ public class CalculationService {
         }
     }
 
+    /**
+     *
+     * @param listener
+     */
     public void calculateTables(PropertyChangeListener listener) {
         executeSwingWorker(BackgroundTask.CalculateTables, listener);
     }
 
+    /**
+     *
+     * @param ex
+     */
     private void workerDone(Exception ex) {
         if (ex == null) {
             this.firePropertyChange("result", null, "success");
@@ -252,12 +331,24 @@ public class CalculationService {
         //this.listener = null;
     }
 
+    /**
+     *
+     * @param propertyName
+     * @param oldValue
+     * @param newValue
+     */
     private void firePropertyChange(String propertyName, Object oldValue, Object newValue) {
         if (this.listener != null) {
             this.listener.propertyChange(new PropertyChangeEvent(this, propertyName, oldValue, newValue));
         }
     }
 
+    //TODO: wordt deze methode gebruikt?
+    /**
+     *
+     * @param worker
+     * @return
+     */
     private PropertyChangeListener getWorkerPropertyChangeListener(final SwingWorker worker) {
         return new PropertyChangeListener() {
             @Override
@@ -267,6 +358,12 @@ public class CalculationService {
         };
     }
 
+    /**
+     *
+     * @param variable
+     * @param varNr
+     * @return
+     */
     private boolean addVariable(VariableMu variable, int varNr) {
         //For numeric non-weight variables, the dll needs a missing value, but it's not required in the model
         //So a default (dummy) value is passed in this case
@@ -275,12 +372,7 @@ public class CalculationService {
             missing0 = StringUtils.repeat("X", variable.getVariableLength());
         }
 
-        //TODO: fixen dat ordinale variabelen goed werken bij rounding (ModifyNumericalVariables)
-//        boolean isCategorical = variable.isCategorical();
-//        if(variable.isNumeric() && variable.isCategorical()){
-//            isCategorical = false;
-//        }
-        return c.SetVariable(varNr,
+        return this.c.SetVariable(varNr,
                 variable.getStartingPosition(),
                 variable.getVariableLength(),
                 variable.getDecimals(),
@@ -292,35 +384,58 @@ public class CalculationService {
                 variable.isNumeric(),
                 variable.isWeight(),
                 getRelatedVariableIndex(variable));
-        //1 + metadata.getVariables().indexOf(variable.getRelatedVariable())); //TODO: handle error
     }
 
-    private int getNVar(Combinations model, MetadataMu metadata) throws ArgusException {
-        //For free format, all variables
-        if (metadata.getDataFileType() != MetadataMu.DATA_FILE_TYPE_FIXED) {
-            return metadata.getVariables().size();
-        }
-
-        int nVar = model.getVariablesInTables().size();
-        if (model.isRiskModel()) {
-            //Add weight when risk model is used.
-            for (VariableMu weightVar : metadata.getVariables()) {
-                if (weightVar.isWeight()) {
-                    if (!model.getVariablesInTables().contains(weightVar)) {
-                        nVar++;
-                    }
-                    return nVar;
-                }
-            }
-            throw new ArgusException("Risk model but no weight variable");
-        }
-        return nVar;
-    }
-
+    //TODO: wordt deze methode gebruikt?
+//    /**
+//     * 
+//     * @param model
+//     * @param metadata
+//     * @return
+//     * @throws ArgusException 
+//     */
+//    private int getNVar(Combinations model, MetadataMu metadata) throws ArgusException {
+//        //For free format, all variables
+//        if (metadata.getDataFileType() != MetadataMu.DATA_FILE_TYPE_FIXED) {
+//            return metadata.getVariables().size();
+//        }
+//
+//        int nVar = model.getVariablesInTables().size();
+//        if (model.isRiskModel()) {
+//            //Add weight when risk model is used.
+//            for (VariableMu weightVar : metadata.getVariables()) {
+//                if (weightVar.isWeight()) {
+//                    if (!model.getVariablesInTables().contains(weightVar)) {
+//                        nVar++;
+//                    }
+//                    return nVar;
+//                }
+//            }
+//            throw new ArgusException("Risk model but no weight variable");
+//        }
+//        return nVar;
+//    }
+    /**
+     *
+     * @return
+     */
     public ArrayList<VariableMu> getVariables() {
-        return metadata.getVariables();
+        return this.metadata.getVariables();
     }
 
+    /**
+     *
+     * @return
+     */
+    public ArrayList<TableMu> getTables() {
+        return this.metadata.getCombinations().getTables();
+    }
+
+    /**
+     *
+     * @param variables
+     * @return
+     */
     private int getRiskVarIndex(ArrayList<VariableMu> variables) {
         int index = 0;
         for (VariableMu variable : variables) {
@@ -332,6 +447,11 @@ public class CalculationService {
         return 0;
     }
 
+    /**
+     *
+     * @param taskType
+     * @throws ArgusException
+     */
     private void executeInBackground(BackgroundTask taskType) throws ArgusException {
         firePropertyChange("stepName", null, taskType.toString());
         switch (taskType) {
@@ -350,9 +470,13 @@ public class CalculationService {
         }
     }
 
+    /**
+     *
+     * @throws ArgusException
+     */
     private void exploreInBackground() throws ArgusException {
         ArrayList<VariableMu> variables = getVariables();
-        boolean result = c.SetNumberVar(variables.size());
+        boolean result = this.c.SetNumberVar(variables.size());
         if (!result) {
             throw new ArgusException("Error in SetNumberVar: Insufficient memory");
         }
@@ -370,13 +494,14 @@ public class CalculationService {
         int[] lineNumbers = new int[1];
         int[] varIndexOut = new int[1];
 
-        result = c.SetInFileInfo(metadata.getDataFileType() == MetadataMu.DATA_FILE_TYPE_FIXED || metadata.getDataFileType() == MetadataMu.DATA_FILE_TYPE_SPSS,
-                metadata.getSeparator(),
-                metadata.getDataFileType() == MetadataMu.DATA_FILE_TYPE_FREE_WITH_META);
+        result = this.c.SetInFileInfo(this.metadata.getDataFileType() == MetadataMu.DATA_FILE_TYPE_FIXED
+                || this.metadata.getDataFileType() == MetadataMu.DATA_FILE_TYPE_SPSS,
+                this.metadata.getSeparator(),
+                this.metadata.getDataFileType() == MetadataMu.DATA_FILE_TYPE_FREE_WITH_META);
         if (!result) {
             throw new ArgusException("Error in SetInFileInfo");
         }
-        result = c.ExploreFile(metadata.getFileNames().getDataFileName(),
+        result = this.c.ExploreFile(this.metadata.getFileNames().getDataFileName(),
                 errorCodes,
                 lineNumbers,
                 varIndexOut);
@@ -386,13 +511,22 @@ public class CalculationService {
             throw new ArgusException(String.format("Error in ExploreFile: %s\nLine %d%s",
                     getErrorString(errorCodes[0]), lineNumbers[0] + 1, var));
         }
-        metadata.setRecordCount(c.NumberofRecords());
+        this.metadata.setRecordCount(this.c.NumberofRecords());
     }
 
+    /**
+     *
+     * @param listener
+     */
     public void exploreFile(PropertyChangeListener listener) {
         executeSwingWorker(BackgroundTask.ExploreFile, listener);
     }
 
+    /**
+     *
+     * @param taskType
+     * @param listener
+     */
     private void executeSwingWorker(final BackgroundTask taskType, PropertyChangeListener listener) {
         this.listener = listener;
         SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
@@ -423,11 +557,15 @@ public class CalculationService {
 
     }
 
+    /**
+     *
+     * @throws ArgusException
+     */
     private void calculateInBackground() throws ArgusException {
-        Combinations model = metadata.getCombinations();
+        Combinations model = this.metadata.getCombinations();
         ArrayList<VariableMu> variables = getVariables();
 
-        boolean result = c.SetNumberTab(model.getTables().size());
+        boolean result = this.c.SetNumberTab(model.getTables().size());
         if (!result) {
             throw new ArgusException("Error in SetNumberTab");
         }
@@ -436,11 +574,11 @@ public class CalculationService {
         int index = 0;
         for (TableMu table : model.getTables()) {
             index++;
-            result = c.SetTable(
+            result = this.c.SetTable(
                     index,
                     table.getThreshold(),
                     table.getVariables().size(),
-                    getVarIndicesInTable(table, model),
+                    getVarIndicesInTable(table),//, model),
                     table.isRiskModel(),
                     riskVarIndex);
             if (!result) {
@@ -451,7 +589,7 @@ public class CalculationService {
 
         int[] errorCodes = new int[1];
         int[] tableIndex = new int[1];
-        result = c.ComputeTables(errorCodes, tableIndex);
+        result = this.c.ComputeTables(errorCodes, tableIndex);
         if (!result) {
             String table = (tableIndex[0] > 0)
                     ? "\nTable " + Integer.toString(tableIndex[0]) : "";
@@ -460,30 +598,55 @@ public class CalculationService {
         }
     }
 
+    /**
+     *
+     * @param variables
+     * @return
+     */
     private int[] getVarIndicesInFile(ArrayList<VariableMu> variables) {
         int[] indices = new int[variables.size()];
         for (int index = 0; index < indices.length; index++) {
-            indices[index] = 1 + metadata.getVariables().indexOf(variables.get(index));
+            indices[index] = getIndexOf(variables.get(index));//1 + this.metadata.getVariables().indexOf(variables.get(index));
         }
         return indices;
     }
 
-    private int[] getVarIndicesInTable(TableMu table, Combinations model) {
+    /**
+     *
+     * @param table
+     * @param model
+     * @return
+     */
+    private int[] getVarIndicesInTable(TableMu table) {//, Combinations model) {
         int[] indices = new int[table.getVariables().size()];
         for (int index = 0; index < indices.length; index++) {
-            indices[index] = 1 + getVariables().indexOf(table.getVariables().get(index));
+            indices[index] = getIndexOf(table.getVariables().get(index));
+            //indices[index] = 1 + getVariables().indexOf(table.getVariables().get(index));
         }
         return indices;
     }
 
+    /**
+     *
+     * @param variable
+     * @return
+     */
     private int getRelatedVariableIndex(VariableMu variable) {
         if (variable.getRelatedVariable() == null) {
             return 0;
         }
-        return this.metadata.getVariables().indexOf(variable.getRelatedVariable()) + 1;
+        return getIndexOf(variable.getRelatedVariable());//this.metadata.getVariables().indexOf(variable.getRelatedVariable()) + 1;
 
     }
 
+    /**
+     *
+     * @param index
+     * @param variable
+     * @param metadata
+     * @param delta
+     * @return
+     */
     private int setSafeFileProperties(final int index, final VariableMu variable, MetadataMu metadata, int delta) {
         if (index == 0) {
             //Variable was not in dll
@@ -498,7 +661,7 @@ public class CalculationService {
             String[] missing2 = new String[1];
             int[] nOfCodes = new int[1];
             int[] nOfMissing = new int[1];
-            c.GetVarProperties(index, startPos, nPos, nSuppressions, entropy, bandwidth, missing1, missing2, nOfCodes, nOfMissing);
+            this.c.GetVarProperties(index, startPos, nPos, nSuppressions, entropy, bandwidth, missing1, missing2, nOfCodes, nOfMissing);
             variable.setStartingPosition(startPos[0]);
             delta += nPos[0] - variable.getVariableLength();
             variable.setVariableLength(nPos[0]);
@@ -525,17 +688,28 @@ public class CalculationService {
         return delta;
     }
 
+    /**
+     *
+     * @param variable
+     * @param top
+     * @param value
+     * @param replacement
+     * @param undo
+     * @throws ArgusException
+     */
     public void setTopBottomCoding(VariableMu variable, boolean top, double value, String replacement, boolean undo) throws ArgusException {
         boolean result;
         if (top) {
-            result = c.SetCodingTop(
-                    getVariables().indexOf(variable) + 1,
+            result = this.c.SetCodingTop(
+                    getIndexOf(variable),
+                    //getVariables().indexOf(variable) + 1,
                     value,
                     replacement,
                     undo);
         } else {
-            result = c.SetCodingBottom(
-                    getVariables().indexOf(variable) + 1,
+            result = this.c.SetCodingBottom(
+                    getIndexOf(variable),
+                    //getVariables().indexOf(variable) + 1,
                     value,
                     replacement,
                     undo);
@@ -545,8 +719,16 @@ public class CalculationService {
         }
     }
 
+    /**
+     *
+     * @param variable
+     * @param base
+     * @param nDecimals
+     * @param undo
+     * @throws ArgusException
+     */
     public void setRounding(VariableMu variable, Double base, int nDecimals, boolean undo) throws ArgusException {
-        boolean result = c.SetRound(getVariables().indexOf(variable) + 1,
+        boolean result = this.c.SetRound(getIndexOf(variable),//getVariables().indexOf(variable) + 1,
                 base,
                 nDecimals,
                 undo);
@@ -555,8 +737,15 @@ public class CalculationService {
         }
     }
 
+    /**
+     *
+     * @param variable
+     * @param noise
+     * @param undo
+     * @throws ArgusException
+     */
     public void setWeightNoise(VariableMu variable, double noise, boolean undo) throws ArgusException {
-        boolean result = c.SetWeightNoise(getVariables().indexOf(variable) + 1,
+        boolean result = this.c.SetWeightNoise(getIndexOf(variable),//getVariables().indexOf(variable) + 1,
                 noise,
                 undo);
         if (!result) {
@@ -564,20 +753,27 @@ public class CalculationService {
         }
     }
 
+    /**
+     *
+     */
     public void fillSafeFileMetadata() {
-        MetadataMu safeMeta = metadata.getCombinations().getProtectedFile().getSafeMeta();
-        ArrayList<VariableMu> variables = getVariables();
+        MetadataMu safeMeta = this.metadata.getCombinations().getProtectedFile().getSafeMeta();
+        //ArrayList<VariableMu> variables = getVariables();
         int delta = 0;
         for (VariableMu var : safeMeta.getVariables()) {
-            int varIndex = variables.indexOf(var) + 1;
-            delta = setSafeFileProperties(varIndex, var, metadata, delta);
+            int varIndex = getIndexOf(var);//variables.indexOf(var) + 1;
+            delta = setSafeFileProperties(varIndex, var, this.metadata, delta);
         }
-        safeMeta.setRecordCount(c.NumberofRecords());
+        safeMeta.setRecordCount(this.c.NumberofRecords());
     }
 
+    /**
+     *
+     * @throws ArgusException
+     */
     public void getVariableInfo() throws ArgusException {
-        Combinations model = metadata.getCombinations();
-        boolean hasRecode = (model.getGlobalRecode() != null);
+        Combinations model = this.metadata.getCombinations();
+        //boolean hasRecode = (model.getGlobalRecode() != null);
         model.getUnsafeCombinations().clear();
         for (int varIndex = 0; varIndex < getVariables().size(); varIndex++) {
             VariableMu variable = getVariables().get(varIndex);
@@ -587,14 +783,14 @@ public class CalculationService {
                     //If the variable is in one of the specified tables, get the unsafe combinations 
                     int[] nDims = new int[1];
                     int[] unsafeCount = new int[model.getMaxDimsInTables()];
-                    boolean result = c.UnsafeVariable(varIndex + 1, nDims, unsafeCount);
+                    boolean result = this.c.UnsafeVariable(varIndex + 1, nDims, unsafeCount);
                     if (!result) {
                         throw new ArgusException("Error in UnsafeVariable");
                     }
                     model.setUnsafeCombinations(variable, unsafeCount, nDims[0]);
 
                     int[] nCodes = new int[]{0};
-                    result = c.UnsafeVariablePrepare(varIndex + 1, nCodes);
+                    result = this.c.UnsafeVariablePrepare(varIndex + 1, nCodes);
                     if (!result) {
                         throw new ArgusException("Error in UnsafeVariablePrepare");
                     }
@@ -603,7 +799,7 @@ public class CalculationService {
                     int[] freq = new int[1];
                     String[] code = new String[1];
                     for (int codeIndex = 0; codeIndex < nCodes[0]; codeIndex++) {
-                        result = c.UnsafeVariableCodes(varIndex + 1,
+                        result = this.c.UnsafeVariableCodes(varIndex + 1,
                                 codeIndex + 1,
                                 isMissing,
                                 freq,
@@ -618,7 +814,7 @@ public class CalculationService {
                         codeInfo.setUnsafeCombinations(nDims[0], unsafeCount);
                         variable.getCodeInfos().add(codeInfo);
                     }
-                    result = c.UnsafeVariableClose(varIndex + 1);
+                    result = this.c.UnsafeVariableClose(varIndex + 1);
                     if (!result) {
                         throw new ArgusException("Error in UnsafeVariableClose");
                     }
@@ -629,7 +825,7 @@ public class CalculationService {
                         codeIndex++;
                         String[] code = new String[1];
                         int[] pramPerc = new int[1];
-                        boolean result = c.GetVarCode(varIndex + 1, codeIndex, code, pramPerc);
+                        boolean result = this.c.GetVarCode(varIndex + 1, codeIndex, code, pramPerc);
                         if (!result) {
                             break;
                         }
@@ -647,100 +843,148 @@ public class CalculationService {
         }
     }
 
+    /**
+     *
+     * @param pramVariable
+     * @throws ArgusException
+     */
     public void setPramVariable(PramVariableSpec pramVariable) throws ArgusException {
-        int varIndex = getVariables().indexOf(pramVariable.getVariable()) + 1;
+        //int varIndex = getVariables().indexOf(pramVariable.getVariable()) + 1;
+        int varIndex = getIndexOf(pramVariable.getVariable());
         int bandWidth = pramVariable.useBandwidth() ? pramVariable.getBandwidth() : -1;
-        boolean result = c.SetPramVar(varIndex, bandWidth, false);
+        boolean result = this.c.SetPramVar(varIndex, bandWidth, false);
         if (!result) {
             throw new ArgusException("Error during SetPramVar");
         }
         for (int codeIndex = 0; codeIndex < pramVariable.getVariable().getCodeInfos().size(); codeIndex++) {
             CodeInfo codeInfo = pramVariable.getVariable().getCodeInfos().get(codeIndex);
             if (!codeInfo.isMissing()) {
-                result = c.SetPramValue(codeIndex + 1, codeInfo.getPramProbability());
+                result = this.c.SetPramValue(codeIndex + 1, codeInfo.getPramProbability());
                 if (!result) {
                     throw new ArgusException("Error during SetPramValue");
                 }
             }
         }
-        result = c.ClosePramVar(varIndex);
+        result = this.c.ClosePramVar(varIndex);
         if (!result) {
             throw new ArgusException("Error during ClosePramVar");
         }
     }
 
+    /**
+     *
+     * @param pramVariable
+     * @throws ArgusException
+     */
     public void undoSetPramVariable(PramVariableSpec pramVariable) throws ArgusException {
-        int varIndex = getVariables().indexOf(pramVariable.getVariable()) + 1;
-        boolean result = c.SetPramVar(varIndex, -1, true);
+        //int varIndex = getVariables().indexOf(pramVariable.getVariable()) + 1;
+        int varIndex = getIndexOf(pramVariable.getVariable());
+        boolean result = this.c.SetPramVar(varIndex, -1, true);
         if (!result) {
             throw new ArgusException("Error during SetPramVar");
         }
     }
 
+    /**
+     *
+     * @param variable
+     * @return
+     */
     public double[] getMinMax(VariableMu variable) {
-        int varIndex = getVariables().indexOf(variable) + 1;
+        int varIndex = getIndexOf(variable);//getVariables().indexOf(variable) + 1;
         double[] min = new double[1];
         double[] max = new double[1];
-        c.GetMinMaxValue(varIndex, min, max);
+        this.c.GetMinMaxValue(varIndex, min, max);
         double[] min_max = {min[0], max[0]};
         return min_max;
     }
 
+    /**
+     *
+     * @param table
+     * @param riskThreshold
+     * @param household
+     * @return
+     * @throws ArgusException
+     */
     public int calculateUnsafe(TableMu table, double riskThreshold, boolean household) throws ArgusException {
-        int tableIndex = this.metadata.getCombinations().getTables().indexOf(table) + 1;
+        int tableIndex = getIndexOf(table);//this.metadata.getCombinations().getTables().indexOf(table) + 1;
         int[] nUnsafe = new int[1];
         int[] dummy = new int[1];
         boolean result = household
-                ? c.SetBHRThreshold(tableIndex, Math.log(riskThreshold), nUnsafe, dummy)
-                : c.SetBirThreshold(tableIndex, Math.log(riskThreshold), nUnsafe);
+                ? this.c.SetBHRThreshold(tableIndex, Math.log(riskThreshold), nUnsafe, dummy)
+                : this.c.SetBirThreshold(tableIndex, Math.log(riskThreshold), nUnsafe);
         if (!result) {
             throw new ArgusException("Error calculating number of unsafe records");
         }
         return nUnsafe[0];
     }
 
+    /**
+     *
+     * @param table
+     * @param riskThreshold
+     * @return
+     * @throws ArgusException
+     */
     public double calculateReidentRate(TableMu table, double riskThreshold) throws ArgusException {
-        int tableIndex = this.metadata.getCombinations().getTables().indexOf(table) + 1;
+        int tableIndex = getIndexOf(table);//int tableIndex = this.metadata.getCombinations().getTables().indexOf(table) + 1;
         double[] reidentRate = new double[1];
-        if (!c.ComputeBIRRateThreshold(tableIndex, riskThreshold, reidentRate)) {
+        if (!this.c.ComputeBIRRateThreshold(tableIndex, riskThreshold, reidentRate)) {
             throw new ArgusException("Error calculating reident rate");
         }
         return reidentRate[0];
     }
 
+    /**
+     *
+     * @param table
+     * @param nUnsafe
+     * @param household
+     * @return
+     * @throws ArgusException
+     */
     public double calculateRiskThreshold(TableMu table, int nUnsafe, boolean household) throws ArgusException {
-        int tableIndex = this.metadata.getCombinations().getTables().indexOf(table) + 1;
+        int tableIndex = getIndexOf(table);//int tableIndex = this.metadata.getCombinations().getTables().indexOf(table) + 1;
         double[] riskThreshold = new double[1];
         int[] errorCode = new int[1];
         //c.SetProgressListener(null);
         boolean result = household
-                ? c.CalculateBHRFreq(tableIndex, true, c.NumberofRecords() - nUnsafe, c.NumberofRecords() - nUnsafe, riskThreshold, errorCode)
-                : c.CalculateBIRFreq(tableIndex, c.NumberofRecords() - nUnsafe, riskThreshold, errorCode);
+                ? this.c.CalculateBHRFreq(tableIndex, true, this.c.NumberofRecords() - nUnsafe, this.c.NumberofRecords() - nUnsafe, riskThreshold, errorCode)
+                : this.c.CalculateBIRFreq(tableIndex, this.c.NumberofRecords() - nUnsafe, riskThreshold, errorCode);
         if (!result) {
             throw new ArgusException("Error calculating frequency");
         }
         return riskThreshold[0];
     }
 
+    /**
+     *
+     * @param table
+     * @param classes
+     * @param cumulative
+     * @return
+     * @throws ArgusException
+     */
     public double fillHistogramData(TableMu table, ArrayList<RiskModelClass> classes, boolean cumulative) throws ArgusException {
         classes.clear();
         double[] ksi = new double[1];
 
-        int tableIndex = this.metadata.getCombinations().getTables().indexOf(table) + 1;
+        int tableIndex = getIndexOf(table);//this.metadata.getCombinations().getTables().indexOf(table) + 1;
         int nClasses = MuARGUS.getNHistogramClasses(cumulative);
         double[] classLeftValue = new double[nClasses + 1];
         int[] frequency = new int[nClasses + 1];
         int[] hhFrequency = new int[nClasses + 1];
-        if (metadata.isHouseholdData()) {
+        if (this.metadata.isHouseholdData()) {
             int[] errorCode = new int[1];
             //c.SetProgressListener(null);
-            boolean result = c.CalculateBaseHouseholdRisk(errorCode);
+            boolean result = this.c.CalculateBaseHouseholdRisk(errorCode);
             if (!result) {
                 throw new ArgusException("Error calculating base household risk");
             }
-            c.GetBHRHistogramData(tableIndex, nClasses, classLeftValue, hhFrequency, frequency);
+            this.c.GetBHRHistogramData(tableIndex, nClasses, classLeftValue, hhFrequency, frequency);
         } else {
-            c.GetBIRHistogramData(tableIndex, nClasses, classLeftValue, ksi, frequency);
+            this.c.GetBIRHistogramData(tableIndex, nClasses, classLeftValue, ksi, frequency);
         }
         int sumFreq = 0;
         int sumHHfreq = 0;
