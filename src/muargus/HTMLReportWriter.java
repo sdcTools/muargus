@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package muargus;
 
 import argus.model.ArgusException;
@@ -41,6 +36,11 @@ public class HTMLReportWriter {
     private static Document doc;
     public static final File css = new File("./resources/muargus.css");
 
+    /**
+     *
+     * @param document
+     * @param metadata
+     */
     public static void createReportTree(Document document, MetadataMu metadata) {
         doc = document;
         Element html = addChildElement(doc, "html");
@@ -66,12 +66,16 @@ public class HTMLReportWriter {
             addChildElement(p, "h2", "No other modifications");
             body.appendChild(p);
         }
-        //body.appendChild(writePRAMTable(metadata));
         body.appendChild(writeSuppressionTable(metadata));
         body.appendChild(writeSafeFileMetaTable(metadata));
         body.appendChild(writeFooter());
     }
 
+    /**
+     *
+     * @param metadata
+     * @return
+     */
     private static Element writeOtherModificationsTable(MetadataMu metadata) {
         Element p = doc.createElement("p");
         addChildElement(p, "h2", "Other modifications");
@@ -118,17 +122,19 @@ public class HTMLReportWriter {
             tr = addChildElement(table, "tr");
             addChildElement(tr, "td", replacement instanceof RankSwappingSpec
                     ? "Rank swapping" : "Numerical microaggregation");
-            addChildElement(tr, "td", VariableMu.printVariableNames(replacement.getVariables()));
+            addChildElement(tr, "td", VariableMu.printVariableNames(replacement.getOutputVariables()));
             if (replacement instanceof RankSwappingSpec) {
                 addChildElement(tr, "td",
                         String.format("Percentage: %d %%", ((RankSwappingSpec) replacement).getPercentage()));
-            } else {
+            } else if (replacement instanceof MicroaggregationSpec) {
                 MicroaggregationSpec microAggr = (MicroaggregationSpec) replacement;
-                String optimal = microAggr.getVariables().size() == 1
+                String optimal = microAggr.getOutputVariables().size() == 1
                         ? String.format("; Optimal: %s", (microAggr.isOptimal() ? "yes" : "no")) : "";
                 addChildElement(tr, "td",
                         String.format("Group size: %d%s", microAggr.getMinimalNumberOfRecords(), optimal));
 
+            } else {
+                //TODO: add output synthetic data
             }
         }
         ProtectedFile protectedFile = metadata.getCombinations().getProtectedFile();
@@ -153,7 +159,7 @@ public class HTMLReportWriter {
                 }
             }
             addChildElement(tr, "td", "HouseHold Identification variable has been changed into a sequence number");
-        } else if (protectedFile.getHouseholdType() == ProtectedFile.REMOVE_FROM_SAFE_FILE){
+        } else if (protectedFile.getHouseholdType() == ProtectedFile.REMOVE_FROM_SAFE_FILE) {
             tr = addChildElement(table, "tr");
             addChildElement(tr, "td", "Make safe file");
             for (VariableMu v : metadata.getVariables()) {
@@ -168,6 +174,14 @@ public class HTMLReportWriter {
         return writePRAMTable(metadata, table, tr, p);
     }
 
+    /**
+     *
+     * @param metadata
+     * @param table
+     * @param tr
+     * @param p
+     * @return
+     */
     private static Element writePRAMTable(MetadataMu metadata, Element table, Element tr, Element p) {
         boolean pram = false;
         if (metadata.getCombinations().getPramSpecification() != null) {
@@ -232,6 +246,11 @@ public class HTMLReportWriter {
 
     }
 
+    /**
+     *
+     * @param metadata
+     * @return
+     */
     private static boolean hasOtherModifications(MetadataMu metadata) {
         ProtectedFile protectedFile = metadata.getCombinations().getProtectedFile();
         boolean pram = false;
@@ -253,6 +272,11 @@ public class HTMLReportWriter {
         return metadata.getReplacementSpecs().size() > 0;
     }
 
+    /**
+     *
+     * @param metadata
+     * @return
+     */
     private static Element writeFrequencyTablesTable(MetadataMu metadata) {
         Element p = doc.createElement("p");
         addChildElement(p, "h2", "Frequency tables used");
@@ -273,6 +297,11 @@ public class HTMLReportWriter {
         return p;
     }
 
+    /**
+     *
+     * @param metadata
+     * @return
+     */
     private static Element writeRelatedVariablesTable(MetadataMu metadata) {
         boolean isRelated = false;
         for (VariableMu v : metadata.getVariables()) {
@@ -301,6 +330,11 @@ public class HTMLReportWriter {
 
     }
 
+    /**
+     *
+     * @param metadata
+     * @return
+     */
     private static Element writeGlobalRecodeTables(MetadataMu metadata) {
         boolean recoded = false;
         if (metadata.getCombinations().getGlobalRecode() != null) {
@@ -365,6 +399,11 @@ public class HTMLReportWriter {
     //    String format = "%." + decimals + "f";
     //    return String.format(MuARGUS.getLocale(), format, d);
     //}
+    /**
+     *
+     * @param metadata
+     * @return
+     */
     private static Element writeBaseIndividualRisk(MetadataMu metadata) {
         Element p = doc.createElement("p");
         addChildElement(p, "h2", String.format("Base %s Risk has been applied:",
@@ -391,6 +430,11 @@ public class HTMLReportWriter {
         return p;
     }
 
+    /**
+     *
+     * @param metadata
+     * @return
+     */
     private static Element writeSuppressionTable(MetadataMu metadata) {
         MetadataMu safeMeta = getSafeMeta(metadata);
 
@@ -428,6 +472,13 @@ public class HTMLReportWriter {
         return p;
     }
 
+    /**
+     *
+     * @param d
+     * @param decimals
+     * @param showIfZero
+     * @return
+     */
     private static String formatDouble(double d, int decimals, boolean showIfZero) {
         DecimalFormat decimalFormat = (DecimalFormat) NumberFormat.getNumberInstance(MuARGUS.getLocale());
         decimalFormat.setGroupingUsed(false);
@@ -437,6 +488,11 @@ public class HTMLReportWriter {
 
     }
 
+    /**
+     *
+     * @param metadata
+     * @return
+     */
     private static Element writeSafeFileMetaTable(MetadataMu metadata) {
         MetadataMu safeMeta = getSafeMeta(metadata);
 
@@ -458,6 +514,10 @@ public class HTMLReportWriter {
         return p;
     }
 
+    /**
+     *
+     * @return
+     */
     private static Element writeFooter() {
         Element p = doc.createElement("p");
         addChildElement(p, "h2", String.format("μ-ARGUS version: %d.%d.%s (build: %d)",
@@ -465,10 +525,20 @@ public class HTMLReportWriter {
         return p;
     }
 
+    /**
+     *
+     * @param metadata
+     * @return
+     */
     private static MetadataMu getSafeMeta(MetadataMu metadata) {
         return metadata.getCombinations().getProtectedFile().getSafeMeta();
     }
 
+    /**
+     *
+     * @param metadata
+     * @return
+     */
     private static Element writeIdVariablesTable(MetadataMu metadata) {
         MetadataMu safeMeta = getSafeMeta(metadata);
 
@@ -492,6 +562,12 @@ public class HTMLReportWriter {
         return p;
     }
 
+    /**
+     *
+     * @param safeMeta
+     * @param varName
+     * @return
+     */
     private static VariableMu getSafeVar(MetadataMu safeMeta, String varName) {
         for (VariableMu variable : safeMeta.getVariables()) {
             if (variable.getName().equals(varName)) {
@@ -501,6 +577,11 @@ public class HTMLReportWriter {
         return null;
     }
 
+    /**
+     *
+     * @param metadata
+     * @return
+     */
     private static Element writeFilesTable(MetadataMu metadata) {
         MetadataMu safeMeta = getSafeMeta(metadata);
         Element p = doc.createElement("p");
@@ -523,13 +604,21 @@ public class HTMLReportWriter {
         addChildElement(tr, "td", Integer.toString(metadata.getRecordCount()));
         tr = addChildElement(table, "tr");
         addChildElement(tr, "td", "Safe data file");
-        addChildElement(tr, "td", safeMeta.getFileNames().getDataFileName());
+        if (metadata.isSpss()) {
+            addChildElement(tr, "td", MuARGUS.getSpssUtils().safeSpssFile.getAbsolutePath());
+        } else {
+            addChildElement(tr, "td", safeMeta.getFileNames().getDataFileName());
+        }
         tr = addChildElement(table, "tr");
         addChildElement(tr, "td", "Safe meta file");
         addChildElement(tr, "td", safeMeta.getFileNames().getMetaFileName());
         return p;
     }
 
+    /**
+     *
+     * @return
+     */
     private static Element writeHeader() {
         Element elm = doc.createElement("head");
         addChildElement(elm, "title", "µ-ARGUS Report");
@@ -537,21 +626,41 @@ public class HTMLReportWriter {
         meta.setAttribute("content", "Statistics; Netherlands");
         Element link = addChildElement(elm, "link", "rel", "stylesheet");
         link.setAttribute("type", "text/css");
-        link.setAttribute("href", "file:///" + css.getAbsolutePath());//c:/program files/mu_argus/muargus.css");    //TODO
-        //System.out.println(css.getAbsolutePath());
+        link.setAttribute("href", "file:///" + css.getAbsolutePath());
         return elm;
     }
 
+    /**
+     *
+     * @param parent
+     * @param name
+     * @return
+     */
     private static Element addChildElement(Node parent, String name) {
         return addChildElement(parent, name, null, null);
     }
 
+    /**
+     *
+     * @param parent
+     * @param name
+     * @param content
+     * @return
+     */
     private static Element addChildElement(Node parent, String name, String content) {
         Element elm = addChildElement(parent, name);
         elm.setTextContent(content);
         return elm;
     }
 
+    /**
+     *
+     * @param parent
+     * @param name
+     * @param attrName
+     * @param attrValue
+     * @return
+     */
     private static Element addChildElement(Node parent, String name, String attrName, String attrValue) {
         Element elm = (Element) parent.appendChild(doc.createElement(name));
         if (attrName != null) {

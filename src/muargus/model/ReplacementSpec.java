@@ -26,10 +26,20 @@ public class ReplacementSpec {
      *
      * @return ArrayList containing the variables.
      */
-    public ArrayList<VariableMu> getVariables() {
+    public ArrayList<VariableMu> getInputVariables() {
         return variables;
     }
 
+    /**
+     * Gets an ArrayList containing the variables. If the ArrayList is empty,
+     * use this method to add variables.
+     *
+     * @return ArrayList containing the variables.
+     */
+    public ArrayList<VariableMu> getOutputVariables() {
+        return variables;
+    }
+    
     /**
      * Gets the replacementFile.
      *

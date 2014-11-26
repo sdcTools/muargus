@@ -67,11 +67,11 @@ public class MicroaggregationController extends ControllerBase<Microaggregation>
         MicroaggregationSpec microaggregation = getModel().getMicroaggregations().get(getModel().getMicroaggregations().size() - 1);
         Numerical num = new Numerical();
         int[] errorCode = new int[1];
-        int[] nColPerGroup = new int[]{microaggregation.getVariables().size()};
+        int[] nColPerGroup = new int[]{microaggregation.getOutputVariables().size()};
         num.DoMicroAggregation(microaggregation.getReplacementFile().getInputFilePath(),
                 microaggregation.getReplacementFile().getOutputFilePath(),
                 muargus.MuARGUS.getDefaultSeparator(),
-                microaggregation.getVariables().size(),
+                microaggregation.getOutputVariables().size(),
                 microaggregation.getMinimalNumberOfRecords(),
                 1,
                 microaggregation.isOptimal() ? 1 : 0,
@@ -122,9 +122,9 @@ public class MicroaggregationController extends ControllerBase<Microaggregation>
             return;
         }
         for (MicroaggregationSpec microaggregation : getModel().getMicroaggregations()) {
-            if (microaggregation.getVariables().size() == selected.size()) {
+            if (microaggregation.getOutputVariables().size() == selected.size()) {
                 boolean difference = false;
-                for (VariableMu variable : microaggregation.getVariables()) {
+                for (VariableMu variable : microaggregation.getOutputVariables()) {
                     if (!selected.contains(variable)) {
                         difference = true;
                         break;
@@ -159,7 +159,7 @@ public class MicroaggregationController extends ControllerBase<Microaggregation>
                     getMicroaggregationView().getMinimalNumberOfRecords(),
                     getMicroaggregationView().getOptimal());
             //numerical);
-            microaggregation.getVariables().addAll(selectedVariables);
+            microaggregation.getOutputVariables().addAll(selectedVariables);
             microaggregation.setReplacementFile(new ReplacementFile("Microaggregation"));
             getModel().getMicroaggregations().add(microaggregation);
             this.metadata.getReplacementSpecs().add(microaggregation);
@@ -178,7 +178,7 @@ public class MicroaggregationController extends ControllerBase<Microaggregation>
     private boolean variablesAreUsed(ArrayList<VariableMu> variables) {
         for (VariableMu variable : variables) {
             for (ReplacementSpec replacement : this.metadata.getReplacementSpecs()) {
-                if (replacement.getVariables().contains(variable)) {
+                if (replacement.getOutputVariables().contains(variable)) {
                     return true;
                 }
             }

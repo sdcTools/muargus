@@ -70,7 +70,7 @@ public class NumericalRankSwappingView extends DialogBase<NumericalRankSwappingC
      * RankSwappingSpec.
      */
     public void updateVariableRows(ReplacementSpec replacement) {
-        for (VariableMu variableMu : replacement.getVariables()) {
+        for (VariableMu variableMu : replacement.getOutputVariables()) {
             int index = this.model.getVariables().indexOf(variableMu);
             this.variablesTable.setValueAt(getModifiedText(variableMu), index, 0);
             this.variablesTable.setValueAt(variableMu.getName(), index, 1);
@@ -89,7 +89,7 @@ public class NumericalRankSwappingView extends DialogBase<NumericalRankSwappingC
      */
     private String getModifiedText(VariableMu variable) {
         for (ReplacementSpec spec : this.model.getRankSwappings()) {
-            if (spec.getVariables().contains(variable)) {
+            if (spec.getOutputVariables().contains(variable)) {
                 return "X";
             }
         }
