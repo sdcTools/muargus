@@ -70,7 +70,7 @@ public class NumericalRankSwappingController extends ControllerBase<NumericalRan
         num.DoRankSwap(swapping.getReplacementFile().getInputFilePath(),
                 swapping.getReplacementFile().getOutputFilePath(),
                 muargus.MuARGUS.getDefaultSeparator(),
-                swapping.getVariables().size(),
+                swapping.getOutputVariables().size(),
                 (int) swapping.getPercentage(),
                 errorCode);
         if (errorCode[0] != 0) {
@@ -121,9 +121,9 @@ public class NumericalRankSwappingController extends ControllerBase<NumericalRan
             return;
         }
         for (RankSwappingSpec swapping : getModel().getRankSwappings()) {
-            if (swapping.getVariables().size() == selected.size()) {
+            if (swapping.getOutputVariables().size() == selected.size()) {
                 boolean difference = false;
-                for (VariableMu variable : swapping.getVariables()) {
+                for (VariableMu variable : swapping.getOutputVariables()) {
                     if (!selected.contains(variable)) {
                         difference = true;
                         break;
@@ -155,7 +155,7 @@ public class NumericalRankSwappingController extends ControllerBase<NumericalRan
         }
         RankSwappingSpec rankSwapping = new RankSwappingSpec(getNumericalRankSwappingView().getPercentage());
         try {
-            rankSwapping.getVariables().addAll(selectedVariables);
+            rankSwapping.getOutputVariables().addAll(selectedVariables);
             rankSwapping.setReplacementFile(new ReplacementFile("RankSwapping"));
             this.metadata.getReplacementSpecs().add(rankSwapping);
             getCalculationService().makeReplacementFile(this);
@@ -175,7 +175,7 @@ public class NumericalRankSwappingController extends ControllerBase<NumericalRan
     private boolean variablesAreUsed(ArrayList<VariableMu> variables) {
         for (VariableMu variable : variables) {
             for (ReplacementSpec replacement : this.metadata.getReplacementSpecs()) {
-                if (replacement.getVariables().contains(variable)) {
+                if (replacement.getOutputVariables().contains(variable)) {
                     return true;
                 }
             }

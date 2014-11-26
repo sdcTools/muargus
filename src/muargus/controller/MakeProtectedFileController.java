@@ -114,13 +114,13 @@ public class MakeProtectedFileController extends ControllerBase<ProtectedFile> {
             ArrayList<VariableMu> variablesFound = new ArrayList<>();
             for (int index2 = index + 1; index2 < this.metadata.getReplacementSpecs().size(); index2++) {
                 ReplacementSpec replacement2 = this.metadata.getReplacementSpecs().get(index2);
-                for (VariableMu variable : replacement2.getVariables()) {
-                    if (replacement.getVariables().contains(variable) && !variablesFound.contains(variable)) {
+                for (VariableMu variable : replacement2.getOutputVariables()) {
+                    if (replacement.getOutputVariables().contains(variable) && !variablesFound.contains(variable)) {
                         variablesFound.add(variable);
                     }
                 }
             }
-            if (variablesFound.size() == replacement.getVariables().size()) {
+            if (variablesFound.size() == replacement.getOutputVariables().size()) {
                 toRemove.add(replacement);
             }
             index++;

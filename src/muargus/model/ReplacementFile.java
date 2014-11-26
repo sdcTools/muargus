@@ -12,8 +12,8 @@ import java.io.IOException;
 public class ReplacementFile {
 
     private final File inputFile;
-    private final File outputFile;
-    private final String replacementType; //TODO: wordt dit gebruikt? Kan het ook een int zijn?
+    private File outputFile;
+    private final String replacementType; 
 
     /**
      * Constructor of the model class ReplacementFile.
@@ -44,6 +44,15 @@ public class ReplacementFile {
      */
     public String getOutputFilePath() {
         return this.outputFile.getPath();
+    }
+    
+    /**
+     * Sets the output file path.
+     *
+     * @param file File containing the output file.
+     */
+    public void setOutputFilePath(File file) {
+       this.outputFile = file;
     }
 
     /**

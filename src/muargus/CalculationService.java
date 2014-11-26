@@ -134,8 +134,8 @@ public class CalculationService {
         boolean result = this.c.WriteVariablesInFile(
                 this.metadata.getFileNames().getDataFileName(),
                 replacement.getReplacementFile().getInputFilePath(),
-                replacement.getVariables().size(),
-                getVarIndicesInFile(replacement.getVariables()),
+                replacement.getInputVariables().size(),
+                getVarIndicesInFile(replacement.getInputVariables()),
                 MuARGUS.getDefaultSeparator(),
                 errorCode);
         if (!result) {
@@ -266,8 +266,8 @@ public class CalculationService {
             index++;
             result = this.c.SetChangeFile(index,
                     replacement.getReplacementFile().getOutputFilePath(),
-                    replacement.getVariables().size(),
-                    getVarIndicesInFile(replacement.getVariables()),
+                    replacement.getOutputVariables().size(),
+                    getVarIndicesInFile(replacement.getOutputVariables()),
                     MuARGUS.getDefaultSeparator());
             if (!result) {
                 throw new ArgusException(String.format("Error during SetChangeFile for replacement file %d", index));

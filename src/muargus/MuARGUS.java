@@ -4,7 +4,6 @@ package muargus;
 import argus.model.ArgusException;
 import argus.utils.SystemUtils;
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.SplashScreen;
@@ -18,7 +17,6 @@ import javax.swing.UnsupportedLookAndFeelException;
 import muargus.extern.dataengine.CMuArgCtrl;
 import muargus.view.MainFrameView;
 import org.apache.commons.io.FilenameUtils;
-import org.icepdf.ri.viewer.Launcher;
 
 
 /**
@@ -45,7 +43,7 @@ public class MuARGUS {
     private static final String lookAndFeel = "Windows";
     //private static final File manual = new File("./resources/MUmanual4.3.pdf");
     private static final File manual = new File("resources/MUmanual4.3.pdf");
-    private static final String acrord32 = "acrord32.exe"; // finds the acrord32.exe
+    //private static final String acrord32 = "acrord32.exe"; // finds the acrord32.exe
     private static final int sleepTime = 2000;
     private static Process helpViewerProcess;
 

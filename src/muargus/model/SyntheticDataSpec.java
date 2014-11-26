@@ -22,6 +22,8 @@ public class SyntheticDataSpec extends ReplacementSpec {
     private final ArrayList<VariableMu> nonSensitiveVariables;
     private File alphaFile;
     private File rScriptFile; 
+    private File runRFile; 
+    //public final static String pathRexe = "C:\\Program Files\\%USERPROFILE%\\AppData\\Local\\Temp\\R";
 
 
     /**
@@ -62,6 +64,17 @@ public class SyntheticDataSpec extends ReplacementSpec {
         return rScriptFile;
     }
     
+    public File getRunRFileFile() throws ArgusException {
+        if (runRFile == null) {
+            runRFile = createFile(".bat");
+        }
+        return runRFile;
+    }
+    
+    public String doubleSlashses(String filename){
+        return filename.replace("\\", "\\\\");
+    }
+    
     private File createFile(String extension) throws ArgusException {
         try {
             File file = File.createTempFile("MuArgus", extension);
@@ -87,11 +100,18 @@ public class SyntheticDataSpec extends ReplacementSpec {
     }
 
     @Override
-    public ArrayList<VariableMu> getVariables() {
+    public ArrayList<VariableMu> getInputVariables() {
         ArrayList<VariableMu> variables = new ArrayList<>(this.sensitiveVariables);
         variables.addAll(this.nonSensitiveVariables);
         return variables;
     }
+
+    @Override
+    public ArrayList<VariableMu> getOutputVariables() {
+        return this.sensitiveVariables;
+    }
+    
+    
 
         
 }

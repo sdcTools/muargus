@@ -8,13 +8,14 @@ package muargus.io;
 import argus.model.ArgusException;
 import argus.model.DataFilePair;
 import argus.utils.StrUtils;
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.List;
 import muargus.model.MetadataMu;
 import muargus.model.RecodeMu;
 import muargus.model.SyntheticDataSpec;
@@ -162,8 +163,7 @@ public class MetaWriter {
      */
     /**
      *
-     * @param path
-     * @param sensitiveVariables
+     * @param synthData
      * @throws ArgusException
      */
     public static void writeAlpha(SyntheticDataSpec synthData) throws ArgusException {
@@ -188,19 +188,67 @@ public class MetaWriter {
     }
 
     public static void writeSynthetic(SyntheticDataSpec synthData) throws ArgusException {
-            //String pathSynth, String pathAlpha, String pathSynthData, 
-            //int numberOfNonSensitiveVariables, String pathOutfile) throws ArgusException {
-            try (PrintWriter writer = new PrintWriter(synthData.getrScriptFile())) {
-                //writer.println("setwd(\"D:/TEMP/\" )");
-                writer.println("require(\"hybridIPSO3\")");
-                writer.println(String.format("hybrid_IPSO(\"%s\",\"%s\", K=%d,  out=TRUE, out_file=\"%s\", separator=\",\")",
-                        synthData.getAlphaFile().getAbsolutePath(), 
-                        synthData.getReplacementFile().getInputFilePath(),
-                        synthData.getNonSensitiveVariables().size(), 
-                        synthData.getReplacementFile().getOutputFilePath()));
-            
+        try (PrintWriter writer = new PrintWriter(synthData.getrScriptFile())) {
+            writer.println("require(\"hybribISO3\")");
+            writer.println(String.format("hybrid_IPSO(\"%s\",\"%s\", K=%d,  out=TRUE, out_file=\"%s\", separator=\",\")",
+                    synthData.doubleSlashses(synthData.getAlphaFile().getAbsolutePath()),
+                    synthData.doubleSlashses(synthData.getReplacementFile().getInputFilePath()) + "2",
+                    synthData.getSensitiveVariables().size(),
+                    synthData.doubleSlashses(synthData.getReplacementFile().getOutputFilePath())));
+
         } catch (FileNotFoundException ex) {
             throw new ArgusException("Error writing to file. Error message: " + ex.getMessage());
+        }
+    }
+
+    public static void writeBatSynthetic(SyntheticDataSpec synthData) throws ArgusException {
+        try (PrintWriter writer = new PrintWriter(synthData.getRunRFileFile())) {
+            writer.println(String.format("R CMD BATCH \"%s\"", synthData.getrScriptFile().getAbsolutePath()));
+        } catch (FileNotFoundException ex) {
+            throw new ArgusException("Error writing to file. Error message: " + ex.getMessage());
+        }
+    }
+
+    public static void adjustSyntheticOutputFile(SyntheticDataSpec model) {
+        File inputFile = new File(model.getReplacementFile().getOutputFilePath());
+        File outputFile = new File(model.getReplacementFile().getOutputFilePath() + "2");
+        outputFile.deleteOnExit();
+        try (BufferedReader reader = new BufferedReader(new FileReader(inputFile))) {
+            try (PrintWriter writer = new PrintWriter(outputFile)) {
+                reader.readLine();
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    writer.println(line.substring(line.indexOf(",") + 1, line.length()));
+                }
+                model.getReplacementFile().setOutputFilePath(outputFile);
+            }
+        } catch (IOException ex) {
+            //throw new ArgusException("Error during reading file. Error message: " + ex.getMessage());
+        }
+    }
+    
+    public static void adjustSyntheticData(SyntheticDataSpec model) {
+        //Adds a header containing the variable names that the R script expects
+        File inputFile = new File(model.getReplacementFile().getInputFilePath());
+        try (BufferedReader reader = new BufferedReader(new FileReader(inputFile))) {
+            String line = "";
+            for (int i = 0; i < model.getSensitiveVariables().size(); i++) {
+                line += "x" + (i + 1) + " ,";
+            }
+            for (int i = 0; i < model.getNonSensitiveVariables().size(); i++) {
+                line += "s" + (i + 1) + " ,";
+            }
+            line = line.substring(0, line.length() - 1);
+            File outputFile = new File(model.getReplacementFile().getInputFilePath() + "2");
+            outputFile.deleteOnExit();
+            try (PrintWriter writer = new PrintWriter(outputFile)) {
+                writer.println(line);
+                while ((line = reader.readLine()) != null) {
+                    writer.println(line);
+                }
+            }
+        } catch (IOException ex) {
+            //throw new ArgusException("Error during reading file. Error message: " + ex.getMessage());
         }
     }
 }

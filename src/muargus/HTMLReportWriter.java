@@ -122,17 +122,19 @@ public class HTMLReportWriter {
             tr = addChildElement(table, "tr");
             addChildElement(tr, "td", replacement instanceof RankSwappingSpec
                     ? "Rank swapping" : "Numerical microaggregation");
-            addChildElement(tr, "td", VariableMu.printVariableNames(replacement.getVariables()));
+            addChildElement(tr, "td", VariableMu.printVariableNames(replacement.getOutputVariables()));
             if (replacement instanceof RankSwappingSpec) {
                 addChildElement(tr, "td",
                         String.format("Percentage: %d %%", ((RankSwappingSpec) replacement).getPercentage()));
-            } else {
+            } else if (replacement instanceof MicroaggregationSpec) {
                 MicroaggregationSpec microAggr = (MicroaggregationSpec) replacement;
-                String optimal = microAggr.getVariables().size() == 1
+                String optimal = microAggr.getOutputVariables().size() == 1
                         ? String.format("; Optimal: %s", (microAggr.isOptimal() ? "yes" : "no")) : "";
                 addChildElement(tr, "td",
                         String.format("Group size: %d%s", microAggr.getMinimalNumberOfRecords(), optimal));
 
+            } else {
+                //TODO: add output synthetic data
             }
         }
         ProtectedFile protectedFile = metadata.getCombinations().getProtectedFile();
