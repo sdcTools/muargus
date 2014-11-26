@@ -231,7 +231,7 @@ public class MetaReader {
                             recode.setMissing_2_new(token);
                         }
                     } else if ("<CODELIST>".equals(token)) {
-                        recode.setCodeListFile(tokenizer.nextToken());
+                        recode.setCodeListFile(tokenizer.nextToken()); //TODO: zet hier waardes bij de orginele 
                     } else {
                         throw new ArgusException("Error reading file, invalid token: " + token);
                     }
