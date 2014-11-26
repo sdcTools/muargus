@@ -14,7 +14,6 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.List;
 import muargus.model.MetadataMu;
 import muargus.model.RecodeMu;
 import muargus.model.SyntheticDataSpec;
@@ -162,8 +161,7 @@ public class MetaWriter {
      */
     /**
      *
-     * @param path
-     * @param sensitiveVariables
+     * @param synthData
      * @throws ArgusException
      */
     public static void writeAlpha(SyntheticDataSpec synthData) throws ArgusException {
