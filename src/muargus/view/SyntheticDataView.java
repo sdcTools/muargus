@@ -22,7 +22,7 @@ public class SyntheticDataView extends DialogBase<SyntheticDataController> {
     private DefaultListModel variablesListModel;
     private DefaultListModel nonSensitiveVariablesListModel;
     private final int[] columnWidth = {80, 30};
-    
+
     /**
      * Creates new form RView
      *
@@ -76,17 +76,17 @@ public class SyntheticDataView extends DialogBase<SyntheticDataController> {
 
     public List<VariableMu> getSelectedSensitiveVariables() {
         List<VariableMu> variables = new ArrayList<>();
-        
-        for (int rowIndex=0; rowIndex < this.sensitiveVariablesTable.getModel().getRowCount(); rowIndex++) {
-            variables.add((VariableMu)this.sensitiveVariablesTable.getModel().getValueAt(rowIndex, 0));
+
+        for (int rowIndex = 0; rowIndex < this.sensitiveVariablesTable.getModel().getRowCount(); rowIndex++) {
+            variables.add((VariableMu) this.sensitiveVariablesTable.getModel().getValueAt(rowIndex, 0));
         }
         return variables;
     }
-    
-     public List<VariableMu> getSelectedNonSensitiveVariables() {
+
+    public List<VariableMu> getSelectedNonSensitiveVariables() {
         List<VariableMu> variables = new ArrayList<>();
-        for (int rowIndex=0; rowIndex < this.nonSensitiveVariablesListModel.size(); rowIndex++) {
-            variables.add((VariableMu)this.nonSensitiveVariablesListModel.get(rowIndex));
+        for (int rowIndex = 0; rowIndex < this.nonSensitiveVariablesListModel.size(); rowIndex++) {
+            variables.add((VariableMu) this.nonSensitiveVariablesListModel.get(rowIndex));
         }
         return variables;
     }
@@ -108,7 +108,6 @@ public class SyntheticDataView extends DialogBase<SyntheticDataController> {
 //            this.sensitiveVariablesTable.getColumnModel().getColumn(i).setMinWidth(this.columnWidth[i]);
 //            this.sensitiveVariablesTable.getColumnModel().getColumn(i).setPreferredWidth(this.columnWidth[i]);
 //        }
-
     }
 
     private void updateValues() {
@@ -364,7 +363,7 @@ public class SyntheticDataView extends DialogBase<SyntheticDataController> {
         for (int i = 1; i <= index.length; i++) {
             int rowIndex = index[index.length - i];
             this.variablesListModel.addElement((VariableMu) this.sensitiveVariablesTable.getValueAt(rowIndex, 0));
-            ((DefaultTableModel)this.sensitiveVariablesTable.getModel()).removeRow(rowIndex);
+            ((DefaultTableModel) this.sensitiveVariablesTable.getModel()).removeRow(rowIndex);
             //getController().getSensitiveVariables().remove((VariableMu) this.sensitiveVariablesTable.getValueAt(i, 0));
         }
         updateTable();
@@ -379,8 +378,8 @@ public class SyntheticDataView extends DialogBase<SyntheticDataController> {
 
         for (Object variableObj : variableMu) {
             VariableMu variable = (VariableMu) variableObj;
-            ((DefaultTableModel)this.sensitiveVariablesTable.getModel()).addRow(
-                    new Object[] {variable, variable.getAlpha()});
+            ((DefaultTableModel) this.sensitiveVariablesTable.getModel()).addRow(
+                    new Object[]{variable, variable.getAlpha()});
             //getController().getSensitiveVariables().add((VariableMu) variable);
             this.variablesListModel.removeElement(variable);
         }
@@ -419,7 +418,18 @@ public class SyntheticDataView extends DialogBase<SyntheticDataController> {
     }//GEN-LAST:event_moveFromNonSensitiveVariablesButtonActionPerformed
 
     private void runSyntheticDataButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_runSyntheticDataButtonActionPerformed
-        getController().runSyntheticData();
+        int rowCount = ((DefaultTableModel) this.sensitiveVariablesTable.getModel()).getRowCount();
+        if (rowCount > 0 && !this.nonSensitiveVariablesListModel.isEmpty() && !this.variablesListModel.isEmpty()) {
+            this.runSyntheticDataButton.setEnabled(false);
+            if(getController().runSyntheticData()){
+                //TODO: checkt nu alleen of het goed gaat tot de batch file wordt aangeroepen.
+                //Het is beter om een progressbar toe te voegen en de voortgang daar aan te linken.
+                showMessage("Synthetic data succesfully generated");
+            }
+            this.runSyntheticDataButton.setEnabled(true);
+        } else if (rowCount > 0) {
+            showMessage("It is not possible to use all numeric variables for generating synthetic data.");
+        }
     }//GEN-LAST:event_runSyntheticDataButtonActionPerformed
 
     private void closeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_closeButtonActionPerformed

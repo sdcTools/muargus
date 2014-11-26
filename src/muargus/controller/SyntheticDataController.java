@@ -48,7 +48,7 @@ public class SyntheticDataController extends ControllerBase<SyntheticDataSpec> {
 //        }
 //        return data;
 //    }
-    public void runSyntheticData() {
+    public boolean runSyntheticData() {
         try {
             SyntheticDataSpec syntheticData = getModel();
 
@@ -64,8 +64,9 @@ public class SyntheticDataController extends ControllerBase<SyntheticDataSpec> {
             MetaWriter.writeSynthetic(syntheticData);
             writeSyntheticData();
             MetaWriter.writeBatSynthetic(syntheticData);
-            close();
+            return true;
         } catch (ArgusException ex) {
+            return false;
 //            Logger.getLogger(SyntheticDataController.class.getName()).log(Level.SEVERE, null, ex);
         }
 
@@ -94,6 +95,7 @@ public class SyntheticDataController extends ControllerBase<SyntheticDataSpec> {
             String cmd = getModel().getRunRFileFile().getAbsolutePath();
             Process p = Runtime.getRuntime().exec(cmd);
             p.waitFor();
+            //System.out.println(cmd);
         } catch (IOException | ArgusException | InterruptedException ex) {
             //Logger.getLogger(SyntheticDataController.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -102,31 +104,6 @@ public class SyntheticDataController extends ControllerBase<SyntheticDataSpec> {
     private void writeSyntheticData() {
         getCalculationService().makeReplacementFile(this);
     }
-
-//    public void adjustSyntheticData() {
-//        //Adds a header containing the variable names that the R script expects
-//        File inputFile = new File(getModel().getReplacementFile().getInputFilePath());
-//        try (BufferedReader reader = new BufferedReader(new FileReader(inputFile))) {
-//            String line = "";
-//            for (int i = 0; i < getModel().getSensitiveVariables().size(); i++) {
-//                line += "x" + (i + 1) + " ,";
-//            }
-//            for (int i = 0; i < getModel().getNonSensitiveVariables().size(); i++) {
-//                line += "s" + (i + 1) + " ,";
-//            }
-//            line = line.substring(0, line.length() - 1);
-//            File outputFile = new File(getModel().getReplacementFile().getInputFilePath() + "2");
-//            outputFile.deleteOnExit();
-//            try (PrintWriter writer = new PrintWriter(outputFile)) {
-//                writer.println(line);
-//                while ((line = reader.readLine()) != null) {
-//                    writer.println(line);
-//                }
-//            }
-//        } catch (IOException ex) {
-//            //throw new ArgusException("Error during reading file. Error message: " + ex.getMessage());
-//        }
-//    }
 
     /**
      * Gets the model and fills the model with the numeric variables if the

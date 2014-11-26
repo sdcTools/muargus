@@ -21,6 +21,7 @@ import muargus.model.RankSwappingSpec;
 import muargus.model.RecodeMu;
 import muargus.model.ReplacementSpec;
 import muargus.model.RiskSpecification;
+import muargus.model.SyntheticDataSpec;
 import muargus.model.TableMu;
 import muargus.model.VariableMu;
 import org.w3c.dom.Document;
@@ -120,8 +121,9 @@ public class HTMLReportWriter {
         }
         for (ReplacementSpec replacement : metadata.getReplacementSpecs()) {
             tr = addChildElement(table, "tr");
-            addChildElement(tr, "td", replacement instanceof RankSwappingSpec
-                    ? "Rank swapping" : "Numerical microaggregation");
+            addChildElement(tr, "td", replacement.getReplacementFile().getReplacementType());
+//            addChildElement(tr, "td", replacement instanceof RankSwappingSpec
+//                    ? "Rank swapping" : "Numerical microaggregation");
             addChildElement(tr, "td", VariableMu.printVariableNames(replacement.getOutputVariables()));
             if (replacement instanceof RankSwappingSpec) {
                 addChildElement(tr, "td",
@@ -132,9 +134,12 @@ public class HTMLReportWriter {
                         ? String.format("; Optimal: %s", (microAggr.isOptimal() ? "yes" : "no")) : "";
                 addChildElement(tr, "td",
                         String.format("Group size: %d%s", microAggr.getMinimalNumberOfRecords(), optimal));
-
             } else {
-                //TODO: add output synthetic data
+                String alpha = "Alpha values:";
+                for (VariableMu v : ((SyntheticDataSpec) replacement).getOutputVariables()) {
+                    alpha = alpha + " " + v.getAlpha() + ",";
+                }
+                addChildElement(tr, "td", alpha.substring(0, alpha.length()-1));
             }
         }
         ProtectedFile protectedFile = metadata.getCombinations().getProtectedFile();
