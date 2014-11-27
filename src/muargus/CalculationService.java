@@ -370,6 +370,8 @@ public class CalculationService {
         String missing0 = variable.getMissing(0);
         if (variable.isNumeric() && !variable.isWeight() && "".equals(missing0)) {
             missing0 = StringUtils.repeat("X", variable.getVariableLength());
+        } else {
+            missing0 += StringUtils.repeat(" ", variable.getVariableLength() - missing0.length());      //Make the right length
         }
 
         return this.c.SetVariable(varNr,

@@ -59,7 +59,8 @@ public class SpssUtils {
      */
     public List<SpssVariable> getVariablesFromSpss(MetadataMu metadata, Frame parent) {
         //getSpssInstallationDirectory(parent);
-        if (this.spssVariables.size() < 1) {
+        //if (this.spssVariables.size() < 1) {
+        this.spssVariables.clear();
             this.spssDataFileName = metadata.getFileNames().getDataFileName();
             try {
                 StatsUtil.start();
@@ -83,7 +84,7 @@ public class SpssUtils {
                 metadata.setRecordCount(StatsUtil.getCaseCount());
                 StatsUtil.stop();
             } catch (StatsException e) { }
-        }
+        //}
         return this.spssVariables;
     }
 
