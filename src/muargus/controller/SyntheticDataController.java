@@ -86,6 +86,7 @@ public class SyntheticDataController extends ControllerBase<SyntheticDataSpec> {
         MetaWriter.adjustSyntheticData(getModel());
         runBat();
         MetaWriter.adjustSyntheticOutputFile(getModel());
+        getView().showMessage("Synthetic data successfully generated");
         //Run the R script
         //RunRScript()
     }
@@ -110,13 +111,14 @@ public class SyntheticDataController extends ControllerBase<SyntheticDataSpec> {
      * model is empty.
      */
     private void fillModel() {
-        if (getModel().getAllVariables().isEmpty()) {
+        getModel().clear();
+//        if (getModel().getAllVariables().isEmpty()) {
             for (VariableMu variable : this.metadata.getVariables()) {
                 if (variable.isNumeric()) {
                     getModel().getAllVariables().add(variable);
                 }
             }
-        }
+       // }
     }
 
 }

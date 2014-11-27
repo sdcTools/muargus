@@ -421,10 +421,10 @@ public class SyntheticDataView extends DialogBase<SyntheticDataController> {
         int rowCount = ((DefaultTableModel) this.sensitiveVariablesTable.getModel()).getRowCount();
         if (rowCount > 0 && !this.nonSensitiveVariablesListModel.isEmpty() && !this.variablesListModel.isEmpty()) {
             this.runSyntheticDataButton.setEnabled(false);
-            if(getController().runSyntheticData()){
+            if(!getController().runSyntheticData()){
                 //TODO: checkt nu alleen of het goed gaat tot de batch file wordt aangeroepen.
                 //Het is beter om een progressbar toe te voegen en de voortgang daar aan te linken.
-                showMessage("Synthetic data succesfully generated");
+                showMessage("Error generating synthetic data");
             }
             this.runSyntheticDataButton.setEnabled(true);
         } else if (rowCount > 0) {

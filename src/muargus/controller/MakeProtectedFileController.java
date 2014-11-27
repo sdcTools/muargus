@@ -11,6 +11,7 @@ import muargus.model.MicroaggregationSpec;
 import muargus.model.ProtectedFile;
 import muargus.model.RankSwappingSpec;
 import muargus.model.ReplacementSpec;
+import muargus.model.SyntheticDataSpec;
 import muargus.model.TableMu;
 import muargus.model.VariableMu;
 import muargus.view.MakeProtectedFileView;
@@ -128,9 +129,11 @@ public class MakeProtectedFileController extends ControllerBase<ProtectedFile> {
         for (ReplacementSpec replacement : toRemove) {
             if (replacement instanceof RankSwappingSpec) {
                 this.metadata.getCombinations().getNumericalRankSwapping().getRankSwappings().remove((RankSwappingSpec) replacement);
-            } else {
+            } else if (replacement instanceof MicroaggregationSpec) {
                 MicroaggregationSpec spec = (MicroaggregationSpec) replacement;
                 this.metadata.getCombinations().getMicroaggregation().getMicroaggregations().remove(spec);
+            } else if (replacement instanceof SyntheticDataSpec) {
+                //No action needed, SyntheticDataSpec's are not stored
             }
         }
     }

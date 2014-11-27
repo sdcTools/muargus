@@ -134,7 +134,7 @@ public class HTMLReportWriter {
                         ? String.format("; Optimal: %s", (microAggr.isOptimal() ? "yes" : "no")) : "";
                 addChildElement(tr, "td",
                         String.format("Group size: %d%s", microAggr.getMinimalNumberOfRecords(), optimal));
-            } else {
+            } else if (replacement instanceof SyntheticDataSpec) {
                 String alpha = "Alpha values:";
                 for (VariableMu v : ((SyntheticDataSpec) replacement).getOutputVariables()) {
                     alpha = alpha + " " + v.getAlpha() + ",";

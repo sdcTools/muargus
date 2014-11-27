@@ -98,7 +98,7 @@ public class AboutView extends DialogBase {
             }
         });
 
-        systemInfoButton.setText("Systen Info...");
+        systemInfoButton.setText("System Info...");
         systemInfoButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 systemInfoButtonActionPerformed(evt);

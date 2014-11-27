@@ -89,8 +89,8 @@ public class MainFrameView extends javax.swing.JFrame {
                 return;
             case ViewReport:
                 doEnable(this.viewReportButton, this.viewReportMenuItem, enable);
-            case RScript:
-                doEnable(this.rScriptButton, this.rScriptMenuItem, enable);
+            //case RScript:
+            //    doEnable(this.rScriptButton, this.rScriptMenuItem, enable);
             case SyntheticData:
                 doEnable(this.syntheticDataButton, this.syntheticDataMenuItem, enable);
         }
@@ -452,6 +452,7 @@ public class MainFrameView extends javax.swing.JFrame {
         modifyNumericalVariablesMenuItem = new javax.swing.JMenuItem();
         numericalMicroaggregationMenuItem = new javax.swing.JMenuItem();
         numericalRankSwappingMenuItem = new javax.swing.JMenuItem();
+        syntheticDataMenuItem = new javax.swing.JMenuItem();
         outputMenu = new javax.swing.JMenu();
         makeProtectedFileMenuItem = new javax.swing.JMenuItem();
         viewReportMenuItem = new javax.swing.JMenuItem();
@@ -460,9 +461,6 @@ public class MainFrameView extends javax.swing.JFrame {
         newsMenuItem = new javax.swing.JMenuItem();
         helpSeparator = new javax.swing.JPopupMenu.Separator();
         aboutMenuItem = new javax.swing.JMenuItem();
-        externMenu = new javax.swing.JMenu();
-        rScriptMenuItem = new javax.swing.JMenuItem();
-        syntheticDataMenuItem = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Main Frame");
@@ -946,6 +944,16 @@ public class MainFrameView extends javax.swing.JFrame {
         });
         modifyMenu.add(numericalRankSwappingMenuItem);
 
+        syntheticDataMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Y, java.awt.event.InputEvent.ALT_MASK));
+        syntheticDataMenuItem.setText("Synthetic data");
+        syntheticDataMenuItem.setEnabled(false);
+        syntheticDataMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                syntheticDataMenuItemActionPerformed(evt);
+            }
+        });
+        modifyMenu.add(syntheticDataMenuItem);
+
         menuBar.add(modifyMenu);
 
         outputMenu.setText("Output");
@@ -1007,29 +1015,6 @@ public class MainFrameView extends javax.swing.JFrame {
         helpMenu.add(aboutMenuItem);
 
         menuBar.add(helpMenu);
-
-        externMenu.setText("Extern");
-
-        rScriptMenuItem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/muargus/resources/icons/Rlogo.png"))); // NOI18N
-        rScriptMenuItem.setText("load R script");
-        rScriptMenuItem.setEnabled(false);
-        rScriptMenuItem.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                rScriptMenuItemActionPerformed(evt);
-            }
-        });
-        externMenu.add(rScriptMenuItem);
-
-        syntheticDataMenuItem.setText("Synthetic data");
-        syntheticDataMenuItem.setEnabled(false);
-        syntheticDataMenuItem.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                syntheticDataMenuItemActionPerformed(evt);
-            }
-        });
-        externMenu.add(syntheticDataMenuItem);
-
-        menuBar.add(externMenu);
 
         setJMenuBar(menuBar);
 
@@ -1154,7 +1139,6 @@ public class MainFrameView extends javax.swing.JFrame {
     private javax.swing.JButton contentsButton;
     private javax.swing.JMenuItem contentsMenuItem;
     private javax.swing.JMenuItem exitMenuItem;
-    private javax.swing.JMenu externMenu;
     private javax.swing.JMenu fileMenu;
     private javax.swing.JPopupMenu.Separator fileSeparator;
     private javax.swing.JButton globalRecodeButton;
@@ -1186,7 +1170,6 @@ public class MainFrameView extends javax.swing.JFrame {
     private javax.swing.JButton pramSpecificationButton;
     private javax.swing.JMenuItem pramSpecificationMenuItem;
     private javax.swing.JButton rScriptButton;
-    private javax.swing.JMenuItem rScriptMenuItem;
     private javax.swing.JButton showTableCollectionButton;
     private javax.swing.JMenuItem showTableCollectionMenuItem;
     private javax.swing.JButton specifyCombinationsButton;

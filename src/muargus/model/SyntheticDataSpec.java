@@ -99,6 +99,12 @@ public class SyntheticDataSpec extends ReplacementSpec {
         return allVariables;
     }
 
+    public void clear() {
+        this.allVariables.clear();
+        this.nonSensitiveVariables.clear();
+        this.sensitiveVariables.clear();
+    }
+    
     @Override
     public ArrayList<VariableMu> getInputVariables() {
         ArrayList<VariableMu> variables = new ArrayList<>(this.sensitiveVariables);
