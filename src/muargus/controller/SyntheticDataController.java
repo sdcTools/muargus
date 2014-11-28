@@ -8,7 +8,6 @@ import muargus.model.MetadataMu;
 import muargus.model.ReplacementFile;
 import muargus.model.SyntheticDataSpec;
 import muargus.model.VariableMu;
-import muargus.view.DialogBase;
 import muargus.view.SyntheticDataView;
 
 /**
@@ -19,6 +18,7 @@ public class SyntheticDataController extends ControllerBase<SyntheticDataSpec> {
 
     private final MetadataMu metadata;
     //private final static String pathRexe = "C:\\Program Files\\R\\R-3.1.2\\bin\\RScript.exe";
+    private final SyntheticDataView view;
 
     /**
      * Constructor for the RController.
@@ -27,7 +27,8 @@ public class SyntheticDataController extends ControllerBase<SyntheticDataSpec> {
      * @param metadata the orginal metadata.
      */
     public SyntheticDataController(java.awt.Frame parentView, MetadataMu metadata) {
-        super.setView(new SyntheticDataView(parentView, true, this));
+        this.view = new SyntheticDataView(parentView, true, this);
+        super.setView(this.view);
         this.metadata = metadata;
         setModel(this.metadata.getCombinations().getSyntheticData());
         fillModel();
@@ -88,6 +89,7 @@ public class SyntheticDataController extends ControllerBase<SyntheticDataSpec> {
         runBat();
         MetaWriter.adjustSyntheticOutputFile(getModel());
         getView().showMessage("Synthetic data successfully generated");
+        this.view.enableRunSyntheticDataButton(true);
         //Run the R script
         //RunRScript()
     }

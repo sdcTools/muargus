@@ -242,6 +242,7 @@ public class PramSpecificationView extends DialogBase<PramSpecificationControlle
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("PRAM Specification");
+        setMinimumSize(new java.awt.Dimension(600, 440));
 
         leftPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Variables"));
 

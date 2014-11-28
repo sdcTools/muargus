@@ -414,6 +414,7 @@ public class MainFrameView extends javax.swing.JFrame {
         modifyNumericalVariablesButton = new javax.swing.JButton();
         numericalMicroaggregationButton = new javax.swing.JButton();
         numericalRankSwappingButton = new javax.swing.JButton();
+        syntheticDataButton = new javax.swing.JButton();
         toolBarSeparator3 = new javax.swing.JToolBar.Separator();
         makeProtectedFileButton = new javax.swing.JButton();
         viewReportButton = new javax.swing.JButton();
@@ -421,9 +422,6 @@ public class MainFrameView extends javax.swing.JFrame {
         contentsButton = new javax.swing.JButton();
         newsButton = new javax.swing.JButton();
         aboutButton = new javax.swing.JButton();
-        toolBarSeparator5 = new javax.swing.JToolBar.Separator();
-        rScriptButton = new javax.swing.JButton();
-        syntheticDataButton = new javax.swing.JButton();
         unsafeCombinationsPanel = new javax.swing.JPanel();
         unsafeCombinationsLabel = new javax.swing.JLabel();
         unsafeCombinationsScrollPane = new javax.swing.JScrollPane();
@@ -613,6 +611,19 @@ public class MainFrameView extends javax.swing.JFrame {
             }
         });
         toolBar.add(numericalRankSwappingButton);
+
+        syntheticDataButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/muargus/resources/icons/Rlogo.png"))); // NOI18N
+        syntheticDataButton.setToolTipText("Synthetic data");
+        syntheticDataButton.setEnabled(false);
+        syntheticDataButton.setFocusable(false);
+        syntheticDataButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        syntheticDataButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        syntheticDataButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                syntheticDataMenuItemActionPerformed(evt);
+            }
+        });
+        toolBar.add(syntheticDataButton);
         toolBar.add(toolBarSeparator3);
 
         makeProtectedFileButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/muargus/resources/icons/makeSafeFile.png"))); // NOI18N
@@ -677,32 +688,6 @@ public class MainFrameView extends javax.swing.JFrame {
             }
         });
         toolBar.add(aboutButton);
-        toolBar.add(toolBarSeparator5);
-
-        rScriptButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/muargus/resources/icons/Rlogo.png"))); // NOI18N
-        rScriptButton.setToolTipText("R script");
-        rScriptButton.setEnabled(false);
-        rScriptButton.setFocusable(false);
-        rScriptButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        rScriptButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        rScriptButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                rScriptMenuItemActionPerformed(evt);
-            }
-        });
-        toolBar.add(rScriptButton);
-
-        syntheticDataButton.setText("Synthetic data");
-        syntheticDataButton.setEnabled(false);
-        syntheticDataButton.setFocusable(false);
-        syntheticDataButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        syntheticDataButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        syntheticDataButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                syntheticDataMenuItemActionPerformed(evt);
-            }
-        });
-        toolBar.add(syntheticDataButton);
 
         unsafeCombinationsPanel.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
 
@@ -1124,10 +1109,6 @@ public class MainFrameView extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_unsafeCombinationsTableMouseClicked
 
-    private void rScriptMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rScriptMenuItemActionPerformed
-        this.controller.rScript();
-    }//GEN-LAST:event_rScriptMenuItemActionPerformed
-
     private void syntheticDataMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_syntheticDataMenuItemActionPerformed
         this.controller.syntheticData();
     }//GEN-LAST:event_syntheticDataMenuItemActionPerformed
@@ -1169,7 +1150,6 @@ public class MainFrameView extends javax.swing.JFrame {
     private javax.swing.JMenu outputMenu;
     private javax.swing.JButton pramSpecificationButton;
     private javax.swing.JMenuItem pramSpecificationMenuItem;
-    private javax.swing.JButton rScriptButton;
     private javax.swing.JButton showTableCollectionButton;
     private javax.swing.JMenuItem showTableCollectionMenuItem;
     private javax.swing.JButton specifyCombinationsButton;
@@ -1182,7 +1162,6 @@ public class MainFrameView extends javax.swing.JFrame {
     private javax.swing.JToolBar.Separator toolBarSeparator2;
     private javax.swing.JToolBar.Separator toolBarSeparator3;
     private javax.swing.JToolBar.Separator toolBarSeparator4;
-    private javax.swing.JToolBar.Separator toolBarSeparator5;
     private javax.swing.JLabel unsafeCombinationsLabel;
     private javax.swing.JPanel unsafeCombinationsPanel;
     private javax.swing.JScrollPane unsafeCombinationsScrollPane;

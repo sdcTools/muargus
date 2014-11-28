@@ -30,7 +30,7 @@ public class Combinations {
     //private Microaggregation qualitativeMicroaggregation;
     private NumericalRankSwapping numericalRankSwapping;
     private PramSpecification pramSpecification;
-    private RSpecification rSpecification;
+    //private RSpecification rSpecification;
     private SyntheticDataSpec syntheticData;
 
     // tot dit aantal kan die het redelijk goed hebben, maar is die wel +/- 5 seconden aan het rekenen. 
@@ -147,24 +147,24 @@ public class Combinations {
         this.pramSpecification = new PramSpecification();
     }
     
-    /**
-     * Gets the model class of the RSpecification screen.
-     *
-     * @return Returns the RSpecification model class.
-     */
-    public RSpecification getRSpecification() {
-        if (this.rSpecification == null) {
-            createRSpecification();
-        }
-        return this.rSpecification;
-    }
-    
-    /**
-     * Creates a new instance of the RSpecification class.
-     */
-    private void createRSpecification(){
-        this.rSpecification = new RSpecification();
-    }
+//    /**
+//     * Gets the model class of the RSpecification screen.
+//     *
+//     * @return Returns the RSpecification model class.
+//     */
+//    public RSpecification getRSpecification() {
+//        if (this.rSpecification == null) {
+//            createRSpecification();
+//        }
+//        return this.rSpecification;
+//    }
+//    
+//    /**
+//     * Creates a new instance of the RSpecification class.
+//     */
+//    private void createRSpecification(){
+//        this.rSpecification = new RSpecification();
+//    }
 
     /**
      * Gets the model class of the SyntheticData screen.
