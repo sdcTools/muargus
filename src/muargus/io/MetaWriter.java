@@ -61,7 +61,8 @@ public class MetaWriter {
             if (recode.getMissing_1_new().length() > 0 || recode.getMissing_2_new().length() > 0) {
                 writer.println(String.format("<MISSING> %s %s", recode.getMissing_1_new(), recode.getMissing_2_new()));
             }
-            if (recode.getCodeListFile() != null && !recode.getCodeListFile().equals(recode.getVariable().getCodeListFile())) {
+            if (recode.getCodeListFile() != null && recode.getCodeListFile().length() > 0 
+                    && !recode.getCodeListFile().equals(recode.getVariable().getCodeListFile())) {
                 writer.println(String.format("<CODELIST> \"%s\"", recode.getCodeListFile()));
             }
         } catch (IOException ex) {

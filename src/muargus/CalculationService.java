@@ -681,8 +681,8 @@ public class CalculationService {
             //Global recode codelist
             if (metadata.getCombinations().getGlobalRecode() != null) {
                 RecodeMu recode = metadata.getCombinations().getGlobalRecode().getRecodeByVariableName(variable.getName());
-                if (recode != null && (recode.isRecoded() || recode.isTruncated())) {
-                    variable.setCodeListFile(recode.getCodeListFile());
+                if (recode != null && recode.getAppliedCodeListFile().length() > 0) {
+                    variable.setCodeListFile(recode.getAppliedCodeListFile());
                     variable.setCodelist(variable.getCodeListFile() != null);
                 }
             }

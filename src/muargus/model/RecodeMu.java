@@ -21,6 +21,7 @@ public class RecodeMu {
     private final String missing_2_original;
     private String missing_1_new;
     private String missing_2_new;
+    private String appliedCodeListFile;
 
     /**
      * Constructor of the model class RecodeMu. Initializes the variable, sets
@@ -35,6 +36,7 @@ public class RecodeMu {
         this.grcFile = "";
         this.grcText = "";
         this.codeListFile = "";
+        this.appliedCodeListFile = "";
         this.missing_1_new = "";
         this.missing_2_new = "";
         this.missing_1_original = variable.getMissing(0);
@@ -58,6 +60,7 @@ public class RecodeMu {
         this.missing_2_new = recode.missing_2_new;
         this.missing_1_original = recode.missing_1_original;
         this.missing_2_original = recode.missing_2_original;
+        this.appliedCodeListFile = recode.appliedCodeListFile;
     }
 
     /**
@@ -94,6 +97,26 @@ public class RecodeMu {
      */
     public void setCodeListFile(String codeListFile) {
         this.codeListFile = codeListFile;
+    }
+
+    /**
+     * Get the path of the code list file that was used when applying the recode.
+     *
+     * @return String containing the the path of the code list file that was
+     * used when applying the recpde
+     */
+    public String getAppliedCodeListFile() {
+        return appliedCodeListFile;
+    }
+
+    /**
+     * Set the path of the code list file that was used when applying the recode.
+     *
+     * @param appliedCodeListFile String containing the the path of the code list file
+     * that was used when applying the recode.
+     */
+    public void setAppliedCodeListFile(String appliedCodeListFile) {
+        this.appliedCodeListFile = appliedCodeListFile;
     }
 
     /**
