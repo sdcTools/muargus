@@ -12,17 +12,12 @@ Global Recode
 SPSS
 -   afvangen als de save file al in gebruik is.                                                         -(M)
 -   Afvangen spss gebruiken wanneer men geen spss geinstalleerd heeft                                   -(L)
--   Bug: Bij String variabelen gaat het fout door missing values                                        -(H) gefixed
 
 R
--   Icon toevoegen Synthetic data                                                                       -(L)
 -   progressbar toevoegen                                                                               -(L)
 -   afvangen als geen R is geinstalleerd of wanneer dit niet goed is gedaan.                            -(M)
     (misschien checken of .rpl file leeg is?)   
--   Oefen scherm verwijderen/onzichtbaar maken (release 3) of beter implementeren (Wishlist)            -(L)
--   Synthetic data: variabelen verdwijnen uit de tabel                                                  -(H) gefixed
-    --> Anne, is het handig om dit terug te zetten naar wat het was?
--   Synthetic data: doet het om de een of andere manier niet met alle variabelen --> Probleem zit       -(M)
+-   Synthetic data: doet het om de een of andere manier niet met alle variabelen --> Probleem zit       -(M) Jeldrik
     waarschijnlijk in R. Ik heb het nu onmogelijk gemaakt maar ik weet niet waarom het niet mag)   
 
 Make Protected File
@@ -32,10 +27,6 @@ Make Protected File
 
 Numerical Rank Swapping
 -   beter waarschuwing geven als meerdere variabelen bij elkaar horen en 1 undoed wordt                 -(L)
--   Catalaan dll aanroepen --> wordt al gedaan toch?                                                    -(L) gefixed
-
-PRAM specification
--   minimale grootte scherm instellen                                                                   -(L)
 
 Select Combinations
 -   Maximum aantal te genereren tabellen opnieuw bekijken (staat nu op 25000)                           -(M)
@@ -50,7 +41,7 @@ Overige
 -   NumericalDll                                     Is leeg, wordt dit ergens voor gebruikt?           -(L)
 -   Release notes schrijven                                                                             -(H)
 -   Javadocs                                                                                            -(M)
--   News report wordt heel amateuristisch ingelezen                                                     -(L)
+-   News report wordt heel amateuristisch ingelezen                                                     -(M)
 -   News report bijwerken                                                                               -(M)
 -   Checken of overal extensies worden toevoegd bij het opslaan                                         -(M)
 -   Bepalen wat we met welke logger willen loggen + implementeren                                       -(H)
@@ -58,10 +49,12 @@ Overige
 -   Open microdata linken aan content help --> gebruikt tau de microdata uit argusLib?                  -(H)
 -   Manual schrijven                                                                                    -(H)
 -   Installatie manual (spss, R etc.)                                                                   -(H)
--   Copyright jaar aanpassen                                                                            -(M)
+-   Copyright jaar aanpassen                                                                            -(H)
 -   licenties regelen/credits geven                                                                     -(H)
--   TODO's in code langslopen                                                                           -(M)
-
+-   TODO's + Nederlands commentaar in code langslopen                                                   -(M)
+-   LINUX                                                                                               -(H)
+-   voorbeeld data meeleveren goed fixen                                                                -(H)
+-   SelectVariables screen non-editable maken + titel                                                   -(M)
 
 
 
@@ -81,7 +74,7 @@ SPSS
 -   Visuele aanwijzing dat het programma aan het rekenen is en niet is vastgelopen                      -
     na open file (dan worden namelijk gegevens opgehaald vanuit spss)
 -   Value labels gebruiken                                                                              -
--   SelectVariables screen non-editable maken                                                           -
+
 
 R
 -   Typefout naam package veranderen zodat het weer hybridIpso3 heet en niet hybribiso3                 -
@@ -125,3 +118,15 @@ PRAM specification
 Select Combinations
 -   risk model zetten voor meerder tabellen tegelijkertijd mogelijk maken                               -
 -   willen we een getData() methode in de constructor. Nu zit het half in de view en half in TableMu.   -
+
+
+
+Gefixed:
+-   Bug: Bij String variabelen gaat het fout door missing values                                        -(H) Anne
+-   Synthetic data: variabelen verdwijnen uit de tabel                                                  -(H) Anne
+    --> Anne, is het handig om dit terug te zetten naar wat het was?
+-   Catalaan dll aanroepen --> wordt al gedaan toch?                                                    -(L) Anne
+-   minimale grootte scherm instellen                                                                   -(L) Jeldrik
+-   Icon toevoegen Synthetic data                                                                       -(L) Jeldrik
+-   Oefen scherm verwijderen/onzichtbaar maken (release 3) of beter implementeren (Wishlist)            -(L) Jeldrik
+

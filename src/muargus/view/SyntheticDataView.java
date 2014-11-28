@@ -4,6 +4,7 @@ package muargus.view;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.DefaultListModel;
+import javax.swing.JButton;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
@@ -144,6 +145,10 @@ public class SyntheticDataView extends DialogBase<SyntheticDataController> {
             selected = index[index.length - 1];
         }
         return selected;
+    }
+
+    public void enableRunSyntheticDataButton(boolean enable) {
+        this.runSyntheticDataButton.setEnabled(enable);
     }
 
     /**
@@ -419,16 +424,17 @@ public class SyntheticDataView extends DialogBase<SyntheticDataController> {
 
     private void runSyntheticDataButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_runSyntheticDataButtonActionPerformed
         int rowCount = ((DefaultTableModel) this.sensitiveVariablesTable.getModel()).getRowCount();
-        if (rowCount > 0 && !this.nonSensitiveVariablesListModel.isEmpty() && !this.variablesListModel.isEmpty()) {
-            this.runSyntheticDataButton.setEnabled(false);
+        if (rowCount > 0){// && !this.nonSensitiveVariablesListModel.isEmpty() && !this.variablesListModel.isEmpty()) {
+            enableRunSyntheticDataButton(false);
             if(!getController().runSyntheticData()){
                 //TODO: checkt nu alleen of het goed gaat tot de batch file wordt aangeroepen.
                 //Het is beter om een progressbar toe te voegen en de voortgang daar aan te linken.
                 showMessage("Error generating synthetic data");
+                enableRunSyntheticDataButton(true);
             }
-            this.runSyntheticDataButton.setEnabled(true);
-        } else if (rowCount > 0) {
-            showMessage("It is not possible to use all numeric variables for generating synthetic data.");
+            
+//        } else if (rowCount > 0) {
+//            showMessage("It is not possible to use all numeric variables for generating synthetic data.");
         }
     }//GEN-LAST:event_runSyntheticDataButtonActionPerformed
 
