@@ -100,6 +100,7 @@ public class GlobalRecodeController extends ControllerBase<GlobalRecode> {
         getCalculationService().applyRecode();
         recode.setTruncated(false);
         recode.setRecoded(true);
+        recode.setAppliedCodeListFile(recode.getCodeListFile());
     }
 
     /**
@@ -114,6 +115,7 @@ public class GlobalRecodeController extends ControllerBase<GlobalRecode> {
         getCalculationService().undoRecode(recode);
         recode.setRecoded(false);
         recode.setTruncated(false);
+        recode.setAppliedCodeListFile("");
     }
 
     /**
@@ -131,6 +133,7 @@ public class GlobalRecodeController extends ControllerBase<GlobalRecode> {
         recode.setRecoded(false);
         recode.setTruncated(true);
         recode.setPositionsTruncated(positions);
+        recode.setAppliedCodeListFile(recode.getCodeListFile());
     }
 
 }

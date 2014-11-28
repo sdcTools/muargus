@@ -267,8 +267,8 @@ public class MainFrameController {
                 }
                 if (hasRecode) {
                     RecodeMu recode = model.getGlobalRecode().getRecodeByVariableName(variable.getName());
-                    if (recode != null && (recode.isRecoded() || recode.isTruncated())) {
-                        codelistFile = recode.getCodeListFile();
+                    if (recode != null && (recode.getAppliedCodeListFile().length() > 0)) {
+                        codelistFile = recode.getAppliedCodeListFile();
                     }
                 }
                 if (!"".equals(codelistFile)) {
