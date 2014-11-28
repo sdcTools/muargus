@@ -8,6 +8,7 @@ import muargus.model.MetadataMu;
 import muargus.model.ReplacementFile;
 import muargus.model.SyntheticDataSpec;
 import muargus.model.VariableMu;
+import muargus.view.DialogBase;
 import muargus.view.SyntheticDataView;
 
 /**

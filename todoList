@@ -50,7 +50,7 @@ Overige
 -   NumericalDll                                     Is leeg, wordt dit ergens voor gebruikt?           -(L)
 -   Release notes schrijven                                                                             -(H)
 -   Javadocs                                                                                            -(M)
--   News report wordt heel amateuristisch ingelezen                                                     -(L)
+-   News report wordt heel amateuristisch ingelezen                                                     -(M)
 -   News report bijwerken                                                                               -(M)
 -   Checken of overal extensies worden toevoegd bij het opslaan                                         -(M)
 -   Bepalen wat we met welke logger willen loggen + implementeren                                       -(H)
@@ -58,10 +58,12 @@ Overige
 -   Open microdata linken aan content help --> gebruikt tau de microdata uit argusLib?                  -(H)
 -   Manual schrijven                                                                                    -(H)
 -   Installatie manual (spss, R etc.)                                                                   -(H)
--   Copyright jaar aanpassen                                                                            -(M)
+-   Copyright jaar aanpassen                                                                            -(H)
 -   licenties regelen/credits geven                                                                     -(H)
--   TODO's in code langslopen                                                                           -(M)
-
+-   TODO's + Nederlands commentaar in code langslopen                                                   -(M)
+-   LINUX
+-   voorbeeld data meeleveren goed fixen
+-   SelectVariables screen non-editable maken + titel                                                   -(M)
 
 
 
@@ -81,7 +83,7 @@ SPSS
 -   Visuele aanwijzing dat het programma aan het rekenen is en niet is vastgelopen                      -
     na open file (dan worden namelijk gegevens opgehaald vanuit spss)
 -   Value labels gebruiken                                                                              -
--   SelectVariables screen non-editable maken                                                           -
+
 
 R
 -   Typefout naam package veranderen zodat het weer hybridIpso3 heet en niet hybribiso3                 -
