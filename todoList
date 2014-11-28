@@ -6,23 +6,23 @@ niet behandelde opmerkingen/vragen:
 Release 3:                                                                                              Door:
 
 Global Recode
--   BUG: Read .grc file --> apply --> reopen global recode --> Read new .grc for same variable          -(H)
+-   BUG: Read .grc file --> apply --> reopen global recode --> Read new .grc for same variable          -(H) Anne
     --> close --> labels verdwijnen terwijl de nieuwe .grc niet is toegepast.
  
 SPSS
 -   afvangen als de save file al in gebruik is.                                                         -(M)
 -   Afvangen spss gebruiken wanneer men geen spss geinstalleerd heeft                                   -(L)
--   Bug: Bij String variabelen gaat het fout door missing values                                        -(H)
+-   Bug: Bij String variabelen gaat het fout door missing values                                        -(H) gefixed
 
 R
 -   Icon toevoegen Synthetic data                                                                       -(L)
--   progressbar toevoegen                                                                               -(M)
+-   progressbar toevoegen                                                                               -(L)
 -   afvangen als geen R is geinstalleerd of wanneer dit niet goed is gedaan.                            -(M)
     (misschien checken of .rpl file leeg is?)   
 -   Oefen scherm verwijderen/onzichtbaar maken (release 3) of beter implementeren (Wishlist)            -(L)
--   Synthetic data: variabelen verdwijnen uit de tabel                                                  -(H)
+-   Synthetic data: variabelen verdwijnen uit de tabel                                                  -(H) gefixed
     --> Anne, is het handig om dit terug te zetten naar wat het was?
--   Synthetic data: doet het om de een of andere manier niet met alle variabelen --> Probleem zit       -(L)
+-   Synthetic data: doet het om de een of andere manier niet met alle variabelen --> Probleem zit       -(M)
     waarschijnlijk in R. Ik heb het nu onmogelijk gemaakt maar ik weet niet waarom het niet mag)   
 
 Make Protected File
@@ -32,7 +32,7 @@ Make Protected File
 
 Numerical Rank Swapping
 -   beter waarschuwing geven als meerdere variabelen bij elkaar horen en 1 undoed wordt                 -(L)
--   Catalaan dll aanroepen --> wordt al gedaan toch?                                                    -(L)
+-   Catalaan dll aanroepen --> wordt al gedaan toch?                                                    -(L) gefixed
 
 PRAM specification
 -   minimale grootte scherm instellen                                                                   -(L)
@@ -40,11 +40,10 @@ PRAM specification
 Select Combinations
 -   Maximum aantal te genereren tabellen opnieuw bekijken (staat nu op 25000)                           -(M)
 -   Waarschuwing aantal combinaties generate tables up to dimension van te voren geven                  -(M)
--   Bug: wanneer het id level bij alle variabelen 0 is, gaat het fout bij generate tables               -(H)
+-   Bug: wanneer het id level bij alle variabelen 0 is, gaat het fout bij generate tables               -(H) ANCO
     up to dimension. (waarschijnlijk worden de variabelen met een id-leven van 0 niet meegerekend)  
 
-Specify Metadata
--   implement significant difference                                                                    -(L)
+
 
 Overige
 -   MuArgusCtrl                                      Is leeg, wordt dit ergens voor gebruikt?           -(L)
@@ -94,6 +93,9 @@ Open microdata
 -   open microdata --> als er een nieuwe extensie wordt gebruikt, wordt die toegevoegd via de registry  -
     misschien mooier als alle bestanden die leesbaar zijn zichtbaar zijn 
     (dus alle .asc, .csv, .sav etc.) en dat vervolgens gespecificeerd kan worden.
+
+Specify Metadata
+-   implement significant difference                                                                    -(L)
 
 Make Protected File
 -   voorkeurs opties zoals 'use entropy' en 'keep in safe file' in de registry                          -
