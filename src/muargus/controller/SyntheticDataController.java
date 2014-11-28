@@ -59,6 +59,10 @@ public class SyntheticDataController extends ControllerBase<SyntheticDataSpec> {
             syntheticData.getSensitiveVariables().addAll(getSensitiveVariables());
             syntheticData.getNonSensitiveVariables().addAll(getNonSensitiveVariables());
             syntheticData.setReplacementFile(new ReplacementFile("SyntheticData"));
+            //TODO:
+//            if(this.metadata.getReplacementSpecs().contains()){
+//                remove replacementspec
+//            }
             this.metadata.getReplacementSpecs().add(syntheticData);
 
             /* synthetic data: sensitive variables are numbered from x1 to xn,

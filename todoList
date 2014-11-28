@@ -5,9 +5,7 @@ niet behandelde opmerkingen/vragen:
 
 Release 3:                                                                                              Door:
 
-Global Recode
--   BUG: Read .grc file --> apply --> reopen global recode --> Read new .grc for same variable          -(H) Anne
-    --> close --> labels verdwijnen terwijl de nieuwe .grc niet is toegepast.
+
  
 SPSS
 -   afvangen als de save file al in gebruik is.                                                         -(M)
@@ -128,3 +126,5 @@ Gefixed:
 -   afvangen als geen R is geinstalleerd of wanneer dit niet goed is gedaan.                            -(M) Jeldrik (waarschuwing moet nog beter)
     (misschien checken of .rpl file leeg is?)   
 -   SelectVariables screen non-editable maken + titel                                                   -(M) Jeldrik
+-   BUG: Read .grc file --> apply --> reopen global recode --> Read new .grc for same variable          -(H) Anne
+    --> close --> labels verdwijnen terwijl de nieuwe .grc niet is toegepast.
