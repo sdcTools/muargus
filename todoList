@@ -1,0 +1,125 @@
+niet behandelde opmerkingen/vragen:
+-   wat doen met knoppen tijdens achtergrondprocessen? --> ANCO
+-   inhoudelijke fout in ingelezen metadata: wat doen? knoppen uitzetten?
+
+
+Release 3:                                                                                              Door:
+
+Global Recode
+-   BUG: Read .grc file --> apply --> reopen global recode --> Read new .grc for same variable          -(H)
+    --> close --> labels verdwijnen terwijl de nieuwe .grc niet is toegepast.
+ 
+SPSS
+-   afvangen als de save file al in gebruik is.                                                         -(M)
+-   Afvangen spss gebruiken wanneer men geen spss geinstalleerd heeft                                   -(L)
+-   Bug: Bij String variabelen gaat het fout door missing values                                        -(H)
+
+R
+-   Icon toevoegen Synthetic data                                                                       -(L)
+-   progressbar toevoegen                                                                               -(M)
+-   afvangen als geen R is geinstalleerd of wanneer dit niet goed is gedaan.                            -(M)
+    (misschien checken of .rpl file leeg is?)   
+-   Oefen scherm verwijderen/onzichtbaar maken (release 3) of beter implementeren (Wishlist)            -(L)
+-   Synthetic data: variabelen verdwijnen uit de tabel                                                  -(H)
+    --> Anne, is het handig om dit terug te zetten naar wat het was?
+-   Synthetic data: doet het om de een of andere manier niet met alle variabelen --> Probleem zit       -(L)
+    waarschijnlijk in R. Ik heb het nu onmogelijk gemaakt maar ik weet niet waarom het niet mag)   
+
+Make Protected File
+-   verwarring door elkaar gebruik van 'priority' en 'weight' wegnemen                                  -(L)
+    --> bij make protected file + suppression weight priority noemen: use weight wordt use priority, 
+    weight for local suppression wordt priority for local suppression       
+
+Numerical Rank Swapping
+-   beter waarschuwing geven als meerdere variabelen bij elkaar horen en 1 undoed wordt                 -(L)
+-   Catalaan dll aanroepen --> wordt al gedaan toch?                                                    -(L)
+
+PRAM specification
+-   minimale grootte scherm instellen                                                                   -(L)
+
+Select Combinations
+-   Maximum aantal te genereren tabellen opnieuw bekijken (staat nu op 25000)                           -(M)
+-   Waarschuwing aantal combinaties generate tables up to dimension van te voren geven                  -(M)
+-   Bug: wanneer het id level bij alle variabelen 0 is, gaat het fout bij generate tables               -(H)
+    up to dimension. (waarschijnlijk worden de variabelen met een id-leven van 0 niet meegerekend)  
+
+Specify Metadata
+-   implement significant difference                                                                    -(L)
+
+Overige
+-   MuArgusCtrl                                      Is leeg, wordt dit ergens voor gebruikt?           -(L)
+-   NumericalDll                                     Is leeg, wordt dit ergens voor gebruikt?           -(L)
+-   Release notes schrijven                                                                             -(H)
+-   Javadocs                                                                                            -(M)
+-   News report wordt heel amateuristisch ingelezen                                                     -(L)
+-   News report bijwerken                                                                               -(M)
+-   Checken of overal extensies worden toevoegd bij het opslaan                                         -(M)
+-   Bepalen wat we met welke logger willen loggen + implementeren                                       -(H)
+-   Controleren warning messages. Worden ze overal gegeven waar nodig en zijn de berichten consequent.  -(L)
+-   Open microdata linken aan content help --> gebruikt tau de microdata uit argusLib?                  -(H)
+-   Manual schrijven                                                                                    -(H)
+-   Installatie manual (spss, R etc.)                                                                   -(H)
+-   Copyright jaar aanpassen                                                                            -(M)
+-   licenties regelen/credits geven                                                                     -(H)
+-   TODO's in code langslopen                                                                           -(M)
+
+
+
+
+Wishlist
+
+- explore file lostrekken                                                                               -
+
+Global Recode
+-   willen we methoden verplaatsen naar de GlobalRecodeController?                                      -
+    bijvoorbeeld: getTableRow(), write() en misschien equals()?  
+-   De nieuwe missing values van het bestand AGE3.GRC worden gezien als 1 missing value                 - 
+    Dit komt omdat er een komma is gebruikt ipv een spatie. Oude mu ziet het ook als 1 missing value    
+    Wat doen?
+-   Missing van REGION.GRC bevat een komma waardoor de eerste missing wordt gezien als "98,"            -
+
+SPSS
+-   Visuele aanwijzing dat het programma aan het rekenen is en niet is vastgelopen                      -
+    na open file (dan worden namelijk gegevens opgehaald vanuit spss)
+-   Value labels gebruiken                                                                              -
+-   SelectVariables screen non-editable maken                                                           -
+
+R
+-   Typefout naam package veranderen zodat het weer hybridIpso3 heet en niet hybribiso3                 -
+
+Main Frame
+-   kijken welke schermen wel en welke niet gemaximaliseerd mogen worden.                               -
+
+Open microdata
+-   open microdata --> als er een nieuwe extensie wordt gebruikt, wordt die toegevoegd via de registry  -
+    misschien mooier als alle bestanden die leesbaar zijn zichtbaar zijn 
+    (dus alle .asc, .csv, .sav etc.) en dat vervolgens gespecificeerd kan worden.
+
+Make Protected File
+-   voorkeurs opties zoals 'use entropy' en 'keep in safe file' in de registry                          -
+-   html viewer vervangen: de html/css wordt nu brak getoond                                            -
+-   berekening onder getData verschuiven naar constructor                                               -
+-   priority automatisch bepalen door middel van entropie. Hierdoor zou je dus kunnen zien hoeveel      -
+    een variabele meeweegt als er gebruik gemaakt wordt van entropie. Nu weet je dat entropie 
+    wordt gebruikt maar niet wat dat precies betekent voor de bescherming van je data.
+
+Micro Aggregation
+-   record number in/uit registry                                                                       -
+-   optimal in/uit registry                                                                             -
+
+Modify Numerical Variables
+-   Iets opslaan/apply als niets is ingevuld?                                                           -
+
+Numerical Rank Swapping
+-   is percentage int of double?                                                                        -
+-   de undo button werkt alleen als de variabele in het selected field staat. Misschien is het mooi als -
+    je ook undo kan doen door alleen de variabele(n) te selecteren?
+-   percentage in/uit registry                                                                          -
+
+PRAM specification
+-   defaultProbability in de registry                                                                   -
+-   waarschuwing geven als dingen zijn aangepast                                                        -
+
+Select Combinations
+-   risk model zetten voor meerder tabellen tegelijkertijd mogelijk maken                               -
+-   willen we een getData() methode in de constructor. Nu zit het half in de view en half in TableMu.   -
