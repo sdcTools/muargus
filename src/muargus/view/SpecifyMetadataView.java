@@ -27,7 +27,7 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
     private ArrayList<VariableMu> related;
     private final String[] idLevel = {"0", "1", "2", "3", "4", "5"};
     private final String[] format = {"Fixed format", "Free format", "Free with meta", "SPSS system file"};
-    private String[] suppressionWeight;
+    private String[] suppressionPriority;
     private final VariableMu dummyVar = new VariableMu();
     private final java.awt.Frame parent;
 
@@ -55,7 +55,7 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
      */
     @Override
     public void initializeData() {
-        this.suppressionWeight = new String[101];
+        this.suppressionPriority = new String[101];
 
         // adds the variables
         this.variableListModel = new DefaultListModel<>();
@@ -64,14 +64,14 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
         }
         this.variablesList.setModel(this.variableListModel);
 
-        // makes the list of suppressionweights for the suppressionWeightJComboBox
-        for (int i = 0; i < this.suppressionWeight.length; i++) {
-            this.suppressionWeight[i] = Integer.toString(i);
+        // makes the list of suppressionPriorities for the suppressionPriorityJComboBox
+        for (int i = 0; i < this.suppressionPriority.length; i++) {
+            this.suppressionPriority[i] = Integer.toString(i);
         }
 
         // add lists of names to the ComboBoxes
         this.identificationComboBox.setModel(new DefaultComboBoxModel(this.idLevel));
-        this.weightLocalSuppressionComboBox.setModel(new DefaultComboBoxModel(this.suppressionWeight));
+        this.priorityLocalSuppressionComboBox.setModel(new DefaultComboBoxModel(this.suppressionPriority));
 
         // set the format choise options
         if (getMetadata().isSpss()) {
@@ -187,7 +187,7 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
         this.truncationAllowedCheckBox.setSelected(selected.isTruncable());
         this.codelistfileCheckBox.setSelected(selected.isCodelist());
         this.codelistfileTextField.setText(selected.getCodeListFile());
-        this.weightLocalSuppressionComboBox.setSelectedIndex(selected.getSuppressweight());
+        this.priorityLocalSuppressionComboBox.setSelectedIndex(selected.getSuppressPriority());
         this.categoricalCheckBox.setSelected(selected.isCategorical());
         this.numericalCheckBox.setSelected(selected.isNumeric());
         this.weightRadioButton.setSelected(selected.isWeight());
@@ -380,9 +380,9 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
         numericalCheckBox = new javax.swing.JCheckBox();
         optionsArgusPanel = new javax.swing.JPanel();
         identificationLevelLabel = new javax.swing.JLabel();
-        weightLocalSuppressionLabel = new javax.swing.JLabel();
+        priorityLocalSuppressionLabel = new javax.swing.JLabel();
         identificationComboBox = new javax.swing.JComboBox();
-        weightLocalSuppressionComboBox = new javax.swing.JComboBox();
+        priorityLocalSuppressionComboBox = new javax.swing.JComboBox();
         categoriesPanel = new javax.swing.JPanel();
         truncationAllowedCheckBox = new javax.swing.JCheckBox();
         codelistfileCheckBox = new javax.swing.JCheckBox();
@@ -670,7 +670,7 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
 
         identificationLevelLabel.setText("Identification Level:");
 
-        weightLocalSuppressionLabel.setText("Weight for local suppression:");
+        priorityLocalSuppressionLabel.setText("Priority for local suppression:");
 
         identificationComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         identificationComboBox.addActionListener(new java.awt.event.ActionListener() {
@@ -679,10 +679,10 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
             }
         });
 
-        weightLocalSuppressionComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        weightLocalSuppressionComboBox.addActionListener(new java.awt.event.ActionListener() {
+        priorityLocalSuppressionComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        priorityLocalSuppressionComboBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                weightLocalSuppressionComboBoxActionPerformed(evt);
+                priorityLocalSuppressionComboBoxActionPerformed(evt);
             }
         });
 
@@ -694,11 +694,11 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
                 .addContainerGap()
                 .addGroup(optionsArgusPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(identificationLevelLabel)
-                    .addComponent(weightLocalSuppressionLabel))
+                    .addComponent(priorityLocalSuppressionLabel))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 22, Short.MAX_VALUE)
                 .addGroup(optionsArgusPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(identificationComboBox, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(weightLocalSuppressionComboBox, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(priorityLocalSuppressionComboBox, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
         optionsArgusPanelLayout.setVerticalGroup(
@@ -710,8 +710,8 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
                     .addComponent(identificationComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(9, 9, 9)
                 .addGroup(optionsArgusPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(weightLocalSuppressionLabel)
-                    .addComponent(weightLocalSuppressionComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(priorityLocalSuppressionLabel)
+                    .addComponent(priorityLocalSuppressionComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(18, Short.MAX_VALUE))
         );
 
@@ -1140,12 +1140,12 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
         }
     }//GEN-LAST:event_identificationComboBoxActionPerformed
 
-    private void weightLocalSuppressionComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_weightLocalSuppressionComboBoxActionPerformed
+    private void priorityLocalSuppressionComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_priorityLocalSuppressionComboBoxActionPerformed
         try {
-            getSelectedVariable().setSuppressweight(Integer.parseInt((String) this.weightLocalSuppressionComboBox.getSelectedItem()));
+            getSelectedVariable().setSuppressionPriority(Integer.parseInt((String) this.priorityLocalSuppressionComboBox.getSelectedItem()));
         } catch (NumberFormatException e) {
         }
-    }//GEN-LAST:event_weightLocalSuppressionComboBoxActionPerformed
+    }//GEN-LAST:event_priorityLocalSuppressionComboBoxActionPerformed
 
     private void relatedToComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_relatedToComboBoxActionPerformed
         if (this.relatedToComboBox.getSelectedIndex() != 0) {
@@ -1194,6 +1194,8 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
     private javax.swing.JButton okButton;
     private javax.swing.JPanel optionsArgusPanel;
     private javax.swing.JRadioButton otherRadioButton;
+    private javax.swing.JComboBox priorityLocalSuppressionComboBox;
+    private javax.swing.JLabel priorityLocalSuppressionLabel;
     private javax.swing.JComboBox relatedToComboBox;
     private javax.swing.JLabel relatedToPanel;
     private javax.swing.JLabel separatorLabel;
@@ -1206,8 +1208,6 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
     private javax.swing.JList variablesList;
     private javax.swing.JPanel variablesPanel;
     private javax.swing.JScrollPane variablesScrollPane;
-    private javax.swing.JComboBox weightLocalSuppressionComboBox;
-    private javax.swing.JLabel weightLocalSuppressionLabel;
     private javax.swing.JRadioButton weightRadioButton;
     // End of variables declaration//GEN-END:variables
 }

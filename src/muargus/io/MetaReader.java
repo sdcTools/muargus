@@ -132,7 +132,7 @@ public class MetaReader {
                             break;
                         case "<SUPPRESSWEIGHT>":
                             try {
-                                variable.setSuppressweight(Integer.parseInt(tokenizer.nextToken()));
+                                variable.setSuppressionPriority(Integer.parseInt(tokenizer.nextToken()));
                             } catch (NumberFormatException e) {
                                 throw new ArgusException(String.format("Suppressweight of the variable %s is not an integer", variable.getName()));
                             }

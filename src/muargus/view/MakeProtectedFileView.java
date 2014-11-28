@@ -34,7 +34,7 @@ public class MakeProtectedFileView extends DialogBase<MakeProtectedFileControlle
         super(parent, modal, controller);
         initComponents();
         setLocationRelativeTo(null);
-        this.suppressionWeightTable.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        this.suppressionPriorityTable.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     }
 
     /**
@@ -53,7 +53,7 @@ public class MakeProtectedFileView extends DialogBase<MakeProtectedFileControlle
         this.addRiskToOutputFileCheckBox.setVisible(this.model.isRiskModel());
         this.writeRecordRandomOrderCheckBox.setEnabled(getMetadata().getDataFileType() == MetadataMu.DATA_FILE_TYPE_FIXED);
         this.selectedRow = 0;
-        this.suppressionWeightTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+        this.suppressionPriorityTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
 
             @Override
             public void valueChanged(ListSelectionEvent lse) {
@@ -69,9 +69,9 @@ public class MakeProtectedFileView extends DialogBase<MakeProtectedFileControlle
                 return false;
             }
         };
-        this.suppressionWeightTable.setModel(this.tableModel);
-        this.suppressionWeightTable.getSelectionModel().setSelectionInterval(this.selectedRow, this.selectedRow);
-        this.suppressionWeightSlider.setValue(Integer.parseInt(this.model.getData()[this.selectedRow][1]));
+        this.suppressionPriorityTable.setModel(this.tableModel);
+        this.suppressionPriorityTable.getSelectionModel().setSelectionInterval(this.selectedRow, this.selectedRow);
+        this.suppressionPrioritySlider.setValue(Integer.parseInt(this.model.getData()[this.selectedRow][1]));
 
         enableSuppressionTable();
     }
@@ -80,8 +80,8 @@ public class MakeProtectedFileView extends DialogBase<MakeProtectedFileControlle
      * Event handler for when the selection changes.
      */
     private void handleSelectionChanged() {
-        this.selectedRow = this.suppressionWeightTable.getSelectedRow();
-        this.suppressionWeightSlider.setValue(Integer.parseInt(this.model.getData()[this.selectedRow][1]));
+        this.selectedRow = this.suppressionPriorityTable.getSelectedRow();
+        this.suppressionPrioritySlider.setValue(Integer.parseInt(this.model.getData()[this.selectedRow][1]));
     }
 
     /**
@@ -89,17 +89,17 @@ public class MakeProtectedFileView extends DialogBase<MakeProtectedFileControlle
      * backgroundcolor.
      */
     private void enableSuppressionTable() {
-        boolean suppression = this.useWeightRadioButton.isSelected();
-        this.suppressionWeightPerVariableLabel.setEnabled(suppression);
-        this.suppressionWeightScrollPane.setEnabled(suppression);
-        this.suppressionWeightSlider.setEnabled(suppression);
-        this.suppressionWeightTable.setEnabled(suppression);
+        boolean suppression = this.usePriorityRadioButton.isSelected();
+        this.suppressionPriorityPerVariableLabel.setEnabled(suppression);
+        this.suppressionPriorityScrollPane.setEnabled(suppression);
+        this.suppressionPrioritySlider.setEnabled(suppression);
+        this.suppressionPriorityTable.setEnabled(suppression);
 
         // different color when table is selected or not
         if (suppression) {
-            this.suppressionWeightTable.setBackground(Color.white);
+            this.suppressionPriorityTable.setBackground(Color.white);
         } else {
-            this.suppressionWeightTable.setBackground(new Color(240, 240, 240));
+            this.suppressionPriorityTable.setBackground(new Color(240, 240, 240));
         }
     }
 
@@ -123,7 +123,7 @@ public class MakeProtectedFileView extends DialogBase<MakeProtectedFileControlle
             case (0):
                 return this.noSuppressionRadioButton;
             case (1):
-                return this.useWeightRadioButton;
+                return this.usePriorityRadioButton;
             case (2):
                 return this.useEntropyRadioButton;
         }
@@ -143,13 +143,13 @@ public class MakeProtectedFileView extends DialogBase<MakeProtectedFileControlle
         hhIdentifierButtonGroup = new javax.swing.ButtonGroup();
         suppressionPanel = new javax.swing.JPanel();
         noSuppressionRadioButton = new javax.swing.JRadioButton();
-        useWeightRadioButton = new javax.swing.JRadioButton();
+        usePriorityRadioButton = new javax.swing.JRadioButton();
         useEntropyRadioButton = new javax.swing.JRadioButton();
         separator = new javax.swing.JSeparator();
-        suppressionWeightPerVariableLabel = new javax.swing.JLabel();
-        suppressionWeightScrollPane = new javax.swing.JScrollPane();
-        suppressionWeightTable = new javax.swing.JTable();
-        suppressionWeightSlider = new javax.swing.JSlider();
+        suppressionPriorityPerVariableLabel = new javax.swing.JLabel();
+        suppressionPriorityScrollPane = new javax.swing.JScrollPane();
+        suppressionPriorityTable = new javax.swing.JTable();
+        suppressionPrioritySlider = new javax.swing.JSlider();
         hhIdentifierPanel = new javax.swing.JPanel();
         keepInSafeFileRadioButton = new javax.swing.JRadioButton();
         changeIntoSequenceNumberRadioButton = new javax.swing.JRadioButton();
@@ -174,11 +174,11 @@ public class MakeProtectedFileView extends DialogBase<MakeProtectedFileControlle
             }
         });
 
-        suppressionButtonGroup.add(useWeightRadioButton);
-        useWeightRadioButton.setText("Use weights");
-        useWeightRadioButton.addItemListener(new java.awt.event.ItemListener() {
+        suppressionButtonGroup.add(usePriorityRadioButton);
+        usePriorityRadioButton.setText("Use priority");
+        usePriorityRadioButton.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
-                useWeightRadioButtonItemStateChanged(evt);
+                usePriorityRadioButtonItemStateChanged(evt);
             }
         });
 
@@ -191,9 +191,9 @@ public class MakeProtectedFileView extends DialogBase<MakeProtectedFileControlle
             }
         });
 
-        suppressionWeightPerVariableLabel.setText("Suppression weight per variable");
+        suppressionPriorityPerVariableLabel.setText("Suppression priority per variable");
 
-        suppressionWeightTable.setModel(new javax.swing.table.DefaultTableModel(
+        suppressionPriorityTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null},
                 {null, null}
@@ -210,14 +210,14 @@ public class MakeProtectedFileView extends DialogBase<MakeProtectedFileControlle
                 return canEdit [columnIndex];
             }
         });
-        suppressionWeightScrollPane.setViewportView(suppressionWeightTable);
+        suppressionPriorityScrollPane.setViewportView(suppressionPriorityTable);
 
-        suppressionWeightSlider.setMajorTickSpacing(100);
-        suppressionWeightSlider.setMinorTickSpacing(5);
-        suppressionWeightSlider.setPaintTicks(true);
-        suppressionWeightSlider.addChangeListener(new javax.swing.event.ChangeListener() {
+        suppressionPrioritySlider.setMajorTickSpacing(100);
+        suppressionPrioritySlider.setMinorTickSpacing(5);
+        suppressionPrioritySlider.setPaintTicks(true);
+        suppressionPrioritySlider.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
-                suppressionWeightSliderStateChanged(evt);
+                suppressionPrioritySliderStateChanged(evt);
             }
         });
 
@@ -230,12 +230,12 @@ public class MakeProtectedFileView extends DialogBase<MakeProtectedFileControlle
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(suppressionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(noSuppressionRadioButton, javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(useWeightRadioButton, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(usePriorityRadioButton, javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(useEntropyRadioButton, javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(suppressionWeightPerVariableLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 452, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(suppressionPriorityPerVariableLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 452, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, suppressionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addComponent(suppressionWeightScrollPane, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                        .addComponent(suppressionWeightSlider, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 152, Short.MAX_VALUE)))
+                        .addComponent(suppressionPriorityScrollPane, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                        .addComponent(suppressionPrioritySlider, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 152, Short.MAX_VALUE)))
                 .addGap(12, 12, 12))
         );
         suppressionPanelLayout.setVerticalGroup(
@@ -243,17 +243,17 @@ public class MakeProtectedFileView extends DialogBase<MakeProtectedFileControlle
             .addGroup(suppressionPanelLayout.createSequentialGroup()
                 .addComponent(noSuppressionRadioButton)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(useWeightRadioButton)
+                .addComponent(usePriorityRadioButton)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(useEntropyRadioButton)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(separator, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(suppressionWeightPerVariableLabel)
+                .addComponent(suppressionPriorityPerVariableLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(suppressionWeightScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(suppressionPriorityScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(suppressionWeightSlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(suppressionPrioritySlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         hhIdentifierPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("HH Identifier"));
@@ -392,10 +392,10 @@ public class MakeProtectedFileView extends DialogBase<MakeProtectedFileControlle
         setVisible(false);
     }//GEN-LAST:event_cancelButtonActionPerformed
 
-    private void suppressionWeightSliderStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_suppressionWeightSliderStateChanged
-        this.model.setPriority(this.selectedRow, this.suppressionWeightSlider.getValue());
-        this.suppressionWeightTable.setValueAt(this.suppressionWeightSlider.getValue(), this.selectedRow, 1);
-    }//GEN-LAST:event_suppressionWeightSliderStateChanged
+    private void suppressionPrioritySliderStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_suppressionPrioritySliderStateChanged
+        this.model.setPriority(this.selectedRow, this.suppressionPrioritySlider.getValue());
+        this.suppressionPriorityTable.setValueAt(this.suppressionPrioritySlider.getValue(), this.selectedRow, 1);
+    }//GEN-LAST:event_suppressionPrioritySliderStateChanged
 
     private void useEntropyRadioButtonItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_useEntropyRadioButtonItemStateChanged
         if (this.useEntropyRadioButton.isSelected()) {
@@ -404,12 +404,12 @@ public class MakeProtectedFileView extends DialogBase<MakeProtectedFileControlle
         }
     }//GEN-LAST:event_useEntropyRadioButtonItemStateChanged
 
-    private void useWeightRadioButtonItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_useWeightRadioButtonItemStateChanged
-        if (this.useWeightRadioButton.isSelected()) {
-            this.model.setSuppressionType(ProtectedFile.USE_WEIGHT);
+    private void usePriorityRadioButtonItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_usePriorityRadioButtonItemStateChanged
+        if (this.usePriorityRadioButton.isSelected()) {
+            this.model.setSuppressionType(ProtectedFile.USE_PRIORITY);
             enableSuppressionTable();
         }
-    }//GEN-LAST:event_useWeightRadioButtonItemStateChanged
+    }//GEN-LAST:event_usePriorityRadioButtonItemStateChanged
 
     private void noSuppressionRadioButtonItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_noSuppressionRadioButtonItemStateChanged
         if (this.noSuppressionRadioButton.isSelected()) {
@@ -463,12 +463,12 @@ public class MakeProtectedFileView extends DialogBase<MakeProtectedFileControlle
     private javax.swing.JSeparator separator;
     private javax.swing.ButtonGroup suppressionButtonGroup;
     private javax.swing.JPanel suppressionPanel;
-    private javax.swing.JLabel suppressionWeightPerVariableLabel;
-    private javax.swing.JScrollPane suppressionWeightScrollPane;
-    private javax.swing.JSlider suppressionWeightSlider;
-    private javax.swing.JTable suppressionWeightTable;
+    private javax.swing.JLabel suppressionPriorityPerVariableLabel;
+    private javax.swing.JScrollPane suppressionPriorityScrollPane;
+    private javax.swing.JSlider suppressionPrioritySlider;
+    private javax.swing.JTable suppressionPriorityTable;
     private javax.swing.JRadioButton useEntropyRadioButton;
-    private javax.swing.JRadioButton useWeightRadioButton;
+    private javax.swing.JRadioButton usePriorityRadioButton;
     private javax.swing.JCheckBox writeRecordRandomOrderCheckBox;
     // End of variables declaration//GEN-END:variables
 }

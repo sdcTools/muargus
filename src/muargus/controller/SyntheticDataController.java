@@ -4,6 +4,7 @@ import argus.model.ArgusException;
 import java.io.IOException;
 import java.util.List;
 import muargus.io.MetaWriter;
+import muargus.io.RWriter;
 import muargus.model.MetadataMu;
 import muargus.model.ReplacementFile;
 import muargus.model.SyntheticDataSpec;
@@ -53,7 +54,8 @@ public class SyntheticDataController extends ControllerBase<SyntheticDataSpec> {
     public boolean runSyntheticData() {
         try {
             SyntheticDataSpec syntheticData = getModel();
-
+            syntheticData.getSensitiveVariables().clear();
+            syntheticData.getNonSensitiveVariables().clear();
             syntheticData.getSensitiveVariables().addAll(getSensitiveVariables());
             syntheticData.getNonSensitiveVariables().addAll(getNonSensitiveVariables());
             syntheticData.setReplacementFile(new ReplacementFile("SyntheticData"));
@@ -62,10 +64,10 @@ public class SyntheticDataController extends ControllerBase<SyntheticDataSpec> {
             /* synthetic data: sensitive variables are numbered from x1 to xn,
              non-sensitive variables are numbered from s1 to sn.
              */
-            MetaWriter.writeAlpha(syntheticData);
-            MetaWriter.writeSynthetic(syntheticData);
+            RWriter.writeAlpha(syntheticData);
+            RWriter.writeSynthetic(syntheticData);
             writeSyntheticData();
-            MetaWriter.writeBatSynthetic(syntheticData);
+            RWriter.writeBatSynthetic(syntheticData);
             return true;
         } catch (ArgusException ex) {
             return false;
@@ -85,10 +87,13 @@ public class SyntheticDataController extends ControllerBase<SyntheticDataSpec> {
     @Override
     protected void doNextStep(boolean success) {
         //Add header
-        MetaWriter.adjustSyntheticData(getModel());
+        RWriter.adjustSyntheticData(getModel());
         runBat();
-        MetaWriter.adjustSyntheticOutputFile(getModel());
-        getView().showMessage("Synthetic data successfully generated");
+        if (RWriter.adjustSyntheticOutputFile(getModel())) {
+            getView().showMessage("Synthetic data successfully generated");
+        } else {
+            getView().showErrorMessage(new ArgusException("No synthetic data generated. Check if R is properly installed.")); //TODO: beter foutmelding als R niet goed is geinstalleerd.
+        }
         this.view.enableRunSyntheticDataButton(true);
         //Run the R script
         //RunRScript()
@@ -116,12 +121,12 @@ public class SyntheticDataController extends ControllerBase<SyntheticDataSpec> {
     private void fillModel() {
         getModel().clear();
 //        if (getModel().getAllVariables().isEmpty()) {
-            for (VariableMu variable : this.metadata.getVariables()) {
-                if (variable.isNumeric()) {
-                    getModel().getAllVariables().add(variable);
-                }
+        for (VariableMu variable : this.metadata.getVariables()) {
+            if (variable.isNumeric()) {
+                getModel().getAllVariables().add(variable);
             }
-       // }
+        }
+        // }
     }
 
 }

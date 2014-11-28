@@ -16,7 +16,7 @@ public class ProtectedFile {
 
     private int suppressionType;
     public final static int NO_SUPPRESSION = 0;
-    public final static int USE_WEIGHT = 1;
+    public final static int USE_PRIORITY = 1;
     public final static int USE_ENTROPY = 2;
 
     private int householdType;
@@ -67,10 +67,10 @@ public class ProtectedFile {
     }
 
     /**
-     * Gets the name and suppressionweight of all categorical variables.
+     * Gets the name and suppression priority of all categorical variables.
      *
-     * @return Double Array of Strings containing the name and suppressionweight
-     * of all categorical variables.
+     * @return Double Array of Strings containing the name and suppression
+     * priority of all categorical variables.
      */
     public String[][] getData() {
         if (this.data == null) {
@@ -78,7 +78,7 @@ public class ProtectedFile {
             int index = 0;
             for (VariableMu v : variables) {
                 this.data[index][0] = v.getName();
-                this.data[index][1] = Integer.toString(v.getSuppressweight());
+                this.data[index][1] = Integer.toString(v.getSuppressPriority());
                 index++;
             }
         }
@@ -86,23 +86,24 @@ public class ProtectedFile {
     }
 
     /**
-     * Sets the priority/weight.
+     * Sets the priority.
      *
      * @param selectedRow Integer containing the index of the selected variable.
-     * @param priority Integer containing the weight for the selected variable.
+     * @param priority Integer containing the priority for the selected
+     * variable.
      */
     public void setPriority(int selectedRow, int priority) {
         this.data[selectedRow][1] = Integer.toString(priority);
-        this.variables.get(selectedRow).setSuppressweight(priority);
+        this.variables.get(selectedRow).setSuppressionPriority(priority);
     }
 
     /**
-     * Returns whether the option 'use weight' is selected.
+     * Returns whether the option 'use priority' is selected.
      *
-     * @return Boolean indicating whether the option 'use weight' is selected.
+     * @return Boolean indicating whether the option 'use priority' is selected.
      */
     public boolean isWithPrior() {
-        return this.suppressionType == ProtectedFile.USE_WEIGHT;
+        return this.suppressionType == ProtectedFile.USE_PRIORITY;
     }
 
     /**
@@ -209,12 +210,11 @@ public class ProtectedFile {
 ////            return file.getPath() + ".saf";
 ////        }
 //    }
-
     /**
      * Gets the type of suppression.
      *
      * @return Integer containing the constant for the suppression type.
-     * NO_SUPPRESSION = 0; USE_WEIGHT = 1; USE_ENTROPY = 2;
+     * NO_SUPPRESSION = 0; USE_PRIORITY = 1; USE_ENTROPY = 2;
      */
     public int getSuppressionType() {
         return suppressionType;
@@ -224,7 +224,7 @@ public class ProtectedFile {
      * Sets the type of suppression.
      *
      * @param suppressionType Integer containing the constant for the
-     * suppression type. NO_SUPPRESSION = 0; USE_WEIGHT = 1; USE_ENTROPY = 2;
+     * suppression type. NO_SUPPRESSION = 0; USE_PRIORITY = 1; USE_ENTROPY = 2;
      */
     public void setSuppressionType(int suppressionType) {
         this.suppressionType = suppressionType;

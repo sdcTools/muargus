@@ -484,12 +484,12 @@
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Component id="identificationLevelLabel" alignment="0" min="-2" max="-2" attributes="0"/>
-                      <Component id="weightLocalSuppressionLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                      <Component id="priorityLocalSuppressionLabel" alignment="0" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace pref="22" max="32767" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Component id="identificationComboBox" alignment="1" min="-2" max="-2" attributes="0"/>
-                      <Component id="weightLocalSuppressionComboBox" alignment="1" min="-2" max="-2" attributes="0"/>
+                      <Component id="priorityLocalSuppressionComboBox" alignment="1" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
@@ -505,8 +505,8 @@
                   </Group>
                   <EmptySpace min="-2" pref="9" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="weightLocalSuppressionLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="weightLocalSuppressionComboBox" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="priorityLocalSuppressionLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="priorityLocalSuppressionComboBox" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace pref="18" max="32767" attributes="0"/>
               </Group>
@@ -519,9 +519,9 @@
             <Property name="text" type="java.lang.String" value="Identification Level:"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JLabel" name="weightLocalSuppressionLabel">
+        <Component class="javax.swing.JLabel" name="priorityLocalSuppressionLabel">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Weight for local suppression:"/>
+            <Property name="text" type="java.lang.String" value="Priority for local suppression:"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JComboBox" name="identificationComboBox">
@@ -539,7 +539,7 @@
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="identificationComboBoxActionPerformed"/>
           </Events>
         </Component>
-        <Component class="javax.swing.JComboBox" name="weightLocalSuppressionComboBox">
+        <Component class="javax.swing.JComboBox" name="priorityLocalSuppressionComboBox">
           <Properties>
             <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
               <StringArray count="4">
@@ -551,7 +551,7 @@
             </Property>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="weightLocalSuppressionComboBoxActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="priorityLocalSuppressionComboBoxActionPerformed"/>
           </Events>
         </Component>
       </SubComponents>

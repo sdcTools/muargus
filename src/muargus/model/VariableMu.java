@@ -27,7 +27,7 @@ public class VariableMu {
     private int startingPosition; // Only used if data file type is fixed format
     private int variableLength;
     private int idLevel;
-    private int suppressweight;
+    private int suppressionPriority;
     private int decimals;
     private String codeListFile; //TODO: change to File??
     //    private int truncLevels; 
@@ -69,7 +69,7 @@ public class VariableMu {
         this.startingPosition = 0;
         this.variableLength = 1;
         this.idLevel = 0;
-        this.suppressweight = 50;
+        this.suppressionPriority = 50;
         this.decimals = 0;
         this.codeListFile = "";
         this.numeric = false;
@@ -117,7 +117,7 @@ public class VariableMu {
         this.relatedVariableName = variable.relatedVariable == null
                 ? null : variable.relatedVariable.getName();
         this.startingPosition = variable.startingPosition;
-        this.suppressweight = variable.suppressweight;
+        this.suppressionPriority = variable.suppressionPriority;
         this.truncable = variable.truncable;
         this.variableLength = variable.variableLength;
         this.weight = variable.weight;
@@ -229,21 +229,21 @@ public class VariableMu {
     }
 
     /**
-     * Gets the suppression weight.
+     * Gets the suppression priority.
      *
-     * @return Integer containing the suppression weight.
+     * @return Integer containing the suppression priority.
      */
-    public int getSuppressweight() {
-        return suppressweight;
+    public int getSuppressPriority() {
+        return suppressionPriority;
     }
 
     /**
-     * Sets the suppression weight.
+     * Sets the suppression priority.
      *
-     * @param suppressweight Integer containing the suppression weight.
+     * @param suppressionPriority Integer containing the suppression priority.
      */
-    public void setSuppressweight(int suppressweight) {
-        this.suppressweight = suppressweight;
+    public void setSuppressionPriority(int suppressionPriority) {
+        this.suppressionPriority = suppressionPriority;
     }
 
     /**
@@ -723,7 +723,7 @@ public class VariableMu {
                 && (this.relatedVariable == null ? cmp.relatedVariable == null
                 : this.relatedVariable.getName().equals(cmpRelatedVariableName))
                 && (this.startingPosition == cmp.startingPosition)
-                && (this.suppressweight == cmp.suppressweight)
+                && (this.suppressionPriority == cmp.suppressionPriority)
                 && (this.truncable == cmp.truncable)
                 && (this.variableLength == cmp.variableLength)
                 && (this.weight == cmp.weight);
@@ -752,7 +752,7 @@ public class VariableMu {
         hash = 41 * hash + Objects.hashCode(this.numeric);
         hash = 41 * hash + Objects.hashCode(cmpRelatedVariableName);
         hash = 41 * hash + this.startingPosition;
-        hash = 41 * hash + Objects.hashCode(this.suppressweight);
+        hash = 41 * hash + Objects.hashCode(this.suppressionPriority);
         hash = 41 * hash + Objects.hashCode(this.truncable);
         hash = 41 * hash + this.variableLength;
         hash = 41 * hash + Objects.hashCode(this.weight);

@@ -451,7 +451,7 @@ public class HTMLReportWriter {
         if (metadata.getCombinations().getProtectedFile().isWithEntropy()) {
             addChildElement(tr, "th", "Entropy");
         } else {
-            addChildElement(tr, "th", "Suppression Weight");
+            addChildElement(tr, "th", "Suppression Priority");
         }
         addChildElement(tr, "th", "Number of suppressions");
 
@@ -463,7 +463,7 @@ public class HTMLReportWriter {
                 if (metadata.getCombinations().getProtectedFile().isWithEntropy()) {
                     addChildElement(tr, "td", formatDouble(v.getEntropy(), 2, true));
                 } else {
-                    addChildElement(tr, "td", Integer.toString(v.getSuppressweight()));
+                    addChildElement(tr, "td", Integer.toString(v.getSuppressPriority()));
                 }
                 addChildElement(tr, "td", Integer.toString(v.getnOfSuppressions()));
                 suppressions += v.getnOfSuppressions();

@@ -293,7 +293,7 @@ public class CalculationService {
         for (VariableMu variable : this.metadata.getVariables()) {
             index++;
             if (protectedFile.getVariables().contains(variable)) {
-                this.c.SetSuppressPrior(index, variable.getSuppressweight());
+                this.c.SetSuppressPrior(index, variable.getSuppressPriority());
             }
         }
 

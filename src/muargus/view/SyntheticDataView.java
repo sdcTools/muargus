@@ -1,6 +1,7 @@
 //TODO: fixen zodat sorteren goed werkt --> de variabele wordt gesorteerd en niet de variabele naam zoals de renderer laat zien.
 package muargus.view;
 
+import argus.model.ArgusException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.DefaultListModel;
@@ -22,7 +23,7 @@ public class SyntheticDataView extends DialogBase<SyntheticDataController> {
 
     private DefaultListModel variablesListModel;
     private DefaultListModel nonSensitiveVariablesListModel;
-    private final int[] columnWidth = {80, 30};
+    //private final int[] columnWidth = {80, 30};
 
     /**
      * Creates new form RView
@@ -424,17 +425,14 @@ public class SyntheticDataView extends DialogBase<SyntheticDataController> {
 
     private void runSyntheticDataButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_runSyntheticDataButtonActionPerformed
         int rowCount = ((DefaultTableModel) this.sensitiveVariablesTable.getModel()).getRowCount();
-        if (rowCount > 0){// && !this.nonSensitiveVariablesListModel.isEmpty() && !this.variablesListModel.isEmpty()) {
+        if (rowCount > 0 && !this.nonSensitiveVariablesListModel.isEmpty()) {
             enableRunSyntheticDataButton(false);
-            if(!getController().runSyntheticData()){
-                //TODO: checkt nu alleen of het goed gaat tot de batch file wordt aangeroepen.
-                //Het is beter om een progressbar toe te voegen en de voortgang daar aan te linken.
-                showMessage("Error generating synthetic data");
+            if (!getController().runSyntheticData()) {
+                showErrorMessage(new ArgusException("Error generating synthetic data"));
                 enableRunSyntheticDataButton(true);
             }
-            
-//        } else if (rowCount > 0) {
-//            showMessage("It is not possible to use all numeric variables for generating synthetic data.");
+        } else if(this.nonSensitiveVariablesListModel.isEmpty()){
+            showErrorMessage(new ArgusException("At least one non-sensitive variable is required"));
         }
     }//GEN-LAST:event_runSyntheticDataButtonActionPerformed
 

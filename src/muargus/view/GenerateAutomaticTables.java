@@ -129,7 +129,7 @@ public class GenerateAutomaticTables extends DialogBase {
                 JOptionPane.showMessageDialog(this, "Illegal value for the dimension, dimension cannot be greater than " + MuARGUS.MAXDIMS);
                 setInputValid(false);
             } else if (dimensions > this.numberOfVariables) {
-                JOptionPane.showMessageDialog(this, "Not enough identifying variables for this request");
+                JOptionPane.showMessageDialog(this, "Not enough identifying variables for this request\nVariables with ID-Level = 0 are excluded");
                 setInputValid(false);
             }
         } catch (NumberFormatException | HeadlessException e) {

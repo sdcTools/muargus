@@ -99,12 +99,12 @@
                   <EmptySpace max="32767" attributes="0"/>
                   <Group type="103" groupAlignment="1" attributes="0">
                       <Component id="noSuppressionRadioButton" alignment="0" min="-2" max="-2" attributes="0"/>
-                      <Component id="useWeightRadioButton" alignment="0" min="-2" max="-2" attributes="0"/>
+                      <Component id="usePriorityRadioButton" alignment="0" min="-2" max="-2" attributes="0"/>
                       <Component id="useEntropyRadioButton" alignment="0" min="-2" max="-2" attributes="0"/>
-                      <Component id="suppressionWeightPerVariableLabel" alignment="1" min="-2" pref="452" max="-2" attributes="0"/>
+                      <Component id="suppressionPriorityPerVariableLabel" alignment="1" min="-2" pref="452" max="-2" attributes="0"/>
                       <Group type="103" alignment="0" groupAlignment="1" max="-2" attributes="0">
-                          <Component id="suppressionWeightScrollPane" alignment="0" pref="0" max="32767" attributes="0"/>
-                          <Component id="suppressionWeightSlider" alignment="0" pref="152" max="32767" attributes="0"/>
+                          <Component id="suppressionPriorityScrollPane" alignment="0" pref="0" max="32767" attributes="0"/>
+                          <Component id="suppressionPrioritySlider" alignment="0" pref="152" max="32767" attributes="0"/>
                       </Group>
                   </Group>
                   <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
@@ -116,17 +116,17 @@
               <Group type="102" alignment="0" attributes="0">
                   <Component id="noSuppressionRadioButton" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="useWeightRadioButton" min="-2" max="-2" attributes="0"/>
+                  <Component id="usePriorityRadioButton" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="useEntropyRadioButton" min="-2" max="-2" attributes="0"/>
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                   <Component id="separator" min="-2" pref="10" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="suppressionWeightPerVariableLabel" min="-2" max="-2" attributes="0"/>
+                  <Component id="suppressionPriorityPerVariableLabel" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="suppressionWeightScrollPane" min="-2" pref="165" max="-2" attributes="0"/>
+                  <Component id="suppressionPriorityScrollPane" min="-2" pref="165" max="-2" attributes="0"/>
                   <EmptySpace max="32767" attributes="0"/>
-                  <Component id="suppressionWeightSlider" min="-2" max="-2" attributes="0"/>
+                  <Component id="suppressionPrioritySlider" min="-2" max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -143,15 +143,15 @@
             <EventHandler event="itemStateChanged" listener="java.awt.event.ItemListener" parameters="java.awt.event.ItemEvent" handler="noSuppressionRadioButtonItemStateChanged"/>
           </Events>
         </Component>
-        <Component class="javax.swing.JRadioButton" name="useWeightRadioButton">
+        <Component class="javax.swing.JRadioButton" name="usePriorityRadioButton">
           <Properties>
             <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
               <ComponentRef name="suppressionButtonGroup"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="Use weights"/>
+            <Property name="text" type="java.lang.String" value="Use priority"/>
           </Properties>
           <Events>
-            <EventHandler event="itemStateChanged" listener="java.awt.event.ItemListener" parameters="java.awt.event.ItemEvent" handler="useWeightRadioButtonItemStateChanged"/>
+            <EventHandler event="itemStateChanged" listener="java.awt.event.ItemListener" parameters="java.awt.event.ItemEvent" handler="usePriorityRadioButtonItemStateChanged"/>
           </Events>
         </Component>
         <Component class="javax.swing.JRadioButton" name="useEntropyRadioButton">
@@ -168,16 +168,16 @@
         </Component>
         <Component class="javax.swing.JSeparator" name="separator">
         </Component>
-        <Component class="javax.swing.JLabel" name="suppressionWeightPerVariableLabel">
+        <Component class="javax.swing.JLabel" name="suppressionPriorityPerVariableLabel">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Suppression weight per variable"/>
+            <Property name="text" type="java.lang.String" value="Suppression priority per variable"/>
           </Properties>
         </Component>
-        <Container class="javax.swing.JScrollPane" name="suppressionWeightScrollPane">
+        <Container class="javax.swing.JScrollPane" name="suppressionPriorityScrollPane">
 
           <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
           <SubComponents>
-            <Component class="javax.swing.JTable" name="suppressionWeightTable">
+            <Component class="javax.swing.JTable" name="suppressionPriorityTable">
               <Properties>
                 <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
                   <Table columnCount="2" rowCount="2">
@@ -189,14 +189,14 @@
             </Component>
           </SubComponents>
         </Container>
-        <Component class="javax.swing.JSlider" name="suppressionWeightSlider">
+        <Component class="javax.swing.JSlider" name="suppressionPrioritySlider">
           <Properties>
             <Property name="majorTickSpacing" type="int" value="100"/>
             <Property name="minorTickSpacing" type="int" value="5"/>
             <Property name="paintTicks" type="boolean" value="true"/>
           </Properties>
           <Events>
-            <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="suppressionWeightSliderStateChanged"/>
+            <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="suppressionPrioritySliderStateChanged"/>
           </Events>
         </Component>
       </SubComponents>
