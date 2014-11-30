@@ -108,7 +108,6 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
         this.codelistfileButton.setEnabled(false);
         this.codelistfileTextField.setEnabled(false);
         this.newButton.setEnabled(false);
-        //this.numericalCheckBox.setEnabled(false);
         this.generateButton.setEnabled(true);
     }
 
@@ -906,7 +905,6 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
     private void generateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generateButtonActionPerformed
         if (getMetadata().isSpss()) {
             this.generateButton.setEnabled(false);
-            //List<SpssVariable> variables = MuARGUS.getSpssUtils().getVariablesFromSpss(getController().getMetadataClone(), parent);
             List<SpssVariable> variables = MuARGUS.getSpssUtils().getSpssVariables();
             SpssSelectVariablesView selectView = new SpssSelectVariablesView(this.parent, true);
             selectView.showVariables(variables);
@@ -983,7 +981,7 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
         }
         try {
             this.variableListModel.remove(index);
-        } catch (Exception ex) {
+        } catch (Exception ex) { //TODO: change to more specific exception
         }
         calculateButtonStates();
         if (this.variablesList.getSelectedIndex() > -1) {

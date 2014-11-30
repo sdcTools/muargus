@@ -59,7 +59,7 @@ public class ShowTableCollectionView extends DialogBase<ShowTableCollectionContr
         VariableMu all = new VariableMu("all");
         this.variableListModel.addElement(all);
         this.model.setSelectedVariable(all);
-        for (VariableMu variable : model.getVariables()) {
+        for (VariableMu variable : this.model.getVariables()) {
             this.variableListModel.addElement(variable);
         }
         this.variableListModel.setSelectedItem(all);
@@ -86,7 +86,7 @@ public class ShowTableCollectionView extends DialogBase<ShowTableCollectionContr
                 return i == 0 ? Integer.class : String.class;
             }
         };
-        this.table.setModel(tableModel);
+        this.table.setModel(this.tableModel);
         DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
         rightRenderer.setHorizontalAlignment(JLabel.RIGHT);
         this.table.getColumn("# unsafe cells").setCellRenderer(rightRenderer);

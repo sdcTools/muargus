@@ -98,7 +98,12 @@ public class GlobalRecodeView extends DialogBase<GlobalRecodeController> {
         this.variablesTable.setModel(tableModel);
     }
 
-    private void updateValues(RecodeMu selected){
+    /**
+     * Updates the values. Sets the missing values, file names, global recode
+     * text and enables/disables the truncated and undo button.
+     */
+    private void updateValues() {
+        RecodeMu selected = getSelectedRecode();
         if (selected == null) {
             return;
         }
@@ -112,15 +117,6 @@ public class GlobalRecodeView extends DialogBase<GlobalRecodeController> {
         enableApplyButton();
         this.undoButton.setEnabled(selected.isRecoded() || selected.isTruncated());
         this.editTextArea.setText(selected.getGrcText());
-    }
-    /**
-     * Updates the values. Sets the missing values, file names, global recode
-     * text and enables/disables the truncated and undo button.
-     */
-    private void updateValues() {
-        updateValues(getSelectedRecode());
-        //RecodeMu selected = getSelectedRecode();
-        
     }
 
     /**
@@ -705,9 +701,6 @@ public class GlobalRecodeView extends DialogBase<GlobalRecodeController> {
         String path = askForGrcPath();
         if (path != null) {
             try {
-                //this.selectedRecodeClone = new RecodeMu(this.selectedRecode);
-                //MetaReader.readGrc(path, this.selectedRecodeClone);
-                //updateValues(this.selectedRecodeClone);
                 MetaReader.readGrc(path, getSelectedRecode());
                 this.selectedRecodeClone = new RecodeMu(this.selectedRecode);
                 updateValues();
@@ -719,8 +712,6 @@ public class GlobalRecodeView extends DialogBase<GlobalRecodeController> {
 
     private void applyButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_applyButtonActionPerformed
         try {
-//            this.selectedRecode = new RecodeMu(this.selectedRecodeClone);
-//            this.selectedRecodeClone = null;
             fixGrcReturns(getSelectedRecode());
             getController().apply(getSelectedRecode());
             int rowIndex = getSelectedRowIndex();

@@ -254,7 +254,7 @@ public class GenerateAutomaticTables extends DialogBase {
                 int tempNumberOfVariables = numberOfVariables - 1;
                 int tempDimensions = dimensions - 1;
                 numberOfTabels(tempNumber, tempDimensions, tempNumberOfVariables);
-            } catch (Exception e) {
+            } catch (Exception e) { //TODO: more specific exception?
                 JOptionPane.showMessageDialog(this, "To ... many ... dimensions ...\nCan't ... visualize :-(");
             }
         } else if (dimensions == 0) {

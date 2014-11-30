@@ -89,8 +89,6 @@ public class MainFrameView extends javax.swing.JFrame {
                 return;
             case ViewReport:
                 doEnable(this.viewReportButton, this.viewReportMenuItem, enable);
-            //case RScript:
-            //    doEnable(this.rScriptButton, this.rScriptMenuItem, enable);
             case SyntheticData:
                 doEnable(this.syntheticDataButton, this.syntheticDataMenuItem, enable);
         }

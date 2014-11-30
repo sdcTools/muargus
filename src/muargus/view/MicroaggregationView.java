@@ -422,6 +422,7 @@ public class MicroaggregationView extends DialogBase<MicroaggregationController>
         }
         updateValues();
 
+        //TODO: gegeneraliseerde getIndex toevoegen?
         if (added) {
             int selected;
             if (index.length < 1 || this.variablesTable.getRowCount() == index[index.length - 1] + 1) {

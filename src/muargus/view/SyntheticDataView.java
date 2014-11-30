@@ -1,11 +1,9 @@
-//TODO: fixen zodat sorteren goed werkt --> de variabele wordt gesorteerd en niet de variabele naam zoals de renderer laat zien.
 package muargus.view;
 
 import argus.model.ArgusException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.DefaultListModel;
-import javax.swing.JButton;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
@@ -16,21 +14,21 @@ import muargus.model.SyntheticDataSpec;
 import muargus.model.VariableMu;
 
 /**
+ * View class of the Synthetic Data screen.
  *
- * @author pibd05
+ * @author Statistics Netherlands
  */
 public class SyntheticDataView extends DialogBase<SyntheticDataController> {
 
     private DefaultListModel variablesListModel;
     private DefaultListModel nonSensitiveVariablesListModel;
-    //private final int[] columnWidth = {80, 30};
 
     /**
-     * Creates new form RView
+     * Creates new form SyntheticDataView.
      *
-     * @param parent
-     * @param modal
-     * @param controller
+     * @param parent the Frame of the mainFrame.
+     * @param modal boolean to set the modal status
+     * @param controller the controller of this view.
      */
     public SyntheticDataView(java.awt.Frame parent, boolean modal, SyntheticDataController controller) {
         super(parent, modal, controller);
@@ -68,23 +66,32 @@ public class SyntheticDataView extends DialogBase<SyntheticDataController> {
             @Override
             public void valueChanged(ListSelectionEvent lse) {
                 if (!lse.getValueIsAdjusting()) {
-                    variablesSelectionChanged();
+                    handleSelectionChanged();
                 }
             }
         });
-        updateTable();
         updateValues();
     }
 
+    /**
+     * Gets the selected sensitive variables.
+     *
+     * @return List of VariableMu's containing the selected sensitive variables.
+     */
     public List<VariableMu> getSelectedSensitiveVariables() {
         List<VariableMu> variables = new ArrayList<>();
-
         for (int rowIndex = 0; rowIndex < this.sensitiveVariablesTable.getModel().getRowCount(); rowIndex++) {
             variables.add((VariableMu) this.sensitiveVariablesTable.getModel().getValueAt(rowIndex, 0));
         }
         return variables;
     }
 
+    /**
+     * Gets the selected non-sensitive variables.
+     *
+     * @return List of VariableMu's containing the selected non-sensitive
+     * variables.
+     */
     public List<VariableMu> getSelectedNonSensitiveVariables() {
         List<VariableMu> variables = new ArrayList<>();
         for (int rowIndex = 0; rowIndex < this.nonSensitiveVariablesListModel.size(); rowIndex++) {
@@ -93,25 +100,9 @@ public class SyntheticDataView extends DialogBase<SyntheticDataController> {
         return variables;
     }
 
-    private void updateTable() {
-
-//        this.sensitiveVariablesTable.setModel(new DefaultTableModel(getController().getSensitiveData(), new Object[]{"Variable", "Alpha"}) {
-//            @Override
-//            public boolean isCellEditable(int rowIndex, int columnIndex) {
-//                return false;
-//            }
-//
-//            @Override
-//            public Class getColumnClass(int i) {
-//                return (i == 1 ? Double.class : VariableMu.class); //TODO: fixen zodat sorteren goed werkt --> renderer zet het nu als string
-//            }
-//        });
-//        for (int i = 0; i < this.columnWidth.length; i++) {
-//            this.sensitiveVariablesTable.getColumnModel().getColumn(i).setMinWidth(this.columnWidth[i]);
-//            this.sensitiveVariablesTable.getColumnModel().getColumn(i).setPreferredWidth(this.columnWidth[i]);
-//        }
-    }
-
+    /**
+     * Updates the buttons and the slider.
+     */
     private void updateValues() {
         this.moveToNonSensitiveVariablesButton.setEnabled(this.variablesListModel.getSize() > 0);
         this.moveToSensitiveVariablesButton.setEnabled(this.variablesListModel.getSize() > 0);
@@ -120,7 +111,11 @@ public class SyntheticDataView extends DialogBase<SyntheticDataController> {
         this.sensitiveVariablesSlider.setEnabled(this.sensitiveVariablesTable.getRowCount() > 0);
     }
 
-    private void variablesSelectionChanged() {
+    /**
+     * Handler that is activated when a different variable is selected. Sets the
+     * alpha levels for the variables.
+     */
+    private void handleSelectionChanged() {
         if (this.sensitiveVariablesTable.getRowCount() > 0) {
             int[] index = this.sensitiveVariablesTable.getSelectedRows();
             for (int i : index) {
@@ -148,6 +143,12 @@ public class SyntheticDataView extends DialogBase<SyntheticDataController> {
         return selected;
     }
 
+    /**
+     * Enables/disables the run synthetic data button.
+     *
+     * @param enable Boolean indicating whether the run synthetic data button
+     * will be enabled/disabled.
+     */
     public void enableRunSyntheticDataButton(boolean enable) {
         this.runSyntheticDataButton.setEnabled(enable);
     }
@@ -370,9 +371,7 @@ public class SyntheticDataView extends DialogBase<SyntheticDataController> {
             int rowIndex = index[index.length - i];
             this.variablesListModel.addElement((VariableMu) this.sensitiveVariablesTable.getValueAt(rowIndex, 0));
             ((DefaultTableModel) this.sensitiveVariablesTable.getModel()).removeRow(rowIndex);
-            //getController().getSensitiveVariables().remove((VariableMu) this.sensitiveVariablesTable.getValueAt(i, 0));
         }
-        updateTable();
         int selected = getIndex(index, this.sensitiveVariablesTable.getRowCount());
         this.sensitiveVariablesTable.getSelectionModel().setSelectionInterval(selected, selected);
         updateValues();
@@ -386,10 +385,8 @@ public class SyntheticDataView extends DialogBase<SyntheticDataController> {
             VariableMu variable = (VariableMu) variableObj;
             ((DefaultTableModel) this.sensitiveVariablesTable.getModel()).addRow(
                     new Object[]{variable, variable.getAlpha()});
-            //getController().getSensitiveVariables().add((VariableMu) variable);
             this.variablesListModel.removeElement(variable);
         }
-        updateTable();
         int selected = getIndex(index, this.variablesListModel.size());
         this.variablesList.setSelectedIndex(selected);
         this.sensitiveVariablesTable.getSelectionModel().setSelectionInterval(
@@ -403,7 +400,6 @@ public class SyntheticDataView extends DialogBase<SyntheticDataController> {
 
         for (Object variable : variableMu) {
             this.nonSensitiveVariablesListModel.add(this.nonSensitiveVariablesListModel.getSize(), (VariableMu) variable);
-            //getController().getNonSensitiveVariables().add((VariableMu) variable);
             this.variablesListModel.removeElement((VariableMu) variable);
         }
         int selected = getIndex(index, this.variablesListModel.size());
@@ -415,7 +411,6 @@ public class SyntheticDataView extends DialogBase<SyntheticDataController> {
         int[] index = this.nonSensitiveVariablesList.getSelectedIndices();
         for (Object o : this.nonSensitiveVariablesList.getSelectedValuesList()) {
             this.nonSensitiveVariablesListModel.removeElement(o);
-            //getController().getNonSensitiveVariables().remove((VariableMu) o);
             this.variablesListModel.addElement((VariableMu) o);
         }
         int selected = getIndex(index, this.nonSensitiveVariablesListModel.size());
@@ -431,7 +426,7 @@ public class SyntheticDataView extends DialogBase<SyntheticDataController> {
                 showErrorMessage(new ArgusException("Error generating synthetic data"));
                 enableRunSyntheticDataButton(true);
             }
-        } else if(this.nonSensitiveVariablesListModel.isEmpty()){
+        } else if (this.nonSensitiveVariablesListModel.isEmpty()) {
             showErrorMessage(new ArgusException("At least one non-sensitive variable is required"));
         }
     }//GEN-LAST:event_runSyntheticDataButtonActionPerformed
