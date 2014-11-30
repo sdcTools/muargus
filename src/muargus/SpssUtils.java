@@ -545,18 +545,18 @@ public class SpssUtils {
         }
     }
 
-    /**
-     * Asks for the directory where spss is installed.
-     *
-     * @param parent the Frame of the mainFrame.
-     */
-    private void getSpssInstallationDirectory(Frame parent) {
-        JFileChooser fileChooser = new JFileChooser();
-        fileChooser.setDialogTitle("Set IBM SPSS directory");
-        fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-        fileChooser.setMultiSelectionEnabled(false);
-        fileChooser.showOpenDialog(parent);
-        System.out.println(fileChooser.getSelectedFile().getPath());
-    }
+//    /**
+//     * Asks for the directory where spss is installed.
+//     *
+//     * @param parent the Frame of the mainFrame.
+//     */
+//    private void getSpssInstallationDirectory(Frame parent) {
+//        JFileChooser fileChooser = new JFileChooser();
+//        fileChooser.setDialogTitle("Set IBM SPSS directory");
+//        fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+//        fileChooser.setMultiSelectionEnabled(false);
+//        fileChooser.showOpenDialog(parent);
+//        System.out.println(fileChooser.getSelectedFile().getPath());
+//    }
 
 }

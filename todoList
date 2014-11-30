@@ -1,41 +1,38 @@
 niet behandelde opmerkingen/vragen:
 -   wat doen met knoppen tijdens achtergrondprocessen? --> ANCO
 -   inhoudelijke fout in ingelezen metadata: wat doen? knoppen uitzetten?
+-   Mag bij het wegschrijven van de metadata <SUPPRESSIONWEIGHT> vervangen worden door <SUPPRESSIONPRIORITY>? --> ANCO?
 
 
 Release 3:                                                                                              Door:
 
+R
+-   Checken of bij de oude mu er ook minimaal 1 non-sensitive variabele moet zijn                       -(L) Jeldrik (kan pas op 8 december)
+
 SPSS
 -   afvangen als de save file al in gebruik is.                                                         -(M)
--   Afvangen spss gebruiken wanneer men geen spss geinstalleerd heeft                                   -(L)
-
-Make Protected File
--   verwarring door elkaar gebruik van 'priority' en 'weight' wegnemen                                  -(L) Jeldrik: gefixed op opmerking na
-    --> bij make protected file + suppression weight priority noemen: use weight wordt use priority, 
-    weight for local suppression wordt priority for local suppression       
-    --> hoe doen we het met de metadata. Daar staat nog <SUPPRESSIONWEIGHT> moeten we dat 
-    overal vervangen door <SUPPRESSIONPRIORITY> of zullen we gewoon een tweede optie toestaan?
+-   Afvangen spss gebruiken wanneer men geen spss geinstalleerd heeft                                   -(L) Anne
 
 Numerical Rank Swapping
 -   beter waarschuwing geven als meerdere variabelen bij elkaar horen en 1 undoed wordt                 -(L)
 
 Overige
--   MuArgusCtrl                                      Is leeg, wordt dit ergens voor gebruikt?           -(L)
--   NumericalDll                                     Is leeg, wordt dit ergens voor gebruikt?           -(L)
+-   MuArgusCtrl                                      Is leeg, wordt dit ergens voor gebruikt?           -(L) Peter Paul vragen??
+-   NumericalDll                                     Is leeg, wordt dit ergens voor gebruikt?           -(L) Peter Paul vragen??
 -   Release notes schrijven                                                                             -(H)
--   Javadocs                                                                                            -(M)
--   News report wordt heel amateuristisch ingelezen                                                     -(M)
+-   Javadocs                                                                                            -(M) Jeldrik
+-   News report wordt heel amateuristisch ingelezen                                                     -(M) Anne
 -   News report bijwerken                                                                               -(M)
--   Checken of overal extensies worden toevoegd bij het opslaan (nog niet bij safe metadata)            -(M)
+-   Checken of overal extensies worden toevoegd bij het opslaan (nog niet bij safe metadata)            -(M)  --> zou mooi zijn als de naam van de geopende file er al staat + .rds
 -   Bepalen wat we met welke logger willen loggen + implementeren                                       -(H)
 -   Controleren warning messages. Worden ze overal gegeven waar nodig en zijn de berichten consequent.  -(L)
--   Open microdata linken aan content help --> gebruikt tau de microdata uit argusLib?                  -(H)
--   Manual schrijven                                                                                    -(H)
--   Installatie manual (spss, R etc.)                                                                   -(H)
--   Copyright jaar aanpassen                                                                            -(H)
+-   Open microdata linken aan content help --> gebruikt tau de microdata uit argusLib?                  -(H) Anne
+-   Manual schrijven                                                                                    -(H) Jeldrik
+-   Installatie manual (spss, R etc.)                                                                   -(H) Jeldrik
+-   Copyright jaar aanpassen                                                                            -(H) 
 -   licenties regelen/credits geven                                                                     -(H)
 -   TODO's + Nederlands commentaar in code langslopen                                                   -(M)
--   LINUX                                                                                               -(H)
+-   LINUX                                                                                               -(H) Anne
 -   voorbeeld data meeleveren goed fixen                                                                -(H)
 
 
@@ -122,3 +119,8 @@ Gefixed:
     --> close --> labels verdwijnen terwijl de nieuwe .grc niet is toegepast.
 -   Maximum aantal te genereren tabellen opnieuw bekijken                                               -(M) Jeldrik --> geeft nu een extra waarschuwing bij meer dan 1000 tabellen.
 -   Waarschuwing aantal combinaties generate tables up to dimension van te voren geven                  -(M) Jeldrik
+-   verwarring door elkaar gebruik van 'priority' en 'weight' wegnemen                                  -(L) Jeldrik: gefixed op opmerking na
+    --> bij make protected file + suppression weight priority noemen: use weight wordt use priority, 
+    weight for local suppression wordt priority for local suppression       
+    --> hoe doen we het met de metadata. Daar staat nog <SUPPRESSIONWEIGHT> moeten we dat 
+    overal vervangen door <SUPPRESSIONPRIORITY> of zullen we gewoon een tweede optie toestaan?
