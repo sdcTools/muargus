@@ -4,7 +4,6 @@ import muargus.CalculationService;
 import argus.model.ArgusException;
 import argus.utils.SystemUtils;
 import java.util.ArrayList;
-import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import muargus.MuARGUS;
 import muargus.model.MetadataMu;
@@ -21,7 +20,7 @@ import muargus.view.SelectCombinationsView;
 public class SelectCombinationsController extends ControllerBase<Combinations> {
 
     private final MetadataMu metadata;
-    private long numberOfTables;
+//    private long numberOfTables;
 
     ///private static final Logger logger = Logger.getLogger(SelectCombinationsController.class.getName());
     /**
@@ -135,55 +134,55 @@ public class SelectCombinationsController extends ControllerBase<Combinations> {
         return isValid;
     }
 
-    /**
-     * Gets the number of tables that will be generated for a given number of
-     * dimensions (See setNumberOfTables).
-     *
-     * @return Long containing the number of tables that will be generated for a
-     * given number of dimensions.
-     */
-    public long getNumberOfTables() {
-        return this.numberOfTables;
-    }
-
-    /**
-     * Sets the number of tables that will be generated for a given number of
-     * dimensions. This is the start of a recursive method. It wil call the
-     * method numberOfTables and sets the initial value for numberOfTables to
-     * one.
-     *
-     * @param dimensions Integer containing the number of dimensions for which
-     * tables need to be generated.
-     * @param numberOfVariables Integere containing the number of variables.
-     */
-    public void setNumberOfTables(int dimensions, int numberOfVariables) {
-        numberOfTabels(1, dimensions, numberOfVariables);
-    }
-
-    /**
-     * Calculates the number of tables that will be generated for a given number
-     * of dimensions. This is a recursive method that will calculate the
-     * equation: N * (N-1) * ... (N-D+1) where N is the number of variables and
-     * D is the number of dimensions.
-     *
-     * @param numberOfTables
-     * @param dimensions
-     * @param numberOfVariables
-     */
-    private void numberOfTabels(long numberOfTables, int dimensions, int numberOfVariables) {
-        if (dimensions > 0) {
-            try {
-                long tempNumber = numberOfTables * numberOfVariables;
-                int tempNumberOfVariables = numberOfVariables - 1;
-                int tempDimensions = dimensions - 1;
-                numberOfTabels(tempNumber, tempDimensions, tempNumberOfVariables);
-            } catch (Exception e) {
-                JOptionPane.showMessageDialog(getView(), "To ... many ... dimensions ...\nCan't ... visualize :-(");
-            }
-        } else if (dimensions == 0) {
-            this.numberOfTables = numberOfTables;
-        }
-    }
+//    /**
+//     * Gets the number of tables that will be generated for a given number of
+//     * dimensions (See setNumberOfTables).
+//     *
+//     * @return Long containing the number of tables that will be generated for a
+//     * given number of dimensions.
+//     */
+//    public long getNumberOfTables() {
+//        return this.numberOfTables;
+//    }
+//
+//    /**
+//     * Sets the number of tables that will be generated for a given number of
+//     * dimensions. This is the start of a recursive method. It wil call the
+//     * method numberOfTables and sets the initial value for numberOfTables to
+//     * one.
+//     *
+//     * @param dimensions Integer containing the number of dimensions for which
+//     * tables need to be generated.
+//     * @param numberOfVariables Integere containing the number of variables.
+//     */
+//    public void setNumberOfTables(int dimensions, int numberOfVariables) {
+//        numberOfTabels(1, dimensions, numberOfVariables);
+//    }
+//
+//    /**
+//     * Calculates the number of tables that will be generated for a given number
+//     * of dimensions. This is a recursive method that will calculate the
+//     * equation: N * (N-1) * ... (N-D+1) where N is the number of variables and
+//     * D is the number of dimensions.
+//     *
+//     * @param numberOfTables
+//     * @param dimensions
+//     * @param numberOfVariables
+//     */
+//    private void numberOfTabels(long numberOfTables, int dimensions, int numberOfVariables) {
+//        if (dimensions > 0) {
+//            try {
+//                long tempNumber = numberOfTables * numberOfVariables;
+//                int tempNumberOfVariables = numberOfVariables - 1;
+//                int tempDimensions = dimensions - 1;
+//                numberOfTabels(tempNumber, tempDimensions, tempNumberOfVariables);
+//            } catch (Exception e) {
+//                JOptionPane.showMessageDialog(getView(), "To ... many ... dimensions ...\nCan't ... visualize :-(");
+//            }
+//        } else if (dimensions == 0) {
+//            this.numberOfTables = numberOfTables;
+//        }
+//    }
 
     /**
      * Starts the recursion equation that calculates the tables for the

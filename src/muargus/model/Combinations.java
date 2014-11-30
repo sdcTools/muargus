@@ -20,7 +20,7 @@ public class Combinations {
     private final HashMap<VariableMu, int[]> unsafeCombinations;
     //private HashMap<VariableMu, UnsafeInfo> unsafe;
 
-    // Model classes that need info from this model class
+    // Model classes that need info from this model class 1 2 6 24 120 720 5040
     private GlobalRecode globalRecode;
     private ProtectedFile protectedFile;
     private TableCollection tableCollection;
@@ -33,8 +33,8 @@ public class Combinations {
     //private RSpecification rSpecification;
     private SyntheticDataSpec syntheticData;
 
-    // tot dit aantal kan die het redelijk goed hebben, maar is die wel +/- 5 seconden aan het rekenen. 
-    private final int maximumNumberOfTables = 25000;
+    // maximum number of tables before the user is warned that this will probably result in memory problems
+    private final int maximumNumberOfTables = 1000; 
 
     private final int maximumSizeBeforeUserConfirmation = 100;
 

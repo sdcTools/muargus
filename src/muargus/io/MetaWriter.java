@@ -8,17 +8,14 @@ package muargus.io;
 import argus.model.ArgusException;
 import argus.model.DataFilePair;
 import argus.utils.StrUtils;
-import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import muargus.model.MetadataMu;
 import muargus.model.RecodeMu;
-import muargus.model.SyntheticDataSpec;
 import muargus.model.VariableMu;
 import org.apache.commons.lang3.StringUtils;
 
@@ -144,6 +141,7 @@ public class MetaWriter {
             }
             if (all) {
                 writer.println("    <IDLEVEL> " + variable.getIdLevel());
+                //writer.println("    <SUPPRESSPRIORITY> " + variable.getSuppressPriority());
                 writer.println("    <SUPPRESSWEIGHT> " + variable.getSuppressPriority());
             }
             if (variable.isCodelist()) {

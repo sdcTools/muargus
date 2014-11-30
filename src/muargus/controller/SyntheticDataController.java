@@ -2,11 +2,12 @@ package muargus.controller;
 
 import argus.model.ArgusException;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
-import muargus.io.MetaWriter;
 import muargus.io.RWriter;
 import muargus.model.MetadataMu;
 import muargus.model.ReplacementFile;
+import muargus.model.ReplacementSpec;
 import muargus.model.SyntheticDataSpec;
 import muargus.model.VariableMu;
 import muargus.view.SyntheticDataView;
@@ -54,15 +55,10 @@ public class SyntheticDataController extends ControllerBase<SyntheticDataSpec> {
     public boolean runSyntheticData() {
         try {
             SyntheticDataSpec syntheticData = getModel();
-            syntheticData.getSensitiveVariables().clear();
-            syntheticData.getNonSensitiveVariables().clear();
+            clean(syntheticData);
             syntheticData.getSensitiveVariables().addAll(getSensitiveVariables());
             syntheticData.getNonSensitiveVariables().addAll(getNonSensitiveVariables());
             syntheticData.setReplacementFile(new ReplacementFile("SyntheticData"));
-            //TODO:
-//            if(this.metadata.getReplacementSpecs().contains()){
-//                remove replacementspec
-//            }
             this.metadata.getReplacementSpecs().add(syntheticData);
 
             /* synthetic data: sensitive variables are numbered from x1 to xn,
@@ -78,6 +74,17 @@ public class SyntheticDataController extends ControllerBase<SyntheticDataSpec> {
 //            Logger.getLogger(SyntheticDataController.class.getName()).log(Level.SEVERE, null, ex);
         }
 
+    }
+
+    private void clean(SyntheticDataSpec syntheticData) {
+        syntheticData.getSensitiveVariables().clear();
+        syntheticData.getNonSensitiveVariables().clear();
+        ArrayList<ReplacementSpec> r = this.metadata.getReplacementSpecs();
+        for (int i = r.size() - 1; i >= 0; i--) {
+            if (r.get(i) instanceof SyntheticDataSpec) {
+                r.remove(i);
+            }
+        }
     }
 
     private List<VariableMu> getSensitiveVariables() {

@@ -5,8 +5,6 @@ niet behandelde opmerkingen/vragen:
 
 Release 3:                                                                                              Door:
 
-
- 
 SPSS
 -   afvangen als de save file al in gebruik is.                                                         -(M)
 -   Afvangen spss gebruiken wanneer men geen spss geinstalleerd heeft                                   -(L)
@@ -21,12 +19,6 @@ Make Protected File
 Numerical Rank Swapping
 -   beter waarschuwing geven als meerdere variabelen bij elkaar horen en 1 undoed wordt                 -(L)
 
-Select Combinations
--   Maximum aantal te genereren tabellen opnieuw bekijken (staat nu op 25000)                           -(M)
--   Waarschuwing aantal combinaties generate tables up to dimension van te voren geven                  -(M)
-
-
-
 Overige
 -   MuArgusCtrl                                      Is leeg, wordt dit ergens voor gebruikt?           -(L)
 -   NumericalDll                                     Is leeg, wordt dit ergens voor gebruikt?           -(L)
@@ -34,7 +26,7 @@ Overige
 -   Javadocs                                                                                            -(M)
 -   News report wordt heel amateuristisch ingelezen                                                     -(M)
 -   News report bijwerken                                                                               -(M)
--   Checken of overal extensies worden toevoegd bij het opslaan                                         -(M)
+-   Checken of overal extensies worden toevoegd bij het opslaan (nog niet bij safe metadata)            -(M)
 -   Bepalen wat we met welke logger willen loggen + implementeren                                       -(H)
 -   Controleren warning messages. Worden ze overal gegeven waar nodig en zijn de berichten consequent.  -(L)
 -   Open microdata linken aan content help --> gebruikt tau de microdata uit argusLib?                  -(H)
@@ -128,3 +120,5 @@ Gefixed:
 -   SelectVariables screen non-editable maken + titel                                                   -(M) Jeldrik
 -   BUG: Read .grc file --> apply --> reopen global recode --> Read new .grc for same variable          -(H) Anne
     --> close --> labels verdwijnen terwijl de nieuwe .grc niet is toegepast.
+-   Maximum aantal te genereren tabellen opnieuw bekijken                                               -(M) Jeldrik --> geeft nu een extra waarschuwing bij meer dan 1000 tabellen.
+-   Waarschuwing aantal combinaties generate tables up to dimension van te voren geven                  -(M) Jeldrik

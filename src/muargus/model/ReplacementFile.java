@@ -14,6 +14,8 @@ public class ReplacementFile {
     private final File inputFile;
     private File outputFile;
     private final String replacementType; 
+    //public final static String syntheticData = "SyntheticData";
+    
 
     /**
      * Constructor of the model class ReplacementFile.

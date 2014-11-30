@@ -15,7 +15,6 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
-import muargus.MuARGUS;
 import muargus.model.MetadataMu;
 import muargus.model.RecodeMu;
 import muargus.model.VariableMu;
@@ -130,11 +129,12 @@ public class MetaReader {
                         case "<HOUSEHOLD>":
                             variable.setHousehold(true);
                             break;
+                        case "<SUPPRESSPRIORITY>":
                         case "<SUPPRESSWEIGHT>":
                             try {
                                 variable.setSuppressionPriority(Integer.parseInt(tokenizer.nextToken()));
                             } catch (NumberFormatException e) {
-                                throw new ArgusException(String.format("Suppressweight of the variable %s is not an integer", variable.getName()));
+                                throw new ArgusException(String.format("Suppression priority of the variable %s is not an integer", variable.getName()));
                             }
                             break;
                         case "<RELATED>":
