@@ -243,7 +243,7 @@ public class Combinations {
      * unsafeCombinations for each dimensions belonging to a variable..
      *
      * @return HashMap of VariableMu's and integer Array's containing the
-     * unsafeCombinations for each dimensions belonging to a variable..
+     * unsafeCombinations for each dimensions belonging to a variable.
      */
     public HashMap<VariableMu, int[]> getUnsafeCombinations() {
         return this.unsafeCombinations;

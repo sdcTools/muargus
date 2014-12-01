@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package muargus.io;
 
 import argus.model.ArgusException;
@@ -22,10 +17,22 @@ import org.apache.commons.lang3.StringUtils;
 /**
  * Class for writing various meta-objects to file
  *
- * @author Argus
+ * @author Statistics Netherlands
  */
 public class MetaWriter {
 
+    /**
+     * Writes the metadata to a .rda file.
+     *
+     * @param path String containign the path of the file containing the
+     * metadata.
+     * @param metadata MetadataMu instance containing the new metadata.
+     * @param all Boolean stating whether all metadata needs to be written. When
+     * writing the safe metadata, the suppressionweight is for example not
+     * necessary.
+     * @throws ArgusException Throws an ArgusException when an error occurs
+     * during writing.
+     */
     public static void writeRda(String path, MetadataMu metadata, boolean all) throws ArgusException {
         try {
             try (PrintWriter writer = new PrintWriter(new File(path))) {
@@ -58,7 +65,7 @@ public class MetaWriter {
             if (recode.getMissing_1_new().length() > 0 || recode.getMissing_2_new().length() > 0) {
                 writer.println(String.format("<MISSING> %s %s", recode.getMissing_1_new(), recode.getMissing_2_new()));
             }
-            if (recode.getCodeListFile() != null && recode.getCodeListFile().length() > 0 
+            if (recode.getCodeListFile() != null && recode.getCodeListFile().length() > 0
                     && !recode.getCodeListFile().equals(recode.getVariable().getCodeListFile())) {
                 writer.println(String.format("<CODELIST> \"%s\"", recode.getCodeListFile()));
             }
@@ -69,19 +76,17 @@ public class MetaWriter {
                 writer.close();
             }
         }
-
     }
 
     /**
      * Writes the metadata to a .rda file when a BufferdWritier has been
      * initialized.
      *
-     * @param w BufferedWriter already initiated with the neede file.
-     * @param all Boolean variable stating whether all metadata needs to be
-     * written. When writing the safe metadata, the suppressionweight is for
-     * example not necessary.
-     * @throws IOException Throws an IOException when an error occurs during
-     * writing.
+     * @param writer BufferedWriter already initiated with the needed file.
+     * @param metadata MetadataMu instance containing the metadata.
+     * @param all Boolean stating whether all metadata needs to be written. When
+     * writing the safe metadata, the suppressionweight is for example not
+     * necessary.
      */
     private static void writeRda(PrintWriter writer, MetadataMu metadata, boolean all) {
         switch (metadata.getDataFileType()) {
@@ -95,16 +100,26 @@ public class MetaWriter {
         for (VariableMu variable : metadata.getVariables()) {
             writeVariableToRda(writer, variable, metadata.getDataFileType(), all);
         }
-
     }
 
+    /**
+     * Writes a variable to a .rda file.
+     *
+     * @param writer BufferedWriter already initiated with the needed file.
+     * @param variable VariableMu instance containing the variable.
+     * @param dataFileType Integer containing the data file type. If the data
+     * file type equals fixed format(1) or spss(4), the starting position is
+     * also written.
+     * @param all Boolean stating whether all metadata needs to be written. When
+     * writing the safe metadata, the suppressionweight is for example not
+     * necessary.
+     */
     private static void writeVariableToRda(PrintWriter writer, VariableMu variable, int dataFileType, boolean all) {
         writer.print(variable.getName());
         if (MetadataMu.DATA_FILE_TYPE_FIXED == dataFileType || dataFileType == MetadataMu.DATA_FILE_TYPE_SPSS) {
             writer.print(String.format(" %d", variable.getStartingPosition()));
         }
         writer.print(String.format(" %d", variable.getVariableLength()));
-        //if (variable.isCategorical()) {
         for (int index = 0; index < VariableMu.MAX_NUMBER_OF_MISSINGS; index++) {
             String missingValue = variable.getMissing(index);
             if (!StringUtils.isNotBlank(missingValue)) {
@@ -112,7 +127,6 @@ public class MetaWriter {
             }
             writer.print(" " + StrUtils.quote(missingValue));
         }
-        //}
         writer.println();
         if (variable.isRecodable()) {
             writer.println("    <RECODABLE>");
@@ -148,17 +162,6 @@ public class MetaWriter {
                 writer.println("    <CODELIST> " + StrUtils.quote(variable.getCodeListFile()));
             }
         }
-
     }
 
-    /**
-     * Writes the metadata to a .rda file.
-     *
-     * @param file File containing the metadata.
-     * @param all all metadata wegschrijven ja of nee? --> safe metadata neemt
-     * niet alles mee (suppressionweight)
-     * @throws ArgusException Throws an ArgusException when an error occurs
-     * during writing.
-     */
-    
 }

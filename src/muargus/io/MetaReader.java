@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package muargus.io;
 
 import argus.model.ArgusException;
@@ -22,7 +17,7 @@ import muargus.model.VariableMu;
 /**
  * Class for reading various meta-objects from file
  *
- * @author Argus
+ * @author Statistics Netherlands
  */
 public class MetaReader {
 
@@ -32,8 +27,8 @@ public class MetaReader {
      * variable it finds and provides the relevant information of this variable
      * (is it recodable, what is it's ID_level etc).
      *
-     * @param metadata
-     * @param parent
+     * @param metadata MetadataMu instance containing the metadata.
+     * @param parent the Frame of the mainFrame.
      * @throws ArgusException Throws an ArgusException when the file cannot be
      * read.
      */
@@ -153,13 +148,17 @@ public class MetaReader {
             //logger.log(Level.SEVERE, null, ex);
             throw new ArgusException("Metadata file not found");
         }
-
-//        if (metadata.getDataFileType() == MetadataMu.DATA_FILE_TYPE_SPSS) {
-//            MuARGUS.getSpssUtils().checkMetadata(metadata, parent);
-//        }
-
     }
 
+    /**
+     * Reads the codelist file. Sets the recode codes, new missing values
+     * and the codelist file.
+     * @param path String containing the path name of the codelist file.
+     * @param metadata MetadataMu instance containing the metadata.
+     * @return HashMap of codes and their labels.
+     * @throws ArgusException Throws an ArgusException when an error occurs
+     * during reading.
+     */
     public static HashMap<String, String> readCodelist(String path, MetadataMu metadata) throws ArgusException {
         BufferedReader reader = null;
         try {
@@ -170,7 +169,6 @@ public class MetaReader {
             }
             reader = new BufferedReader(new FileReader(file));
         } catch (FileNotFoundException ex) {
-            //System.out.println("file not found");
             //logger.log(Level.SEVERE, null, ex);
             throw new ArgusException(String.format("Codelist %s not found", path));
         }
@@ -231,7 +229,7 @@ public class MetaReader {
                             recode.setMissing_2_new(token);
                         }
                     } else if ("<CODELIST>".equals(token)) {
-                        recode.setCodeListFile(tokenizer.nextToken()); //TODO: zet hier waardes bij de orginele 
+                        recode.setCodeListFile(tokenizer.nextToken()); 
                     } else {
                         throw new ArgusException("Error reading file, invalid token: " + token);
                     }
