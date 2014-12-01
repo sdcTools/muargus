@@ -1,6 +1,5 @@
 package muargus;
 
-//import javax.swing.SwingUtilities;
 import argus.model.ArgusException;
 import argus.utils.SystemUtils;
 import java.awt.Color;
@@ -18,10 +17,9 @@ import muargus.extern.dataengine.CMuArgCtrl;
 import muargus.view.MainFrameView;
 import org.apache.commons.io.FilenameUtils;
 
-
 /**
  *
- * @author ambargus
+ * @author Statistics Netherlands
  */
 public class MuARGUS {
 
@@ -41,9 +39,7 @@ public class MuARGUS {
     private static final String defaultSeparator = ",";
 
     private static final String lookAndFeel = "Windows";
-    //private static final File manual = new File("./resources/MUmanual4.3.pdf");
     private static final File manual = new File("resources/MUmanual4.3.pdf");
-    //private static final String acrord32 = "acrord32.exe"; // finds the acrord32.exe
     private static final int sleepTime = 2000;
     private static Process helpViewerProcess;
 
@@ -52,61 +48,102 @@ public class MuARGUS {
         System.loadLibrary("lib/libnumericaldll");
     }
 
-    //private static CMuArgCtrl muArgCrtl = new CMuArgCtrl();
     private static final CalculationService calcService = new CalculationService(new CMuArgCtrl());
-    
-
-    public static CalculationService getCalculationService() {
-        return calcService;
-    }
-    
-    private static  SpssUtils spssUtils;// = new SpssUtils();
-    
-    public static SpssUtils getSpssUtils() {
-        if (spssUtils == null) {
-            spssUtils = new SpssUtils();
-        }
-        return spssUtils;
-    }
-
-    public static String getFullVersion() {
-        return "" + MAJOR + "." + MINOR + "." + REVISION;
-    }
-
+    private static SpssUtils spssUtils;
     private static String tempDir;
 
     static {
         setTempDir(System.getProperty("java.io.tmpdir"));
     }
 
+    /**
+     *
+     * @return
+     */
+    public static CalculationService getCalculationService() {
+        return MuARGUS.calcService;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public static SpssUtils getSpssUtils() {
+        if (MuARGUS.spssUtils == null) {
+            MuARGUS.spssUtils = new SpssUtils();
+        }
+        return MuARGUS.spssUtils;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public static String getFullVersion() {
+        return "" + MuARGUS.MAJOR + "." + MuARGUS.MINOR + "." + MuARGUS.REVISION;
+    }
+
+    /**
+     * 
+     * @return 
+     */
     public static String getMessageTitle() {
-        return messageTitle;
+        return MuARGUS.messageTitle;
     }
 
+    /**
+     * 
+     * @param cumulative
+     * @return 
+     */
     public static int getNHistogramClasses(boolean cumulative) {
-        return cumulative ? nCumulativeHistogramClasses : nHistogramClasses;
+        return cumulative ? MuARGUS.nCumulativeHistogramClasses : MuARGUS.nHistogramClasses;
     }
 
+    /**
+     * 
+     * @return 
+     */
     public static Locale getLocale() {
         return Locale.ENGLISH;
     }
 
+    /**
+     * 
+     * @return 
+     */
     public static String getDefaultSeparator() {
-        return defaultSeparator;
+        return MuARGUS.defaultSeparator;
     }
 
+    /**
+     * 
+     * @return 
+     */
     public static String getTempDir() {
         return MuARGUS.tempDir;
     }
 
+    /**
+     * 
+     * @param tempDir 
+     */
     public static void setTempDir(String tempDir) {
         MuARGUS.tempDir = FilenameUtils.normalizeNoEndSeparator(tempDir);
     }
 
+    /**
+     * 
+     * @param fileName
+     * @return 
+     */
     public static String getTempFile(String fileName) {
-        return FilenameUtils.concat(tempDir, fileName);
+        return FilenameUtils.concat(MuARGUS.tempDir, fileName);
     }
 
+    /**
+     * 
+     */
     public static void showBuildInfoInSplashScreen() {
         final SplashScreen splash = SplashScreen.getSplashScreen();
         if (splash == null) {
@@ -120,78 +157,69 @@ public class MuARGUS {
                 g.setColor(new Color(200, 0, 0));
                 Font font = g.getFont().deriveFont(Font.BOLD, 14.0f);
                 g.setFont(font);
-                g.drawString("Version " + getFullVersion() + " (Build " + BUILD + ")", (splash.getSize().width / 2) - 100, 230);
-                //System.out.println(splash.getSize().width / 2);
+                g.drawString("Version " + getFullVersion() + " (Build " + MuARGUS.BUILD + ")", (splash.getSize().width / 2) - 100, 230);
                 splash.update();
-                // Sleep for 1/2 second, so people can see it
                 sleepThread(MuARGUS.sleepTime);
             }
         }
     }
 
+    /**
+     * 
+     * @param namedDest
+     * @throws ArgusException 
+     */
     public static void showHelp(String namedDest) throws ArgusException {
-//        if (namedDest == null) {
-//            Launcher.main(new String[] {"-loadfile", manual.getAbsolutePath()});
-//        }
-//        else{
-//            Launcher.main(new String[] {"-loadfile", manual.getAbsolutePath(), "-nameddest", namedDest});
-//        }
-//    }
-        //try {            
-            ArrayList<String> args = new ArrayList<String>();
-            args.add("-loadfile");
-            args.add(manual.getAbsolutePath());
-            if (namedDest != null) {
+        ArrayList<String> args = new ArrayList<>();
+        args.add("-loadfile");
+        args.add(MuARGUS.manual.getAbsolutePath());
+        if (namedDest != null) {
             args.add("-nameddest");
             args.add(namedDest);
-            }
+        }
 
-            try {
+        try {
             execClass(
                     "org.icepdf.ri.viewer.Main",
                     "lib\\ICEpdf.jar",
                     args);
-            }
-            catch (IOException | InterruptedException ex) {
-                throw new ArgusException("Error trying to display help file");
-            }
+        } catch (IOException | InterruptedException ex) {
+            throw new ArgusException("Error trying to display help file");
+        }
     }
-            //String cmdString = "taskkill /IM " + acrord32;
-            //System.out.println(cmdString);
-            //Process p = Runtim.e.getRuntime().exec(cmdString);
-//        } catch (IOException ex) {
-//        } catch (Exception ex2) {
-//        }
-//        try {
-//            String cmdString = "cmd.exe /c start " + acrord32 + " /A \"nameddest=" + namedDest + "\" \"" + manual.getAbsolutePath() + "\"";
-//            Process p = Runtime.getRuntime().exec(cmdString);
-//        } catch (IOException ex) {
-//        } catch (Exception ex2) {
-//        }
-    
 
-        public static void execClass(String className, String classPath, List<String> arguments) throws IOException,
-                                               InterruptedException {
-        if (helpViewerProcess != null) {
-            helpViewerProcess.destroy();
-            helpViewerProcess = null;
-        }    
-            
+    /**
+     * 
+     * @param className
+     * @param classPath
+     * @param arguments
+     * @throws IOException
+     * @throws InterruptedException 
+     */
+    public static void execClass(String className, String classPath, List<String> arguments) throws IOException,
+            InterruptedException {
+        if (MuARGUS.helpViewerProcess != null) {
+            MuARGUS.helpViewerProcess.destroy();
+            MuARGUS.helpViewerProcess = null;
+        }
+
         String javaHome = System.getProperty("java.home");
-        String javaBin = javaHome +
-                File.separator + "bin" +
-                File.separator + "java";
-        //String classpath = System.getProperty("java.class.path");
-        //String className = klass.getCanonicalName();
+        String javaBin = javaHome
+                + File.separator + "bin"
+                + File.separator + "java";
         arguments.add(0, javaBin);
         arguments.add(1, "-cp");
         arguments.add(2, classPath);
         arguments.add(3, className);
-        ProcessBuilder builder = new ProcessBuilder( arguments );
+        ProcessBuilder builder = new ProcessBuilder(arguments);
 
-        helpViewerProcess = builder.start();
+        MuARGUS.helpViewerProcess = builder.start();
     }
-        
+
+    /**
+     *
+     * @param milliSecs
+     */
     private static void sleepThread(int milliSecs) {
         try {
             Thread.sleep(milliSecs);
@@ -208,7 +236,7 @@ public class MuARGUS {
         /* Set the  look and feel */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if (lookAndFeel.equals(info.getName())) {
+                if (MuARGUS.lookAndFeel.equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
                 }
@@ -217,16 +245,12 @@ public class MuARGUS {
             java.util.logging.Logger.getLogger(MainFrameView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-        //batch = BATCH_NOBATCH;
-        //getAnco();
         SystemUtils.setRegistryRoot("muargus");
         SystemUtils.setLogbook(SystemUtils.getRegString("general", "logbook", getTempFile("MuLogbook.txt")));
         SystemUtils.writeLogbook(" ");
         SystemUtils.writeLogbook("Start of MuArgus run");
         SystemUtils.writeLogbook("Version " + MuARGUS.getFullVersion() + " build " + MuARGUS.BUILD);
         SystemUtils.writeLogbook("--------------------------");
-        //generalMaxHitasTime = SystemUtils.getRegInteger("optimal", "maxhitastime", 10);
-        //anco = SystemUtils.getRegBoolean("general", "anco", false);
 
         showBuildInfoInSplashScreen();
 
@@ -238,7 +262,6 @@ public class MuARGUS {
                 new MainFrameView().setVisible(true);
             }
         });
-
     }
 
 }

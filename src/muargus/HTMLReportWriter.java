@@ -30,7 +30,7 @@ import org.w3c.dom.Node;
 
 /**
  *
- * @author pibd05
+ * @author Statistics Netherlands
  */
 public class HTMLReportWriter {
 
@@ -43,8 +43,8 @@ public class HTMLReportWriter {
      * @param metadata
      */
     public static void createReportTree(Document document, MetadataMu metadata) {
-        doc = document;
-        Element html = addChildElement(doc, "html");
+        HTMLReportWriter.doc = document;
+        Element html = addChildElement(HTMLReportWriter.doc, "html");
         html.appendChild(writeHeader());
         Element body = addChildElement(html, "body");
         addChildElement(body, "h1", "µ-ARGUS Report");
@@ -63,7 +63,7 @@ public class HTMLReportWriter {
         if (hasOtherModifications(metadata)) {
             body.appendChild(writeOtherModificationsTable(metadata));
         } else {
-            Element p = doc.createElement("p");
+            Element p = HTMLReportWriter.doc.createElement("p");
             addChildElement(p, "h2", "No other modifications");
             body.appendChild(p);
         }
@@ -78,7 +78,7 @@ public class HTMLReportWriter {
      * @return
      */
     private static Element writeOtherModificationsTable(MetadataMu metadata) {
-        Element p = doc.createElement("p");
+        Element p = HTMLReportWriter.doc.createElement("p");
         addChildElement(p, "h2", "Other modifications");
         Element table = addChildElement(p, "table");
         Element tr = addChildElement(table, "tr");
@@ -283,7 +283,7 @@ public class HTMLReportWriter {
      * @return
      */
     private static Element writeFrequencyTablesTable(MetadataMu metadata) {
-        Element p = doc.createElement("p");
+        Element p = HTMLReportWriter.doc.createElement("p");
         addChildElement(p, "h2", "Frequency tables used");
         Element table = addChildElement(p, "table");
         Element tr = addChildElement(table, "tr");
@@ -314,7 +314,7 @@ public class HTMLReportWriter {
                 isRelated = true;
             }
         }
-        Element p = doc.createElement("p");
+        Element p = HTMLReportWriter.doc.createElement("p");
 
         if (isRelated) {
             addChildElement(p, "h2", "Related Variables");
@@ -350,7 +350,7 @@ public class HTMLReportWriter {
             }
         }
 
-        Element p = doc.createElement("p");
+        Element p = HTMLReportWriter.doc.createElement("p");
         if (recoded) {
             addChildElement(p, "h2", "GlobalRecodings that have been applied:");
             for (RecodeMu r : metadata.getCombinations().getGlobalRecode().getRecodeMus()) {
@@ -410,7 +410,7 @@ public class HTMLReportWriter {
      * @return
      */
     private static Element writeBaseIndividualRisk(MetadataMu metadata) {
-        Element p = doc.createElement("p");
+        Element p = HTMLReportWriter.doc.createElement("p");
         addChildElement(p, "h2", String.format("Base %s Risk has been applied:",
                 metadata.isHouseholdData() ? "Household" : "Individual"));
         for (TableMu t : metadata.getCombinations().getTables()) {
@@ -443,7 +443,7 @@ public class HTMLReportWriter {
     private static Element writeSuppressionTable(MetadataMu metadata) {
         MetadataMu safeMeta = getSafeMeta(metadata);
 
-        Element p = doc.createElement("p");
+        Element p = HTMLReportWriter.doc.createElement("p");
         addChildElement(p, "h2", "Suppression overview ");
         Element table = addChildElement(p, "table");
         Element tr = addChildElement(table, "tr");
@@ -501,7 +501,7 @@ public class HTMLReportWriter {
     private static Element writeSafeFileMetaTable(MetadataMu metadata) {
         MetadataMu safeMeta = getSafeMeta(metadata);
 
-        Element p = doc.createElement("p");
+        Element p = HTMLReportWriter.doc.createElement("p");
         addChildElement(p, "h2", "Record description safe file");
         Element table = addChildElement(p, "table");
         Element tr = addChildElement(table, "tr");
@@ -524,7 +524,7 @@ public class HTMLReportWriter {
      * @return
      */
     private static Element writeFooter() {
-        Element p = doc.createElement("p");
+        Element p = HTMLReportWriter.doc.createElement("p");
         addChildElement(p, "h2", String.format("μ-ARGUS version: %d.%d.%s (build: %d)",
                 MuARGUS.MAJOR, MuARGUS.MINOR, MuARGUS.REVISION, MuARGUS.BUILD));
         return p;
@@ -547,7 +547,7 @@ public class HTMLReportWriter {
     private static Element writeIdVariablesTable(MetadataMu metadata) {
         MetadataMu safeMeta = getSafeMeta(metadata);
 
-        Element p = doc.createElement("p");
+        Element p = HTMLReportWriter.doc.createElement("p");
         addChildElement(p, "h2", "Identifying variables used");
         Element table = addChildElement(p, "table");
         Element tr = addChildElement(table, "tr");
@@ -589,7 +589,7 @@ public class HTMLReportWriter {
      */
     private static Element writeFilesTable(MetadataMu metadata) {
         MetadataMu safeMeta = getSafeMeta(metadata);
-        Element p = doc.createElement("p");
+        Element p = HTMLReportWriter.doc.createElement("p");
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd ', time ' HH:mm:ss");
         addChildElement(p, "h2", String.format("Safe file created date: %s",
                 format.format(new Date())));
@@ -625,13 +625,13 @@ public class HTMLReportWriter {
      * @return
      */
     private static Element writeHeader() {
-        Element elm = doc.createElement("head");
+        Element elm = HTMLReportWriter.doc.createElement("head");
         addChildElement(elm, "title", "µ-ARGUS Report");
         Element meta = addChildElement(elm, "META", "name", "author");
         meta.setAttribute("content", "Statistics; Netherlands");
         Element link = addChildElement(elm, "link", "rel", "stylesheet");
         link.setAttribute("type", "text/css");
-        link.setAttribute("href", "file:///" + css.getAbsolutePath());
+        link.setAttribute("href", "file:///" + HTMLReportWriter.css.getAbsolutePath());
         return elm;
     }
 
@@ -667,7 +667,7 @@ public class HTMLReportWriter {
      * @return
      */
     private static Element addChildElement(Node parent, String name, String attrName, String attrValue) {
-        Element elm = (Element) parent.appendChild(doc.createElement(name));
+        Element elm = (Element) parent.appendChild(HTMLReportWriter.doc.createElement(name));
         if (attrName != null) {
             elm.setAttribute(attrName, attrValue);
         }

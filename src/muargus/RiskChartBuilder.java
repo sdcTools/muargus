@@ -1,9 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package muargus;
 
 import muargus.model.RiskModelClass;
@@ -21,10 +15,20 @@ import org.jfree.data.Range;
 import org.jfree.data.xy.XIntervalSeries;
 import org.jfree.data.xy.XIntervalSeriesCollection;
 
+/**
+ * 
+ * @author Statistics Netherlands
+ */
 public class RiskChartBuilder {
 
+    /**
+     * 
+     * @param riskSpec
+     * @param decimals
+     * @param household
+     * @return 
+     */
     public ChartPanel CreateChart(RiskSpecification riskSpec, int decimals, boolean household) {
-
         RiskModelClass first = riskSpec.getClasses().get(0);
         double offset = Math.log(first.getLeftValue());
         double mult = Math.log(first.getRightValue()/first.getLeftValue());
@@ -57,10 +61,15 @@ public class RiskChartBuilder {
         JFreeChart chart = new JFreeChart(null, null, mainPlot, false);
         ChartPanel chartPanel = new ChartPanel(chart);
         
-        
         return chartPanel;
     }
 
+    /**
+     * 
+     * @param spec
+     * @param household
+     * @return 
+     */
     private XYDataset getDataset(RiskSpecification spec, boolean household) {
         XIntervalSeries series = new XIntervalSeries("1");
         int index=0;

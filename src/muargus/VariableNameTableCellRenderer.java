@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package muargus;
 
 import java.awt.Component;
@@ -12,8 +7,10 @@ import javax.swing.table.DefaultTableCellRenderer;
 import muargus.model.VariableMu;
 
 /**
+ * Table cell renderer. Shows the variable name instead of the variable object
+ * name.
  *
- * @author pibd05
+ * @author Statistics Netherlands
  */
 public class VariableNameTableCellRenderer extends DefaultTableCellRenderer {
 
