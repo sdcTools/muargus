@@ -18,6 +18,7 @@ import muargus.view.MainFrameView;
 import org.apache.commons.io.FilenameUtils;
 
 /**
+ * Main class of Mu-Argus.
  *
  * @author Statistics Netherlands
  */
@@ -57,16 +58,18 @@ public class MuARGUS {
     }
 
     /**
+     * Gets the calculations service.
      *
-     * @return
+     * @return CalculationService.
      */
     public static CalculationService getCalculationService() {
         return MuARGUS.calcService;
     }
 
     /**
+     * Gets the instance of SpssUtils.
      *
-     * @return
+     * @return SpssUtils.
      */
     public static SpssUtils getSpssUtils() {
         if (MuARGUS.spssUtils == null) {
@@ -76,73 +79,82 @@ public class MuARGUS {
     }
 
     /**
+     * Gets the full version.
      *
-     * @return
+     * @return String containing the full version.
      */
     public static String getFullVersion() {
         return "" + MuARGUS.MAJOR + "." + MuARGUS.MINOR + "." + MuARGUS.REVISION;
     }
 
     /**
-     * 
-     * @return 
+     * Gets the message title.
+     *
+     * @return String containing the message title.
      */
     public static String getMessageTitle() {
         return MuARGUS.messageTitle;
     }
 
     /**
-     * 
-     * @param cumulative
-     * @return 
+     * Gets the number of histogram classes.
+     *
+     * @param cumulative Boolean indicating whether the number of cumulative or
+     * normal histogram classes are requested.
+     * @return Integer containing the number of histogram classes.
      */
     public static int getNHistogramClasses(boolean cumulative) {
         return cumulative ? MuARGUS.nCumulativeHistogramClasses : MuARGUS.nHistogramClasses;
     }
 
     /**
-     * 
-     * @return 
+     * Gets the Locale.
+     *
+     * @return Locale containing the English locale.
      */
     public static Locale getLocale() {
         return Locale.ENGLISH;
     }
 
     /**
-     * 
-     * @return 
+     * Gets the default separator.
+     *
+     * @return String containing the default separator.
      */
     public static String getDefaultSeparator() {
         return MuARGUS.defaultSeparator;
     }
 
     /**
-     * 
-     * @return 
+     * Gets the temp directory.
+     *
+     * @return String containing the temp directory.
      */
     public static String getTempDir() {
         return MuARGUS.tempDir;
     }
 
     /**
-     * 
-     * @param tempDir 
+     * Sets the temp directory.
+     *
+     * @param tempDir String containing the temp directory.
      */
     public static void setTempDir(String tempDir) {
         MuARGUS.tempDir = FilenameUtils.normalizeNoEndSeparator(tempDir);
     }
 
     /**
-     * 
-     * @param fileName
-     * @return 
+     * Gets a temp file.
+     *
+     * @param fileName String containing the temp file name.
+     * @return String containing the path to the filename.
      */
     public static String getTempFile(String fileName) {
         return FilenameUtils.concat(MuARGUS.tempDir, fileName);
     }
 
     /**
-     * 
+     * Shows the build info on the splash screen.
      */
     public static void showBuildInfoInSplashScreen() {
         final SplashScreen splash = SplashScreen.getSplashScreen();
@@ -165,9 +177,11 @@ public class MuARGUS {
     }
 
     /**
-     * 
-     * @param namedDest
-     * @throws ArgusException 
+     * Shows the content sensitive help.
+     *
+     * @param namedDest String containing the named destination.
+     * @throws ArgusException Throws an ArgusException when an error occurs
+     * while trying to display the help file.
      */
     public static void showHelp(String namedDest) throws ArgusException {
         ArrayList<String> args = new ArrayList<>();
@@ -189,12 +203,12 @@ public class MuARGUS {
     }
 
     /**
-     * 
+     *
      * @param className
      * @param classPath
      * @param arguments
      * @throws IOException
-     * @throws InterruptedException 
+     * @throws InterruptedException
      */
     public static void execClass(String className, String classPath, List<String> arguments) throws IOException,
             InterruptedException {
@@ -217,8 +231,10 @@ public class MuARGUS {
     }
 
     /**
+     * Starts a sleep thread for a given amount of time.
      *
-     * @param milliSecs
+     * @param milliSecs Integer containing the number of milli seconds that the
+     * program will sleep.
      */
     private static void sleepThread(int milliSecs) {
         try {
@@ -230,6 +246,8 @@ public class MuARGUS {
     }
 
     /**
+     * Main method for running Mu-Argus.
+     *
      * @param args the command line arguments
      */
     public static void main(String[] args) {

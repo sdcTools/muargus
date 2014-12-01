@@ -16,22 +16,26 @@ import org.jfree.data.xy.XIntervalSeries;
 import org.jfree.data.xy.XIntervalSeriesCollection;
 
 /**
- * 
+ * Class for creating a risk chart.
+ *
  * @author Statistics Netherlands
  */
 public class RiskChartBuilder {
 
     /**
-     * 
-     * @param riskSpec
-     * @param decimals
-     * @param household
-     * @return 
+     * Gets the risk chart.
+     *
+     * @param riskSpec RiskSpecification instance containing the specifications
+     * for the risk chart.
+     * @param decimals Integer containing the number of decimals.
+     * @param household Boolean indicating whether this variable is a household
+     * variable.
+     * @return ChartPanel containing the risk chart.
      */
     public ChartPanel CreateChart(RiskSpecification riskSpec, int decimals, boolean household) {
         RiskModelClass first = riskSpec.getClasses().get(0);
         double offset = Math.log(first.getLeftValue());
-        double mult = Math.log(first.getRightValue()/first.getLeftValue());
+        double mult = Math.log(first.getRightValue() / first.getLeftValue());
         LogarithmicNumberAxis domainAxis = new LogarithmicNumberAxis(offset, mult, decimals);
         NumberAxis rangeAxisLeft = new NumberAxis("Frequency");
         XYBarRenderer renderer = new XYBarRenderer(0);
@@ -40,7 +44,7 @@ public class RiskChartBuilder {
         renderer.setBarPainter(new StandardXYBarPainter());
         domainAxis.setMinorTickMarksVisible(false);
         Range range = new Range(0, riskSpec.getClasses().size());
-        domainAxis.setTickUnit(new NumberTickUnit(riskSpec.getClasses().size()/10));
+        domainAxis.setTickUnit(new NumberTickUnit(riskSpec.getClasses().size() / 10));
         //domainAxis.setNumberFormatOverride(new Numberformatter());
         domainAxis.setAutoRange(false);
         domainAxis.setRange(range);
@@ -53,28 +57,29 @@ public class RiskChartBuilder {
         rangeAxisRight.setStandardTickUnits(NumberAxis.createStandardTickUnits(MuARGUS.getLocale()));
         mainPlot.setRangeAxis(1, rangeAxisRight);
         mainPlot.setRangeAxisLocation(1, AxisLocation.BOTTOM_OR_RIGHT);
-        
-        
+
         mainPlot.setDomainGridlinesVisible(true);
 
-        
         JFreeChart chart = new JFreeChart(null, null, mainPlot, false);
         ChartPanel chartPanel = new ChartPanel(chart);
-        
+
         return chartPanel;
     }
 
     /**
-     * 
-     * @param spec
-     * @param household
-     * @return 
+     * Gets the dataset containing the x and y coordinates of the risk chart.
+     *
+     * @param spec RiskSpecification instance containing the specifications for
+     * the risk chart.
+     * @param household Boolean indicating whether this variable is a household
+     * variable.
+     * @return XYDataset containing the x and y coordinates of the risk chart.
      */
     private XYDataset getDataset(RiskSpecification spec, boolean household) {
         XIntervalSeries series = new XIntervalSeries("1");
-        int index=0;
+        int index = 0;
         for (RiskModelClass cl : spec.getClasses()) {
-            series.add(index, index+1, index, household ? cl.getHhFrequency() : cl.getFrequency());
+            series.add(index, index + 1, index, household ? cl.getHhFrequency() : cl.getFrequency());
             index++;
         }
         XIntervalSeriesCollection dataset = new XIntervalSeriesCollection();
@@ -82,4 +87,3 @@ public class RiskChartBuilder {
         return dataset;
     }
 }
-

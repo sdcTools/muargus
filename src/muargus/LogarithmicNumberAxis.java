@@ -24,8 +24,9 @@ public class LogarithmicNumberAxis extends NumberAxis {
     /**
      * Constructor of the LogarithmicNumberAxis class.
      *
-     * @param offset
-     * @param mult
+     * @param offset Double containing the uppermost left value of the risk
+     * chart.
+     * @param mult Double containing the multiple for each bar.
      * @param decimals Integer containing the number of decimals.
      */
     public LogarithmicNumberAxis(double offset, double mult, int decimals) {
@@ -36,12 +37,13 @@ public class LogarithmicNumberAxis extends NumberAxis {
     }
 
     /**
+     * Represhes the ticks.
      *
-     * @param g2
-     * @param state
-     * @param dataArea
-     * @param edge
-     * @return
+     * @param g2 Graphics2D
+     * @param state AxisState
+     * @param dataArea Rectangle2D
+     * @param edge RectangleEdge
+     * @return List of NumberTicks.
      */
     @Override
     public List refreshTicks(Graphics2D g2, AxisState state, Rectangle2D dataArea, RectangleEdge edge) {
@@ -59,9 +61,10 @@ public class LogarithmicNumberAxis extends NumberAxis {
     }
 
     /**
+     * Transforms a number to a String.
      *
-     * @param value
-     * @return
+     * @param value Number instance containing the value of the number tick.
+     * @return String containing the value of the number tick.
      */
     private String transformString(Number value) {
         String format = "%." + Integer.toString(this.decimals) + "f";

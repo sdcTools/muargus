@@ -29,6 +29,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
 /**
+ * Class for writing the HTML report.
  *
  * @author Statistics Netherlands
  */
@@ -38,9 +39,10 @@ public class HTMLReportWriter {
     public static final File css = new File("./resources/muargus.css");
 
     /**
+     * Creates the report.
      *
-     * @param document
-     * @param metadata
+     * @param document Document containing the html report.
+     * @param metadata MetadataMu instance containing the metadata.
      */
     public static void createReportTree(Document document, MetadataMu metadata) {
         HTMLReportWriter.doc = document;
@@ -73,9 +75,10 @@ public class HTMLReportWriter {
     }
 
     /**
+     * Writes the other modifications table.
      *
-     * @param metadata
-     * @return
+     * @param metadata MetadataMu instance containing the metadata.
+     * @return Element containing the other modifications table.
      */
     private static Element writeOtherModificationsTable(MetadataMu metadata) {
         Element p = HTMLReportWriter.doc.createElement("p");
@@ -122,8 +125,6 @@ public class HTMLReportWriter {
         for (ReplacementSpec replacement : metadata.getReplacementSpecs()) {
             tr = addChildElement(table, "tr");
             addChildElement(tr, "td", replacement.getReplacementFile().getReplacementType());
-//            addChildElement(tr, "td", replacement instanceof RankSwappingSpec
-//                    ? "Rank swapping" : "Numerical microaggregation");
             addChildElement(tr, "td", VariableMu.printVariableNames(replacement.getOutputVariables()));
             if (replacement instanceof RankSwappingSpec) {
                 addChildElement(tr, "td",
@@ -139,7 +140,7 @@ public class HTMLReportWriter {
                 for (VariableMu v : ((SyntheticDataSpec) replacement).getOutputVariables()) {
                     alpha = alpha + " " + v.getAlpha() + ",";
                 }
-                addChildElement(tr, "td", alpha.substring(0, alpha.length()-1));
+                addChildElement(tr, "td", alpha.substring(0, alpha.length() - 1));
             }
         }
         ProtectedFile protectedFile = metadata.getCombinations().getProtectedFile();
@@ -175,17 +176,17 @@ public class HTMLReportWriter {
             }
             addChildElement(tr, "td", "HouseHold Identification variable has been removed from the safe file");
         }
-
         return writePRAMTable(metadata, table, tr, p);
     }
 
     /**
+     * Writes the PRAM specification table.
      *
-     * @param metadata
-     * @param table
-     * @param tr
-     * @param p
-     * @return
+     * @param metadata MetadataMu instance containing the metadata.
+     * @param table Element for the table.
+     * @param tr Element for the table row.
+     * @param p Element containing the other modifications table.
+     * @return Element containing the PRAM specification table.
      */
     private static Element writePRAMTable(MetadataMu metadata, Element table, Element tr, Element p) {
         boolean pram = false;
@@ -248,13 +249,13 @@ public class HTMLReportWriter {
             }
         }
         return p;
-
     }
 
     /**
+     * Checks whether there are other modifications.
      *
-     * @param metadata
-     * @return
+     * @param metadata MetadataMu instance containing the metadata.
+     * @return Boolean indicating whether there are other modifications.
      */
     private static boolean hasOtherModifications(MetadataMu metadata) {
         ProtectedFile protectedFile = metadata.getCombinations().getProtectedFile();
@@ -278,9 +279,10 @@ public class HTMLReportWriter {
     }
 
     /**
+     * Writes the frequency table.
      *
-     * @param metadata
-     * @return
+     * @param metadata MetadataMu instance containing the metadata.
+     * @return Element containing the frequency table.
      */
     private static Element writeFrequencyTablesTable(MetadataMu metadata) {
         Element p = HTMLReportWriter.doc.createElement("p");
@@ -303,9 +305,10 @@ public class HTMLReportWriter {
     }
 
     /**
+     * Writes the related variables table.
      *
-     * @param metadata
-     * @return
+     * @param metadata MetadataMu instance containing the metadata.
+     * @return Element containing the related variables table.
      */
     private static Element writeRelatedVariablesTable(MetadataMu metadata) {
         boolean isRelated = false;
@@ -332,13 +335,13 @@ public class HTMLReportWriter {
             }
         }
         return p;
-
     }
 
     /**
+     * Writes the global recode table.
      *
-     * @param metadata
-     * @return
+     * @param metadata MetadataMu instance containing the metadata.
+     * @return Element containing the global recode table.
      */
     private static Element writeGlobalRecodeTables(MetadataMu metadata) {
         boolean recoded = false;
@@ -392,22 +395,13 @@ public class HTMLReportWriter {
             addChildElement(p, "h2", "No global recodings have been applied");
         }
         return p;
-//        } catch (Exception e) {
-//            Element p = doc.createElement("p");
-//            addChildElement(p, "h2", "No global recodings have been applied");
-//            return p;
-//        }
-
     }
 
-    //private static String formatDouble(double d, int decimals) {
-    //    String format = "%." + decimals + "f";
-    //    return String.format(MuARGUS.getLocale(), format, d);
-    //}
     /**
+     * Writes base individual risk.
      *
-     * @param metadata
-     * @return
+     * @param metadata MetadataMu instance containing the metadata.
+     * @return Element containing the base individual risk.
      */
     private static Element writeBaseIndividualRisk(MetadataMu metadata) {
         Element p = HTMLReportWriter.doc.createElement("p");
@@ -436,9 +430,10 @@ public class HTMLReportWriter {
     }
 
     /**
+     * Writes the suppression table.
      *
-     * @param metadata
-     * @return
+     * @param metadata MetadataMu instance containing the metadata.
+     * @return Element containing the suppression table.
      */
     private static Element writeSuppressionTable(MetadataMu metadata) {
         MetadataMu safeMeta = getSafeMeta(metadata);
@@ -478,11 +473,13 @@ public class HTMLReportWriter {
     }
 
     /**
+     * Converts a double to a String.
      *
-     * @param d
-     * @param decimals
-     * @param showIfZero
-     * @return
+     * @param d Double to be converted.
+     * @param decimals Integer containing the number of decimels.
+     * @param showIfZero Boolean indicating whether a double should be shown if
+     * it is zero.
+     * @return String containing the converted double.
      */
     private static String formatDouble(double d, int decimals, boolean showIfZero) {
         DecimalFormat decimalFormat = (DecimalFormat) NumberFormat.getNumberInstance(MuARGUS.getLocale());
@@ -494,9 +491,10 @@ public class HTMLReportWriter {
     }
 
     /**
+     * Writes the safe file meta table.
      *
-     * @param metadata
-     * @return
+     * @param metadata MetadataMu instance containing the metadata.
+     * @return Element containing the safe file meta table.
      */
     private static Element writeSafeFileMetaTable(MetadataMu metadata) {
         MetadataMu safeMeta = getSafeMeta(metadata);
@@ -520,8 +518,9 @@ public class HTMLReportWriter {
     }
 
     /**
+     * Writes the Footer.
      *
-     * @return
+     * @return Element containing the Footer.
      */
     private static Element writeFooter() {
         Element p = HTMLReportWriter.doc.createElement("p");
@@ -531,18 +530,20 @@ public class HTMLReportWriter {
     }
 
     /**
+     * Gets the safe metadata.
      *
-     * @param metadata
-     * @return
+     * @param metadata MetadataMu instance containing the metadata.
+     * @return MetadataMu instance containing the safe metadata.
      */
     private static MetadataMu getSafeMeta(MetadataMu metadata) {
         return metadata.getCombinations().getProtectedFile().getSafeMeta();
     }
 
     /**
+     * Writes the variables table.
      *
-     * @param metadata
-     * @return
+     * @param metadata MetadataMu instance containing the metadata.
+     * @return Element containing the variables table.
      */
     private static Element writeIdVariablesTable(MetadataMu metadata) {
         MetadataMu safeMeta = getSafeMeta(metadata);
@@ -563,15 +564,15 @@ public class HTMLReportWriter {
             addChildElement(tr, "td", String.format("%d (%d)", safeVar.getnOfCodes(), missings));
             addChildElement(tr, "td", variable.isHousehold() ? "HHVar" : "");
         }
-
         return p;
     }
 
     /**
+     * Gets the safe variable.
      *
-     * @param safeMeta
-     * @param varName
-     * @return
+     * @param safeMeta MetadataMu instance containing the safe metadata.
+     * @param varName String containing the variable name.
+     * @return VariableMu instance containing the safe variable.
      */
     private static VariableMu getSafeVar(MetadataMu safeMeta, String varName) {
         for (VariableMu variable : safeMeta.getVariables()) {
@@ -583,9 +584,10 @@ public class HTMLReportWriter {
     }
 
     /**
+     * Writes the files table.
      *
-     * @param metadata
-     * @return
+     * @param metadata MetadataMu instance containing the metadata.
+     * @return Element containing the files table.
      */
     private static Element writeFilesTable(MetadataMu metadata) {
         MetadataMu safeMeta = getSafeMeta(metadata);
@@ -621,8 +623,9 @@ public class HTMLReportWriter {
     }
 
     /**
+     * Writes the header.
      *
-     * @return
+     * @return Element containing the header.
      */
     private static Element writeHeader() {
         Element elm = HTMLReportWriter.doc.createElement("head");
@@ -636,21 +639,23 @@ public class HTMLReportWriter {
     }
 
     /**
+     * Adds a child element.
      *
-     * @param parent
-     * @param name
-     * @return
+     * @param parent Node from the parent.
+     * @param name String containing the name of the element.
+     * @return Element containing the added child.
      */
     private static Element addChildElement(Node parent, String name) {
         return addChildElement(parent, name, null, null);
     }
 
     /**
+     * Adds a child element.
      *
-     * @param parent
-     * @param name
-     * @param content
-     * @return
+     * @param parent Node from the parent.
+     * @param name String containing the name of the element.
+     * @param content String containing the content.
+     * @return Element containing the added child.
      */
     private static Element addChildElement(Node parent, String name, String content) {
         Element elm = addChildElement(parent, name);
@@ -659,12 +664,13 @@ public class HTMLReportWriter {
     }
 
     /**
+     * Adds a child element.
      *
-     * @param parent
-     * @param name
-     * @param attrName
-     * @param attrValue
-     * @return
+     * @param parent Node from the parent.
+     * @param name String containing the name of the element.
+     * @param attrName String containing the attribute name.
+     * @param attrValue String containing the attribute value.
+     * @return Element containing the added child.
      */
     private static Element addChildElement(Node parent, String name, String attrName, String attrValue) {
         Element elm = (Element) parent.appendChild(HTMLReportWriter.doc.createElement(name));
