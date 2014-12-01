@@ -20,7 +20,7 @@ Overige
 -   MuArgusCtrl                                      Is leeg, wordt dit ergens voor gebruikt?           -(L) Peter Paul vragen??
 -   NumericalDll                                     Is leeg, wordt dit ergens voor gebruikt?           -(L) Peter Paul vragen??
 -   Release notes schrijven                                                                             -(H)
--   Javadocs                                                                                            -(M) Jeldrik
+-   Javadocs                                                                                            -(M) Jeldrik (alleen calculationService nog)
 -   News report wordt heel amateuristisch ingelezen                                                     -(M) Anne
 -   News report bijwerken                                                                               -(M)
 -   Checken of overal extensies worden toevoegd bij het opslaan (nog niet bij safe metadata)            -(M)  --> zou mooi zijn als de naam van de geopende file er al staat + .rds
