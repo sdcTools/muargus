@@ -16,7 +16,6 @@ public class TableMu {
     private final ArrayList<VariableMu> variables = new ArrayList<>();
     private int nrOfUnsafeCombinations;
     private final int defaultThreshold = 1;
-    
 
     /**
      * Constructor for the model class TableMu. Sets the default values for the
@@ -68,15 +67,6 @@ public class TableMu {
     public int getThreshold() {
         return threshold;
     }
-
-//    /**
-//     * Sets the threshold.
-//     *
-//     * @param threshold Integer containing the threshold.
-//     */
-//    public void setThreshold(String threshold) {
-//        this.threshold = Integer.parseInt(threshold);
-//    }
 
     /**
      * Sets the threshold.
@@ -157,16 +147,16 @@ public class TableMu {
         }
         return contains;
     }
-    
+
     /**
-     * Constructs the title of the table, containing of the table dimension 
+     * Constructs the title of the table, containing of the table dimension
      * names separated by x.
-     * 
+     *
      * @return title of the table
      */
     public String getTableTitle() {
         ArrayList<String> names = new ArrayList<>();
-        
+
         for (VariableMu variable : this.getVariables()) {
             names.add(variable.getName());
         }

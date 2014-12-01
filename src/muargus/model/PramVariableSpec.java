@@ -9,7 +9,6 @@ package muargus.model;
 public class PramVariableSpec {
 
     private boolean useBandwidth;
-    //private int bandwidth;
     private boolean applied;
     private String appliedText;
     private final VariableMu variable;
@@ -52,7 +51,6 @@ public class PramVariableSpec {
      */
     public int getBandwidth() {
         return this.variable.getBandwidth();
-//        return this.bandwidth;
     }
 
     /**
@@ -62,7 +60,6 @@ public class PramVariableSpec {
      */
     public void setBandwidth(int bandwidth) {
         this.variable.setBandwidth(bandwidth);
-        //this.bandwidth = bandwidth;
     }
 
     /**
@@ -119,7 +116,6 @@ public class PramVariableSpec {
     public String getBandwidthText() {
         if (isApplied() && useBandwidth()) {
             return Integer.toString(this.variable.getBandwidth());
-            //return Integer.toString(this.bandwidth);
         } else {
             return "";
         }

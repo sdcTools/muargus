@@ -131,6 +131,11 @@ public class CodeInfo {
         return objArr;
     }
 
+    /**
+     * Gets the code.
+     *
+     * @return Returns a string containing the code
+     */
     @Override
     public String toString() {
         return this.getCode();

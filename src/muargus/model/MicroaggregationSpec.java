@@ -9,7 +9,6 @@ public class MicroaggregationSpec extends ReplacementSpec {
 
     private final int minimalNumberOfRecords;
     private final boolean optimal;
-    //private final boolean numerical;
 
     /**
      * Constructor of the model class Microaggregation. 
@@ -21,7 +20,6 @@ public class MicroaggregationSpec extends ReplacementSpec {
     public MicroaggregationSpec(int minimalNumberOfRecords, boolean optimal) {
         this.minimalNumberOfRecords = minimalNumberOfRecords;
         this.optimal = optimal;
-        //this.numerical = numerical;
     }
 
     /**
@@ -41,14 +39,5 @@ public class MicroaggregationSpec extends ReplacementSpec {
     public boolean isOptimal() {
         return this.optimal;
     }
-
-//    /**
-//     * Returns whether the variable is numerical.
-//     *
-//     * @return Boolean indicating whether the variable is numerical.
-//     */
-//    public boolean isNumerical() {
-//        return this.numerical;
-//    }
 
 }

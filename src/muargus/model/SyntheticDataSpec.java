@@ -1,9 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package muargus.model;
 
 import argus.model.ArgusException;
@@ -12,23 +6,23 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 /**
+ * Model class of the Synthetic data specifications.
  *
- * @author pibd05
+ * @author Statistics Netherlands
  */
 public class SyntheticDataSpec extends ReplacementSpec {
-    
+
     private final ArrayList<VariableMu> allVariables;
     private final ArrayList<VariableMu> sensitiveVariables;
     private final ArrayList<VariableMu> nonSensitiveVariables;
     private File alphaFile;
-    private File rScriptFile; 
-    private File runRFile; 
-    //public final static String pathRexe = "C:\\Program Files\\%USERPROFILE%\\AppData\\Local\\Temp\\R";
-
+    private File rScriptFile;
+    private File runRFile;
 
     /**
-     * Constructor of the model class SyntheticDataSpec. 
-     * Initializes its variables.
+     * Constructor of the model class SyntheticDataSpec. Initializes the
+     * ArrayLists for all variables, the sensitive variables and the
+     * non-sensitive variable.
      */
     public SyntheticDataSpec() {
         this.sensitiveVariables = new ArrayList<>();
@@ -37,44 +31,86 @@ public class SyntheticDataSpec extends ReplacementSpec {
     }
 
     /**
-     * Gets an ArrayList containing the variables. If the ArrayList is empty,
-     * use this method to add variables.
+     * Gets an ArrayList containing the non-sensitive variables. If the
+     * ArrayList is empty, use this method to add variables.
      *
-     * @return ArrayList containing the variables.
+     * @return ArrayList of VariableMu's containing the non-sensitive variables.
      */
     public ArrayList<VariableMu> getNonSensitiveVariables() {
         return this.nonSensitiveVariables;
     }
-    
+
+    /**
+     * Gets an ArrayList containing the sensitive variables. If the ArrayList is
+     * empty, use this method to add variables.
+     *
+     * @return ArrayList of VariableMu's containing the sensitive variables.
+     */
     public ArrayList<VariableMu> getSensitiveVariables() {
         return this.sensitiveVariables;
     }
 
+    /**
+     * Gets the file containing the alpa matrix.
+     *
+     * @return File containing the aplhaFile.
+     * @throws ArgusException Throws an ArgusException when an error occurs
+     * while creating the aplhaFile.
+     */
     public File getAlphaFile() throws ArgusException {
-        if (alphaFile == null) {
-            alphaFile = createFile(".txt");
+        if (this.alphaFile == null) {
+            this.alphaFile = createFile(".txt");
         }
-        return alphaFile;
+        return this.alphaFile;
     }
 
+    /**
+     * Gets the file containing the r-script.
+     *
+     * @return File containing the rScriptFile.
+     * @throws ArgusException Throws an ArgusException when an error occurs
+     * while creating the rScriptFile.
+     */
     public File getrScriptFile() throws ArgusException {
-        if (rScriptFile == null) {
-            rScriptFile = createFile(".R");
+        if (this.rScriptFile == null) {
+            this.rScriptFile = createFile(".R");
         }
-        return rScriptFile;
+        return this.rScriptFile;
     }
-    
+
+    /**
+     * Gets the file containing the .bat file used to run the r-script.
+     *
+     * @return File containing the runRfile.
+     * @throws ArgusException Throws an ArgusException when an error occurs
+     * while creating the runRfile.
+     */
     public File getRunRFileFile() throws ArgusException {
-        if (runRFile == null) {
-            runRFile = createFile(".bat");
+        if (this.runRFile == null) {
+            this.runRFile = createFile(".bat");
         }
-        return runRFile;
+        return this.runRFile;
     }
-    
-    public String doubleSlashses(String filename){
+
+    /**
+     * Replaces slashes in filenames for double slashes.
+     *
+     * @param filename String containing the filename.
+     * @return String containing the filename with double slashes instead of
+     * single slashes.
+     */
+    public String doubleSlashses(String filename) {
         return filename.replace("\\", "\\\\");
     }
-    
+
+    /**
+     * Creates a new temp file.
+     *
+     * @param extension String containing the extension of the temp file.
+     * @return File containing the new temp file.
+     * @throws ArgusException Throws an ArgusException when an error occurs
+     * while creating the temp file.
+     */
     private File createFile(String extension) throws ArgusException {
         try {
             File file = File.createTempFile("MuArgus", extension);
@@ -85,9 +121,16 @@ public class SyntheticDataSpec extends ReplacementSpec {
         }
     }
 
+    /**
+     * Gets an ArrayList containing the variables used as neither sensitive nor
+     * non-sensitive variables.
+     *
+     * @return ArrayList of VariableMu's containing the variables used as
+     * neither sensitive nor non-sensitive variables.
+     */
     public ArrayList<VariableMu> getOtherVariables() {
         ArrayList<VariableMu> other = new ArrayList<>();
-        for (VariableMu variable : allVariables) {
+        for (VariableMu variable : this.allVariables) {
             if (!this.sensitiveVariables.contains(variable) && (!this.nonSensitiveVariables.contains(variable))) {
                 other.add(variable);
             }
@@ -95,16 +138,33 @@ public class SyntheticDataSpec extends ReplacementSpec {
         return other;
     }
 
+    /**
+     * Gets an ArrayList containing all numeric variables. If the ArrayList is
+     * empty, use this method to add variables.
+     *
+     * @return ArrayList of VariableMu's containing the numeric variables.
+     */
     public ArrayList<VariableMu> getAllVariables() {
-        return allVariables;
+        return this.allVariables;
     }
 
+    /**
+     * Clears all ArrayLists.
+     */
     public void clear() {
         this.allVariables.clear();
         this.nonSensitiveVariables.clear();
         this.sensitiveVariables.clear();
     }
-    
+
+    /**
+     * Gets an ArrayList containing the input variables. The input variables are
+     * the sensitive and the non-sensitive variables. sensitive and the
+     * non-sensitive variables.
+     *
+     * @return ArrayList of VariableMu's containing the the *sensitive and the
+     * non-sensitive variables.
+     */
     @Override
     public ArrayList<VariableMu> getInputVariables() {
         ArrayList<VariableMu> variables = new ArrayList<>(this.sensitiveVariables);
@@ -112,12 +172,15 @@ public class SyntheticDataSpec extends ReplacementSpec {
         return variables;
     }
 
+    /**
+     * Gets an ArrayList containing the output variables. The output variables
+     * are the sensitive variables.
+     *
+     * @return ArrayList of VariableMu's containing the the sensitive variables.
+     */
     @Override
     public ArrayList<VariableMu> getOutputVariables() {
         return this.sensitiveVariables;
     }
-    
-    
 
-        
 }

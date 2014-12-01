@@ -63,7 +63,6 @@ public class MainFrameController {
         Contents,
         News,
         About,
-//        RScript,
         SyntheticData
     }
 
@@ -126,7 +125,6 @@ public class MainFrameController {
         this.view.enableAction(Action.MakeProtectedFile, tablesCalculated);
         this.view.enableAction(Action.ShowTableCollection, tablesCalculated);
         this.view.enableAction(Action.PramSpecification, tablesCalculated);
-//        this.view.enableAction(Action.RScript, tablesCalculated);
         this.view.enableAction(Action.SyntheticData, tablesCalculated);
         this.view.enableAction(Action.IndividualRiskSpecification,
                 tablesCalculated && metadata.getCombinations().isRiskModel() && !metadata.isHouseholdData());

@@ -2,7 +2,6 @@ package muargus.model;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-//import muargus.MuARGUS;
 
 /**
  * Model class of the SelectCombinations screen. Only a single instance of this
@@ -13,28 +12,23 @@ import java.util.HashMap;
 public class Combinations {
 
     private int threshold;
-    //private boolean riskModel;
     private ArrayList<TableMu> tables;
-    //private VariableMu[] variables;
     private int[] thresholds;
     private final HashMap<VariableMu, int[]> unsafeCombinations;
-    //private HashMap<VariableMu, UnsafeInfo> unsafe;
 
-    // Model classes that need info from this model class 1 2 6 24 120 720 5040
+    // Model classes that need info from this model class 
     private GlobalRecode globalRecode;
     private ProtectedFile protectedFile;
     private TableCollection tableCollection;
     private final HashMap<TableMu, RiskSpecification> riskSpecifications;
     private ModifyNumericalVariables modifyNumericalVariables;
     private Microaggregation numericalMicroaggregation;
-    //private Microaggregation qualitativeMicroaggregation;
     private NumericalRankSwapping numericalRankSwapping;
     private PramSpecification pramSpecification;
-    //private RSpecification rSpecification;
     private SyntheticDataSpec syntheticData;
 
     // maximum number of tables before the user is warned that this will probably result in memory problems
-    private final int maximumNumberOfTables = 1000; 
+    private final int maximumNumberOfTables = 1000;
 
     private final int maximumSizeBeforeUserConfirmation = 100;
 
@@ -146,25 +140,6 @@ public class Combinations {
     private void createPramSpecification() {
         this.pramSpecification = new PramSpecification();
     }
-    
-//    /**
-//     * Gets the model class of the RSpecification screen.
-//     *
-//     * @return Returns the RSpecification model class.
-//     */
-//    public RSpecification getRSpecification() {
-//        if (this.rSpecification == null) {
-//            createRSpecification();
-//        }
-//        return this.rSpecification;
-//    }
-//    
-//    /**
-//     * Creates a new instance of the RSpecification class.
-//     */
-//    private void createRSpecification(){
-//        this.rSpecification = new RSpecification();
-//    }
 
     /**
      * Gets the model class of the SyntheticData screen.
@@ -177,14 +152,14 @@ public class Combinations {
         }
         return this.syntheticData;
     }
-    
+
     /**
      * Creates a new instance of the SyntheticData class.
      */
-    private void createSyntheticData(){
+    private void createSyntheticData() {
         this.syntheticData = new SyntheticDataSpec();
     }
-    
+
     /**
      * Gets the model class of the RiskSpecification screen.
      *
@@ -225,19 +200,13 @@ public class Combinations {
     /**
      * Gets the model class of the NumbericalMicroaggregation screen.
      *
-     * @param numerical Boolean indication whether there are numerical
-     * variables.
      * @return Returns the NumbericalMicroaggregation model class.
      */
     public Microaggregation getMicroaggregation() {
-        if(this.numericalMicroaggregation == null){
+        if (this.numericalMicroaggregation == null) {
             createMicroaggregation();
         }
         return this.numericalMicroaggregation;
-//        if ((numerical ? this.numericalMicroaggregation : this.qualitativeMicroaggregation) == null) {
-//            createMicroaggregation(numerical);
-//        }
-//        return numerical ? this.numericalMicroaggregation : this.qualitativeMicroaggregation;
     }
 
     /**
@@ -247,11 +216,7 @@ public class Combinations {
      * variables.
      */
     private void createMicroaggregation() {
-//        if (numerical) {
-            this.numericalMicroaggregation = new Microaggregation();
-//        } else {
-//            this.qualitativeMicroaggregation = new Microaggregation();
-//        }
+        this.numericalMicroaggregation = new Microaggregation();
     }
 
     /*
@@ -273,22 +238,13 @@ public class Combinations {
         this.numericalRankSwapping = new NumericalRankSwapping();
     }
 
-//    /**
-//     * Clearing the unsafeCombinations by assinging a new HashMap.
-//     */
-//    public void clearUnsafeCombinations() {
-//        this.unsafeCombinations = new HashMap<>();
-//    }
     /**
-     * Gets an array of integers containing the unsafeCombinations for each
-     * dimensions.
+     * Gets a HashMap of VariableMu's and integer Array's containing the
+     * unsafeCombinations for each dimensions belonging to a variable..
      *
-     * @return Array of integers containing the number of unsafe combinations
-     * per dimension.
+     * @return HashMap of VariableMu's and integer Array's containing the
+     * unsafeCombinations for each dimensions belonging to a variable..
      */
-    //public int[] getUnsafeCombinations(VariableMu variable) {
-    //    return this.unsafeCombinations.get(variable);
-    //}
     public HashMap<VariableMu, int[]> getUnsafeCombinations() {
         return this.unsafeCombinations;
     }
@@ -308,27 +264,7 @@ public class Combinations {
         System.arraycopy(unsafeCount, 0, unsafe, 0, length);
         this.unsafeCombinations.put(variable, unsafe);
     }
-//    public void clearUnsafe() {
-//        this.unsafe = new HashMap<>();
-//    }
-//
-//    public void setUnsafe(VariableMu variable, UnsafeInfo unsafe) {
-//        this.unsafe.put(variable, unsafe);
-//    }
-//
-//    public UnsafeInfo getUnsafe(VariableMu variable) {
-//        return this.unsafe.get(variable);
-//    }
 
-//    /**
-//     * Gets the threshold.
-//     *
-//     * @return String containing the threshold.
-//     */
-//    public String getThreshold() {
-//        return Integer.toString(threshold);
-//    }
-    
     /**
      * Gets the threshold.
      *
@@ -375,14 +311,6 @@ public class Combinations {
         this.thresholds = thresholds;
     }
 
-//    /**
-//     * Sets the threshold for each dimension at the same threshold.
-//     * @param thresholds
-//     * @param dimension
-//     */
-//    public void setThresholds(int thresholds, int dimension) {
-//        this.thresholds[dimension - 1] = thresholds;
-//    }
     /**
      * Gets all the specified tables.
      *

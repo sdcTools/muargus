@@ -145,29 +145,6 @@ public final class MetadataMu {
         return this.replacementSpecs;
     }
 
-//    public static ArrayList<VariableMu> makeClone(ArrayList<VariableMu> list) throws CloneNotSupportedException {
-//        ArrayList<VariableMu> clone = new ArrayList<>(list.size());
-//        for (VariableMu item : list) {
-//            clone.add((VariableMu) item.clone());
-//        }
-//        return clone;
-//    }
-//    public static ArrayList<Variables> getClone(){
-//        return cloneData;
-//    }
-//    public void TestClone(){
-//        cloneData.get(1).setName("test");
-//        System.out.println(variables.get(1).getName());
-//        System.out.println(cloneData.get(1).getName());
-//    }
-//    /**
-//     *
-//     * @param w
-//     * @param variable
-//     */
-//    private void writeVariable(Writer w, VariableMu variable) {
-//
-//    }
     /**
      * Links variables to each other if this is specified.
      *
@@ -180,7 +157,6 @@ public final class MetadataMu {
         }
     }
 
-    // TODO: add a message explaining whats the problem
     /**
      * Verifies for each variable if they are valid. This method checks if the
      * there are duplicate variable names, if the length of the missing values
@@ -253,25 +229,6 @@ public final class MetadataMu {
                 }
             }
         }
-
-//        for (int i = 0; i < variables.size(); i++) {
-//            VariableMu variable = variables.get(i);
-//            if (dataFileType == DATA_FILE_TYPE_FIXED) {
-//                int b1 = variable.getStartingPosition();
-//                int e1 = b1 + variable.getVariableLength();
-//                for (int j = i + 1; j < variables.size(); j++) {
-//                    VariableMu variable2 = variables.get(j);
-//                    int b2 = variable2.getStartingPosition();
-//                    int e2 = b2 + variable2.getVariableLength();
-//                    if (b2 < e1 && e2 > b1) {
-//                        throw new ArgusException("Variable " + variable.getName() + " and variable " + variable2.getName() + " overlap.");
-//                    }
-//                }
-//                if (StringUtils.equalsIgnoreCase(variable.getName(), variable2.getName())) {
-//                    throw new ArgusException("Variable" + i + " and variable" + j + " have the same name.");
-//                }
-//            }
-//        }
     }
 
     /**

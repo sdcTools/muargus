@@ -30,7 +30,6 @@ public class VariableMu {
     private int suppressionPriority;
     private int decimals;
     private String codeListFile; //TODO: change to File??
-    //    private int truncLevels; 
 
     private boolean numeric;
     private boolean categorical;
