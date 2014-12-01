@@ -20,6 +20,7 @@ import muargus.view.SelectCombinationsView;
 public class SelectCombinationsController extends ControllerBase<Combinations> {
 
     private final MetadataMu metadata;
+    //TODO:remove
 //    private long numberOfTables;
 
     ///private static final Logger logger = Logger.getLogger(SelectCombinationsController.class.getName());
@@ -134,6 +135,7 @@ public class SelectCombinationsController extends ControllerBase<Combinations> {
         return isValid;
     }
 
+    //TODO:remove
 //    /**
 //     * Gets the number of tables that will be generated for a given number of
 //     * dimensions (See setNumberOfTables).
@@ -183,7 +185,6 @@ public class SelectCombinationsController extends ControllerBase<Combinations> {
 //            this.numberOfTables = numberOfTables;
 //        }
 //    }
-
     /**
      * Starts the recursion equation that calculates the tables for the
      * specified number of dimensions. Assings an empty Arraylist of
@@ -413,13 +414,6 @@ public class SelectCombinationsController extends ControllerBase<Combinations> {
             SystemUtils.putRegInteger("general", "threshold" + Integer.toString(t), thresholds[t - 1]);
         }
     }
-
-//    /**
-//     *
-//     */
-//    public void automaticSpecification() {
-//        //het zou mooier zijn als de berekening niet in de view zou gebeuren
-//    }
 
     /**
      * Closes the view.

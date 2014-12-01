@@ -122,21 +122,6 @@ public class PramSpecificationController extends ControllerBase<PramSpecificatio
         }
     }
 
-//    /**
-//     * Gets the PramVariableSpec
-//     * @param variable
-//     * @return
-//     */
-//    public PramVariableSpec getPramVariableSpec(VariableMu variable) {
-//        PramVariableSpec temp = null;
-//        for (PramVariableSpec p : getModel().getPramVarSpec()) {
-//            if (p.getVariable().equals(variable)) {
-//                temp = p;
-//                break;
-//            }
-//        }
-//        return temp;
-//    }
     /**
      * Gets a double Object array containing the data for the codes table. Each
      * row contains the code, it's label and the PRAM probability.

@@ -126,6 +126,7 @@ public class ControllerBase<T> implements PropertyChangeListener {
         return this.stepName;
     }
 
+    //TODO: remove
 //    public double[][] readVariablesFromFile(File file, String separator, int nVariables) throws ArgusException {
 //        NumberFormat format = NumberFormat.getInstance(MuARGUS.getLocale());
 //        ArrayList<double[]> records = new ArrayList();

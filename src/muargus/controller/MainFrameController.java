@@ -98,7 +98,8 @@ public class MainFrameController {
     }
 
     /**
-     *
+     * Organizes the main screens functionality. Enables/disables the buttons
+     * and menu-items.
      */
     private void organise() {
         if (this.metadata.getCombinations() == null) {
@@ -137,7 +138,9 @@ public class MainFrameController {
     }
 
     /**
-     *
+     * Opens the open microdata screen. Gets the data file names, makes a new
+     * instance of MetadataMu, reads the metadata file and verifies the
+     * metadata.
      */
     public void openMicrodata() {
         DataFilePair filenames;
@@ -159,7 +162,6 @@ public class MainFrameController {
         newMetadata.setFileNames(filenames);
         try {
             MetaReader.readRda(newMetadata, this.view);
-
         } catch (ArgusException ex) {
             this.view.showErrorMessage(new ArgusException("Error reading metadata file: " + ex.getMessage()));
             return;
@@ -171,7 +173,7 @@ public class MainFrameController {
         }
         this.metadata = newMetadata;
         if (this.metadata.getDataFileType() == MetadataMu.DATA_FILE_TYPE_SPSS) {
-            MuARGUS.getSpssUtils().checkMetadata(this.metadata, this.view);
+            MuARGUS.getSpssUtils().verifyMetadata(this.metadata, this.view);
         }
         organise();
     }
@@ -218,6 +220,7 @@ public class MainFrameController {
     }
 
     /**
+     * Opens the global recode screen.
      *
      * @param selectedVariableIndex
      */
@@ -230,9 +233,11 @@ public class MainFrameController {
     }
 
     /**
+     * Shows the unsafe combinations.
      *
-     * @param variableIndex
-     * @param redraw
+     * @param variableIndex Integer containing the index of the variable.
+     * @param redraw Boolean indicating whether the number of unsafe
+     * combinations have been changed and need to be redrawn.
      */
     private void showUnsafeCombinations(int variableIndex, boolean redraw) {
         try {
@@ -249,8 +254,9 @@ public class MainFrameController {
     }
 
     /**
+     * Adds the codelist info to the variabels.
      *
-     * @return
+     * @return ArrayList of Strings containing the missing codelists.
      */
     public ArrayList<String> addCodelistInfo() {
         ArrayList<String> missingCodelists = new ArrayList<>();
@@ -285,7 +291,8 @@ public class MainFrameController {
         }
         return missingCodelists;
     }
-//                
+
+//  TODO:Remove              
 //                    String message = getCodelist(variable, codelistFile, codelist);
 //                    if (message != null) {
 //                        missingCodelists.add(message);
@@ -354,9 +361,8 @@ public class MainFrameController {
 //        }
 //        return missingCodelists;
 //    }
-
     /**
-     *
+     * Opens the PRAM specification screen.
      */
     public void pramSpecification() {
         PramSpecificationController controller = new PramSpecificationController(
@@ -365,7 +371,7 @@ public class MainFrameController {
     }
 
     /**
-     *
+     * Opens the risk specification screen.
      */
     public void riskSpecification() {
         if (this.metadata.getCombinations().getRiskSpecifications().isEmpty()) {
@@ -377,22 +383,8 @@ public class MainFrameController {
         controller.showView();
     }
 
-//    /**
-//     *
-//     */
-//    public void householdRiskSpecification() {
-//        riskSpecification();
-//    }
-//
-//    /**
-//     *
-//     */
-//    public void individualRiskSpecification() {
-//        riskSpecification();
-//    }
-
     /**
-     *
+     * Opens the modify numerical variables screen.
      */
     public void numericalVariables() {
         ModifyNumericalVariablesController controller = new ModifyNumericalVariablesController(
@@ -401,7 +393,7 @@ public class MainFrameController {
     }
 
     /**
-     *
+     * Opens the numerical microaggreagation screen.
      */
     public void numericalMicroaggregation() {
         MicroaggregationController controller = new MicroaggregationController(
@@ -410,7 +402,7 @@ public class MainFrameController {
     }
 
     /**
-     *
+     * Opens the numerical rank swapping screen.
      */
     public void numericalRankSwapping() {
         NumericalRankSwappingController controller = new NumericalRankSwappingController(
@@ -419,7 +411,7 @@ public class MainFrameController {
     }
 
     /**
-     *
+     * Opens the make protected file screen.
      */
     public void makeProtectedFile() {
         try {
@@ -437,6 +429,7 @@ public class MainFrameController {
     }
 
     /**
+     * Opens the view report screen.
      *
      * @param save
      */
@@ -448,13 +441,16 @@ public class MainFrameController {
             }
             viewReportController.showView();
         } catch (ArgusException ex) {
-            view.showErrorMessage(ex);
+            this.view.showErrorMessage(ex);
         }
     }
 
     /**
+     * Creates the report as a html file.
      *
-     * @return @throws ArgusException
+     * @return Document containing the html report.
+     * @throws ArgusException Throws an ArgusException when the file cannot be
+     * created.
      */
     private Document createReport() throws ArgusException {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -479,12 +475,12 @@ public class MainFrameController {
     public void contents() {
         try {
             MuARGUS.showHelp(null);
-        }
-        catch (ArgusException ex) {
+        } catch (ArgusException ex) {
             view.showErrorMessage(ex);
         }
     }
 
+    //TODO: mooier maken
     /**
      * Shows the news.
      */
@@ -519,22 +515,14 @@ public class MainFrameController {
     }
 
     /**
-     *
+     * Opens the about screen.
      */
     public void about() {
         new AboutView(this.view, true).setVisible(true);
     }
 
-//    /**
-//     *
-//     */
-//    public void rScript() {
-//        RController controller = new RController(this.view, this.metadata);
-//        controller.showView();
-//    }
-
     /**
-     *
+     * Opens the synthetic data screen.
      */
     public void syntheticData() {
         SyntheticDataController controller = new SyntheticDataController(this.view, this.metadata);
@@ -542,7 +530,7 @@ public class MainFrameController {
     }
 
     /**
-     *
+     * Clears the data if no combinations are selected.
      */
     private void clearDataBeforeSelectCombinations() {
         for (int i = this.view.getUnsafeCombinationsTable().getColumnCount() - 1; i >= 0; i--) {

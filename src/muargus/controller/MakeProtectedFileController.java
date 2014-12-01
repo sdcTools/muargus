@@ -47,7 +47,6 @@ public class MakeProtectedFileController extends ControllerBase<ProtectedFile> {
      * safe data will be written.
      */
     public void makeFile(File file) {
-        //System.out.println(file.getAbsolutePath());
         if (!isRiskThresholdSpecified()) {
             return;
         }
@@ -56,14 +55,7 @@ public class MakeProtectedFileController extends ControllerBase<ProtectedFile> {
         if (this.metadata.isSpss()) {
             MuARGUS.getSpssUtils().safFile = file;
             String path = this.metadata.getCombinations().getProtectedFile().getSafeMeta().getFileNames().getDataFileName();
-            //FilenameUtils.removeExtension
-//            String safeSpssFile;
-//            if (path.substring(path.length() - 4, path.length()).equals(".saf")) {
-//                int lastDot = path.lastIndexOf(".");
-                String safeSpssFile = path.substring(0, path.lastIndexOf(".")) + "Safe.sav";
-//            } else {
-//                safeSpssFile = path + "Safe.sav";
-//            }
+            String safeSpssFile = path.substring(0, path.lastIndexOf(".")) + "Safe.sav";
             MuARGUS.getSpssUtils().safeSpssFile = new File(safeSpssFile);
         }
         getCalculationService().makeProtectedFile(this);

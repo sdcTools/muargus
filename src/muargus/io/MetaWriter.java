@@ -15,7 +15,7 @@ import muargus.model.VariableMu;
 import org.apache.commons.lang3.StringUtils;
 
 /**
- * Class for writing various meta-objects to file
+ * Class for writing various meta-objects to file.
  *
  * @author Statistics Netherlands
  */

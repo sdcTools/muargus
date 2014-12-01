@@ -185,7 +185,7 @@ public class MainFrameView extends javax.swing.JFrame {
      * @param selectedIndex Integer containing the index of the selected
      * variable.
      * @param redraw Boolean indicating whether the number of unsafe
-     * combinations needs the be changed.
+     * combinations have been changed and need to be redrawn.
      */
     public void showUnsafeCombinations(Combinations model, int selectedIndex, boolean redraw) {
         this.model = model;

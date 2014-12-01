@@ -158,7 +158,6 @@ public class MicroaggregationController extends ControllerBase<Microaggregation>
             MicroaggregationSpec microaggregation = new MicroaggregationSpec(
                     getMicroaggregationView().getMinimalNumberOfRecords(),
                     getMicroaggregationView().getOptimal());
-            //numerical);
             microaggregation.getOutputVariables().addAll(selectedVariables);
             microaggregation.setReplacementFile(new ReplacementFile("Microaggregation"));
             getModel().getMicroaggregations().add(microaggregation);

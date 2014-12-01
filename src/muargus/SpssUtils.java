@@ -166,7 +166,7 @@ public class SpssUtils {
      * in the .rda file.
      * @param parent the Frame of the mainFrame.
      */
-    public void checkMetadata(MetadataMu metadata, Frame parent) {
+    public void verifyMetadata(MetadataMu metadata, Frame parent) {
         this.getVariablesFromSpss(metadata, parent);
         for (VariableMu variable : metadata.getVariables()) {
             boolean found = false;

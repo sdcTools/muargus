@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package muargus.io;
 
 import argus.model.ArgusException;
@@ -15,15 +10,20 @@ import java.io.PrintWriter;
 import muargus.model.SyntheticDataSpec;
 
 /**
+ * Class for writing R related objects to file.
  *
- * @author pibd05
+ * @author Statistics Netherlands
  */
 public class RWriter {
 
     /**
+     * Writes the alpha file. The Alpha file contains a diagonal matrix with the
+     * alpha values of the sensitive variables in the diagonal.
      *
-     * @param synthData
-     * @throws ArgusException
+     * @param synthData SyntheticDataSpec instance containig the replacement
+     * file for synthetic data.
+     * @throws ArgusException Throws an ArgusException when an error occurs
+     * during writing.
      */
     public static void writeAlpha(SyntheticDataSpec synthData) throws ArgusException {
         try (PrintWriter writer = new PrintWriter(synthData.getAlphaFile())) {
@@ -46,9 +46,17 @@ public class RWriter {
         }
     }
 
+    /**
+     * Writes the r-Script for generating synthetic data.
+     *
+     * @param synthData SyntheticDataSpec instance containig the replacement
+     * file for synthetic data.
+     * @throws ArgusException Throws an ArgusException when an error occurs
+     * during writing.
+     */
     public static void writeSynthetic(SyntheticDataSpec synthData) throws ArgusException {
         try (PrintWriter writer = new PrintWriter(synthData.getrScriptFile())) {
-            writer.println("require(\"hybribISO3\")");
+            writer.println("require(\"hybribISO3\")");//TODO: change to hybridIPSO3 when a new hybridIPSO is compiled.
             writer.println(String.format("hybrid_IPSO(\"%s\",\"%s\", K=%d,  out=TRUE, out_file=\"%s\", separator=\",\")",
                     synthData.doubleSlashses(synthData.getAlphaFile().getAbsolutePath()),
                     synthData.doubleSlashses(synthData.getReplacementFile().getInputFilePath()) + "2",
@@ -60,6 +68,13 @@ public class RWriter {
         }
     }
 
+    /**
+     *
+     * @param synthData SyntheticDataSpec instance containig the replacement
+     * file for synthetic data.
+     * @throws ArgusException Throws an ArgusException when an error occurs
+     * during writing.
+     */
     public static void writeBatSynthetic(SyntheticDataSpec synthData) throws ArgusException {
         try (PrintWriter writer = new PrintWriter(synthData.getRunRFileFile())) {
             writer.println(String.format("R CMD BATCH \"%s\"", synthData.getrScriptFile().getAbsolutePath()));
@@ -68,22 +83,31 @@ public class RWriter {
         }
     }
 
-    public static boolean adjustSyntheticOutputFile(SyntheticDataSpec model) {
+    /**
+     * Adjusts the synthetic data output file to the format used by Mu-Argus.
+     * Removes the first row containing the variable names used by R and the
+     * beginning of each row containing the record number.
+     *
+     * @param synthData SyntheticDataSpec instance containig the replacement
+     * file for synthetic data.
+     * @return Boolean indicating whether the synthetic data was succesfully
+     * adjusted.
+     */
+    public static boolean adjustSyntheticOutputFile(SyntheticDataSpec synthData) {
         boolean valid = true;
-        File inputFile = new File(model.getReplacementFile().getOutputFilePath());
-        File outputFile = new File(model.getReplacementFile().getOutputFilePath() + "2");
+        File inputFile = new File(synthData.getReplacementFile().getOutputFilePath());
+        File outputFile = new File(synthData.getReplacementFile().getOutputFilePath() + "2");
         outputFile.deleteOnExit();
         try (BufferedReader reader = new BufferedReader(new FileReader(inputFile))) {
             try (PrintWriter writer = new PrintWriter(outputFile)) {
                 if (reader.readLine() == null) {
                     valid = false;
                 }
-                //reader.readLine();
                 String line;
                 while ((line = reader.readLine()) != null) {
                     writer.println(line.substring(line.indexOf(",") + 1, line.length()));
                 }
-                model.getReplacementFile().setOutputFilePath(outputFile);
+                synthData.getReplacementFile().setOutputFilePath(outputFile);
             }
         } catch (IOException ex) {
             valid = false;
@@ -92,19 +116,28 @@ public class RWriter {
         return valid;
     }
 
-    public static void adjustSyntheticData(SyntheticDataSpec model) {
+    /**
+     * Ads a row to the synthetic data file. The row contains a header
+     * containing the variable names that the R script expects. Sensitive
+     * variables are numbered from x1 to xn, non-sensitive variables are
+     * numbered from s1 to sn.
+     *
+     * @param synthData SyntheticDataSpec instance containig the replacement
+     * file for synthetic data.
+     */
+    public static void adjustSyntheticData(SyntheticDataSpec synthData) {
         //Adds a header containing the variable names that the R script expects
-        File inputFile = new File(model.getReplacementFile().getInputFilePath());
+        File inputFile = new File(synthData.getReplacementFile().getInputFilePath());
         try (BufferedReader reader = new BufferedReader(new FileReader(inputFile))) {
             String line = "";
-            for (int i = 0; i < model.getSensitiveVariables().size(); i++) {
+            for (int i = 0; i < synthData.getSensitiveVariables().size(); i++) {
                 line += "x" + (i + 1) + " ,";
             }
-            for (int i = 0; i < model.getNonSensitiveVariables().size(); i++) {
+            for (int i = 0; i < synthData.getNonSensitiveVariables().size(); i++) {
                 line += "s" + (i + 1) + " ,";
             }
             line = line.substring(0, line.length() - 1);
-            File outputFile = new File(model.getReplacementFile().getInputFilePath() + "2");
+            File outputFile = new File(synthData.getReplacementFile().getInputFilePath() + "2");
             outputFile.deleteOnExit();
             try (PrintWriter writer = new PrintWriter(outputFile)) {
                 writer.println(line);

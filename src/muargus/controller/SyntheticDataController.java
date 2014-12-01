@@ -14,12 +14,11 @@ import muargus.view.SyntheticDataView;
 
 /**
  *
- * @author pibd05
+ * @author Statistics Netherlands
  */
 public class SyntheticDataController extends ControllerBase<SyntheticDataSpec> {
 
     private final MetadataMu metadata;
-    //private final static String pathRexe = "C:\\Program Files\\R\\R-3.1.2\\bin\\RScript.exe";
     private final SyntheticDataView view;
 
     /**
@@ -44,14 +43,15 @@ public class SyntheticDataController extends ControllerBase<SyntheticDataSpec> {
         getView().setVisible(false);
     }
 
-//    public Object[][] getSensitiveData() {
-//        Object[][] data = new Object[getSensitiveVariables().size()][2];
-//        for (int i = 0; i < getSensitiveVariables().size(); i++) {
-//            data[i][0] = getSensitiveVariables().get(i);
-//            data[i][1] = getSensitiveVariables().get(i).getAlpha();
-//        }
-//        return data;
-//    }
+    /**
+     * Generates the synthetic data. Gets the SyntheticDataSpec instance, cleans
+     * it, adds all relevant variables, creates a new replacement file and
+     * writes the required files (Alpha, r-script, data file and .bat file).
+     * After writeSyntheticData, the doNextStep is activated.
+     *
+     * @return Boolean indicating whether the synthetic data was succesfully
+     * generated.
+     */
     public boolean runSyntheticData() {
         try {
             SyntheticDataSpec syntheticData = getModel();
@@ -60,14 +60,10 @@ public class SyntheticDataController extends ControllerBase<SyntheticDataSpec> {
             syntheticData.getNonSensitiveVariables().addAll(getNonSensitiveVariables());
             syntheticData.setReplacementFile(new ReplacementFile("SyntheticData"));
             this.metadata.getReplacementSpecs().add(syntheticData);
-
-            /* synthetic data: sensitive variables are numbered from x1 to xn,
-             non-sensitive variables are numbered from s1 to sn.
-             */
             RWriter.writeAlpha(syntheticData);
             RWriter.writeSynthetic(syntheticData);
-            writeSyntheticData();
             RWriter.writeBatSynthetic(syntheticData);
+            writeSyntheticData();
             return true;
         } catch (ArgusException ex) {
             return false;
@@ -76,6 +72,12 @@ public class SyntheticDataController extends ControllerBase<SyntheticDataSpec> {
 
     }
 
+    /**
+     * Cleans the synthetic data and removes previous replacement file
+     * instances.
+     *
+     * @param syntheticData SyntheticDataSpec containing the replacement file.
+     */
     private void clean(SyntheticDataSpec syntheticData) {
         syntheticData.getSensitiveVariables().clear();
         syntheticData.getNonSensitiveVariables().clear();
@@ -87,17 +89,33 @@ public class SyntheticDataController extends ControllerBase<SyntheticDataSpec> {
         }
     }
 
+    /**
+     * Gets the selected sensitive variables.
+     *
+     * @return List of VariableMu's containing the selected sensitive variables.
+     */
     private List<VariableMu> getSensitiveVariables() {
         return ((SyntheticDataView) getView()).getSelectedSensitiveVariables();
     }
 
+    /**
+     * Gets the selected non-sensitive variables.
+     *
+     * @return List of VariableMu's containing the selected non-sensitive
+     * variables.
+     */
     private List<VariableMu> getNonSensitiveVariables() {
         return ((SyntheticDataView) getView()).getSelectedNonSensitiveVariables();
     }
 
+    /**
+     * Does the next step if the previous step was succesful.
+     *
+     * @param success Boolean indicating whether the previous step was
+     * succesful.
+     */
     @Override
     protected void doNextStep(boolean success) {
-        //Add header
         RWriter.adjustSyntheticData(getModel());
         runBat();
         if (RWriter.adjustSyntheticOutputFile(getModel())) {
@@ -106,21 +124,25 @@ public class SyntheticDataController extends ControllerBase<SyntheticDataSpec> {
             getView().showErrorMessage(new ArgusException("No synthetic data generated. Check if R is properly installed.")); //TODO: beter foutmelding als R niet goed is geinstalleerd.
         }
         this.view.enableRunSyntheticDataButton(true);
-        //Run the R script
-        //RunRScript()
     }
 
+    /**
+     * Runs the .bat file. The .bat file runs the R-script which generates the
+     * synthetic data.
+     */
     private void runBat() {
         try {
             String cmd = getModel().getRunRFileFile().getAbsolutePath();
             Process p = Runtime.getRuntime().exec(cmd);
             p.waitFor();
-            //System.out.println(cmd);
         } catch (IOException | ArgusException | InterruptedException ex) {
             //Logger.getLogger(SyntheticDataController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
+    /**
+     * Writes the synthetic data in a replacement file.
+     */
     private void writeSyntheticData() {
         getCalculationService().makeReplacementFile(this);
     }
@@ -131,13 +153,11 @@ public class SyntheticDataController extends ControllerBase<SyntheticDataSpec> {
      */
     private void fillModel() {
         getModel().clear();
-//        if (getModel().getAllVariables().isEmpty()) {
         for (VariableMu variable : this.metadata.getVariables()) {
             if (variable.isNumeric()) {
                 getModel().getAllVariables().add(variable);
             }
         }
-        // }
     }
 
 }
