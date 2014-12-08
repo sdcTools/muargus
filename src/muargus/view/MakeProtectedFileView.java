@@ -382,6 +382,12 @@ public class MakeProtectedFileView extends DialogBase<MakeProtectedFileControlle
     }// </editor-fold>//GEN-END:initComponents
 
     private void makeFileButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_makeFileButtonActionPerformed
+        String filter;
+
+//        if(spss){
+//            
+//        }
+        
         String filePath = showFileDialog("Make safe micro file", true, new String[]{"Safefile (*.saf)|saf"});
         if (filePath != null) {
             getController().makeFile(new File(filePath));

@@ -4,6 +4,8 @@ import muargus.CalculationService;
 import argus.model.ArgusException;
 import argus.utils.SystemUtils;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import javax.swing.JOptionPane;
 import muargus.MuARGUS;
 import muargus.model.MetadataMu;
@@ -226,6 +228,7 @@ public class SelectCombinationsController extends ControllerBase<Combinations> {
                 VariableMu s = allVariables.get(i);
                 temp.addAll(variableSubset);
                 temp.add(s);
+                sort(temp);
 
                 //Make table, add the variable array and add this table to the table array
                 TableMu tableMu = new TableMu();
@@ -311,6 +314,7 @@ public class SelectCombinationsController extends ControllerBase<Combinations> {
                 ArrayList<VariableMu> temp = new ArrayList<>();
                 temp.addAll(variableSubset);
                 temp.add(allVariables.get(i));
+                sort(temp);
 
                 if (temp.size() == numberOfLevels) {
                     TableMu tableMu = new TableMu();
@@ -322,6 +326,23 @@ public class SelectCombinationsController extends ControllerBase<Combinations> {
                 calculateTablesForID(i + 1, index, size, currentLevel, temp, numberOfLevels, variables, allVariables);
             }
         }
+    }
+
+    /**
+     * Sorts an Arraylist of VariableMu's on the startingposition.
+     * @param variables ArrayList of VariableMu's.
+     */
+    private void sort(ArrayList<VariableMu> variables) {
+        Collections.sort(variables, new Comparator<VariableMu>() {
+            @Override
+            public int compare(VariableMu v1, VariableMu v2) {
+                if (v1.getStartingPosition() < v2.getStartingPosition()) {
+                    return -1;
+                } else {
+                    return 1;
+                }
+            }
+        });
     }
 
     /**
