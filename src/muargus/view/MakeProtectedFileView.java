@@ -383,12 +383,13 @@ public class MakeProtectedFileView extends DialogBase<MakeProtectedFileControlle
 
     private void makeFileButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_makeFileButtonActionPerformed
         String filter;
+        if(getController().getMetadata().isSpss()){
+            filter = "Safefile (*.sav)|sav"; //TODO: verander zodat de saf file in de temp directory staat
+        } else {
+            filter = "Safefile (*.saf)|saf";
+        }
 
-//        if(spss){
-//            
-//        }
-        
-        String filePath = showFileDialog("Make safe micro file", true, new String[]{"Safefile (*.saf)|saf"});
+        String filePath = showFileDialog("Make safe micro file", true, new String[]{filter});
         if (filePath != null) {
             getController().makeFile(new File(filePath));
         }

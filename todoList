@@ -6,8 +6,12 @@ niet behandelde opmerkingen/vragen:
 
 Release 3:                                                                                              Door:
 
+Select Combinations:
+-   check aantal te genereren tabellen zit er nog niet wanneer met het volgens het id-level wil doen.   -(L)
+-   Thresholds voor meerdere dimensies mogelijk maken alle waardes te geven 
+
 R
--   Checken of bij de oude mu er ook minimaal 1 non-sensitive variabele moet zijn                       -(L) Jeldrik (kan pas op 8 december)
+-   Checken of bij de oude mu er ook minimaal 1 non-sensitive variabele moet zijn                       -(L) ANCO?
 
 SPSS
 -   afvangen als de save file al in gebruik is.                                                         -(M)
