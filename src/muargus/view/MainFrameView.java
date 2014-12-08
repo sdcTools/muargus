@@ -459,7 +459,7 @@ public class MainFrameView extends javax.swing.JFrame {
         aboutMenuItem = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Main Frame");
+        setTitle("MU-ARGUS");
         setIconImage(new javax.swing.ImageIcon(getClass().getResource("/muargus/resources/icons/mu.png")).getImage());
         setMinimumSize(new java.awt.Dimension(650, 400));
 
@@ -928,6 +928,7 @@ public class MainFrameView extends javax.swing.JFrame {
         modifyMenu.add(numericalRankSwappingMenuItem);
 
         syntheticDataMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Y, java.awt.event.InputEvent.ALT_MASK));
+        syntheticDataMenuItem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/muargus/resources/icons/Rlogo.png"))); // NOI18N
         syntheticDataMenuItem.setText("Synthetic data");
         syntheticDataMenuItem.setEnabled(false);
         syntheticDataMenuItem.addActionListener(new java.awt.event.ActionListener() {

@@ -64,12 +64,17 @@ public class MetaReader {
                         try {
                             variable.setStartingPosition(Integer.parseInt(tokenizer.nextToken()));
                         } catch (NumberFormatException e) {
+                            if(metadata.getDataFileType() == MetadataMu.DATA_FILE_TYPE_FIXED){
                             throw new ArgusException(String.format("Starting position of the variable %s is not an integer", variable.getName()));
-                        }
+                        }}
                     } else {
                         variable.setStartingPosition(1);  //not relevant, but must be >0
                     }
+                    try{
                     variable.setVariableLength(Integer.parseInt(tokenizer.nextToken()));
+                    } catch(NumberFormatException e){
+                        variable.setVariableLength(0);
+                    }
                     variable.setMissing(0, tokenizer.nextToken());
                     variable.setMissing(1, tokenizer.nextToken());
                 } else if (variable == null) {

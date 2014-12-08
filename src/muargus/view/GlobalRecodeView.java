@@ -156,7 +156,7 @@ public class GlobalRecodeView extends DialogBase<GlobalRecodeController> {
      */
     private int getTruncatePositions(int varLength) {
         while (true) {
-            String result = JOptionPane.showInputDialog(null, "Number of Digits", 1);
+            String result = JOptionPane.showInputDialog(null, "Number of Digits", "Truncate" , 1);
             if (result == null || result.length() == 0) {
                 return 0;
             }

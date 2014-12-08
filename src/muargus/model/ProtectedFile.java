@@ -181,7 +181,12 @@ public class ProtectedFile {
      */
     public void initSafeMeta(File file, MetadataMu meta) {
         this.safeMeta = new MetadataMu(meta);
-        String path = StrUtils.replaceExtension(file.getPath(), ".saf");
+        String path;
+        if(file.getPath().contains(".saf") || file.getPath().contains(".sav")){
+            path = StrUtils.replaceExtension(file.getPath(), ".saf");
+        } else {
+            path = file.getPath() + ".saf";
+        }
         DataFilePair pair = new DataFilePair(path, FilenameUtils.removeExtension(path) + ".rds");
         this.safeMeta.setFileNames(pair);
     }

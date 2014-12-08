@@ -162,7 +162,7 @@ public class MakeProtectedFileView extends DialogBase<MakeProtectedFileControlle
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Make Protected File");
-        setResizable(false);
+        setMinimumSize(new java.awt.Dimension(440, 400));
 
         suppressionPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Suppression"));
 

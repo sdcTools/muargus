@@ -486,7 +486,7 @@ public class VariableMu {
     public int getNumberOfMissings() {
         int numberOfMissings = 0;
         for (int i = 0; i < MAX_NUMBER_OF_MISSINGS; i++) {
-            if (!missing[i].isEmpty()) {
+            if (!this.missing[i].isEmpty()) {
                 numberOfMissings++;
             }
         }
@@ -500,7 +500,7 @@ public class VariableMu {
      * @return String containing the missing value.
      */
     public String getMissing(int index) {
-        return missing[index];
+        return this.missing[index];
     }
 
     /**

@@ -25,13 +25,15 @@ import muargus.model.VariableMu;
 import org.apache.commons.lang3.StringUtils;
 
 /**
+ * Class for calculations. This class calls an external .dll for its
+ * calculations.
  *
  * @author Statistics Netherlands
  */
 public class CalculationService {
 
     /**
-     *
+     * Progress listenere.
      */
     private class ProgressListener extends IProgressListener {
 
@@ -49,7 +51,7 @@ public class CalculationService {
     }
 
     /**
-     *
+     * Enumeration of background tasks.
      */
     private enum BackgroundTask {
 
@@ -63,10 +65,13 @@ public class CalculationService {
     private final CMuArgCtrl c;
     private MetadataMu metadata;
     private final ProgressListener progressListener; //must remain in scope, or will be garbage collected 
+    private PropertyChangeListener listener;
 
     /**
+     * Constructor for the CalculationService.
      *
-     * @param muArgCtrl
+     * @param muArgCtrl CMuArgCtrl. CMuArgCtrl is the wrapper class around the
+     * external .dll.
      */
     public CalculationService(final CMuArgCtrl muArgCtrl) {
         this.c = muArgCtrl;
@@ -75,11 +80,10 @@ public class CalculationService {
         this.metadata = null;
     }
 
-    private PropertyChangeListener listener;
-
     /**
+     * Makes a protected file.
      *
-     * @param listener
+     * @param listener PropertyChangeListener.
      */
     public void makeProtectedFile(PropertyChangeListener listener) {
         executeSwingWorker(BackgroundTask.MakeProtectedFile, listener);
@@ -108,8 +112,9 @@ public class CalculationService {
     }
 
     /**
+     * Sets the metadata.
      *
-     * @param metadata
+     * @param metadata MetadataMu instance containing the metadata.
      */
     public void setMetadata(MetadataMu metadata) {
         this.metadata = metadata;
@@ -117,16 +122,19 @@ public class CalculationService {
     }
 
     /**
+     * Makes a replacement file.
      *
-     * @param listener
+     * @param listener PropertyChangeListener.
      */
     public void makeReplacementFile(PropertyChangeListener listener) {
         executeSwingWorker(BackgroundTask.MakeReplacementFile, listener);
     }
 
     /**
+     * Makes a replacement file in the background (in a separate thread).
      *
-     * @throws ArgusException
+     * @throws ArgusException Throws an ArgusException when an error occurs
+     * while creating temporary replacement file.
      */
     private void makeReplacementFileInBackground() throws ArgusException {
         ReplacementSpec replacement = this.metadata.getReplacementSpecs().get(this.metadata.getReplacementSpecs().size() - 1);
@@ -144,9 +152,10 @@ public class CalculationService {
     }
 
     /**
+     * Gets the error message as a String.
      *
-     * @param errorType
-     * @return
+     * @param errorType Integer containing the error type.
+     * @return String containing the error message.
      */
     private String getErrorString(int errorType) {
         String[] error = new String[1];
@@ -155,10 +164,15 @@ public class CalculationService {
     }
 
     /**
+     * Does a global recoding. Reduces the number of codes of a variable by
+     * grouping several codes together.
      *
-     * @param recode
-     * @return
-     * @throws ArgusException
+     * @param recode RecodeMu instance containing the variable specifications
+     * for global recoding.
+     * @return String containing a warning of overlapping sources, not mentioned
+     * codes, etc.
+     * @throws ArgusException Throws an ArgusException when an error occurs
+     * while recoding.
      */
     public String doRecode(RecodeMu recode) throws ArgusException {
         int index = getIndexOf(recode.getVariable());
@@ -182,9 +196,11 @@ public class CalculationService {
     }
 
     /**
+     * Gets the unsafe combinations for each table and each dimension.
      *
-     * @param dimensions
-     * @return
+     * @param dimensions Integer containing the number of dimensions.
+     * @return Arraylist of TableMu's containing the number of unsafe
+     * combinations for each dimension.
      */
     public ArrayList<TableMu> getTableUnsafeCombinations(int dimensions) {
         int index = 1;
@@ -209,8 +225,10 @@ public class CalculationService {
     }
 
     /**
+     * Applies the global recoding.
      *
-     * @throws ArgusException
+     * @throws ArgusException Throws an ArgusException when an error occurs
+     * while applying global recoding.
      */
     public void applyRecode() throws ArgusException {
         //c.SetProgressListener(null);
@@ -222,9 +240,12 @@ public class CalculationService {
     }
 
     /**
+     * Undo's the global recoding.
      *
-     * @param recode
-     * @throws ArgusException
+     * @param recode RecodeMu instance containing the variable specifications
+     * for global recoding.
+     * @throws ArgusException Throws an ArgusException when an error occurs
+     * while undoing global recoding.
      */
     public void undoRecode(RecodeMu recode) throws ArgusException {
         //c.SetProgressListener(null);
@@ -237,10 +258,15 @@ public class CalculationService {
     }
 
     /**
+     * Truncates the codes. This reduces the number of codes of a variable by
+     * cutting of one r more positions at the right.
      *
-     * @param recode
-     * @param positions
-     * @throws ArgusException
+     * @param recode RecodeMu instance containing the variable specifications
+     * for global recoding.
+     * @param positions Integer containing the number of positions that will be
+     * cut of.
+     * @throws ArgusException Throws an ArgusException when an error occurs
+     * during truncate.
      */
     public void truncate(RecodeMu recode, int positions) throws ArgusException {
         int index = getIndexOf(recode.getVariable());
@@ -253,8 +279,11 @@ public class CalculationService {
     }
 
     /**
+     * Changes the files. Numeric variables will be replaced by the variables in
+     * the replacement files.
      *
-     * @throws ArgusException
+     * @throws ArgusException Throws an ArgusException when an error occurs
+     * during SetChangeFile for replacement file.
      */
     private void doChangeFiles() throws ArgusException {
         boolean result = this.c.SetNumberOfChangeFiles(this.metadata.getReplacementSpecs().size());
@@ -276,8 +305,10 @@ public class CalculationService {
     }
 
     /**
+     * Makes the protected/safe file.
      *
-     * @throws ArgusException
+     * @throws ArgusException Throws an ArgusException when an error occurs
+     * during Make protected file.
      */
     private void makeFileInBackground() throws ArgusException {
         doChangeFiles();
@@ -310,16 +341,19 @@ public class CalculationService {
     }
 
     /**
+     * Calculates the tables. For each (sub) table is calculated how many table
+     * cells are greater than 0 and less than or equal to the threshold.
      *
-     * @param listener
+     * @param listener PropertyChangeListener.
      */
     public void calculateTables(PropertyChangeListener listener) {
         executeSwingWorker(BackgroundTask.CalculateTables, listener);
     }
 
     /**
+     * Checks if a background worker has succesfully finished it's job.
      *
-     * @param ex
+     * @param ex Exception that might be thrown if an error occurs.
      */
     private void workerDone(Exception ex) {
         if (ex == null) {
@@ -332,10 +366,13 @@ public class CalculationService {
     }
 
     /**
+     * Fires a property change event.
      *
-     * @param propertyName
-     * @param oldValue
-     * @param newValue
+     * @param propertyName String containing the property name.
+     * @param oldValue Object containing the old object before the property
+     * change.
+     * @param newValue Object containing the new object after the property
+     * change.
      */
     private void firePropertyChange(String propertyName, Object oldValue, Object newValue) {
         if (this.listener != null) {
@@ -359,10 +396,11 @@ public class CalculationService {
     }
 
     /**
+     * Adds a variable.
      *
-     * @param variable
-     * @param varNr
-     * @return
+     * @param variable VariableMu instance of the to be added variable.
+     * @param varNr Integer containing the index of the variable.
+     * @return Boolean indicating whether the adding was succesful.
      */
     private boolean addVariable(VariableMu variable, int varNr) {
         //For numeric non-weight variables, the dll needs a missing value, but it's not required in the model
@@ -418,25 +456,29 @@ public class CalculationService {
 //        return nVar;
 //    }
     /**
+     * Gets an ArrayList containing all the Variables in the Metadata.
      *
-     * @return
+     * @return ArrayList containing all the Variables in the Metadata.
      */
     public ArrayList<VariableMu> getVariables() {
         return this.metadata.getVariables();
     }
 
     /**
+     * Gets all the specified tables.
      *
-     * @return
+     * @return ArrayList containing instances of the TableMu class. Each table
+     * is specified by an TableMu instance.
      */
     public ArrayList<TableMu> getTables() {
         return this.metadata.getCombinations().getTables();
     }
 
     /**
+     * Gets the index of the weight variable.
      *
-     * @param variables
-     * @return
+     * @param variables ArrayList of VariableMu's
+     * @return Integer containing the index of the weight variable.
      */
     private int getRiskVarIndex(ArrayList<VariableMu> variables) {
         int index = 0;
@@ -450,9 +492,11 @@ public class CalculationService {
     }
 
     /**
+     * Executes calculations in the background (in a separate thread).
      *
-     * @param taskType
-     * @throws ArgusException
+     * @param taskType Background task.
+     * @throws ArgusException Throws an ArgusException when an error occurs
+     * while executing a task in the background.
      */
     private void executeInBackground(BackgroundTask taskType) throws ArgusException {
         firePropertyChange("stepName", null, taskType.toString());
@@ -473,8 +517,9 @@ public class CalculationService {
     }
 
     /**
-     *
-     * @throws ArgusException
+     * 
+     * @throws ArgusException Throws an ArgusException when an error occurs
+     * during a background task.
      */
     private void exploreInBackground() throws ArgusException {
         ArrayList<VariableMu> variables = getVariables();

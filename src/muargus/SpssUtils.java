@@ -173,7 +173,7 @@ public class SpssUtils {
             outerloop:
             for (SpssVariable spssVariable : this.spssVariables) {
                 if (variable.getName().equals(spssVariable.getName())
-                        && variable.getVariableLength() == spssVariable.getVariableLength()
+                        //&& variable.getVariableLength() == spssVariable.getVariableLength()
                         && variable.getDecimals() == spssVariable.getNumberOfDecimals()) {
                     for (int i = 0; i < variable.getNumberOfMissings(); i++) {
                         String missing;

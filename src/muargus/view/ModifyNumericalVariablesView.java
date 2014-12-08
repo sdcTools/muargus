@@ -24,7 +24,7 @@ import muargus.model.ModifyNumericalVariablesSpec;
 public class ModifyNumericalVariablesView extends DialogBase<ModifyNumericalVariablesController> {
 
     ModifyNumericalVariables model;
-    private final int[] variablesColumnWidth = {20, 80};
+    private final int[] variablesColumnWidth = {20, 80};//TODO: eerte kolom breder maken
     private int selectedRow = 0;
 
     /**
