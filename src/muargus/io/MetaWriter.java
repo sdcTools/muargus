@@ -155,8 +155,8 @@ public class MetaWriter {
             }
             if (all) {
                 writer.println("    <IDLEVEL> " + variable.getIdLevel());
-                //writer.println("    <SUPPRESSPRIORITY> " + variable.getSuppressPriority());
-                writer.println("    <SUPPRESSWEIGHT> " + variable.getSuppressPriority());
+                writer.println("    <SUPPRESSPRIORITY> " + variable.getSuppressPriority());
+                //writer.println("    <SUPPRESSWEIGHT> " + variable.getSuppressPriority());
             }
             if (variable.isCodelist()) {
                 writer.println("    <CODELIST> " + StrUtils.quote(variable.getCodeListFile()));

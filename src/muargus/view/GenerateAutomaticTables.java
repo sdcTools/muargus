@@ -180,12 +180,8 @@ public class GenerateAutomaticTables extends DialogBase {
                         break breakpoint;
                     }
                     if (result > 0) {
-                        if (i > 0 && result < thresholds[i - 1]) {
-                            showErrorMessage(new ArgusException("The threshold needs to be equal to or larger than " + thresholds[i - 1]));
-                        } else {
-                            thresholds[i] = result;
-                            setInputValid(true);
-                        }
+                        thresholds[i] = result;
+                        setInputValid(true);
                     } else {
                         showErrorMessage(new ArgusException("Threshold needs to greater than 0"));
                     }
@@ -199,23 +195,22 @@ public class GenerateAutomaticTables extends DialogBase {
     }
 
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
-    private boolean generateTables() { 
+    private boolean generateTables() {
         if (isMakeUpToDimensionRadioButton()) {
             setNumberOfTables(getDimensions(), numberOfVariables);
-            if (this.numberOfTables > this.model.getMaximumSizeBeforeUserConfirmation() 
+            if (this.numberOfTables > this.model.getMaximumSizeBeforeUserConfirmation()
                     && this.numberOfTables < this.model.getMaximumNumberOfTables()) {
                 if (JOptionPane.showConfirmDialog(this, "Are you sure that you want to generate "
                         + this.numberOfTables + " tables?", "Mu Argus",
                         JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
                     return true;
                 }
-            } else if (this.numberOfTables > this.model.getMaximumSizeBeforeUserConfirmation()){
+            } else if (this.numberOfTables > this.model.getMaximumSizeBeforeUserConfirmation()) {
                 if (JOptionPane.showConfirmDialog(this, "Are you sure that you want to generate "
-                        + this.numberOfTables + " tables?\nGenerating this many tables will probably result in memory problems."
-                        , "Mu Argus", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+                        + this.numberOfTables + " tables?\nGenerating this many tables will probably result in memory problems.", "Mu Argus", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
                     return true;
                 }
             }
