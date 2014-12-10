@@ -166,12 +166,14 @@ public class MainFrameView extends javax.swing.JFrame {
      *
      * @param filenames DataFilePair instance containing the filenames that are
      * currently loaded. This is empty if no filenames are specified.
+     * @param hasSpss indicates whether Spss files can be chosen or not
      * @return DataFilePair instance containing the filnemas after
      * (re)specification of the filenames.
      */
-    public DataFilePair showOpenMicrodataDialog(DataFilePair filenames) {
-        DialogOpenMicrodata dialog = new DialogOpenMicrodata(this, true);
+    public DataFilePair showOpenMicrodataDialog(DataFilePair filenames, boolean hasSpss) {
+        OpenMicrodataView dialog = new OpenMicrodataView(this, true);
         dialog.setDataFileNames(filenames.getDataFileName(), filenames.getMetaFileName());
+        dialog.selectSpssAllowed(hasSpss);
         if (dialog.showDialog() == DialogOpenMicrodata.APPROVE_OPTION) {
             return dialog.getMicrodataFilePair();
         }

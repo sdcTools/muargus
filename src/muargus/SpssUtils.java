@@ -82,7 +82,8 @@ public class SpssUtils {
                 }
                 metadata.setRecordCount(StatsUtil.getCaseCount());
                 StatsUtil.stop();
-            } catch (StatsException e) { }
+            } catch (StatsException e) { 
+            }
         //}
         return this.spssVariables;
     }
