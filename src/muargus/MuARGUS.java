@@ -29,8 +29,8 @@ public class MuARGUS {
     // Version info
     public static final int MAJOR = 5;
     public static final int MINOR = 0;
-    public static final String REVISION = "1 (beta)";
-    public static final int BUILD = 1;
+    public static final String REVISION = "2 (beta)";
+    public static final int BUILD = 2;
 
     public static final int MAXDIMS = 10;
 
@@ -69,7 +69,7 @@ public class MuARGUS {
     /**
      * Gets the instance of SpssUtils.
      *
-     * @return SpssUtils.
+     * @return SpssUtils, or null if the Spss plugin cannot be loaded
      */
     public static SpssUtils getSpssUtils() {
         try {
