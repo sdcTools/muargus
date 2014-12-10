@@ -18,7 +18,6 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import muargus.HTMLReportWriter;
 import muargus.MuARGUS;
-import muargus.SpssUtils;
 import muargus.io.MetaReader;
 import muargus.model.CodeInfo;
 import muargus.model.Combinations;
