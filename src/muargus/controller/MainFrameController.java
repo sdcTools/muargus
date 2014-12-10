@@ -18,6 +18,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import muargus.HTMLReportWriter;
 import muargus.MuARGUS;
+import muargus.SpssUtils;
 import muargus.io.MetaReader;
 import muargus.model.CodeInfo;
 import muargus.model.Combinations;
@@ -144,15 +145,16 @@ public class MainFrameController {
      */
     public void openMicrodata() {
         DataFilePair filenames;
+        boolean hasSpss = MuARGUS.getSpssUtils() != null;
         if (this.metadata.isSpss() && this.metadata.getCombinations() != null) {
             if (this.metadata.getCombinations().getTables().size() > 0) {
-                filenames = this.view.showOpenMicrodataDialog(
-                        new DataFilePair(MuARGUS.getSpssUtils().spssDataFileName, this.metadata.getFileNames().getMetaFileName()));
+                filenames = this.view.showOpenMicrodataDialog(new DataFilePair(
+                        MuARGUS.getSpssUtils().spssDataFileName, this.metadata.getFileNames().getMetaFileName()), hasSpss);
             } else {
-                filenames = this.view.showOpenMicrodataDialog(this.metadata.getFileNames());
+                filenames = this.view.showOpenMicrodataDialog(this.metadata.getFileNames(), hasSpss);
             }
         } else {
-            filenames = this.view.showOpenMicrodataDialog(this.metadata.getFileNames());
+            filenames = this.view.showOpenMicrodataDialog(this.metadata.getFileNames(), hasSpss);
         }
         if (filenames == null) {
             return;
@@ -173,7 +175,12 @@ public class MainFrameController {
         }
         this.metadata = newMetadata;
         if (this.metadata.getDataFileType() == MetadataMu.DATA_FILE_TYPE_SPSS) {
+            try { 
             MuARGUS.getSpssUtils().verifyMetadata(this.metadata, this.view);
+            }
+            catch (Throwable ex) {
+                this.view.showErrorMessage(new ArgusException("SPSS error"));
+            }
         }
         organise();
     }

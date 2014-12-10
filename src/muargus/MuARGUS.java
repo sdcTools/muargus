@@ -45,8 +45,8 @@ public class MuARGUS {
     private static Process helpViewerProcess;
 
     static {
-        System.loadLibrary("libmuargusdll");
-        System.loadLibrary("libnumericaldll");
+        System.loadLibrary("lib/libmuargusdll");
+        System.loadLibrary("lib/libnumericaldll");
     }
 
     private static final CalculationService calcService = new CalculationService(new CMuArgCtrl());
@@ -72,10 +72,15 @@ public class MuARGUS {
      * @return SpssUtils.
      */
     public static SpssUtils getSpssUtils() {
+        try {
         if (MuARGUS.spssUtils == null) {
             MuARGUS.spssUtils = new SpssUtils();
         }
         return MuARGUS.spssUtils;
+        }
+        catch (NoClassDefFoundError err) {
+            return null;
+        }
     }
 
     /**
