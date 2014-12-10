@@ -173,7 +173,7 @@ public class MainFrameController {
         }
         this.metadata = newMetadata;
         if (this.metadata.getDataFileType() == MetadataMu.DATA_FILE_TYPE_SPSS) {
-            MuARGUS.getSpssUtils().verifyMetadata(this.metadata, this.view);
+            MuARGUS.getSpssUtils().verifyMetadata(this.metadata);
         }
         organise();
     }

@@ -169,7 +169,8 @@ public final class MetadataMu {
      */
     public void verify() throws ArgusException {
         for (VariableMu var : variables) {
-
+            boolean oldSpssMeta = this.isSpss() && var.getVariableLength() == 0;
+        
             //Check for duplicate variable names
             for (VariableMu var2 : variables) {
                 if (!var.equals(var2) && var.getName().equalsIgnoreCase(var2.getName())) {
@@ -213,7 +214,7 @@ public final class MetadataMu {
             }
 
             //Check if the first missing value is not empty when the variable is categorical
-            if (var.isCategorical() && var.getMissing(0).equals("")) {
+            if (var.isCategorical() && var.getMissing(0).equals("") && !oldSpssMeta) {
                 throw new ArgusException("The first missing value for variable " + var.getName() + " can not be empty");
             }
 
