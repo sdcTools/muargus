@@ -408,9 +408,9 @@ public class SpssUtils {
             }
             command.add("SAVE OUTFILE='" + this.safeSpssFile + "'/DROP=TEMP" + first + " TO TEMP" + last + ".");
             command.add("EXECUTE.");
-            for (String s : command) {
-                System.out.println(s);
-            }
+//            for (String s : command) {
+//                System.out.println(s);
+//            }
 
             StatsUtil.submit(command.toArray(new String[command.size()]));
             StatsUtil.stop();

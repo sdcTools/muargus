@@ -125,13 +125,13 @@ public class SelectCombinationsController extends ControllerBase<Combinations> {
         }
         if (tableMuNew.getVariables().size() == tableMuOld.getVariables().size()
                 && numberOfDoubleVariables == tableMuNew.getVariables().size()) {
-            int thresholdOld = tableMuOld.getThreshold();
-            int thresholdNew = tableMuNew.getThreshold();
-            if (thresholdNew > thresholdOld) {
-                tableMuOld.setThreshold(thresholdNew);
-            } else {
-                tableMuNew.setThreshold(thresholdOld);
-            }
+            //int thresholdOld = tableMuOld.getThreshold();
+            //int thresholdNew = tableMuNew.getThreshold();
+//            if (thresholdNew > thresholdOld) {
+                tableMuOld.setThreshold(tableMuNew.getThreshold());
+//            } else {
+//                tableMuNew.setThreshold(thresholdOld);
+//            }
             isValid = false;
         }
         return isValid;

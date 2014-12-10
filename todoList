@@ -1,14 +1,13 @@
 niet behandelde opmerkingen/vragen:
 -   wat doen met knoppen tijdens achtergrondprocessen? --> ANCO
 -   inhoudelijke fout in ingelezen metadata: wat doen? knoppen uitzetten?
--   Mag bij het wegschrijven van de metadata <SUPPRESSIONWEIGHT> vervangen worden door <SUPPRESSIONPRIORITY>? --> ANCO?
+
 
 
 Release 3:                                                                                              Door:
 
 Select Combinations:
--   check aantal te genereren tabellen zit er nog niet wanneer met het volgens het id-level wil doen.   -(L)
--   Thresholds voor meerdere dimensies mogelijk maken alle waardes te geven 
+-   check aantal te genereren tabellen zit er nog niet wanneer met het id-level wil doen.               -(L)
 
 R
 -   Checken of bij de oude mu er ook minimaal 1 non-sensitive variabele moet zijn                       -(L) ANCO?
@@ -128,3 +127,5 @@ Gefixed:
     weight for local suppression wordt priority for local suppression       
     --> hoe doen we het met de metadata. Daar staat nog <SUPPRESSIONWEIGHT> moeten we dat 
     overal vervangen door <SUPPRESSIONPRIORITY> of zullen we gewoon een tweede optie toestaan?
+-   Mag bij het wegschrijven van de metadata <SUPPRESSIONWEIGHT> vervangen worden door <SUPPRESSIONPRIORITY>? --> ANCO?
+-   Thresholds voor meerdere dimensies mogelijk maken alle waardes te geven 

@@ -560,19 +560,7 @@ public class SelectCombinationsView extends DialogBase<SelectCombinationsControl
         if (generateAutomaticTables.isInputValid()) {
             if (generateAutomaticTables.isMakeUpToDimensionRadioButton()) {
                 int dimensions = generateAutomaticTables.getDimensions();
-//                getController().setNumberOfTables(dimensions, numberOfVariables);
-//                //if (getController().getNumberOfTables() > this.model.getMaximumNumberOfTables()) {
-//                if (getController().getNumberOfTables() > this.model.getMaximumSizeBeforeUserConfirmation()) {
-//                    if (JOptionPane.showConfirmDialog(this, "Are you sure that you want to generate " 
-//                            + getController().getNumberOfTables() + " tables?", "Mu Argus", 
-//                            //TODO: willen we het verbieden om meer dan 1000 tabellen te maken of mag het en laten we het gewoon crashen?
-//                            //+ getController().getNumberOfTables() + " tables?\nCalculating unsafe combinations will probably result in a crash", "Mu Argus", 
-//                            JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
-//                        getController().calculateTablesForDimensions(allValidVariables, dimensions);
-//                    }
-//                } else {
                 getController().calculateTablesForDimensions(allValidVariables, dimensions);
-//                }
             } else if (generateAutomaticTables.isUseIdentificationLevelRadioButton()) {
                 getController().calculateTablesForID(numberOfLevels, variables, allValidVariables);
             }
