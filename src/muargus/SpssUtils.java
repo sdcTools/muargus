@@ -54,10 +54,9 @@ public class SpssUtils {
      * variable.
      *
      * @param metadata Metadata file.
-     * @param parent the Frame of the mainFrame.
      * @return List List containing the SpssVariable instances.
      */
-    public List<SpssVariable> getVariablesFromSpss(MetadataMu metadata, Frame parent) {
+    public List<SpssVariable> getVariablesFromSpss(MetadataMu metadata) {
         //getSpssInstallationDirectory(parent);
         //if (this.spssVariables.size() < 1) {
         this.spssVariables.clear();
@@ -164,31 +163,38 @@ public class SpssUtils {
      *
      * @param metadata MetadataMu instance containing the metadata as specified
      * in the .rda file.
-     * @param parent the Frame of the mainFrame.
      */
-    public void verifyMetadata(MetadataMu metadata, Frame parent) {
-        this.getVariablesFromSpss(metadata, parent);
+    public void verifyMetadata(MetadataMu metadata) {
+        this.getVariablesFromSpss(metadata);
         for (VariableMu variable : metadata.getVariables()) {
+            boolean oldSpssMeta = variable.getVariableLength() == 0;
             boolean found = false;
             outerloop:
             for (SpssVariable spssVariable : this.spssVariables) {
-                if (variable.getName().equals(spssVariable.getName())
-                        //&& variable.getVariableLength() == spssVariable.getVariableLength()
-                        && variable.getDecimals() == spssVariable.getNumberOfDecimals()) {
-                    for (int i = 0; i < variable.getNumberOfMissings(); i++) {
-                        String missing;
-                        if (spssVariable.getVariableType() == this.NUMERIC) {
-                            missing = this.getIntIfPossible(spssVariable.getNumericMissings()[i]);
-                        } else {
-                            missing = spssVariable.getStringMissings()[i];
+                if (variable.getName().equals(spssVariable.getName())) {
+                    if (oldSpssMeta || (variable.getVariableLength() == spssVariable.getVariableLength()
+                     && variable.getDecimals() == spssVariable.getNumberOfDecimals())) {
+                        for (int i = 0; i < variable.getNumberOfMissings(); i++) {
+                            //TODO: If use can specify new missings, then to check if they are the same is wrong
+                            String missing;
+                            if (spssVariable.getVariableType() == this.NUMERIC) {
+                                missing = this.getIntIfPossible(spssVariable.getNumericMissings()[i]);
+                            } else {
+                                missing = spssVariable.getStringMissings()[i];
+                            }
+                            if (!variable.getMissing(i).equals(missing)) {
+                                break outerloop;
+                            }
                         }
-                        if (!variable.getMissing(i).equals(missing)) {
-                            break outerloop;
+                        if (oldSpssMeta) {
+                            variable.setVariableLength(spssVariable.getVariableLength());
+                            variable.setDecimals(spssVariable.getNumberOfDecimals());
                         }
+                        variable.setSpssVariable(spssVariable);
+                        spssVariable.setSelected(true);
+                        found = true;
+                        break;
                     }
-                    variable.setSpssVariable(spssVariable);
-                    found = true;
-                    break;
                 }
             }
             if (!found) {
