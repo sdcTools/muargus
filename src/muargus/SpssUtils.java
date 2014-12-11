@@ -397,7 +397,7 @@ public class SpssUtils {
      *
      * @param safeMetadata MetadataMu instance containing the safe metadata.
      */
-    public void makeSafeFileSpss(MetadataMu safeMetadata) {
+    public void makeSafeFileSpss(MetadataMu safeMetadata) throws ArgusException {
         try {
             StatsUtil.start();
             ArrayList<VariableMu> variables = safeMetadata.getVariables();
@@ -451,6 +451,14 @@ public class SpssUtils {
             StatsUtil.submit(command.toArray(new String[command.size()]));
             StatsUtil.stop();
         } catch (StatsException ex) {
+            if (ex.getErrorCode() == 3) {
+                throw new ArgusException("The specified file is already in use by SPSS and cannot be written to."
+                        + "\nThe data will not be saved.");
+//                JOptionPane.showMessageDialog(null, "The specified file is already in use by SPSS and cannot be written to."
+//                        + "\nThe data will not be saved.", MuARGUS.getMessageTitle(), JOptionPane.ERROR_MESSAGE);
+            }
+//            System.out.println(ex.getErrorCode());
+//            System.out.println(ex.getMessage());
             //Logger.getLogger(CalculationService.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -578,7 +586,7 @@ public class SpssUtils {
                 //Logger.getLogger(CalculationService.class.getName()).log(Level.SEVERE, null, ex);
             }
         } catch (StatsException ex) {
-            
+
             //Logger.getLogger(CalculationService.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

@@ -39,8 +39,8 @@ public class MakeProtectedFileController extends ControllerBase<ProtectedFile> {
 
         getView().setMetadata(this.metadata);
     }
-    
-    public MetadataMu getMetadata(){
+
+    public MetadataMu getMetadata() {
         return this.metadata;
     }
 
@@ -59,7 +59,7 @@ public class MakeProtectedFileController extends ControllerBase<ProtectedFile> {
         if (this.metadata.isSpss()) {
             MuARGUS.getSpssUtils().safFile = file;
             String path = this.metadata.getCombinations().getProtectedFile().getSafeMeta().getFileNames().getDataFileName();
-            String safeSpssFile = path.substring(0, path.lastIndexOf(".")) + ".sav"; 
+            String safeSpssFile = path.substring(0, path.lastIndexOf(".")) + ".sav";
             MuARGUS.getSpssUtils().safeSpssFile = new File(safeSpssFile);
         }
         getCalculationService().makeProtectedFile(this);
@@ -140,10 +140,11 @@ public class MakeProtectedFileController extends ControllerBase<ProtectedFile> {
     private void saveSafeMeta() {
         getCalculationService().fillSafeFileMetadata();
         MetadataMu safeMetadata = this.metadata.getCombinations().getProtectedFile().getSafeMeta();
-        if (this.metadata.isSpss()) {
-            MuARGUS.getSpssUtils().makeSafeFileSpss(safeMetadata);
-        }
+
         try {
+            if (this.metadata.isSpss()) {
+                MuARGUS.getSpssUtils().makeSafeFileSpss(safeMetadata);
+            }
             MetaWriter.writeRda(safeMetadata.getFileNames().getMetaFileName(),
                     safeMetadata, false);
             this.fileCreated = true;

@@ -7,7 +7,7 @@ niet behandelde opmerkingen/vragen:
 Release 3:                                                                                              Door:
 
 SPSS
--   afvangen als de save file al in gebruik is.                                                         -(M)
+-   afvangen als de save file al in gebruik is.                                                         -(M) Jeldrik (werkt maar de progressbar moet nog gereset worden na de warning)
 
 Numerical Rank Swapping
 -   beter waarschuwing geven als meerdere variabelen bij elkaar horen en 1 undoed wordt                 -(L)
