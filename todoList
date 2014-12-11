@@ -10,7 +10,7 @@ SPSS
 -   afvangen als de save file al in gebruik is.                                                         -(M) Jeldrik (werkt maar de progressbar moet nog gereset worden na de warning)
 
 Numerical Rank Swapping
--   beter waarschuwing geven als meerdere variabelen bij elkaar horen en 1 undoed wordt                 -(L)
+-   beter waarschuwing geven als meerdere variabelen bij elkaar horen en 1 undoed wordt                 -(L) Jeldrik
 
 Overige
 -   MuArgusCtrl                                      Is leeg, wordt dit ergens voor gebruikt?           -(L) Peter Paul vragen??
@@ -22,7 +22,6 @@ Overige
 -   Checken of overal extensies worden toevoegd bij het opslaan (nog niet bij safe metadata)            -(M)  --> zou mooi zijn als de naam van de geopende file er al staat + .rds
 -   Bepalen wat we met welke logger willen loggen + implementeren                                       -(H)
 -   Controleren warning messages. Worden ze overal gegeven waar nodig en zijn de berichten consequent.  -(L)
--   Open microdata linken aan content help --> gebruikt tau de microdata uit argusLib?                  -(H) Jeldrik
 -   Manual schrijven                                                                                    -(H) Jeldrik
 -   Installatie manual (spss, R etc.)                                                                   -(H) Jeldrik
 -   Copyright jaar aanpassen                                                                            -(H) 
@@ -125,3 +124,4 @@ Gefixed:
 -   check aantal te genereren tabellen zit er nog niet wanneer met het id-level wil doen.               -(L) Jeldrik
 -   Checken of bij de oude mu er ook minimaal 1 non-sensitive variabele moet zijn                       -(L) ANCO? Ja
 -   Afvangen spss gebruiken wanneer men geen spss geinstalleerd heeft                                   -(L) Anne
+-   Open microdata linken aan content help --> gebruikt tau de microdata uit argusLib?                  -(H) Jeldrik
