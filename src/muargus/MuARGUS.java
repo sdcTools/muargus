@@ -45,8 +45,8 @@ public class MuARGUS {
     private static Process helpViewerProcess;
 
     static {
-        System.loadLibrary("muargusdll");
-        System.loadLibrary("numericaldll");
+        System.loadLibrary("libmuargusdll");
+        System.loadLibrary("libnumericaldll");
     }
 
     private static final CalculationService calcService = new CalculationService(new CMuArgCtrl());

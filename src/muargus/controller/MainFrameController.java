@@ -11,6 +11,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.xml.parsers.DocumentBuilder;
@@ -286,6 +287,26 @@ public class MainFrameController {
                         }
                     } catch (ArgusException ex) {
                         missingCodelists.add(ex.getMessage());
+                    }
+                } else if (this.metadata.isSpss()) {
+                    HashMap<String, String> codelist = new HashMap<>();
+                    if (MuARGUS.getSpssUtils().isNumeric(variable.getSpssVariable())) {
+                        Map<Double, String> numeric = variable.getSpssVariable().getNumericValueLabels();
+                        Double[] key = numeric.keySet().toArray(new Double[numeric.size()]);
+                        String[] value = numeric.values().toArray(new String[numeric.size()]);
+
+                        for (int i = 0; i < numeric.size(); i++) {
+                            int j = key[i].intValue();
+                            codelist.put(j + "", value[i]);
+                        }
+
+                    } else {
+                        codelist.putAll(variable.getSpssVariable().getStringValueLabels());
+                    }
+                    for (CodeInfo codeInfo : variable.getCodeInfos()) {
+                        if (codelist.containsKey(codeInfo.getCode().trim())) {
+                            codeInfo.setLabel(codelist.get(codeInfo.getCode().trim()));
+                        }
                     }
                 }
             }

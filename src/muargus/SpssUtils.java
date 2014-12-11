@@ -168,7 +168,7 @@ public class SpssUtils {
      * @return Boolean indicaating whether the SPSS variable is a numeric
      * variable.
      */
-    private boolean isNumeric(SpssVariable spssVariable) {
+    public boolean isNumeric(SpssVariable spssVariable) {
         return spssVariable.getVariableType() == this.NUMERIC;
     }
 
