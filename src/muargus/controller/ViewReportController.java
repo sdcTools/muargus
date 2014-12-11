@@ -34,19 +34,20 @@ public class ViewReportController {
      * @param xmlDoc Document containing the report as a xml document.
      */
     public ViewReportController(java.awt.Frame parentView, Document xmlDoc) {
-        this.view = new ViewReportView(parentView, this, true);
+        this.view = new ViewReportView(parentView, this, true, false);
         this.html = createHtmlFromXml(xmlDoc);
     }
 
     /**
-     * Constructor for the ViewReportController.
+     * Constructor for the ViewReportController. This constructor is used for
+     * generating the news report.
      *
      * @param parentView the Frame of the mainFrame.
      * @param html String containing the html news report.
      * @param title String containing the title of the screen.
      */
     public ViewReportController(java.awt.Frame parentView, String html, String title) {
-        this.view = new ViewReportView(parentView, this, true);
+        this.view = new ViewReportView(parentView, this, true, true);
         this.view.setTitle(title);
         this.html = html;
     }
@@ -58,7 +59,7 @@ public class ViewReportController {
         if (this.html != null) {
             this.view.showReport(this.html);
             this.view.setVisible(true);
-            
+
         }
     }
 

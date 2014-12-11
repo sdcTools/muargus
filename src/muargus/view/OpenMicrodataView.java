@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package muargus.view;
 
 import java.io.File;
@@ -13,7 +9,12 @@ import argus.model.DataFilePair;
 import argus.utils.SystemUtils;
 import argus.utils.TauArgusUtils;
 
-public class OpenMicrodataView extends javax.swing.JDialog {
+/**
+ * View class of the open microdata screen.
+ *
+ * @author Statistics Netherlands
+ */
+public class OpenMicrodataView extends DialogBase {
 
     private static final Logger logger = Logger.getLogger(OpenMicrodataView.class.getName());
     private boolean canSelectSpss;
@@ -21,30 +22,60 @@ public class OpenMicrodataView extends javax.swing.JDialog {
     // ***** Dialog Return Values *****
     public static final int CANCEL_OPTION = 1;
     public static final int APPROVE_OPTION = 0;
+    
+    private int returnValue = OpenMicrodataView.CANCEL_OPTION;
 
+    /**
+     * Creates new form DialogOpenMicrodata.
+     *
+     * @param parent the Frame of the main frame.
+     * @param modal boolean to set the modal status.
+     */
     public OpenMicrodataView(java.awt.Frame parent, boolean modal) {
-        super(parent, modal);
+        super(parent, modal, null);
         initComponents();
         setLocationRelativeTo(parent);
     }
     
+    /**
+     * Sets the data file names.
+     *
+     * @param dataFileName String containing the data file name.
+     * @param metadataFileName String containing the metadata file name.
+     */
     public void setDataFileNames(String dataFileName, String metadataFileName) {
-        textFieldMicrodata.setText(dataFileName);
-        textFieldMetadata.setText(metadataFileName);
+        this.textFieldMicrodata.setText(dataFileName);
+        this.textFieldMetadata.setText(metadataFileName);
     }
     
+    /**
+     * Sets the data field labels.
+     *
+     * @param dataFileLabel String containing the data file label.
+     * @param metadataFileLabel String containing the metadata file label.
+     */
     public void setDataFieldLabels(String dataFileLabel, String metadataFileLabel) {
-        labelMicrodata.setText(dataFileLabel);
-        labelMetadata.setText(metadataFileLabel);
+        this.labelMicrodata.setText(dataFileLabel);
+        this.labelMetadata.setText(metadataFileLabel);
     }
     
+    /**
+     * Shows the dialog.
+     *
+     * @return Integer containig the return value.
+     */
     public int showDialog() {
         setVisible(true);
-        return returnValue;
+        return this.returnValue;
     }
 
+    /**
+     * Gets te microdata file pair.
+     *
+     * @return DataFilePair containing the microdata file pair.
+     */
     public DataFilePair getMicrodataFilePair() {
-        return new DataFilePair(textFieldMicrodata.getText(), textFieldMetadata.getText());
+        return new DataFilePair(this.textFieldMicrodata.getText(), this.textFieldMetadata.getText());
     }
 
     public void selectSpssAllowed(boolean allowed) {
@@ -172,21 +203,21 @@ public class OpenMicrodataView extends javax.swing.JDialog {
         String hs = SystemUtils.getRegString("general", "datadir", "");
         if (!hs.equals("")){
             File file = new File(hs); 
-            fileChooser.setCurrentDirectory(file);
+            this.fileChooser.setCurrentDirectory(file);
         }
-        fileChooser.setDialogTitle("Open Microdata");
-        fileChooser.setSelectedFile(new File(""));
-        fileChooser.resetChoosableFileFilters();
+        this.fileChooser.setDialogTitle("Open Microdata");
+        this.fileChooser.setSelectedFile(new File(""));
+        this.fileChooser.resetChoosableFileFilters();
         // filters are shown in order of declaration, setFileFilter sets the default filter
-        fileChooser.setFileFilter(new FileNameExtensionFilter("Microdata (*.asc)", "asc"));
-        fileChooser.addChoosableFileFilter(new FileNameExtensionFilter("Comma Separated File (*.csv)", "csv"));
-        fileChooser.addChoosableFileFilter(new FileNameExtensionFilter("Microdata (*.dat)", "dat"));
+        this.fileChooser.setFileFilter(new FileNameExtensionFilter("Microdata (*.asc)", "asc"));
+        this.fileChooser.addChoosableFileFilter(new FileNameExtensionFilter("Comma Separated File (*.csv)", "csv"));
+        this.fileChooser.addChoosableFileFilter(new FileNameExtensionFilter("Microdata (*.dat)", "dat"));
         if (this.canSelectSpss) {
-            fileChooser.addChoosableFileFilter(new FileNameExtensionFilter("SPSS system file (*.sav)", "sav"));
+            this.fileChooser.addChoosableFileFilter(new FileNameExtensionFilter("SPSS system file (*.sav)", "sav"));
         }
-        if (fileChooser.showOpenDialog(this) == javax.swing.JFileChooser.APPROVE_OPTION) {
-            textFieldMicrodata.setText(fileChooser.getSelectedFile().toString());
-            hs = fileChooser.getSelectedFile().getPath();
+        if (this.fileChooser.showOpenDialog(this) == javax.swing.JFileChooser.APPROVE_OPTION) {
+            this.textFieldMicrodata.setText(this.fileChooser.getSelectedFile().toString());
+            hs = this.fileChooser.getSelectedFile().getPath();
             if (!hs.equals("")){SystemUtils.putRegString("general", "datadir", hs);}
             setMetadataFileNameIfPossible();
         }
@@ -196,49 +227,49 @@ public class OpenMicrodataView extends javax.swing.JDialog {
         String hs = SystemUtils.getRegString("general", "datadir", "");
         if (!hs.equals("")){
             File file = new File(hs); 
-            fileChooser.setCurrentDirectory(file);
+            this.fileChooser.setCurrentDirectory(file);
         }
-        fileChooser.setDialogTitle("Open Metadata");
-        fileChooser.setSelectedFile(new File(""));
-        fileChooser.resetChoosableFileFilters();
-        fileChooser.setFileFilter(new FileNameExtensionFilter("Metadata (*.rda)", "rda"));
-        if (fileChooser.showOpenDialog(this) == javax.swing.JFileChooser.APPROVE_OPTION) {
-            textFieldMetadata.setText(fileChooser.getSelectedFile().toString());
-            hs = fileChooser.getSelectedFile().getPath();
+        this.fileChooser.setDialogTitle("Open Metadata");
+        this.fileChooser.setSelectedFile(new File(""));
+        this.fileChooser.resetChoosableFileFilters();
+        this.fileChooser.setFileFilter(new FileNameExtensionFilter("Metadata (*.rda)", "rda"));
+        if (this.fileChooser.showOpenDialog(this) == javax.swing.JFileChooser.APPROVE_OPTION) {
+            this.textFieldMetadata.setText(this.fileChooser.getSelectedFile().toString());
+            hs = this.fileChooser.getSelectedFile().getPath();
             if (!hs.equals("")){SystemUtils.putRegString("general", "datadir", hs);}
         }
     }//GEN-LAST:event_buttonMetadataActionPerformed
 
     private void buttonOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonOKActionPerformed
-        if (textFieldMicrodata.getText().trim().equals("")) 
+        if (this.textFieldMicrodata.getText().trim().equals("")) 
         {
             JOptionPane.showMessageDialog(this,"Please specify microdata file.");
             return;
         }
         
-        if (!TauArgusUtils.ExistFile(textFieldMicrodata.getText()))
+        if (!TauArgusUtils.ExistFile(this.textFieldMicrodata.getText()))
         {
-            JOptionPane.showMessageDialog(this,"Microdata file "+textFieldMicrodata.getText()+" does not exist.");
+            JOptionPane.showMessageDialog(this,"Microdata file "+this.textFieldMicrodata.getText()+" does not exist.");
             return;
         }
         
-        if (!textFieldMetadata.getText().trim().equals(""))
+        if (!this.textFieldMetadata.getText().trim().equals(""))
         {
-            if (!TauArgusUtils.ExistFile(textFieldMetadata.getText()))
+            if (!TauArgusUtils.ExistFile(this.textFieldMetadata.getText()))
             {
-                JOptionPane.showMessageDialog(this,"Metadata file "+textFieldMetadata.getText()+" does not exist.");
+                JOptionPane.showMessageDialog(this,"Metadata file "+this.textFieldMetadata.getText()+" does not exist.");
                 return;                
             }
         }
-        SystemUtils.writeLogbook("Microdata file: "+textFieldMicrodata.getText()+" has been opened");            
-        if (!textFieldMetadata.getText().trim().equals(""))SystemUtils.writeLogbook("Metadata file: "+textFieldMetadata.getText()+" has been opened");            
-        returnValue = APPROVE_OPTION;
+        SystemUtils.writeLogbook("Microdata file: "+this.textFieldMicrodata.getText()+" has been opened");            
+        if (!this.textFieldMetadata.getText().trim().equals(""))SystemUtils.writeLogbook("Metadata file: "+this.textFieldMetadata.getText()+" has been opened");            
+        this.returnValue = OpenMicrodataView.APPROVE_OPTION;
         setVisible(false);            
     }//GEN-LAST:event_buttonOKActionPerformed
 
     private void buttonCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonCancelActionPerformed
         setVisible(false);
-        returnValue = CANCEL_OPTION;
+        this.returnValue = OpenMicrodataView.CANCEL_OPTION;
     }//GEN-LAST:event_buttonCancelActionPerformed
 
     private void DialogClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_DialogClosing
@@ -250,7 +281,7 @@ public class OpenMicrodataView extends javax.swing.JDialog {
      * microdata filename, only with another extension.
      */
     private void setMetadataFileNameIfPossible() {
-        String fileName = textFieldMicrodata.getText();
+        String fileName = this.textFieldMicrodata.getText();
         int extensionIndex = FilenameUtils.indexOfExtension(fileName);
         String baseFileName;
         if (extensionIndex == -1) {
@@ -262,53 +293,53 @@ public class OpenMicrodataView extends javax.swing.JDialog {
         String metadataFileName = baseFileName + ".rda";
         File file = new File(metadataFileName);
         if (file.exists() && file.isFile()) {
-            textFieldMetadata.setText(metadataFileName);
+            this.textFieldMetadata.setText(metadataFileName);
         }
     }
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-            // Anco 1.6
-//        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
-        } catch (ClassNotFoundException  ex) {
-            logger.log(java.util.logging.Level.SEVERE, null, ex);}
-          catch (InstantiationException ex) {
-            logger.log(java.util.logging.Level.SEVERE, null, ex);}
-          catch (IllegalAccessException  ex) {
-            logger.log(java.util.logging.Level.SEVERE, null, ex);}
-          catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            logger.log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the dialog */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                OpenMicrodataView dialog = new OpenMicrodataView(new javax.swing.JFrame(), true);
-                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
-                    @Override
-                    public void windowClosing(java.awt.event.WindowEvent e) {
-                        System.exit(0);
-                    }
-                });
-                dialog.showDialog();
-            }
-        });
-    }
+//    /**
+//     * @param args the command line arguments
+//     */
+//    public static void main(String args[]) {
+//        /* Set the Nimbus look and feel */
+//        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+//        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+//         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+//         */
+//        try {
+//            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+//                if ("Nimbus".equals(info.getName())) {
+//                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+//                    break;
+//                }
+//            }
+//            // Anco 1.6
+////        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
+//        } catch (ClassNotFoundException  ex) {
+//            logger.log(java.util.logging.Level.SEVERE, null, ex);}
+//          catch (InstantiationException ex) {
+//            logger.log(java.util.logging.Level.SEVERE, null, ex);}
+//          catch (IllegalAccessException  ex) {
+//            logger.log(java.util.logging.Level.SEVERE, null, ex);}
+//          catch (javax.swing.UnsupportedLookAndFeelException ex) {
+//            logger.log(java.util.logging.Level.SEVERE, null, ex);
+//        }
+//        //</editor-fold>
+//
+//        /* Create and display the dialog */
+//        java.awt.EventQueue.invokeLater(new Runnable() {
+//            @Override
+//            public void run() {
+//                OpenMicrodataView dialog = new OpenMicrodataView(new javax.swing.JFrame(), true);
+//                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
+//                    @Override
+//                    public void windowClosing(java.awt.event.WindowEvent e) {
+//                        System.exit(0);
+//                    }
+//                });
+//                dialog.showDialog();
+//            }
+//        });
+//    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton buttonCancel;
     private javax.swing.JButton buttonMetadata;
@@ -321,5 +352,5 @@ public class OpenMicrodataView extends javax.swing.JDialog {
     private javax.swing.JTextField textFieldMicrodata;
     // End of variables declaration//GEN-END:variables
     
-    private int returnValue = CANCEL_OPTION;
+    
 }

@@ -12,6 +12,7 @@ import javax.swing.text.html.HTMLDocument;
 import javax.swing.text.html.HTMLEditorKit;
 import muargus.controller.MainFrameController;
 import muargus.controller.ViewReportController;
+import muargus.resources.ContextHelp;
 
 /**
  * View class of the ViewReport screen.
@@ -20,15 +21,19 @@ import muargus.controller.ViewReportController;
  */
 public class ViewReportView extends DialogBase<ViewReportController> {
 
+    private final boolean isNews;
+    
     /**
      * Creates new form ViewReportView.
      *
      * @param parent the Frame of the mainFrame.
-     * @param modal boolean to set the modal status
+     * @param modal boolean to set the modal status.
      * @param controller the controller of this view.
+     * @param isNews boolean indicating whether the report is a news report.
      */
-    public ViewReportView(java.awt.Frame parent, ViewReportController controller, boolean modal) {
+    public ViewReportView(java.awt.Frame parent, ViewReportController controller, boolean modal, boolean isNews) {
         super(parent, modal, controller);
+        this.isNews = isNews;
         initComponents();
         setLocationRelativeTo(null);
     }
@@ -59,6 +64,16 @@ public class ViewReportView extends DialogBase<ViewReportController> {
      */
     public void showReport(HTMLDocument htmlDoc) {
         this.htmlPane.setDocument(htmlDoc);
+    }
+    
+    /**
+     * Gets the named destination linked to the visible view.
+     *
+     * @return String containing the named destination.
+     */
+    @Override
+    protected String getHelpNamedDestination() {
+        return ContextHelp.fromClassName(getClass().getName(), this.isNews);
     }
 
     /**

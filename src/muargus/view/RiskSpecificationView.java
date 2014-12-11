@@ -50,6 +50,11 @@ public class RiskSpecificationView extends DialogBase<RiskSpecificationControlle
         this.isHousehold = isHousehold;
     }
 
+    /**
+     * Gets the named destination linked to the visible view.
+     *
+     * @return String containing the named destination.
+     */
     @Override
     protected String getHelpNamedDestination() {
         return ContextHelp.fromClassName(getClass().getName(), isHousehold);

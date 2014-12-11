@@ -7,7 +7,7 @@ package muargus.resources;
  */
 public enum ContextHelp {
 
-    OPEN_MICRODATA("muargus.view.DialogOpenMicrodata", "OpenMicrodata"), //TODO: fixen dat deze ook gebruikt kan worden. Misschien gewoon de dialog uit de ArgusLib halen en bij MuARGUS zetten
+    OPEN_MICRODATA("muargus.view.OpenMicrodataView", "OpenMicrodata"),
     MAIN_FRAME("muargus.view.MainFrameView", "MainFrame"),
     SPECIFY_METADATA("muargus.view.SpecifyMetadataView", "SpecifyMetaFile"),
     SELECT_COMBINATIONS("muargus.view.SelectCombinationsView", "SpecifyCombinations"),
@@ -19,8 +19,11 @@ public enum ContextHelp {
     MODIFY_NUMERICAL_VARIABLES("muargus.view.ModifyNumericalVariablesView", "ModifyNumericalVariables"),
     MICROAGGREGATION("muargus.view.MicroaggregationView", "ModifyNumericalMicroAggregation"),
     NUMERICAL_RANK_SWAPPING("muargus.view.NumericalRankSwappingView", "ModifyNumericalRankSwapping"),
-    MAKE_PROTECTED_FILE("muargus.view.MakeProtectedFileView", "OutputMakeSuppressedFile"),
-    VIEW_REPORT("muargus.view.ViewReportView", "OutputViewReport");
+    SYNTHETIC_DATA("muargus.view.SyntheticDataView", "ModifySyntheticData"),
+    MAKE_PROTECTED_FILE("muargus.view.MakeProtectedFileView", "OutputMakeProtectedFile"),
+    VIEW_REPORT("muargus.view.ViewReportView", "OutputViewReport"),
+    NEWS("muargus.view.ViewReportView", "HelpNews"),
+    ABOUT("muargus.view.AboutView", "HelpAbout");
 
     public String nameddest;
     public String className;
@@ -55,15 +58,25 @@ public enum ContextHelp {
      * Gets the named destination using the classname.
      *
      * @param className String containing the classname.
-     * @param isHousehold Boolean indicating whether the data contains household
+     * @param isHouseholdOrNews Boolean indicating whether the data contains household
      * data.
      * @return String containing the named destination.
      */
-    public static String fromClassName(String className, boolean isHousehold) {
-        if (isHousehold) {
-            return ContextHelp.HOUSEHOLD_RISK_SPECIFICATION.nameddest;
+    public static String fromClassName(String className, boolean isHouseholdOrNews) {
+        if (className.equals(HOUSEHOLD_RISK_SPECIFICATION.className)) {
+            if (isHouseholdOrNews) {
+                return ContextHelp.HOUSEHOLD_RISK_SPECIFICATION.nameddest;
+            } else {
+                return ContextHelp.INDIVIDUAL_RISK_SPECIFICATION.nameddest;
+            }
+        } else if (className.equals(NEWS.className)) {
+            if (isHouseholdOrNews) {
+                return ContextHelp.NEWS.nameddest;
+            } else {
+                return ContextHelp.VIEW_REPORT.nameddest;
+            }
         } else {
-            return ContextHelp.INDIVIDUAL_RISK_SPECIFICATION.nameddest;
+            return null;
         }
     }
 
