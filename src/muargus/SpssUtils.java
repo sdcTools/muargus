@@ -184,14 +184,15 @@ public class SpssUtils {
         int startingPos = 1;
         String message = "";
         for (VariableMu variable : metadata.getVariables()) {
-            boolean oldSpssMeta = variable.getVariableLength() == 0;
+            //boolean oldSpssMeta = variable.getVariableLength() == 0;
             boolean found = false;
 
             for (SpssVariable spssVariable : this.spssVariables) {
+                //TODO: name & decimal check samen nemen
                 if (variable.getName().equals(spssVariable.getName())) {
-                    if (oldSpssMeta || (variable.getVariableLength() == spssVariable.getVariableLength()
-                            && variable.getDecimals() == spssVariable.getNumberOfDecimals())) {
-                        if (oldSpssMeta) {
+                    if (/*oldSpssMeta || (variable.getVariableLength() == spssVariable.getVariableLength() &&*/
+                             variable.getDecimals() == spssVariable.getNumberOfDecimals())/*)*/ {
+                        //if (oldSpssMeta) {
                             variable.setVariableLength(spssVariable.getVariableLength());
                             variable.setDecimals(spssVariable.getNumberOfDecimals());
                             int numberOfMissings = isNumeric(spssVariable) ? spssVariable.getNumericMissings().length : spssVariable.getStringMissings().length;
@@ -204,9 +205,8 @@ public class SpssUtils {
                                     missing = spssVariable.getStringMissings()[i];
                                 }
                                 variable.setMissing(i, missing);
-
                             }
-                        }
+                        //}
                         variable.setSpssVariable(spssVariable);
                         spssVariable.setSelected(true);
                         variable.setStartingPosition(startingPos);
@@ -214,9 +214,9 @@ public class SpssUtils {
                         found = true;
                         break;
                     } else {
-                        if (variable.getVariableLength() != spssVariable.getVariableLength()) {
-                            message += "\nThe variable lengths of " + variable.getName() + " are different.";
-                        }
+//                        if (variable.getVariableLength() != spssVariable.getVariableLength()) {
+//                            message += "\nThe variable lengths of " + variable.getName() + " are different.";
+//                        }
                         if (variable.getDecimals() != spssVariable.getNumberOfDecimals()) {
                             message += "\nThe number of decimals of " + variable.getName() + " are different.";
                         }

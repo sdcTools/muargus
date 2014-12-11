@@ -98,7 +98,7 @@ public class MetaWriter {
                 break;
         }
         for (VariableMu variable : metadata.getVariables()) {
-            writeVariableToRda(writer, variable, metadata.getDataFileType(), all);
+            writeVariableToRda(writer, variable, metadata.getDataFileType(), all, metadata);
         }
     }
 
@@ -114,18 +114,20 @@ public class MetaWriter {
      * writing the safe metadata, the suppressionweight is for example not
      * necessary.
      */
-    private static void writeVariableToRda(PrintWriter writer, VariableMu variable, int dataFileType, boolean all) {
+    private static void writeVariableToRda(PrintWriter writer, VariableMu variable, int dataFileType, boolean all, MetadataMu metadata) {
         writer.print(variable.getName());
-        if (MetadataMu.DATA_FILE_TYPE_FIXED == dataFileType || dataFileType == MetadataMu.DATA_FILE_TYPE_SPSS) {
+        if (MetadataMu.DATA_FILE_TYPE_FIXED == dataFileType) {// || dataFileType == MetadataMu.DATA_FILE_TYPE_SPSS) {
             writer.print(String.format(" %d", variable.getStartingPosition()));
         }
-        writer.print(String.format(" %d", variable.getVariableLength()));
-        for (int index = 0; index < VariableMu.MAX_NUMBER_OF_MISSINGS; index++) {
-            String missingValue = variable.getMissing(index);
-            if (!StringUtils.isNotBlank(missingValue)) {
-                break;
+        if (!metadata.isSpss()) {
+            writer.print(String.format(" %d", variable.getVariableLength()));
+            for (int index = 0; index < VariableMu.MAX_NUMBER_OF_MISSINGS; index++) {
+                String missingValue = variable.getMissing(index);
+                if (!StringUtils.isNotBlank(missingValue)) {
+                    break;
+                }
+                writer.print(" " + StrUtils.quote(missingValue));
             }
-            writer.print(" " + StrUtils.quote(missingValue));
         }
         writer.println();
         if (variable.isRecodable()) {
