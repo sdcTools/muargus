@@ -104,6 +104,7 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
 
         // disable or enable
         enableControls(this.attributesPanel, false);
+        enableControls(this.missingsPanel, false);
         this.codelistfileCheckBox.setEnabled(false);
         this.codelistfileButton.setEnabled(false);
         this.codelistfileTextField.setEnabled(false);

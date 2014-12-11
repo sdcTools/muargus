@@ -5,6 +5,8 @@ import java.awt.HeadlessException;
 import javax.swing.JOptionPane;
 import muargus.MuARGUS;
 import muargus.model.Combinations;
+import muargus.model.MetadataMu;
+import muargus.model.VariableMu;
 
 /**
  * Dialog used for generating tables automatically.
@@ -17,6 +19,7 @@ public class GenerateAutomaticTables extends DialogBase {
     private boolean valid; // is used to continue with the calculation
     private final int numberOfVariables;
     private long numberOfTables;
+    private MetadataMu metadata;
 
     /**
      * Creates new form GenerateAutomaticTables
@@ -29,11 +32,12 @@ public class GenerateAutomaticTables extends DialogBase {
      * variables.
      */
     public GenerateAutomaticTables(java.awt.Frame parent, boolean modal, Combinations model,
-            int numberOfVariables) {
+            int numberOfVariables, MetadataMu metadata) {
         super(parent, modal, null);
         this.model = model;
         this.valid = false;
         this.numberOfVariables = numberOfVariables;
+        this.metadata = metadata;
         initComponents();
         setLocationRelativeTo(null);
         setTitle("Method for generating tables");
@@ -195,27 +199,27 @@ public class GenerateAutomaticTables extends DialogBase {
     }
 
     /**
+     * Asks the user to continue generating tables if more than the maximum
+     * number of tables before user confirmation are to be generated.
      *
-     * @return
+     * @return Boolean indicating whether the tables should be generated.
      */
     private boolean generateTables() {
         if (isMakeUpToDimensionRadioButton()) {
-            setNumberOfTables(getDimensions(), numberOfVariables);
-            if (this.numberOfTables > this.model.getMaximumSizeBeforeUserConfirmation()
-                    && this.numberOfTables < this.model.getMaximumNumberOfTables()) {
-                if (JOptionPane.showConfirmDialog(this, "Are you sure that you want to generate "
-                        + this.numberOfTables + " tables?", "Mu Argus",
-                        JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
-                    return true;
-                }
-            } else if (this.numberOfTables > this.model.getMaximumSizeBeforeUserConfirmation()) {
-                if (JOptionPane.showConfirmDialog(this, "Are you sure that you want to generate "
-                        + this.numberOfTables + " tables?\nGenerating this many tables will probably result in memory problems.", "Mu Argus", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
-                    return true;
-                }
-            }
+            setNumberOfTables(getDimensions(), this.numberOfVariables);
+        } else if (isUseIdentificationLevelRadioButton()) {
+            setNumberOfTables();
         }
-        return false;
+        if (this.numberOfTables > this.model.getMaximumSizeBeforeUserConfirmation()
+                && this.numberOfTables < this.model.getMaximumNumberOfTables()) {
+            return JOptionPane.showConfirmDialog(this, "Are you sure that you want to generate "
+                    + this.numberOfTables + " tables?", "Mu Argus",
+                    JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION;
+        } else if (this.numberOfTables > this.model.getMaximumSizeBeforeUserConfirmation()) {
+            return JOptionPane.showConfirmDialog(this, "Are you sure that you want to generate "
+                    + this.numberOfTables + " tables?\nGenerating this many tables will probably result in memory problems.", "Mu Argus", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION;
+        }
+        return true;
     }
 
     /**
@@ -255,6 +259,30 @@ public class GenerateAutomaticTables extends DialogBase {
         } else if (dimensions == 0) {
             this.numberOfTables = numberOfTables;
         }
+    }
+
+    private void setNumberOfTables() {
+        int[] id = new int[6];
+        for (VariableMu v : metadata.getVariables()) {
+            if (v.isCategorical()) {
+                id[v.getIdLevel()]++;
+            }
+        }
+        int tabels = 0;
+        for (int i = 1; i < id.length; i++) {
+            tabels += id[i];
+        }
+        if (tabels > 0) {
+            tabels = 1;
+            for (int i : id) {
+                if (i > 0) {
+                    tabels *= i;
+                }
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "No variables found with an id-level greater than 0");
+        }
+        this.numberOfTables = tabels;
     }
 
     /**
@@ -384,7 +412,9 @@ public class GenerateAutomaticTables extends DialogBase {
         if (isInputValid()) {
             setInputValid(false);
             if (this.useIdentificationLevelRadioButton.isSelected()) {
-                getThresholdIdLevel();
+                if (generateTables()) {
+                    getThresholdIdLevel();
+                }
             } else if (this.makeUpToDimensionRadioButton.isSelected()) {
                 if (generateTables()) {
                     getThresholdDimensions(dimensions);

@@ -384,7 +384,7 @@ public class MakeProtectedFileView extends DialogBase<MakeProtectedFileControlle
     private void makeFileButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_makeFileButtonActionPerformed
         String filter;
         if(getController().getMetadata().isSpss()){
-            filter = "Safefile (*.sav)|sav"; //TODO: verander zodat de saf file in de temp directory staat
+            filter = "Safefile (*.sav)|sav"; //TODO: verander zodat de saf + rds file in de temp directory staan
         } else {
             filter = "Safefile (*.saf)|saf";
         }

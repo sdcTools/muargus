@@ -554,7 +554,7 @@ public class SelectCombinationsView extends DialogBase<SelectCombinationsControl
 
         int numberOfVariables = allValidVariables.size();
 
-        GenerateAutomaticTables generateAutomaticTables = new GenerateAutomaticTables(this.parent, true, this.model, numberOfVariables);
+        GenerateAutomaticTables generateAutomaticTables = new GenerateAutomaticTables(this.parent, true, this.model, numberOfVariables, getMetadata());
         generateAutomaticTables.setVisible(true);
 
         if (generateAutomaticTables.isInputValid()) {

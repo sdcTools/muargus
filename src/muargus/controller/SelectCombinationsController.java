@@ -336,7 +336,7 @@ public class SelectCombinationsController extends ControllerBase<Combinations> {
         Collections.sort(variables, new Comparator<VariableMu>() {
             @Override
             public int compare(VariableMu v1, VariableMu v2) {
-                if (v1.getStartingPosition() < v2.getStartingPosition()) {
+                if (metadata.getVariables().indexOf(v1) < metadata.getVariables().indexOf(v2)) {
                     return -1;
                 } else {
                     return 1;

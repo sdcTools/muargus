@@ -137,6 +137,7 @@ public class NumericalRankSwappingController extends ControllerBase<NumericalRan
                 }
             }
         }
+        
         getView().showMessage(String.format("Rank swapping involving %s not found", VariableMu.printVariableNames(selected)));
     }
 

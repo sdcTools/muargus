@@ -60,39 +60,42 @@ public class SpssUtils {
         //getSpssInstallationDirectory(parent);
         //if (this.spssVariables.size() < 1) {
         this.spssVariables.clear();
-            this.spssDataFileName = metadata.getFileNames().getDataFileName();
-            try {
-                StatsUtil.start();
-                StatsUtil.submit("get file = \"" + this.spssDataFileName + "\".");
-                Cursor c = new Cursor();
-                for (int i = 0; i < StatsUtil.getVariableCount(); i++) {
-                    SpssVariable variable = new SpssVariable(StatsUtil.getVariableName(i), StatsUtil.getVariableFormatDecimal(i),
-                            StatsUtil.getVariableFormatWidth(i), StatsUtil.getVariableMeasurementLevel(i),
-                            StatsUtil.getVariableType(i), StatsUtil.getVariableLabel(i), StatsUtil.getVariableAttributeNames(i),
-                            StatsUtil.getVariableFormat(i));
-                    // set numeric or string missings & value labels
-                    if (variable.getVariableType() == this.NUMERIC) {
-                        variable.setNumericValueLabels(c.getNumericValueLabels(i));
-                        variable.setNumericMissings(StatsUtil.getNumericMissingValues(i));
-                    } else {
-                        variable.setStringValueLabels(c.getStringValueLabels(i));
-                        variable.setStringMissings(StatsUtil.getStringMissingValues(i));
-                    }
-                    this.spssVariables.add(variable);
+        this.spssDataFileName = metadata.getFileNames().getDataFileName();
+        try {
+            StatsUtil.start();
+            StatsUtil.submit("get file = \"" + this.spssDataFileName + "\".");
+            Cursor c = new Cursor();
+            for (int i = 0; i < StatsUtil.getVariableCount(); i++) {
+                SpssVariable variable = new SpssVariable(StatsUtil.getVariableName(i), StatsUtil.getVariableFormatDecimal(i),
+                        StatsUtil.getVariableFormatWidth(i), StatsUtil.getVariableMeasurementLevel(i),
+                        StatsUtil.getVariableType(i), StatsUtil.getVariableLabel(i), StatsUtil.getVariableAttributeNames(i),
+                        StatsUtil.getVariableFormat(i));
+                // set numeric or string missings & value labels
+                if (isNumeric(variable)) {
+                    variable.setNumericValueLabels(c.getNumericValueLabels(i));
+                    variable.setNumericMissings(StatsUtil.getNumericMissingValues(i));
+                } else {
+                    variable.setStringValueLabels(c.getStringValueLabels(i));
+                    variable.setStringMissings(StatsUtil.getStringMissingValues(i));
                 }
-                metadata.setRecordCount(StatsUtil.getCaseCount());
-                StatsUtil.stop();
-            } catch (StatsException e) { 
+                this.spssVariables.add(variable);
             }
+            metadata.setRecordCount(StatsUtil.getCaseCount());
+            StatsUtil.stop();
+        } catch (StatsException e) {
+        }
         //}
         return this.spssVariables;
     }
 
+    /**
+     * Gets the SPSS variables.
+     *
+     * @return ArrayList of SpssVariable's containing the SPSS variables.
+     */
     public ArrayList<SpssVariable> getSpssVariables() {
         return spssVariables;
     }
-    
-    
 
     /**
      * Sets the variables for use whithin argus.
@@ -110,7 +113,7 @@ public class SpssUtils {
                     // Set the missing values and variableLength either for numeric or for string missing values
                     int variableLength = spssVariable.getVariableLength();
                     //TODO: add time/date type
-                    if (spssVariable.getVariableType() == this.NUMERIC) {
+                    if (isNumeric(spssVariable)) {
                         for (int i = 0; i < spssVariable.getNumericMissings().length; i++) {
                             if (i == VariableMu.MAX_NUMBER_OF_MISSINGS) {
                                 break;
@@ -159,6 +162,17 @@ public class SpssUtils {
     }
 
     /**
+     * Returns whether the SPSS variable is a numeric variable.
+     *
+     * @param spssVariable SpssVariable instance.
+     * @return Boolean indicaating whether the SPSS variable is a numeric
+     * variable.
+     */
+    private boolean isNumeric(SpssVariable spssVariable) {
+        return spssVariable.getVariableType() == this.NUMERIC;
+    }
+
+    /**
      * Checks whether the metadata in the .rda file si conform the spss
      * metadata.
      *
@@ -167,40 +181,56 @@ public class SpssUtils {
      */
     public void verifyMetadata(MetadataMu metadata) {
         this.getVariablesFromSpss(metadata);
+        int startingPos = 1;
+        String message = "";
         for (VariableMu variable : metadata.getVariables()) {
             boolean oldSpssMeta = variable.getVariableLength() == 0;
             boolean found = false;
-            outerloop:
+
             for (SpssVariable spssVariable : this.spssVariables) {
                 if (variable.getName().equals(spssVariable.getName())) {
                     if (oldSpssMeta || (variable.getVariableLength() == spssVariable.getVariableLength()
-                     && variable.getDecimals() == spssVariable.getNumberOfDecimals())) {
-                        for (int i = 0; i < variable.getNumberOfMissings(); i++) {
-                            //TODO: If use can specify new missings, then to check if they are the same is wrong
-                            String missing;
-                            if (spssVariable.getVariableType() == this.NUMERIC) {
-                                missing = this.getIntIfPossible(spssVariable.getNumericMissings()[i]);
-                            } else {
-                                missing = spssVariable.getStringMissings()[i];
-                            }
-                            if (!variable.getMissing(i).equals(missing)) {
-                                break outerloop;
-                            }
-                        }
+                            && variable.getDecimals() == spssVariable.getNumberOfDecimals())) {
                         if (oldSpssMeta) {
                             variable.setVariableLength(spssVariable.getVariableLength());
                             variable.setDecimals(spssVariable.getNumberOfDecimals());
+                            int numberOfMissings = isNumeric(spssVariable) ? spssVariable.getNumericMissings().length : spssVariable.getStringMissings().length;
+                            for (int i = 0; i < numberOfMissings; i++) {
+                                //TODO: If use can specify new missings, then to check if they are the same is wrong
+                                String missing;
+                                if (isNumeric(spssVariable)) {
+                                    missing = this.getIntIfPossible(spssVariable.getNumericMissings()[i]);
+                                } else {
+                                    missing = spssVariable.getStringMissings()[i];
+                                }
+                                variable.setMissing(i, missing);
+
+                            }
                         }
                         variable.setSpssVariable(spssVariable);
                         spssVariable.setSelected(true);
+                        variable.setStartingPosition(startingPos);
+                        startingPos += spssVariable.getVariableLength();
                         found = true;
+                        break;
+                    } else {
+                        if (variable.getVariableLength() != spssVariable.getVariableLength()) {
+                            message += "\nThe variable lengths of " + variable.getName() + " are different.";
+                        }
+                        if (variable.getDecimals() != spssVariable.getNumberOfDecimals()) {
+                            message += "\nThe number of decimals of " + variable.getName() + " are different.";
+                        }
                         break;
                     }
                 }
             }
+            if (message.equals("")) {
+                message += "\nCan not find the variable " + variable.getName() + " in the spss file";
+            }
             if (!found) {
+                message += "";
                 metadata.getVariables().removeAll(metadata.getVariables());
-                JOptionPane.showMessageDialog(null, "Metadatafile does not equal the spss metadata."
+                JOptionPane.showMessageDialog(null, "Metadata file does not equal the spss metadata." + message
                         + "\nReload the metadata via specify metadata.", "Spss metadata error", JOptionPane.ERROR_MESSAGE);
                 break;
             }
@@ -397,8 +427,8 @@ public class SpssUtils {
             for (VariableMu v : variables) {
                 String name = v.getSpssVariable().getName();
                 String statement;
-                if(v.getSpssVariable().getVariableType() == this.NUMERIC){
-                    statement= "if (SYSMIS(" + name + ") EQ 0) ";
+                if (isNumeric(v.getSpssVariable())) {
+                    statement = "if (SYSMIS(" + name + ") EQ 0) ";
                 } else {
                     statement = "COMPUTE ";
                 }
@@ -517,7 +547,7 @@ public class SpssUtils {
                     temp.setVarLabel(variable.getVariableLabel());
                     temp.setFormatDecimal(variable.getNumberOfDecimals());
                     temp.setFormatWidth(variable.getVariableLength());
-                    if (variable.getVariableType() == this.NUMERIC) {
+                    if (isNumeric(variable)) {
                         double[] doubleData = new double[data[i].length];
                         for (int j = 0; j < data[i].length; j++) {
                             if (!data[i][j].equals("")) {
@@ -548,6 +578,7 @@ public class SpssUtils {
                 //Logger.getLogger(CalculationService.class.getName()).log(Level.SEVERE, null, ex);
             }
         } catch (StatsException ex) {
+            
             //Logger.getLogger(CalculationService.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
