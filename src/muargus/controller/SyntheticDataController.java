@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import muargus.io.RWriter;
 import muargus.model.MetadataMu;
 import muargus.model.ReplacementFile;
@@ -63,7 +65,7 @@ public class SyntheticDataController extends ControllerBase<SyntheticDataSpec> {
             this.metadata.getReplacementSpecs().add(syntheticData);
             RWriter.writeAlpha(syntheticData);
             RWriter.writeSynthetic(syntheticData);
-            RWriter.writeBatSynthetic(syntheticData);
+            //RWriter.writeBatSynthetic(syntheticData);
             writeSyntheticData();
             return true;
         } catch (ArgusException ex) {
@@ -118,7 +120,7 @@ public class SyntheticDataController extends ControllerBase<SyntheticDataSpec> {
     @Override
     protected void doNextStep(boolean success) {
         RWriter.adjustSyntheticData(getModel());
-        runBat();
+        runR();
         if (RWriter.adjustSyntheticOutputFile(getModel())) {
             getView().showMessage("Synthetic data successfully generated");
         } else {
@@ -131,16 +133,25 @@ public class SyntheticDataController extends ControllerBase<SyntheticDataSpec> {
      * Runs the .bat file. The .bat file runs the R-script which generates the
      * synthetic data.
      */
-    private void runBat() {
+    private void runR() {
         try {
             //String cmd = getModel().getRunRFileFile().getAbsolutePath();
-            Process p = Runtime.getRuntime().exec(String.format("R CMD BATCH \"%s\"", getModel().getrScriptFile().getAbsolutePath()));
+            ArrayList<String> arguments = new ArrayList<>();
+            arguments.add("R");
+            arguments.add("CMD");
+            arguments.add("BATCH");
+            arguments.add(getModel().getrScriptFile().getAbsolutePath());
+            ProcessBuilder builder = new ProcessBuilder(arguments);
+            
+            Process p = builder.start();
             p.waitFor();
-        } catch (IOException | ArgusException | InterruptedException ex) {
+        } catch (ArgusException | InterruptedException ex) {
             System.out.println("R is not working arggg");
             System.out.println(ex.getMessage());
             System.out.println(Arrays.toString(ex.getStackTrace()));
             //Logger.getLogger(SyntheticDataController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(SyntheticDataController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
