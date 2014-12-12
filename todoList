@@ -5,7 +5,6 @@ niet behandelde opmerkingen/vragen:
 
 Release 3:                                                                                              Door:
 
-
 Global recode
 -   Truncate --> labels weghalen (algemeen voor als er geen codelist gegeven is)
 
@@ -14,30 +13,32 @@ ICEPDF
 
 SPSS
 --   afvangen als de save file al in gebruik is. (progressbar updaten)                                   -(L) Jeldrik (werkt maar de progressbar moet nog gereset worden na de warning)
--   .rds en .saf in de temp file plaatsen                                                                -(L) Jeldrik
 
 Overige
---   MuArgusCtrl                                      Is leeg, wordt dit ergens voor gebruikt?           -(L) Peter Paul vragen??
---   NumericalDll                                     Is leeg, wordt dit ergens voor gebruikt?           -(L) Peter Paul vragen??
--   Release notes schrijven                                                                             -(H)
+
 --   Javadocs                                                                                            -(M) Jeldrik (alleen calculationService nog)
 --   News report wordt heel amateuristisch ingelezen                                                     -(M) Anne
 -   News report bijwerken                                                                               -(M)
 --   Bepalen wat we met welke logger willen loggen + implementeren                                       -(H)
--   Controleren warning messages. Worden ze overal gegeven waar nodig en zijn de berichten consequent.  -(L)
 -   Manual schrijven                                                                                    -(H) Jeldrik
--   Installatie manual (spss, R etc.)                                                                   -(H) Jeldrik
 --   Copyright jaar aanpassen                                                                            -(H) 
--   licenties regelen/credits geven                                                                     -(H)
---   TODO's + Nederlands commentaar in code langslopen                                                   -(M)
+--   TODO's + Nederlands commentaar in code langslopen                                                   -(M) Anne
 -   LINUX   (Manual)                                                                                     -(H) Anne
 -   voorbeeld data meeleveren goed fixen                                                                -(H)
+-   Release notes schrijven                                                                             -(H)
+-   Installatie manual (spss, R etc.)                                                                   -(H) Jeldrik
+-   licenties regelen/credits geven                                                                     -(H) Peter Paul?
+
+
+
 
 
 
 Wishlist
 
-- explore file lostrekken                                                                               -
+-   explore file lostrekken         
+-   Controleren warning messages. Worden ze overal gegeven waar nodig en zijn de berichten consequent.  -(L)
+                                                                      -
 
 Global Recode
 -   willen we methoden verplaatsen naar de GlobalRecodeController?                                      -
@@ -131,3 +132,6 @@ Gefixed:
 -   truncate schermpje een 1 als default waarde geven
 -   Checken of overal extensies worden toevoegd bij het opslaan (nog niet bij safe metadata)            -(M) Jeldrik  --> zou mooi zijn als de naam van de geopende file er al staat + .rds
 -   beter waarschuwing geven als meerdere variabelen bij elkaar horen en 1 undoed wordt                 -(L) Jeldrik
+-   .rds en .saf in de temp file plaatsen                                                                -(L) Jeldrik
+--   MuArgusCtrl                                      Is leeg, wordt dit ergens voor gebruikt?           -(L) Peter Paul: gewoon maar laten staan
+--   NumericalDll                                     Is leeg, wordt dit ergens voor gebruikt?           -(L) Peter Paul: gewoon maar laten staan
