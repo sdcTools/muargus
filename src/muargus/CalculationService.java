@@ -3,6 +3,8 @@ package muargus;
 import argus.model.ArgusException;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
@@ -329,16 +331,16 @@ public class CalculationService {
         }
 
         boolean result = this.c.MakeFileSafe(protectedFile.getSafeMeta().getFileNames().getDataFileName(),
-                protectedFile.isWithPrior(),
-                protectedFile.isWithEntropy(),
-                protectedFile.getHouseholdType(),
-                protectedFile.isRandomizeOutput(),
-                protectedFile.isPrintBHR());
+                    protectedFile.isWithPrior(),
+                    protectedFile.isWithEntropy(),
+                    protectedFile.getHouseholdType(),
+                    protectedFile.isRandomizeOutput(),
+                    protectedFile.isPrintBHR());
 
-        if (!result) {
-            throw new ArgusException("Error during Make protected file");
+            if (!result) {
+                throw new ArgusException("Error during Make protected file");
+            }
         }
-    }
 
     /**
      * Calculates the tables. For each (sub) table is calculated how many table
@@ -517,7 +519,7 @@ public class CalculationService {
     }
 
     /**
-     * 
+     *
      * @throws ArgusException Throws an ArgusException when an error occurs
      * during a background task.
      */

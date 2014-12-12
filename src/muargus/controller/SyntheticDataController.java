@@ -132,8 +132,8 @@ public class SyntheticDataController extends ControllerBase<SyntheticDataSpec> {
      */
     private void runBat() {
         try {
-            String cmd = getModel().getRunRFileFile().getAbsolutePath();
-            Process p = Runtime.getRuntime().exec(cmd);
+            //String cmd = getModel().getRunRFileFile().getAbsolutePath();
+            Process p = Runtime.getRuntime().exec(String.format("R CMD BATCH \"%s\"", getModel().getrScriptFile().getAbsolutePath()));
             p.waitFor();
         } catch (IOException | ArgusException | InterruptedException ex) {
             //Logger.getLogger(SyntheticDataController.class.getName()).log(Level.SEVERE, null, ex);
