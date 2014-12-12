@@ -615,10 +615,10 @@ public class HTMLReportWriter {
             addChildElement(tr, "td", MuARGUS.getSpssUtils().safeSpssFile.getAbsolutePath());
         } else {
             addChildElement(tr, "td", safeMeta.getFileNames().getDataFileName());
+            tr = addChildElement(table, "tr");
+            addChildElement(tr, "td", "Safe meta file");
+            addChildElement(tr, "td", safeMeta.getFileNames().getMetaFileName());
         }
-        tr = addChildElement(table, "tr");
-        addChildElement(tr, "td", "Safe meta file");
-        addChildElement(tr, "td", safeMeta.getFileNames().getMetaFileName());
         return p;
     }
 

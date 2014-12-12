@@ -396,6 +396,7 @@ public class SpssUtils {
      * Makes the safe file using fixed format.
      *
      * @param safeMetadata MetadataMu instance containing the safe metadata.
+     * @throws argus.model.ArgusException
      */
     public void makeSafeFileSpss(MetadataMu safeMetadata) throws ArgusException {
         try {
@@ -407,7 +408,7 @@ public class SpssUtils {
             ArrayList<String> command = new ArrayList<>();
             command.add("TITLE   'MERGECOPYCLEAN'.");
             command.add("SET DECIMAL=DOT.");
-            command.add("DATA LIST FILE = '" + safeMetadata.getFileNames().getDataFileName() + "'/");
+            command.add("DATA LIST FILE = '" + this.safFile.getPath() + "'/");
             int startPosition = 1;
             int endPosition;
 

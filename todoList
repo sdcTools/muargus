@@ -9,6 +9,9 @@ Release 3:                                                                      
 Global recode
 -   Truncate --> labels weghalen (algemeen voor als er geen codelist gegeven is)
 
+ICEPDF
+-   Schermpje ICE pdf hacken
+
 SPSS
 --   afvangen als de save file al in gebruik is. (progressbar updaten)                                   -(L) Jeldrik (werkt maar de progressbar moet nog gereset worden na de warning)
 -   .rds en .saf in de temp file plaatsen                                                                -(L) Jeldrik
@@ -27,7 +30,7 @@ Overige
 --   Copyright jaar aanpassen                                                                            -(H) 
 -   licenties regelen/credits geven                                                                     -(H)
 --   TODO's + Nederlands commentaar in code langslopen                                                   -(M)
--   LINUX   (R)                                                                                            -(H) Anne
+-   LINUX   (Manual)                                                                                     -(H) Anne
 -   voorbeeld data meeleveren goed fixen                                                                -(H)
 
 

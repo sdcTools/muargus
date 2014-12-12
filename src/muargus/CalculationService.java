@@ -3,6 +3,8 @@ package muargus;
 import argus.model.ArgusException;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
@@ -326,16 +328,29 @@ public class CalculationService {
                 this.c.SetSuppressPrior(index, variable.getSuppressPriority());
             }
         }
+        try {
+            String dataFileName;
+            if (this.metadata.isSpss()) {
+                File saf = File.createTempFile("MuArgus", ".saf");
+                saf.deleteOnExit();
+                dataFileName = saf.getPath();
+                MuARGUS.getSpssUtils().safFile = saf;
+            } else {
+                dataFileName = protectedFile.getSafeMeta().getFileNames().getDataFileName();
+            }
 
-        boolean result = this.c.MakeFileSafe(protectedFile.getSafeMeta().getFileNames().getDataFileName(),
-                protectedFile.isWithPrior(),
-                protectedFile.isWithEntropy(),
-                protectedFile.getHouseholdType(),
-                protectedFile.isRandomizeOutput(),
-                protectedFile.isPrintBHR());
+            boolean result = this.c.MakeFileSafe(dataFileName,
+                    protectedFile.isWithPrior(),
+                    protectedFile.isWithEntropy(),
+                    protectedFile.getHouseholdType(),
+                    protectedFile.isRandomizeOutput(),
+                    protectedFile.isPrintBHR());
 
-        if (!result) {
-            throw new ArgusException("Error during Make protected file");
+            if (!result) {
+                throw new ArgusException("Error during Make protected file");
+            }
+        } catch (IOException e) {
+
         }
     }
 
