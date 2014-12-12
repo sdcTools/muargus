@@ -1,5 +1,6 @@
 package muargus.view;
 
+import argus.utils.StrUtils;
 import java.awt.Color;
 import java.io.File;
 import javax.swing.JRadioButton;
@@ -8,6 +9,7 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
+import muargus.MuARGUS;
 import muargus.controller.MakeProtectedFileController;
 import muargus.model.ProtectedFile;
 import muargus.model.MetadataMu;
@@ -383,13 +385,17 @@ public class MakeProtectedFileView extends DialogBase<MakeProtectedFileControlle
 
     private void makeFileButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_makeFileButtonActionPerformed
         String filter;
+        String selectedFile;
         if(getController().getMetadata().isSpss()){
             filter = "Safefile (*.sav)|sav"; //TODO: verander zodat de saf + rds file in de temp directory staan
+            //TODO: replace by safemeta.
+            selectedFile = StrUtils.replaceExtension(MuARGUS.getSpssUtils().spssDataFileName, "Safe.sav");
         } else {
             filter = "Safefile (*.saf)|saf";
+            selectedFile = StrUtils.replaceExtension(getController().getMetadata().getFileNames().getDataFileName(), "Safe.saf");
         }
 
-        String filePath = showFileDialog("Make safe micro file", true, new String[]{filter});
+        String filePath = showFileDialog("Make safe micro file", true, new String[]{filter}, new File(selectedFile));
         if (filePath != null) {
             getController().makeFile(new File(filePath));
         }

@@ -105,9 +105,10 @@ public class DialogBase<T> extends javax.swing.JDialog {
      * @param forSaving Boolean indicating whether the dialog is for saving.
      * @param filter Array of Strings containing the filter extensions. These
      * extensions are used to filter the files in the directory.
+     * @param selectedFile
      * @return String containing the path of the chosen file.
      */
-    public String showFileDialog(String title, boolean forSaving, String[] filter) {
+    public String showFileDialog(String title, boolean forSaving, String[] filter, File selectedFile) {
         JFileChooser fileChooser = new JFileChooser();
         String hs = SystemUtils.getRegString("general", "datadir", "");
         if (!hs.equals("")) {
@@ -122,6 +123,7 @@ public class DialogBase<T> extends javax.swing.JDialog {
             String[] otherFilter = splitFilter(filter[index]);
             fileChooser.addChoosableFileFilter(new FileNameExtensionFilter(otherFilter[0], otherFilter[1]));
         }
+        fileChooser.setSelectedFile(selectedFile);
         int result = forSaving ? fileChooser.showSaveDialog(this) : fileChooser.showOpenDialog(this);
         if (result != JFileChooser.APPROVE_OPTION) {
             return null;
@@ -131,6 +133,43 @@ public class DialogBase<T> extends javax.swing.JDialog {
             SystemUtils.putRegString("general", "datadir", hs);
         }
         return fileChooser.getSelectedFile().getPath();
+    }
+    
+    /**
+     * Shows a file chooser dialog.
+     *
+     * @param title String instance containing the title of the file chooser
+     * dialog.
+     * @param forSaving Boolean indicating whether the dialog is for saving.
+     * @param filter Array of Strings containing the filter extensions. These
+     * extensions are used to filter the files in the directory.
+     * @return String containing the path of the chosen file.
+     */
+    public String showFileDialog(String title, boolean forSaving, String[] filter) {
+        return showFileDialog(title, forSaving, filter, null);
+//        JFileChooser fileChooser = new JFileChooser();
+//        String hs = SystemUtils.getRegString("general", "datadir", "");
+//        if (!hs.equals("")) {
+//            File file = new File(hs);
+//            fileChooser.setCurrentDirectory(file);
+//        }
+//        fileChooser.setDialogTitle(title);
+//        fileChooser.resetChoosableFileFilters();
+//        String[] firstFilter = splitFilter(filter[0]);
+//        fileChooser.setFileFilter(new FileNameExtensionFilter(firstFilter[0], firstFilter[1]));
+//        for (int index = 1; index < filter.length; index++) {
+//            String[] otherFilter = splitFilter(filter[index]);
+//            fileChooser.addChoosableFileFilter(new FileNameExtensionFilter(otherFilter[0], otherFilter[1]));
+//        }
+//        int result = forSaving ? fileChooser.showSaveDialog(this) : fileChooser.showOpenDialog(this);
+//        if (result != JFileChooser.APPROVE_OPTION) {
+//            return null;
+//        }
+//        hs = fileChooser.getSelectedFile().getParent();
+//        if (!"".equals(hs)) {
+//            SystemUtils.putRegString("general", "datadir", hs);
+//        }
+//        return fileChooser.getSelectedFile().getPath();
     }
 
     /**
