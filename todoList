@@ -6,26 +6,26 @@ niet behandelde opmerkingen/vragen:
 Release 3:                                                                                              Door:
 
 Global recode
--   Truncate --> labels weghalen (algemeen voor als er geen codelist gegeven is)
+-   Truncate --> labels weghalen (algemeen voor als er geen codelist gegeven is)                        -(L) Anne
 
 ICEPDF
--   Schermpje ICE pdf hacken
+-   Schermpje ICE pdf hacken                                                                            -(L) Anne
 
 SPSS
---   afvangen als de save file al in gebruik is. (progressbar updaten)                                   -(L) Jeldrik (werkt maar de progressbar moet nog gereset worden na de warning)
+--   afvangen als de save file al in gebruik is. (progressbar updaten)                                  -(L) Anne (werkt maar de progressbar moet nog gereset worden na de warning)
 
 Overige
 
---   Javadocs                                                                                            -(M) Jeldrik (alleen calculationService nog)
---   News report wordt heel amateuristisch ingelezen                                                     -(M) Anne
--   News report bijwerken                                                                               -(M)
---   Bepalen wat we met welke logger willen loggen + implementeren                                       -(H)
+--   Javadocs                                                                                           -(M) Jeldrik (alleen calculationService nog)
+-   News report bijwerken                                                                               -(M) Jeldrik
+--   Bepalen wat we met welke logger willen loggen + implementeren                                      -(H) Anne
 -   Manual schrijven                                                                                    -(H) Jeldrik
---   Copyright jaar aanpassen                                                                            -(H) 
---   TODO's + Nederlands commentaar in code langslopen                                                   -(M) Anne
--   LINUX   (Manual)                                                                                     -(H) Anne
+--   Copyright jaar aanpassen                                                                           -(H) Jeldrik
+--   TODO's + Nederlands commentaar in code langslopen                                                  -(M) Anne/Jeldrik --> maandag samen naar kijken?
+-   LINUX   (Manual)                                                                                    -(H) Jeldrik
+
 -   voorbeeld data meeleveren goed fixen                                                                -(H)
--   Release notes schrijven                                                                             -(H)
+-   Release notes schrijven                                                                             -(H) Anne
 -   Installatie manual (spss, R etc.)                                                                   -(H) Jeldrik
 -   licenties regelen/credits geven                                                                     -(H) Peter Paul?
 
@@ -135,3 +135,4 @@ Gefixed:
 -   .rds en .saf in de temp file plaatsen                                                                -(L) Jeldrik
 --   MuArgusCtrl                                      Is leeg, wordt dit ergens voor gebruikt?           -(L) Peter Paul: gewoon maar laten staan
 --   NumericalDll                                     Is leeg, wordt dit ergens voor gebruikt?           -(L) Peter Paul: gewoon maar laten staan
+--   News report wordt heel amateuristisch ingelezen                                                     -(M) Anne
