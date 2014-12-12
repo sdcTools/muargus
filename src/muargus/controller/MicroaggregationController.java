@@ -121,6 +121,8 @@ public class MicroaggregationController extends ControllerBase<Microaggregation>
                 VariableMu.printVariableNames(selected)))) {
             return;
         }
+        String microaggregations = (getModel().getMicroaggregations().size()>1)? "s are:" : " is:";
+        
         for (MicroaggregationSpec microaggregation : getModel().getMicroaggregations()) {
             if (microaggregation.getOutputVariables().size() == selected.size()) {
                 boolean difference = false;
@@ -137,8 +139,11 @@ public class MicroaggregationController extends ControllerBase<Microaggregation>
                     return;
                 }
             }
+            microaggregations += "\n- " + VariableMu.printVariableNames(microaggregation.getOutputVariables());
         }
-        getView().showMessage(String.format("Micro aggregation involving %s not found", VariableMu.printVariableNames(selected)));
+
+        getView().showMessage(String.format("Micro aggregation involving %s not found.\n"
+                + "The available microaggregation" + microaggregations, VariableMu.printVariableNames(selected)));
     }
 
     /**

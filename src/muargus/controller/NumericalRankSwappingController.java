@@ -120,6 +120,7 @@ public class NumericalRankSwappingController extends ControllerBase<NumericalRan
                 VariableMu.printVariableNames(selected)))) {
             return;
         }
+        String rankSwappings = (getModel().getRankSwappings().size()>1)? "s are:" : " is:";
         for (RankSwappingSpec swapping : getModel().getRankSwappings()) {
             if (swapping.getOutputVariables().size() == selected.size()) {
                 boolean difference = false;
@@ -136,9 +137,11 @@ public class NumericalRankSwappingController extends ControllerBase<NumericalRan
                     return;
                 }
             }
+            rankSwappings += "\n- " + VariableMu.printVariableNames(swapping.getOutputVariables());
         }
         
-        getView().showMessage(String.format("Rank swapping involving %s not found", VariableMu.printVariableNames(selected)));
+        getView().showMessage(String.format("Rank swapping involving %s not found.\n"
+                + "The available rank swapping" + rankSwappings, VariableMu.printVariableNames(selected)));
     }
 
     /**

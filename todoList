@@ -13,9 +13,6 @@ SPSS
 --   afvangen als de save file al in gebruik is. (progressbar updaten)                                   -(L) Jeldrik (werkt maar de progressbar moet nog gereset worden na de warning)
 -   .rds en .saf in de temp file plaatsen
 
-Numerical Rank Swapping
---   beter waarschuwing geven als meerdere variabelen bij elkaar horen en 1 undoed wordt                 -(L) Jeldrik
-
 Overige
 --   MuArgusCtrl                                      Is leeg, wordt dit ergens voor gebruikt?           -(L) Peter Paul vragen??
 --   NumericalDll                                     Is leeg, wordt dit ergens voor gebruikt?           -(L) Peter Paul vragen??
@@ -130,3 +127,4 @@ Gefixed:
 -   Typefout naam package veranderen zodat het weer hybridIpso3 heet en niet hybribiso3                 -
 -   truncate schermpje een 1 als default waarde geven
 -   Checken of overal extensies worden toevoegd bij het opslaan (nog niet bij safe metadata)            -(M) Jeldrik  --> zou mooi zijn als de naam van de geopende file er al staat + .rds
+-   beter waarschuwing geven als meerdere variabelen bij elkaar horen en 1 undoed wordt                 -(L) Jeldrik
