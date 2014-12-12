@@ -3,8 +3,6 @@ package muargus;
 import argus.model.ArgusException;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
@@ -22,7 +20,6 @@ import muargus.model.CodeInfo;
 import muargus.model.PramVariableSpec;
 import muargus.model.ReplacementSpec;
 import muargus.model.RiskModelClass;
-//import muargus.model.UnsafeInfo;
 import muargus.model.VariableMu;
 import org.apache.commons.lang3.StringUtils;
 
@@ -331,16 +328,16 @@ public class CalculationService {
         }
 
         boolean result = this.c.MakeFileSafe(protectedFile.getSafeMeta().getFileNames().getDataFileName(),
-                    protectedFile.isWithPrior(),
-                    protectedFile.isWithEntropy(),
-                    protectedFile.getHouseholdType(),
-                    protectedFile.isRandomizeOutput(),
-                    protectedFile.isPrintBHR());
+                protectedFile.isWithPrior(),
+                protectedFile.isWithEntropy(),
+                protectedFile.getHouseholdType(),
+                protectedFile.isRandomizeOutput(),
+                protectedFile.isPrintBHR());
 
-            if (!result) {
-                throw new ArgusException("Error during Make protected file");
-            }
+        if (!result) {
+            throw new ArgusException("Error during Make protected file");
         }
+    }
 
     /**
      * Calculates the tables. For each (sub) table is calculated how many table
@@ -519,6 +516,7 @@ public class CalculationService {
     }
 
     /**
+     * Explores the data file in the background.
      *
      * @throws ArgusException Throws an ArgusException when an error occurs
      * during a background task.
@@ -564,17 +562,21 @@ public class CalculationService {
     }
 
     /**
+     * Explores the data file in the background.
      *
-     * @param listener
+     * @param listener PropertyChangeListener
      */
     public void exploreFile(PropertyChangeListener listener) {
         executeSwingWorker(BackgroundTask.ExploreFile, listener);
     }
 
     /**
+     * Executes a swing worker. The swing worker executes a task in a separate
+     * thread.
      *
-     * @param taskType
-     * @param listener
+     * @param taskType BackgroundTask containing the type of task to be executed
+     * in the background.
+     * @param listener PropertychangeListener.
      */
     private void executeSwingWorker(final BackgroundTask taskType, PropertyChangeListener listener) {
         this.listener = listener;
@@ -607,8 +609,11 @@ public class CalculationService {
     }
 
     /**
+     * Calculates the tables including the number of unsafe combinations in the
+     * background.
      *
-     * @throws ArgusException
+     * @throws ArgusException Throws an ArgusException when an error occurs
+     * while calculating the unsafe combinations.
      */
     private void calculateInBackground() throws ArgusException {
         Combinations model = this.metadata.getCombinations();

@@ -146,9 +146,9 @@ public class SyntheticDataController extends ControllerBase<SyntheticDataSpec> {
             Process p = builder.start();
             p.waitFor();
         } catch (ArgusException | InterruptedException ex) {
-            System.out.println("R is not working arggg");
-            System.out.println(ex.getMessage());
-            System.out.println(Arrays.toString(ex.getStackTrace()));
+//            System.out.println("R is not working arggg");
+//            System.out.println(ex.getMessage());
+//            System.out.println(Arrays.toString(ex.getStackTrace()));
             //Logger.getLogger(SyntheticDataController.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
             Logger.getLogger(SyntheticDataController.class.getName()).log(Level.SEVERE, null, ex);

@@ -271,7 +271,7 @@
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                   <Image iconType="3" name="/muargus/resources/icons/Contents.png"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="Content help"/>
+                <Property name="text" type="java.lang.String" value="Help"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="contentsMenuItemActionPerformed"/>
@@ -597,7 +597,7 @@
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
               <Image iconType="3" name="/muargus/resources/icons/Contents.png"/>
             </Property>
-            <Property name="toolTipText" type="java.lang.String" value="Content help"/>
+            <Property name="toolTipText" type="java.lang.String" value="Help"/>
             <Property name="focusable" type="boolean" value="false"/>
             <Property name="horizontalTextPosition" type="int" value="0"/>
             <Property name="verticalTextPosition" type="int" value="3"/>

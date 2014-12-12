@@ -532,7 +532,7 @@ public class MainFrameController {
             }
         }
 
-        ViewReportController viewReportController = new ViewReportController(this.view, this.news, "news");
+        ViewReportController viewReportController = new ViewReportController(this.view, this.news, "News");
         viewReportController.showView();
     }
 

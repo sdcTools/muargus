@@ -200,7 +200,7 @@ public class MuARGUS {
         try {
             execClass(
                     "org.icepdf.ri.viewer.Main",
-                    "lib\\ICEpdf.jar",
+                    "lib/ICEpdf.jar",
                     args);
         } catch (IOException | InterruptedException ex) {
             throw new ArgusException("Error trying to display help file");

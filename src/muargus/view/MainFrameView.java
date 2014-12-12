@@ -654,7 +654,7 @@ public class MainFrameView extends javax.swing.JFrame {
         toolBar.add(toolBarSeparator4);
 
         contentsButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/muargus/resources/icons/Contents.png"))); // NOI18N
-        contentsButton.setToolTipText("Content help");
+        contentsButton.setToolTipText("Help");
         contentsButton.setFocusable(false);
         contentsButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         contentsButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -972,7 +972,7 @@ public class MainFrameView extends javax.swing.JFrame {
 
         contentsMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F1, java.awt.event.InputEvent.ALT_MASK));
         contentsMenuItem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/muargus/resources/icons/Contents.png"))); // NOI18N
-        contentsMenuItem.setText("Content help");
+        contentsMenuItem.setText("Help");
         contentsMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 contentsMenuItemActionPerformed(evt);

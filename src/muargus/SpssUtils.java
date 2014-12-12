@@ -452,8 +452,8 @@ public class SpssUtils {
             StatsUtil.stop();
         } catch (StatsException ex) {
             if (ex.getErrorCode() == 3) {
-                throw new ArgusException("The specified file is already in use by SPSS and cannot be written to."
-                        + "\nThe data will not be saved.");
+                throw new ArgusException("An error occured in SPSS while saving. This might occur because:"
+                        + "\n- The specified file is already in use by SPSS and cannot be written to.");
 //                JOptionPane.showMessageDialog(null, "The specified file is already in use by SPSS and cannot be written to."
 //                        + "\nThe data will not be saved.", MuARGUS.getMessageTitle(), JOptionPane.ERROR_MESSAGE);
             }
