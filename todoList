@@ -11,7 +11,7 @@ Global recode
 
 SPSS
 --   afvangen als de save file al in gebruik is. (progressbar updaten)                                   -(L) Jeldrik (werkt maar de progressbar moet nog gereset worden na de warning)
--   .rds en .saf in de temp file plaatsen
+-   .rds en .saf in de temp file plaatsen                                                                -(L) Jeldrik
 
 Overige
 --   MuArgusCtrl                                      Is leeg, wordt dit ergens voor gebruikt?           -(L) Peter Paul vragen??
