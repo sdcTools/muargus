@@ -3,6 +3,7 @@ package muargus.controller;
 import argus.model.ArgusException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import muargus.io.RWriter;
 import muargus.model.MetadataMu;
@@ -136,6 +137,9 @@ public class SyntheticDataController extends ControllerBase<SyntheticDataSpec> {
             Process p = Runtime.getRuntime().exec(String.format("R CMD BATCH \"%s\"", getModel().getrScriptFile().getAbsolutePath()));
             p.waitFor();
         } catch (IOException | ArgusException | InterruptedException ex) {
+            System.out.println("R is not working arggg");
+            System.out.println(ex.getMessage());
+            System.out.println(Arrays.toString(ex.getStackTrace()));
             //Logger.getLogger(SyntheticDataController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
