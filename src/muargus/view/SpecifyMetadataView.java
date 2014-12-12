@@ -14,6 +14,7 @@ import muargus.VariableNameCellRenderer;
 import muargus.model.MetadataMu;
 import muargus.controller.SpecifyMetadataController;
 import argus.model.SpssVariable;
+import java.io.File;
 import muargus.MuARGUS;
 import muargus.model.VariableMu;
 
@@ -998,8 +999,12 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
     }//GEN-LAST:event_cancelButtonActionPerformed
 
     private void codelistfileButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_codelistfileButtonActionPerformed
-        String filePath = showFileDialog("Open Codelist File", false, new String[]{"Codelist (*.cdl)|cdl"});
+        String selectedFile = getSelectedVariable().getName() + ".cdl";
+        String filePath = showFileDialog("Open Codelist File", false, new String[]{"Codelist (*.cdl)|cdl"}, new File(selectedFile));
         if (filePath != null) {
+            if (!filePath.substring(filePath.lastIndexOf(".")).toLowerCase().equals(".cdl")) {
+                filePath += ".cdl";
+            }
             this.codelistfileTextField.setText(filePath);
         }
     }//GEN-LAST:event_codelistfileButtonActionPerformed

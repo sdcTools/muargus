@@ -1,6 +1,9 @@
 package muargus.controller;
 
 import argus.model.ArgusException;
+import argus.utils.StrUtils;
+import java.io.File;
+import muargus.MuARGUS;
 import muargus.io.MetaReader;
 import muargus.io.MetaWriter;
 import muargus.model.Combinations;
@@ -100,8 +103,18 @@ public class SpecifyMetadataController extends ControllerBase<MetadataMu> {
             // set the metadata and ask if the user want to save the metadata.
             setModel(this.metadataClone);
             if (getView().showConfirmDialog(message + "Save changes to file?")) {
-                String filePath = getView().showFileDialog("Save ARGUS metadata", true, new String[]{"ARGUS metadata file (*.rda)|rda"});
+                String selectedFile;
+                //TODO: Ik heb nu new toegevoegd om te voorkomen dat men zonder dat iemand het door heeft de oude metadata overschrijft. Goed idee?
+                if (this.metadataClone.isSpss()) {
+                    selectedFile = StrUtils.replaceExtension(MuARGUS.getSpssUtils().spssDataFileName, "New.rda"); 
+                } else {
+                    selectedFile = StrUtils.replaceExtension(this.metadataClone.getFileNames().getDataFileName(), "New.rda");
+                }
+                String filePath = getView().showFileDialog("Save ARGUS metadata", true, new String[]{"ARGUS metadata file (*.rda)|rda"}, new File(selectedFile));
                 if (filePath != null) {
+                    if (!filePath.substring(filePath.lastIndexOf(".")).toLowerCase().equals(".rda")) {
+                        filePath += ".rda";
+                    }
                     try {
                         MetaWriter.writeRda(filePath, getModel(), true);
                     } catch (ArgusException ex) {

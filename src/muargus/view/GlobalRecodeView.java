@@ -1,6 +1,7 @@
 package muargus.view;
 
 import argus.model.ArgusException;
+import argus.utils.StrUtils;
 import java.io.File;
 import javax.swing.JOptionPane;
 import javax.swing.ListSelectionModel;
@@ -9,6 +10,7 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import muargus.HighlightTableCellRenderer;
+import muargus.MuARGUS;
 import muargus.controller.GlobalRecodeController;
 import muargus.io.MetaReader;
 import muargus.io.MetaWriter;
@@ -143,7 +145,9 @@ public class GlobalRecodeView extends DialogBase<GlobalRecodeController> {
      * @return String containing the global recode file path.
      */
     private String askForGrcPath() {
-        return showFileDialog("Open Recode File", false, new String[]{"Recode files (*.grc)|grc"});
+        //TODO: nu wordt automatisch een bestandsnaam ingevuld. Is dit handig of juist vervelend?
+        String selectedFile = getSelectedRecode().getVariable().getName() + ".grc";
+        return showFileDialog("Open Recode File", false, new String[]{"Recode files (*.grc)|grc"}, new File(selectedFile));
     }
 
     /**
@@ -156,7 +160,7 @@ public class GlobalRecodeView extends DialogBase<GlobalRecodeController> {
      */
     private int getTruncatePositions(int varLength) {
         while (true) {
-            String result = JOptionPane.showInputDialog(null, "Number of Digits", "Truncate" , 1);
+            String result = JOptionPane.showInputDialog(null, "Number of digits for truncation", 1); //TODO: we moeten kiezen tussen een initiele waarde of een titel. Ik heb het hier gezet op een initiele waarde
             if (result == null || result.length() == 0) {
                 return 0;
             }
@@ -229,8 +233,12 @@ public class GlobalRecodeView extends DialogBase<GlobalRecodeController> {
      * Saves the global recode file.
      */
     private void saveGrcFile() {
-        String filePath = showFileDialog("Save Recode File", true, new String[]{"Recode files (*.grc)|grc"});
+        String selectedFile = getSelectedRecode().getVariable().getName() + ".grc";
+        String filePath = showFileDialog("Save Recode File", true, new String[]{"Recode files (*.grc)|grc"}, new File(selectedFile));
         if (filePath != null) {
+            if (!filePath.substring(filePath.lastIndexOf(".")).toLowerCase().equals(".cdl")) {
+                filePath += ".grc";
+            }
             try {
                 MetaWriter.writeGrc(new File(filePath), this.selectedRecode);
             } catch (ArgusException ex) {
@@ -675,8 +683,12 @@ public class GlobalRecodeView extends DialogBase<GlobalRecodeController> {
     }//GEN-LAST:event_closeButtonActionPerformed
 
     private void codelistRecodeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_codelistRecodeButtonActionPerformed
-        String filePath = showFileDialog("Open Codelist File", false, new String[]{"Codelist (*.cdl)|cdl"});
+        String selectedFile = getSelectedRecode().getVariable().getName() + ".cdl";
+        String filePath = showFileDialog("Open Codelist File", false, new String[]{"Codelist (*.cdl)|cdl"}, new File(selectedFile));
         if (filePath != null) {
+            if (!filePath.substring(filePath.lastIndexOf(".")).toLowerCase().equals(".cdl")) {
+                filePath += ".cdl";
+            }
             setCodelistText(filePath);
         }
     }//GEN-LAST:event_codelistRecodeButtonActionPerformed
