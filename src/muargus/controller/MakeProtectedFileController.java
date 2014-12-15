@@ -1,11 +1,9 @@
 package muargus.controller;
 
 import argus.model.ArgusException;
+import argus.utils.SystemUtils;
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import muargus.MuARGUS;
 import muargus.io.MetaWriter;
 import muargus.model.MetadataMu;
@@ -60,13 +58,14 @@ public class MakeProtectedFileController extends ControllerBase<ProtectedFile> {
         this.metadata.getCombinations().getProtectedFile().initSafeMeta(file, this.metadata);
         removeRedundentReplacementSpecs();
         if (this.metadata.isSpss()) {
-                MuARGUS.getSpssUtils().safFile = file;
-                String path = this.metadata.getCombinations().getProtectedFile().getSafeMeta().getFileNames().getDataFileName();
-                String safeSpssFile = path.substring(0, path.lastIndexOf(".")) + ".sav";
-                MuARGUS.getSpssUtils().safeSpssFile = new File(safeSpssFile);
-           
+            MuARGUS.getSpssUtils().safFile = file;
+            String path = this.metadata.getCombinations().getProtectedFile().getSafeMeta().getFileNames().getDataFileName();
+            String safeSpssFile = path.substring(0, path.lastIndexOf(".")) + ".sav";
+            MuARGUS.getSpssUtils().safeSpssFile = new File(safeSpssFile);
+
         }
         getCalculationService().makeProtectedFile(this);
+        SystemUtils.writeLogbook("Protected file has been written.");
     }
 
     /**
@@ -155,6 +154,7 @@ public class MakeProtectedFileController extends ControllerBase<ProtectedFile> {
         } catch (ArgusException ex) {
             this.getView().showErrorMessage(ex);
         }
+        SystemUtils.writeLogbook("Safe meta file has been written.");
     }
 
     /**

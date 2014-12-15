@@ -2,6 +2,7 @@ package muargus.controller;
 
 import argus.model.ArgusException;
 import argus.utils.StrUtils;
+import argus.utils.SystemUtils;
 import java.io.File;
 import muargus.MuARGUS;
 import muargus.io.MetaReader;
@@ -84,6 +85,7 @@ public class SpecifyMetadataController extends ControllerBase<MetadataMu> {
                 getView().showErrorMessage(ex);
                 return;
             }
+            SystemUtils.writeLogbook("Metadata has been changed.");
 
             /* check if the changes are significant. If they are significant 
              ask the user if he/she wishes to continue. */
@@ -120,6 +122,7 @@ public class SpecifyMetadataController extends ControllerBase<MetadataMu> {
                         getView().showErrorMessage(ex);
                     }
                 }
+                SystemUtils.writeLogbook("Metadata file has been saved.");
             }
         }
         this.getView().setVisible(false);

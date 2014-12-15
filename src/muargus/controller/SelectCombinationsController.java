@@ -397,6 +397,7 @@ public class SelectCombinationsController extends ControllerBase<Combinations> {
             MuARGUS.getCalculationService().calculateTables(this);
         } else {
             getSelectCombinationsView().enableCalculateTables(true);
+            SystemUtils.writeLogbook("Tables have been calculated.");
             if (success) {
                 getView().setVisible(false);
             }

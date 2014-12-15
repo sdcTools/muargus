@@ -1,12 +1,10 @@
 package muargus.controller;
 
 import argus.model.ArgusException;
+import argus.utils.SystemUtils;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import muargus.io.RWriter;
 import muargus.model.MetadataMu;
 import muargus.model.ReplacementFile;
@@ -67,6 +65,7 @@ public class SyntheticDataController extends ControllerBase<SyntheticDataSpec> {
             RWriter.writeSynthetic(syntheticData);
             //RWriter.writeBatSynthetic(syntheticData);
             writeSyntheticData();
+            SystemUtils.writeLogbook("R input files for synthetic data have been generated.");
             return true;
         } catch (ArgusException ex) {
             return false;
@@ -124,12 +123,13 @@ public class SyntheticDataController extends ControllerBase<SyntheticDataSpec> {
             runR();
             if (RWriter.adjustSyntheticOutputFile(getModel())) {
                 getView().showMessage("Synthetic data successfully generated");
+                SystemUtils.writeLogbook("Synthetic data has been generated.");
             } else { //TODO: argusException geven
                 getView().showErrorMessage(new ArgusException("No synthetic data generated. Check if R is properly installed.")); //TODO: beter foutmelding als R niet goed is geinstalleerd.
             }
             this.view.enableRunSyntheticDataButton(true);
         } catch (ArgusException ex) {
-            Logger.getLogger(SyntheticDataController.class.getName()).log(Level.SEVERE, null, ex);
+            this.getView().showErrorMessage(ex);
         }
     }
 

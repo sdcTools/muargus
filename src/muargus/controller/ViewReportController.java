@@ -1,6 +1,7 @@
 package muargus.controller;
 
 import argus.model.ArgusException;
+import argus.utils.SystemUtils;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -82,6 +83,7 @@ public class ViewReportController {
         String htmlPath = FilenameUtils.removeExtension(path) + ".html";
         try (FileWriter writer = new FileWriter(new File(htmlPath))) {
             writer.write(this.html);
+            SystemUtils.writeLogbook("Report has been written.");
         } catch (IOException ex) {
             throw new ArgusException("Error saving report: " + ex.getMessage());
         }

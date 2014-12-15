@@ -1,6 +1,7 @@
 package muargus.controller;
 
 import argus.model.ArgusException;
+import argus.utils.SystemUtils;
 import java.util.ArrayList;
 import muargus.model.MetadataMu;
 import muargus.model.RiskModelClass;
@@ -151,6 +152,7 @@ public class RiskSpecificationController extends ControllerBase<RiskSpecificatio
                     getModel().getRiskTable(), getModel().getRiskThreshold(), this.metadata.isHouseholdData()));
             getModel().setReidentRateThreshold(getCalculationService().calculateReidentRate(
                     getModel().getRiskTable(), getModel().getRiskThreshold()));
+            SystemUtils.writeLogbook("Risk threshold has been set/changed.");
         } catch (ArgusException ex) {
             getView().showErrorMessage(ex);
         }
@@ -166,6 +168,7 @@ public class RiskSpecificationController extends ControllerBase<RiskSpecificatio
                     getModel().getRiskTable(), getModel().getUnsafeRecords(), this.metadata.isHouseholdData()));
             getModel().setReidentRateThreshold(getCalculationService().calculateReidentRate(
                     getModel().getRiskTable(), getModel().getRiskThreshold()));
+            SystemUtils.writeLogbook("Risk threshold has been set/changed.");
         } catch (ArgusException ex) {
             getView().showErrorMessage(ex);
         }

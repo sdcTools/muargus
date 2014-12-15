@@ -2,6 +2,7 @@ package muargus.controller;
 
 import argus.model.ArgusException;
 import argus.utils.StrUtils;
+import argus.utils.SystemUtils;
 import muargus.model.MetadataMu;
 import muargus.model.ModifyNumericalVariables;
 import muargus.model.ModifyNumericalVariablesSpec;
@@ -268,6 +269,7 @@ public class ModifyNumericalVariablesController extends ControllerBase<ModifyNum
                         selected.getWeightNoisePercentage(),
                         Double.isNaN(selected.getWeightNoisePercentage()));
             }
+            SystemUtils.writeLogbook("Modify numerical variables has been done.");
         } catch (ArgusException ex) {
             getView().showErrorMessage(ex);
         }
