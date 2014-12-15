@@ -1,6 +1,7 @@
 niet behandelde opmerkingen/vragen:
 -   wat doen met knoppen tijdens achtergrondprocessen? --> ANCO
 -   inhoudelijke fout in ingelezen metadata: wat doen? knoppen uitzetten?
+-   Let op dat de twee mappen met resources hetzelfde zijn (Jeldrik --> is nu bijgewerkt)
 
 
 Release 3:                                                                                              Door:
@@ -16,10 +17,8 @@ SPSS
 
 Overige
 
--   News report bijwerken                                                                               -(M) Jeldrik
 --   Bepalen wat we met welke logger willen loggen + implementeren                                      -(H) Anne
 -   Manual schrijven                                                                                    -(H) Jeldrik
---   Copyright jaar aanpassen                                                                           -(H) Jeldrik
 --   TODO's + Nederlands commentaar in code langslopen                                                  -(M) Anne/Jeldrik --> maandag samen naar kijken?
 -   LINUX   (Manual)                                                                                    -(H) Jeldrik
 -   voorbeeld data meeleveren goed fixen                                                                -(H)
@@ -135,3 +134,7 @@ Gefixed:
 --   NumericalDll                                     Is leeg, wordt dit ergens voor gebruikt?           -(L) Peter Paul: gewoon maar laten staan
 --   News report wordt heel amateuristisch ingelezen                                                     -(M) Anne
 --   Javadocs                                                                                           -(M) Jeldrik (alleen calculationService nog)
+-   News report bijwerken                                                                               -(M) Jeldrik
+--   Copyright jaar aanpassen                                                                           -(H) Jeldrik
+-   Er zijn nu twee mappen met resources. Een in the source packages en 1 bij files maar die zijn       -(M) Jeldrik
+    niet meer hetzelfde.

@@ -7,10 +7,13 @@ package muargus.resources;
  */
 public enum ContextHelp {
 
-    OPEN_MICRODATA("muargus.view.OpenMicrodataView", "OpenMicrodata"),
     MAIN_FRAME("muargus.view.MainFrameView", "MainFrame"),
+    
+    OPEN_MICRODATA("muargus.view.OpenMicrodataView", "OpenMicrodata"),
+    
     SPECIFY_METADATA("muargus.view.SpecifyMetadataView", "SpecifyMetaFile"),
     SELECT_COMBINATIONS("muargus.view.SelectCombinationsView", "SpecifyCombinations"),
+    
     SHOW_TABLE_COLLECTION("muargus.view.ShowTableCollectionView", "ModifyShowTables"),
     GLOBAL_RECODE("muargus.view.GlobalRecodeView", "ModifyGlobalRecode"),
     PRAM_SPECIFICATION("muargus.view.PramSpecificationView", "ModifyPRAMSpecification"),
@@ -20,8 +23,10 @@ public enum ContextHelp {
     MICROAGGREGATION("muargus.view.MicroaggregationView", "ModifyNumericalMicroAggregation"),
     NUMERICAL_RANK_SWAPPING("muargus.view.NumericalRankSwappingView", "ModifyNumericalRankSwapping"),
     SYNTHETIC_DATA("muargus.view.SyntheticDataView", "ModifySyntheticData"),
+    
     MAKE_PROTECTED_FILE("muargus.view.MakeProtectedFileView", "OutputMakeProtectedFile"),
     VIEW_REPORT("muargus.view.ViewReportView", "OutputViewReport"),
+    
     NEWS("muargus.view.ViewReportView", "HelpNews"),
     ABOUT("muargus.view.AboutView", "HelpAbout");
 
@@ -58,8 +63,8 @@ public enum ContextHelp {
      * Gets the named destination using the classname.
      *
      * @param className String containing the classname.
-     * @param isHouseholdOrNews Boolean indicating whether the data contains household
-     * data.
+     * @param isHouseholdOrNews Boolean indicating whether the data contains
+     * household data.
      * @return String containing the named destination.
      */
     public static String fromClassName(String className, boolean isHouseholdOrNews) {
