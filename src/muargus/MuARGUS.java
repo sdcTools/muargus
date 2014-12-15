@@ -24,8 +24,6 @@ import org.apache.commons.io.FilenameUtils;
  */
 public class MuARGUS {
 
-    private static final Logger logger = Logger.getLogger(MuARGUS.class.getName());
-
     // Version info
     public static final int MAJOR = 5;
     public static final int MINOR = 0;

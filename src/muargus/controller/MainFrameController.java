@@ -4,17 +4,12 @@ package muargus.controller;
 import argus.model.ArgusException;
 import argus.model.DataFilePair;
 import argus.utils.StrUtils;
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -487,8 +482,7 @@ public class MainFrameController {
 
             return doc;
         } catch (ParserConfigurationException ex) {
-            Logger.getLogger(MainFrameController.class.getName()).log(Level.SEVERE, null, ex);
-            throw new ArgusException("Error creating report");
+            throw new ArgusException("Error creating report: " + ex.getMessage());
         }
     }
 
@@ -511,15 +505,16 @@ public class MainFrameController {
 
         if (this.news.equals("")) {
             try {
-                FileInputStream fis = new FileInputStream(this.newsLocation);
-                byte[] data = new byte[(int) this.newsLocation.length()];
-                fis.read(data);
-                fis.close();
+                byte[] data;
+                try (FileInputStream fis = new FileInputStream(this.newsLocation)) {
+                    data = new byte[(int) this.newsLocation.length()];
+                    fis.read(data);
+                }
                 String newsString = new String(data, "UTF-8");
                 String css = "<link href=\"file:///" + HTMLReportWriter.css.getAbsolutePath() + "\" rel=\"stylesheet\" type=\"text/css\">";
                 this.news = newsString.replace("<!--{CSS}-->", css);
             } catch (IOException ex) {
-                //Logger.getLogger(MainFrameController.class.getName()).log(Level.SEVERE, null, ex);
+                this.view.showErrorMessage(new ArgusException("Error while reading news file: " + ex.getMessage()));
             }
         }
 
