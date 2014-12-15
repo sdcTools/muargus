@@ -26,8 +26,6 @@ import com.ibm.statistics.plugin.StatsException;
 import com.ibm.statistics.plugin.StatsUtil;
 import com.ibm.statistics.plugin.Variable;
 import com.ibm.statistics.plugin.VariableFormat;
-import java.awt.Frame;
-import javax.swing.JFileChooser;
 import muargus.controller.SelectCombinationsController;
 import muargus.model.VariableMu;
 
@@ -579,24 +577,8 @@ public class SpssUtils {
                 //Logger.getLogger(CalculationService.class.getName()).log(Level.SEVERE, null, ex);
             }
         } catch (StatsException ex) {
-
             //Logger.getLogger(CalculationService.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
-    //TODO: remove??
-//    /**
-//     * Asks for the directory where spss is installed.
-//     *
-//     * @param parent the Frame of the mainFrame.
-//     */
-//    private void getSpssInstallationDirectory(Frame parent) {
-//        JFileChooser fileChooser = new JFileChooser();
-//        fileChooser.setDialogTitle("Set IBM SPSS directory");
-//        fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-//        fileChooser.setMultiSelectionEnabled(false);
-//        fileChooser.showOpenDialog(parent);
-//        System.out.println(fileChooser.getSelectedFile().getPath());
-//    }
 
 }

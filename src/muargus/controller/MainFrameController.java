@@ -1,4 +1,3 @@
-//TODO: make news reader better
 package muargus.controller;
 
 import argus.model.ArgusException;
@@ -314,75 +313,6 @@ public class MainFrameController {
         return missingCodelists;
     }
 
-//  TODO:Remove              
-//                    String message = getCodelist(variable, codelistFile, codelist);
-//                    if (message != null) {
-//                        missingCodelists.add(message);
-//                    }
-//                }
-//                }
-//            
-//                if (model.getVariablesInTables().contains(variable)) {
-//                    
-//                    int[] nDims = new int[]{0};
-//                    int[] unsafeCount = new int[model.getMaxDimsInTables()];
-//
-//                    boolean result = c.UnsafeVariable(varIndex + 1, nDims, unsafeCount);
-//                    //UnsafeInfo unsafe = new UnsafeInfo();
-//                    model.setUnsafeCombinations(variable, unsafeCount, nDims[0]);
-//                    //model.setUnsafe(variable, unsafeCount);
-//
-//                    int[] nCodes = new int[]{0};
-//                    result = c.UnsafeVariablePrepare(varIndex + 1, nCodes);
-//                    int[] isMissing = new int[]{0};
-//                    int[] freq = new int[]{0};
-//                    String[] code = new String[1];
-//                    variable.clearCodeInfos();
-//                    for (int codeIndex = 0; codeIndex < nCodes[0]; codeIndex++) {
-//                        result = c.UnsafeVariableCodes(varIndex + 1,
-//                                codeIndex + 1,
-//                                isMissing,
-//                                freq,
-//                                code,
-//                                nDims,
-//                                unsafeCount);
-//                        CodeInfo codeInfo = new CodeInfo(code[0], isMissing[0] != 0);
-//                        if (codelist.containsKey(code[0].trim())) {
-//                            codeInfo.setLabel(codelist.get(code[0].trim()));
-//                        }
-//                        codeInfo.setFrequency(freq[0]);
-//                        codeInfo.setUnsafeCombinations(nDims[0], unsafeCount);
-//                        variable.addCodeInfo(codeInfo);
-//                    }
-//                    result = c.UnsafeVariableClose(varIndex + 1);
-//                }
-//                else {
-//                    variable.clearCodeInfos();
-//                    int codeIndex = 0;
-//                    while (true) {
-//                        codeIndex++;
-//                        String[] code = new String[1];
-//                        int[] pramPerc = new int[1];
-//                        boolean result = c.GetVarCode(varIndex + 1, codeIndex, code, pramPerc); 
-//                        if (!result)
-//                            break;
-//                        CodeInfo codeInfo = new CodeInfo(code[0], false);
-//                         if (codelist.containsKey(code[0].trim())) {
-//                            codeInfo.setLabel(codelist.get(code[0].trim()));
-//                        }
-//                        variable.addCodeInfo(codeInfo);
-//                    }
-//                    for (int i=0; i < 2; i++) {
-//                        if (!"".equals(variable.getMissing(i))) {
-//                            CodeInfo codeInfo = new CodeInfo(variable.getMissing(i), true);
-//                            variable.addCodeInfo(codeInfo);
-//                        }
-//                    }
-//                }
-//            }
-//        }
-//        return missingCodelists;
-//    }
     /**
      * Opens the PRAM specification screen.
      */
@@ -502,7 +432,6 @@ public class MainFrameController {
         }
     }
 
-    //TODO: mooier maken
     /**
      * Shows the news.
      */

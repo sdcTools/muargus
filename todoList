@@ -16,14 +16,12 @@ SPSS
 
 Overige
 
---   Javadocs                                                                                           -(M) Jeldrik (alleen calculationService nog)
 -   News report bijwerken                                                                               -(M) Jeldrik
 --   Bepalen wat we met welke logger willen loggen + implementeren                                      -(H) Anne
 -   Manual schrijven                                                                                    -(H) Jeldrik
 --   Copyright jaar aanpassen                                                                           -(H) Jeldrik
 --   TODO's + Nederlands commentaar in code langslopen                                                  -(M) Anne/Jeldrik --> maandag samen naar kijken?
 -   LINUX   (Manual)                                                                                    -(H) Jeldrik
-
 -   voorbeeld data meeleveren goed fixen                                                                -(H)
 -   Release notes schrijven                                                                             -(H) Anne
 -   Installatie manual (spss, R etc.)                                                                   -(H) Jeldrik
@@ -136,3 +134,4 @@ Gefixed:
 --   MuArgusCtrl                                      Is leeg, wordt dit ergens voor gebruikt?           -(L) Peter Paul: gewoon maar laten staan
 --   NumericalDll                                     Is leeg, wordt dit ergens voor gebruikt?           -(L) Peter Paul: gewoon maar laten staan
 --   News report wordt heel amateuristisch ingelezen                                                     -(M) Anne
+--   Javadocs                                                                                           -(M) Jeldrik (alleen calculationService nog)

@@ -22,10 +22,7 @@ import muargus.view.SelectCombinationsView;
 public class SelectCombinationsController extends ControllerBase<Combinations> {
 
     private final MetadataMu metadata;
-    //TODO:remove
-//    private long numberOfTables;
 
-    ///private static final Logger logger = Logger.getLogger(SelectCombinationsController.class.getName());
     /**
      * Constructor for the SelectCombinationsController.
      *
@@ -125,68 +122,12 @@ public class SelectCombinationsController extends ControllerBase<Combinations> {
         }
         if (tableMuNew.getVariables().size() == tableMuOld.getVariables().size()
                 && numberOfDoubleVariables == tableMuNew.getVariables().size()) {
-            //int thresholdOld = tableMuOld.getThreshold();
-            //int thresholdNew = tableMuNew.getThreshold();
-//            if (thresholdNew > thresholdOld) {
-                tableMuOld.setThreshold(tableMuNew.getThreshold());
-//            } else {
-//                tableMuNew.setThreshold(thresholdOld);
-//            }
+            tableMuOld.setThreshold(tableMuNew.getThreshold());
             isValid = false;
         }
         return isValid;
     }
 
-    //TODO:remove
-//    /**
-//     * Gets the number of tables that will be generated for a given number of
-//     * dimensions (See setNumberOfTables).
-//     *
-//     * @return Long containing the number of tables that will be generated for a
-//     * given number of dimensions.
-//     */
-//    public long getNumberOfTables() {
-//        return this.numberOfTables;
-//    }
-//
-//    /**
-//     * Sets the number of tables that will be generated for a given number of
-//     * dimensions. This is the start of a recursive method. It wil call the
-//     * method numberOfTables and sets the initial value for numberOfTables to
-//     * one.
-//     *
-//     * @param dimensions Integer containing the number of dimensions for which
-//     * tables need to be generated.
-//     * @param numberOfVariables Integere containing the number of variables.
-//     */
-//    public void setNumberOfTables(int dimensions, int numberOfVariables) {
-//        numberOfTabels(1, dimensions, numberOfVariables);
-//    }
-//
-//    /**
-//     * Calculates the number of tables that will be generated for a given number
-//     * of dimensions. This is a recursive method that will calculate the
-//     * equation: N * (N-1) * ... (N-D+1) where N is the number of variables and
-//     * D is the number of dimensions.
-//     *
-//     * @param numberOfTables
-//     * @param dimensions
-//     * @param numberOfVariables
-//     */
-//    private void numberOfTabels(long numberOfTables, int dimensions, int numberOfVariables) {
-//        if (dimensions > 0) {
-//            try {
-//                long tempNumber = numberOfTables * numberOfVariables;
-//                int tempNumberOfVariables = numberOfVariables - 1;
-//                int tempDimensions = dimensions - 1;
-//                numberOfTabels(tempNumber, tempDimensions, tempNumberOfVariables);
-//            } catch (Exception e) {
-//                JOptionPane.showMessageDialog(getView(), "To ... many ... dimensions ...\nCan't ... visualize :-(");
-//            }
-//        } else if (dimensions == 0) {
-//            this.numberOfTables = numberOfTables;
-//        }
-//    }
     /**
      * Starts the recursion equation that calculates the tables for the
      * specified number of dimensions. Assings an empty Arraylist of
@@ -330,6 +271,7 @@ public class SelectCombinationsController extends ControllerBase<Combinations> {
 
     /**
      * Sorts an Arraylist of VariableMu's on the startingposition.
+     *
      * @param variables ArrayList of VariableMu's.
      */
     private void sort(ArrayList<VariableMu> variables) {

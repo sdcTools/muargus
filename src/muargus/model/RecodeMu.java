@@ -295,38 +295,6 @@ public class RecodeMu {
         return row;
     }
 
-    //TODOD: staat nu bij MetaWriter. Misschien beter om te veranderen naar een aparte klasse?
-//    /**
-//     * Writes the global recode text as a .grc file. The global recode file
-//     * contains the recodings (old and new codes), missing values and if
-//     * available the codelist.
-//     *
-//     * @param file The file for the safe global recode file.
-//     * @throws ArgusException Throws an ArgusException when an error during the
-//     * writing of the file occurs.
-//     */
-//    public void write(File file) throws ArgusException {
-//        BufferedWriter w;
-//        PrintWriter writer = null;
-//        try {
-//            w = new BufferedWriter(new FileWriter(file));
-//            writer = new PrintWriter(w);
-//            writer.println(this.grcText);
-//            if (this.missing_1_new.length() > 0 || this.missing_2_new.length() > 0) {
-//                writer.println(String.format("<MISSING> %s %s", this.missing_1_new, this.missing_2_new));
-//            }
-//            if (this.codeListFile != null && !this.codeListFile.equals(this.variable.getCodeListFile())) {
-//                writer.println(String.format("<CODELIST> \"%s\"", this.codeListFile));
-//            }
-//        } catch (IOException ex) {
-//            throw new ArgusException("Error writing to file. Error message: " + ex.getMessage());
-//        } finally {
-//            if (writer != null) {
-//                writer.close();
-//            }
-//        }
-//    }
-
     /**
      * Checks if a RecodeMu object is equal to this instance of RecodeMu. Each
      * individual component of this RecodeMu instance is compaired to its

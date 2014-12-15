@@ -63,30 +63,6 @@ public class GlobalRecodeController extends ControllerBase<GlobalRecode> {
         return (GlobalRecodeView) getView();
     }
 
-    //TODO:Remove
-//    /**
-//     *
-//     */
-//    public void codelistRecode() {
-//        JFileChooser fileChooser = new JFileChooser();
-//        fileChooser.setFileFilter(new FileNameExtensionFilter("Codelist (*.cdl)", "cdl"));
-//        String hs = SystemUtils.getRegString("general", "datadir", "");
-//        if (!hs.equals("")){
-//            File file = new File(hs); 
-//            fileChooser.setCurrentDirectory(file);
-//        }        
-//        fileChooser.showOpenDialog(null);
-//
-//        String filename;
-//        File f = fileChooser.getSelectedFile();
-//        if (fileChooser.getSelectedFile() == null) {
-//            filename = "";
-//        } else {
-//            filename = f.getAbsolutePath();
-//        }
-//        view.setCodelistText(filename);
-//    }
-
     /**
      * Apply's the recoding on the selected variable.
      *
