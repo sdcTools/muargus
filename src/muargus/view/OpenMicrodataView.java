@@ -7,7 +7,6 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import org.apache.commons.io.FilenameUtils;
 import argus.model.DataFilePair;
 import argus.utils.SystemUtils;
-import argus.utils.TauArgusUtils;
 
 /**
  * View class of the open microdata screen.
@@ -16,7 +15,6 @@ import argus.utils.TauArgusUtils;
  */
 public class OpenMicrodataView extends DialogBase {
 
-    private static final Logger logger = Logger.getLogger(OpenMicrodataView.class.getName());
     private boolean canSelectSpss;
 
     // ***** Dialog Return Values *****
@@ -247,7 +245,7 @@ public class OpenMicrodataView extends DialogBase {
             return;
         }
         
-        if (!TauArgusUtils.ExistFile(this.textFieldMicrodata.getText()))
+        if (!new File(this.textFieldMicrodata.getText()).exists())
         {
             JOptionPane.showMessageDialog(this,"Microdata file "+this.textFieldMicrodata.getText()+" does not exist.");
             return;
@@ -255,7 +253,7 @@ public class OpenMicrodataView extends DialogBase {
         
         if (!this.textFieldMetadata.getText().trim().equals(""))
         {
-            if (!TauArgusUtils.ExistFile(this.textFieldMetadata.getText()))
+            if (!new File(this.textFieldMetadata.getText()).exists())
             {
                 JOptionPane.showMessageDialog(this,"Metadata file "+this.textFieldMetadata.getText()+" does not exist.");
                 return;                

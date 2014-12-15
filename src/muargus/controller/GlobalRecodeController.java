@@ -1,6 +1,7 @@
 package muargus.controller;
 
 import argus.model.ArgusException;
+import argus.utils.SystemUtils;
 import muargus.model.GlobalRecode;
 import muargus.model.MetadataMu;
 import muargus.model.RecodeMu;
@@ -78,6 +79,7 @@ public class GlobalRecodeController extends ControllerBase<GlobalRecode> {
         recode.setTruncated(false);
         recode.setRecoded(true);
         recode.setAppliedCodeListFile(recode.getCodeListFile());
+        SystemUtils.writeLogbook("Recoding has been done.");
     }
 
     /**
@@ -93,6 +95,7 @@ public class GlobalRecodeController extends ControllerBase<GlobalRecode> {
         recode.setRecoded(false);
         recode.setTruncated(false);
         recode.setAppliedCodeListFile("");
+        SystemUtils.writeLogbook("Recode/truncation has been undone.");
     }
 
     /**
@@ -111,6 +114,7 @@ public class GlobalRecodeController extends ControllerBase<GlobalRecode> {
         recode.setTruncated(true);
         recode.setPositionsTruncated(positions);
         recode.setAppliedCodeListFile(recode.getCodeListFile());
+        SystemUtils.writeLogbook("Truncation has been done.");
     }
 
 }

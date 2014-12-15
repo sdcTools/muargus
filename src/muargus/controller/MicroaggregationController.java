@@ -1,6 +1,7 @@
 package muargus.controller;
 
 import argus.model.ArgusException;
+import argus.utils.SystemUtils;
 import java.util.ArrayList;
 import muargus.extern.dataengine.Numerical;
 import muargus.model.MetadataMu;
@@ -79,8 +80,13 @@ public class MicroaggregationController extends ControllerBase<Microaggregation>
                 errorCode);
         if (errorCode[0] != 0) {
             getView().showErrorMessage(new ArgusException("Error during MicroAggregation"));
+            return;
         }
-        getView().showMessage("Micro aggregation successfully completed");
+        else 
+        {
+            SystemUtils.writeLogbook("Micro aggregation has been done.");
+            getView().showMessage("Micro aggregation successfully completed");
+        }
         getView().setProgress(0);
         getView().showStepName("");
         getMicroaggregationView().updateVariableRows(microaggregation);
@@ -135,6 +141,7 @@ public class MicroaggregationController extends ControllerBase<Microaggregation>
                 if (!difference) {
                     getModel().getMicroaggregations().remove(microaggregation);
                     this.metadata.getReplacementSpecs().remove(microaggregation);
+                    SystemUtils.writeLogbook("Micro aggregation has been removed.");
                     getMicroaggregationView().updateVariableRows(microaggregation);
                     return;
                 }

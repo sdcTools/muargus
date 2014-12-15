@@ -1,6 +1,7 @@
 package muargus.controller;
 
 import argus.model.ArgusException;
+import argus.utils.SystemUtils;
 import java.util.ArrayList;
 import muargus.extern.dataengine.Numerical;
 import muargus.model.MetadataMu;
@@ -79,6 +80,7 @@ public class NumericalRankSwappingController extends ControllerBase<NumericalRan
             getModel().getRankSwappings().remove(swapping);
         } else {
             getView().showMessage("RankSwapping successfully completed");
+            SystemUtils.writeLogbook("Numerical rank swapping has been done.");
         }
         getView().setProgress(0);
         getView().showStepName("");
@@ -133,6 +135,7 @@ public class NumericalRankSwappingController extends ControllerBase<NumericalRan
                 if (!difference) {
                     getModel().getRankSwappings().remove(swapping);
                     this.metadata.getReplacementSpecs().remove(swapping);
+                    SystemUtils.writeLogbook("Numerical rank swapping has been undone.");
                     getNumericalRankSwappingView().updateVariableRows(swapping);
                     return;
                 }

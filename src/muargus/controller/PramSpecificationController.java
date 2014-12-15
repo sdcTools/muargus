@@ -1,9 +1,9 @@
 package muargus.controller;
 
 import argus.model.ArgusException;
+import argus.utils.SystemUtils;
 import java.util.ArrayList;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 import muargus.model.CodeInfo;
 import muargus.model.MetadataMu;
 import muargus.model.PramSpecification;
@@ -178,8 +178,9 @@ public class PramSpecificationController extends ControllerBase<PramSpecificatio
     public void apply(PramVariableSpec pramVariableSpec) {
         try {
             getCalculationService().setPramVariable(pramVariableSpec);
+            SystemUtils.writeLogbook("PRAM variable has been set.");
         } catch (ArgusException ex) {
-            Logger.getLogger(PramSpecificationController.class.getName()).log(Level.SEVERE, null, ex);
+            getView().showErrorMessage(ex);
         }
     }
 
@@ -194,8 +195,9 @@ public class PramSpecificationController extends ControllerBase<PramSpecificatio
     public void undo(PramVariableSpec pramVariableSpec) {
         try {
             getCalculationService().undoSetPramVariable(pramVariableSpec);
+            SystemUtils.writeLogbook("PRAM variable has been unset.");
         } catch (ArgusException ex) {
-            Logger.getLogger(PramSpecificationController.class.getName()).log(Level.SEVERE, null, ex);
+            getView().showErrorMessage(ex);
         }
     }
 }
