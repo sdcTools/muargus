@@ -119,21 +119,25 @@ public class SyntheticDataController extends ControllerBase<SyntheticDataSpec> {
      */
     @Override
     protected void doNextStep(boolean success) {
-        RWriter.adjustSyntheticData(getModel());
-        runR();
-        if (RWriter.adjustSyntheticOutputFile(getModel())) {
-            getView().showMessage("Synthetic data successfully generated");
-        } else {
-            getView().showErrorMessage(new ArgusException("No synthetic data generated. Check if R is properly installed.")); //TODO: beter foutmelding als R niet goed is geinstalleerd.
+        try {
+            RWriter.adjustSyntheticData(getModel());
+            runR();
+            if (RWriter.adjustSyntheticOutputFile(getModel())) {
+                getView().showMessage("Synthetic data successfully generated");
+            } else { //TODO: argusException geven
+                getView().showErrorMessage(new ArgusException("No synthetic data generated. Check if R is properly installed.")); //TODO: beter foutmelding als R niet goed is geinstalleerd.
+            }
+            this.view.enableRunSyntheticDataButton(true);
+        } catch (ArgusException ex) {
+            Logger.getLogger(SyntheticDataController.class.getName()).log(Level.SEVERE, null, ex);
         }
-        this.view.enableRunSyntheticDataButton(true);
     }
 
     /**
      * Runs the .bat file. The .bat file runs the R-script which generates the
      * synthetic data.
      */
-    private void runR() {
+    private void runR()throws ArgusException{
         try {
             //String cmd = getModel().getRunRFileFile().getAbsolutePath();
             ArrayList<String> arguments = new ArrayList<>();
@@ -145,13 +149,12 @@ public class SyntheticDataController extends ControllerBase<SyntheticDataSpec> {
             
             Process p = builder.start();
             p.waitFor();
-        } catch (ArgusException | InterruptedException ex) {
+        } catch (InterruptedException | IOException ex) {
+            throw new ArgusException("Error running R script: " + ex.getMessage());
 //            System.out.println("R is not working arggg");
 //            System.out.println(ex.getMessage());
 //            System.out.println(Arrays.toString(ex.getStackTrace()));
             //Logger.getLogger(SyntheticDataController.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(SyntheticDataController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

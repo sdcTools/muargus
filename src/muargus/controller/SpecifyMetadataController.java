@@ -104,7 +104,6 @@ public class SpecifyMetadataController extends ControllerBase<MetadataMu> {
             setModel(this.metadataClone);
             if (getView().showConfirmDialog(message + "Save changes to file?")) {
                 String selectedFile;
-                //TODO: Ik heb nu new toegevoegd om te voorkomen dat men zonder dat iemand het door heeft de oude metadata overschrijft. Goed idee?
                 if (this.metadataClone.isSpss()) {
                     selectedFile = StrUtils.replaceExtension(MuARGUS.getSpssUtils().spssDataFileName, "New.rda"); 
                 } else {

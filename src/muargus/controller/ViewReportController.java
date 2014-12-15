@@ -1,4 +1,3 @@
-//TODO: Change constructor news document
 package muargus.controller;
 
 import argus.model.ArgusException;

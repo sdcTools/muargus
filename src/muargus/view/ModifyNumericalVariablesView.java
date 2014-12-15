@@ -24,7 +24,7 @@ import muargus.model.ModifyNumericalVariablesSpec;
 public class ModifyNumericalVariablesView extends DialogBase<ModifyNumericalVariablesController> {
 
     ModifyNumericalVariables model;
-    private final int[] variablesColumnWidth = {20, 80};//TODO: eerte kolom breder maken
+    private final int[] variablesColumnWidth = {60, 80};
     private int selectedRow = 0;
 
     /**
@@ -508,7 +508,7 @@ public class ModifyNumericalVariablesView extends DialogBase<ModifyNumericalVari
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(variablesScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(variablesScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 180, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
@@ -522,7 +522,7 @@ public class ModifyNumericalVariablesView extends DialogBase<ModifyNumericalVari
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                             .addComponent(topCodingPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addComponent(weightNoisePanel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -542,7 +542,7 @@ public class ModifyNumericalVariablesView extends DialogBase<ModifyNumericalVari
                             .addComponent(closeButton)
                             .addComponent(applyButton)))
                     .addComponent(variablesScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 363, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(15, Short.MAX_VALUE))
         );
 
         pack();
@@ -554,13 +554,6 @@ public class ModifyNumericalVariablesView extends DialogBase<ModifyNumericalVari
                 checkValidAnswer();
             }
         }
-        //TODO: check if undo should be applied when no value has been entered.
-//        else if (valueChanged() && !valueEntered()){
-//            if (showConfirmDialog("Do you want to undo the modification of " 
-//                    + getModifyNumericalVariablesSpec().getVariable().getName() + "?")) {
-//                checkValidAnswer();
-//            }
-//        }
         getController().close();
     }//GEN-LAST:event_closeButtonActionPerformed
 

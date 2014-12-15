@@ -201,7 +201,7 @@ public class MainFrameView extends javax.swing.JFrame {
         Object[][] data = new Object[model.getVariablesInTables().size()][];
         int rowIndex = 0;
         for (VariableMu variable : model.getVariablesInTables()) {
-            data[rowIndex] = toObjectArray(model, variable); //TODO mooier
+            data[rowIndex] = toObjectArray(model, variable); 
             rowIndex++;
         }
         if (!redraw) {

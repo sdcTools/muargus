@@ -145,9 +145,7 @@ public class GlobalRecodeView extends DialogBase<GlobalRecodeController> {
      * @return String containing the global recode file path.
      */
     private String askForGrcPath() {
-        //TODO: nu wordt automatisch een bestandsnaam ingevuld. Is dit handig of juist vervelend?
-        String selectedFile = getSelectedRecode().getVariable().getName() + ".grc";
-        return showFileDialog("Open Recode File", false, new String[]{"Recode files (*.grc)|grc"}, new File(selectedFile));
+        return showFileDialog("Open Recode File", false, new String[]{"Recode files (*.grc)|grc"});
     }
 
     /**
@@ -160,7 +158,7 @@ public class GlobalRecodeView extends DialogBase<GlobalRecodeController> {
      */
     private int getTruncatePositions(int varLength) {
         while (true) {
-            String result = JOptionPane.showInputDialog(null, "Number of digits for truncation", 1); //TODO: we moeten kiezen tussen een initiele waarde of een titel. Ik heb het hier gezet op een initiele waarde
+            String result = JOptionPane.showInputDialog(null, "Number of digits for truncation", 1); 
             if (result == null || result.length() == 0) {
                 return 0;
             }
@@ -683,8 +681,7 @@ public class GlobalRecodeView extends DialogBase<GlobalRecodeController> {
     }//GEN-LAST:event_closeButtonActionPerformed
 
     private void codelistRecodeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_codelistRecodeButtonActionPerformed
-        String selectedFile = getSelectedRecode().getVariable().getName() + ".cdl";
-        String filePath = showFileDialog("Open Codelist File", false, new String[]{"Codelist (*.cdl)|cdl"}, new File(selectedFile));
+        String filePath = showFileDialog("Open Codelist File", false, new String[]{"Codelist (*.cdl)|cdl"});
         if (filePath != null) {
             if (!filePath.substring(filePath.lastIndexOf(".")).toLowerCase().equals(".cdl")) {
                 filePath += ".cdl";

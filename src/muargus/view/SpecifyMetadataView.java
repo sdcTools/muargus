@@ -983,7 +983,8 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
         }
         try {
             this.variableListModel.remove(index);
-        } catch (Exception ex) { //TODO: change to more specific exception
+        } catch (ArrayIndexOutOfBoundsException ex) { 
+            // do nothing
         }
         calculateButtonStates();
         if (this.variablesList.getSelectedIndex() > -1) {
@@ -999,8 +1000,8 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
     }//GEN-LAST:event_cancelButtonActionPerformed
 
     private void codelistfileButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_codelistfileButtonActionPerformed
-        String selectedFile = getSelectedVariable().getName() + ".cdl";
-        String filePath = showFileDialog("Open Codelist File", false, new String[]{"Codelist (*.cdl)|cdl"}, new File(selectedFile));
+        //String selectedFile = getSelectedVariable().getName() + ".cdl";
+        String filePath = showFileDialog("Open Codelist File", false, new String[]{"Codelist (*.cdl)|cdl"});//, new File(selectedFile));
         if (filePath != null) {
             if (!filePath.substring(filePath.lastIndexOf(".")).toLowerCase().equals(".cdl")) {
                 filePath += ".cdl";

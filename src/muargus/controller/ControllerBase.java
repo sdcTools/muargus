@@ -126,29 +126,4 @@ public class ControllerBase<T> implements PropertyChangeListener {
         return this.stepName;
     }
 
-    //TODO: remove
-//    public double[][] readVariablesFromFile(File file, String separator, int nVariables) throws ArgusException {
-//        NumberFormat format = NumberFormat.getInstance(MuARGUS.getLocale());
-//        ArrayList<double[]> records = new ArrayList();
-//        try {
-//            BufferedReader reader = new BufferedReader(new FileReader(file));
-//            String line;
-//            while ((line = reader.readLine()) != null) {
-//                String[] fields = line.split(separator);
-//                if (fields.length != nVariables) {
-//                    throw new ArgusException("Incorret number of fields");
-//                }
-//                double[] doubles = new double[nVariables];
-//                for (int index=0; index < nVariables; index++) {
-//                    doubles[index] = format.parse(fields[index]).doubleValue();
-//                }
-//                records.add(doubles);
-//            }
-//        }
-//        catch (IOException | ParseException ex) {
-//            throw new ArgusException("Error reading replacement file: " + ex.getMessage());
-//        }
-//        double[][] arr = new double[records.size()][];
-//        return records.toArray(arr);
-//    }
 }

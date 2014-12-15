@@ -110,7 +110,7 @@ public final class MetadataMu {
      * @return Boolean stating whether the change is significant or not.
      */
     public boolean significantDifference(MetadataMu metadata) {
-        //TODO: implemenet
+        //Currently not implemented. Good Luck!
         //significant changes are for instance changes in field length, variable type, etc
         //insignificant changes are for instance changes in codelist file
         //for now, everything is significant
