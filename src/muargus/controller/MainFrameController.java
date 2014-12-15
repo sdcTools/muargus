@@ -519,7 +519,7 @@ public class MainFrameController {
                 String css = "<link href=\"file:///" + HTMLReportWriter.css.getAbsolutePath() + "\" rel=\"stylesheet\" type=\"text/css\">";
                 this.news = newsString.replace("<!--{CSS}-->", css);
             } catch (IOException ex) {
-                Logger.getLogger(MainFrameController.class.getName()).log(Level.SEVERE, null, ex);
+                //Logger.getLogger(MainFrameController.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
 
