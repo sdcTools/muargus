@@ -983,7 +983,8 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
         }
         try {
             this.variableListModel.remove(index);
-        } catch (Exception ex) { //TODO: change to more specific exception
+        } catch (ArrayIndexOutOfBoundsException ex) { 
+            // do nothing
         }
         calculateButtonStates();
         if (this.variablesList.getSelectedIndex() > -1) {

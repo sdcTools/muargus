@@ -435,7 +435,6 @@ public class Combinations {
         return this.calculateNumberOfColumns();
     }
 
-    //TODO: naar controller?
     /**
      * Calculates the number of Columns. It sets the numberOfVariables to the
      * size of the largest table and adds two columns (one for the riskModel and

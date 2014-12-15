@@ -275,7 +275,6 @@ public class RecodeMu {
         this.positionsTruncated = positionsTruncated;
     }
 
-    //TODO: Zullen we dit veranderen naar een getData() en in de controller stoppen?
     /**
      * Gets the data shown in the variables table for one row.
      *

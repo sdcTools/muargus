@@ -24,7 +24,7 @@ import muargus.model.ModifyNumericalVariablesSpec;
 public class ModifyNumericalVariablesView extends DialogBase<ModifyNumericalVariablesController> {
 
     ModifyNumericalVariables model;
-    private final int[] variablesColumnWidth = {20, 80};//TODO: eerte kolom breder maken
+    private final int[] variablesColumnWidth = {30, 80};//TODO: eerte kolom breder maken? vergroten fixen
     private int selectedRow = 0;
 
     /**
@@ -554,13 +554,6 @@ public class ModifyNumericalVariablesView extends DialogBase<ModifyNumericalVari
                 checkValidAnswer();
             }
         }
-        //TODO: check if undo should be applied when no value has been entered.
-//        else if (valueChanged() && !valueEntered()){
-//            if (showConfirmDialog("Do you want to undo the modification of " 
-//                    + getModifyNumericalVariablesSpec().getVariable().getName() + "?")) {
-//                checkValidAnswer();
-//            }
-//        }
         getController().close();
     }//GEN-LAST:event_closeButtonActionPerformed
 

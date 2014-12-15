@@ -385,19 +385,6 @@ public class NumericalRankSwappingView extends DialogBase<NumericalRankSwappingC
         this.setVisible(false);
     }//GEN-LAST:event_okButtonActionPerformed
 
-    //TODO: get index generaliseren??
-//    private int getIndex(int[] index, int size) {
-//        int selected;
-//        if (index.length < 1) {
-//            selected = 0;
-//        } else if (size == index[index.length - 1] + 1) {
-//            selected = 0;
-//        } else {
-//            selected = index[index.length - 1] + 1;
-//        }
-//        return selected;
-//    }
-
     private void toSelectedButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_toSelectedButtonActionPerformed
         boolean added = false;
         int index[] = this.variablesTable.getSelectedRows();

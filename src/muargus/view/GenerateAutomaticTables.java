@@ -248,14 +248,10 @@ public class GenerateAutomaticTables extends DialogBase {
      */
     private void numberOfTabels(long numberOfTables, int dimensions, int numberOfVariables) {
         if (dimensions > 0) {
-            try {
-                long tempNumber = numberOfTables * numberOfVariables;
-                int tempNumberOfVariables = numberOfVariables - 1;
-                int tempDimensions = dimensions - 1;
-                numberOfTabels(tempNumber, tempDimensions, tempNumberOfVariables);
-            } catch (Exception e) { //TODO: more specific exception?
-                JOptionPane.showMessageDialog(this, "To ... many ... dimensions ...\nCan't ... visualize :-(");
-            }
+            long tempNumber = numberOfTables * numberOfVariables;
+            int tempNumberOfVariables = numberOfVariables - 1;
+            int tempDimensions = dimensions - 1;
+            numberOfTabels(tempNumber, tempDimensions, tempNumberOfVariables);
         } else if (dimensions == 0) {
             this.numberOfTables = numberOfTables;
         }

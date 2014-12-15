@@ -566,7 +566,6 @@ public class SelectCombinationsView extends DialogBase<SelectCombinationsControl
             }
         }
 
-        //TODO: progressbar laten zien?
         // removes double tables
         if (numberOfOldTables < this.model.getMaximumNumberOfTables()) {
             for (int i = 0; i < numberOfOldTables; i++) {
@@ -594,9 +593,12 @@ public class SelectCombinationsView extends DialogBase<SelectCombinationsControl
 
     private void setTableRiskModelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_setTableRiskModelButtonActionPerformed
         if (this.model.getTables().size() > 0) {
-            try { // afvangen geen tabel geselecteerd
-                //TODO: geen try catch 
+            
                 int index = this.table.getSelectedRow();
+                if(index < 0){
+                    showMessage("No table is selected");
+                    return;
+                }
                 index = this.table.convertRowIndexToModel(index);
                 TableMu tableMu = this.model.getTables().get(index);
                 if (!getController().weightVariableExists()) {
@@ -614,9 +616,6 @@ public class SelectCombinationsView extends DialogBase<SelectCombinationsControl
                 updateValues();
                 this.table.getSelectionModel().setSelectionInterval(index, index);
 
-            } catch (IndexOutOfBoundsException e) {
-                showMessage("No table is selected");
-            }
         }
     }//GEN-LAST:event_setTableRiskModelButtonActionPerformed
 

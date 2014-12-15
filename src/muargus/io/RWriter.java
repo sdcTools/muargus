@@ -56,7 +56,7 @@ public class RWriter {
      */
     public static void writeSynthetic(SyntheticDataSpec synthData) throws ArgusException {
         try (PrintWriter writer = new PrintWriter(synthData.getrScriptFile())) {
-            writer.println("require(\"hybridIPSO\")");//TODO: change to hybridIPSO3 when a new hybridIPSO is compiled.
+            writer.println("require(\"hybridIPSO\")");
             writer.println(String.format("hybrid_IPSO(\"%s\",\"%s\", K=%d,  out=TRUE, out_file=\"%s\", separator=\",\")",
                     synthData.doubleSlashses(synthData.getAlphaFile().getAbsolutePath()),
                     synthData.doubleSlashses(synthData.getReplacementFile().getInputFilePath()) + "2",

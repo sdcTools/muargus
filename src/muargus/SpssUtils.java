@@ -188,25 +188,20 @@ public class SpssUtils {
             boolean found = false;
 
             for (SpssVariable spssVariable : this.spssVariables) {
-                //TODO: name & decimal check samen nemen
                 if (variable.getName().equals(spssVariable.getName())) {
-                    if (/*oldSpssMeta || (variable.getVariableLength() == spssVariable.getVariableLength() &&*/
-                             variable.getDecimals() == spssVariable.getNumberOfDecimals())/*)*/ {
-                        //if (oldSpssMeta) {
-                            variable.setVariableLength(spssVariable.getVariableLength());
-                            variable.setDecimals(spssVariable.getNumberOfDecimals());
-                            int numberOfMissings = isNumeric(spssVariable) ? spssVariable.getNumericMissings().length : spssVariable.getStringMissings().length;
-                            for (int i = 0; i < numberOfMissings; i++) {
-                                //TODO: If use can specify new missings, then to check if they are the same is wrong
-                                String missing;
-                                if (isNumeric(spssVariable)) {
-                                    missing = this.getIntIfPossible(spssVariable.getNumericMissings()[i]);
-                                } else {
-                                    missing = spssVariable.getStringMissings()[i];
-                                }
-                                variable.setMissing(i, missing);
+                    if (variable.getDecimals() == spssVariable.getNumberOfDecimals()) {
+                        variable.setVariableLength(spssVariable.getVariableLength());
+                        variable.setDecimals(spssVariable.getNumberOfDecimals());
+                        int numberOfMissings = isNumeric(spssVariable) ? spssVariable.getNumericMissings().length : spssVariable.getStringMissings().length;
+                        for (int i = 0; i < numberOfMissings; i++) {
+                            String missing;
+                            if (isNumeric(spssVariable)) {
+                                missing = this.getIntIfPossible(spssVariable.getNumericMissings()[i]);
+                            } else {
+                                missing = spssVariable.getStringMissings()[i];
                             }
-                        //}
+                            variable.setMissing(i, missing);
+                        }
                         variable.setSpssVariable(spssVariable);
                         spssVariable.setSelected(true);
                         variable.setStartingPosition(startingPos);
@@ -214,9 +209,6 @@ public class SpssUtils {
                         found = true;
                         break;
                     } else {
-//                        if (variable.getVariableLength() != spssVariable.getVariableLength()) {
-//                            message += "\nThe variable lengths of " + variable.getName() + " are different.";
-//                        }
                         if (variable.getDecimals() != spssVariable.getNumberOfDecimals()) {
                             message += "\nThe number of decimals of " + variable.getName() + " are different.";
                         }
@@ -593,18 +585,18 @@ public class SpssUtils {
     }
 
     //TODO: remove??
-    /**
-     * Asks for the directory where spss is installed.
-     *
-     * @param parent the Frame of the mainFrame.
-     */
-    private void getSpssInstallationDirectory(Frame parent) {
-        JFileChooser fileChooser = new JFileChooser();
-        fileChooser.setDialogTitle("Set IBM SPSS directory");
-        fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-        fileChooser.setMultiSelectionEnabled(false);
-        fileChooser.showOpenDialog(parent);
-        System.out.println(fileChooser.getSelectedFile().getPath());
-    }
+//    /**
+//     * Asks for the directory where spss is installed.
+//     *
+//     * @param parent the Frame of the mainFrame.
+//     */
+//    private void getSpssInstallationDirectory(Frame parent) {
+//        JFileChooser fileChooser = new JFileChooser();
+//        fileChooser.setDialogTitle("Set IBM SPSS directory");
+//        fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+//        fileChooser.setMultiSelectionEnabled(false);
+//        fileChooser.showOpenDialog(parent);
+//        System.out.println(fileChooser.getSelectedFile().getPath());
+//    }
 
 }

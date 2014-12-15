@@ -387,9 +387,7 @@ public class MakeProtectedFileView extends DialogBase<MakeProtectedFileControlle
         String filter;
         String selectedFile;
         if(getController().getMetadata().isSpss()){
-            filter = "Safefile (*.sav)|sav"; //TODO: verander zodat de saf + rds file in de temp directory staan
-            //TODO: replace by safemeta.
-            
+            filter = "Safefile (*.sav)|sav"; 
             selectedFile = StrUtils.replaceExtension(MuARGUS.getSpssUtils().spssDataFileName, "Safe.sav");
         } else {
             filter = "Safefile (*.saf)|saf";

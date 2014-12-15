@@ -145,7 +145,7 @@ public class GlobalRecodeView extends DialogBase<GlobalRecodeController> {
      * @return String containing the global recode file path.
      */
     private String askForGrcPath() {
-        //TODO: nu wordt automatisch een bestandsnaam ingevuld. Is dit handig of juist vervelend?
+        //TODO: nu wordt automatisch een bestandsnaam ingevuld. Is dit handig of juist vervelend? Dit is vervelend
         String selectedFile = getSelectedRecode().getVariable().getName() + ".grc";
         return showFileDialog("Open Recode File", false, new String[]{"Recode files (*.grc)|grc"}, new File(selectedFile));
     }
@@ -160,7 +160,7 @@ public class GlobalRecodeView extends DialogBase<GlobalRecodeController> {
      */
     private int getTruncatePositions(int varLength) {
         while (true) {
-            String result = JOptionPane.showInputDialog(null, "Number of digits for truncation", 1); //TODO: we moeten kiezen tussen een initiele waarde of een titel. Ik heb het hier gezet op een initiele waarde
+            String result = JOptionPane.showInputDialog(null, "Number of digits for truncation", 1); 
             if (result == null || result.length() == 0) {
                 return 0;
             }

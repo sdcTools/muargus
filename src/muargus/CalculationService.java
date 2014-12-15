@@ -395,20 +395,19 @@ public class CalculationService {
     }
 
     //TODO: wordt deze methode gebruikt?
-    /**
-     *
-     * @param worker
-     * @return
-     */
-    private PropertyChangeListener getWorkerPropertyChangeListener(final SwingWorker worker) {
-        return new PropertyChangeListener() {
-            @Override
-            public void propertyChange(PropertyChangeEvent evt) {
-                worker.firePropertyChange(evt.getPropertyName(), evt.getOldValue(), evt.getNewValue());
-            }
-        };
-    }
-
+//    /**
+//     *
+//     * @param worker
+//     * @return
+//     */
+//    private PropertyChangeListener getWorkerPropertyChangeListener(final SwingWorker worker) {
+//        return new PropertyChangeListener() {
+//            @Override
+//            public void propertyChange(PropertyChangeEvent evt) {
+//                worker.firePropertyChange(evt.getPropertyName(), evt.getOldValue(), evt.getNewValue());
+//            }
+//        };
+//    }
     /**
      * Adds a variable.
      *
@@ -423,7 +422,7 @@ public class CalculationService {
         if (variable.isNumeric() && !variable.isWeight() && "".equals(missing0)) {
             missing0 = StringUtils.repeat("X", variable.getVariableLength());
         } else {
-            missing0 += StringUtils.repeat(" ", variable.getVariableLength() - missing0.length());      //Make the right length
+            missing0 += StringUtils.repeat(" ", variable.getVariableLength() - missing0.length());//Make the right length
         }
 
         return this.c.SetVariable(varNr,
@@ -440,35 +439,6 @@ public class CalculationService {
                 getRelatedVariableIndex(variable));
     }
 
-    //TODO: wordt deze methode gebruikt?
-//    /**
-//     * 
-//     * @param model
-//     * @param metadata
-//     * @return
-//     * @throws ArgusException 
-//     */
-//    private int getNVar(Combinations model, MetadataMu metadata) throws ArgusException {
-//        //For free format, all variables
-//        if (metadata.getDataFileType() != MetadataMu.DATA_FILE_TYPE_FIXED) {
-//            return metadata.getVariables().size();
-//        }
-//
-//        int nVar = model.getVariablesInTables().size();
-//        if (model.isRiskModel()) {
-//            //Add weight when risk model is used.
-//            for (VariableMu weightVar : metadata.getVariables()) {
-//                if (weightVar.isWeight()) {
-//                    if (!model.getVariablesInTables().contains(weightVar)) {
-//                        nVar++;
-//                    }
-//                    return nVar;
-//                }
-//            }
-//            throw new ArgusException("Risk model but no weight variable");
-//        }
-//        return nVar;
-//    }
     /**
      * Gets an ArrayList containing all the Variables in the Metadata.
      *
@@ -628,7 +598,7 @@ public class CalculationService {
      * background.
      *
      * @throws ArgusException Throws an ArgusException when an error occurs
-     * while calculating the unsafe combinations.
+     * while computing the tables and calculating the unsafe combinations.
      */
     private void calculateInBackground() throws ArgusException {
         Combinations model = this.metadata.getCombinations();
@@ -647,7 +617,7 @@ public class CalculationService {
                     index,
                     table.getThreshold(),
                     table.getVariables().size(),
-                    getVarIndicesInTable(table),//, model),
+                    getVarIndicesInTable(table),
                     table.isRiskModel(),
                     riskVarIndex);
             if (!result) {
@@ -668,53 +638,62 @@ public class CalculationService {
     }
 
     /**
+     * Gets the variable indices (1-based) in the file.
      *
-     * @param variables
-     * @return
+     * @param variables ArrayList of VariableMu's for which the indices are
+     * requisted.
+     * @return Array of integers containing the 1-based indices of the
+     * variables.
      */
     private int[] getVarIndicesInFile(ArrayList<VariableMu> variables) {
         int[] indices = new int[variables.size()];
         for (int index = 0; index < indices.length; index++) {
-            indices[index] = getIndexOf(variables.get(index));//1 + this.metadata.getVariables().indexOf(variables.get(index));
+            indices[index] = getIndexOf(variables.get(index));
         }
         return indices;
     }
 
     /**
+     * Gets the variable indices (1-based) in the tables.
      *
-     * @param table
-     * @param model
-     * @return
+     * @param table ArrayList of TableMu's for which the indices of it's
+     * variables are requisted.
+     * @return Array of integers containing the 1-based indices of the variables
+     * in the tables.
      */
-    private int[] getVarIndicesInTable(TableMu table) {//, Combinations model) {
+    private int[] getVarIndicesInTable(TableMu table) {
         int[] indices = new int[table.getVariables().size()];
         for (int index = 0; index < indices.length; index++) {
             indices[index] = getIndexOf(table.getVariables().get(index));
-            //indices[index] = 1 + getVariables().indexOf(table.getVariables().get(index));
         }
         return indices;
     }
 
     /**
+     * Gets the variable index (1-based) of the related variable.
      *
-     * @param variable
-     * @return
+     * @param variable VariableMu instance for which the index of it's related
+     * variableMu is requisted.
+     * @return Integer containing the index of the related variable of the given
+     * variable.
      */
     private int getRelatedVariableIndex(VariableMu variable) {
         if (variable.getRelatedVariable() == null) {
             return 0;
         }
-        return getIndexOf(variable.getRelatedVariable());//this.metadata.getVariables().indexOf(variable.getRelatedVariable()) + 1;
+        return getIndexOf(variable.getRelatedVariable());
 
     }
 
     /**
+     * Sets the properties for the safe file for a given variable.
      *
-     * @param index
-     * @param variable
-     * @param metadata
-     * @param delta
-     * @return
+     * @param index Integer containing the index of the variable (1-based).
+     * @param variable VariableMu instance of the given variable.
+     * @param metadata MetadataMu containing the metadata.
+     * @param delta Integer containing the difference in startingposition
+     * compared to the original data file.
+     * @return Integer containing the delta value.
      */
     private int setSafeFileProperties(final int index, final VariableMu variable, MetadataMu metadata, int delta) {
         if (index == 0) {
@@ -758,27 +737,33 @@ public class CalculationService {
     }
 
     /**
+     * Sets for a given numerical variable the code to be used to replace all
+     * values below a certain value. E.g., all values below 100,000 receive the
+     * text "<=100,000"
      *
-     * @param variable
-     * @param top
-     * @param value
-     * @param replacement
-     * @param undo
-     * @throws ArgusException
+     * @param variable VariableMu instance
+     * @param top Boolean indicating whether top or bottom coding should be
+     * applied.
+     * @param value values <= BottomLevel or >= TopLevel are to be replaced
+     * depending whether top = true.
+     * @param replacement String containing the code used for replacement
+     * @param undo Boolean indicating whether the bottom/top coding should be
+     * undone.
+     * @throws ArgusException Throws an ArgusException when an error occurs
+     * while doing top/bottom coding. This occurs when the variable index is
+     * wrong.
      */
     public void setTopBottomCoding(VariableMu variable, boolean top, double value, String replacement, boolean undo) throws ArgusException {
         boolean result;
         if (top) {
             result = this.c.SetCodingTop(
                     getIndexOf(variable),
-                    //getVariables().indexOf(variable) + 1,
                     value,
                     replacement,
                     undo);
         } else {
             result = this.c.SetCodingBottom(
                     getIndexOf(variable),
-                    //getVariables().indexOf(variable) + 1,
                     value,
                     replacement,
                     undo);
@@ -789,15 +774,20 @@ public class CalculationService {
     }
 
     /**
+     * Sets for a numerical variable the rounding base. Rounding base can
+     * contain decimals, e.g. "2.5". In that case give as rounding base 2.5 and
+     * nDec=1.
      *
-     * @param variable
-     * @param base
-     * @param nDecimals
-     * @param undo
-     * @throws ArgusException
+     * @param variable VariableMu instance
+     * @param base Double containing the rounding base
+     * @param nDecimals Integer containing the number of decimals in rounding
+     * base
+     * @param undo Boolean indicating whether the rounding should be undone.
+     * @throws ArgusException Throws an ArgusException when an error occurs
+     * while rounding. This occurs when the variable index is wrong.
      */
     public void setRounding(VariableMu variable, Double base, int nDecimals, boolean undo) throws ArgusException {
-        boolean result = this.c.SetRound(getIndexOf(variable),//getVariables().indexOf(variable) + 1,
+        boolean result = this.c.SetRound(getIndexOf(variable),
                 base,
                 nDecimals,
                 undo);
@@ -807,14 +797,22 @@ public class CalculationService {
     }
 
     /**
+     * Sets the weight noise. The weight noise is the percentage to decrease or
+     * increase the value of a numeric variable. Variable will be changed by
+     * percentage, randomly selected from the interval (100 - WeightNoise, 100 +
+     * WeightNoise)
      *
-     * @param variable
-     * @param noise
-     * @param undo
-     * @throws ArgusException
+     * @param variable VariableMu instance
+     * @param noise Double containing the percentage by which the value is
+     * reduced/increased
+     * @param undo Boolean indicating whether the setWeightNoise should be
+     * undone.
+     * @throws ArgusException Throws an ArgusException when an error occurs
+     * while setting the weight noise. This occurs when the variable index is
+     * wrong, e.g. WeightNoise <= 0, WeighthNoise > 100.
      */
     public void setWeightNoise(VariableMu variable, double noise, boolean undo) throws ArgusException {
-        boolean result = this.c.SetWeightNoise(getIndexOf(variable),//getVariables().indexOf(variable) + 1,
+        boolean result = this.c.SetWeightNoise(getIndexOf(variable),
                 noise,
                 undo);
         if (!result) {
@@ -823,26 +821,28 @@ public class CalculationService {
     }
 
     /**
-     *
+     * Fills the safe metadata.
      */
     public void fillSafeFileMetadata() {
         MetadataMu safeMeta = this.metadata.getCombinations().getProtectedFile().getSafeMeta();
-        //ArrayList<VariableMu> variables = getVariables();
         int delta = 0;
         for (VariableMu var : safeMeta.getVariables()) {
-            int varIndex = getIndexOf(var);//variables.indexOf(var) + 1;
+            int varIndex = getIndexOf(var);
             delta = setSafeFileProperties(varIndex, var, this.metadata, delta);
         }
         safeMeta.setRecordCount(this.c.NumberofRecords());
     }
 
     /**
+     * Gets the variable info.
      *
-     * @throws ArgusException
+     * @throws ArgusException Throws an ArgusException when an error occurs
+     * while retrieving the variable info. This can occur in the .dll for the
+     * functions UnsafeVariable, UnsafeVariablePrepare, UnsafeVariablesCodes and
+     * UnsafeVariableClose.
      */
     public void getVariableInfo() throws ArgusException {
         Combinations model = this.metadata.getCombinations();
-        //boolean hasRecode = (model.getGlobalRecode() != null);
         model.getUnsafeCombinations().clear();
         for (int varIndex = 0; varIndex < getVariables().size(); varIndex++) {
             VariableMu variable = getVariables().get(varIndex);
@@ -913,12 +913,15 @@ public class CalculationService {
     }
 
     /**
+     * Sets PRAM variables and values.
      *
-     * @param pramVariable
-     * @throws ArgusException
+     * @param pramVariable PramVariableSpec instance containing the the variable
+     * specifications for PRAM.
+     * @throws ArgusException Throws an ArgusException when an error occurs
+     * while applying PRAM. This can occur in the .dll for the functions
+     * SetPramVar, SetPramValue and ClosePramVar.
      */
     public void setPramVariable(PramVariableSpec pramVariable) throws ArgusException {
-        //int varIndex = getVariables().indexOf(pramVariable.getVariable()) + 1;
         int varIndex = getIndexOf(pramVariable.getVariable());
         int bandWidth = pramVariable.useBandwidth() ? pramVariable.getBandwidth() : -1;
         boolean result = this.c.SetPramVar(varIndex, bandWidth, false);
@@ -941,12 +944,14 @@ public class CalculationService {
     }
 
     /**
+     * Undo's PRAM. Resets the PRAM'ed variable to the pre-PRAM'ed values.
      *
-     * @param pramVariable
-     * @throws ArgusException
+     * @param pramVariable PramVariableSpec instance containing the the variable
+     * specifications for PRAM.
+     * @throws ArgusException Throws an ArgusException when an error occurs
+     * while undoing PRAM.
      */
     public void undoSetPramVariable(PramVariableSpec pramVariable) throws ArgusException {
-        //int varIndex = getVariables().indexOf(pramVariable.getVariable()) + 1;
         int varIndex = getIndexOf(pramVariable.getVariable());
         boolean result = this.c.SetPramVar(varIndex, -1, true);
         if (!result) {
@@ -955,12 +960,14 @@ public class CalculationService {
     }
 
     /**
+     * Gets the minimum and maximum value of a numeric variable.
      *
-     * @param variable
-     * @return
+     * @param variable VariableMu instance of a numeric variable.
+     * @return Array of doubles containing the minimum and maximum value. The
+     * minimum value has the index 0 and the maximum value the index 1.
      */
     public double[] getMinMax(VariableMu variable) {
-        int varIndex = getIndexOf(variable);//getVariables().indexOf(variable) + 1;
+        int varIndex = getIndexOf(variable);
         double[] min = new double[1];
         double[] max = new double[1];
         this.c.GetMinMaxValue(varIndex, min, max);
@@ -969,15 +976,17 @@ public class CalculationService {
     }
 
     /**
+     * Calculates the number of unsafe records for the risk model.
      *
-     * @param table
-     * @param riskThreshold
-     * @param household
-     * @return
-     * @throws ArgusException
+     * @param table TableMu instance for which the risk model is set.
+     * @param riskThreshold Double containing the risk threshold.
+     * @param household Boolean indicating whether the data are household data.
+     * @return Integer containing the number of unsafe records.
+     * @throws ArgusException Throws an ArgusException when an error occurs
+     * while calculating the number of unsafe records.
      */
     public int calculateUnsafe(TableMu table, double riskThreshold, boolean household) throws ArgusException {
-        int tableIndex = getIndexOf(table);//this.metadata.getCombinations().getTables().indexOf(table) + 1;
+        int tableIndex = getIndexOf(table);
         int[] nUnsafe = new int[1];
         int[] dummy = new int[1];
         boolean result = household
@@ -990,14 +999,16 @@ public class CalculationService {
     }
 
     /**
+     * Calculate the reidentification rate.
      *
-     * @param table
-     * @param riskThreshold
-     * @return
-     * @throws ArgusException
+     * @param table TableMu instance for which the risk model is set.
+     * @param riskThreshold Double containing the risk threshold.
+     * @return Double containing the reidentification rate.
+     * @throws ArgusException Throws an ArgusException when an error occurs
+     * while calculating the reidentification rate.
      */
     public double calculateReidentRate(TableMu table, double riskThreshold) throws ArgusException {
-        int tableIndex = getIndexOf(table);//int tableIndex = this.metadata.getCombinations().getTables().indexOf(table) + 1;
+        int tableIndex = getIndexOf(table);
         double[] reidentRate = new double[1];
         if (!this.c.ComputeBIRRateThreshold(tableIndex, riskThreshold, reidentRate)) {
             throw new ArgusException("Error calculating reident rate");
@@ -1006,15 +1017,17 @@ public class CalculationService {
     }
 
     /**
+     * Calculates the risk threshold.
      *
-     * @param table
-     * @param nUnsafe
-     * @param household
-     * @return
-     * @throws ArgusException
+     * @param table TableMu instance for which the risk model is set.
+     * @param nUnsafe Integer containing the number of unsafe records.
+     * @param household Boolean indicating whether the data are household data.
+     * @return Double containing the risk threshold.
+     * @throws ArgusException Throws an ArgusException when an error occurs
+     * while calculating the risk threshold.
      */
     public double calculateRiskThreshold(TableMu table, int nUnsafe, boolean household) throws ArgusException {
-        int tableIndex = getIndexOf(table);//int tableIndex = this.metadata.getCombinations().getTables().indexOf(table) + 1;
+        int tableIndex = getIndexOf(table);
         double[] riskThreshold = new double[1];
         int[] errorCode = new int[1];
         //c.SetProgressListener(null);
@@ -1028,18 +1041,22 @@ public class CalculationService {
     }
 
     /**
+     * Fills the risk model classes with the histogram data.
      *
-     * @param table
-     * @param classes
-     * @param cumulative
-     * @return
-     * @throws ArgusException
+     * @param table TableMu instance for which the risk model is set.
+     * @param classes ArrayList of RiskModelClasses. A RiskModelClass contains
+     * information on a single pillar of the risk model histogram.
+     * @param cumulative Boolean indicating whether the histogram is a
+     * cumulative historgram.
+     * @return Double containing the re-identification rate (ksi).
+     * @throws ArgusException Throws an ArgusException when an error occurs
+     * while filling the risk model classes with the histogram data.
      */
     public double fillHistogramData(TableMu table, ArrayList<RiskModelClass> classes, boolean cumulative) throws ArgusException {
         classes.clear();
         double[] ksi = new double[1];
 
-        int tableIndex = getIndexOf(table);//this.metadata.getCombinations().getTables().indexOf(table) + 1;
+        int tableIndex = getIndexOf(table);
         int nClasses = MuARGUS.getNHistogramClasses(cumulative);
         double[] classLeftValue = new double[nClasses + 1];
         int[] frequency = new int[nClasses + 1];

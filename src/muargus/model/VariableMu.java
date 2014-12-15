@@ -1,5 +1,3 @@
-//TODO: change codeList File from String to File??
-//TODO: trucable or truncatable?
 package muargus.model;
 
 import argus.model.SpssVariable;
@@ -29,7 +27,7 @@ public class VariableMu {
     private int idLevel;
     private int suppressionPriority;
     private int decimals;
-    private String codeListFile; //TODO: change to File??
+    private String codeListFile; 
 
     private boolean numeric;
     private boolean categorical;
