@@ -5,6 +5,7 @@ import argus.model.DataFilePair;
 import argus.utils.StrUtils;
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
@@ -439,25 +440,15 @@ public class MainFrameController {
 
         if (this.news.equals("")) {
             try {
-                BufferedReader reader = new BufferedReader(new FileReader(this.newsLocation));
-                boolean finished = false;
-                do {
-                    try {
-
-                        String temp = reader.readLine();
-                        if (temp.contains("<link href=")) {
-                            temp = "<link href=\"file:///" + HTMLReportWriter.css.getAbsolutePath() + "\" rel=\"stylesheet\" type=\"text/css\">";
-                        }
-                        this.news = this.news + temp;
-                        if (temp.equals("</html>")) {
-                            finished = true;
-                        }
-                    } catch (IOException e) {
-                        finished = true;
-                    }
-                } while (!finished);
-            } catch (FileNotFoundException ex) {
-                Logger.getLogger(MainFrameController.class.getName()).log(Level.SEVERE, null, ex);
+                FileInputStream fis = new FileInputStream(this.newsLocation);
+                byte[] data = new byte[(int) this.newsLocation.length()];
+                fis.read(data);
+                fis.close();
+                String newsString = new String(data, "UTF-8");
+                String css = "<link href=\"file:///" + HTMLReportWriter.css.getAbsolutePath() + "\" rel=\"stylesheet\" type=\"text/css\">";
+                this.news = newsString.replace("<!--{CSS}-->", css);
+            } catch (IOException ex) {
+                //Logger.getLogger(MainFrameController.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
 
