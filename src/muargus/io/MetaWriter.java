@@ -116,7 +116,7 @@ public class MetaWriter {
      */
     private static void writeVariableToRda(PrintWriter writer, VariableMu variable, int dataFileType, boolean all, MetadataMu metadata) {
         writer.print(variable.getName());
-        if (MetadataMu.DATA_FILE_TYPE_FIXED == dataFileType) {// || dataFileType == MetadataMu.DATA_FILE_TYPE_SPSS) {
+        if (MetadataMu.DATA_FILE_TYPE_FIXED == dataFileType) {
             writer.print(String.format(" %d", variable.getStartingPosition()));
         }
         if (!metadata.isSpss()) {
@@ -158,7 +158,6 @@ public class MetaWriter {
             if (all) {
                 writer.println("    <IDLEVEL> " + variable.getIdLevel());
                 writer.println("    <SUPPRESSPRIORITY> " + variable.getSuppressPriority());
-                //writer.println("    <SUPPRESSWEIGHT> " + variable.getSuppressPriority());
             }
             if (variable.isCodelist()) {
                 writer.println("    <CODELIST> " + StrUtils.quote(variable.getCodeListFile()));

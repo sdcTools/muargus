@@ -386,8 +386,8 @@ public class MakeProtectedFileView extends DialogBase<MakeProtectedFileControlle
     private void makeFileButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_makeFileButtonActionPerformed
         String filter;
         String selectedFile;
-        if(getController().getMetadata().isSpss()){
-            filter = "Safefile (*.sav)|sav"; 
+        if (getController().getMetadata().isSpss()) {
+            filter = "Safefile (*.sav)|sav";
             selectedFile = StrUtils.replaceExtension(MuARGUS.getSpssUtils().spssDataFileName, "Safe.sav");
         } else {
             filter = "Safefile (*.saf)|saf";

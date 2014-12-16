@@ -100,7 +100,8 @@ public class RecodeMu {
     }
 
     /**
-     * Get the path of the code list file that was used when applying the recode.
+     * Get the path of the code list file that was used when applying the
+     * recode.
      *
      * @return String containing the the path of the code list file that was
      * used when applying the recpde
@@ -110,10 +111,11 @@ public class RecodeMu {
     }
 
     /**
-     * Set the path of the code list file that was used when applying the recode.
+     * Set the path of the code list file that was used when applying the
+     * recode.
      *
-     * @param appliedCodeListFile String containing the the path of the code list file
-     * that was used when applying the recode.
+     * @param appliedCodeListFile String containing the the path of the code
+     * list file that was used when applying the recode.
      */
     public void setAppliedCodeListFile(String appliedCodeListFile) {
         this.appliedCodeListFile = appliedCodeListFile;
@@ -312,9 +314,7 @@ public class RecodeMu {
             return false;
         }
 
-        return //(this.recoded == cmp.recoded) &&
-                //(this.truncated == cmp.truncated) &&
-                (this.codeListFile == null ? cmp.codeListFile == null : this.codeListFile.equals(cmp.codeListFile))
+        return (this.codeListFile == null ? cmp.codeListFile == null : this.codeListFile.equals(cmp.codeListFile))
                 && (this.grcFile == null ? cmp.grcFile == null : this.grcFile.equals(cmp.grcFile))
                 && (this.grcText == null ? cmp.grcText == null : this.grcText.equals(cmp.grcText))
                 && (this.missing_1_new == null ? cmp.missing_1_new == null : this.missing_1_new.equals(cmp.missing_1_new))
@@ -334,8 +334,6 @@ public class RecodeMu {
     @Override
     public int hashCode() {
         int hash = 3;
-        //hash = 41 * hash + Objects.hashCode(this.recoded);
-        //hash = 41 * hash + Objects.hashCode(this.truncated);
         hash = 41 * hash + Objects.hashCode(this.codeListFile);
         hash = 41 * hash + Objects.hashCode(this.grcFile);
         hash = 41 * hash + Objects.hashCode(this.grcText);

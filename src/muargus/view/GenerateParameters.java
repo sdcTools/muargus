@@ -171,12 +171,12 @@ public class GenerateParameters extends DialogBase {
     }// </editor-fold>//GEN-END:initComponents
 
     private void okButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okButtonActionPerformed
-        if (separatorTextField.getText().length() == 0) {
+        if (this.separatorTextField.getText().length() == 0) {
             showMessage("Please enter a separator");
             return;
         }
         try {
-            if (Integer.parseInt(fieldLengthTextField.getText()) > 0) {
+            if (Integer.parseInt(this.fieldLengthTextField.getText()) > 0) {
                 this.ok = true;
                 this.setVisible(false);
                 return;

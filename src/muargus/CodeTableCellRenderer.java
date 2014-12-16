@@ -32,7 +32,6 @@ public class CodeTableCellRenderer extends DefaultTableCellRenderer {
         }
         setHorizontalAlignment(column > 1 ? JLabel.RIGHT : JLabel.LEFT);
         return cr;
-
     }
 
 }

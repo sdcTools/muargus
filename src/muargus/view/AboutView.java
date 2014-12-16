@@ -1,5 +1,3 @@
-//TODO: Wat is het copyright jaar ... 2002 of 2004?
-
 package muargus.view;
 
 import java.io.File;
@@ -24,11 +22,11 @@ public class AboutView extends DialogBase {
         setLocationRelativeTo(null);
         updateVersion();
     }
-    
+
     /**
      * Updates the version and build number.
      */
-    private void updateVersion(){
+    private void updateVersion() {
         this.versionLabel.setText("Version " + MuARGUS.getFullVersion());
         this.buildLabel.setText("build: " + MuARGUS.BUILD);
     }
@@ -57,18 +55,19 @@ public class AboutView extends DialogBase {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("About");
+        setMinimumSize(new java.awt.Dimension(500, 480));
 
         muArguslabel.setText("<html><P STYLE=\"font-size: 40pt;color: red\"> µ-ARGUS");
 
-        versionLabel.setText("Version 4.2.0");
+        versionLabel.setText("Version ");
 
         buildLabel.setText("build: 1");
 
         sdcLabel.setText("Statistical Disclosure Control of microdata");
 
-        copyrightLabel.setText("Copyright: Statistics Netherlands (2002)");
+        copyrightLabel.setText("Statistics Netherlands");
 
-        creditsLabel.setText("<html>\nThis software has been developed as<br>\npart of the CASC-project, partly<br>\nsubsidised by the EU under grant no:<br>\nIST-2000-25069");
+        creditsLabel.setText("<html> The development of this software has been partly\n<br> funded by the EU under the following grants:\n<br> - IST-2000-25069\n<br> - 25200.2005.001-2005.619\n<br> - 25200.2005.003-2007.670\n<br> - 61102.2010.004-2010.579\n<br> - 61102.2012.001-2012.102");
 
         legalPane.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
 

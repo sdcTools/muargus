@@ -62,7 +62,6 @@ public class RWriter {
                     synthData.doubleSlashses(synthData.getReplacementFile().getInputFilePath()) + "2",
                     synthData.getSensitiveVariables().size(),
                     synthData.doubleSlashses(synthData.getReplacementFile().getOutputFilePath())));
-
         } catch (FileNotFoundException ex) {
             throw new ArgusException("Error writing to file. Error message: " + ex.getMessage());
         }
@@ -111,7 +110,6 @@ public class RWriter {
             }
         } catch (IOException ex) {
             valid = false;
-            //throw new ArgusException("Error during reading file. Error message: " + ex.getMessage());
         }
         return valid;
     }
@@ -125,7 +123,7 @@ public class RWriter {
      * @param synthData SyntheticDataSpec instance containig the replacement
      * file for synthetic data.
      */
-    public static void adjustSyntheticData(SyntheticDataSpec synthData) {
+    public static void adjustSyntheticData(SyntheticDataSpec synthData) throws ArgusException {
         //Adds a header containing the variable names that the R script expects
         File inputFile = new File(synthData.getReplacementFile().getInputFilePath());
         try (BufferedReader reader = new BufferedReader(new FileReader(inputFile))) {
@@ -146,7 +144,7 @@ public class RWriter {
                 }
             }
         } catch (IOException ex) {
-            //throw new ArgusException("Error during reading file. Error message: " + ex.getMessage());
+            throw new ArgusException("Error writing to file. Error message: " + ex.getMessage());
         }
     }
 

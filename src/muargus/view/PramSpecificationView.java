@@ -530,15 +530,16 @@ public class PramSpecificationView extends DialogBase<PramSpecificationControlle
     }//GEN-LAST:event_bandwidthCheckBoxStateChanged
 
     private void applyButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_applyButtonActionPerformed
-        if (!getController().areAllProbabilitiesZero(getSelectedPramVariableSpec())) {
-            getSelectedPramVariableSpec().setApplied(true);
-            getSelectedPramVariableSpec().setBandwidth(Integer.parseInt((String) this.bandwidthComboBox.getSelectedItem()));
-            getSelectedPramVariableSpec().setUseBandwidth(this.bandwidthCheckBox.isSelected());
+        PramVariableSpec pramSpec = getSelectedPramVariableSpec(); 
+        if (!getController().areAllProbabilitiesZero(pramSpec)) {
+            pramSpec.setApplied(true);
+            pramSpec.setBandwidth(Integer.parseInt((String) this.bandwidthComboBox.getSelectedItem()));
+            pramSpec.setUseBandwidth(this.bandwidthCheckBox.isSelected());
             int selected = this.variablesTable.getSelectedRow();
-            this.variablesTable.setValueAt(getSelectedPramVariableSpec().getAppliedText(), selected, 0);
-            this.variablesTable.setValueAt(getSelectedPramVariableSpec().getBandwidthText(), selected, 1);
-            this.variablesTable.setValueAt(getSelectedPramVariableSpec().getVariable().getName(), selected, 2);
-            getController().apply(getSelectedPramVariableSpec());
+            this.variablesTable.setValueAt(pramSpec.getAppliedText(), selected, 0);
+            this.variablesTable.setValueAt(pramSpec.getBandwidthText(), selected, 1);
+            this.variablesTable.setValueAt(pramSpec.getVariable().getName(), selected, 2);
+            getController().apply(pramSpec);
         } else {
             showMessage("All probabilities are zero");
         }

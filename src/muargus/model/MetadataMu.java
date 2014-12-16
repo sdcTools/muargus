@@ -14,7 +14,6 @@ import java.util.Objects;
  */
 public final class MetadataMu {
 
-
     // file types 
     public static final int DATA_FILE_TYPE_FIXED = 1;
     public static final int DATA_FILE_TYPE_FREE = 2;
@@ -109,7 +108,7 @@ public final class MetadataMu {
      * @return Boolean stating whether the change is significant or not.
      */
     public boolean significantDifference(MetadataMu metadata) {
-        //Currently not implemented. Good Luck!
+        //Currently not implemented. 
         //significant changes are for instance changes in field length, variable type, etc
         //insignificant changes are for instance changes in codelist file
         //for now, everything is significant
@@ -169,7 +168,7 @@ public final class MetadataMu {
     public void verify() throws ArgusException {
         for (VariableMu var : variables) {
             boolean oldSpssMeta = this.isSpss() && var.getVariableLength() == 0;
-        
+
             //Check for duplicate variable names
             for (VariableMu var2 : variables) {
                 if (!var.equals(var2) && var.getName().equalsIgnoreCase(var2.getName())) {

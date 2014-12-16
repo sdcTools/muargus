@@ -57,7 +57,7 @@ public class RiskSpecificationView extends DialogBase<RiskSpecificationControlle
      */
     @Override
     protected String getHelpNamedDestination() {
-        return ContextHelp.fromClassName(getClass().getName(), isHousehold);
+        return ContextHelp.fromClassName(getClass().getName(), this.isHousehold);
     }
 
     /**
@@ -125,7 +125,7 @@ public class RiskSpecificationView extends DialogBase<RiskSpecificationControlle
     }
 
     /**
-     * Converts a double value to a string format. 
+     * Converts a double value to a string format.
      *
      * @param d Double value that will be converted to a string.
      * @return String containing the double value as a string

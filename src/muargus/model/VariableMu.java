@@ -27,7 +27,7 @@ public class VariableMu {
     private int idLevel;
     private int suppressionPriority;
     private int decimals;
-    private String codeListFile; 
+    private String codeListFile;
 
     private boolean numeric;
     private boolean categorical;
@@ -394,7 +394,8 @@ public class VariableMu {
                     return;
                 }
             }
-            throw new ArgusException("Variable " + this.name + " related to non-specified variable " + this.relatedVariableName);
+            throw new ArgusException("Variable " + this.name
+                    + " related to non-specified variable " + this.relatedVariableName);
         }
     }
 

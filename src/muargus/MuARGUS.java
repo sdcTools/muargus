@@ -11,7 +11,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.logging.Logger;
 import javax.swing.UnsupportedLookAndFeelException;
 import muargus.extern.dataengine.CMuArgCtrl;
 import muargus.view.MainFrameView;
@@ -27,7 +26,7 @@ public class MuARGUS {
     // Version info
     public static final int MAJOR = 5;
     public static final int MINOR = 0;
-    public static final String REVISION = "2 (beta)";
+    public static final String REVISION = "2 (beta)";//TODO: versie aanpassen
     public static final int BUILD = 2;
 
     public static final int MAXDIMS = 10;
@@ -71,12 +70,11 @@ public class MuARGUS {
      */
     public static SpssUtils getSpssUtils() {
         try {
-        if (MuARGUS.spssUtils == null) {
-            MuARGUS.spssUtils = new SpssUtils();
-        }
-        return MuARGUS.spssUtils;
-        }
-        catch (NoClassDefFoundError err) {
+            if (MuARGUS.spssUtils == null) {
+                MuARGUS.spssUtils = new SpssUtils();
+            }
+            return MuARGUS.spssUtils;
+        } catch (NoClassDefFoundError err) {
             return null;
         }
     }

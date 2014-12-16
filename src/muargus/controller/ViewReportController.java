@@ -63,14 +63,6 @@ public class ViewReportController {
         }
     }
 
-//    /**
-//     * Shows the view using a html document.
-//     * @param htmlDoc HTMLDocument instance containing the html-document.
-//     */
-//    public void showView(HTMLDocument htmlDoc) {
-//        this.view.showReport(htmlDoc);
-//        this.view.setVisible(true);
-//    }
     /**
      * Saves the report.
      *
@@ -113,7 +105,7 @@ public class ViewReportController {
 
             return output.toString();
         } catch (IllegalArgumentException | TransformerException ex) {
-            view.showErrorMessage(new ArgusException("Error creating report: " + ex.getMessage()));
+            this.view.showErrorMessage(new ArgusException("Error creating report: " + ex.getMessage()));
             return null;
         }
     }

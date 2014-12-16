@@ -4,6 +4,9 @@
   <Properties>
     <Property name="defaultCloseOperation" type="int" value="2"/>
     <Property name="title" type="java.lang.String" value="About"/>
+    <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+      <Dimension value="[500, 480]"/>
+    </Property>
   </Properties>
   <SyntheticProperties>
     <SyntheticProperty name="formSizePolicy" type="int" value="1"/>
@@ -106,7 +109,7 @@
     </Component>
     <Component class="javax.swing.JLabel" name="versionLabel">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Version 4.2.0"/>
+        <Property name="text" type="java.lang.String" value="Version "/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="buildLabel">
@@ -123,12 +126,12 @@
     </Component>
     <Component class="javax.swing.JLabel" name="copyrightLabel">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Copyright: Statistics Netherlands (2002)"/>
+        <Property name="text" type="java.lang.String" value="Statistics Netherlands"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="creditsLabel">
       <Properties>
-        <Property name="text" type="java.lang.String" value="&lt;html&gt;&#xa;This software has been developed as&lt;br&gt;&#xa;part of the CASC-project, partly&lt;br&gt;&#xa;subsidised by the EU under grant no:&lt;br&gt;&#xa;IST-2000-25069"/>
+        <Property name="text" type="java.lang.String" value="&lt;html&gt; The development of this software has been partly&#xa;&lt;br&gt; funded by the EU under the following grants:&#xa;&lt;br&gt; - IST-2000-25069&#xa;&lt;br&gt; - 25200.2005.001-2005.619&#xa;&lt;br&gt; - 25200.2005.003-2007.670&#xa;&lt;br&gt; - 61102.2010.004-2010.579&#xa;&lt;br&gt; - 61102.2012.001-2012.102"/>
       </Properties>
     </Component>
     <Container class="javax.swing.JPanel" name="legalPane">

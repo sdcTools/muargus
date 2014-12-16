@@ -64,15 +64,16 @@ public class MetaReader {
                         try {
                             variable.setStartingPosition(Integer.parseInt(tokenizer.nextToken()));
                         } catch (NumberFormatException e) {
-                            if(metadata.getDataFileType() == MetadataMu.DATA_FILE_TYPE_FIXED){
-                            throw new ArgusException(String.format("Starting position of the variable %s is not an integer", variable.getName()));
-                        }}
+                            if (metadata.getDataFileType() == MetadataMu.DATA_FILE_TYPE_FIXED) {
+                                throw new ArgusException(String.format("Starting position of the variable %s is not an integer", variable.getName()));
+                            }
+                        }
                     } else {
                         variable.setStartingPosition(1);  //not relevant, but must be >0
                     }
-                    try{
-                    variable.setVariableLength(Integer.parseInt(tokenizer.nextToken()));
-                    } catch(NumberFormatException e){
+                    try {
+                        variable.setVariableLength(Integer.parseInt(tokenizer.nextToken()));
+                    } catch (NumberFormatException e) {
                         variable.setVariableLength(0);
                     }
                     variable.setMissing(0, tokenizer.nextToken());
@@ -134,7 +135,8 @@ public class MetaReader {
                             try {
                                 variable.setSuppressionPriority(Integer.parseInt(tokenizer.nextToken()));
                             } catch (NumberFormatException e) {
-                                throw new ArgusException(String.format("Suppression priority of the variable %s is not an integer", variable.getName()));
+                                throw new ArgusException(String.format(
+                                        "Suppression priority of the variable %s is not an integer", variable.getName()));
                             }
                             break;
                         case "<RELATED>":
@@ -154,8 +156,9 @@ public class MetaReader {
     }
 
     /**
-     * Reads the codelist file. Sets the recode codes, new missing values
-     * and the codelist file.
+     * Reads the codelist file. Sets the recode codes, new missing values and
+     * the codelist file.
+     *
      * @param path String containing the path name of the codelist file.
      * @param metadata MetadataMu instance containing the metadata.
      * @return HashMap of codes and their labels.
@@ -172,7 +175,6 @@ public class MetaReader {
             }
             reader = new BufferedReader(new FileReader(file));
         } catch (FileNotFoundException ex) {
-            //logger.log(Level.SEVERE, null, ex);
             throw new ArgusException(String.format("Codelist %s not found", path));
         }
         HashMap<String, String> codelist = new HashMap<>();
@@ -186,7 +188,6 @@ public class MetaReader {
             }
             reader.close();
         } catch (IOException ex) {
-            //logger.log(Level.SEVERE, null, ex);
             //Try to close the reader
             try {
                 reader.close();
@@ -232,7 +233,7 @@ public class MetaReader {
                             recode.setMissing_2_new(token);
                         }
                     } else if ("<CODELIST>".equals(token)) {
-                        recode.setCodeListFile(tokenizer.nextToken()); 
+                        recode.setCodeListFile(tokenizer.nextToken());
                     } else {
                         throw new ArgusException("Error reading file, invalid token: " + token);
                     }
@@ -243,7 +244,6 @@ public class MetaReader {
         } catch (IOException ex) {
             throw new ArgusException("Error during reading file. Error message: " + ex.getMessage());
         }
-
     }
 
     /**
@@ -261,9 +261,7 @@ public class MetaReader {
             BufferedReader reader = new BufferedReader(new FileReader(new File(path)));
             String firstLine = reader.readLine();
             return firstLine.split(separator);
-
         } catch (IOException ex) {
-            //logger.log(Level.SEVERE, null, ex);
             throw new ArgusException("Error reading data file");
         }
     }
