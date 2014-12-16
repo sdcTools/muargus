@@ -204,12 +204,12 @@ public class MuARGUS {
     }
 
     /**
-     *
-     * @param className
-     * @param classPath
-     * @param arguments
-     * @throws IOException
-     * @throws InterruptedException
+     * Creates a new process starting with the class with the given name and path
+     * @param className Fully qualified name of the class
+     * @param classPath Path to the directory or jar file containing the class
+     * @param arguments List of commandline arguments given to the new instance
+     * @throws IOException Occurs when de class cannot be loaded
+     * @throws InterruptedException Occurs when the new process is interrupted
      */
     public static void execClass(String className, String classPath, List<String> arguments) throws IOException,
             InterruptedException {

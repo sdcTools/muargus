@@ -122,7 +122,7 @@ public class SyntheticDataController extends ControllerBase<SyntheticDataSpec> {
             if (RWriter.adjustSyntheticOutputFile(getModel())) {
                 getView().showMessage("Synthetic data successfully generated");
                 SystemUtils.writeLogbook("Synthetic data has been generated.");
-            } else { //TODO: argusException geven
+            } else {
                 getView().showErrorMessage(new ArgusException("No synthetic data generated. Check if R is properly installed.")); //TODO: beter foutmelding als R niet goed is geinstalleerd.
             }
             this.view.enableRunSyntheticDataButton(true);
