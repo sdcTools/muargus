@@ -156,6 +156,7 @@ public class MakeProtectedFileController extends ControllerBase<ProtectedFile> {
                     safeMetadata, false);
             this.fileCreated = true;
         } catch (ArgusException ex) {
+            getView().setProgress(0);
             this.getView().showErrorMessage(ex);
         }
         SystemUtils.writeLogbook("Safe meta file has been written.");
