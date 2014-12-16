@@ -57,15 +57,19 @@ public class SelectCombinationsController extends ControllerBase<Combinations> {
      * during setMetadata and/or exploreFile.
      */
     public void calculateTables() throws ArgusException {
-        getSelectCombinationsView().enableCalculateTables(false);
-        saveSettings();
-        this.metadata.setCombinations(getModel());
-        if (this.metadata.getDataFileType() == MetadataMu.DATA_FILE_TYPE_SPSS) {
-            MuARGUS.getSpssUtils().generateSpssData(this.metadata);
+        try {
+            getSelectCombinationsView().enableCalculateTables(false);
+            saveSettings();
+            this.metadata.setCombinations(getModel());
+            if (this.metadata.getDataFileType() == MetadataMu.DATA_FILE_TYPE_SPSS) {
+                MuARGUS.getSpssUtils().generateSpssData(this.metadata);
+            }
+            CalculationService service = MuARGUS.getCalculationService();
+            service.setMetadata(this.metadata);
+            service.exploreFile(this);
+        } catch (ArgusException ex) {
+            getView().showErrorMessage(ex);
         }
-        CalculationService service = MuARGUS.getCalculationService();
-        service.setMetadata(this.metadata);
-        service.exploreFile(this);
     }
 
     /**

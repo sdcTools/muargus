@@ -1,3 +1,4 @@
+//WARNING: time/date variables from SPSS are not supported in Mu
 package muargus;
 
 import argus.model.ArgusException;
@@ -12,8 +13,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import muargus.model.MetadataMu;
 import argus.model.SpssVariable;
@@ -25,7 +24,6 @@ import com.ibm.statistics.plugin.StatsException;
 import com.ibm.statistics.plugin.StatsUtil;
 import com.ibm.statistics.plugin.Variable;
 import com.ibm.statistics.plugin.VariableFormat;
-import muargus.controller.SelectCombinationsController;
 import muargus.model.VariableMu;
 
 /**
@@ -52,6 +50,8 @@ public class SpssUtils {
      *
      * @param metadata Metadata file.
      * @return List List containing the SpssVariable instances.
+     * @throw ArgusException Throws an ArgusException when an error occurs
+     * while generating spss data.
      */
     public List<SpssVariable> getVariablesFromSpss(MetadataMu metadata) {
         this.spssVariables.clear();
@@ -106,7 +106,6 @@ public class SpssUtils {
                 if (!doesVariableExist(variable, metadata)) {
                     // Set the missing values and variableLength either for numeric or for string missing values
                     int variableLength = spssVariable.getVariableLength();
-                    //TODO: add time/date variable type
                     if (isNumeric(spssVariable)) {
                         for (int i = 0; i < spssVariable.getNumericMissings().length; i++) {
                             if (i == VariableMu.MAX_NUMBER_OF_MISSINGS) {
@@ -299,8 +298,10 @@ public class SpssUtils {
      * Generates temporary data from the spss data file.
      *
      * @param metadata Metadata file.
+     * @throws ArgusException Throws an ArgusException when an error occurs
+     * while generating spss data.
      */
-    public void generateSpssData(MetadataMu metadata) {
+    public void generateSpssData(MetadataMu metadata) throws ArgusException {
         if (this.fixed) {
             writeFixedFormat(metadata);
         } else {
@@ -342,8 +343,10 @@ public class SpssUtils {
      * file.
      *
      * @param metadata MetadataMu instance containing the metadata.
+     * @throws ArgusException Throws an ArgusException when an error occurs
+     * while writing the fixed format.
      */
-    private void writeFixedFormat(MetadataMu metadata) {
+    private void writeFixedFormat(MetadataMu metadata) throws ArgusException {
         try {
             // start spss and make an instance of dataUtil
             StatsUtil.start();
@@ -360,10 +363,8 @@ public class SpssUtils {
             StatsUtil.submit(command);
             StatsUtil.stop();
             setNewDataFile(metadata);
-        } catch (StatsException ex) {
-            Logger.getLogger(SelectCombinationsController.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(SpssUtils.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (StatsException|IOException ex) {
+            throw new ArgusException("Error while writing fixed format from SPSS: " + ex.getMessage());
         }
     }
 
@@ -381,7 +382,8 @@ public class SpssUtils {
      * Makes the safe file using fixed format.
      *
      * @param safeMetadata MetadataMu instance containing the safe metadata.
-     * @throws argus.model.ArgusException
+     * @throws ArgusException Throws an ArgusException when an error occurs
+     * while writing the safe spss data file.
      */
     public void makeSafeFileSpss(MetadataMu safeMetadata) throws ArgusException {
         try {
@@ -446,8 +448,10 @@ public class SpssUtils {
      * (free format).
      *
      * @param metadata MetadataMu instance containing the metadata.
+     * @throws ArgusException Throws an ArgusException when an error occurs
+     * while writing the free format.
      */
-    private void writeFreeFormat(MetadataMu metadata) {
+    private void writeFreeFormat(MetadataMu metadata) throws ArgusException {
         try {
             // start spss and make an instance of dataUtil
             StatsUtil.start();
@@ -478,14 +482,12 @@ public class SpssUtils {
                         writer.println(c.toString().substring(1, c.toString().length() - 1).replace("null", "").replace(',', ';'));
                     }
                 }
-            } catch (FileNotFoundException ex) {
-                Logger.getLogger(SelectCombinationsController.class.getName()).log(Level.SEVERE, null, ex);
             } catch (IOException ex) {
-                Logger.getLogger(SpssUtils.class.getName()).log(Level.SEVERE, null, ex);
+                throw new ArgusException("Error while writing free format from SPSS: " + ex.getMessage());
             }
             StatsUtil.stop();
         } catch (StatsException ex) {
-            Logger.getLogger(SelectCombinationsController.class.getName()).log(Level.SEVERE, null, ex);
+            throw new ArgusException("Error while writing free format from SPSS: " + ex.getMessage());
         }
     }
 
@@ -494,8 +496,10 @@ public class SpssUtils {
      * Makes the safe file using free format.
      *
      * @param safeMetadata MetadataMu instance of the safe metadata.
+     * @throws ArgusException Throws an ArgusException when an error occurs
+     * while writing the safe spss data file.
      */
-    public void makeSafeFileFreeformat(MetadataMu safeMetadata) {
+    public void makeSafeFileFreeformat(MetadataMu safeMetadata) throws ArgusException {
         try {
             try {
                 BufferedReader reader;
@@ -560,10 +564,10 @@ public class SpssUtils {
                 StatsUtil.submit("SAVE OUTFILE='" + this.safeSpssFile + "'/DROP=TEMP" + first + " TO TEMP" + last + ".");
                 StatsUtil.stop();
             } catch (FileNotFoundException ex) {
-                Logger.getLogger(CalculationService.class.getName()).log(Level.SEVERE, null, ex);
+                throw new ArgusException("Error while making safe SPSS data from free format: " + ex.getMessage());
             }
         } catch (StatsException ex) {
-            Logger.getLogger(CalculationService.class.getName()).log(Level.SEVERE, null, ex);
+            throw new ArgusException("Error while making safe SPSS data from free format: " + ex.getMessage());
         }
     }
 

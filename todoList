@@ -6,9 +6,6 @@ niet behandelde opmerkingen/vragen:
 
 Release 3:                                                                                              Door:
 
-Global recode
--   Truncate --> labels weghalen (algemeen voor als er geen codelist gegeven is)                        -(L) Anne
-
 ICEPDF
 -   Schermpje ICE pdf hacken                                                                            -(L) Anne
 
@@ -24,12 +21,9 @@ Overige
 --   TODO's + Nederlands commentaar in code langslopen                                                  -(M) Anne/Jeldrik --> maandag samen naar kijken?
     -MuARGUS: versie aanpassen
     -MuARGUS: javadocs method: execClass()                                                              - Anne, wil jij deze doen?
-    -SpssUtils: ergens aangeven dat date/time variables niet zijn ondersteund
     -SyntheticDataController: TODO: ArgusExeption bij doNextStep()                                      - Anne
     -Externe classes: nergens staat javadocs. Auteursnaam er bij zetten?
-    -ProtectedFile: initSafeMeta: logger. Moeten alle loggers via argusexceptions gaan? 
-     er staan er namelijk nog een paar in waar de gewone logger wordt gebruit.
-     -GenerateAutomaticTables: berekening aantal tabellen id-level aanpassen
+     -GenerateAutomaticTables: berekening aantal tabellen id-level aanpassen                            -Jeldrik
 -   LINUX   (Manual)                                                                                    -(H) Jeldrik
 -   voorbeeld data meeleveren goed fixen                                                                -(H)
 -   Release notes schrijven                                                                             -(H) Anne
@@ -149,3 +143,7 @@ Gefixed:
 -   Er zijn nu twee mappen met resources. Een in the source packages en 1 bij files maar die zijn       -(M) Jeldrik
     niet meer hetzelfde.
 --   Bepalen wat we met welke logger willen loggen + implementeren                                      -(H) Anne
+-   ProtectedFile: initSafeMeta: logger. Moeten alle loggers via argusexceptions gaan? 
+     er staan er namelijk nog een paar in waar de gewone logger wordt gebruit.
+-   SpssUtils: ergens aangeven dat date/time variables niet zijn ondersteund
+-   Truncate --> labels weghalen (algemeen voor als er geen codelist gegeven is)                        -(L) Anne
