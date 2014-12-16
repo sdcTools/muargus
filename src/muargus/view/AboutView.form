@@ -114,7 +114,7 @@
     </Component>
     <Component class="javax.swing.JLabel" name="buildLabel">
       <Properties>
-        <Property name="text" type="java.lang.String" value="build: 1"/>
+        <Property name="text" type="java.lang.String" value="build: "/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="sdcLabel">
@@ -166,7 +166,7 @@
       <SubComponents>
         <Component class="javax.swing.JLabel" name="legalLabel">
           <Properties>
-            <Property name="text" type="java.lang.String" value="&lt;html&gt;&#xa;The Statistics Netherlands and its CASC Partners provide this software &quot;as is&quot;, without&lt;br&gt;&#xa;any warranty, expressed or implied, or assume any legal liability or responsibility for the&lt;br&gt;&#xa;accuracy, completeness, or usefulness of this software. The Statistics Netherlands and&lt;br&gt;&#xa;its CASC Partners will provide at their discretion only limited consultation on problems&lt;br&gt;&#xa;encountered with this software. Improvements or changes to this software may be made&lt;br&gt;&#xa;at any time withouth an obligation to inform users."/>
+            <Property name="text" type="java.lang.String" value="&lt;html&gt;&#xa;The Statistics Netherlands and its CASC Partners provide this software &quot;as is&quot;, without&lt;br&gt;&#xa;any warranty, expressed or implied, or assume any legal liability or responsibility for the&lt;br&gt;&#xa;accuracy, completeness, or usefulness of this software. The Statistics Netherlands and&lt;br&gt;&#xa;its CASC Partners will provide at their discretion only limited consultation on problems&lt;br&gt;&#xa;encountered with this software. Improvements or changes to this software may be made&lt;br&gt;&#xa;at any time without an obligation to inform users."/>
           </Properties>
         </Component>
       </SubComponents>

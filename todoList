@@ -23,7 +23,7 @@ Overige
     -MuARGUS: javadocs method: execClass()                                                              - Anne, wil jij deze doen?
     -SyntheticDataController: TODO: ArgusExeption bij doNextStep()                                      - Anne
     -Externe classes: nergens staat javadocs. Auteursnaam er bij zetten?
-     -GenerateAutomaticTables: berekening aantal tabellen id-level aanpassen                            -Jeldrik
+    -GenerateAutomaticTables: berekening aantal tabellen id-level aanpassen                             - Jeldrik
 -   LINUX   (Manual)                                                                                    -(H) Jeldrik
 -   voorbeeld data meeleveren goed fixen                                                                -(H)
 -   Release notes schrijven                                                                             -(H) Anne

@@ -61,7 +61,7 @@ public class AboutView extends DialogBase {
 
         versionLabel.setText("Version ");
 
-        buildLabel.setText("build: 1");
+        buildLabel.setText("build: ");
 
         sdcLabel.setText("Statistical Disclosure Control of microdata");
 
@@ -71,7 +71,7 @@ public class AboutView extends DialogBase {
 
         legalPane.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
 
-        legalLabel.setText("<html>\nThe Statistics Netherlands and its CASC Partners provide this software \"as is\", without<br>\nany warranty, expressed or implied, or assume any legal liability or responsibility for the<br>\naccuracy, completeness, or usefulness of this software. The Statistics Netherlands and<br>\nits CASC Partners will provide at their discretion only limited consultation on problems<br>\nencountered with this software. Improvements or changes to this software may be made<br>\nat any time withouth an obligation to inform users.");
+        legalLabel.setText("<html>\nThe Statistics Netherlands and its CASC Partners provide this software \"as is\", without<br>\nany warranty, expressed or implied, or assume any legal liability or responsibility for the<br>\naccuracy, completeness, or usefulness of this software. The Statistics Netherlands and<br>\nits CASC Partners will provide at their discretion only limited consultation on problems<br>\nencountered with this software. Improvements or changes to this software may be made<br>\nat any time without an obligation to inform users.");
 
         javax.swing.GroupLayout legalPaneLayout = new javax.swing.GroupLayout(legalPane);
         legalPane.setLayout(legalPaneLayout);
