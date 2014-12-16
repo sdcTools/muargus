@@ -1,7 +1,7 @@
 package muargus.model;
 
 /**
- * Model class containing relevant information for rank swapping. 
+ * Model class containing relevant information for rank swapping.
  *
  * @author Statistics Netherlands
  */

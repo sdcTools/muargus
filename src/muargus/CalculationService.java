@@ -232,12 +232,10 @@ public class CalculationService {
      * while applying global recoding.
      */
     public void applyRecode() throws ArgusException {
-        //c.SetProgressListener(null);
         boolean result = this.c.ApplyRecode();
         if (!result) {
             throw new ArgusException("Error during Apply recode");
         }
-        //return getUnsafeCombinations(metadata);
     }
 
     /**
@@ -249,7 +247,6 @@ public class CalculationService {
      * while undoing global recoding.
      */
     public void undoRecode(RecodeMu recode) throws ArgusException {
-        //c.SetProgressListener(null);
         int index = getIndexOf(recode.getVariable());
         boolean result = this.c.UndoRecode(index);
         if (!result) {
@@ -376,7 +373,6 @@ public class CalculationService {
             this.firePropertyChange("error", null, ex.getCause());
             this.firePropertyChange("result", null, "error");
         }
-        //this.listener = null;
     }
 
     /**
@@ -394,20 +390,6 @@ public class CalculationService {
         }
     }
 
-    //TODO: wordt deze methode gebruikt?
-//    /**
-//     *
-//     * @param worker
-//     * @return
-//     */
-//    private PropertyChangeListener getWorkerPropertyChangeListener(final SwingWorker worker) {
-//        return new PropertyChangeListener() {
-//            @Override
-//            public void propertyChange(PropertyChangeEvent evt) {
-//                worker.firePropertyChange(evt.getPropertyName(), evt.getOldValue(), evt.getNewValue());
-//            }
-//        };
-//    }
     /**
      * Adds a variable.
      *
@@ -1030,7 +1012,6 @@ public class CalculationService {
         int tableIndex = getIndexOf(table);
         double[] riskThreshold = new double[1];
         int[] errorCode = new int[1];
-        //c.SetProgressListener(null);
         boolean result = household
                 ? this.c.CalculateBHRFreq(tableIndex, true, this.c.NumberofRecords() - nUnsafe, this.c.NumberofRecords() - nUnsafe, riskThreshold, errorCode)
                 : this.c.CalculateBIRFreq(tableIndex, this.c.NumberofRecords() - nUnsafe, riskThreshold, errorCode);
@@ -1063,7 +1044,6 @@ public class CalculationService {
         int[] hhFrequency = new int[nClasses + 1];
         if (this.metadata.isHouseholdData()) {
             int[] errorCode = new int[1];
-            //c.SetProgressListener(null);
             boolean result = this.c.CalculateBaseHouseholdRisk(errorCode);
             if (!result) {
                 throw new ArgusException("Error calculating base household risk");

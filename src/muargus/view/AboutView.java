@@ -1,5 +1,3 @@
-//TODO: Wat is het copyright jaar ... 2002 of 2004?
-
 package muargus.view;
 
 import java.io.File;
@@ -24,11 +22,11 @@ public class AboutView extends DialogBase {
         setLocationRelativeTo(null);
         updateVersion();
     }
-    
+
     /**
      * Updates the version and build number.
      */
-    private void updateVersion(){
+    private void updateVersion() {
         this.versionLabel.setText("Version " + MuARGUS.getFullVersion());
         this.buildLabel.setText("build: " + MuARGUS.BUILD);
     }

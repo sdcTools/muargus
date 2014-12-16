@@ -245,7 +245,6 @@ public class HTMLReportWriter {
                         addChildElement(tr2, "td", "" + c.getPramProbability());
                     }
                 }
-
             }
         }
         return p;
@@ -383,8 +382,6 @@ public class HTMLReportWriter {
                         }
 
                     } catch (ArgusException ex) {
-                        //JOptionPane.showMessageDialog(null, ex.getMessage(), MuARGUS.getMessageTitle(), JOptionPane.ERROR_MESSAGE);
-                        //Logger.getLogger(HTMLReportWriter.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 } else if (r.isTruncated()) {
                     addChildElement(p, "h2", r.getVariable().getName());
@@ -487,7 +484,6 @@ public class HTMLReportWriter {
         decimalFormat.setMaximumFractionDigits(decimals);
         decimalFormat.setMinimumFractionDigits(showIfZero ? decimals : 0);
         return decimalFormat.format(d);
-
     }
 
     /**

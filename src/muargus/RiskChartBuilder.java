@@ -45,7 +45,6 @@ public class RiskChartBuilder {
         domainAxis.setMinorTickMarksVisible(false);
         Range range = new Range(0, riskSpec.getClasses().size());
         domainAxis.setTickUnit(new NumberTickUnit(riskSpec.getClasses().size() / 10));
-        //domainAxis.setNumberFormatOverride(new Numberformatter());
         domainAxis.setAutoRange(false);
         domainAxis.setRange(range);
         rangeAxisLeft.setStandardTickUnits(NumberAxis.createStandardTickUnits(MuARGUS.getLocale()));

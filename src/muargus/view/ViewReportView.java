@@ -22,7 +22,7 @@ import muargus.resources.ContextHelp;
 public class ViewReportView extends DialogBase<ViewReportController> {
 
     private final boolean isNews;
-    
+
     /**
      * Creates new form ViewReportView.
      *
@@ -65,7 +65,7 @@ public class ViewReportView extends DialogBase<ViewReportController> {
     public void showReport(HTMLDocument htmlDoc) {
         this.htmlPane.setDocument(htmlDoc);
     }
-    
+
     /**
      * Gets the named destination linked to the visible view.
      *

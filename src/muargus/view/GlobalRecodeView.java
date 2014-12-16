@@ -1,7 +1,6 @@
 package muargus.view;
 
 import argus.model.ArgusException;
-import argus.utils.StrUtils;
 import java.io.File;
 import javax.swing.JOptionPane;
 import javax.swing.ListSelectionModel;
@@ -10,7 +9,6 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import muargus.HighlightTableCellRenderer;
-import muargus.MuARGUS;
 import muargus.controller.GlobalRecodeController;
 import muargus.io.MetaReader;
 import muargus.io.MetaWriter;
@@ -158,7 +156,7 @@ public class GlobalRecodeView extends DialogBase<GlobalRecodeController> {
      */
     private int getTruncatePositions(int varLength) {
         while (true) {
-            String result = JOptionPane.showInputDialog(null, "Number of digits for truncation", 1); 
+            String result = JOptionPane.showInputDialog(null, "Number of digits for truncation", 1);
             if (result == null || result.length() == 0) {
                 return 0;
             }

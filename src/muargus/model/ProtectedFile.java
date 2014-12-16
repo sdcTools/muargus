@@ -186,17 +186,17 @@ public class ProtectedFile {
         try {
             this.safeMeta = new MetadataMu(meta);
             String path;
-            if(file.getPath().contains(".saf") || file.getPath().contains(".sav")){
+            if (file.getPath().contains(".saf") || file.getPath().contains(".sav")) {
                 path = StrUtils.replaceExtension(file.getPath(), ".saf");
             } else {
                 path = file.getPath() + ".saf";
             }
-            
+
             File rds = File.createTempFile("MuArgus", ".rds");
             rds.deleteOnExit();
-            DataFilePair pair = meta.isSpss()?
-                    new DataFilePair(path, rds.getPath()):
-                    new DataFilePair(path, FilenameUtils.removeExtension(path) + ".rds");
+            DataFilePair pair = meta.isSpss()
+                    ? new DataFilePair(path, rds.getPath())
+                    : new DataFilePair(path, FilenameUtils.removeExtension(path) + ".rds");
             this.safeMeta.setFileNames(pair);
         } catch (IOException ex) {
             Logger.getLogger(ProtectedFile.class.getName()).log(Level.SEVERE, null, ex);

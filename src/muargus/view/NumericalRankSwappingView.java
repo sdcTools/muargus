@@ -382,7 +382,7 @@ public class NumericalRankSwappingView extends DialogBase<NumericalRankSwappingC
     }// </editor-fold>//GEN-END:initComponents
 
     private void okButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okButtonActionPerformed
-        this.setVisible(false);
+        setVisible(false);
     }//GEN-LAST:event_okButtonActionPerformed
 
     private void toSelectedButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_toSelectedButtonActionPerformed

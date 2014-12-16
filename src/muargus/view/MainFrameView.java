@@ -76,7 +76,7 @@ public class MainFrameView extends javax.swing.JFrame {
                 doEnable(this.householdRiskSpecificationButton, this.householdRiskSpecificationMenuItem, enable);
                 return;
             case ModifyNumericalVariables:
-                doEnable(this.modifyNumericalVariablesButton, this.modifyNumericalVariablesMenuItem, enable); 
+                doEnable(this.modifyNumericalVariablesButton, this.modifyNumericalVariablesMenuItem, enable);
                 return;
             case NumericalMicroAggregation:
                 doEnable(this.numericalMicroaggregationButton, this.numericalMicroaggregationMenuItem, enable);
@@ -89,6 +89,7 @@ public class MainFrameView extends javax.swing.JFrame {
                 return;
             case ViewReport:
                 doEnable(this.viewReportButton, this.viewReportMenuItem, enable);
+                return;
             case SyntheticData:
                 doEnable(this.syntheticDataButton, this.syntheticDataMenuItem, enable);
         }
@@ -201,7 +202,7 @@ public class MainFrameView extends javax.swing.JFrame {
         Object[][] data = new Object[model.getVariablesInTables().size()][];
         int rowIndex = 0;
         for (VariableMu variable : model.getVariablesInTables()) {
-            data[rowIndex] = toObjectArray(model, variable); 
+            data[rowIndex] = toObjectArray(model, variable);
             rowIndex++;
         }
         if (!redraw) {
@@ -239,9 +240,7 @@ public class MainFrameView extends javax.swing.JFrame {
                 }
             };
 
-            //renderer.setHorizontalAlignment(JLabel.RIGHT);
             for (int index = 1; index < columnNames.size(); index++) {
-
                 this.unsafeCombinationsTable.getColumn(String.format("dim %d", index)).setCellRenderer(renderer);
             }
 
@@ -252,7 +251,6 @@ public class MainFrameView extends javax.swing.JFrame {
                             selectionChanged(evt);
                         }
                     });
-
         }
         int i = this.unsafeCombinationsTable.convertRowIndexToView(selectedIndex);
         this.unsafeCombinationsTable.getSelectionModel().setSelectionInterval(i, i);
@@ -311,7 +309,6 @@ public class MainFrameView extends javax.swing.JFrame {
     private void updateVariablesTable(int j) {
         j = this.unsafeCombinationsTable.convertRowIndexToModel(j);
         VariableMu variable = this.model.getVariablesInTables().get(j);
-        //UnsafeInfo unsafeInfo = this.model.getUnsafe(variable);
         this.variableNameLabel.setText(variable.getName());
 
         ArrayList<String> columnNames = new ArrayList<>();
@@ -384,11 +381,9 @@ public class MainFrameView extends javax.swing.JFrame {
     private void showHelp() {
         try {
             MuARGUS.showHelp(getHelpNamedDestination());
-        }
-        catch (ArgusException ex) {
+        } catch (ArgusException ex) {
             showErrorMessage(ex);
         }
-            
     }
 
     /**

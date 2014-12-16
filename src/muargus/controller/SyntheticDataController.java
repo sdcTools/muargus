@@ -63,13 +63,11 @@ public class SyntheticDataController extends ControllerBase<SyntheticDataSpec> {
             this.metadata.getReplacementSpecs().add(syntheticData);
             RWriter.writeAlpha(syntheticData);
             RWriter.writeSynthetic(syntheticData);
-            //RWriter.writeBatSynthetic(syntheticData);
             writeSyntheticData();
             SystemUtils.writeLogbook("R input files for synthetic data have been generated.");
             return true;
         } catch (ArgusException ex) {
             return false;
-//            Logger.getLogger(SyntheticDataController.class.getName()).log(Level.SEVERE, null, ex);
         }
 
     }
@@ -139,7 +137,6 @@ public class SyntheticDataController extends ControllerBase<SyntheticDataSpec> {
      */
     private void runR()throws ArgusException{
         try {
-            //String cmd = getModel().getRunRFileFile().getAbsolutePath();
             ArrayList<String> arguments = new ArrayList<>();
             arguments.add("R");
             arguments.add("CMD");
@@ -151,10 +148,6 @@ public class SyntheticDataController extends ControllerBase<SyntheticDataSpec> {
             p.waitFor();
         } catch (InterruptedException | IOException ex) {
             throw new ArgusException("Error running R script: " + ex.getMessage());
-//            System.out.println("R is not working arggg");
-//            System.out.println(ex.getMessage());
-//            System.out.println(Arrays.toString(ex.getStackTrace()));
-            //Logger.getLogger(SyntheticDataController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

@@ -30,7 +30,6 @@ public class SelectCombinationsView extends DialogBase<SelectCombinationsControl
     private DefaultListModel variablesSelectedListModel;
     private TableModel tableModel;
     private final Frame parent;
-    //private long numberOfTables;
     // gives the width of column 1, 2 and the final value is the width of all the other columns
     private final int[] columnWidth = {30, 45, 65};
 

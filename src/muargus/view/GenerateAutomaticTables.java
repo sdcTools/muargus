@@ -19,7 +19,7 @@ public class GenerateAutomaticTables extends DialogBase {
     private boolean valid; // is used to continue with the calculation
     private final int numberOfVariables;
     private long numberOfTables;
-    private MetadataMu metadata;
+    private final MetadataMu metadata;
 
     /**
      * Creates new form GenerateAutomaticTables
@@ -30,6 +30,7 @@ public class GenerateAutomaticTables extends DialogBase {
      * select combinations screen
      * @param numberOfVariables Integer containing the number of categorical
      * variables.
+     * @param metadata MetadataMu instance containing the metadata.
      */
     public GenerateAutomaticTables(java.awt.Frame parent, boolean modal, Combinations model,
             int numberOfVariables, MetadataMu metadata) {
@@ -242,9 +243,9 @@ public class GenerateAutomaticTables extends DialogBase {
      * equation: N * (N-1) * ... (N-D+1) where N is the number of variables and
      * D is the number of dimensions.
      *
-     * @param numberOfTables
-     * @param dimensions
-     * @param numberOfVariables
+     * @param numberOfTables Long containing the number of tables.
+     * @param dimensions Integer containing the number of dimensions.
+     * @param numberOfVariables Integer containing the number of variables.
      */
     private void numberOfTabels(long numberOfTables, int dimensions, int numberOfVariables) {
         if (dimensions > 0) {
@@ -257,9 +258,17 @@ public class GenerateAutomaticTables extends DialogBase {
         }
     }
 
+    //TODO: berekening klopt niet
+    /**
+     * Sets the number of tables. This method first creates an integer array
+     * containing the number op variables per id-level. Following it will check if
+     * there is at least one variable with an id-levels greater than 0. Finally the
+     * number of variables per id-level (greater than 0) are multiplied with each
+     * other resulting in the number of tables.
+     */
     private void setNumberOfTables() {
         int[] id = new int[6];
-        for (VariableMu v : metadata.getVariables()) {
+        for (VariableMu v : this.metadata.getVariables()) {
             if (v.isCategorical()) {
                 id[v.getIdLevel()]++;
             }
@@ -270,9 +279,9 @@ public class GenerateAutomaticTables extends DialogBase {
         }
         if (tabels > 0) {
             tabels = 1;
-            for (int i : id) {
+            for (int i = 1; i < id.length; i++) {
                 if (i > 0) {
-                    tabels *= i;
+                    tabels *= id[i];
                 }
             }
         } else {

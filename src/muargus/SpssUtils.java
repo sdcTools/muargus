@@ -1,4 +1,3 @@
-//TODO: test for String format and add the possibility to add/read/write date/time format
 package muargus;
 
 import argus.model.ArgusException;
@@ -55,8 +54,6 @@ public class SpssUtils {
      * @return List List containing the SpssVariable instances.
      */
     public List<SpssVariable> getVariablesFromSpss(MetadataMu metadata) {
-        //getSpssInstallationDirectory(parent);
-        //if (this.spssVariables.size() < 1) {
         this.spssVariables.clear();
         this.spssDataFileName = metadata.getFileNames().getDataFileName();
         try {
@@ -82,7 +79,6 @@ public class SpssUtils {
             StatsUtil.stop();
         } catch (StatsException e) {
         }
-        //}
         return this.spssVariables;
     }
 
@@ -110,7 +106,7 @@ public class SpssUtils {
                 if (!doesVariableExist(variable, metadata)) {
                     // Set the missing values and variableLength either for numeric or for string missing values
                     int variableLength = spssVariable.getVariableLength();
-                    //TODO: add time/date type
+                    //TODO: add time/date variable type
                     if (isNumeric(spssVariable)) {
                         for (int i = 0; i < spssVariable.getNumericMissings().length; i++) {
                             if (i == VariableMu.MAX_NUMBER_OF_MISSINGS) {
@@ -171,7 +167,7 @@ public class SpssUtils {
     }
 
     /**
-     * Checks whether the metadata in the .rda file si conform the spss
+     * Checks whether the metadata in the .rda file is conform the spss
      * metadata.
      *
      * @param metadata MetadataMu instance containing the metadata as specified
@@ -182,7 +178,6 @@ public class SpssUtils {
         int startingPos = 1;
         String message = "";
         for (VariableMu variable : metadata.getVariables()) {
-            //boolean oldSpssMeta = variable.getVariableLength() == 0;
             boolean found = false;
 
             for (SpssVariable spssVariable : this.spssVariables) {
@@ -435,26 +430,17 @@ public class SpssUtils {
             }
             command.add("SAVE OUTFILE='" + this.safeSpssFile + "'/DROP=TEMP" + first + " TO TEMP" + last + ".");
             command.add("EXECUTE.");
-//            for (String s : command) {
-//                System.out.println(s);
-//            }
-
             StatsUtil.submit(command.toArray(new String[command.size()]));
             StatsUtil.stop();
         } catch (StatsException ex) {
             if (ex.getErrorCode() == 3) {
                 throw new ArgusException("An error occured in SPSS while saving. This might occur because:"
                         + "\n- The specified file is already in use by SPSS and cannot be written to.");
-//                JOptionPane.showMessageDialog(null, "The specified file is already in use by SPSS and cannot be written to."
-//                        + "\nThe data will not be saved.", MuARGUS.getMessageTitle(), JOptionPane.ERROR_MESSAGE);
             }
-//            System.out.println(ex.getErrorCode());
-//            System.out.println(ex.getMessage());
-            //Logger.getLogger(CalculationService.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
-    // WARNING: this has not been properly tested
+    // WARNING: this method has not been properly tested
     /**
      * Extracts the data from spss and writes this to a comma separated file
      * (free format).
@@ -503,7 +489,7 @@ public class SpssUtils {
         }
     }
 
-    // WARNING: this has not been properly tested
+    // WARNING: this method has not been properly tested
     /**
      * Makes the safe file using free format.
      *
@@ -574,10 +560,10 @@ public class SpssUtils {
                 StatsUtil.submit("SAVE OUTFILE='" + this.safeSpssFile + "'/DROP=TEMP" + first + " TO TEMP" + last + ".");
                 StatsUtil.stop();
             } catch (FileNotFoundException ex) {
-                //Logger.getLogger(CalculationService.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(CalculationService.class.getName()).log(Level.SEVERE, null, ex);
             }
         } catch (StatsException ex) {
-            //Logger.getLogger(CalculationService.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(CalculationService.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

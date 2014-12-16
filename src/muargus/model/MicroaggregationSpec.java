@@ -1,7 +1,7 @@
 package muargus.model;
 
 /**
- * Model class containing relevant information for microaggregation. 
+ * Model class containing relevant information for microaggregation.
  *
  * @author Statistics Netherlands
  */
@@ -11,7 +11,7 @@ public class MicroaggregationSpec extends ReplacementSpec {
     private final boolean optimal;
 
     /**
-     * Constructor of the model class Microaggregation. 
+     * Constructor of the model class Microaggregation.
      *
      * @param minimalNumberOfRecords Integer containing the minimum number of
      * records per group.

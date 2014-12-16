@@ -39,7 +39,7 @@ public class ReplacementSpec {
     public ArrayList<VariableMu> getOutputVariables() {
         return variables;
     }
-    
+
     /**
      * Gets the replacementFile.
      *
@@ -59,5 +59,5 @@ public class ReplacementSpec {
     public void setReplacementFile(ReplacementFile replacementFile) {
         this.replacementFile = replacementFile;
     }
-    
+
 }
