@@ -383,6 +383,7 @@ public class HTMLReportWriter {
                         }
 
                     } catch (ArgusException ex) {
+                        
                         //JOptionPane.showMessageDialog(null, ex.getMessage(), MuARGUS.getMessageTitle(), JOptionPane.ERROR_MESSAGE);
                         //Logger.getLogger(HTMLReportWriter.class.getName()).log(Level.SEVERE, null, ex);
                     }

@@ -149,8 +149,6 @@ public class MetaReader {
 
             metadata.linkRelatedVariables();
         } catch (FileNotFoundException ex) {
-            //System.out.println("file not found");
-            //logger.log(Level.SEVERE, null, ex);
             throw new ArgusException("Metadata file not found");
         }
     }

@@ -69,7 +69,6 @@ public class SyntheticDataController extends ControllerBase<SyntheticDataSpec> {
             return true;
         } catch (ArgusException ex) {
             return false;
-//            Logger.getLogger(SyntheticDataController.class.getName()).log(Level.SEVERE, null, ex);
         }
 
     }

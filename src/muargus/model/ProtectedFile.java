@@ -1,12 +1,11 @@
 package muargus.model;
 
+import argus.model.ArgusException;
 import argus.model.DataFilePair;
 import argus.utils.StrUtils;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.apache.commons.io.FilenameUtils;
 
 /**
@@ -181,8 +180,9 @@ public class ProtectedFile {
      *
      * @param file File instance choosen by the user for the safe file.
      * @param meta Metadata instance containing the safe metadata.
+     * @throws ArgusException in case of errors creating the files
      */
-    public void initSafeMeta(File file, MetadataMu meta) {
+    public void initSafeMeta(File file, MetadataMu meta) throws ArgusException {
         try {
             this.safeMeta = new MetadataMu(meta);
             String path;
@@ -199,7 +199,7 @@ public class ProtectedFile {
                     new DataFilePair(path, FilenameUtils.removeExtension(path) + ".rds");
             this.safeMeta.setFileNames(pair);
         } catch (IOException ex) {
-            Logger.getLogger(ProtectedFile.class.getName()).log(Level.SEVERE, null, ex);
+            throw new ArgusException("Error creating safe file: " + ex.getMessage());
         }
     }
 

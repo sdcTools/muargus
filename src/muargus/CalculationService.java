@@ -1,14 +1,13 @@
 package muargus;
 
 import argus.model.ArgusException;
+import argus.utils.SystemUtils;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.SwingWorker;
 import muargus.controller.SelectCombinationsController;
 import muargus.extern.dataengine.CMuArgCtrl;
@@ -62,7 +61,6 @@ public class CalculationService {
         MakeReplacementFile
     }
 
-    private static final Logger logger = Logger.getLogger(SelectCombinationsController.class.getName());
     private final CMuArgCtrl c;
     private MetadataMu metadata;
     private final ProgressListener progressListener; //must remain in scope, or will be garbage collected 
@@ -582,7 +580,7 @@ public class CalculationService {
                     get();
                     workerDone(null);
                 } catch (InterruptedException ex) {
-                    logger.log(Level.SEVERE, null, ex);
+                    SystemUtils.writeLogbook("Background process interrupted: " + ex.getMessage());
                 } catch (ExecutionException ex) {
                     workerDone(ex);
                 }

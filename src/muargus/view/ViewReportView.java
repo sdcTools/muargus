@@ -5,8 +5,6 @@ import java.awt.print.PrinterException;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.html.HTMLDocument;
 import javax.swing.text.html.HTMLEditorKit;
@@ -52,7 +50,6 @@ public class ViewReportView extends DialogBase<ViewReportController> {
             htmlKit.read(stringReader, htmlDoc, 0);
             this.htmlPane.setDocument(htmlDoc);
         } catch (IOException | BadLocationException ex) {
-            Logger.getLogger(MainFrameController.class.getName()).log(Level.SEVERE, null, ex);
             showErrorMessage(new ArgusException("Error creating report: " + ex.getMessage()));
         }
     }

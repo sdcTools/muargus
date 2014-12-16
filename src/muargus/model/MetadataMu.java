@@ -14,7 +14,6 @@ import java.util.Objects;
  */
 public final class MetadataMu {
 
-    //private static final Logger logger = Logger.getLogger(MetadataMu.class.getName());
 
     // file types 
     public static final int DATA_FILE_TYPE_FIXED = 1;
