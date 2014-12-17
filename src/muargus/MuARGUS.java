@@ -25,8 +25,8 @@ public class MuARGUS {
 
     // Version info
     public static final int MAJOR = 5;
-    public static final int MINOR = 0;
-    public static final String REVISION = "2 (beta)";//TODO: versie aanpassen
+    public static final int MINOR = 1;
+    public static final String REVISION = "0";
     public static final int BUILD = 2;
 
     public static final int MAXDIMS = 10;
@@ -204,12 +204,14 @@ public class MuARGUS {
     }
 
     /**
+     * Creates a new process starting with the class with the given name and
+     * path
      *
-     * @param className
-     * @param classPath
-     * @param arguments
-     * @throws IOException
-     * @throws InterruptedException
+     * @param className Fully qualified name of the class
+     * @param classPath Path to the directory or jar file containing the class
+     * @param arguments List of commandline arguments given to the new instance
+     * @throws IOException Occurs when de class cannot be loaded
+     * @throws InterruptedException Occurs when the new process is interrupted
      */
     public static void execClass(String className, String classPath, List<String> arguments) throws IOException,
             InterruptedException {

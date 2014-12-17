@@ -2,6 +2,7 @@ package muargus.view;
 
 import argus.model.ArgusException;
 import java.awt.HeadlessException;
+import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import muargus.MuARGUS;
 import muargus.model.Combinations;
@@ -20,6 +21,7 @@ public class GenerateAutomaticTables extends DialogBase {
     private final int numberOfVariables;
     private long numberOfTables;
     private final MetadataMu metadata;
+    private final int CANCEL_OPTION = -123456; // this value is given when no answer is given
 
     /**
      * Creates new form GenerateAutomaticTables
@@ -107,7 +109,7 @@ public class GenerateAutomaticTables extends DialogBase {
     private int getThreshold(int threshold, String message) throws ArgusException {
         String result = JOptionPane.showInputDialog(null, message, threshold);
         if (result == null || result.length() == 0) {
-            return 0;
+            return this.CANCEL_OPTION;
         }
         try {
             return Integer.parseInt(result);
@@ -153,7 +155,9 @@ public class GenerateAutomaticTables extends DialogBase {
         while (!isInputValid()) {
             try {
                 int result = getThreshold(this.model.getThreshold(), "Threshold:");
-                if (result > 0) {
+                if (result == this.CANCEL_OPTION) {
+                    return;
+                } else if (result > 0) {
                     this.model.setThreshold(result);
                     setInputValid(true);
                 } else {
@@ -180,7 +184,9 @@ public class GenerateAutomaticTables extends DialogBase {
             while (!isInputValid()) {
                 try {
                     int result = getThreshold(thresholds[i], "Threshold dimension " + (i + 1) + ":");
-                    if (result == 0) {
+                    if (result == this.CANCEL_OPTION) {
+                        return;
+                    } else if (result == 0) {
                         setInputValid(false);
                         break breakpoint;
                     }
@@ -209,7 +215,9 @@ public class GenerateAutomaticTables extends DialogBase {
         if (isMakeUpToDimensionRadioButton()) {
             setNumberOfTables(getDimensions(), this.numberOfVariables);
         } else if (isUseIdentificationLevelRadioButton()) {
-            setNumberOfTables();
+            if (!setNumberOfTablesIdLevel()) {
+                return false;
+            }
         }
         if (this.numberOfTables > this.model.getMaximumSizeBeforeUserConfirmation()
                 && this.numberOfTables < this.model.getMaximumNumberOfTables()) {
@@ -258,36 +266,114 @@ public class GenerateAutomaticTables extends DialogBase {
         }
     }
 
-    //TODO: berekening klopt niet
     /**
-     * Sets the number of tables. This method first creates an integer array
-     * containing the number op variables per id-level. Following it will check if
-     * there is at least one variable with an id-levels greater than 0. Finally the
-     * number of variables per id-level (greater than 0) are multiplied with each
-     * other resulting in the number of tables.
+     * Sets the number of tables using ID-level. This method first makes an
+     * array containing the number of categorical variables for each dimension.
+     * Following it makes a cumulative array of integers controlling for the
+     * dimension. This will result in an array giving the maximum number of
+     * variables used per dimension.
+     *
+     *
+     * calls the method calculatefirst creates an integer array containing the
+     * number op variables per id-level. Following it will generate an ArrayList
+     * of integers containing the maximum number of variables used per
+     * dimension. the number of check if there is at least one variable with an
+     * id-levels greater than 0. Finally the number of variables per id-level
+     * (greater than 0) are multiplied with each other resulting in the number
+     * of tables. Then it will generate an array with the number of tables per
+     * variable up to the first dimension. This is similar to setting all values
+     * to one and uses this to start the recursive method, which will calculate
+     * the number of tables.
+     *
+     * @return Boolean indicating whether tables will be generated.
      */
-    private void setNumberOfTables() {
+    private boolean setNumberOfTablesIdLevel() {
+        this.numberOfTables = 0;
+
+        // make an array containing the number of categorical variables for each dimension.
         int[] id = new int[6];
         for (VariableMu v : this.metadata.getVariables()) {
             if (v.isCategorical()) {
                 id[v.getIdLevel()]++;
             }
         }
-        int tabels = 0;
+        // make a cumulative array of integers controlling for the dimension. 
+        // This will result in an array giving the maximum number of variables 
+        //used per dimension.
+        ArrayList<Integer> cumulative = new ArrayList<>();
         for (int i = 1; i < id.length; i++) {
-            tabels += id[i];
+            if (id[i] > 0) {
+                cumulative.add(cumulative.size() > 0
+                        ? cumulative.get(cumulative.size() - 1) + id[i] - 1 : id[i]);
+            }
         }
-        if (tabels > 0) {
-            tabels = 1;
-            for (int i = 1; i < id.length; i++) {
-                if (i > 0) {
-                    tabels *= id[i];
+
+        // fills the array with the number of tables per variable up to the 
+        // first dimension. This is similar to setting all values to one.
+        int[] list = new int[cumulative.get(0)];
+        for (int i = 0; i < list.length; i++) {
+            list[i] = 1;
+        }
+        // call the recursive function
+        setNumberOfTablesIdLevel(1, list, cumulative.size(), cumulative);
+        // give a warning when no tables will be generated
+        if (this.numberOfTables <= 0) {
+            JOptionPane.showMessageDialog(this, "No variables found with an id-level greater than 0");
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Recursive method for calculating the number of tabels using ID-level.
+     * This method uses the idea that the number of tables with a particular
+     * variable as last variable is equal to the sum of the number of tables
+     * that can be generated for all possible second to last variables when
+     * using one dimension fewer. If we have for example two variables with
+     * ID-level=1 (A & B) and two variables with ID-level=2(C % D) then all the
+     * possibel tables are {AB, AC, AD, BC, BD}. Here we have 3 possible last
+     * variables {B, C, D} and 2 possible second to last variables {A, B}. Note
+     * that lower ID-levels can be used for higher dimensions but higher
+     * ID-levels can't be used for lower dimensions. All tables for the second
+     * to last variables are 1-dimensional and therefore only 1 table for each
+     * variable exists. For the last variables, B has only one second to last
+     * variable {A} and both C and D have two second to last variables {A, B}.
+     * The number of tables containing a particular last variable can be
+     * obtained by summing the number of tables that can be genarated for the
+     * second te last variables. Resulting that the total number of tables
+     * ending with B is the total number of tables having a second last variable
+     * A equals 1. For tables having a final variable C, the total number of
+     * tabels equals the number of tables having a second last variable A plus
+     * the number of tables having a second last variable B, resulting in 2
+     * tables (and similarly for D). To get the total number of tables one
+     * simply sums the number of tables for the last dimension {1 + 2 + 2 = 5}.
+     *
+     * @param _dimension Integer containing the current dimension.
+     * @param _list Array of integers containing the number of tables made per
+     * variable up to the current dimension.
+     * @param dimensions Integer containing the maximum number
+     * ofcumulativedimensions.
+     * @param cumulative ArrayList of integers containing the maximum number of
+     * variables used per dimension.
+     */
+    public void setNumberOfTablesIdLevel(int _dimension, int[] _list, int dimensions, ArrayList<Integer> cumulative) {
+        int dimension = _dimension;
+        if (dimension < dimensions) {
+            int[] list = new int[cumulative.get(dimension)];
+
+            for (int i = 0; i < _list.length; i++) {
+                for (int j = i; j < list.length; j++) {
+                    list[j] += _list[i];
                 }
             }
+            dimension++;
+            setNumberOfTablesIdLevel(dimension, list, dimensions, cumulative);
         } else {
-            JOptionPane.showMessageDialog(this, "No variables found with an id-level greater than 0");
+            for (int i : _list) {
+                this.numberOfTables += i;
+            }
+            dimension++;
         }
-        this.numberOfTables = tabels;
     }
 
     /**
