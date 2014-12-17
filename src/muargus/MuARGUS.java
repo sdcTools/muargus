@@ -27,7 +27,7 @@ public class MuARGUS {
     public static final int MAJOR = 5;
     public static final int MINOR = 1;
     public static final String REVISION = "0";
-    public static final int BUILD = 2;
+    public static final int BUILD = 1;
 
     public static final int MAXDIMS = 10;
 
@@ -37,7 +37,7 @@ public class MuARGUS {
     private static final String defaultSeparator = ",";
 
     private static final String lookAndFeel = "Windows";
-    private static final File manual = new File("resources/MUmanual5.0.pdf");
+    private static final File manual = new File("resources/MUmanual5.1.pdf");
     private static final int sleepTime = 2000;
     private static Process helpViewerProcess;
 

@@ -15,10 +15,16 @@ SPSS
 Overige
 
 -   Manual schrijven                                                                                    -(H) Jeldrik
-    -bookmarks
-    -screenshots
+    -pagina 40 REGION.GRC and AGE.GRC aangeven welke
+    -pagina 48 functional design of mu-Argus plaatje bijwerken 
+    -pagina 65 stukje tekst hoofdstuk 4 toevoegen
+    -pagina 77 stukje over synthetische data/R
+    -pagina 78 aangeven dat minimaal 1 non-sensitive variable nodig is
+    -pagina 79 undo beschrijving toevoegen
+    -pagina 81 undo beschrijving toevoegen
+    -pagina 82 add risk to output file
+    -pagina 83 stukje over named destinations?
     -content beter klikbaar maken met doorlinken
--   LINUX   (Manual)                                                                                    -(H) Jeldrik
 -   voorbeeld data meeleveren goed fixen                                                                -(H)
 -   Release notes schrijven                                                                             -(H) Anne
 -   Installatie manual (spss, R etc.)                                                                   -(H) Jeldrik
@@ -148,3 +154,6 @@ Gefixed:
     -MuARGUS: versie aanpassen                                                                          - Jeldrik: ik heb er 5.1.0 van gemaakt
     -Externe classes: nergens staat javadocs. Auteursnaam er bij zetten?
 --   TODO's + Nederlands commentaar in code langslopen                                                  -(M) Anne/Jeldrik --> maandag samen naar kijken?
+    -bookmarks
+    -screenshots
+-   LINUX   (Manual)                                                                                    -(H) Jeldrik
