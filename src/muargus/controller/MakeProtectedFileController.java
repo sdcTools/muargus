@@ -63,7 +63,6 @@ public class MakeProtectedFileController extends ControllerBase<ProtectedFile> {
                 String path = this.metadata.getCombinations().getProtectedFile().getSafeMeta().getFileNames().getDataFileName();
                 String safeSpssFile = path.substring(0, path.lastIndexOf(".")) + ".sav";
                 MuARGUS.getSpssUtils().safeSpssFile = new File(safeSpssFile);
-                
             }
             getCalculationService().makeProtectedFile(this);
             SystemUtils.writeLogbook("Protected file has been written.");
