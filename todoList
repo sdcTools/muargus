@@ -19,11 +19,10 @@ Overige
     -screenshots
     -content beter klikbaar maken met doorlinken
 --   TODO's + Nederlands commentaar in code langslopen                                                  -(M) Anne/Jeldrik --> maandag samen naar kijken?
-    -MuARGUS: versie aanpassen
+    -MuARGUS: versie aanpassen                                                                          - Jeldrik: ik heb er 5.1.0 van gemaakt
     -MuARGUS: javadocs method: execClass()                                                              - Anne, wil jij deze doen?
     -SyntheticDataController: TODO: ArgusExeption bij doNextStep()                                      - Anne
     -Externe classes: nergens staat javadocs. Auteursnaam er bij zetten?
-    -GenerateAutomaticTables: berekening aantal tabellen id-level aanpassen                             - Jeldrik
 -   LINUX   (Manual)                                                                                    -(H) Jeldrik
 -   voorbeeld data meeleveren goed fixen                                                                -(H)
 -   Release notes schrijven                                                                             -(H) Anne
@@ -147,3 +146,5 @@ Gefixed:
      er staan er namelijk nog een paar in waar de gewone logger wordt gebruit.
 -   SpssUtils: ergens aangeven dat date/time variables niet zijn ondersteund
 -   Truncate --> labels weghalen (algemeen voor als er geen codelist gegeven is)                        -(L) Anne
+    -GenerateAutomaticTables: berekening aantal tabellen id-level aanpassen                             - Jeldrik
+    -GenerateAutomaticTables: cancel button threshold
