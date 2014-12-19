@@ -1,3 +1,19 @@
+/*
+ * Argus Open Source
+ * Software to apply Statistical Disclosure Control techniques
+ *
+ * Copyright 2014 Statistics Netherlands
+ *
+ * This program is free software; you can redistribute it and/or 
+ * modify it under the terms of the European Union Public Licence 
+ * (EUPL) version 1.1, as published by the European Commission.
+ *
+ * You can find the text of the EUPL v1.1 on
+ * https://joinup.ec.europa.eu/software/page/eupl/licence-eupl
+ *
+ * This software is distributed on an "AS IS" basis without 
+ * warranties or conditions of any kind, either express or implied.
+ */
 package muargus;
 
 import argus.model.ArgusException;
@@ -167,10 +183,11 @@ public class MuARGUS {
                 System.out.println("g is null");
             } else {
                 g.setPaintMode();
-                g.setColor(new Color(200, 0, 0));
+                g.setColor(new Color(255, 0, 0));
                 Font font = g.getFont().deriveFont(Font.BOLD, 14.0f);
                 g.setFont(font);
-                g.drawString("Version " + getFullVersion() + " (Build " + MuARGUS.BUILD + ")", (splash.getSize().width / 2) - 100, 230);
+                String version = "Version " + getFullVersion() + " (Build " + MuARGUS.BUILD + ")";
+                g.drawString(version, (splash.getSize().width / 2) - (version.length()*3), (3*splash.getSize().height/4));
                 splash.update();
                 sleepThread(MuARGUS.sleepTime);
             }
