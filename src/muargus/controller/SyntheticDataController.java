@@ -30,6 +30,7 @@ import muargus.model.VariableMu;
 import muargus.view.SyntheticDataView;
 
 /**
+ * Controller class of the Synthetic data screen.
  *
  * @author Statistics Netherlands
  */
@@ -151,7 +152,7 @@ public class SyntheticDataController extends ControllerBase<SyntheticDataSpec> {
      * Runs the .bat file. The .bat file runs the R-script which generates the
      * synthetic data.
      */
-    private void runR()throws ArgusException{
+    private void runR() throws ArgusException {
         try {
             ArrayList<String> arguments = new ArrayList<>();
             arguments.add("R");
@@ -159,7 +160,7 @@ public class SyntheticDataController extends ControllerBase<SyntheticDataSpec> {
             arguments.add("BATCH");
             arguments.add(getModel().getrScriptFile().getAbsolutePath());
             ProcessBuilder builder = new ProcessBuilder(arguments);
-            
+
             Process p = builder.start();
             p.waitFor();
         } catch (InterruptedException | IOException ex) {
