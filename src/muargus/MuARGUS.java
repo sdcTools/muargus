@@ -18,6 +18,7 @@ package muargus;
 
 import argus.model.ArgusException;
 import argus.utils.SystemUtils;
+import com.ibm.statistics.util.Utility;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
@@ -27,10 +28,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import javax.swing.JOptionPane;
 import javax.swing.UnsupportedLookAndFeelException;
 import muargus.extern.dataengine.CMuArgCtrl;
 import muargus.view.MainFrameView;
 import org.apache.commons.io.FilenameUtils;
+import muargus.model.ClassPathHack;
 
 /**
  * Main class of Mu-Argus.
@@ -42,7 +45,7 @@ public class MuARGUS {
     // Version info
     public static final int MAJOR = 5;
     public static final int MINOR = 1;
-    public static final String REVISION = "0";
+    public static final String REVISION = "1";
     public static final int BUILD = 1;
 
     public static final int MAXDIMS = 10;
@@ -79,6 +82,19 @@ public class MuARGUS {
         return MuARGUS.calcService;
     }
 
+    
+    private static String getSpssVersion()
+    {
+        Utility FindSpss = new Utility();
+        return FindSpss.getStatisticsLocationLatest();
+    }
+    
+    static{
+        try{
+            ClassPathHack.addFile(getSpssVersion() + "\\spssjavaplugin.jar");
+        }catch (IOException ex){System.out.print(ex.toString());};
+    }
+   
     /**
      * Gets the instance of SpssUtils.
      *
