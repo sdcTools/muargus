@@ -473,7 +473,7 @@ public class MainFrameView extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("MU-ARGUS");
-        setIconImage(new javax.swing.ImageIcon(getClass().getResource("/muargus/resources/icons/mu.png")).getImage());
+        setIconImage(new javax.swing.ImageIcon(getClass().getResource("/muargus/resources/icons/muball100.png")).getImage());
         setMinimumSize(new java.awt.Dimension(650, 400));
 
         toolBar.setRollover(true);
