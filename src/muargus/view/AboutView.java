@@ -44,7 +44,7 @@ public class AboutView extends DialogBase {
      */
     private void updateVersion() {
         this.versionLabel.setText("Version " + MuARGUS.getFullVersion());
-        this.buildLabel.setText("build: " + MuARGUS.BUILD);
+        this.buildLabel.setText("build " + MuARGUS.BUILD);
     }
 
     /**
@@ -79,7 +79,7 @@ public class AboutView extends DialogBase {
 
         versionLabel.setText("Version ");
 
-        buildLabel.setText("build: ");
+        buildLabel.setText("build ");
 
         sdcLabel.setText("Statistical Disclosure Control of microdata");
 
@@ -150,16 +150,18 @@ public class AboutView extends DialogBase {
                 .addComponent(iconLabel)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(80, 80, 80)
-                        .addComponent(muArguslabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(41, 41, 41)
+                        .addGap(46, 46, 46)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(versionLabel)
-                                .addGap(37, 37, 37)
-                                .addComponent(buildLabel))
-                            .addComponent(sdcLabel)))))
+                                .addGap(39, 39, 39)
+                                .addComponent(muArguslabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(sdcLabel)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(84, 84, 84)
+                        .addComponent(versionLabel)
+                        .addGap(37, 37, 37)
+                        .addComponent(buildLabel)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -169,7 +171,7 @@ public class AboutView extends DialogBase {
                         .addContainerGap()
                         .addComponent(iconLabel))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(34, 34, 34)
+                        .addGap(20, 20, 20)
                         .addComponent(muArguslabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(sdcLabel)
