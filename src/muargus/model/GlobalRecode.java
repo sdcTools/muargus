@@ -37,7 +37,7 @@ public class GlobalRecode {
     public GlobalRecode() {
         this.variables = new ArrayList<>();
         this.recodeMus = new ArrayList<>();
-        this.columnNames = new String[]{"R", "Variables"};
+        this.columnNames = new String[]{"Recoded", "Variables"};
     }
 
     /**

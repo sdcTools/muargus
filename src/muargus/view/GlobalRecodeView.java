@@ -389,10 +389,12 @@ public class GlobalRecodeView extends DialogBase<GlobalRecodeController> {
                 {null, null}
             },
             new String [] {
-                "R", "Variable"
+                "Recoded", "Variable"
             }
         ));
         variablesTable.setDragEnabled(true);
+        variablesTable.setShowHorizontalLines(false);
+        variablesTable.setShowVerticalLines(false);
         variablesTable.getTableHeader().setReorderingAllowed(false);
         variablesScrollPane.setViewportView(variablesTable);
         if (variablesTable.getColumnModel().getColumnCount() > 0) {
@@ -635,12 +637,12 @@ public class GlobalRecodeView extends DialogBase<GlobalRecodeController> {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(variablesScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(variablesScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(midSectionPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(warningScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 290, Short.MAX_VALUE)
+                    .addComponent(warningScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 229, Short.MAX_VALUE)
                     .addComponent(editScrollPane, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(globalRecodeTextField)
                     .addGroup(layout.createSequentialGroup()
@@ -710,7 +712,7 @@ public class GlobalRecodeView extends DialogBase<GlobalRecodeController> {
             if (positions > 0) {
                 getController().truncate(getSelectedRecode(), positions);
                 int rowIndex = getSelectedRowIndex();
-                this.variablesTable.getModel().setValueAt("T", rowIndex, 0);
+                this.variablesTable.getModel().setValueAt(" T", rowIndex, 0);
                 this.variablesTable.getModel().setValueAt(getSelectedRecode().getVariable().getName(), rowIndex, 1);
                 updateValues();
             }
@@ -738,7 +740,7 @@ public class GlobalRecodeView extends DialogBase<GlobalRecodeController> {
             fixGrcReturns(getSelectedRecode());
             getController().apply(getSelectedRecode());
             int rowIndex = getSelectedRowIndex();
-            this.variablesTable.getModel().setValueAt("R", rowIndex, 0);
+            this.variablesTable.getModel().setValueAt(" R", rowIndex, 0);
             this.variablesTable.getModel().setValueAt(getSelectedRecode().getVariable().getName(), rowIndex, 1);
             updateValues();
         } catch (ArgusException ex) {
