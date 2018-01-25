@@ -88,6 +88,7 @@ public class MainFrameController {
         this.metadata = new MetadataMu();
         this.report = null;
         this.news = "";
+        this.clearDataBeforeSelectCombinations();
     }
 
     /**

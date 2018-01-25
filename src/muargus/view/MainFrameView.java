@@ -433,6 +433,7 @@ public class MainFrameView extends javax.swing.JFrame {
         contentsButton = new javax.swing.JButton();
         newsButton = new javax.swing.JButton();
         aboutButton = new javax.swing.JButton();
+        jSplitPane2 = new javax.swing.JSplitPane();
         unsafeCombinationsPanel = new javax.swing.JPanel();
         unsafeCombinationsLabel = new javax.swing.JLabel();
         unsafeCombinationsScrollPane = new javax.swing.JScrollPane();
@@ -702,7 +703,9 @@ public class MainFrameView extends javax.swing.JFrame {
         });
         toolBar.add(aboutButton);
 
-        unsafeCombinationsPanel.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
+        jSplitPane2.setResizeWeight(0.5);
+
+        unsafeCombinationsPanel.setPreferredSize(new java.awt.Dimension(0, 255));
 
         unsafeCombinationsLabel.setText("# unsafe combinations in each dimension");
 
@@ -712,7 +715,7 @@ public class MainFrameView extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Variable", "dim 1", ""
+                "Variable", "", ""
             }
         ) {
             Class[] types = new Class [] {
@@ -747,20 +750,20 @@ public class MainFrameView extends javax.swing.JFrame {
             .addGroup(unsafeCombinationsPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(unsafeCombinationsLabel)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, unsafeCombinationsPanelLayout.createSequentialGroup()
-                .addComponent(unsafeCombinationsScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 292, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addContainerGap())
+            .addGroup(unsafeCombinationsPanelLayout.createSequentialGroup()
+                .addComponent(unsafeCombinationsScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 269, Short.MAX_VALUE)
+                .addGap(1, 1, 1))
         );
         unsafeCombinationsPanelLayout.setVerticalGroup(
             unsafeCombinationsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(unsafeCombinationsPanelLayout.createSequentialGroup()
                 .addComponent(unsafeCombinationsLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(unsafeCombinationsScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 249, Short.MAX_VALUE))
+                .addComponent(unsafeCombinationsScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 235, Short.MAX_VALUE))
         );
 
-        variablesPanel.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
+        jSplitPane2.setLeftComponent(unsafeCombinationsPanel);
 
         variableLabel.setText("Variable:");
 
@@ -770,7 +773,7 @@ public class MainFrameView extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Code", "Label", "Freq", "dim1", ""
+                "Code", "Label", "Freq", "", ""
             }
         ));
         variablesTable.setShowHorizontalLines(false);
@@ -797,8 +800,10 @@ public class MainFrameView extends javax.swing.JFrame {
                     .addComponent(variableLabel)
                     .addComponent(variableNameLabel))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(variablesScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                .addComponent(variablesScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 235, Short.MAX_VALUE))
         );
+
+        jSplitPane2.setRightComponent(variablesPanel);
 
         fileMenu.setText("File");
 
@@ -1024,13 +1029,8 @@ public class MainFrameView extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(unsafeCombinationsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(variablesPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(toolBar, javax.swing.GroupLayout.PREFERRED_SIZE, 616, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                    .addComponent(toolBar, javax.swing.GroupLayout.DEFAULT_SIZE, 616, Short.MAX_VALUE)
+                    .addComponent(jSplitPane2))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -1038,9 +1038,7 @@ public class MainFrameView extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addComponent(toolBar, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(unsafeCombinationsPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(variablesPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jSplitPane2)
                 .addContainerGap())
         );
 
@@ -1118,16 +1116,16 @@ public class MainFrameView extends javax.swing.JFrame {
         this.controller.about();
     }//GEN-LAST:event_aboutMenuItemActionPerformed
 
+    private void syntheticDataMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_syntheticDataMenuItemActionPerformed
+        this.controller.syntheticData();
+    }//GEN-LAST:event_syntheticDataMenuItemActionPerformed
+
     private void unsafeCombinationsTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_unsafeCombinationsTableMouseClicked
         if (evt.getClickCount() == 2) {
             int j = this.unsafeCombinationsTable.getSelectionModel().getMinSelectionIndex();
             this.controller.globalRecode(this.unsafeCombinationsTable.convertRowIndexToModel(j));
         }
     }//GEN-LAST:event_unsafeCombinationsTableMouseClicked
-
-    private void syntheticDataMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_syntheticDataMenuItemActionPerformed
-        this.controller.syntheticData();
-    }//GEN-LAST:event_syntheticDataMenuItemActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton aboutButton;
@@ -1146,6 +1144,7 @@ public class MainFrameView extends javax.swing.JFrame {
     private javax.swing.JMenuItem householdRiskSpecificationMenuItem;
     private javax.swing.JButton individualRiskSpecificationButton;
     private javax.swing.JMenuItem individualRiskSpecificationMenuItem;
+    private javax.swing.JSplitPane jSplitPane2;
     private javax.swing.JButton makeProtectedFileButton;
     private javax.swing.JMenuItem makeProtectedFileMenuItem;
     private javax.swing.JMenuBar menuBar;
