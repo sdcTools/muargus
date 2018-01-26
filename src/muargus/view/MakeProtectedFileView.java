@@ -243,7 +243,6 @@ public class MakeProtectedFileView extends DialogBase<MakeProtectedFileControlle
         suppressionPanel.setLayout(suppressionPanelLayout);
         suppressionPanelLayout.setHorizontalGroup(
             suppressionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(separator)
             .addGroup(suppressionPanelLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(suppressionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -255,6 +254,9 @@ public class MakeProtectedFileView extends DialogBase<MakeProtectedFileControlle
                         .addComponent(suppressionPriorityScrollPane, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                         .addComponent(suppressionPrioritySlider, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 152, Short.MAX_VALUE)))
                 .addGap(12, 12, 12))
+            .addGroup(suppressionPanelLayout.createSequentialGroup()
+                .addComponent(separator, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         suppressionPanelLayout.setVerticalGroup(
             suppressionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)

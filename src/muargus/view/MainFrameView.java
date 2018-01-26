@@ -703,11 +703,14 @@ public class MainFrameView extends javax.swing.JFrame {
         });
         toolBar.add(aboutButton);
 
+        jSplitPane2.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
         jSplitPane2.setResizeWeight(0.5);
 
         unsafeCombinationsPanel.setPreferredSize(new java.awt.Dimension(0, 255));
 
         unsafeCombinationsLabel.setText("# unsafe combinations in each dimension");
+
+        unsafeCombinationsScrollPane.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
 
         unsafeCombinationsTable.setAutoCreateRowSorter(true);
         unsafeCombinationsTable.setModel(new javax.swing.table.DefaultTableModel(
@@ -752,7 +755,7 @@ public class MainFrameView extends javax.swing.JFrame {
                 .addComponent(unsafeCombinationsLabel)
                 .addContainerGap())
             .addGroup(unsafeCombinationsPanelLayout.createSequentialGroup()
-                .addComponent(unsafeCombinationsScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 269, Short.MAX_VALUE)
+                .addComponent(unsafeCombinationsScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 268, Short.MAX_VALUE)
                 .addGap(1, 1, 1))
         );
         unsafeCombinationsPanelLayout.setVerticalGroup(
@@ -760,12 +763,14 @@ public class MainFrameView extends javax.swing.JFrame {
             .addGroup(unsafeCombinationsPanelLayout.createSequentialGroup()
                 .addComponent(unsafeCombinationsLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(unsafeCombinationsScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 235, Short.MAX_VALUE))
+                .addComponent(unsafeCombinationsScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 233, Short.MAX_VALUE))
         );
 
         jSplitPane2.setLeftComponent(unsafeCombinationsPanel);
 
         variableLabel.setText("Variable:");
+
+        variablesScrollPane.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
 
         variablesTable.setAutoCreateRowSorter(true);
         variablesTable.setModel(new javax.swing.table.DefaultTableModel(
@@ -800,7 +805,7 @@ public class MainFrameView extends javax.swing.JFrame {
                     .addComponent(variableLabel)
                     .addComponent(variableNameLabel))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(variablesScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 235, Short.MAX_VALUE))
+                .addComponent(variablesScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 233, Short.MAX_VALUE))
         );
 
         jSplitPane2.setRightComponent(variablesPanel);
@@ -1038,7 +1043,7 @@ public class MainFrameView extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addComponent(toolBar, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jSplitPane2)
+                .addComponent(jSplitPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 257, Short.MAX_VALUE)
                 .addContainerGap())
         );
 

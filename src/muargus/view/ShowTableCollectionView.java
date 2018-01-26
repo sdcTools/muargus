@@ -138,7 +138,15 @@ public class ShowTableCollectionView extends DialogBase<ShowTableCollectionContr
             new String [] {
                 "# unsafe cells", "Var 1", "Var 2", "Var 3", "Var 4"
             }
-        ));
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Integer.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+        });
         table.getTableHeader().setReorderingAllowed(false);
         scrollPane.setViewportView(table);
 

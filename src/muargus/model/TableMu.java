@@ -28,6 +28,7 @@ import java.util.ArrayList;
 public class TableMu {
 
     private boolean riskModel;
+    private boolean kAnon;
     private int threshold;
     private final ArrayList<VariableMu> variables = new ArrayList<>();
     private int nrOfUnsafeCombinations;
@@ -35,10 +36,11 @@ public class TableMu {
 
     /**
      * Constructor for the model class TableMu. Sets the default values for the
-     * riskmodel and threshold.
+     * riskmodel, kAnonymity and threshold.
      */
     public TableMu() {
         this.riskModel = false;
+        this.kAnon = false;
         this.threshold = this.defaultThreshold;
     }
 
@@ -50,6 +52,7 @@ public class TableMu {
      */
     public TableMu(TableMu table) {
         this.riskModel = table.riskModel;
+        this.kAnon = table.kAnon;
         this.threshold = table.threshold;
         for (VariableMu variable : table.variables) {
             this.variables.add(variable);
@@ -73,6 +76,25 @@ public class TableMu {
      */
     public void setRiskModel(boolean riskModel) {
         this.riskModel = riskModel;
+    }
+    
+    /**
+     * Returns whether the k-anonymity is set for this table.
+     *
+     * @return Boolean indicating whether the k-anonymity is set for this table.
+     */
+    public boolean isKAnon() {
+        return kAnon;
+    }
+
+    /**
+     * Sets whether the k-anonymity is set for this table.
+     *
+     * @param kAnon Boolean indicating whether the k-anonymity is set for this
+     * table.
+     */
+    public void setKAnon(boolean kAnon) {
+        this.kAnon = kAnon;
     }
 
     /**
@@ -130,11 +152,16 @@ public class TableMu {
      */
     public Object[] getTableData() {
         Object[] table = new Object[variables.size() + 2];
-        if (isRiskModel()) {
-            table[0] = "R";
+        if (isRiskModel() || isKAnon()) {
+            if (isRiskModel()){
+                table[0] = "Risk";
+            }
+            if (isKAnon()) {
+                table[0] = "kAnon";
+            }
         } else {
             table[0] = "";
-        }
+            }
         table[1] = this.threshold;
         for (int i = 0; i < variables.size(); i++) {
             table[i + 2] = variables.get(i).getName();
