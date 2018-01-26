@@ -34,7 +34,7 @@ public class HighlightTableCellRenderer extends DefaultTableCellRenderer {
           Component cr = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
           if (!"".equals(table.getValueAt(row, 0))) {
               if ("kAnon".equals(table.getValueAt(row,0)))
-                setForeground(Color.orange);
+                setForeground(new Color(255,98,30));
               else
                 setForeground(Color.red);  
           }
