@@ -205,7 +205,7 @@ public class SelectCombinationsView extends DialogBase<SelectCombinationsControl
         removeAllFromSelectedButton = new javax.swing.JButton();
         addRowButton = new javax.swing.JButton();
         removeRowButton = new javax.swing.JButton();
-        thresholdLabel = new javax.swing.JLabel();
+        kLabel = new javax.swing.JLabel();
         thresholdTextField = new javax.swing.JTextField();
         automaticSpecificationButton = new javax.swing.JButton();
         clearButton = new javax.swing.JButton();
@@ -217,10 +217,11 @@ public class SelectCombinationsView extends DialogBase<SelectCombinationsControl
         table = new javax.swing.JTable();
         progressLabel = new javax.swing.JLabel();
         setKAnonButton = new javax.swing.JButton();
+        thresholdLabel = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Specify Combinations");
-        setMinimumSize(new java.awt.Dimension(690, 500));
+        setMinimumSize(new java.awt.Dimension(710, 500));
 
         variablesScrollPane.setViewportView(variablesList);
 
@@ -261,8 +262,9 @@ public class SelectCombinationsView extends DialogBase<SelectCombinationsControl
             }
         });
 
-        thresholdLabel.setText("Threshold k:");
+        kLabel.setText("k =");
 
+        thresholdTextField.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         thresholdTextField.setToolTipText("<html>Threshold k:<br>\n&le; k is unsafe according to traditional Dutch Approach<br>\n&le; k is unsafe according to (k+1)-anonymity");
         thresholdTextField.addCaretListener(new javax.swing.event.CaretListener() {
             public void caretUpdate(javax.swing.event.CaretEvent evt) {
@@ -278,7 +280,7 @@ public class SelectCombinationsView extends DialogBase<SelectCombinationsControl
             }
         });
 
-        automaticSpecificationButton.setText("Automatic specification of tables");
+        automaticSpecificationButton.setText("Automatic specification of combinations");
         automaticSpecificationButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 automaticSpecificationButtonActionPerformed(evt);
@@ -294,7 +296,7 @@ public class SelectCombinationsView extends DialogBase<SelectCombinationsControl
         });
 
         setTableRiskModelButton.setText("Set combination for Risk model");
-        setTableRiskModelButton.setToolTipText("");
+        setTableRiskModelButton.setToolTipText(""); // NOI18N
         setTableRiskModelButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 setTableRiskModelButtonActionPerformed(evt);
@@ -333,7 +335,7 @@ public class SelectCombinationsView extends DialogBase<SelectCombinationsControl
             table.getColumnModel().getColumn(0).setPreferredWidth(20);
         }
 
-        setKAnonButton.setText("Set combination for (k+1)-anonymity");
+        setKAnonButton.setText("Toggle combinations for (k+1)-anonymity");
         setKAnonButton.setToolTipText("<html>\n&le; k is unsafe according to traditional Dutch Approach<br>\n&le; k is unsafe according to (k+1)-anonymity");
         setKAnonButton.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
@@ -349,6 +351,9 @@ public class SelectCombinationsView extends DialogBase<SelectCombinationsControl
             }
         });
 
+        thresholdLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        thresholdLabel.setText("Threshold");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -357,52 +362,43 @@ public class SelectCombinationsView extends DialogBase<SelectCombinationsControl
                 .addContainerGap()
                 .addComponent(variablesScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(10, 10, 10)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(clearButton, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(81, 81, 81))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                    .addComponent(setKAnonButton, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(progressbar, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(cancelButton)
-                                        .addGap(40, 40, 40)
-                                        .addComponent(calculateTablesButton)))
-                                .addGap(10, 10, 10))))
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addGroup(layout.createSequentialGroup()
-                                    .addGap(18, 18, 18)
-                                    .addComponent(progressLabel))
-                                .addGroup(layout.createSequentialGroup()
-                                    .addGap(10, 10, 10)
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                        .addComponent(removeFromSelectedButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(moveToSelectedButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(removeAllFromSelectedButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                    .addGap(10, 10, 10)
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                        .addGroup(layout.createSequentialGroup()
-                                            .addComponent(thresholdLabel)
-                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                            .addComponent(thresholdTextField))
-                                        .addComponent(variablesSelectedScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGap(10, 10, 10)
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(addRowButton)
-                                        .addComponent(removeRowButton)))
-                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                    .addGap(10, 10, 10)
-                                    .addComponent(automaticSpecificationButton, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(10, 10, 10)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addGroup(layout.createSequentialGroup()
+                                .addComponent(cancelButton, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(setTableRiskModelButton, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(10, 10, 10)))
-                .addComponent(tablesScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 284, Short.MAX_VALUE)
+                                .addComponent(calculateTablesButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(removeFromSelectedButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(moveToSelectedButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(removeAllFromSelectedButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addGap(12, 12, 12)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGap(19, 19, 19)
+                                        .addComponent(kLabel)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(thresholdTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(variablesSelectedScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                                            .addComponent(thresholdLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                        .addGap(12, 12, 12)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(addRowButton)
+                                            .addComponent(removeRowButton)))))
+                            .addComponent(progressLabel, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(setKAnonButton, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(setTableRiskModelButton, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(automaticSpecificationButton, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(progressbar, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(91, 91, 91)
+                        .addComponent(clearButton, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(10, 10, 10)
+                .addComponent(tablesScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 319, Short.MAX_VALUE)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -410,7 +406,6 @@ public class SelectCombinationsView extends DialogBase<SelectCombinationsControl
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(variablesScrollPane)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
@@ -420,33 +415,36 @@ public class SelectCombinationsView extends DialogBase<SelectCombinationsControl
                                 .addComponent(removeFromSelectedButton)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(removeAllFromSelectedButton))
-                            .addComponent(variablesSelectedScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(27, 27, 27)
                                 .addComponent(addRowButton)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(removeRowButton)))
-                        .addGap(32, 32, 32)
+                                .addComponent(removeRowButton))
+                            .addComponent(variablesSelectedScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(thresholdLabel)
+                        .addGap(5, 5, 5)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(thresholdLabel)
-                            .addComponent(thresholdTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
+                            .addComponent(thresholdTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(kLabel))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(automaticSpecificationButton)
                         .addGap(18, 18, 18)
                         .addComponent(clearButton)
-                        .addGap(18, 18, 18)
+                        .addGap(25, 25, 25)
                         .addComponent(setTableRiskModelButton)
                         .addGap(18, 18, 18)
                         .addComponent(setKAnonButton)
-                        .addGap(18, 18, 18)
-                        .addComponent(progressLabel)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(progressbar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(cancelButton)
-                            .addComponent(calculateTablesButton)))
-                    .addComponent(tablesScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                            .addComponent(calculateTablesButton))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(progressLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(progressbar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(variablesScrollPane)
+                    .addComponent(tablesScrollPane))
                 .addContainerGap())
         );
 
@@ -456,7 +454,7 @@ public class SelectCombinationsView extends DialogBase<SelectCombinationsControl
     private void calculateTablesButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_calculateTablesButtonActionPerformed
         try {
             if (this.model.getTables().isEmpty()) {
-                showMessage("No tables specified");
+                showMessage("No combinations specified");
             } else {
                 getController().calculateTables();
             }
@@ -652,7 +650,7 @@ public class SelectCombinationsView extends DialogBase<SelectCombinationsControl
             
                 int index = this.table.getSelectedRow();
                 if(index < 0){
-                    showMessage("No table is selected");
+                    showMessage("No combination is selected");
                     return;
                 }
                 index = this.table.convertRowIndexToModel(index);
@@ -662,7 +660,7 @@ public class SelectCombinationsView extends DialogBase<SelectCombinationsControl
                     return;
                 }
                 tableMu.setRiskModel(!tableMu.isRiskModel());
-                tableMu.setKAnon(false);
+                //tableMu.setKAnon(false);
 
                 if (tableMu.isRiskModel()) {  //The table is added to the risk model
                     ArrayList<TableMu> toBeRemovedTables = getController().getListOfRemovedTables();
@@ -691,26 +689,19 @@ public class SelectCombinationsView extends DialogBase<SelectCombinationsControl
 
     private void setKAnonButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_setKAnonButtonActionPerformed
         if (this.model.getTables().size() > 0) {
-            
                 int index = this.table.getSelectedRow();
                 if(index < 0){
-                    showMessage("No table is selected");
+                    showMessage("No combination is selected");
                     return;
                 }
-                index = this.table.convertRowIndexToModel(index);
-                TableMu tableMu = this.model.getTables().get(index);
-                tableMu.setKAnon(!tableMu.isKAnon());
-                tableMu.setRiskModel(false);
-
-                /*if (tableMu.isKAnon()) {  //The table is added to the k-anonymisation model
-                    ArrayList<TableMu> toBeRemovedTables = getController().getListOfRemovedTables();
-                    getController().overlappingTables(toBeRemovedTables, tableMu);
-                    getController().removeTableRiskModel(toBeRemovedTables);
-                }*/
+                boolean SetkAnon = this.model.getTables().get(index).isKAnon();
+                for (TableMu tableMu : this.model.getTables()){
+                    tableMu.setKAnon(!SetkAnon);
+                    tableMu.setRiskModel(false);
+                }
 
                 updateValues();
                 this.table.getSelectionModel().setSelectionInterval(index, index);
-
         }
     }//GEN-LAST:event_setKAnonButtonActionPerformed
 
@@ -737,6 +728,7 @@ public class SelectCombinationsView extends DialogBase<SelectCombinationsControl
     private javax.swing.JButton calculateTablesButton;
     private javax.swing.JButton cancelButton;
     private javax.swing.JButton clearButton;
+    private javax.swing.JLabel kLabel;
     private javax.swing.JButton moveToSelectedButton;
     private javax.swing.JLabel progressLabel;
     private javax.swing.JProgressBar progressbar;

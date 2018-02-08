@@ -341,7 +341,7 @@ public class SelectCombinationsController extends ControllerBase<Combinations> {
     }
 
     /**
-     * Checks if there are overlapping tables and askes if they need to be
+     * Checks if there are overlapping tables and asks if they need to be
      * removed.
      *
      * @param toBeRemovedTables ArrayList of TableMu's that overlap the given
@@ -356,6 +356,10 @@ public class SelectCombinationsController extends ControllerBase<Combinations> {
             if (JOptionPane.showConfirmDialog(getView(), "Overlapping tables found with this risk table\nDo you want to remove them?",
                     "Mu Argus", JOptionPane.YES_NO_OPTION) == JOptionPane.NO_OPTION) {
                 tableMu.setRiskModel(!tableMu.isRiskModel());  //Revert the change
+                toBeRemovedTables.clear();// Clear set of toBeRemovedTables ("No" chosen when asked to remove)
+            }
+            else{ // Do actual clear when "Yes" was selected, and set kAnon to false
+                tableMu.setKAnon(false);
                 valid = true;
             }
         }

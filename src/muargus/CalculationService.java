@@ -17,17 +17,24 @@
 package muargus;
 
 import argus.model.ArgusException;
+import argus.model.DataFilePair;
 import argus.utils.SystemUtils;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.concurrent.ExecutionException;
 import javax.swing.SwingWorker;
+import muargus.controller.AnonDataController;
 import muargus.controller.SelectCombinationsController;
 import muargus.extern.dataengine.CMuArgCtrl;
 import muargus.extern.dataengine.IProgressListener;
+import muargus.io.MetaReader;
+import muargus.io.MetaWriter;
+import muargus.io.RWriter;
+import muargus.model.AnonDataSpec;
 import muargus.model.ProtectedFile;
 import muargus.model.MetadataMu;
 import muargus.model.Combinations;
@@ -35,9 +42,11 @@ import muargus.model.RecodeMu;
 import muargus.model.TableMu;
 import muargus.model.CodeInfo;
 import muargus.model.PramVariableSpec;
+import muargus.model.ReplacementFile;
 import muargus.model.ReplacementSpec;
 import muargus.model.RiskModelClass;
 import muargus.model.VariableMu;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -317,7 +326,7 @@ public class CalculationService {
     }
 
     /**
-     * Makes the protected/safe file.
+     * Makes the protected/safe file using "traditional suppression".
      *
      * @throws ArgusException Throws an ArgusException when an error occurs
      * during Make protected file.
@@ -349,14 +358,14 @@ public class CalculationService {
             } else {
                 dataFileName = protectedFile.getSafeMeta().getFileNames().getDataFileName();
             }
-
+            
             boolean result = this.c.MakeFileSafe(dataFileName,
                     protectedFile.isWithPrior(),
                     protectedFile.isWithEntropy(),
                     protectedFile.getHouseholdType(),
                     protectedFile.isRandomizeOutput(),
                     protectedFile.isPrintBHR());
-
+                    
             if (!result) {
                 throw new ArgusException("Error during Make protected file");
             }
@@ -365,6 +374,99 @@ public class CalculationService {
         }
     }
 
+    /**
+     * Makes the protected/safe file using "(k+1)-anonymisation".
+     *
+     * @throws ArgusException Throws an ArgusException when an error occurs
+     * during Make protected file.
+     */
+    private void makeFileInBackgroundKAnon() throws ArgusException {
+        AnonDataSpec anonData = new AnonDataSpec();
+        AnonDataController controller = new AnonDataController(this.metadata);
+        //ProtectedFile protectedFile = this.metadata.getCombinations().getProtectedFile();
+
+        // First save ascii file with microdata with other SDC methods applied
+        // Save only variables that are needed to apply (k+1)-anonymisation
+        // Save corresponding metadata file
+        // Read microdata into R and apply (k+1)-anonymisation with sdcMicro and save result
+        // Combine result with original microdata
+        
+        controller.runAnonData(anonData);
+        
+        try{
+            ProtectedFile protectedFile = this.metadata.getCombinations().getProtectedFile();
+            String dataFileName;
+            if (this.metadata.isSpss()) {
+                File saf = File.createTempFile("MuArgus", ".saf");
+                saf.deleteOnExit();
+                dataFileName = saf.getPath();
+                MuARGUS.getSpssUtils().safFile = saf;
+            } else {
+                //dataFileName = protectedFile.getSafeMeta().getFileNames().getDataFileName();
+                dataFileName = anonData.getdataFile().getAbsolutePath();
+            }
+            
+            boolean result = this.c.MakeFileSafe(dataFileName, false, false, protectedFile.getHouseholdType(), false, false);
+            
+            if (!result) {
+                throw new ArgusException("Error during Make protected file");
+            }
+        
+        } catch (IOException ex){
+        
+        }
+        // doChangeFiles(); // Apply SDC methods
+        
+            //this.metadata.getCombinations().getProtectedFile().initSafeMeta(MuTmpFile, this.metadata);
+                       
+            //this.c.SetChangeFile(this.metadata.getReplacementSpecs().size()+1, KAnonymFile, 0, VarIndex, ";");
+        
+            
+            
+            
+            
+        
+     /*   this.c.SetOutFileInfo(this.metadata.getDataFileType() == MetadataMu.DATA_FILE_TYPE_FIXED
+                || this.metadata.getDataFileType() == MetadataMu.DATA_FILE_TYPE_SPSS,
+                this.metadata.getSeparator(),
+                "",
+                true
+        );
+        
+        int index = 0;
+        
+        for (VariableMu variable : this.metadata.getVariables()) {
+            index++;
+            if (protectedFile.getVariables().contains(variable)) {
+                this.c.SetSuppressPrior(index, variable.getSuppressPriority());
+            }
+        }
+        try {
+            String dataFileName;
+            if (this.metadata.isSpss()) {
+                File saf = File.createTempFile("MuArgus", ".saf");
+                saf.deleteOnExit();
+                dataFileName = saf.getPath();
+                MuARGUS.getSpssUtils().safFile = saf;
+            } else {
+                dataFileName = protectedFile.getSafeMeta().getFileNames().getDataFileName();
+            }
+            
+            boolean result = this.c.MakeFileSafe(dataFileName,
+                    protectedFile.isWithPrior(),
+                    protectedFile.isWithEntropy(),
+                    protectedFile.getHouseholdType(),
+                    protectedFile.isRandomizeOutput(),
+                    protectedFile.isPrintBHR());
+                    
+            if (!result) {
+                throw new ArgusException("Error during Make protected file");
+            }
+        } catch (IOException e) {
+
+        }*/
+    }
+    
     /**
      * Calculates the tables. For each (sub) table is calculated how many table
      * cells are greater than 0 and less than or equal to the threshold.
@@ -488,7 +590,11 @@ public class CalculationService {
                 exploreInBackground();
                 break;
             case MakeProtectedFile:
-                makeFileInBackground();
+                if (!this.metadata.getCombinations().getProtectedFile().isKAnon()){
+                    makeFileInBackground();
+                } else {
+                    makeFileInBackgroundKAnon();
+                }
                 break;
             case MakeReplacementFile:
                 makeReplacementFileInBackground();
@@ -662,6 +768,7 @@ public class CalculationService {
         for (int index = 0; index < indices.length; index++) {
             indices[index] = getIndexOf(table.getVariables().get(index));
         }
+        Arrays.sort(indices,0,indices.length); // MuArgusCtrl needs ordering from low to high
         return indices;
     }
 

@@ -5,7 +5,7 @@
     <Property name="defaultCloseOperation" type="int" value="2"/>
     <Property name="title" type="java.lang.String" value="Specify Combinations"/>
     <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-      <Dimension value="[690, 500]"/>
+      <Dimension value="[710, 500]"/>
     </Property>
   </Properties>
   <SyntheticProperties>
@@ -28,74 +28,59 @@
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
-              <EmptySpace max="-2" attributes="0"/>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
               <Component id="variablesScrollPane" min="-2" pref="101" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" alignment="1" attributes="0">
+                  <Group type="102" attributes="0">
                       <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
+                      <Group type="103" groupAlignment="1" max="-2" attributes="0">
                           <Group type="102" alignment="1" attributes="0">
-                              <Component id="clearButton" min="-2" pref="72" max="-2" attributes="0"/>
-                              <EmptySpace min="-2" pref="81" max="-2" attributes="0"/>
+                              <Component id="cancelButton" min="-2" pref="106" max="-2" attributes="0"/>
+                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                              <Component id="calculateTablesButton" max="32767" attributes="0"/>
                           </Group>
                           <Group type="102" alignment="0" attributes="0">
-                              <Group type="103" groupAlignment="1" max="-2" attributes="0">
-                                  <Component id="setKAnonButton" alignment="0" max="32767" attributes="0"/>
-                                  <Component id="progressbar" alignment="0" max="32767" attributes="0"/>
+                              <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                  <Component id="removeFromSelectedButton" max="32767" attributes="0"/>
+                                  <Component id="moveToSelectedButton" max="32767" attributes="0"/>
+                                  <Component id="removeAllFromSelectedButton" alignment="0" max="32767" attributes="0"/>
+                              </Group>
+                              <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
                                   <Group type="102" attributes="0">
-                                      <Component id="cancelButton" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace min="-2" pref="40" max="-2" attributes="0"/>
-                                      <Component id="calculateTablesButton" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace min="-2" pref="19" max="-2" attributes="0"/>
+                                      <Component id="kLabel" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace max="-2" attributes="0"/>
+                                      <Component id="thresholdTextField" min="-2" pref="48" max="-2" attributes="0"/>
+                                  </Group>
+                                  <Group type="102" alignment="0" attributes="0">
+                                      <Group type="103" groupAlignment="0" attributes="0">
+                                          <Component id="variablesSelectedScrollPane" pref="0" max="32767" attributes="0"/>
+                                          <Component id="thresholdLabel" max="32767" attributes="0"/>
+                                      </Group>
+                                      <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
+                                      <Group type="103" groupAlignment="0" attributes="0">
+                                          <Component id="addRowButton" min="-2" max="-2" attributes="0"/>
+                                          <Component id="removeRowButton" min="-2" max="-2" attributes="0"/>
+                                      </Group>
                                   </Group>
                               </Group>
-                              <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
                           </Group>
+                          <Component id="progressLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="setKAnonButton" alignment="0" max="32767" attributes="0"/>
+                          <Component id="setTableRiskModelButton" alignment="0" max="32767" attributes="0"/>
+                          <Component id="automaticSpecificationButton" alignment="0" max="32767" attributes="0"/>
+                          <Component id="progressbar" alignment="0" max="32767" attributes="0"/>
                       </Group>
                   </Group>
-                  <Group type="102" attributes="0">
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Group type="102" alignment="0" attributes="0">
-                                  <EmptySpace type="separate" max="-2" attributes="0"/>
-                                  <Component id="progressLabel" min="-2" max="-2" attributes="0"/>
-                              </Group>
-                              <Group type="102" alignment="0" attributes="0">
-                                  <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
-                                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                      <Component id="removeFromSelectedButton" max="32767" attributes="0"/>
-                                      <Component id="moveToSelectedButton" max="32767" attributes="0"/>
-                                      <Component id="removeAllFromSelectedButton" alignment="0" max="32767" attributes="0"/>
-                                  </Group>
-                                  <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
-                                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                      <Group type="102" attributes="0">
-                                          <Component id="thresholdLabel" min="-2" max="-2" attributes="0"/>
-                                          <EmptySpace max="-2" attributes="0"/>
-                                          <Component id="thresholdTextField" max="32767" attributes="0"/>
-                                      </Group>
-                                      <Component id="variablesSelectedScrollPane" min="-2" pref="102" max="-2" attributes="0"/>
-                                  </Group>
-                                  <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
-                                  <Group type="103" groupAlignment="0" attributes="0">
-                                      <Component id="addRowButton" min="-2" max="-2" attributes="0"/>
-                                      <Component id="removeRowButton" min="-2" max="-2" attributes="0"/>
-                                  </Group>
-                              </Group>
-                              <Group type="102" alignment="1" attributes="0">
-                                  <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
-                                  <Component id="automaticSpecificationButton" min="-2" pref="214" max="-2" attributes="0"/>
-                              </Group>
-                          </Group>
-                          <Group type="102" alignment="0" attributes="0">
-                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                              <Component id="setTableRiskModelButton" min="-2" pref="214" max="-2" attributes="0"/>
-                          </Group>
-                      </Group>
-                      <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
+                  <Group type="102" alignment="0" attributes="0">
+                      <EmptySpace min="-2" pref="91" max="-2" attributes="0"/>
+                      <Component id="clearButton" min="-2" pref="72" max="-2" attributes="0"/>
                   </Group>
               </Group>
-              <Component id="tablesScrollPane" pref="284" max="32767" attributes="0"/>
-              <EmptySpace max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
+              <Component id="tablesScrollPane" pref="319" max="32767" attributes="0"/>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -104,7 +89,6 @@
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="variablesScrollPane" max="32767" attributes="0"/>
                   <Group type="102" attributes="0">
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" attributes="0">
@@ -115,38 +99,41 @@
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="removeAllFromSelectedButton" min="-2" max="-2" attributes="0"/>
                           </Group>
-                          <Component id="variablesSelectedScrollPane" alignment="0" min="-2" max="-2" attributes="0"/>
                           <Group type="102" alignment="0" attributes="0">
                               <EmptySpace min="-2" pref="27" max="-2" attributes="0"/>
                               <Component id="addRowButton" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="removeRowButton" min="-2" max="-2" attributes="0"/>
                           </Group>
+                          <Component id="variablesSelectedScrollPane" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace min="-2" pref="32" max="-2" attributes="0"/>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <Component id="thresholdLabel" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="thresholdLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="thresholdTextField" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="kLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Component id="automaticSpecificationButton" min="-2" max="-2" attributes="0"/>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Component id="clearButton" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="25" max="-2" attributes="0"/>
                       <Component id="setTableRiskModelButton" min="-2" max="-2" attributes="0"/>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Component id="setKAnonButton" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace type="separate" max="-2" attributes="0"/>
-                      <Component id="progressLabel" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="progressbar" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="cancelButton" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="calculateTablesButton" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <Component id="progressLabel" min="-2" pref="24" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="progressbar" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <Component id="tablesScrollPane" pref="0" max="32767" attributes="0"/>
+                  <Component id="variablesScrollPane" max="32767" attributes="0"/>
+                  <Component id="tablesScrollPane" max="32767" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
@@ -223,13 +210,14 @@
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="removeRowButtonActionPerformed"/>
       </Events>
     </Component>
-    <Component class="javax.swing.JLabel" name="thresholdLabel">
+    <Component class="javax.swing.JLabel" name="kLabel">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Threshold k:"/>
+        <Property name="text" type="java.lang.String" value="k ="/>
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="thresholdTextField">
       <Properties>
+        <Property name="horizontalAlignment" type="int" value="4"/>
         <Property name="toolTipText" type="java.lang.String" value="&lt;html&gt;Threshold k:&lt;br&gt;&#xa;&amp;le; k is unsafe according to traditional Dutch Approach&lt;br&gt;&#xa;&amp;le; k is unsafe according to (k+1)-anonymity"/>
       </Properties>
       <Events>
@@ -240,7 +228,7 @@
     </Component>
     <Component class="javax.swing.JButton" name="automaticSpecificationButton">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Automatic specification of tables"/>
+        <Property name="text" type="java.lang.String" value="Automatic specification of combinations"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="automaticSpecificationButtonActionPerformed"/>
@@ -258,7 +246,7 @@
     <Component class="javax.swing.JButton" name="setTableRiskModelButton">
       <Properties>
         <Property name="text" type="java.lang.String" value="Set combination for Risk model"/>
-        <Property name="toolTipText" type="java.lang.String" value=""/>
+        <Property name="toolTipText" type="java.lang.String" value="" noResource="true"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="setTableRiskModelButtonActionPerformed"/>
@@ -333,7 +321,7 @@
     </Component>
     <Component class="javax.swing.JButton" name="setKAnonButton">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Set combination for (k+1)-anonymity"/>
+        <Property name="text" type="java.lang.String" value="Toggle combinations for (k+1)-anonymity"/>
         <Property name="toolTipText" type="java.lang.String" value="&lt;html&gt;&#xa;&amp;le; k is unsafe according to traditional Dutch Approach&lt;br&gt;&#xa;&amp;le; k is unsafe according to (k+1)-anonymity"/>
       </Properties>
       <Events>
@@ -341,6 +329,12 @@
         <EventHandler event="mouseExited" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="setKAnonButtonMouseExited"/>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="setKAnonButtonActionPerformed"/>
       </Events>
+    </Component>
+    <Component class="javax.swing.JLabel" name="thresholdLabel">
+      <Properties>
+        <Property name="horizontalAlignment" type="int" value="0"/>
+        <Property name="text" type="java.lang.String" value="Threshold"/>
+      </Properties>
     </Component>
   </SubComponents>
 </Form>

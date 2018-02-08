@@ -23,6 +23,12 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import muargus.model.AnonDataSpec;
+import muargus.model.MetadataMu;
+import muargus.model.TableMu;
+import muargus.model.VariableMu;
+import muargus.model.ProtectedFile;
 import muargus.model.SyntheticDataSpec;
 
 /**
@@ -164,4 +170,47 @@ public class RWriter {
         }
     }
 
+    /**
+     * Writes the r-Script for generating (k+1)-anonymised data.
+     *
+     * @param anonDataSpec instance containing k-anonymisation info
+     * @throws ArgusException Throws an ArgusException when an error occurs
+     * during writing.
+     */
+    public static void writeKAnon(AnonDataSpec anonData) throws ArgusException {
+        try (PrintWriter writer = new PrintWriter(anonData.getrScriptFile())) {
+            writer.println("require(\"sdcMicro\")");
+            writer.println(String.format("ppin <- read.csv(\"%s\",sep=\";\",header=FALSE)",
+                                            anonData.doubleSlashses(anonData.getdataFile().getAbsolutePath())));
+            
+            for (int i=0; i<anonData.getKAnonRStrings().size(); i++){
+                writer.println(String.format("keyVars <- %s",anonData.getKAnonRStrings().get(i)));
+                writer.println(String.format("k <- %d",anonData.getKAnonThresholds().get(i)));
+                writer.println("importance <- NULL"); // Nog vullen m.b.v. priorities
+                writer.println("ppin[,keyVars] <- kAnon(ppin, keyVars=keyVars, importance=importance, k=k+1)$xAnon");
+            }
+            
+            File tmp2File = new File(anonData.doubleSlashses(anonData.getdataFile().getAbsolutePath())+2);
+            tmp2File.deleteOnExit();
+            writer.println(String.format("write.table(ppin,\"%s2\",row.names=FALSE,col.names=FALSE,quote=FALSE)",
+                    anonData.doubleSlashses(anonData.getdataFile().getAbsolutePath())));
+        } catch (FileNotFoundException ex) {
+            throw new ArgusException("Error writing to file. Error message: " + ex.getMessage());
+        }
+    }
+
+    /**
+     *
+     * @param kAnonData ProtectedFile instance containing Data 
+     * @throws ArgusException Throws an ArgusException when an error occurs
+     * during writing.
+     */
+    public static void writeBatKAnon(AnonDataSpec anonData) throws ArgusException {
+        try (PrintWriter writer = new PrintWriter(anonData.getRunRFileFile())) {
+            writer.println(String.format("R CMD BATCH --no-save --no-restore \"%s\"", anonData.getrScriptFile().getAbsolutePath()));
+        } catch (FileNotFoundException ex) {
+            throw new ArgusException("Error writing to file. Error message: " + ex.getMessage());
+        }
+    }
+   
 }

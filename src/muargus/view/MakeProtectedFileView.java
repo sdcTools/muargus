@@ -92,6 +92,7 @@ public class MakeProtectedFileView extends DialogBase<MakeProtectedFileControlle
         this.suppressionPrioritySlider.setValue(Integer.parseInt(this.model.getData()[this.selectedRow][1]));
 
         enableSuppressionTable();
+        enableSuppressionApproach();
     }
 
     /**
@@ -102,6 +103,20 @@ public class MakeProtectedFileView extends DialogBase<MakeProtectedFileControlle
         this.suppressionPrioritySlider.setValue(Integer.parseInt(this.model.getData()[this.selectedRow][1]));
     }
 
+    /**
+     * Enables/disables the Approach radiobuttons
+     */
+    private void enableSuppressionApproach(){
+        boolean suppression = !this.noSuppressionRadioButton.isSelected();
+        if (getMetadata().getCombinations().isKAnon()){
+            this.labelApproach.setText("(k+1)-anonymisation");
+        } else {
+            this.labelApproach.setText("Traditional");
+        }
+        
+        this.approachesPanel.setEnabled(suppression);
+    }
+    
     /**
      * Enables/disables the suppressionTable, slider and label and changes the
      * backgroundcolor.
@@ -159,6 +174,7 @@ public class MakeProtectedFileView extends DialogBase<MakeProtectedFileControlle
 
         suppressionButtonGroup = new javax.swing.ButtonGroup();
         hhIdentifierButtonGroup = new javax.swing.ButtonGroup();
+        approachButtonGroup = new javax.swing.ButtonGroup();
         suppressionPanel = new javax.swing.JPanel();
         noSuppressionRadioButton = new javax.swing.JRadioButton();
         usePriorityRadioButton = new javax.swing.JRadioButton();
@@ -168,6 +184,8 @@ public class MakeProtectedFileView extends DialogBase<MakeProtectedFileControlle
         suppressionPriorityScrollPane = new javax.swing.JScrollPane();
         suppressionPriorityTable = new javax.swing.JTable();
         suppressionPrioritySlider = new javax.swing.JSlider();
+        approachesPanel = new javax.swing.JPanel();
+        labelApproach = new javax.swing.JLabel();
         hhIdentifierPanel = new javax.swing.JPanel();
         keepInSafeFileRadioButton = new javax.swing.JRadioButton();
         changeIntoSequenceNumberRadioButton = new javax.swing.JRadioButton();
@@ -180,7 +198,8 @@ public class MakeProtectedFileView extends DialogBase<MakeProtectedFileControlle
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Make Protected File");
-        setMinimumSize(new java.awt.Dimension(440, 400));
+        setMinimumSize(new java.awt.Dimension(440, 490));
+        setPreferredSize(new java.awt.Dimension(440, 490));
 
         suppressionPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Suppression"));
 
@@ -209,6 +228,7 @@ public class MakeProtectedFileView extends DialogBase<MakeProtectedFileControlle
             }
         });
 
+        suppressionPriorityPerVariableLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         suppressionPriorityPerVariableLabel.setText("Suppression priority per variable");
 
         suppressionPriorityTable.setModel(new javax.swing.table.DefaultTableModel(
@@ -239,24 +259,51 @@ public class MakeProtectedFileView extends DialogBase<MakeProtectedFileControlle
             }
         });
 
+        approachesPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Approach"));
+
+        labelApproach.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+
+        javax.swing.GroupLayout approachesPanelLayout = new javax.swing.GroupLayout(approachesPanel);
+        approachesPanel.setLayout(approachesPanelLayout);
+        approachesPanelLayout.setHorizontalGroup(
+            approachesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(approachesPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(labelApproach, javax.swing.GroupLayout.DEFAULT_SIZE, 120, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        approachesPanelLayout.setVerticalGroup(
+            approachesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, approachesPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(labelApproach, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
+
         javax.swing.GroupLayout suppressionPanelLayout = new javax.swing.GroupLayout(suppressionPanel);
         suppressionPanel.setLayout(suppressionPanelLayout);
         suppressionPanelLayout.setHorizontalGroup(
             suppressionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(suppressionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                .addComponent(separator, javax.swing.GroupLayout.Alignment.LEADING)
+                .addComponent(suppressionPriorityPerVariableLabel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 171, Short.MAX_VALUE))
             .addGroup(suppressionPanelLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(suppressionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(noSuppressionRadioButton, javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(usePriorityRadioButton, javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(useEntropyRadioButton, javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(suppressionPriorityPerVariableLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 452, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, suppressionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addComponent(suppressionPriorityScrollPane, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                        .addComponent(suppressionPrioritySlider, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 152, Short.MAX_VALUE)))
-                .addGap(12, 12, 12))
-            .addGroup(suppressionPanelLayout.createSequentialGroup()
-                .addComponent(separator, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addContainerGap()
+                .addGroup(suppressionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(suppressionPanelLayout.createSequentialGroup()
+                        .addComponent(approachesPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap())
+                    .addGroup(suppressionPanelLayout.createSequentialGroup()
+                        .addGroup(suppressionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(suppressionPriorityScrollPane, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                            .addGroup(suppressionPanelLayout.createSequentialGroup()
+                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addGroup(suppressionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(noSuppressionRadioButton, javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(usePriorityRadioButton, javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(useEntropyRadioButton, javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(suppressionPrioritySlider, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addGap(312, 312, 312))))
         );
         suppressionPanelLayout.setVerticalGroup(
             suppressionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -266,13 +313,15 @@ public class MakeProtectedFileView extends DialogBase<MakeProtectedFileControlle
                 .addComponent(usePriorityRadioButton)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(useEntropyRadioButton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(approachesPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(separator, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(10, 10, 10)
                 .addComponent(suppressionPriorityPerVariableLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(suppressionPriorityScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(suppressionPrioritySlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
@@ -380,22 +429,20 @@ public class MakeProtectedFileView extends DialogBase<MakeProtectedFileControlle
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(suppressionPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addContainerGap())
+                    .addComponent(suppressionPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(hhIdentifierPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(writeRecordRandomOrderCheckBox)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(addRiskToOutputFileCheckBox)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(18, 18, 18)
                         .addComponent(progressbar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(9, 9, 9)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(cancelButton)
-                            .addComponent(makeFileButton))
-                        .addGap(17, 17, 17))))
+                            .addComponent(makeFileButton))))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -431,6 +478,7 @@ public class MakeProtectedFileView extends DialogBase<MakeProtectedFileControlle
         if (this.useEntropyRadioButton.isSelected()) {
             this.model.setSuppressionType(ProtectedFile.USE_ENTROPY);
             enableSuppressionTable();
+            enableSuppressionApproach();
         }
     }//GEN-LAST:event_useEntropyRadioButtonItemStateChanged
 
@@ -438,6 +486,7 @@ public class MakeProtectedFileView extends DialogBase<MakeProtectedFileControlle
         if (this.usePriorityRadioButton.isSelected()) {
             this.model.setSuppressionType(ProtectedFile.USE_PRIORITY);
             enableSuppressionTable();
+            enableSuppressionApproach();
         }
     }//GEN-LAST:event_usePriorityRadioButtonItemStateChanged
 
@@ -445,6 +494,7 @@ public class MakeProtectedFileView extends DialogBase<MakeProtectedFileControlle
         if (this.noSuppressionRadioButton.isSelected()) {
             this.model.setSuppressionType(ProtectedFile.NO_SUPPRESSION);
             enableSuppressionTable();
+            enableSuppressionApproach();
         }
     }//GEN-LAST:event_noSuppressionRadioButtonItemStateChanged
 
@@ -481,11 +531,14 @@ public class MakeProtectedFileView extends DialogBase<MakeProtectedFileControlle
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JCheckBox addRiskToOutputFileCheckBox;
+    private javax.swing.ButtonGroup approachButtonGroup;
+    private javax.swing.JPanel approachesPanel;
     private javax.swing.JButton cancelButton;
     private javax.swing.JRadioButton changeIntoSequenceNumberRadioButton;
     private javax.swing.ButtonGroup hhIdentifierButtonGroup;
     private javax.swing.JPanel hhIdentifierPanel;
     private javax.swing.JRadioButton keepInSafeFileRadioButton;
+    private javax.swing.JLabel labelApproach;
     private javax.swing.JButton makeFileButton;
     private javax.swing.JRadioButton noSuppressionRadioButton;
     private javax.swing.JProgressBar progressbar;
