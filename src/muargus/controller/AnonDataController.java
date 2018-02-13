@@ -27,6 +27,7 @@ import muargus.model.MetadataMu;
 import muargus.model.ReplacementFile;
 import muargus.model.ReplacementSpec;
 import muargus.model.AnonDataSpec;
+import muargus.model.Combinations;
 import muargus.model.PramVariableSpec;
 import muargus.model.ProtectedFile;
 import muargus.model.SyntheticDataSpec;
@@ -52,32 +53,41 @@ public class AnonDataController extends ControllerBase<AnonDataSpec>{
         //fillModel();
     }
 
-    public boolean runAnonData(AnonDataSpec anonData) {
+    public AnonDataSpec setAnonData() {
         try {
-            //AnonDataSpec anonData = getModel();
-            //clean(anonData);
+            AnonDataSpec anonData = getModel();
+            clean(anonData);
             
             fillKAnonVariables();
             fillKAnonCombinations();
             removeRedundantKAnonVariables();
             
-            for (TableMu tab : anonData.getKAnonCombinations())
+            for (TableMu tab : anonData.getKAnonCombinations().getTables())
                 anonData.getKAnonThresholds().add(tab.getThreshold());
             
             fillKAnonRStrings();
             
             anonData.getdataFile();
-            writeDataKAnon();
             
             RWriter.writeKAnon(anonData);
             RWriter.writeBatKAnon(anonData);
             
             SystemUtils.writeLogbook("Anon-files for (k+1)-anonymisation have been generated.");
-            return true;
+            return anonData;
         } catch (ArgusException ex) {
-            return false;
+            return null;
         }
 
+    }
+    
+    public void runAnonData() {
+        try {
+          
+            writeDataKAnon();  
+          
+        } catch (ArgusException ex){
+            
+        }
     }
 
      /**
@@ -147,18 +157,18 @@ public class AnonDataController extends ControllerBase<AnonDataSpec>{
         if (this.metadata.getCombinations().getPramSpecification() != null) {
             if (this.metadata.getCombinations().getPramSpecification().getPramVarSpec().isEmpty())
             {
-              for (VariableMu var : protectedFile.getVariables()) getKAnonVariables().add(var);
+              for (VariableMu var : protectedFile.getVariables()) this.getKAnonVariables().add(var);
             } else {
                 for (PramVariableSpec pramSpec : this.metadata.getCombinations().getPramSpecification().getPramVarSpec()) {
                     if (!pramSpec.isApplied() & protectedFile.getVariables().contains(pramSpec.getVariable())) {
-                        getKAnonVariables().add(pramSpec.getVariable());
+                        this.getKAnonVariables().add(pramSpec.getVariable());
                     }
                 }
             }
         }
     }
     
-    private ArrayList<TableMu> getKAnonCombinations() {
+    private Combinations getKAnonCombinations() {
         return getModel().getKAnonCombinations();
     }
     
@@ -175,22 +185,22 @@ public class AnonDataController extends ControllerBase<AnonDataSpec>{
                 }
             }
             if (!pramCombi) {
-                getKAnonCombinations().add(tab);
+                getKAnonCombinations().addTable(tab);
             }
         }
     }
     
     private void removeRedundantKAnonVariables(){
         getKAnonVariables().clear();
-        for (TableMu tab : getKAnonCombinations()){
+        for (TableMu tab : getKAnonCombinations().getTables()){
             for (VariableMu var : tab.getVariables()){
                 if (!getKAnonVariables().contains(var)) getKAnonVariables().add(var);
             }
         }
     }
-
+    
     private void fillKAnonRStrings(){
-        for (TableMu tab : getKAnonCombinations()){
+        for (TableMu tab : getKAnonCombinations().getTables()){
             String hs ="c(";
             for (VariableMu var : tab.getVariables()){
                 hs += (getKAnonVariables().indexOf(var) + 1) + ",";
@@ -206,12 +216,7 @@ public class AnonDataController extends ControllerBase<AnonDataSpec>{
      * @throws ArgusException 
      */
     private void writeDataKAnon() throws ArgusException {
-        try (PrintWriter writer = new PrintWriter(getModel().getdataFile().getAbsolutePath())){
-            writer.println("Testdata");
-            
-        } catch (IOException ex){
-            throw new ArgusException("Error writing data for (k+1)-anonymisation in R");
-        }
+        runR();
     }    
     
         

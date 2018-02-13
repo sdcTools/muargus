@@ -27,7 +27,7 @@ import java.util.ArrayList;
  */
 public class AnonDataSpec extends ReplacementSpec{
     private final ArrayList<VariableMu> KAnonVars;
-    private final ArrayList<TableMu> KAnonCombinations;
+    private final Combinations KAnonCombinations;
     private final ArrayList<String> RStrings;
     private final ArrayList<Integer> thresholds;
     private File dataFile;
@@ -41,7 +41,7 @@ public class AnonDataSpec extends ReplacementSpec{
     */
     public AnonDataSpec() {
         this.KAnonVars = new ArrayList<>();
-        this.KAnonCombinations = new ArrayList<>();
+        this.KAnonCombinations = new Combinations();
         this.thresholds = new ArrayList<>();
         this.RStrings = new ArrayList<>();
     }
@@ -51,7 +51,7 @@ public class AnonDataSpec extends ReplacementSpec{
     */
     public void clear() {
         this.KAnonVars.clear();
-        this.KAnonCombinations.clear();
+        //this.KAnonCombinations.clear();
         this.RStrings.clear();
     }
     
@@ -82,7 +82,7 @@ public class AnonDataSpec extends ReplacementSpec{
      *
      * @return ArrayList of TableMu's containing the combinations to apply k-anonymisation to.
      */
-    public ArrayList<TableMu> getKAnonCombinations() {
+    public Combinations getKAnonCombinations() {
         return this.KAnonCombinations;
     }
     

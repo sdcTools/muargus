@@ -192,7 +192,7 @@ public class RWriter {
             
             File tmp2File = new File(anonData.doubleSlashses(anonData.getdataFile().getAbsolutePath())+2);
             tmp2File.deleteOnExit();
-            writer.println(String.format("write.table(ppin,\"%s2\",row.names=FALSE,col.names=FALSE,quote=FALSE)",
+            writer.println(String.format("write.table(ppin,\"%s2\",row.names=FALSE,col.names=FALSE,quote=FALSE,sep=\";\")",
                     anonData.doubleSlashses(anonData.getdataFile().getAbsolutePath())));
         } catch (FileNotFoundException ex) {
             throw new ArgusException("Error writing to file. Error message: " + ex.getMessage());

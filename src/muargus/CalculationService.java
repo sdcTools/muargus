@@ -381,40 +381,50 @@ public class CalculationService {
      * during Make protected file.
      */
     private void makeFileInBackgroundKAnon() throws ArgusException {
-        AnonDataSpec anonData = new AnonDataSpec();
-        AnonDataController controller = new AnonDataController(this.metadata);
-        //ProtectedFile protectedFile = this.metadata.getCombinations().getProtectedFile();
-
         // First save ascii file with microdata with other SDC methods applied
         // Save only variables that are needed to apply (k+1)-anonymisation
         // Save corresponding metadata file
         // Read microdata into R and apply (k+1)-anonymisation with sdcMicro and save result
         // Combine result with original microdata
         
-        controller.runAnonData(anonData);
+        // anonData will contain
+        // Variables, Combinations, RStrings, Thresholds, dataFile, rScriptFile, runRFile
+        ProtectedFile protectedFile = metadata.getCombinations().getProtectedFile();
+        AnonDataController controller = new AnonDataController(metadata);
         
-        try{
-            ProtectedFile protectedFile = this.metadata.getCombinations().getProtectedFile();
-            String dataFileName;
-            if (this.metadata.isSpss()) {
-                File saf = File.createTempFile("MuArgus", ".saf");
-                saf.deleteOnExit();
-                dataFileName = saf.getPath();
-                MuARGUS.getSpssUtils().safFile = saf;
-            } else {
-                //dataFileName = protectedFile.getSafeMeta().getFileNames().getDataFileName();
-                dataFileName = anonData.getdataFile().getAbsolutePath();
+        AnonDataSpec anonData = controller.setAnonData();
+        
+        MetadataMu oldSafeMeta = new MetadataMu(metadata.getCombinations().getProtectedFile().getSafeMeta());
+        
+        protectedFile.getSafeMeta().getVariables().clear();
+        protectedFile.getSafeMeta().getVariables().addAll(anonData.getKAnonVariables());
+        
+        // Recoded variabels should be saved. Does not work yet.
+        /*for (RecodeMu r : metadata.getCombinations().getGlobalRecode().getRecodeMus()){
+            anonData.getKAnonCombinations().getGlobalRecode().addRecodeMu(r);
+            if (r.isRecoded()) {
+                doRecode(r);
             }
-            
-            boolean result = this.c.MakeFileSafe(dataFileName, false, false, protectedFile.getHouseholdType(), false, false);
-            
-            if (!result) {
-                throw new ArgusException("Error during Make protected file");
-            }
-        
-        } catch (IOException ex){
-        
         }
+        applyRecode();*/
+        
+        int[] errorCode = new int[1];        
+        boolean result = this.c.WriteVariablesInFile(metadata.getFileNames().getDataFileName(), 
+                                                     anonData.getdataFile().getAbsolutePath(),
+                                                     anonData.getKAnonVariables().size(), 
+                                                     getVarIndicesInFile(anonData.getKAnonVariables()),
+                                                     ";", errorCode);
+
+        if (!result) {
+            throw new ArgusException("Error creating temporary data file: " + getErrorString(errorCode[0]));
+        }
+            
+        controller.runAnonData();
+        
+        protectedFile.getSafeMeta().getVariables().clear();
+        protectedFile.getSafeMeta().getVariables().addAll(oldSafeMeta.getVariables());
+        
+        
         // doChangeFiles(); // Apply SDC methods
         
             //this.metadata.getCombinations().getProtectedFile().initSafeMeta(MuTmpFile, this.metadata);
