@@ -61,11 +61,9 @@ public class AnonDataController extends ControllerBase<AnonDataSpec>{
             fillKAnonVariables();
             fillKAnonCombinations();
             removeRedundantKAnonVariables();
-            
-            for (TableMu tab : anonData.getKAnonCombinations().getTables())
-                anonData.getKAnonThresholds().add(tab.getThreshold());
-            
+            fillKAnonThresholds();
             fillKAnonRStrings();
+            fillKAnonMissings();
             
             anonData.getdataFile();
             
@@ -199,6 +197,17 @@ public class AnonDataController extends ControllerBase<AnonDataSpec>{
         }
     }
     
+    
+    
+    private ArrayList<Integer> getKAnonThresholds() {
+        return getModel().getKAnonThresholds();
+    }
+    
+    private void fillKAnonThresholds(){
+        for (TableMu tab : getKAnonCombinations().getTables())
+                getKAnonThresholds().add(tab.getThreshold());
+    }
+    
     private void fillKAnonRStrings(){
         for (TableMu tab : getKAnonCombinations().getTables()){
             String hs ="c(";
@@ -207,6 +216,17 @@ public class AnonDataController extends ControllerBase<AnonDataSpec>{
             }
             hs = hs.substring(0, hs.length()-1) + ")";
             getModel().getKAnonRStrings().add(hs);
+        }
+    }
+    
+    private void fillKAnonMissings(){
+        for (TableMu tab : getKAnonCombinations().getTables()){
+            String hs ="c(";
+            for (VariableMu var : tab.getVariables()){
+                hs += "\"" + (var.getMissing(0)) + "\",";
+            }
+            hs = hs.substring(0, hs.length()-1) + ")";
+            getModel().getKAnonMissings().add(hs);
         }
     }
     

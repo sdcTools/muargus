@@ -185,9 +185,14 @@ public class RWriter {
             
             for (int i=0; i<anonData.getKAnonRStrings().size(); i++){
                 writer.println(String.format("keyVars <- %s",anonData.getKAnonRStrings().get(i)));
-                writer.println(String.format("k <- %d",anonData.getKAnonThresholds().get(i)));
+                writer.println(String.format("missings <- %s",anonData.getKAnonMissings().get(i)));
                 writer.println("importance <- NULL"); // Nog vullen m.b.v. priorities
+                writer.println("if (!is.null(importance)) importance <- round((100 - importance) * length(importance) / 100)");
+                writer.println(String.format("k <- %d",anonData.getKAnonThresholds().get(i)));
                 writer.println("ppin[,keyVars] <- kAnon(ppin, keyVars=keyVars, importance=importance, k=k+1)$xAnon");
+                writer.println("for (i in keyVars){");
+                writer.println("\tppin[[i]][is.na(ppin[[i]])] <- missings[i]");
+                writer.println("}");
             }
             
             File tmp2File = new File(anonData.doubleSlashses(anonData.getdataFile().getAbsolutePath())+2);

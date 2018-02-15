@@ -29,6 +29,7 @@ public class AnonDataSpec extends ReplacementSpec{
     private final ArrayList<VariableMu> KAnonVars;
     private final Combinations KAnonCombinations;
     private final ArrayList<String> RStrings;
+    private final ArrayList<String> missings;
     private final ArrayList<Integer> thresholds;
     private File dataFile;
     private File rScriptFile;
@@ -44,6 +45,7 @@ public class AnonDataSpec extends ReplacementSpec{
         this.KAnonCombinations = new Combinations();
         this.thresholds = new ArrayList<>();
         this.RStrings = new ArrayList<>();
+        this.missings = new ArrayList<>();
     }
     
     /**
@@ -63,6 +65,16 @@ public class AnonDataSpec extends ReplacementSpec{
      */
     public ArrayList<String> getKAnonRStrings() {
         return this.RStrings;
+    }
+    
+    /**
+     * Gets an ArrayList containing all strings concerning keyVars needed for R-script. 
+     * If the ArrayList is empty, use this method to add strings.
+     *
+     * @return ArrayList of Strings containing the strings for R-script.
+     */
+    public ArrayList<String> getKAnonMissings() {
+        return this.missings;
     }
 
     
