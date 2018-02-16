@@ -30,6 +30,7 @@ public class AnonDataSpec extends ReplacementSpec{
     private final Combinations KAnonCombinations;
     private final ArrayList<String> RStrings;
     private final ArrayList<String> missings;
+    private final ArrayList<String> priorities;
     private final ArrayList<Integer> thresholds;
     private File dataFile;
     private File rScriptFile;
@@ -46,6 +47,7 @@ public class AnonDataSpec extends ReplacementSpec{
         this.thresholds = new ArrayList<>();
         this.RStrings = new ArrayList<>();
         this.missings = new ArrayList<>();
+        this.priorities = new ArrayList<>();
     }
     
     /**
@@ -76,8 +78,12 @@ public class AnonDataSpec extends ReplacementSpec{
     public ArrayList<String> getKAnonMissings() {
         return this.missings;
     }
-
     
+    
+    public ArrayList<String> getKAnonPriority(){
+        return this.priorities;
+    }
+
     /**
      * Gets an ArrayList containing all KAnon variables. If the ArrayList is
      * empty, use this method to add variables.

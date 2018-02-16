@@ -64,6 +64,7 @@ public class AnonDataController extends ControllerBase<AnonDataSpec>{
             fillKAnonThresholds();
             fillKAnonRStrings();
             fillKAnonMissings();
+            fillKAnonPriority();
             
             anonData.getdataFile();
             
@@ -227,6 +228,24 @@ public class AnonDataController extends ControllerBase<AnonDataSpec>{
             }
             hs = hs.substring(0, hs.length()-1) + ")";
             getModel().getKAnonMissings().add(hs);
+        }
+    }
+    
+    private void fillKAnonPriority(){
+        ProtectedFile protectedFile = this.metadata.getCombinations().getProtectedFile();
+        for (TableMu tab : getKAnonCombinations().getTables()){
+            String hs;
+            if (protectedFile.isWithPrior()){
+                hs = "c(";
+                for (VariableMu var : tab.getVariables()){
+                    hs += var.getSuppressPriority() + ",";
+                }
+                hs = hs.substring(0, hs.length()-1) + ")";
+            }
+            else{
+                hs = "NULL";
+            }
+            getModel().getKAnonPriority().add(hs);
         }
     }
     

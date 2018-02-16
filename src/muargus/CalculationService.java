@@ -405,8 +405,8 @@ public class CalculationService {
             if (r.isRecoded()) {
                 doRecode(r);
             }
-        }
-        applyRecode();*/
+            applyRecode();
+        }*/
         
         int[] errorCode = new int[1];        
         boolean result = this.c.WriteVariablesInFile(metadata.getFileNames().getDataFileName(), 
@@ -418,6 +418,11 @@ public class CalculationService {
         if (!result) {
             throw new ArgusException("Error creating temporary data file: " + getErrorString(errorCode[0]));
         }
+        
+        // WriteVariablesInFile schrijft wel alleen de gewenste variabelen, maar hercodeert niet
+        // MakeFileSafe hercodeert wel, maar schrijft alle variabelen
+        
+        //this.c.MakeFileSafe(anonData.getdataFile().getAbsolutePath(), false, false, 0, false, false);
             
         controller.runAnonData();
         
