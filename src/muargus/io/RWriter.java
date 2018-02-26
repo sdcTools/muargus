@@ -17,18 +17,17 @@
 package muargus.io;
 
 import argus.model.ArgusException;
+import argus.utils.SystemUtils;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import muargus.MuARGUS;
 import muargus.model.AnonDataSpec;
-import muargus.model.MetadataMu;
-import muargus.model.TableMu;
-import muargus.model.VariableMu;
-import muargus.model.ProtectedFile;
 import muargus.model.SyntheticDataSpec;
 
 /**
@@ -178,30 +177,36 @@ public class RWriter {
      * during writing.
      */
     public static void writeKAnon(AnonDataSpec anonData) throws ArgusException {
+        String resourceDir;
+        try{
+            resourceDir = anonData.doubleSlashses(SystemUtils.getApplicationDirectory(MuARGUS.class).getAbsolutePath()+"\\resources");
+        } catch (IOException ex) {
+            throw new ArgusException("Error writing to file. Error message: " + ex.getMessage());
+        }
+        
         try (PrintWriter writer = new PrintWriter(anonData.getrScriptFile())) {
             writer.println("require(\"sdcMicro\")");
-            writer.println(String.format("ppin <- read.csv(\"%s\",sep=\";\",header=FALSE)",
-                                            anonData.doubleSlashses(anonData.getdataFile().getAbsolutePath())));
-            
+            writer.println(String.format("source(\"%s\\\\R\\\\KAnonFuncs.R\")",resourceDir));
+            writer.println(String.format("ppin <- read.csv(\"%s\",sep=\"%s\",header=FALSE,colClasses=\"factor\")",
+                                            anonData.doubleSlashses(anonData.getdataFile().getAbsolutePath()),
+                                            MuARGUS.getDefaultSeparator()));
+            writer.println("params <- list()\n");
             for (int i=0; i<anonData.getKAnonCombinations().getTables().size(); i++){
-                writer.println(String.format("keyVars <- %s",anonData.getKAnonRStrings().get(i)));
-                writer.println(String.format("missings <- %s",anonData.getKAnonMissings().get(i)));
-                writer.println(String.format("importance <- %s",anonData.getKAnonPriority().get(i)));
-                writer.println("if (!is.null(importance)) importance <- round((100 - importance) * length(importance) / 100)");
-                writer.println(String.format("k <- %d",anonData.getKAnonThresholds().get(i)));
-                writer.println("ppin[,keyVars] <- kAnon(ppin, keyVars=keyVars, importance=importance, k=k+1)$xAnon");
-                writer.println("for (i in keyVars){");
-                writer.println("\tppin[[i]][is.na(ppin[[i]])] <- missings[i]");
-                writer.println("}");
-                writer.println("ppin[,keyVars] <- lapply(ppin[,keyVars], function(x) as.integer(x))");
+                writer.println(String.format("params[[%d]] <- list()",i+1));
+                writer.println(String.format("params[[%d]]$keyVars <- %s",i+1,anonData.getKAnonRStrings().get(i)));
+                writer.println(String.format("params[[%d]]$missings <- %s",i+1,anonData.getKAnonMissings().get(i)));
+                writer.println(String.format("params[[%d]]$priorities_mu <- %s",i+1,anonData.getKAnonPriority().get(i)));
+                writer.println(String.format("params[[%d]]$k <- %d",i+1,anonData.getKAnonThresholds().get(i)));
                 writer.println();
             }
+            writer.println("ppin <- run_Kanon(ppin,params)");
+            writer.println("ppin <- replace_NA_per_var(ppin,params)");
             
             File tmp2File = new File(anonData.doubleSlashses(anonData.getdataFile().getAbsolutePath())+2);
             tmp2File.deleteOnExit();
-            writer.println(String.format("write.table(ppin,\"%s2\",row.names=FALSE,col.names=FALSE,quote=FALSE,sep=\";\")",
-                    anonData.doubleSlashses(anonData.getdataFile().getAbsolutePath())));
-        } catch (FileNotFoundException ex) {
+            writer.println(String.format("write.table(ppin,\"%s2\",row.names=FALSE,col.names=FALSE,quote=FALSE,sep=\"%s\")",
+                    anonData.doubleSlashses(anonData.getdataFile().getAbsolutePath()),MuARGUS.getDefaultSeparator()));
+        } catch (IOException ex) {
             throw new ArgusException("Error writing to file. Error message: " + ex.getMessage());
         }
     }

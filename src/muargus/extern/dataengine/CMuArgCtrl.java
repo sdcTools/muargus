@@ -231,4 +231,8 @@ public class CMuArgCtrl {
     return MuArgusCtrlJNI.CMuArgCtrl_GetErrorString(swigCPtr, this, ErrorCode, ErrorString);
   }
 
+  public boolean MakeAnonFile(String FileName, int nVar, int[] VarIndexes, String seperator, int[] ErrorCode) {
+    return MuArgusCtrlJNI.CMuArgCtrl_MakeAnonFile(swigCPtr, this, FileName, nVar, VarIndexes, seperator, ErrorCode);
+  }
+
 }

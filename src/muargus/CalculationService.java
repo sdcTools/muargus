@@ -386,100 +386,33 @@ public class CalculationService {
         // Save corresponding metadata file
         // Read microdata into R and apply (k+1)-anonymisation with sdcMicro and save result
         // Combine result with original microdata
+
+        doChangeFiles(); // Apply replacement files
         
+        //ProtectedFile protectedFile = this.metadata.getCombinations().getProtectedFile();
+        AnonDataController controller = new AnonDataController(metadata);        
+
         // anonData will contain
         // Variables, Combinations, RStrings, Thresholds, dataFile, rScriptFile, runRFile
-        ProtectedFile protectedFile = metadata.getCombinations().getProtectedFile();
-        AnonDataController controller = new AnonDataController(metadata);
-        
         AnonDataSpec anonData = controller.setAnonData();
         
-        MetadataMu oldSafeMeta = new MetadataMu(metadata.getCombinations().getProtectedFile().getSafeMeta());
-        
-        protectedFile.getSafeMeta().getVariables().clear();
-        protectedFile.getSafeMeta().getVariables().addAll(anonData.getKAnonVariables());
-        
-        // Recoded variabels should be saved. Does not work yet.
-        /*for (RecodeMu r : metadata.getCombinations().getGlobalRecode().getRecodeMus()){
-            anonData.getKAnonCombinations().getGlobalRecode().addRecodeMu(r);
-            if (r.isRecoded()) {
-                doRecode(r);
-            }
-            applyRecode();
-        }*/
-        
-        int[] errorCode = new int[1];        
-        boolean result = this.c.WriteVariablesInFile(metadata.getFileNames().getDataFileName(), 
-                                                     anonData.getdataFile().getAbsolutePath(),
-                                                     anonData.getKAnonVariables().size(), 
-                                                     getVarIndicesInFile(anonData.getKAnonVariables()),
-                                                     ";", errorCode);
+        // Save file with recodings and replacements, no suppressions
+        // NB: Still to check on household issues
+        //this.c.MakeFileSafe(anonData.getdataFile().getAbsolutePath(), false, false, 0, false, false);
+        int[] errorCode = new int[1];
+        boolean result = this.c.MakeAnonFile(anonData.getdataFile().getAbsolutePath(),
+                            anonData.getKAnonVariables().size(),
+                            getVarIndicesInFile(anonData.getKAnonVariables()),
+                            MuARGUS.getDefaultSeparator(), errorCode);
 
+        controller.runAnonData();
+        
         if (!result) {
             throw new ArgusException("Error creating temporary data file: " + getErrorString(errorCode[0]));
         }
         
         // WriteVariablesInFile schrijft wel alleen de gewenste variabelen, maar hercodeert niet
         // MakeFileSafe hercodeert wel, maar schrijft alle variabelen
-        
-        //this.c.MakeFileSafe(anonData.getdataFile().getAbsolutePath(), false, false, 0, false, false);
-            
-        controller.runAnonData();
-        
-        protectedFile.getSafeMeta().getVariables().clear();
-        protectedFile.getSafeMeta().getVariables().addAll(oldSafeMeta.getVariables());
-        
-        
-        // doChangeFiles(); // Apply SDC methods
-        
-            //this.metadata.getCombinations().getProtectedFile().initSafeMeta(MuTmpFile, this.metadata);
-                       
-            //this.c.SetChangeFile(this.metadata.getReplacementSpecs().size()+1, KAnonymFile, 0, VarIndex, ";");
-        
-            
-            
-            
-            
-        
-     /*   this.c.SetOutFileInfo(this.metadata.getDataFileType() == MetadataMu.DATA_FILE_TYPE_FIXED
-                || this.metadata.getDataFileType() == MetadataMu.DATA_FILE_TYPE_SPSS,
-                this.metadata.getSeparator(),
-                "",
-                true
-        );
-        
-        int index = 0;
-        
-        for (VariableMu variable : this.metadata.getVariables()) {
-            index++;
-            if (protectedFile.getVariables().contains(variable)) {
-                this.c.SetSuppressPrior(index, variable.getSuppressPriority());
-            }
-        }
-        try {
-            String dataFileName;
-            if (this.metadata.isSpss()) {
-                File saf = File.createTempFile("MuArgus", ".saf");
-                saf.deleteOnExit();
-                dataFileName = saf.getPath();
-                MuARGUS.getSpssUtils().safFile = saf;
-            } else {
-                dataFileName = protectedFile.getSafeMeta().getFileNames().getDataFileName();
-            }
-            
-            boolean result = this.c.MakeFileSafe(dataFileName,
-                    protectedFile.isWithPrior(),
-                    protectedFile.isWithEntropy(),
-                    protectedFile.getHouseholdType(),
-                    protectedFile.isRandomizeOutput(),
-                    protectedFile.isPrintBHR());
-                    
-            if (!result) {
-                throw new ArgusException("Error during Make protected file");
-            }
-        } catch (IOException e) {
-
-        }*/
     }
     
     /**

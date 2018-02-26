@@ -81,7 +81,7 @@ public class AnonDataController extends ControllerBase<AnonDataSpec>{
     
     public void runAnonData() {
         try {
-          
+                      
             writeDataKAnon();  
           
         } catch (ArgusException ex){

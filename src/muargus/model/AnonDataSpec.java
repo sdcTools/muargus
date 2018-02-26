@@ -37,9 +37,7 @@ public class AnonDataSpec extends ReplacementSpec{
     private File runRFile;
     
     /**
-     * Constructor of the model class SyntheticDataSpec. Initializes the
-     * ArrayLists for all variables, the sensitive variables and the
-     * non-sensitive variable.
+     * Constructor of the model class AnonDataSpec. Initializes ArrayLists.
     */
     public AnonDataSpec() {
         this.KAnonVars = new ArrayList<>();
@@ -55,7 +53,6 @@ public class AnonDataSpec extends ReplacementSpec{
     */
     public void clear() {
         this.KAnonVars.clear();
-        //this.KAnonCombinations.clear();
         this.RStrings.clear();
     }
     
@@ -148,7 +145,7 @@ public class AnonDataSpec extends ReplacementSpec{
      *
      * @return File containing the rScriptFile.
      * @throws ArgusException Throws an ArgusException when an error occurs
-     * while creating the rScriptFile.
+     * while creating the dataFile.
      */
     public File getdataFile() throws ArgusException {
         if (this.dataFile == null) {
@@ -178,7 +175,7 @@ public class AnonDataSpec extends ReplacementSpec{
      */
     private File createFile(String extension) throws ArgusException {
         try {
-            File file = File.createTempFile("MuArgus", extension);
+            File file = File.createTempFile("KAnon", extension);
             file.deleteOnExit();
             return file;
         } catch (IOException ex) {
