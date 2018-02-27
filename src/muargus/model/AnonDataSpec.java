@@ -35,6 +35,7 @@ public class AnonDataSpec extends ReplacementSpec{
     private File dataFile;
     private File rScriptFile;
     private File runRFile;
+    private File logFile;
     
     /**
      * Constructor of the model class AnonDataSpec. Initializes ArrayLists.
@@ -54,6 +55,10 @@ public class AnonDataSpec extends ReplacementSpec{
     public void clear() {
         this.KAnonVars.clear();
         this.RStrings.clear();
+        this.thresholds.clear();
+        this.missings.clear();
+        this.priorities.clear();
+        this.KAnonCombinations.getTables().clear();
     }
     
     /**
@@ -155,6 +160,20 @@ public class AnonDataSpec extends ReplacementSpec{
     }    
     
     /**
+     * Gets the file containing the logging of the number of suppressions.
+     *
+     * @return File containing the number of suppressions.
+     * @throws ArgusException Throws an ArgusException when an error occurs
+     * while creating the logFile.
+     */
+    public File getlogFile() throws ArgusException {
+        if (this.logFile == null) {
+            this.logFile = createFile(".log");
+        }
+        return this.logFile;
+    }
+    
+    /**
      * Replaces slashes in filenames for double slashes.
      *
      * @param filename String containing the filename.
@@ -183,4 +202,8 @@ public class AnonDataSpec extends ReplacementSpec{
         }
     }    
 
+    @Override
+    public ArrayList<VariableMu> getOutputVariables() {
+        return this.KAnonVars;
+    }
 }

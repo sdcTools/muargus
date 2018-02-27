@@ -702,13 +702,14 @@ public class SelectCombinationsView extends DialogBase<SelectCombinationsControl
     }//GEN-LAST:event_thresholdTextFieldCaretUpdate
 
     private void setKAnonButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_setKAnonButtonActionPerformed
+        boolean SetkAnon;
         if (this.model.getTables().size() > 0) {
                 int index = this.table.getSelectedRow();
-                if(index < 0){
-                    showMessage("No combination is selected");
-                    return;
+                if (index < 0){
+                    SetkAnon = this.model.getTables().get(0).isKAnon();
+                }else{
+                    SetkAnon = this.model.getTables().get(index).isKAnon();
                 }
-                boolean SetkAnon = this.model.getTables().get(index).isKAnon();
                 for (TableMu tableMu : this.model.getTables()){
                     tableMu.setKAnon(!SetkAnon);
                     tableMu.setRiskModel(false);

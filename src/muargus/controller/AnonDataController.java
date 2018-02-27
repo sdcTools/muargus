@@ -68,6 +68,9 @@ public class AnonDataController extends ControllerBase<AnonDataSpec>{
             
             anonData.getdataFile();
             
+            anonData.setReplacementFile(new ReplacementFile("KAnonData"));
+            this.metadata.getReplacementSpecs().add(anonData);
+            
             RWriter.writeKAnon(anonData);
             RWriter.writeBatKAnon(anonData);
             
@@ -82,7 +85,7 @@ public class AnonDataController extends ControllerBase<AnonDataSpec>{
     public void runAnonData() {
         try {
                       
-            writeDataKAnon();  
+            writeDataKAnon(); 
           
         } catch (ArgusException ex){
             
@@ -114,7 +117,8 @@ public class AnonDataController extends ControllerBase<AnonDataSpec>{
             arguments.add("R");
             arguments.add("CMD");
             arguments.add("BATCH");
-            arguments.add("--no-save --no-restore");
+            arguments.add("--no-save");
+            arguments.add("--no-restore");
             arguments.add(getModel().getrScriptFile().getAbsolutePath());
             ProcessBuilder builder = new ProcessBuilder(arguments);
 
@@ -133,7 +137,12 @@ public class AnonDataController extends ControllerBase<AnonDataSpec>{
      * @param anonData AnonDataSpec containing the replacement file.
      */
     private void clean(AnonDataSpec anonData) {
+        anonData.getKAnonCombinations().getTables().clear();
         anonData.getKAnonVariables().clear();
+        anonData.getKAnonMissings().clear();
+        anonData.getKAnonPriority().clear();
+        anonData.getKAnonRStrings().clear();
+        anonData.getKAnonThresholds().clear();
         ArrayList<ReplacementSpec> r = this.metadata.getReplacementSpecs();
         for (int i = r.size() - 1; i >= 0; i--) {
             if (r.get(i) instanceof AnonDataSpec) {
@@ -258,18 +267,4 @@ public class AnonDataController extends ControllerBase<AnonDataSpec>{
         runR();
     }    
     
-        
-    private void writeCombinedFile() throws ArgusException {
-        try (PrintWriter writer = new PrintWriter(getModel().getdataFile().getAbsolutePath())) {
-            ArrayList<TableMu> tableList = metadata.getCombinations().getTables();
-            for (TableMu table : tableList){
-                writer.println(String.format("Table threshold = %d",table.getThreshold()));
-                for (VariableMu variable : table.getVariables()){
-                    writer.println(String.format("length of var %s = %d",variable.getName(),variable.getVariableLength()));
-                }
-            }
-        } catch (IOException ex) {
-           // throw new ArgusException("Error writing to file. Error message: " + ex.getMessage());
-        }
-    }
 }

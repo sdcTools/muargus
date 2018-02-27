@@ -81,6 +81,7 @@ public class SelectCombinationsController extends ControllerBase<Combinations> {
                 MuARGUS.getSpssUtils().generateSpssData(this.metadata);
             }
             CalculationService service = MuARGUS.getCalculationService();
+            service.removeKAnonReplacementIfAny(this.metadata);
             service.setMetadata(this.metadata);
             service.exploreFile(this);
         } catch (ArgusException ex) {

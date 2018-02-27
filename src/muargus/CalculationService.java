@@ -382,37 +382,33 @@ public class CalculationService {
      */
     private void makeFileInBackgroundKAnon() throws ArgusException {
         // First save ascii file with microdata with other SDC methods applied
+        // Do not apply numeric changes, will be done in last step
         // Save only variables that are needed to apply (k+1)-anonymisation
-        // Save corresponding metadata file
         // Read microdata into R and apply (k+1)-anonymisation with sdcMicro and save result
-        // Combine result with original microdata
+        // Combine result with original microdata and apply numericvariable methods
 
-        doChangeFiles(); // Apply replacement files
-        
-        //ProtectedFile protectedFile = this.metadata.getCombinations().getProtectedFile();
-        AnonDataController controller = new AnonDataController(metadata);        
+        AnonDataController controller = new AnonDataController(this.metadata);        
 
         // anonData will contain
         // Variables, Combinations, RStrings, Thresholds, dataFile, rScriptFile, runRFile
         AnonDataSpec anonData = controller.setAnonData();
         
-        // Save file with recodings and replacements, no suppressions
-        // NB: Still to check on household issues
-        //this.c.MakeFileSafe(anonData.getdataFile().getAbsolutePath(), false, false, 0, false, false);
+        // Save file with recodings, no suppressions
         int[] errorCode = new int[1];
         boolean result = this.c.MakeAnonFile(anonData.getdataFile().getAbsolutePath(),
                             anonData.getKAnonVariables().size(),
                             getVarIndicesInFile(anonData.getKAnonVariables()),
                             MuARGUS.getDefaultSeparator(), errorCode);
-
+        // Run sdcMicro R-code to make .rpl-file with (k+1)-anonymised key-variables
         controller.runAnonData();
+        
+        // Run "normal"  makeFileSafe, with result from R as ReplacementFile (.rpl)
+        makeFileInBackground();
         
         if (!result) {
             throw new ArgusException("Error creating temporary data file: " + getErrorString(errorCode[0]));
         }
         
-        // WriteVariablesInFile schrijft wel alleen de gewenste variabelen, maar hercodeert niet
-        // MakeFileSafe hercodeert wel, maar schrijft alle variabelen
     }
     
     /**
@@ -1137,4 +1133,12 @@ public class CalculationService {
         return ksi[0];
     }
 
+    public void removeKAnonReplacementIfAny(MetadataMu metadata){
+        ArrayList<ReplacementSpec> r = metadata.getReplacementSpecs();
+        for (int i = r.size() - 1; i >= 0; i--) {
+            if (r.get(i) instanceof AnonDataSpec) {
+                r.remove(i);
+            }
+        }
+    }
 }
