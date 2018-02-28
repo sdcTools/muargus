@@ -18,6 +18,7 @@ package muargus.controller;
 
 import argus.model.ArgusException;
 import argus.utils.SystemUtils;
+import java.awt.Cursor;
 import java.io.File;
 import java.util.ArrayList;
 import muargus.MuARGUS;

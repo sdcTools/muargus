@@ -19,6 +19,7 @@ package muargus;
 import argus.model.ArgusException;
 import argus.model.DataFilePair;
 import argus.utils.SystemUtils;
+import com.sun.glass.ui.Application;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
@@ -388,7 +389,7 @@ public class CalculationService {
         // Combine result with original microdata and apply numericvariable methods
 
         AnonDataController controller = new AnonDataController(this.metadata);        
-
+        firePropertyChange("stepName", null, "Writing temp file...");
         // anonData will contain
         // Variables, Combinations, RStrings, Thresholds, dataFile, rScriptFile, runRFile
         AnonDataSpec anonData = controller.setAnonData();
@@ -400,9 +401,12 @@ public class CalculationService {
                             getVarIndicesInFile(anonData.getKAnonVariables()),
                             MuARGUS.getDefaultSeparator(), errorCode);
         // Run sdcMicro R-code to make .rpl-file with (k+1)-anonymised key-variables
+        firePropertyChange("stepName", null, "Running R-code...");
+        firePropertyChange("progress", null, 0);
         controller.runAnonData();
         
         // Run "normal"  makeFileSafe, with result from R as ReplacementFile (.rpl)
+        firePropertyChange("stepName", null, "Writing safe file...");        
         makeFileInBackground();
         
         if (!result) {
