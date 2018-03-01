@@ -384,8 +384,8 @@ public class CalculationService {
         // Save only variables that are needed to apply (k+1)-anonymisation
         // Read microdata into R and apply (k+1)-anonymisation with sdcMicro and save result
         // Combine result with original microdata and apply numericvariable methods
-
-        
+        String RFileName;
+        ViewRerrorView ErrorText;
         
         AnonDataController controller = new AnonDataController(this.metadata);        
         firePropertyChange("stepName", null, "Writing temp file...");
@@ -412,13 +412,14 @@ public class CalculationService {
             throw new ArgusException("R not correctly installed?");
         }
         
-        ViewRerrorView ErrorText = new ViewRerrorView(null, true);
-        String RFileName = anonData.getrScriptFile().getAbsoluteFile().toString();
+        ErrorText = new ViewRerrorView(null, true);
+        RFileName = anonData.getrScriptFile().getAbsoluteFile().toString();
         if (ErrorText.addTextFile(RFileName+"out")) { // Display only when "Error" is in file-text
             ErrorText.setVisible(true);
             firePropertyChange("stepName", null, "");
             throw new ArgusException("No safe file produced: error running Rscript for (k+1)-anonymisation.");
         } else{
+            Save number of suppressions in each variable, read from log-file in %TEMP%
             // Run "normal"  makeFileSafe, with result from R as ReplacementFile (.rpl)
             firePropertyChange("stepName", null, "Writing safe file...");        
             makeFileInBackground();
