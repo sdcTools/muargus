@@ -17,24 +17,23 @@
 package muargus;
 
 import argus.model.ArgusException;
-import argus.model.DataFilePair;
 import argus.utils.SystemUtils;
-import com.sun.glass.ui.Application;
+import java.awt.Container;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.concurrent.ExecutionException;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.SwingWorker;
 import muargus.controller.AnonDataController;
-import muargus.controller.SelectCombinationsController;
 import muargus.extern.dataengine.CMuArgCtrl;
 import muargus.extern.dataengine.IProgressListener;
-import muargus.io.MetaReader;
-import muargus.io.MetaWriter;
-import muargus.io.RWriter;
 import muargus.model.AnonDataSpec;
 import muargus.model.ProtectedFile;
 import muargus.model.MetadataMu;
@@ -43,11 +42,10 @@ import muargus.model.RecodeMu;
 import muargus.model.TableMu;
 import muargus.model.CodeInfo;
 import muargus.model.PramVariableSpec;
-import muargus.model.ReplacementFile;
 import muargus.model.ReplacementSpec;
 import muargus.model.RiskModelClass;
 import muargus.model.VariableMu;
-import org.apache.commons.io.FilenameUtils;
+import muargus.view.ViewRerrorView;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -80,7 +78,6 @@ public class CalculationService {
      * Enumeration of background tasks.
      */
     private enum BackgroundTask {
-
         ExploreFile,
         CalculateTables,
         MakeProtectedFile,
@@ -388,6 +385,8 @@ public class CalculationService {
         // Read microdata into R and apply (k+1)-anonymisation with sdcMicro and save result
         // Combine result with original microdata and apply numericvariable methods
 
+        
+        
         AnonDataController controller = new AnonDataController(this.metadata);        
         firePropertyChange("stepName", null, "Writing temp file...");
         // anonData will contain
@@ -400,19 +399,30 @@ public class CalculationService {
                             anonData.getKAnonVariables().size(),
                             getVarIndicesInFile(anonData.getKAnonVariables()),
                             MuARGUS.getDefaultSeparator(), errorCode);
-        // Run sdcMicro R-code to make .rpl-file with (k+1)-anonymised key-variables
-        firePropertyChange("stepName", null, "Running R-code...");
-        firePropertyChange("progress", null, 0);
-        controller.runAnonData();
-        
-        // Run "normal"  makeFileSafe, with result from R as ReplacementFile (.rpl)
-        firePropertyChange("stepName", null, "Writing safe file...");        
-        makeFileInBackground();
-        
         if (!result) {
+            firePropertyChange("stepName", null, "");
             throw new ArgusException("Error creating temporary data file: " + getErrorString(errorCode[0]));
         }
         
+        // Run sdcMicro R-code to make .rpl-file with (k+1)-anonymised key-variables
+        firePropertyChange("stepName", null, "Running R-code...");
+        firePropertyChange("progress", null, 0);
+        if (!controller.runAnonData()){
+            firePropertyChange("stepName", null, "");
+            throw new ArgusException("R not correctly installed?");
+        }
+        
+        ViewRerrorView ErrorText = new ViewRerrorView(null, true);
+        String RFileName = anonData.getrScriptFile().getAbsoluteFile().toString();
+        if (ErrorText.addTextFile(RFileName+"out")) { // Display only when "Error" is in file-text
+            ErrorText.setVisible(true);
+            firePropertyChange("stepName", null, "");
+            throw new ArgusException("No safe file produced: error running Rscript for (k+1)-anonymisation.");
+        } else{
+            // Run "normal"  makeFileSafe, with result from R as ReplacementFile (.rpl)
+            firePropertyChange("stepName", null, "Writing safe file...");        
+            makeFileInBackground();
+        }
     }
     
     /**
@@ -542,6 +552,7 @@ public class CalculationService {
                     makeFileInBackground();
                 } else {
                     makeFileInBackgroundKAnon();
+                    
                 }
                 break;
             case MakeReplacementFile:
@@ -1144,5 +1155,19 @@ public class CalculationService {
                 r.remove(i);
             }
         }
+    }
+    
+    private String getRout(String fn){
+        String ReturnString="";
+        String hs;
+        try{
+            BufferedReader reader = new BufferedReader(new FileReader(fn));
+            while ( (hs = reader.readLine()) != null){
+                ReturnString = ReturnString+ "\n" + hs;
+                //IsError = IsError || hs.contains("Error");
+            }
+            reader.close();
+        } catch (IOException ex){ }
+        return ReturnString;
     }
 }

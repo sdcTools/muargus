@@ -434,7 +434,7 @@ public class MakeProtectedFileView extends DialogBase<MakeProtectedFileControlle
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(cancelButton)
                             .addComponent(makeFileButton))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGap(18, 18, 18)
                         .addComponent(progressInfo)))
                 .addContainerGap())
         );

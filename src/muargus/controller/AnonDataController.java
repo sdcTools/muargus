@@ -19,9 +19,7 @@ package muargus.controller;
 import argus.model.ArgusException;
 import argus.utils.SystemUtils;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.List;
 import muargus.io.RWriter;
 import muargus.model.MetadataMu;
 import muargus.model.ReplacementFile;
@@ -30,10 +28,8 @@ import muargus.model.AnonDataSpec;
 import muargus.model.Combinations;
 import muargus.model.PramVariableSpec;
 import muargus.model.ProtectedFile;
-import muargus.model.SyntheticDataSpec;
 import muargus.model.TableMu;
 import muargus.model.VariableMu;
-import muargus.view.SyntheticDataView;
 
 /**
  *
@@ -50,7 +46,6 @@ public class AnonDataController extends ControllerBase<AnonDataSpec>{
     public AnonDataController(MetadataMu metadata) {
         this.metadata = metadata;
         setModel(this.metadata.getCombinations().getAnonData());
-        //fillModel();
     }
 
     public AnonDataSpec setAnonData() {
@@ -82,34 +77,17 @@ public class AnonDataController extends ControllerBase<AnonDataSpec>{
 
     }
     
-    public void runAnonData() {
+    public boolean runAnonData(){
         try {
-                      
-            writeDataKAnon(); 
-          
+            runR(); 
+            return true;
         } catch (ArgusException ex){
-            
-        }
-    }
-
-     /**
-     * Does the next step if the previous step was succesful.
-     *
-     * @param success Boolean indicating whether the previous step was
-     * succesful.
-     */
-    @Override
-    protected void doNextStep(boolean success) {
-        try {
-            runR();
-        } catch (ArgusException ex) {
-            getView().showErrorMessage(ex);
+            return false;
         }
     }
 
     /**
-     * Runs the .bat file. The .bat file runs the R-script which generates the
-     * synthetic data.
+     * Runs the R-script file.
      */
     private void runR() throws ArgusException {
         try {
@@ -258,13 +236,5 @@ public class AnonDataController extends ControllerBase<AnonDataSpec>{
         }
     }
     
-    /**
-     * Writes datafile to be used in R to apply k-anonymisation
-     * @param anonData instance of AnonDataSpec with specifications of variables and combinations
-     * @throws ArgusException 
-     */
-    private void writeDataKAnon() throws ArgusException {
-        runR();
-    }    
-    
+   
 }

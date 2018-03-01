@@ -24,7 +24,6 @@ import java.io.StringReader;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.html.HTMLDocument;
 import javax.swing.text.html.HTMLEditorKit;
-import muargus.controller.MainFrameController;
 import muargus.controller.ViewReportController;
 import muargus.resources.ContextHelp;
 
