@@ -27,6 +27,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import muargus.io.MetaReader;
+import muargus.model.AnonDataSpec;
 import muargus.model.CodeInfo;
 import muargus.model.MetadataMu;
 import muargus.model.MicroaggregationSpec;
@@ -157,6 +158,8 @@ public class HTMLReportWriter {
                     alpha = alpha + " " + v.getAlpha() + ",";
                 }
                 addChildElement(tr, "td", alpha.substring(0, alpha.length() - 1));
+            } else if (replacement instanceof AnonDataSpec){
+                addChildElement(tr,"td","Suppressions by sdcMicro");
             }
         }
         ProtectedFile protectedFile = metadata.getCombinations().getProtectedFile();

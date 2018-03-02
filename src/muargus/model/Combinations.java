@@ -191,7 +191,7 @@ public class Combinations {
     }
 
     /**
-     * Creates a new instance of the AnonData model class.
+     * Creates a new instance of the AnonData class.
      */
     private void createAnonData() {
         this.anonData = new AnonDataSpec();

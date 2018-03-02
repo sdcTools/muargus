@@ -18,8 +18,11 @@ package muargus.controller;
 
 import argus.model.ArgusException;
 import argus.utils.SystemUtils;
+import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Scanner;
 import muargus.io.RWriter;
 import muargus.model.MetadataMu;
 import muargus.model.ReplacementFile;
@@ -63,7 +66,7 @@ public class AnonDataController extends ControllerBase<AnonDataSpec>{
             
             anonData.getdataFile();
             
-            anonData.setReplacementFile(new ReplacementFile("KAnonData"));
+            anonData.setReplacementFile(new ReplacementFile("(k+1)-anonymity"));
             this.metadata.getReplacementSpecs().add(anonData);
             
             RWriter.writeKAnon(anonData);
@@ -83,6 +86,26 @@ public class AnonDataController extends ControllerBase<AnonDataSpec>{
             return true;
         } catch (ArgusException ex){
             return false;
+        }
+    }
+    
+    public void setNumberSuppAnonData() throws ArgusException{
+        String fn = getModel().doubleSlashses(getModel().getlogFile().getAbsolutePath());
+        File SuppInfo = new File(fn);
+        int[] Supps = new int[getKAnonVariables().size()];
+        
+        try (Scanner reader = new Scanner(new FileReader(SuppInfo))){
+            int i=0;
+            while (reader.hasNextInt()){
+                Supps[i++] = reader.nextInt();
+            }
+        }catch(IOException ex){
+            throw new ArgusException(String.format("Error reading number of suppressions from (k+1)-anonymity in %s.",fn));
+        }
+        
+        for (VariableMu var : getKAnonVariables()){
+            int i=0;
+            var.setnOfSuppressions(Supps[i]);
         }
     }
 
@@ -235,6 +258,5 @@ public class AnonDataController extends ControllerBase<AnonDataSpec>{
             getModel().getKAnonPriority().add(hs);
         }
     }
-    
-   
+ 
 }

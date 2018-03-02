@@ -379,11 +379,11 @@ public class CalculationService {
      * during Make protected file.
      */
     private void makeFileInBackgroundKAnon() throws ArgusException {
-        // First save ascii file with microdata with other SDC methods applied
+        // First save ascii file with microdata with recoding applied
         // Do not apply numeric changes, will be done in last step
         // Save only variables that are needed to apply (k+1)-anonymisation
-        // Read microdata into R and apply (k+1)-anonymisation with sdcMicro and save result
-        // Combine result with original microdata and apply numericvariable methods
+        // Read that into R and apply (k+1)-anonymisation with sdcMicro and save result
+        // Combine result with original microdata and apply numeric changes
         String RFileName;
         ViewRerrorView ErrorText;
         
@@ -396,9 +396,9 @@ public class CalculationService {
         // Save file with recodings, no suppressions
         int[] errorCode = new int[1];
         boolean result = this.c.MakeAnonFile(anonData.getdataFile().getAbsolutePath(),
-                            anonData.getKAnonVariables().size(),
-                            getVarIndicesInFile(anonData.getKAnonVariables()),
-                            MuARGUS.getDefaultSeparator(), errorCode);
+                                anonData.getKAnonVariables().size(),
+                                getVarIndicesInFile(anonData.getKAnonVariables()),
+                                MuARGUS.getDefaultSeparator(), errorCode);
         if (!result) {
             firePropertyChange("stepName", null, "");
             throw new ArgusException("Error creating temporary data file: " + getErrorString(errorCode[0]));
@@ -411,18 +411,34 @@ public class CalculationService {
             firePropertyChange("stepName", null, "");
             throw new ArgusException("R not correctly installed?");
         }
-        
+      
         ErrorText = new ViewRerrorView(null, true);
-        RFileName = anonData.getrScriptFile().getAbsoluteFile().toString();
+        RFileName = anonData.getrScriptFile().getAbsolutePath();
         if (ErrorText.addTextFile(RFileName+"out")) { // Display only when "Error" is in file-text
             ErrorText.setVisible(true);
             firePropertyChange("stepName", null, "");
             throw new ArgusException("No safe file produced: error running Rscript for (k+1)-anonymisation.");
         } else{
-            Save number of suppressions in each variable, read from log-file in %TEMP%
             // Run "normal"  makeFileSafe, with result from R as ReplacementFile (.rpl)
-            firePropertyChange("stepName", null, "Writing safe file...");        
+            // Do it without Additional Suppressions!!!!
+            firePropertyChange("stepName", null, "Writing safe file...");       
             makeFileInBackground();
+            //Save number of suppressions in each variable, read from log-file in %TEMP%
+            controller.setNumberSuppAnonData();
+            copySupps(metadata,anonData);
+        }
+    }
+    
+    /**
+     * Copies number of suppressions from anonData variables to variables in safemeta
+     * 
+     * @param metadata to
+     * @param anonData from
+     */
+    private void copySupps(MetadataMu metadata, AnonDataSpec anonData){
+        ArrayList<VariableMu> varList = metadata.getCombinations().getProtectedFile().getSafeMeta().getVariables();
+        for (VariableMu var : anonData.getKAnonVariables()){
+            varList.get(varList.indexOf(var)).setnOfSuppressions(var.getnOfSuppressions());
         }
     }
     
@@ -549,11 +565,13 @@ public class CalculationService {
                 exploreInBackground();
                 break;
             case MakeProtectedFile:
-                if (!this.metadata.getCombinations().getProtectedFile().isKAnon()){
+                // If not (k+1)-anonymisation or no suppression, use "old" proceudre
+                if (!this.metadata.getCombinations().getProtectedFile().isKAnon() ||
+                        (!this.metadata.getCombinations().getProtectedFile().isWithEntropy() && 
+                            !this.metadata.getCombinations().getProtectedFile().isWithPrior())){
                     makeFileInBackground();
-                } else {
+                } else { // Use k-anonymity precedure
                     makeFileInBackgroundKAnon();
-                    
                 }
                 break;
             case MakeReplacementFile:
