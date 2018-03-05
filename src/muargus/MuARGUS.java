@@ -28,7 +28,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import javax.swing.JOptionPane;
 import javax.swing.UnsupportedLookAndFeelException;
 import muargus.extern.dataengine.CMuArgCtrl;
 import muargus.view.MainFrameView;

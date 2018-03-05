@@ -18,7 +18,6 @@ package muargus;
 
 import argus.model.ArgusException;
 import argus.utils.SystemUtils;
-import java.awt.Container;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.BufferedReader;
@@ -28,8 +27,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.concurrent.ExecutionException;
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
 import javax.swing.SwingWorker;
 import muargus.controller.AnonDataController;
 import muargus.extern.dataengine.CMuArgCtrl;
@@ -421,11 +418,66 @@ public class CalculationService {
         } else{
             // Run "normal"  makeFileSafe, with result from R as ReplacementFile (.rpl)
             // Do it without Additional Suppressions!!!!
-            firePropertyChange("stepName", null, "Writing safe file...");       
-            makeFileInBackground();
-            //Save number of suppressions in each variable, read from log-file in %TEMP%
+            firePropertyChange("stepName", null, "Writing safe file...");  
             controller.setNumberSuppAnonData();
-            copySupps(metadata,anonData);
+            combineFileInBackground(anonData);
+        }
+    }
+    
+/**
+     * Makes the protected/safe file using output from (k+1)-anonymisation
+     *
+     * @throws ArgusException Throws an ArgusException when an error occurs
+     */
+    private void combineFileInBackground(AnonDataSpec anonData) throws ArgusException {
+        doChangeFiles();
+        ProtectedFile protectedFile = this.metadata.getCombinations().getProtectedFile();
+
+        this.c.SetOutFileInfo(this.metadata.getDataFileType() == MetadataMu.DATA_FILE_TYPE_FIXED
+                || this.metadata.getDataFileType() == MetadataMu.DATA_FILE_TYPE_SPSS,
+                this.metadata.getSeparator(),
+                "",
+                true
+        );
+        int index = 0;
+        for (VariableMu variable : this.metadata.getVariables()) {
+            index++;
+            if (protectedFile.getVariables().contains(variable)) {
+                this.c.SetSuppressPrior(index, variable.getSuppressPriority());
+            }
+        }
+        try {
+            String dataFileName;
+            if (this.metadata.isSpss()) {
+                File saf = File.createTempFile("MuArgus", ".saf");
+                saf.deleteOnExit();
+                dataFileName = saf.getPath();
+                MuARGUS.getSpssUtils().safFile = saf;
+            } else {
+                dataFileName = protectedFile.getSafeMeta().getFileNames().getDataFileName();
+            }
+            
+            int[] nSupps = new int[this.metadata.getVariables().size()];
+            for (int i = 0; i < nSupps.length; i++) {
+                nSupps[i] = 0;
+            }
+            for (int i = 0; i < anonData.getKAnonVariables().size(); i++){
+                nSupps[getIndexOf(anonData.getKAnonVariables().get(i)) - 1] = anonData.getKAnonVariables().get(i).getnOfSuppressions();
+            }
+            
+            boolean result = this.c.CombineToSafeFile(dataFileName,
+                    nSupps,
+                    protectedFile.isWithPrior(),
+                    protectedFile.isWithEntropy(),
+                    protectedFile.getHouseholdType(),
+                    protectedFile.isRandomizeOutput(),
+                    protectedFile.isPrintBHR());
+                    
+            if (!result) {
+                throw new ArgusException("Error during Make protected file");
+            }
+        } catch (IOException e) {
+
         }
     }
     

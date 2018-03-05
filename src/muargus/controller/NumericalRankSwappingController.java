@@ -88,7 +88,7 @@ public class NumericalRankSwappingController extends ControllerBase<NumericalRan
                 swapping.getReplacementFile().getOutputFilePath(),
                 muargus.MuARGUS.getDefaultSeparator(),
                 swapping.getOutputVariables().size(),
-                (int) swapping.getPercentage(),
+                swapping.getPercentage(),
                 errorCode);
         if (errorCode[0] != 0) {
             getView().showErrorMessage(new ArgusException("Error during rank swapping"));

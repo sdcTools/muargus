@@ -102,10 +102,10 @@ public class AnonDataController extends ControllerBase<AnonDataSpec>{
         }catch(IOException ex){
             throw new ArgusException(String.format("Error reading number of suppressions from (k+1)-anonymity in %s.",fn));
         }
-        
+
+        int i=0;        
         for (VariableMu var : getKAnonVariables()){
-            int i=0;
-            var.setnOfSuppressions(Supps[i]);
+            var.setnOfSuppressions(Supps[i++]);
         }
     }
 

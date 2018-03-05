@@ -18,7 +18,6 @@ package muargus.view;
 
 import argus.utils.StrUtils;
 import java.awt.Color;
-import java.awt.Cursor;
 import java.io.File;
 import javax.swing.JRadioButton;
 import javax.swing.ListSelectionModel;
