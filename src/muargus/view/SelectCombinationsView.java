@@ -268,7 +268,7 @@ public class SelectCombinationsView extends DialogBase<SelectCombinationsControl
         kLabel.setText("k =");
 
         thresholdTextField.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
-        thresholdTextField.setToolTipText("<html>Threshold k:<br>\n&le; k is unsafe according to traditional Dutch Approach<br>\n&le; k is unsafe according to (k+1)-anonymity");
+        thresholdTextField.setToolTipText("<html>Threshold k:<br>\n&le; k is unsafe according to traditional approach<br>\n&le; k is unsafe according to (k+1)-anonymity");
         thresholdTextField.addCaretListener(new javax.swing.event.CaretListener() {
             public void caretUpdate(javax.swing.event.CaretEvent evt) {
                 thresholdTextFieldCaretUpdate(evt);
