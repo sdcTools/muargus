@@ -16,7 +16,6 @@
  */
 package muargus.view;
 
-import muargus.resources.ContextHelp;
 import argus.model.ArgusException;
 import argus.model.DataFilePair;
 import argus.view.DialogOpenMicrodata;
@@ -38,9 +37,10 @@ import javax.swing.table.DefaultTableModel;
 import muargus.CodeTableCellRenderer;
 import muargus.MuARGUS;
 import muargus.controller.MainFrameController;
-import muargus.model.Combinations;
 import muargus.model.CodeInfo;
+import muargus.model.Combinations;
 import muargus.model.VariableMu;
+import muargus.resources.ContextHelp;
 
 /**
  * View class of the main frame.

@@ -16,12 +16,12 @@
  */
 package muargus.view;
 
+import argus.model.DataFilePair;
+import argus.utils.SystemUtils;
 import java.io.File;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import org.apache.commons.io.FilenameUtils;
-import argus.model.DataFilePair;
-import argus.utils.SystemUtils;
 
 /**
  * View class of the open microdata screen.

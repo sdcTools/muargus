@@ -21,15 +21,15 @@ import java.awt.Color;
 import java.io.File;
 import javax.swing.JRadioButton;
 import javax.swing.ListSelectionModel;
+import javax.swing.border.TitledBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
-import javax.swing.border.TitledBorder;
 import muargus.MuARGUS;
 import muargus.controller.MakeProtectedFileController;
-import muargus.model.ProtectedFile;
 import muargus.model.MetadataMu;
+import muargus.model.ProtectedFile;
 
 /**
  * View class of the MakeProtectedFile screen.

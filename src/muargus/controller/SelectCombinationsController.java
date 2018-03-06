@@ -16,16 +16,16 @@
  */
 package muargus.controller;
 
-import muargus.CalculationService;
 import argus.model.ArgusException;
 import argus.utils.SystemUtils;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import javax.swing.JOptionPane;
+import muargus.CalculationService;
 import muargus.MuARGUS;
-import muargus.model.MetadataMu;
 import muargus.model.Combinations;
+import muargus.model.MetadataMu;
 import muargus.model.TableMu;
 import muargus.model.VariableMu;
 import muargus.view.SelectCombinationsView;
@@ -265,7 +265,7 @@ public class SelectCombinationsController extends ControllerBase<Combinations> {
             // find the next idLevel larger than zero and add the number of variables to the size
             for (int u = index; u < variables.size(); u++) {
                 if (variables.get(u).size() > 0) {
-                    size = size + variables.get(u).size();
+                    size += variables.get(u).size();
                     index = u + 1;
                     break;
                 }

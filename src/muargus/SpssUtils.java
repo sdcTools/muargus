@@ -18,8 +18,17 @@ package muargus;
 
 import argus.model.ArgusException;
 import argus.model.DataFilePair;
+import argus.model.SpssVariable;
 import argus.utils.StrUtils;
 import argus.utils.Tokenizer;
+import com.ibm.statistics.plugin.Case;
+import com.ibm.statistics.plugin.Cursor;
+import com.ibm.statistics.plugin.DataUtil;
+import com.ibm.statistics.plugin.NumericMissingValueType;
+import com.ibm.statistics.plugin.StatsException;
+import com.ibm.statistics.plugin.StatsUtil;
+import com.ibm.statistics.plugin.Variable;
+import com.ibm.statistics.plugin.VariableFormat;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -30,15 +39,6 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
 import muargus.model.MetadataMu;
-import argus.model.SpssVariable;
-import com.ibm.statistics.plugin.Case;
-import com.ibm.statistics.plugin.Cursor;
-import com.ibm.statistics.plugin.DataUtil;
-import com.ibm.statistics.plugin.NumericMissingValueType;
-import com.ibm.statistics.plugin.StatsException;
-import com.ibm.statistics.plugin.StatsUtil;
-import com.ibm.statistics.plugin.Variable;
-import com.ibm.statistics.plugin.VariableFormat;
 import muargus.model.VariableMu;
 
 /**

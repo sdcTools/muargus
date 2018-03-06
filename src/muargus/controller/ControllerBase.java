@@ -16,10 +16,10 @@
  */
 package muargus.controller;
 
-import muargus.CalculationService;
 import argus.model.ArgusException;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import muargus.CalculationService;
 import muargus.view.DialogBase;
 
 /**

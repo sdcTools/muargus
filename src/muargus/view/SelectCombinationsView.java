@@ -28,13 +28,13 @@ import javax.swing.JTable;
 import javax.swing.ToolTipManager;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
+import muargus.HighlightTableCellRenderer;
+import muargus.MuARGUS;
 import muargus.VariableNameCellRenderer;
 import muargus.controller.SelectCombinationsController;
 import muargus.model.Combinations;
 import muargus.model.TableMu;
 import muargus.model.VariableMu;
-import muargus.MuARGUS;
-import muargus.HighlightTableCellRenderer;
 
 /**
  * View class of the SelectCombinations screen.

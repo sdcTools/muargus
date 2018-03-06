@@ -16,8 +16,9 @@
  */
 package muargus.view;
 
-import argus.view.SpssSelectVariablesView;
+import argus.model.SpssVariable;
 import argus.utils.SingleListSelectionModel;
+import argus.view.SpssSelectVariablesView;
 import java.awt.Component;
 import java.awt.Container;
 import java.util.ArrayList;
@@ -26,11 +27,10 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
-import muargus.VariableNameCellRenderer;
-import muargus.model.MetadataMu;
-import muargus.controller.SpecifyMetadataController;
-import argus.model.SpssVariable;
 import muargus.MuARGUS;
+import muargus.VariableNameCellRenderer;
+import muargus.controller.SpecifyMetadataController;
+import muargus.model.MetadataMu;
 import muargus.model.VariableMu;
 
 /**

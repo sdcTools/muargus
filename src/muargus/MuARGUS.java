@@ -30,9 +30,9 @@ import java.util.List;
 import java.util.Locale;
 import javax.swing.UnsupportedLookAndFeelException;
 import muargus.extern.dataengine.CMuArgCtrl;
+import muargus.model.ClassPathHack;
 import muargus.view.MainFrameView;
 import org.apache.commons.io.FilenameUtils;
-import muargus.model.ClassPathHack;
 
 /**
  * Main class of Mu-Argus.
