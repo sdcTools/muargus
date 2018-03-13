@@ -40,6 +40,7 @@ import muargus.model.VariableMu;
  */
 public class AnonDataController extends ControllerBase<AnonDataSpec>{
     private final MetadataMu metadata;
+    public final int RINSTALL_ERROR = 99;
     
     /**
      * Constructor for the AnonDataController.
@@ -80,12 +81,11 @@ public class AnonDataController extends ControllerBase<AnonDataSpec>{
 
     }
     
-    public boolean runAnonData(){
+    public int runAnonData(){
         try {
-            runR(); 
-            return true;
+            return runR(); 
         } catch (ArgusException ex){
-            return false;
+            return RINSTALL_ERROR;
         }
     }
     
@@ -112,7 +112,7 @@ public class AnonDataController extends ControllerBase<AnonDataSpec>{
     /**
      * Runs the R-script file.
      */
-    private void runR() throws ArgusException {
+    private int runR() throws ArgusException {
         try {
             ArrayList<String> arguments = new ArrayList<>();
             arguments.add("R");
@@ -121,10 +121,11 @@ public class AnonDataController extends ControllerBase<AnonDataSpec>{
             arguments.add("--no-save");
             arguments.add("--no-restore");
             arguments.add(getModel().getrScriptFile().getAbsolutePath());
+            arguments.add(getModel().getRoutFile().getAbsolutePath());
             ProcessBuilder builder = new ProcessBuilder(arguments);
 
             Process p = builder.start();
-            p.waitFor();
+            return p.waitFor();
         } catch (InterruptedException | IOException ex) {
             throw new ArgusException("Error running R script: " + ex.getMessage());
         }
@@ -232,9 +233,13 @@ public class AnonDataController extends ControllerBase<AnonDataSpec>{
     
     private void fillKAnonMissings(){
         for (TableMu tab : getKAnonCombinations().getTables()){
-            String hs ="c(";
+            String hs ="list(";
             for (VariableMu var : tab.getVariables()){
-                hs += "\"" + (var.getMissing(0)) + "\",";
+                hs += "c(";
+                for (int i= 0; i < var.getNumberOfMissings(); i++){
+                    hs += "\"" + (var.getMissing(i)) + "\",";
+                }
+                hs = hs.substring(0, hs.length()-1) + "),";
             }
             hs = hs.substring(0, hs.length()-1) + ")";
             getModel().getKAnonMissings().add(hs);

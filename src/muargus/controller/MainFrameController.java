@@ -268,9 +268,9 @@ public class MainFrameController {
     }
 
     /**
-     * Adds the codelist info to the variabels.
+     * Adds the code list info to the variables.
      *
-     * @return ArrayList of Strings containing the missing codelists.
+     * @return ArrayList of Strings containing the missing-codes-list.
      */
     public ArrayList<String> addCodelistInfo() {
         ArrayList<String> missingCodelists = new ArrayList<>();

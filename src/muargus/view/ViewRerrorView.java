@@ -26,11 +26,13 @@ import java.io.IOException;
  *
  * @author pwof
  */
-public class ViewRerrorView extends javax.swing.JDialog {
+public class ViewRerrorView extends javax.swing.JDialog{
 
     /**
-     * Creates new form ViewRerrorView
-     */
+    * Creates new form ViewRerrorView
+    * @param parent
+    * @param modal 
+    */
     public ViewRerrorView(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
@@ -108,27 +110,22 @@ public class ViewRerrorView extends javax.swing.JDialog {
         RerrorArea.setText("");  
     }
     
-    public boolean addTextFile (String fn) throws ArgusException{
+    public void addTextFile (String fn) throws ArgusException{
         String hs;  
-        boolean IsError=false;
         clearText();
         File RoutFile = new File(fn);
         if (!RoutFile.exists()){
             RerrorArea.setText("The file " + fn + " could not be displayed; sorry"); 
         }
         else { 
-            try{  
-                BufferedReader reader = new BufferedReader(new FileReader(fn));
+            try (BufferedReader reader = new BufferedReader(new FileReader(fn))) {
                 while ( (hs = reader.readLine()) != null){
                     RerrorArea.append(hs + "\n");
-                    IsError = IsError || hs.contains("Error");
                 }
-            reader.close();
             }
             catch (IOException ex){ throw new ArgusException("An error occured reading the file "+fn); }
             RerrorArea.setCaretPosition(1);
         }
-        return IsError;
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

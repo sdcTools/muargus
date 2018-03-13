@@ -35,6 +35,7 @@ public class AnonDataSpec extends ReplacementSpec{
     private File dataFile;
     private File rScriptFile;
     private File runRFile;
+    private File RoutFile;
     private File logFile;
     
     /**
@@ -143,6 +144,20 @@ public class AnonDataSpec extends ReplacementSpec{
             this.runRFile = createFile(".bat");
         }
         return this.runRFile;
+    }
+    
+    /**
+     * Gets the file containing the .Rout file used for screen output of r-script.
+     *
+     * @return File containing the RoutFile.
+     * @throws ArgusException Throws an ArgusException when an error occurs
+     * while creating the RoutFile.
+     */
+    public File getRoutFile() throws ArgusException {
+        if (this.RoutFile == null) {
+            this.RoutFile = createFile(".Rout");
+        }
+        return this.RoutFile;
     }
 
     /**

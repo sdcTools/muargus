@@ -47,7 +47,7 @@ public class MakeProtectedFileController extends ControllerBase<ProtectedFile> {
      * Constructor for the MakeProtectedFileController.
      *
      * @param parentView the Frame of the mainFrame.
-     * @param metadata the orginal metadata.
+     * @param metadata the original metadata.
      */
     public MakeProtectedFileController(java.awt.Frame parentView, MetadataMu metadata) {
         this.setView(new MakeProtectedFileView(parentView, true, this));
@@ -122,7 +122,7 @@ public class MakeProtectedFileController extends ControllerBase<ProtectedFile> {
     }
 
     /**
-     * Removes the redundent ReplacementSpecs. It check if there are replacement
+     * Removes the redundant ReplacementSpecs. It check if there are replacement
      * specs with the same variables. If this is the case, the replacement specs
      * are removed.
      */
@@ -196,10 +196,10 @@ public class MakeProtectedFileController extends ControllerBase<ProtectedFile> {
     }
 
     /**
-     * Does the next step if the previous step was succesful.
+     * Does the next step if the previous step was successful.
      *
      * @param success Boolean indicating whether the previous step was
-     * succesful.
+     * successful.
      */
     @Override
     protected void doNextStep(boolean success) {

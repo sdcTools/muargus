@@ -199,17 +199,17 @@ public class RWriter {
                 writer.println();
             }
             writer.println("result <- run_Kanon(ppin,params)");
-            writer.println("ppin <- replace_NA_per_var(result$dat,params)");
+            //writer.println("ppin <- replace_NA_per_var(result$dat,params)");
             
             //File tmp2File = new File(anonData.doubleSlashses(anonData.getdataFile().getAbsolutePath())+2);
             //tmp2File.deleteOnExit();
             
             writer.println(String.format("write.table(unlist(lapply(bind_rows(result$supps),function(x){sum(x,na.rm=TRUE)})),"
-                                            + "\"%s\",row.names=FALSE,col.names=FALSE,quote=FALSE,sep=%s)",
+                                            + "\"%s\",row.names=FALSE,col.names=FALSE,quote=FALSE,sep=\"%s\")",
                                             anonData.doubleSlashses(anonData.getlogFile().getAbsolutePath()),
                                             MuARGUS.getDefaultSeparator()));
             
-            writer.println(String.format("write.table(ppin,\"%s\",row.names=FALSE,col.names=FALSE,quote=FALSE,sep=\"%s\")",
+            writer.println(String.format("write.table(result$dat,\"%s\",row.names=FALSE,col.names=FALSE,quote=FALSE,sep=\"%s\")",
                     anonData.doubleSlashses(anonData.getReplacementFile().getOutputFilePath()),MuARGUS.getDefaultSeparator()));
         } catch (IOException ex) {
             throw new ArgusException("Error writing to file. Error message: " + ex.getMessage());

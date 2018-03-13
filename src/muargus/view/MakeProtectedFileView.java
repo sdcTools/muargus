@@ -18,6 +18,7 @@ package muargus.view;
 
 import argus.utils.StrUtils;
 import java.awt.Color;
+import java.awt.Cursor;
 import java.io.File;
 import javax.swing.JRadioButton;
 import javax.swing.ListSelectionModel;
@@ -452,6 +453,7 @@ public class MakeProtectedFileView extends DialogBase<MakeProtectedFileControlle
             selectedFile = StrUtils.replaceExtension(getController().getMetadata().getFileNames().getDataFileName(), "Safe.saf");
         }
 
+       // this.setCursor(new Cursor(Cursor.WAIT_CURSOR));
         String filePath = showFileDialog("Make safe micro file", true, new String[]{filter}, new File(selectedFile));
         if (filePath != null) {
             getController().makeFile(new File(filePath));

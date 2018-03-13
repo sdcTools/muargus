@@ -20,9 +20,7 @@ import argus.model.ArgusException;
 import argus.utils.SystemUtils;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -54,7 +52,7 @@ import org.apache.commons.lang3.StringUtils;
 public class CalculationService {
 
     /**
-     * Progress listenere.
+     * Progress listener.
      */
     private class ProgressListener extends IProgressListener {
 
@@ -404,14 +402,16 @@ public class CalculationService {
         // Run sdcMicro R-code to make .rpl-file with (k+1)-anonymised key-variables
         firePropertyChange("stepName", null, "Running R-code...");
         firePropertyChange("progress", null, 0);
-        if (!controller.runAnonData()){
+        int RrunResult = controller.runAnonData();
+        if (RrunResult == controller.RINSTALL_ERROR){
             firePropertyChange("stepName", null, "");
             throw new ArgusException("R not correctly installed?");
         }
       
         ErrorText = new ViewRerrorView(null, true);
         RFileName = anonData.getrScriptFile().getAbsolutePath();
-        if (ErrorText.addTextFile(RFileName+"out")) { // Display only when "Error" is in file-text
+        if (RrunResult != 0){ // R returned with exit code != 0, i.e., error
+            ErrorText.addTextFile(anonData.getRoutFile().getAbsolutePath());
             ErrorText.setVisible(true);
             firePropertyChange("stepName", null, "");
             throw new ArgusException("No safe file produced: error running Rscript for (k+1)-anonymisation.");
@@ -482,19 +482,6 @@ public class CalculationService {
     }
     
     /**
-     * Copies number of suppressions from anonData variables to variables in safemeta
-     * 
-     * @param metadata to
-     * @param anonData from
-     */
-    private void copySupps(MetadataMu metadata, AnonDataSpec anonData){
-        ArrayList<VariableMu> varList = metadata.getCombinations().getProtectedFile().getSafeMeta().getVariables();
-        for (VariableMu var : anonData.getKAnonVariables()){
-            varList.get(varList.indexOf(var)).setnOfSuppressions(var.getnOfSuppressions());
-        }
-    }
-    
-    /**
      * Calculates the tables. For each (sub) table is calculated how many table
      * cells are greater than 0 and less than or equal to the threshold.
      *
@@ -505,7 +492,7 @@ public class CalculationService {
     }
 
     /**
-     * Checks if a background worker has succesfully finished it's job.
+     * Checks if a background worker has successfully finished it's job.
      *
      * @param ex Exception that might be thrown if an error occurs.
      */
@@ -538,7 +525,7 @@ public class CalculationService {
      *
      * @param variable VariableMu instance of the to be added variable.
      * @param varNr Integer containing the index of the variable.
-     * @return Boolean indicating whether the adding was succesful.
+     * @return Boolean indicating whether the adding was successful.
      */
     private boolean addVariable(VariableMu variable, int varNr) {
         //For numeric non-weight variables, the dll needs a missing value, but it's not required in the model
@@ -773,7 +760,7 @@ public class CalculationService {
      * Gets the variable indices (1-based) in the file.
      *
      * @param variables ArrayList of VariableMu's for which the indices are
-     * requisted.
+     * requested.
      * @return Array of integers containing the 1-based indices of the
      * variables.
      */
@@ -789,7 +776,7 @@ public class CalculationService {
      * Gets the variable indices (1-based) in the tables.
      *
      * @param table ArrayList of TableMu's for which the indices of it's
-     * variables are requisted.
+     * variables are requested.
      * @return Array of integers containing the 1-based indices of the variables
      * in the tables.
      */
@@ -806,7 +793,7 @@ public class CalculationService {
      * Gets the variable index (1-based) of the related variable.
      *
      * @param variable VariableMu instance for which the index of it's related
-     * variableMu is requisted.
+     * variableMu is requested.
      * @return Integer containing the index of the related variable of the given
      * variable.
      */
@@ -824,7 +811,7 @@ public class CalculationService {
      * @param index Integer containing the index of the variable (1-based).
      * @param variable VariableMu instance of the given variable.
      * @param metadata MetadataMu containing the metadata.
-     * @param delta Integer containing the difference in startingposition
+     * @param delta Integer containing the difference in starting position
      * compared to the original data file.
      * @return Integer containing the delta value.
      */
@@ -1132,13 +1119,13 @@ public class CalculationService {
     }
 
     /**
-     * Calculate the reidentification rate.
+     * Calculate the re-identification rate.
      *
      * @param table TableMu instance for which the risk model is set.
      * @param riskThreshold Double containing the risk threshold.
-     * @return Double containing the reidentification rate.
+     * @return Double containing the re-identification rate.
      * @throws ArgusException Throws an ArgusException when an error occurs
-     * while calculating the reidentification rate.
+     * while calculating the re-identification rate.
      */
     public double calculateReidentRate(TableMu table, double riskThreshold) throws ArgusException {
         int tableIndex = getIndexOf(table);
@@ -1179,7 +1166,7 @@ public class CalculationService {
      * @param classes ArrayList of RiskModelClasses. A RiskModelClass contains
      * information on a single pillar of the risk model histogram.
      * @param cumulative Boolean indicating whether the histogram is a
-     * cumulative historgram.
+     * cumulative histogram.
      * @return Double containing the re-identification rate (ksi).
      * @throws ArgusException Throws an ArgusException when an error occurs
      * while filling the risk model classes with the histogram data.
@@ -1228,17 +1215,4 @@ public class CalculationService {
         }
     }
     
-    private String getRout(String fn){
-        String ReturnString="";
-        String hs;
-        try{
-            BufferedReader reader = new BufferedReader(new FileReader(fn));
-            while ( (hs = reader.readLine()) != null){
-                ReturnString = ReturnString+ "\n" + hs;
-                //IsError = IsError || hs.contains("Error");
-            }
-            reader.close();
-        } catch (IOException ex){ }
-        return ReturnString;
-    }
 }
