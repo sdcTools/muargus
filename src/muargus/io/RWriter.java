@@ -182,12 +182,12 @@ public class RWriter {
             throw new ArgusException("Error writing to file. Error message: " + ex.getMessage());
         }
         
-        try (PrintWriter writer = new PrintWriter(anonData.getrScriptFile())) {
+        try (PrintWriter writer = new PrintWriter(anonData.getRScriptFile())) {
             writer.println("require(\"sdcMicro\")");
             writer.println("require(\"dplyr\")");
             writer.println(String.format("source(\"%s\\\\R\\\\KAnonFuncs.R\")",resourceDir));
             writer.println(String.format("ppin <- read.csv(\"%s\",sep=\"%s\",header=FALSE,colClasses=\"factor\")",
-                                            anonData.doubleSlashses(anonData.getdataFile().getAbsolutePath()),
+                                            anonData.doubleSlashses(anonData.getDataFile().getAbsolutePath()),
                                             MuARGUS.getDefaultSeparator()));
             writer.println("params <- list()\n");
             for (int i=0; i<anonData.getKAnonCombinations().getTables().size(); i++){
@@ -199,14 +199,9 @@ public class RWriter {
                 writer.println();
             }
             writer.println("result <- run_Kanon(ppin,params)");
-            //writer.println("ppin <- replace_NA_per_var(result$dat,params)");
-            
-            //File tmp2File = new File(anonData.doubleSlashses(anonData.getdataFile().getAbsolutePath())+2);
-            //tmp2File.deleteOnExit();
-            
             writer.println(String.format("write.table(unlist(lapply(bind_rows(result$supps),function(x){sum(x,na.rm=TRUE)})),"
                                             + "\"%s\",row.names=FALSE,col.names=FALSE,quote=FALSE,sep=\"%s\")",
-                                            anonData.doubleSlashses(anonData.getlogFile().getAbsolutePath()),
+                                            anonData.doubleSlashses(anonData.getLogFile().getAbsolutePath()),
                                             MuARGUS.getDefaultSeparator()));
             
             writer.println(String.format("write.table(result$dat,\"%s\",row.names=FALSE,col.names=FALSE,quote=FALSE,sep=\"%s\")",
@@ -224,10 +219,11 @@ public class RWriter {
      */
     public static void writeBatKAnon(AnonDataSpec anonData) throws ArgusException {
         try (PrintWriter writer = new PrintWriter(anonData.getRunRFileFile())) {
-            writer.println(String.format("R CMD BATCH --no-save --no-restore \"%s\"", anonData.getrScriptFile().getAbsolutePath()));
+            writer.println(String.format("R CMD BATCH --no-save --no-restore \"%s\" \"%s\"", 
+                            anonData.getRScriptFile().getAbsolutePath(),
+                            anonData.getRoutFile().getAbsolutePath()));
         } catch (FileNotFoundException ex) {
             throw new ArgusException("Error writing to file. Error message: " + ex.getMessage());
         }
     }
-   
 }

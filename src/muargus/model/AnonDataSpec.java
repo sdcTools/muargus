@@ -125,7 +125,7 @@ public class AnonDataSpec extends ReplacementSpec{
      * @throws ArgusException Throws an ArgusException when an error occurs
      * while creating the rScriptFile.
      */
-    public File getrScriptFile() throws ArgusException {
+    public File getRScriptFile() throws ArgusException {
         if (this.rScriptFile == null) {
             this.rScriptFile = createFile(".R");
         }
@@ -167,7 +167,7 @@ public class AnonDataSpec extends ReplacementSpec{
      * @throws ArgusException Throws an ArgusException when an error occurs
      * while creating the dataFile.
      */
-    public File getdataFile() throws ArgusException {
+    public File getDataFile() throws ArgusException {
         if (this.dataFile == null) {
             this.dataFile = createFile(".asc");
         }
@@ -181,7 +181,7 @@ public class AnonDataSpec extends ReplacementSpec{
      * @throws ArgusException Throws an ArgusException when an error occurs
      * while creating the logFile.
      */
-    public File getlogFile() throws ArgusException {
+    public File getLogFile() throws ArgusException {
         if (this.logFile == null) {
             this.logFile = createFile(".log");
         }

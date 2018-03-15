@@ -65,7 +65,7 @@ public class AnonDataController extends ControllerBase<AnonDataSpec>{
             fillKAnonMissings();
             fillKAnonPriority();
             
-            anonData.getdataFile();
+            anonData.getDataFile();
             
             anonData.setReplacementFile(new ReplacementFile("(k+1)-anonymity"));
             this.metadata.getReplacementSpecs().add(anonData);
@@ -90,7 +90,7 @@ public class AnonDataController extends ControllerBase<AnonDataSpec>{
     }
     
     public void setNumberSuppAnonData() throws ArgusException{
-        String fn = getModel().doubleSlashses(getModel().getlogFile().getAbsolutePath());
+        String fn = getModel().doubleSlashses(getModel().getLogFile().getAbsolutePath());
         File SuppInfo = new File(fn);
         int[] Supps = new int[getKAnonVariables().size()];
         
@@ -120,7 +120,7 @@ public class AnonDataController extends ControllerBase<AnonDataSpec>{
             arguments.add("BATCH");
             arguments.add("--no-save");
             arguments.add("--no-restore");
-            arguments.add(getModel().getrScriptFile().getAbsolutePath());
+            arguments.add(getModel().getRScriptFile().getAbsolutePath());
             arguments.add(getModel().getRoutFile().getAbsolutePath());
             ProcessBuilder builder = new ProcessBuilder(arguments);
 

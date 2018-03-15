@@ -93,7 +93,7 @@
                       </Group>
                   </Group>
               </Group>
-              <EmptySpace min="10" pref="11" max="32767" attributes="0"/>
+              <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="2" attributes="0">
                   <Component id="setKAnonButton" alignment="2" min="-2" pref="255" max="-2" attributes="0"/>
                   <Component id="tablesScrollPane" alignment="2" max="32767" attributes="0"/>

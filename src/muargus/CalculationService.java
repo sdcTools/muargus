@@ -379,7 +379,6 @@ public class CalculationService {
         // Save only variables that are needed to apply (k+1)-anonymisation
         // Read that into R and apply (k+1)-anonymisation with sdcMicro and save result
         // Combine result with original microdata and apply numeric changes
-        String RFileName;
         ViewRerrorView ErrorText;
         
         AnonDataController controller = new AnonDataController(this.metadata);        
@@ -390,7 +389,7 @@ public class CalculationService {
         
         // Save file with recodings, no suppressions
         int[] errorCode = new int[1];
-        boolean result = this.c.MakeAnonFile(anonData.getdataFile().getAbsolutePath(),
+        boolean result = this.c.MakeAnonFile(anonData.getDataFile().getAbsolutePath(),
                                 anonData.getKAnonVariables().size(),
                                 getVarIndicesInFile(anonData.getKAnonVariables()),
                                 MuARGUS.getDefaultSeparator(), errorCode);
@@ -409,7 +408,6 @@ public class CalculationService {
         }
       
         ErrorText = new ViewRerrorView(null, true);
-        RFileName = anonData.getrScriptFile().getAbsolutePath();
         if (RrunResult != 0){ // R returned with exit code != 0, i.e., error
             ErrorText.addTextFile(anonData.getRoutFile().getAbsolutePath());
             ErrorText.setVisible(true);
