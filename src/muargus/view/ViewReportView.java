@@ -104,8 +104,8 @@ public class ViewReportView extends DialogBase<ViewReportController> {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("View Report");
-        setMinimumSize(new java.awt.Dimension(700, 500));
-        setPreferredSize(new java.awt.Dimension(700, 500));
+        setMinimumSize(new java.awt.Dimension(750, 500));
+        setPreferredSize(new java.awt.Dimension(750, 500));
 
         printButton.setText("Print");
         printButton.addActionListener(new java.awt.event.ActionListener() {

@@ -145,7 +145,7 @@ public class HTMLReportWriter {
                 ArrayList<TableMu> TableSet = ((AnonDataSpec) replacement).getKAnonCombinations().getTables();
                 for (int i=0; i < TableSet.size();i++){
                     tr = addChildElement(table,"tr");
-                    addChildElement(tr, "td", replacement.getReplacementFile().getReplacementType());
+                    addChildElement(tr, "td", TableSet.get(i).getThreshold()+1+"-anonymity");
                     addChildElement(tr, "td", VariableMu.printVariableNames(TableSet.get(i).getVariables()));
                     addChildElement(tr, "td", "Suppressions by sdcMicro");
                 }
@@ -323,7 +323,7 @@ public class HTMLReportWriter {
         }
         for (TableMu t : metadata.getCombinations().getTables()) {
             tr = addChildElement(table, "tr");
-            addChildElement(tr, "td", Integer.toString(t.getThreshold()));
+            addChildElement(tr, "td", "k = " + Integer.toString(t.getThreshold()));
             for (VariableMu v : t.getVariables()) {
                 addChildElement(tr, "td", v.getName());
             }
