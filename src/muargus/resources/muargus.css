@@ -60,7 +60,8 @@ table        {
 th           {
   border: thin solid gray;
   border-collapse: collapse;
-  padding: 4px 2px 2px 4px;
+  /* padding: top right bottom left */
+  padding: 4px 4px 4px 4px;
 }
 
 /* table cell */
@@ -68,6 +69,7 @@ th           {
 td           {
   border: thin solid gray;
   border-collapse: collapse;
-  padding: 4px 2px 2px 4px;
+  /* padding: top right bottom left */
+  padding: 4px 6px 4px 4px; /* italic correction */
   font-style: italic;
 }
