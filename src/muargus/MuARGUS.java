@@ -55,7 +55,7 @@ public class MuARGUS {
     private static final String defaultSeparator = ",";
 
     private static final String lookAndFeel = "Windows";
-    private static final File manual = new File("resources/MUmanual5.1.pdf");
+    private static final File manual = new File("resources/MUmanual5.1.3.pdf");
     private static final int sleepTime = 2000;
     private static Process helpViewerProcess;
 
