@@ -33,7 +33,7 @@ public class HighlightTableCellRenderer extends DefaultTableCellRenderer {
      public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
           Component cr = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
           if (!"".equals(table.getValueAt(row, 0))) {
-              setForeground(Color.red);
+                setForeground(Color.red);  
           }
           else {
               setForeground(isSelected ? Color.white : Color.black);

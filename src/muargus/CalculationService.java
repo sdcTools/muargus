@@ -23,21 +23,24 @@ import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.concurrent.ExecutionException;
 import javax.swing.SwingWorker;
-import muargus.controller.SelectCombinationsController;
+import muargus.controller.AnonDataController;
 import muargus.extern.dataengine.CMuArgCtrl;
 import muargus.extern.dataengine.IProgressListener;
-import muargus.model.ProtectedFile;
-import muargus.model.MetadataMu;
-import muargus.model.Combinations;
-import muargus.model.RecodeMu;
-import muargus.model.TableMu;
+import muargus.model.AnonDataSpec;
 import muargus.model.CodeInfo;
+import muargus.model.Combinations;
+import muargus.model.MetadataMu;
 import muargus.model.PramVariableSpec;
+import muargus.model.ProtectedFile;
+import muargus.model.RecodeMu;
 import muargus.model.ReplacementSpec;
 import muargus.model.RiskModelClass;
+import muargus.model.TableMu;
 import muargus.model.VariableMu;
+import muargus.view.ViewRerrorView;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -49,7 +52,7 @@ import org.apache.commons.lang3.StringUtils;
 public class CalculationService {
 
     /**
-     * Progress listenere.
+     * Progress listener.
      */
     private class ProgressListener extends IProgressListener {
 
@@ -70,7 +73,6 @@ public class CalculationService {
      * Enumeration of background tasks.
      */
     private enum BackgroundTask {
-
         ExploreFile,
         CalculateTables,
         MakeProtectedFile,
@@ -317,7 +319,7 @@ public class CalculationService {
     }
 
     /**
-     * Makes the protected/safe file.
+     * Makes the protected/safe file using "traditional suppression".
      *
      * @throws ArgusException Throws an ArgusException when an error occurs
      * during Make protected file.
@@ -349,14 +351,14 @@ public class CalculationService {
             } else {
                 dataFileName = protectedFile.getSafeMeta().getFileNames().getDataFileName();
             }
-
+            
             boolean result = this.c.MakeFileSafe(dataFileName,
                     protectedFile.isWithPrior(),
                     protectedFile.isWithEntropy(),
                     protectedFile.getHouseholdType(),
                     protectedFile.isRandomizeOutput(),
                     protectedFile.isPrintBHR());
-
+                    
             if (!result) {
                 throw new ArgusException("Error during Make protected file");
             }
@@ -365,6 +367,118 @@ public class CalculationService {
         }
     }
 
+    /**
+     * Makes the protected/safe file using "(k+1)-anonymisation".
+     *
+     * @throws ArgusException Throws an ArgusException when an error occurs
+     * during Make protected file.
+     */
+    private void makeFileInBackgroundKAnon() throws ArgusException {
+        // First save ascii file with microdata with recoding applied
+        // Do not apply numeric changes, will be done in last step
+        // Save only variables that are needed to apply (k+1)-anonymisation
+        // Read that into R and apply (k+1)-anonymisation with sdcMicro and save result
+        // Combine result with original microdata and apply numeric changes
+        ViewRerrorView ErrorText;
+        
+        AnonDataController controller = new AnonDataController(this.metadata);        
+        firePropertyChange("stepName", null, "Writing temp file...");
+        // anonData will contain
+        // Variables, Combinations, RStrings, Thresholds, dataFile, rScriptFile, runRFile
+        AnonDataSpec anonData = controller.setAnonData();
+        
+        // Save file with recodings, no suppressions
+        int[] errorCode = new int[1];
+        boolean result = this.c.MakeAnonFile(anonData.getDataFile().getAbsolutePath(),
+                                anonData.getKAnonVariables().size(),
+                                getVarIndicesInFile(anonData.getKAnonVariables()),
+                                MuARGUS.getDefaultSeparator(), errorCode);
+        if (!result) {
+            firePropertyChange("stepName", null, "");
+            throw new ArgusException("Error creating temporary data file: " + getErrorString(errorCode[0]));
+        }
+        
+        // Run sdcMicro R-code to make .rpl-file with (k+1)-anonymised key-variables
+        firePropertyChange("stepName", null, "Running R-code...");
+        firePropertyChange("progress", null, 0);
+        int RrunResult = controller.runAnonData();
+        if (RrunResult == controller.RINSTALL_ERROR){
+            firePropertyChange("stepName", null, "");
+            throw new ArgusException("R not correctly installed?");
+        }
+      
+        ErrorText = new ViewRerrorView(null, true);
+        if (RrunResult != 0){ // R returned with exit code != 0, i.e., error
+            ErrorText.addTextFile(anonData.getRoutFile().getAbsolutePath());
+            ErrorText.setVisible(true);
+            firePropertyChange("stepName", null, "");
+            throw new ArgusException("No safe file produced: error running Rscript for (k+1)-anonymisation.");
+        } else{
+            // Run "normal"  makeFileSafe, with result from R as ReplacementFile (.rpl)
+            // Do it without Additional Suppressions!!!!
+            firePropertyChange("stepName", null, "Writing safe file...");  
+            controller.setNumberSuppAnonData();
+            combineFileInBackground(anonData);
+        }
+    }
+    
+/**
+     * Makes the protected/safe file using output from (k+1)-anonymisation
+     *
+     * @throws ArgusException Throws an ArgusException when an error occurs
+     */
+    private void combineFileInBackground(AnonDataSpec anonData) throws ArgusException {
+        doChangeFiles();
+        ProtectedFile protectedFile = this.metadata.getCombinations().getProtectedFile();
+
+        this.c.SetOutFileInfo(this.metadata.getDataFileType() == MetadataMu.DATA_FILE_TYPE_FIXED
+                || this.metadata.getDataFileType() == MetadataMu.DATA_FILE_TYPE_SPSS,
+                this.metadata.getSeparator(),
+                "",
+                true
+        );
+        int index = 0;
+        for (VariableMu variable : this.metadata.getVariables()) {
+            index++;
+            if (protectedFile.getVariables().contains(variable)) {
+                this.c.SetSuppressPrior(index, variable.getSuppressPriority());
+            }
+        }
+        try {
+            String dataFileName;
+            if (this.metadata.isSpss()) {
+                File saf = File.createTempFile("MuArgus", ".saf");
+                saf.deleteOnExit();
+                dataFileName = saf.getPath();
+                MuARGUS.getSpssUtils().safFile = saf;
+            } else {
+                dataFileName = protectedFile.getSafeMeta().getFileNames().getDataFileName();
+            }
+            
+            int[] nSupps = new int[this.metadata.getVariables().size()];
+            for (int i = 0; i < nSupps.length; i++) {
+                nSupps[i] = 0;
+            }
+            for (int i = 0; i < anonData.getKAnonVariables().size(); i++){
+                nSupps[getIndexOf(anonData.getKAnonVariables().get(i)) - 1] = anonData.getKAnonVariables().get(i).getnOfSuppressions();
+            }
+            
+            boolean result = this.c.CombineToSafeFile(dataFileName,
+                    nSupps,
+                    protectedFile.isWithPrior(),
+                    protectedFile.isWithEntropy(),
+                    protectedFile.getHouseholdType(),
+                    protectedFile.isRandomizeOutput(),
+                    protectedFile.isPrintBHR());
+                    
+            if (!result) {
+                throw new ArgusException("Error during Make protected file");
+            }
+        } catch (IOException e) {
+
+        }
+    }
+    
     /**
      * Calculates the tables. For each (sub) table is calculated how many table
      * cells are greater than 0 and less than or equal to the threshold.
@@ -376,7 +490,7 @@ public class CalculationService {
     }
 
     /**
-     * Checks if a background worker has succesfully finished it's job.
+     * Checks if a background worker has successfully finished it's job.
      *
      * @param ex Exception that might be thrown if an error occurs.
      */
@@ -409,7 +523,7 @@ public class CalculationService {
      *
      * @param variable VariableMu instance of the to be added variable.
      * @param varNr Integer containing the index of the variable.
-     * @return Boolean indicating whether the adding was succesful.
+     * @return Boolean indicating whether the adding was successful.
      */
     private boolean addVariable(VariableMu variable, int varNr) {
         //For numeric non-weight variables, the dll needs a missing value, but it's not required in the model
@@ -488,7 +602,14 @@ public class CalculationService {
                 exploreInBackground();
                 break;
             case MakeProtectedFile:
-                makeFileInBackground();
+                // If not (k+1)-anonymisation or no suppression, use "old" proceudre
+                if (!this.metadata.getCombinations().getProtectedFile().isKAnon() ||
+                        (!this.metadata.getCombinations().getProtectedFile().isWithEntropy() && 
+                            !this.metadata.getCombinations().getProtectedFile().isWithPrior())){
+                    makeFileInBackground();
+                } else { // Use k-anonymity precedure
+                    makeFileInBackgroundKAnon();
+                }
                 break;
             case MakeReplacementFile:
                 makeReplacementFileInBackground();
@@ -637,7 +758,7 @@ public class CalculationService {
      * Gets the variable indices (1-based) in the file.
      *
      * @param variables ArrayList of VariableMu's for which the indices are
-     * requisted.
+     * requested.
      * @return Array of integers containing the 1-based indices of the
      * variables.
      */
@@ -653,7 +774,7 @@ public class CalculationService {
      * Gets the variable indices (1-based) in the tables.
      *
      * @param table ArrayList of TableMu's for which the indices of it's
-     * variables are requisted.
+     * variables are requested.
      * @return Array of integers containing the 1-based indices of the variables
      * in the tables.
      */
@@ -662,6 +783,7 @@ public class CalculationService {
         for (int index = 0; index < indices.length; index++) {
             indices[index] = getIndexOf(table.getVariables().get(index));
         }
+        Arrays.sort(indices,0,indices.length); // MuArgusCtrl needs ordering from low to high
         return indices;
     }
 
@@ -669,7 +791,7 @@ public class CalculationService {
      * Gets the variable index (1-based) of the related variable.
      *
      * @param variable VariableMu instance for which the index of it's related
-     * variableMu is requisted.
+     * variableMu is requested.
      * @return Integer containing the index of the related variable of the given
      * variable.
      */
@@ -687,7 +809,7 @@ public class CalculationService {
      * @param index Integer containing the index of the variable (1-based).
      * @param variable VariableMu instance of the given variable.
      * @param metadata MetadataMu containing the metadata.
-     * @param delta Integer containing the difference in startingposition
+     * @param delta Integer containing the difference in starting position
      * compared to the original data file.
      * @return Integer containing the delta value.
      */
@@ -995,13 +1117,13 @@ public class CalculationService {
     }
 
     /**
-     * Calculate the reidentification rate.
+     * Calculate the re-identification rate.
      *
      * @param table TableMu instance for which the risk model is set.
      * @param riskThreshold Double containing the risk threshold.
-     * @return Double containing the reidentification rate.
+     * @return Double containing the re-identification rate.
      * @throws ArgusException Throws an ArgusException when an error occurs
-     * while calculating the reidentification rate.
+     * while calculating the re-identification rate.
      */
     public double calculateReidentRate(TableMu table, double riskThreshold) throws ArgusException {
         int tableIndex = getIndexOf(table);
@@ -1042,7 +1164,7 @@ public class CalculationService {
      * @param classes ArrayList of RiskModelClasses. A RiskModelClass contains
      * information on a single pillar of the risk model histogram.
      * @param cumulative Boolean indicating whether the histogram is a
-     * cumulative historgram.
+     * cumulative histogram.
      * @return Double containing the re-identification rate (ksi).
      * @throws ArgusException Throws an ArgusException when an error occurs
      * while filling the risk model classes with the histogram data.
@@ -1082,4 +1204,13 @@ public class CalculationService {
         return ksi[0];
     }
 
+    public void removeKAnonReplacementIfAny(MetadataMu metadata){
+        ArrayList<ReplacementSpec> r = metadata.getReplacementSpecs();
+        for (int i = r.size() - 1; i >= 0; i--) {
+            if (r.get(i) instanceof AnonDataSpec) {
+                r.remove(i);
+            }
+        }
+    }
+    
 }

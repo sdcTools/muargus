@@ -16,7 +16,6 @@
  */
 package muargus.view;
 
-import muargus.resources.ContextHelp;
 import argus.model.ArgusException;
 import java.awt.BorderLayout;
 import java.awt.geom.Rectangle2D;
@@ -28,6 +27,7 @@ import muargus.RiskChartBuilder;
 import muargus.controller.RiskSpecificationController;
 import muargus.model.RiskSpecification;
 import muargus.model.TableMu;
+import muargus.resources.ContextHelp;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.event.ChartProgressEvent;
 import org.jfree.chart.event.ChartProgressListener;

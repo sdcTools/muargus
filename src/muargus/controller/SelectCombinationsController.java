@@ -16,16 +16,16 @@
  */
 package muargus.controller;
 
-import muargus.CalculationService;
 import argus.model.ArgusException;
 import argus.utils.SystemUtils;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import javax.swing.JOptionPane;
+import muargus.CalculationService;
 import muargus.MuARGUS;
-import muargus.model.MetadataMu;
 import muargus.model.Combinations;
+import muargus.model.MetadataMu;
 import muargus.model.TableMu;
 import muargus.model.VariableMu;
 import muargus.view.SelectCombinationsView;
@@ -81,6 +81,7 @@ public class SelectCombinationsController extends ControllerBase<Combinations> {
                 MuARGUS.getSpssUtils().generateSpssData(this.metadata);
             }
             CalculationService service = MuARGUS.getCalculationService();
+            service.removeKAnonReplacementIfAny(this.metadata);
             service.setMetadata(this.metadata);
             service.exploreFile(this);
         } catch (ArgusException ex) {
@@ -264,7 +265,7 @@ public class SelectCombinationsController extends ControllerBase<Combinations> {
             // find the next idLevel larger than zero and add the number of variables to the size
             for (int u = index; u < variables.size(); u++) {
                 if (variables.get(u).size() > 0) {
-                    size = size + variables.get(u).size();
+                    size += variables.get(u).size();
                     index = u + 1;
                     break;
                 }
@@ -341,7 +342,7 @@ public class SelectCombinationsController extends ControllerBase<Combinations> {
     }
 
     /**
-     * Checks if there are overlapping tables and askes if they need to be
+     * Checks if there are overlapping tables and asks if they need to be
      * removed.
      *
      * @param toBeRemovedTables ArrayList of TableMu's that overlap the given
@@ -356,6 +357,10 @@ public class SelectCombinationsController extends ControllerBase<Combinations> {
             if (JOptionPane.showConfirmDialog(getView(), "Overlapping tables found with this risk table\nDo you want to remove them?",
                     "Mu Argus", JOptionPane.YES_NO_OPTION) == JOptionPane.NO_OPTION) {
                 tableMu.setRiskModel(!tableMu.isRiskModel());  //Revert the change
+                toBeRemovedTables.clear();// Clear set of toBeRemovedTables ("No" chosen when asked to remove)
+            }
+            else{ // Do actual clear when "Yes" was selected, and set kAnon to false
+                tableMu.setKAnon(false);
                 valid = true;
             }
         }

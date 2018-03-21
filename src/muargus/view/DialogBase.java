@@ -16,7 +16,6 @@
  */
 package muargus.view;
 
-import muargus.resources.ContextHelp;
 import argus.model.ArgusException;
 import argus.utils.SystemUtils;
 import java.awt.event.ActionEvent;
@@ -30,6 +29,7 @@ import javax.swing.KeyStroke;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import muargus.MuARGUS;
 import muargus.model.MetadataMu;
+import muargus.resources.ContextHelp;
 
 /**
  * Basic dialog class. This class contains standard methods useable by all view

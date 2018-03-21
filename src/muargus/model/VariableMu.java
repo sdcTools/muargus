@@ -16,8 +16,8 @@
  */
 package muargus.model;
 
-import argus.model.SpssVariable;
 import argus.model.ArgusException;
+import argus.model.SpssVariable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Objects;

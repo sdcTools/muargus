@@ -27,6 +27,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import muargus.io.MetaReader;
+import muargus.model.AnonDataSpec;
 import muargus.model.CodeInfo;
 import muargus.model.MetadataMu;
 import muargus.model.MicroaggregationSpec;
@@ -138,27 +139,38 @@ public class HTMLReportWriter {
                         "%s %% random noise has been added ", formatDouble(spec.getWeightNoisePercentage(), 2, false)));
             }
         }
+        
         for (ReplacementSpec replacement : metadata.getReplacementSpecs()) {
-            tr = addChildElement(table, "tr");
-            addChildElement(tr, "td", replacement.getReplacementFile().getReplacementType());
-            addChildElement(tr, "td", VariableMu.printVariableNames(replacement.getOutputVariables()));
-            if (replacement instanceof RankSwappingSpec) {
-                addChildElement(tr, "td",
-                        String.format("Percentage: %d %%", ((RankSwappingSpec) replacement).getPercentage()));
-            } else if (replacement instanceof MicroaggregationSpec) {
-                MicroaggregationSpec microAggr = (MicroaggregationSpec) replacement;
-                String optimal = microAggr.getOutputVariables().size() == 1
-                        ? String.format("; Optimal: %s", (microAggr.isOptimal() ? "yes" : "no")) : "";
-                addChildElement(tr, "td",
-                        String.format("Group size: %d%s", microAggr.getMinimalNumberOfRecords(), optimal));
-            } else if (replacement instanceof SyntheticDataSpec) {
-                String alpha = "Alpha values:";
-                for (VariableMu v : ((SyntheticDataSpec) replacement).getOutputVariables()) {
-                    alpha = alpha + " " + v.getAlpha() + ",";
+            if (replacement instanceof AnonDataSpec){
+                ArrayList<TableMu> TableSet = ((AnonDataSpec) replacement).getKAnonCombinations().getTables();
+                for (int i=0; i < TableSet.size();i++){
+                    tr = addChildElement(table,"tr");
+                    addChildElement(tr, "td", TableSet.get(i).getThreshold()+1+"-anonymity");
+                    addChildElement(tr, "td", VariableMu.printVariableNames(TableSet.get(i).getVariables()));
+                    addChildElement(tr, "td", "Suppressions by sdcMicro");
                 }
-                addChildElement(tr, "td", alpha.substring(0, alpha.length() - 1));
+            }
+            else{
+                tr = addChildElement(table, "tr");
+                addChildElement(tr, "td", replacement.getReplacementFile().getReplacementType());                
+                addChildElement(tr, "td", VariableMu.printVariableNames(replacement.getOutputVariables()));
+                if (replacement instanceof RankSwappingSpec) {
+                    addChildElement(tr, "td", String.format("Percentage: %d %%", ((RankSwappingSpec) replacement).getPercentage()));
+                } else if (replacement instanceof MicroaggregationSpec) {
+                    MicroaggregationSpec microAggr = (MicroaggregationSpec) replacement;
+                    String optimal = microAggr.getOutputVariables().size() == 1
+                        ? String.format("; Optimal: %s", (microAggr.isOptimal() ? "yes" : "no")) : "";
+                    addChildElement(tr, "td", String.format("Group size: %d%s", microAggr.getMinimalNumberOfRecords(), optimal));
+                } else if (replacement instanceof SyntheticDataSpec) {
+                    String alpha = "Alpha values:";
+                    for (VariableMu v : replacement.getOutputVariables()) {
+                        alpha = alpha + " " + v.getAlpha() + ",";
+                    }
+                    addChildElement(tr, "td", alpha.substring(0, alpha.length() - 1));
+                }
             }
         }
+        
         ProtectedFile protectedFile = metadata.getCombinations().getProtectedFile();
         if (protectedFile.isRandomizeOutput()) {
             tr = addChildElement(table, "tr");
@@ -311,7 +323,7 @@ public class HTMLReportWriter {
         }
         for (TableMu t : metadata.getCombinations().getTables()) {
             tr = addChildElement(table, "tr");
-            addChildElement(tr, "td", Integer.toString(t.getThreshold()));
+            addChildElement(tr, "td", "k = " + Integer.toString(t.getThreshold()));
             for (VariableMu v : t.getVariables()) {
                 addChildElement(tr, "td", v.getName());
             }

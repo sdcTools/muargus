@@ -42,17 +42,18 @@ public class ProtectedFile {
     public final static int KEEP_IN_SAFE_FILE = 1;
     public final static int CHANGE_INTO_SEQUENCE_NUMBER = 2;
     public final static int REMOVE_FROM_SAFE_FILE = 3;
-
+    
     private final ArrayList<VariableMu> variables;
     private String[][] data;
     private final String[] columnames;
     private boolean riskModel;
+    private boolean kAnon;
 
     // values for the dll
     private boolean randomizeOutput;
     private boolean printBHR;
     private MetadataMu safeMeta;
-
+    
     /**
      * Constructor of the model class ProtectedFile. Initializes the column
      * names for the variablesTable. Makes an empty arraylists for the variables
@@ -173,6 +174,24 @@ public class ProtectedFile {
         this.printBHR = printBHR;
     }
 
+    /**
+     * Returns whether k-anonymisation is used.
+     *
+     * @return Boolean indication whether k-anonymisation is used.
+     */
+    public boolean isKAnon(){
+        return kAnon;
+    }
+
+    /**
+     * Sets whether k-anonymisation is used.
+     *
+     * @param kAnon Boolean indication whether k-anonymisation is used.
+     */
+    public void setKAnon(boolean kAnon) {
+        this.kAnon = kAnon;
+    }
+    
     /**
      * Returns whether the risk model is used.
      *

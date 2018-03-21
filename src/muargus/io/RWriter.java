@@ -17,12 +17,15 @@
 package muargus.io;
 
 import argus.model.ArgusException;
+import argus.utils.SystemUtils;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import muargus.MuARGUS;
+import muargus.model.AnonDataSpec;
 import muargus.model.SyntheticDataSpec;
 
 /**
@@ -164,4 +167,63 @@ public class RWriter {
         }
     }
 
+    /**
+     * Writes the r-Script for generating (k+1)-anonymised data.
+     *
+     * @param anonDataSpec instance containing k-anonymisation info
+     * @throws ArgusException Throws an ArgusException when an error occurs
+     * during writing.
+     */
+    public static void writeKAnon(AnonDataSpec anonData) throws ArgusException {
+        String resourceDir;
+        try{
+            resourceDir = anonData.doubleSlashses(SystemUtils.getApplicationDirectory(MuARGUS.class).getAbsolutePath()+"\\resources");
+        } catch (IOException ex) {
+            throw new ArgusException("Error writing to file. Error message: " + ex.getMessage());
+        }
+        
+        try (PrintWriter writer = new PrintWriter(anonData.getRScriptFile())) {
+            writer.println("require(\"sdcMicro\")");
+            writer.println("require(\"dplyr\")");
+            writer.println(String.format("source(\"%s\\\\R\\\\KAnonFuncs.R\")",resourceDir));
+            writer.println(String.format("ppin <- read.csv(\"%s\",sep=\"%s\",header=FALSE,colClasses=\"factor\")",
+                                            anonData.doubleSlashses(anonData.getDataFile().getAbsolutePath()),
+                                            MuARGUS.getDefaultSeparator()));
+            writer.println("params <- list()\n");
+            for (int i=0; i<anonData.getKAnonCombinations().getTables().size(); i++){
+                writer.println(String.format("params[[%d]] <- list()",i+1));
+                writer.println(String.format("params[[%d]]$keyVars <- %s",i+1,anonData.getKAnonRStrings().get(i)));
+                writer.println(String.format("params[[%d]]$missings <- %s",i+1,anonData.getKAnonMissings().get(i)));
+                writer.println(String.format("params[[%d]]$priorities_mu <- %s",i+1,anonData.getKAnonPriority().get(i)));
+                writer.println(String.format("params[[%d]]$k <- %d",i+1,anonData.getKAnonThresholds().get(i)));
+                writer.println();
+            }
+            writer.println("result <- run_Kanon(ppin,params)");
+            writer.println(String.format("write.table(unlist(lapply(bind_rows(result$supps),function(x){sum(x,na.rm=TRUE)})),"
+                                            + "\"%s\",row.names=FALSE,col.names=FALSE,quote=FALSE,sep=\"%s\")",
+                                            anonData.doubleSlashses(anonData.getLogFile().getAbsolutePath()),
+                                            MuARGUS.getDefaultSeparator()));
+            
+            writer.println(String.format("write.table(result$dat,\"%s\",row.names=FALSE,col.names=FALSE,quote=FALSE,sep=\"%s\")",
+                    anonData.doubleSlashses(anonData.getReplacementFile().getOutputFilePath()),MuARGUS.getDefaultSeparator()));
+        } catch (IOException ex) {
+            throw new ArgusException("Error writing to file. Error message: " + ex.getMessage());
+        }
+    }
+
+    /**
+     *
+     * @param kAnonData ProtectedFile instance containing Data 
+     * @throws ArgusException Throws an ArgusException when an error occurs
+     * during writing.
+     */
+    public static void writeBatKAnon(AnonDataSpec anonData) throws ArgusException {
+        try (PrintWriter writer = new PrintWriter(anonData.getRunRFileFile())) {
+            writer.println(String.format("R CMD BATCH --no-save --no-restore \"%s\" \"%s\"", 
+                            anonData.getRScriptFile().getAbsolutePath(),
+                            anonData.getRoutFile().getAbsolutePath()));
+        } catch (FileNotFoundException ex) {
+            throw new ArgusException("Error writing to file. Error message: " + ex.getMessage());
+        }
+    }
 }

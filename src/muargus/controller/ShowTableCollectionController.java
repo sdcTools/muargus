@@ -35,7 +35,7 @@ public class ShowTableCollectionController extends ControllerBase<TableCollectio
      *
      * @param parentView the Frame of the mainFrame that is given to the
      * ShowTableCollectionView.
-     * @param metadata the orginal metadata.
+     * @param metadata the original metadata.
      */
     public ShowTableCollectionController(java.awt.Frame parentView, MetadataMu metadata) {
         super.setView(new ShowTableCollectionView(parentView, true, this));
@@ -102,7 +102,7 @@ public class ShowTableCollectionController extends ControllerBase<TableCollectio
      * This function makes a new two-dimensional array with the length equal to
      * the number of tables and the with equal to the number of columns. The
      * first column will be filled with the number of unsafe combinations and
-     * the following columns will be filled with the names of the varibles of
+     * the following columns will be filled with the names of the variables of
      * each table
      *
      * @param tables The Array of tables that should be displayed

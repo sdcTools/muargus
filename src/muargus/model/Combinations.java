@@ -42,6 +42,7 @@ public class Combinations {
     private NumericalRankSwapping numericalRankSwapping;
     private PramSpecification pramSpecification;
     private SyntheticDataSpec syntheticData;
+    private AnonDataSpec anonData;
 
     // maximum number of tables before the user is warned that this will probably result in memory problems
     private final int maximumNumberOfTables = 1000;
@@ -136,6 +137,7 @@ public class Combinations {
         this.protectedFile = new ProtectedFile();
         this.protectedFile.getVariables().addAll(this.getVariablesInTables());
         this.protectedFile.setRiskModel(this.isRiskModel());
+        this.protectedFile.setKAnon(this.isKAnon());
     }
 
     /**
@@ -174,6 +176,25 @@ public class Combinations {
      */
     private void createSyntheticData() {
         this.syntheticData = new SyntheticDataSpec();
+    }
+    
+    /**
+     * Gets the model class of the AnonData.
+     *
+     * @return Returns the AnonData model class.
+     */
+    public AnonDataSpec getAnonData() {
+        if (this.anonData == null) {
+            createAnonData();
+        }
+        return this.anonData;
+    }
+
+    /**
+     * Creates a new instance of the AnonData class.
+     */
+    private void createAnonData() {
+        this.anonData = new AnonDataSpec();
     }
 
     /**
@@ -419,6 +440,21 @@ public class Combinations {
     public boolean isRiskModel() {
         for (TableMu t : this.tables) {
             if (t.isRiskModel()) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    /**
+     * Returns if the kAnonymity is specified for at least one table.
+     *
+     * @return Boolean whether the kAnonymity is specified for at least one table
+     * or not.
+     */
+    public boolean isKAnon() {
+        for (TableMu t : this.tables) {
+            if (t.isKAnon()) {
                 return true;
             }
         }
