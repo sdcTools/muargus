@@ -525,16 +525,31 @@ public class HTMLReportWriter {
 
         Element p = HTMLReportWriter.doc.createElement("p");
         addChildElement(p, "h2", "Record description safe file");
+        String format="Fixed format";
+        switch(metadata.getDataFileType()){
+            case MetadataMu.DATA_FILE_TYPE_FREE:
+            case MetadataMu.DATA_FILE_TYPE_FREE_WITH_META:
+                format = "Free format";
+                break;
+            case MetadataMu.DATA_FILE_TYPE_SPSS:
+                format = "SPSS";
+                break;
+        }
+        addChildElement(p, "h2", String.format("Safe file format = %s",format));
         Element table = addChildElement(p, "table");
         Element tr = addChildElement(table, "tr");
         addChildElement(tr, "th", "Name");
-        addChildElement(tr, "th", "Starting position");
+        if (metadata.getDataFileType()==MetadataMu.DATA_FILE_TYPE_FIXED){
+            addChildElement(tr, "th", "Starting position");
+        }
         addChildElement(tr, "th", "Length");
         addChildElement(tr, "th", "Decimal");
         for (VariableMu v : safeMeta.getVariables()) {
             tr = addChildElement(table, "tr");
             addChildElement(tr, "td", v.getName());
-            addChildElement(tr, "td", Integer.toString(v.getStartingPosition()));
+            if (metadata.getDataFileType()==MetadataMu.DATA_FILE_TYPE_FIXED){
+                addChildElement(tr, "td", Integer.toString(v.getStartingPosition()));
+            }
             addChildElement(tr, "td", Integer.toString(v.getVariableLength()));
             addChildElement(tr, "td", Integer.toString(v.getDecimals()));
         }
