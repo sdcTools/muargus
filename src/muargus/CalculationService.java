@@ -400,7 +400,7 @@ public class CalculationService {
         
         // Run sdcMicro R-code to make .rpl-file with (k+1)-anonymised key-variables
         firePropertyChange("stepName", null, "Running R-code...");
-        firePropertyChange("progress", null, 0);
+        firePropertyChange("progress", null, 83);
         int RrunResult = controller.runAnonData();
         if (RrunResult == controller.RINSTALL_ERROR){
             firePropertyChange("stepName", null, "");
@@ -412,6 +412,7 @@ public class CalculationService {
             ErrorText.addTextFile(anonData.getRoutFile().getAbsolutePath());
             ErrorText.setVisible(true);
             firePropertyChange("stepName", null, "");
+            firePropertyChange("progress", null, 0);
             throw new ArgusException("No safe file produced: error running Rscript for (k+1)-anonymisation.");
         } else{
             // Run "normal"  makeFileSafe, with result from R as ReplacementFile (.rpl)

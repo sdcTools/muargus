@@ -9,7 +9,7 @@
     <Property name="defaultCloseOperation" type="int" value="2"/>
     <Property name="title" type="java.lang.String" value="Specify Metadata"/>
     <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-      <Dimension value="[560, 490]"/>
+      <Dimension value="[590, 490]"/>
     </Property>
   </Properties>
   <SyntheticProperties>
@@ -33,54 +33,55 @@
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace min="-2" pref="8" max="-2" attributes="0"/>
-              <Component id="variablesPanel" max="32767" attributes="0"/>
-              <EmptySpace type="unrelated" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="1" max="-2" attributes="0">
+              <Component id="variablesPanel" pref="136" max="32767" attributes="0"/>
+              <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="1" attributes="0">
                   <Group type="102" alignment="1" attributes="0">
                       <Component id="generateButton" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="newButton" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="deleteButton" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="32767" attributes="0"/>
+                      <EmptySpace min="-2" pref="70" max="-2" attributes="0"/>
                       <Component id="cancelButton" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="okButton" min="-2" pref="53" max="-2" attributes="0"/>
                   </Group>
-                  <Component id="categoriesPanel" pref="399" max="32767" attributes="0"/>
+                  <Component id="categoriesPanel" min="-2" pref="399" max="-2" attributes="0"/>
                   <Group type="102" attributes="0">
-                      <Group type="103" groupAlignment="1" max="-2" attributes="0">
-                          <Component id="optionsArgusPanel" max="32767" attributes="0"/>
-                          <Component id="attributesPanel" max="32767" attributes="0"/>
+                      <Group type="103" groupAlignment="1" attributes="0">
+                          <Component id="optionsArgusPanel" min="-2" max="-2" attributes="0"/>
+                          <Component id="attributesPanel" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                          <Component id="variableTypePanel" alignment="0" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="variableTypePanel" min="-2" max="-2" attributes="0"/>
                           <Group type="102" alignment="0" attributes="0">
-                              <Component id="relatedToPanel" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="relatedToComboBox" max="32767" attributes="0"/>
+                              <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="relatedToPanel" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="relatedToComboBox" min="-2" pref="82" max="-2" attributes="0"/>
+                              </Group>
                           </Group>
                       </Group>
                   </Group>
               </Group>
-              <EmptySpace max="-2" attributes="0"/>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Component id="variablesPanel" max="32767" attributes="0"/>
+          <Component id="variablesPanel" pref="456" max="32767" attributes="0"/>
           <Group type="102" alignment="0" attributes="0">
-              <EmptySpace max="-2" attributes="0"/>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
                       <Component id="variableTypePanel" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace type="separate" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="relatedToPanel" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="relatedToComboBox" alignment="3" min="-2" max="-2" attributes="0"/>
-                      </Group>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="relatedToPanel" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="relatedToComboBox" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <Group type="102" attributes="0">
                       <Component id="attributesPanel" min="-2" max="-2" attributes="0"/>
@@ -98,13 +99,22 @@
                   <Component id="newButton" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="generateButton" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace pref="17" max="32767" attributes="0"/>
+              <EmptySpace pref="12" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
   </Layout>
   <SubComponents>
     <Container class="javax.swing.JPanel" name="variablesPanel">
+      <Properties>
+        <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+          <Dimension value="[133, 446]"/>
+        </Property>
+        <Property name="name" type="java.lang.String" value="" noResource="true"/>
+        <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+          <Dimension value="[133, 446]"/>
+        </Property>
+      </Properties>
 
       <Layout>
         <DimensionLayout dim="0">
@@ -113,18 +123,19 @@
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="0" attributes="0">
+                          <EmptySpace max="32767" attributes="0"/>
                           <Component id="moveUpButton" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace min="-2" pref="20" max="-2" attributes="0"/>
+                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
                           <Component id="moveDownButton" min="-2" max="-2" attributes="0"/>
                           <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                       </Group>
-                      <Component id="formatComboBox" alignment="0" pref="113" max="32767" attributes="0"/>
+                      <Component id="formatComboBox" alignment="0" min="-2" pref="113" max="-2" attributes="0"/>
                       <Component id="variablesScrollPane" alignment="0" pref="0" max="32767" attributes="0"/>
                       <Group type="102" alignment="1" attributes="0">
-                          <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                           <Component id="separatorLabel" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace max="-2" attributes="0"/>
+                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
                           <Component id="separatorTextField" min="-2" pref="35" max="-2" attributes="0"/>
+                          <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                       </Group>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
@@ -264,6 +275,9 @@
             <TitledBorder title="Attributes"/>
           </Border>
         </Property>
+        <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+          <Dimension value="[249, 124]"/>
+        </Property>
       </Properties>
 
       <Layout>
@@ -272,19 +286,19 @@
               <Group type="102" alignment="1" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="nameLabel" alignment="0" min="-2" max="-2" attributes="0"/>
-                      <Component id="startingPositionLabel" alignment="0" min="-2" max="-2" attributes="0"/>
-                      <Component id="lengthLabel" alignment="0" min="-2" max="-2" attributes="0"/>
-                      <Component id="decimalsLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                      <Component id="startingPositionLabel" min="-2" max="-2" attributes="0"/>
+                      <Component id="nameLabel" alignment="0" min="-2" pref="82" max="-2" attributes="0"/>
+                      <Component id="lengthLabel" alignment="0" min="-2" pref="82" max="-2" attributes="0"/>
+                      <Component id="decimalsLabel" alignment="0" min="-2" pref="82" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace max="32767" attributes="0"/>
+                  <EmptySpace pref="44" max="32767" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Component id="nameTextField" alignment="1" min="-2" pref="91" max="-2" attributes="0"/>
-                      <Group type="103" alignment="1" groupAlignment="0" max="-2" attributes="0">
-                          <Component id="lengthTextField" alignment="1" pref="51" max="32767" attributes="0"/>
-                          <Component id="decimalsTextField" alignment="1" max="32767" attributes="0"/>
-                      </Group>
                       <Component id="startingPositionTextField" alignment="1" min="-2" pref="51" max="-2" attributes="0"/>
+                      <Group type="103" alignment="1" groupAlignment="0" max="-2" attributes="0">
+                          <Component id="decimalsTextField" alignment="1" max="32767" attributes="0"/>
+                          <Component id="lengthTextField" alignment="1" pref="51" max="32767" attributes="0"/>
+                      </Group>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
@@ -306,12 +320,12 @@
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="lengthTextField" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="lengthLabel" alignment="3" max="32767" attributes="0"/>
+                      <Component id="lengthLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="decimalsTextField" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="decimalsLabel" alignment="3" max="32767" attributes="0"/>
+                      <Component id="decimalsLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
               </Group>
           </Group>
@@ -330,7 +344,7 @@
         </Component>
         <Component class="javax.swing.JLabel" name="startingPositionLabel">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Starting position"/>
+            <Property name="text" type="java.lang.String" value="Starting position:"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JTextField" name="startingPositionTextField">
@@ -366,6 +380,9 @@
           <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
             <TitledBorder title="Variable Type"/>
           </Border>
+        </Property>
+        <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+          <Dimension value="[140, 179]"/>
         </Property>
       </Properties>
 
@@ -475,23 +492,29 @@
             <TitledBorder title="Options for Argus"/>
           </Border>
         </Property>
+        <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+          <Dimension value="[249, 101]"/>
+        </Property>
+        <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+          <Dimension value="[249, 101]"/>
+        </Property>
       </Properties>
 
       <Layout>
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
-                  <EmptySpace max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="identificationLevelLabel" alignment="0" min="-2" max="-2" attributes="0"/>
-                      <Component id="priorityLocalSuppressionLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                      <Component id="priorityLocalSuppressionLabel" max="32767" attributes="0"/>
+                      <Component id="identificationLevelLabel" max="32767" attributes="0"/>
                   </Group>
-                  <EmptySpace pref="22" max="32767" attributes="0"/>
-                  <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="identificationComboBox" alignment="1" min="-2" max="-2" attributes="0"/>
-                      <Component id="priorityLocalSuppressionComboBox" alignment="1" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace pref="27" max="32767" attributes="0"/>
+                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                      <Component id="identificationComboBox" min="-2" pref="51" max="-2" attributes="0"/>
+                      <Component id="priorityLocalSuppressionComboBox" max="32767" attributes="0"/>
                   </Group>
-                  <EmptySpace max="-2" attributes="0"/>
+                  <EmptySpace min="-2" max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -517,6 +540,15 @@
         <Component class="javax.swing.JLabel" name="identificationLevelLabel">
           <Properties>
             <Property name="text" type="java.lang.String" value="Identification Level:"/>
+            <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+              <Dimension value="[139, 14]"/>
+            </Property>
+            <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+              <Dimension value="[139, 14]"/>
+            </Property>
+            <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+              <Dimension value="[139, 14]"/>
+            </Property>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="priorityLocalSuppressionLabel">
@@ -534,6 +566,15 @@
                 <StringItem index="3" value="Item 4"/>
               </StringArray>
             </Property>
+            <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+              <Dimension value="[51, 20]"/>
+            </Property>
+            <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+              <Dimension value="[51, 20]"/>
+            </Property>
+            <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+              <Dimension value="[51, 20]"/>
+            </Property>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="identificationComboBoxActionPerformed"/>
@@ -549,6 +590,15 @@
                 <StringItem index="3" value="Item 4"/>
               </StringArray>
             </Property>
+            <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+              <Dimension value="[51, 20]"/>
+            </Property>
+            <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+              <Dimension value="[51, 20]"/>
+            </Property>
+            <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+              <Dimension value="[51, 20]"/>
+            </Property>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="priorityLocalSuppressionComboBoxActionPerformed"/>
@@ -563,29 +613,32 @@
             <TitledBorder title="Categories"/>
           </Border>
         </Property>
+        <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+          <Dimension value="[427, 152]"/>
+        </Property>
       </Properties>
 
       <Layout>
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
-              <Group type="102" alignment="1" attributes="0">
-                  <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-                  <Group type="103" groupAlignment="0" attributes="0">
+              <Group type="102" alignment="0" attributes="0">
+                  <EmptySpace min="-2" pref="6" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="1" max="-2" attributes="0">
                       <Group type="102" attributes="0">
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Component id="truncationAllowedCheckBox" alignment="0" min="-2" max="-2" attributes="0"/>
                               <Component id="codelistfileCheckBox" alignment="0" min="-2" max="-2" attributes="0"/>
                           </Group>
-                          <EmptySpace min="-2" pref="107" max="-2" attributes="0"/>
+                          <EmptySpace max="32767" attributes="0"/>
                           <Component id="missingsPanel" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <Group type="102" attributes="0">
-                          <Component id="codelistfileTextField" min="-2" pref="303" max="-2" attributes="0"/>
+                          <Component id="codelistfileTextField" min="-2" pref="315" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="codelistfileButton" min="-2" max="-2" attributes="0"/>
                       </Group>
                   </Group>
-                  <EmptySpace min="-2" pref="61" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -593,23 +646,20 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="1" attributes="0">
                   <Group type="103" groupAlignment="0" attributes="0">
+                      <Component id="missingsPanel" min="-2" max="-2" attributes="0"/>
                       <Group type="102" alignment="0" attributes="0">
-                          <EmptySpace max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="19" max="-2" attributes="0"/>
                           <Component id="truncationAllowedCheckBox" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                          <Component id="codelistfileCheckBox" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace max="32767" attributes="0"/>
-                      </Group>
-                      <Group type="102" alignment="0" attributes="0">
-                          <Component id="missingsPanel" max="32767" attributes="0"/>
                           <EmptySpace type="separate" max="-2" attributes="0"/>
+                          <Component id="codelistfileCheckBox" min="-2" max="-2" attributes="0"/>
                       </Group>
                   </Group>
+                  <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="codelistfileTextField" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="codelistfileButton" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace max="-2" attributes="0"/>
+                  <EmptySpace pref="30" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -686,7 +736,7 @@
                           <Component id="missing2Label" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="missing2TextField" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                      <EmptySpace min="0" pref="6" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
