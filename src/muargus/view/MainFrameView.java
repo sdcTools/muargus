@@ -463,6 +463,7 @@ public class MainFrameView extends javax.swing.JFrame {
         numericalMicroaggregationMenuItem = new javax.swing.JMenuItem();
         numericalRankSwappingMenuItem = new javax.swing.JMenuItem();
         syntheticDataMenuItem = new javax.swing.JMenuItem();
+        targetedRecordSwappingMenuItem = new javax.swing.JMenuItem();
         outputMenu = new javax.swing.JMenu();
         makeProtectedFileMenuItem = new javax.swing.JMenuItem();
         viewReportMenuItem = new javax.swing.JMenuItem();
@@ -963,6 +964,10 @@ public class MainFrameView extends javax.swing.JFrame {
         });
         modifyMenu.add(syntheticDataMenuItem);
 
+        targetedRecordSwappingMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_C, java.awt.event.InputEvent.ALT_MASK));
+        targetedRecordSwappingMenuItem.setText("Targeted Record Swapping");
+        modifyMenu.add(targetedRecordSwappingMenuItem);
+
         menuBar.add(modifyMenu);
 
         outputMenu.setText("Output");
@@ -1177,6 +1182,7 @@ public class MainFrameView extends javax.swing.JFrame {
     private javax.swing.JButton specifyMetaDataButton;
     private javax.swing.JButton syntheticDataButton;
     private javax.swing.JMenuItem syntheticDataMenuItem;
+    private javax.swing.JMenuItem targetedRecordSwappingMenuItem;
     private javax.swing.JToolBar toolBar;
     private javax.swing.JToolBar.Separator toolBarSeparator1;
     private javax.swing.JToolBar.Separator toolBarSeparator2;
