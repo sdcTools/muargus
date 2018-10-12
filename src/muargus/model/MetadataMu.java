@@ -185,6 +185,14 @@ public final class MetadataMu {
         for (VariableMu var : variables) {
             boolean oldSpssMeta = this.isSpss() && var.getVariableLength() == 0;
 
+            if (var.isHouse_id()){
+                for (VariableMu var2 : variables){
+                    if (!var.equals(var2) && var2.isHouse_id()){
+                        throw new ArgusException("Multiple household ID variables: " + var.getName() + " and " + var2.getName());
+                    }
+                }
+            }
+            
             //Check for duplicate variable names
             for (VariableMu var2 : variables) {
                 if (!var.equals(var2) && var.getName().equalsIgnoreCase(var2.getName())) {

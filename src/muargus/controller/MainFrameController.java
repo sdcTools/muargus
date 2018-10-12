@@ -70,6 +70,7 @@ public class MainFrameController {
         ModifyNumericalVariables,
         NumericalMicroAggregation,
         NumericalRankSwapping,
+        TargetedRecordSwapping,
         MakeProtectedFile,
         ViewReport,
         Contents,
@@ -147,6 +148,7 @@ public class MainFrameController {
         this.view.enableAction(Action.ModifyNumericalVariables, tablesCalculated && hasNumericalVariables);
         this.view.enableAction(Action.NumericalMicroAggregation, tablesCalculated && hasNumericalVariables);
         this.view.enableAction(Action.NumericalRankSwapping, tablesCalculated && hasNumericalVariables);
+        this.view.enableAction(Action.TargetedRecordSwapping, tablesCalculated);
 
     }
 
@@ -371,6 +373,15 @@ public class MainFrameController {
      */
     public void numericalRankSwapping() {
         NumericalRankSwappingController controller = new NumericalRankSwappingController(
+                this.view, this.metadata);
+        controller.showView();
+    }
+    
+    /**
+     * Opens the targeted record swapping screen.
+     */
+    public void TargetedRecordSwapping() {
+        TargetedRecordSwappingController controller = new TargetedRecordSwappingController(
                 this.view, this.metadata);
         controller.showView();
     }

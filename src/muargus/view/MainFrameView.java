@@ -100,6 +100,9 @@ public class MainFrameView extends javax.swing.JFrame {
             case NumericalRankSwapping:
                 doEnable(this.numericalRankSwappingButton, this.numericalRankSwappingMenuItem, enable);
                 return;
+            case TargetedRecordSwapping:
+                doEnable(this.targetedRecordSwappingButton, this.targetedRecordSwappingMenuItem, enable);
+                return;
             case MakeProtectedFile:
                 doEnable(this.makeProtectedFileButton, this.makeProtectedFileMenuItem, enable);
                 return;
@@ -425,6 +428,7 @@ public class MainFrameView extends javax.swing.JFrame {
         modifyNumericalVariablesButton = new javax.swing.JButton();
         numericalMicroaggregationButton = new javax.swing.JButton();
         numericalRankSwappingButton = new javax.swing.JButton();
+        targetedRecordSwappingButton = new javax.swing.JButton();
         syntheticDataButton = new javax.swing.JButton();
         toolBarSeparator3 = new javax.swing.JToolBar.Separator();
         makeProtectedFileButton = new javax.swing.JButton();
@@ -626,6 +630,18 @@ public class MainFrameView extends javax.swing.JFrame {
             }
         });
         toolBar.add(numericalRankSwappingButton);
+
+        targetedRecordSwappingButton.setText("TRS");
+        targetedRecordSwappingButton.setEnabled(false);
+        targetedRecordSwappingButton.setFocusable(false);
+        targetedRecordSwappingButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        targetedRecordSwappingButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        targetedRecordSwappingButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                targetedRecordSwappingButtonActionPerformed(evt);
+            }
+        });
+        toolBar.add(targetedRecordSwappingButton);
 
         syntheticDataButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/muargus/resources/icons/Rlogo.png"))); // NOI18N
         syntheticDataButton.setToolTipText("Synthetic data");
@@ -964,8 +980,14 @@ public class MainFrameView extends javax.swing.JFrame {
         });
         modifyMenu.add(syntheticDataMenuItem);
 
-        targetedRecordSwappingMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_C, java.awt.event.InputEvent.ALT_MASK));
+        targetedRecordSwappingMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_B, java.awt.event.InputEvent.ALT_MASK));
         targetedRecordSwappingMenuItem.setText("Targeted Record Swapping");
+        targetedRecordSwappingMenuItem.setEnabled(false);
+        targetedRecordSwappingMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                targetedRecordSwappingMenuItemActionPerformed(evt);
+            }
+        });
         modifyMenu.add(targetedRecordSwappingMenuItem);
 
         menuBar.add(modifyMenu);
@@ -1137,6 +1159,14 @@ public class MainFrameView extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_unsafeCombinationsTableMouseClicked
 
+    private void targetedRecordSwappingMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_targetedRecordSwappingMenuItemActionPerformed
+        this.controller.TargetedRecordSwapping();
+    }//GEN-LAST:event_targetedRecordSwappingMenuItemActionPerformed
+
+    private void targetedRecordSwappingButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_targetedRecordSwappingButtonActionPerformed
+        this.controller.TargetedRecordSwapping();
+    }//GEN-LAST:event_targetedRecordSwappingButtonActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton aboutButton;
     private javax.swing.JMenuItem aboutMenuItem;
@@ -1182,6 +1212,7 @@ public class MainFrameView extends javax.swing.JFrame {
     private javax.swing.JButton specifyMetaDataButton;
     private javax.swing.JButton syntheticDataButton;
     private javax.swing.JMenuItem syntheticDataMenuItem;
+    private javax.swing.JButton targetedRecordSwappingButton;
     private javax.swing.JMenuItem targetedRecordSwappingMenuItem;
     private javax.swing.JToolBar toolBar;
     private javax.swing.JToolBar.Separator toolBarSeparator1;

@@ -39,6 +39,10 @@ public class Numerical {
     this(NumericalDllJNI.new_Numerical(), true);
   }
 
+  public void DoTargetedRecordSwap(String inFileName, String outFileName, String separator, int numVar, double swaprate, int[] similar, int[] hierarchy, int[] risk, int hhID, int th, int seed) {
+    NumericalDllJNI.Numerical_DoTargetedRecordSwap(swigCPtr, this, inFileName, outFileName, separator, numVar, swaprate, similar, hierarchy, risk, hhID, th, seed);
+  }
+
   public void DoRankSwap(String inFileName, String outFileName, String separator, int numVar, int perc, int[] errorCode) {
     NumericalDllJNI.Numerical_DoRankSwap(swigCPtr, this, inFileName, outFileName, separator, numVar, perc, errorCode);
   }
