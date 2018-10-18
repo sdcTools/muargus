@@ -26,6 +26,7 @@ public class TargetedRecordSwappingView extends DialogBase<TargetedRecordSwappin
     private DefaultListModel<VariableMu> similarListModel;
     private DefaultListModel<VariableMu> hierarchyListModel;
     private DefaultListModel<VariableMu> riskListModel;
+    private VariableMu hhIDVariable;
     
     /**
      * Creates new form NumericalRankSwappingView.
@@ -59,7 +60,8 @@ public class TargetedRecordSwappingView extends DialogBase<TargetedRecordSwappin
         for (VariableMu variable : this.model.getVariables()) {
             data[index] = new String[]{getModifiedText(variable), variable.getName()};            
             if (variable.isHouse_id()){
-                this.hhIDTextField.setText(variable.getName());
+                this.hhIDVariable = variable;
+                this.hhIDTextField.setText(this.hhIDVariable.getName());
                 data[index][0]="hhID";
                 hhindex=index;
             }
@@ -184,6 +186,29 @@ public class TargetedRecordSwappingView extends DialogBase<TargetedRecordSwappin
             return 0;
         }
     }
+    
+    /**
+     * Gets the seed.
+     *
+     * @return Integer containing the seed.
+     */
+    public int getSeed() {
+        try {
+            return Integer.parseInt(this.seedTextField.getText());
+        } catch (NumberFormatException ex) {
+            return 0;
+        }
+    }
+    
+    /**
+     * Gets the household ID variable.
+     *
+     * @return VariableMu containing the household ID variable.
+     */
+    public VariableMu getHHIDVar() {
+            return this.hhIDVariable;
+    }
+    
     /**
      * Sets the progress bar's current value to the give value.
      *
@@ -519,6 +544,11 @@ public class TargetedRecordSwappingView extends DialogBase<TargetedRecordSwappin
         undoButton.setText("Undo");
 
         calculateButton.setText("Calculate");
+        calculateButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                calculateButtonActionPerformed(evt);
+            }
+        });
 
         okButton.setText("OK");
         okButton.addActionListener(new java.awt.event.ActionListener() {
@@ -712,6 +742,10 @@ public class TargetedRecordSwappingView extends DialogBase<TargetedRecordSwappin
     private void downriskActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_downriskActionPerformed
         moveDowninList(this.riskListModel,this.riskList);
     }//GEN-LAST:event_downriskActionPerformed
+
+    private void calculateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_calculateButtonActionPerformed
+        getController().calculate();
+    }//GEN-LAST:event_calculateButtonActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton calculateButton;

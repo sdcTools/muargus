@@ -69,13 +69,11 @@ public class TargetedRecordSwappingController extends ControllerBase<TargetedRec
     @Override
     protected void doNextStep(boolean success) {
         TargetSwappingSpec swapping = getModel().getTargetSwappings().get(getModel().getTargetSwappings().size() - 1);
-        Numerical num = new Numerical();
+        Numerical num = new Numerical(); // instance of the library-class
         int[] errorCode = new int[1];
         int[] similar = new int[5];
         int[] hierarchy = new int[5];
         int[] risk = new int[5];
-        int seed=12345;
-        int hhID=1;
         
         num.DoTargetedRecordSwap(swapping.getReplacementFile().getInputFilePath(),
                                  swapping.getReplacementFile().getOutputFilePath(),
@@ -85,9 +83,9 @@ public class TargetedRecordSwappingController extends ControllerBase<TargetedRec
                                  similar,
                                  hierarchy,
                                  risk,
-                                 hhID,
+                                 swapping.getHHID(),
                                  swapping.getkThreshold(),
-                                 seed
+                                 swapping.getSeed()
                                  );
 
         if (errorCode[0] != 0) {
@@ -170,35 +168,38 @@ public class TargetedRecordSwappingController extends ControllerBase<TargetedRec
         if (!checkFields()) {
             return;
         }
-        ArrayList<VariableMu> selectedVariables = getTargetedRecordSwappingView().getSelectedSimilarVariables();
-        if (variablesAreUsed(selectedVariables)) {
-            if (!getView().showConfirmDialog("One or more of the variables are already modified. Continue?")) {
-                return;
-            }
-        }
-        selectedVariables = getTargetedRecordSwappingView().getSelectedHierarchyVariables();
-        if (variablesAreUsed(selectedVariables)) {
-            if (!getView().showConfirmDialog("One or more of the variables are already modified. Continue?")) {
-                return;
-            }
-        }
-        selectedVariables = getTargetedRecordSwappingView().getSelectedRiskVariables();
-        if (variablesAreUsed(selectedVariables)) {
-            if (!getView().showConfirmDialog("One or more of the variables are already modified. Continue?")) {
+        ArrayList<VariableMu> selectedSimilarVariables = getTargetedRecordSwappingView().getSelectedSimilarVariables();
+        ArrayList<VariableMu> selectedHierarchyVariables = getTargetedRecordSwappingView().getSelectedHierarchyVariables();
+        ArrayList<VariableMu> selectedRiskVariables = getTargetedRecordSwappingView().getSelectedRiskVariables();
+        if (variablesAreUsed(selectedSimilarVariables)||variablesAreUsed(selectedHierarchyVariables)||variablesAreUsed(selectedRiskVariables)) {
+            if (!getView().showConfirmDialog("One or more of the selected variables are already modified. Continue?")) {
                 return;
             }
         }
         
-        TargetSwappingSpec rankSwapping = new TargetSwappingSpec(getTargetedRecordSwappingView().getSwaprate(),
-                                                                 getTargetedRecordSwappingView().getkanonThreshold());
+        ArrayList<VariableMu> selectedVariables = getTargetedRecordSwappingView().getSelectedSimilarVariables();
+        for (VariableMu variable : getTargetedRecordSwappingView().getSelectedHierarchyVariables()){
+            if (!selectedVariables.contains(variable)) selectedVariables.add(variable);
+        }
+
+        for (VariableMu variable : getTargetedRecordSwappingView().getSelectedRiskVariables()){
+            if (!selectedVariables.contains(variable)) selectedVariables.add(variable);
+        }
+        
+        selectedVariables.add(getTargetedRecordSwappingView().getHHIDVar());
+        
+        TargetSwappingSpec targetSwapping = new TargetSwappingSpec(selectedVariables.size(),
+                                                                   getTargetedRecordSwappingView().getSwaprate(),
+                                                                   getTargetedRecordSwappingView().getkanonThreshold(),
+                                                                   getTargetedRecordSwappingView().getSeed());
         try {
-            rankSwapping.getOutputVariables().addAll(selectedVariables);
-            rankSwapping.setReplacementFile(new ReplacementFile("RankSwapping"));
-            this.metadata.getReplacementSpecs().add(rankSwapping);
+            targetSwapping.getOutputVariables().addAll(selectedVariables);
+            targetSwapping.setReplacementFile(new ReplacementFile("TargetSwapping"));
+            this.metadata.getReplacementSpecs().add(targetSwapping);
             getCalculationService().makeReplacementFile(this);
-            getModel().getTargetSwappings().add(rankSwapping);
+            getModel().getTargetSwappings().add(targetSwapping);
         } catch (ArgusException ex) {
-            this.metadata.getReplacementSpecs().remove(rankSwapping);
+            this.metadata.getReplacementSpecs().remove(targetSwapping);
             getView().showErrorMessage(ex);
         }
     }
