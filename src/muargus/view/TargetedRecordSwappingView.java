@@ -542,6 +542,11 @@ public class TargetedRecordSwappingView extends DialogBase<TargetedRecordSwappin
         });
 
         undoButton.setText("Undo");
+        undoButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                undoButtonActionPerformed(evt);
+            }
+        });
 
         calculateButton.setText("Calculate");
         calculateButton.addActionListener(new java.awt.event.ActionListener() {
@@ -746,6 +751,10 @@ public class TargetedRecordSwappingView extends DialogBase<TargetedRecordSwappin
     private void calculateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_calculateButtonActionPerformed
         getController().calculate();
     }//GEN-LAST:event_calculateButtonActionPerformed
+
+    private void undoButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_undoButtonActionPerformed
+        getController().undo();
+    }//GEN-LAST:event_undoButtonActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton calculateButton;

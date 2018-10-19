@@ -71,21 +71,22 @@ public class TargetedRecordSwappingController extends ControllerBase<TargetedRec
         TargetSwappingSpec swapping = getModel().getTargetSwappings().get(getModel().getTargetSwappings().size() - 1);
         Numerical num = new Numerical(); // instance of the library-class
         int[] errorCode = new int[1];
-        int[] similar = new int[5];
-        int[] hierarchy = new int[5];
-        int[] risk = new int[5];
-        
+       
         num.DoTargetedRecordSwap(swapping.getReplacementFile().getInputFilePath(),
                                  swapping.getReplacementFile().getOutputFilePath(),
                                  muargus.MuARGUS.getDefaultSeparator(),
                                  swapping.getOutputVariables().size(),
                                  swapping.getSwaprate(),
-                                 similar,
-                                 hierarchy,
-                                 risk,
+                                 swapping.getSimilarIndexes(),
+                                 swapping.getNSim(),
+                                 swapping.getHierarchyIndexes(),
+                                 swapping.getNHier(),
+                                 swapping.getRiskIndexes(),
+                                 swapping.getNRisk(),
                                  swapping.getHHID(),
                                  swapping.getkThreshold(),
-                                 swapping.getSeed()
+                                 swapping.getSeed(),
+                                 errorCode
                                  );
 
         if (errorCode[0] != 0) {
@@ -117,8 +118,8 @@ public class TargetedRecordSwappingController extends ControllerBase<TargetedRec
      */
     private boolean checkFields() {
         double percentage = getTargetedRecordSwappingView().getSwaprate();
-        if (Double.isNaN(percentage) || percentage <= 0 || percentage > 1) {
-            getView().showErrorMessage(new ArgusException("Illegal value for the swaprate"));
+        if (Double.isNaN(percentage) || percentage < 0 || percentage > 1) {
+            getView().showErrorMessage(new ArgusException("Illegal value for the swaprate (should be > 0 and < 1)"));
             return false;
         }
         return true;
@@ -128,7 +129,15 @@ public class TargetedRecordSwappingController extends ControllerBase<TargetedRec
      * Undo's the numerical rank swapping
      */
     public void undo() {
-    /*    ArrayList<VariableMu> selected = getTargetedRecordSwappingView().getSelectedVariables();
+        ArrayList<VariableMu> selected = new ArrayList<>();
+        selected.addAll(getTargetedRecordSwappingView().getSelectedSimilarVariables());
+        for (VariableMu variable : getTargetedRecordSwappingView().getSelectedHierarchyVariables()){
+            if (!selected.contains(variable)) selected.add(variable);
+        }
+        for (VariableMu variable : getTargetedRecordSwappingView().getSelectedRiskVariables()){
+            if (!selected.contains(variable)) selected.add(variable);
+        }
+        selected.add(getTargetedRecordSwappingView().getHHIDVar());
         if (selected.isEmpty()) {
             return;
         }
@@ -149,7 +158,7 @@ public class TargetedRecordSwappingController extends ControllerBase<TargetedRec
                 if (!difference) {
                     getModel().getTargetSwappings().remove(swapping);
                     this.metadata.getReplacementSpecs().remove(swapping);
-                    SystemUtils.writeLogbook("Numerical rank swapping has been undone.");
+                    SystemUtils.writeLogbook("Targeted Record swapping has been undone.");
                     getTargetedRecordSwappingView().updateVariableRows(swapping);
                     return;
                 }
@@ -159,7 +168,7 @@ public class TargetedRecordSwappingController extends ControllerBase<TargetedRec
         
         getView().showMessage(String.format("Rank swapping involving %s not found.\n"
                 + "The available rank swapping" + rankSwappings, VariableMu.printVariableNames(selected)));
-    */}
+    }
 
     /**
      * Calculates the numerical rank swapping.
@@ -168,6 +177,7 @@ public class TargetedRecordSwappingController extends ControllerBase<TargetedRec
         if (!checkFields()) {
             return;
         }
+        
         ArrayList<VariableMu> selectedSimilarVariables = getTargetedRecordSwappingView().getSelectedSimilarVariables();
         ArrayList<VariableMu> selectedHierarchyVariables = getTargetedRecordSwappingView().getSelectedHierarchyVariables();
         ArrayList<VariableMu> selectedRiskVariables = getTargetedRecordSwappingView().getSelectedRiskVariables();
@@ -177,24 +187,30 @@ public class TargetedRecordSwappingController extends ControllerBase<TargetedRec
             }
         }
         
-        ArrayList<VariableMu> selectedVariables = getTargetedRecordSwappingView().getSelectedSimilarVariables();
-        for (VariableMu variable : getTargetedRecordSwappingView().getSelectedHierarchyVariables()){
-            if (!selectedVariables.contains(variable)) selectedVariables.add(variable);
-        }
-
-        for (VariableMu variable : getTargetedRecordSwappingView().getSelectedRiskVariables()){
-            if (!selectedVariables.contains(variable)) selectedVariables.add(variable);
-        }
+        ArrayList<VariableMu> selectedVariables = new ArrayList<>();
         
+        selectedVariables.addAll(selectedSimilarVariables);
+        for (VariableMu variable : selectedHierarchyVariables){
+            if (!selectedVariables.contains(variable)) selectedVariables.add(variable);
+        }
+        for (VariableMu variable : selectedRiskVariables){
+            if (!selectedVariables.contains(variable)) selectedVariables.add(variable);
+        }
         selectedVariables.add(getTargetedRecordSwappingView().getHHIDVar());
         
-        TargetSwappingSpec targetSwapping = new TargetSwappingSpec(selectedVariables.size(),
+        TargetSwappingSpec targetSwapping = new TargetSwappingSpec(selectedSimilarVariables.size(),
+                                                                   selectedHierarchyVariables.size(),
+                                                                   selectedRiskVariables.size(),
                                                                    getTargetedRecordSwappingView().getSwaprate(),
                                                                    getTargetedRecordSwappingView().getkanonThreshold(),
                                                                    getTargetedRecordSwappingView().getSeed());
         try {
             targetSwapping.getOutputVariables().addAll(selectedVariables);
             targetSwapping.setReplacementFile(new ReplacementFile("TargetSwapping"));
+            targetSwapping.calculateSimilarIndexes(selectedSimilarVariables);
+            targetSwapping.calculateHierarchyIndexes(selectedHierarchyVariables);
+            targetSwapping.calculateRiskIndexes(selectedRiskVariables);
+            targetSwapping.calculateHHIdIndex(getTargetedRecordSwappingView().getHHIDVar());
             this.metadata.getReplacementSpecs().add(targetSwapping);
             getCalculationService().makeReplacementFile(this);
             getModel().getTargetSwappings().add(targetSwapping);
