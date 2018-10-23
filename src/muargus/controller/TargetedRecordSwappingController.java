@@ -137,11 +137,14 @@ public class TargetedRecordSwappingController extends ControllerBase<TargetedRec
         for (VariableMu variable : getTargetedRecordSwappingView().getSelectedRiskVariables()){
             if (!selected.contains(variable)) selected.add(variable);
         }
-        selected.add(getTargetedRecordSwappingView().getHHIDVar());
+        
         if (selected.isEmpty()) {
+            getView().showMessage(String.format("Nothing to Undo: Targeted Record Swapping was not applied yet.\n"));
             return;
         }
-        if (!getView().showConfirmDialog(String.format("The rank swapping involving %s will be removed. Continue?",
+        selected.add(getTargetedRecordSwappingView().getHHIDVar());
+        
+        if (!getView().showConfirmDialog(String.format("The Targeted Record Swapping involving %s will be removed. Continue?",
                 VariableMu.printVariableNames(selected)))) {
             return;
         }
@@ -158,7 +161,7 @@ public class TargetedRecordSwappingController extends ControllerBase<TargetedRec
                 if (!difference) {
                     getModel().getTargetSwappings().remove(swapping);
                     this.metadata.getReplacementSpecs().remove(swapping);
-                    SystemUtils.writeLogbook("Targeted Record swapping has been undone.");
+                    SystemUtils.writeLogbook("Targeted Record Swapping has been undone.");
                     getTargetedRecordSwappingView().updateVariableRows(swapping);
                     return;
                 }
@@ -166,8 +169,7 @@ public class TargetedRecordSwappingController extends ControllerBase<TargetedRec
             rankSwappings += "\n- " + VariableMu.printVariableNames(swapping.getOutputVariables());
         }
         
-        getView().showMessage(String.format("Rank swapping involving %s not found.\n"
-                + "The available rank swapping" + rankSwappings, VariableMu.printVariableNames(selected)));
+        getView().showMessage(String.format("Nothing to Undo: Targeted Record Swapping was not applied yet.\n"));
     }
 
     /**

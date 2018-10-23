@@ -7,12 +7,14 @@ package muargus.view;
 
 import java.util.ArrayList;
 import javax.swing.DefaultListModel;
+import javax.swing.DefaultListSelectionModel;
 import javax.swing.JList;
 import javax.swing.table.DefaultTableModel;
 import muargus.VariableNameCellRenderer;
 import muargus.VariablesTableRowRenderer;
 import muargus.controller.TargetedRecordSwappingController;
 import muargus.model.ReplacementSpec;
+import muargus.model.TargetSwappingSpec;
 import muargus.model.TargetedRecordSwapping;
 import muargus.model.VariableMu;
 
@@ -27,7 +29,8 @@ public class TargetedRecordSwappingView extends DialogBase<TargetedRecordSwappin
     private DefaultListModel<VariableMu> hierarchyListModel;
     private DefaultListModel<VariableMu> riskListModel;
     private VariableMu hhIDVariable;
-    
+    private int hhindex;
+        
     /**
      * Creates new form NumericalRankSwappingView.
      *
@@ -51,12 +54,17 @@ public class TargetedRecordSwappingView extends DialogBase<TargetedRecordSwappin
      */
     @Override
     public void initializeData() {
-
+        
+        this.similarListModel = new DefaultListModel<>();
+        this.hierarchyListModel = new DefaultListModel<>();
+        this.riskListModel = new DefaultListModel<>();
+        this.similarList.setModel(this.similarListModel);
+        this.hierarchyList.setModel(this.hierarchyListModel);
+        this.riskList.setModel(this.riskListModel);
+        
         this.model = getMetadata().getCombinations().getTargetedRecordSwapping();
-        //int numVar = getMetadata().isHouseholdData() ? this.model.getVariables().size() - 1 : this.model.getVariables().size();
         String[][] data = new String[this.model.getVariables().size()][2];
         int index = 0;
-        int hhindex = 0;
         for (VariableMu variable : this.model.getVariables()) {
             data[index] = new String[]{getModifiedText(variable), variable.getName()};            
             if (variable.isHouse_id()){
@@ -67,27 +75,48 @@ public class TargetedRecordSwappingView extends DialogBase<TargetedRecordSwappin
             }
             index++;
         }
-
         this.variablesTable.setModel(new DefaultTableModel(data, new Object[]{"Info", "Variable"}));
         this.variablesTable.getColumnModel().getColumn(0).setPreferredWidth(25);
+        // Disable selection of hhID row
+        this.variablesTable.setSelectionModel(new DefaultListSelectionModel() {
+            @Override
+            public boolean isSelectedIndex(final int index) {
+            boolean isSelected;
+            if ( index == hhindex ) {
+                isSelected = false;
+            } else {
+                isSelected = super.isSelectedIndex(index);
+            }
+                return isSelected;
+            }
+        }); 
         
-        if (hhindex ==0) this.variablesTable.getSelectionModel().setSelectionInterval(1, 1);
+        if (hhindex == 0) this.variablesTable.getSelectionModel().setSelectionInterval(1, 1);
         else this.variablesTable.getSelectionModel().setSelectionInterval(0, 0);
-        
-        this.similarListModel = new DefaultListModel<>();
-        this.hierarchyListModel = new DefaultListModel<>();
-        this.riskListModel = new DefaultListModel<>();
-        this.similarList.setModel(this.similarListModel);
-        this.hierarchyList.setModel(this.hierarchyListModel);
-        this.riskList.setModel(this.riskListModel);
+        // Fill displayed lists with last TargetSwappingSpec
+        if (this.model.getTargetSwappings().size() > 0){ 
+            TargetSwappingSpec spec = this.model.getTargetSwappings().get(this.model.getTargetSwappings().size() - 1);
+            updateVariableRows(spec);
+            fillList(this.similarListModel,spec.getSimilarIndexes(),spec);
+            fillList(this.hierarchyListModel,spec.getHierarchyIndexes(),spec);
+            fillList(this.riskListModel,spec.getRiskIndexes(),spec);
+            this.updateVariableRows(spec);
+        }
         updateValues();
     }
     
+    private void fillList(DefaultListModel<VariableMu> ListModel, int[] Indexes, TargetSwappingSpec spec){
+        for (int i=0;i<Indexes.length;i++){
+            ListModel.addElement(spec.getOutputVariables().get(Indexes[i]));
+        }
+    }
+    
     /**
-     * Enables/disables the calculate button.
+     * Enables/disables the calculate and undo button.
      */
     private void updateValues() {
         this.calculateButton.setEnabled(getSelectedRiskVariables().size()*getSelectedSimilarVariables().size()*getSelectedHierarchyVariables().size() > 0);
+        this.undoButton.setEnabled(this.calculateButton.isEnabled());
     }
 
     /**
@@ -97,8 +126,9 @@ public class TargetedRecordSwappingView extends DialogBase<TargetedRecordSwappin
      * RankSwappingSpec.
      */
     public void updateVariableRows(ReplacementSpec replacement) {
+        int index;
         for (VariableMu variableMu : replacement.getOutputVariables()) {
-            int index = this.model.getVariables().indexOf(variableMu);
+            index = this.model.getVariables().indexOf(variableMu);
             this.variablesTable.setValueAt(getModifiedText(variableMu), index, 0);
             this.variablesTable.setValueAt(variableMu.getName(), index, 1);
         }
@@ -106,18 +136,28 @@ public class TargetedRecordSwappingView extends DialogBase<TargetedRecordSwappin
 
     /**
      * Gets the modification text belonging to this particular variable. If a
-     * variable is modified "X" is returned, otherwise an empty string is
-     * returned.
+     * variable is modified a string is returned containing info on being part of
+     * "S"imilarList, "H"ierarchyList, "R"iskList
+     * otherwise an empty string is returned.
+     * HouseholdIdentifier always returns "hhID"
      *
      * @param variable VariableMu instance of the variable for which the modified
      * text is requested.
-     * @return String containing the modified text. If a variable is modified
-     * "X" is returned, otherwise an empty string is returned.
+     * @return String containing the modified text. 
      */
     private String getModifiedText(VariableMu variable) {
+        if (variable == this.getHHIDVar())
+            return "hhID";
         for (ReplacementSpec spec : this.model.getTargetSwappings()) {
             if (spec.getOutputVariables().contains(variable)) {
-                return "X";
+                String hs = "";
+                if (this.getSelectedSimilarVariables().contains(variable))
+                    hs += "S";
+                if (this.getSelectedHierarchyVariables().contains(variable))
+                    hs += "H";
+                if (this.getSelectedRiskVariables().contains(variable))
+                    hs += "R";
+                return hs;              
             }
         }
         return "";
@@ -218,7 +258,7 @@ public class TargetedRecordSwappingView extends DialogBase<TargetedRecordSwappin
     public void setProgress(int progress) {
         this.progressBar.setValue(progress);
     }
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -684,26 +724,32 @@ public class TargetedRecordSwappingView extends DialogBase<TargetedRecordSwappin
     
     private void tosimilarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tosimilarButtonActionPerformed
         toSelectionList(this.similarListModel);
+        updateValues();
     }//GEN-LAST:event_tosimilarButtonActionPerformed
 
     private void tohierarchyButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tohierarchyButtonActionPerformed
         toSelectionList(this.hierarchyListModel);
+        updateValues();
     }//GEN-LAST:event_tohierarchyButtonActionPerformed
 
     private void toriskButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_toriskButtonActionPerformed
         toSelectionList(this.riskListModel);
+        updateValues();
     }//GEN-LAST:event_toriskButtonActionPerformed
 
     private void unSimilarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_unSimilarButtonActionPerformed
         fromSelectionList(this.similarListModel, this.similarList);
+        updateValues();
     }//GEN-LAST:event_unSimilarButtonActionPerformed
 
     private void unHierarchyButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_unHierarchyButtonActionPerformed
         fromSelectionList(this.hierarchyListModel, this.hierarchyList);
+        updateValues();
     }//GEN-LAST:event_unHierarchyButtonActionPerformed
 
     private void unRiskButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_unRiskButtonActionPerformed
         fromSelectionList(this.riskListModel, this.riskList);
+        updateValues();
     }//GEN-LAST:event_unRiskButtonActionPerformed
 
     private void moveUpinList(DefaultListModel<VariableMu> ListModel, JList List){
@@ -750,10 +796,12 @@ public class TargetedRecordSwappingView extends DialogBase<TargetedRecordSwappin
 
     private void calculateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_calculateButtonActionPerformed
         getController().calculate();
+        updateValues();
     }//GEN-LAST:event_calculateButtonActionPerformed
 
     private void undoButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_undoButtonActionPerformed
         getController().undo();
+        updateValues();
     }//GEN-LAST:event_undoButtonActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

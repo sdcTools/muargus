@@ -16,25 +16,20 @@ import javax.swing.table.DefaultTableCellRenderer;
  * @author pwof
  */
 public class VariablesTableRowRenderer extends DefaultTableCellRenderer{
-     @Override
-     public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-          Component cr = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-          if (!"".equals(table.getValueAt(row, 0))) {
-              if (!"hhID".equals(table.getValueAt(row,0))){
-                      setForeground(Color.red);
-              }
-              else {
-                  //setForeground(Color.gray);
-                  cr.setEnabled(false);
-              }
-          }
-          else {
-              setForeground(isSelected ? Color.white : Color.black);
-              cr.setEnabled(true);
-          }
-          if (value instanceof Integer) {
-              setHorizontalAlignment(JLabel.RIGHT);
-          }   
-          return cr;
-     }
+    @Override
+    public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+        
+        Component cr = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+        
+        if (!"".equals(table.getValueAt(row, 0))) {
+            setForeground("hhID".equals(table.getValueAt(row,0)) ? Color.gray : Color.red);
+        }
+        else {
+            setForeground(isSelected ? Color.white : Color.black);
+        }
+        if (value instanceof Integer) {
+            setHorizontalAlignment(JLabel.RIGHT);
+        }   
+        return cr;
+    }
 }
