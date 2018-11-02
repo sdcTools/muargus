@@ -40,6 +40,7 @@ import muargus.model.ReplacementSpec;
 import muargus.model.RiskSpecification;
 import muargus.model.SyntheticDataSpec;
 import muargus.model.TableMu;
+import muargus.model.TargetSwappingSpec;
 import muargus.model.VariableMu;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -167,6 +168,23 @@ public class HTMLReportWriter {
                         alpha = alpha + " " + v.getAlpha() + ",";
                     }
                     addChildElement(tr, "td", alpha.substring(0, alpha.length() - 1));
+                } else if (replacement instanceof TargetSwappingSpec){
+                    String Info = "S = {";
+                    for (int index : ((TargetSwappingSpec) replacement).getSimilarIndexes()){
+                        Info = Info + " " + replacement.getOutputVariables().get(index).getName() + ",";
+                    }
+                    Info = Info.substring(0, Info.length()-1) + "}    H = {";
+                    for (int index : ((TargetSwappingSpec) replacement).getHierarchyIndexes()){
+                        Info = Info + " " + replacement.getOutputVariables().get(index).getName() + ",";
+                    }
+                    Info = Info.substring(0, Info.length()-1) + "}    R = {";
+                    for (int index : ((TargetSwappingSpec) replacement).getRiskIndexes()){
+                        Info = Info + " " + replacement.getOutputVariables().get(index).getName() + ",";
+                    }
+                    Info = Info.substring(0, Info.length()-1) + "}    hhID = { " + 
+                            replacement.getOutputVariables().get(((TargetSwappingSpec) replacement).getHHID()).getName();
+                    
+                    addChildElement(tr, "td", Info + "}");
                 }
             }
         }
