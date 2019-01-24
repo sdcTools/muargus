@@ -1,0 +1,24 @@
+hhnum 1 4 "9998" "9999"
+    <HOUSE_ID>
+weight 5 5
+    <NUMERIC>
+    <DECIMALS> 2
+    <WEIGHT>
+town 10 1 "X"
+    <RECODABLE>
+    <CODELIST> "Town.cdl"
+province 11 1 "9"
+    <RECODABLE>
+MarStat 13 1 "9"
+    <RECODABLE>
+sex 14 1 "9"
+    <RECODABLE>
+age 15 2 "99"
+    <RECODABLE>
+employed 17 1 "9"
+    <RECODABLE>
+income 18 4 "9999"
+    <NUMERIC>
+agehh 23 2 "99"
+    <RECODABLE>
+    <HOUSEHOLD>
