@@ -71,7 +71,7 @@ public class TargetedRecordSwappingController extends ControllerBase<TargetedRec
         TargetSwappingSpec swapping = getModel().getTargetSwappings().get(getModel().getTargetSwappings().size() - 1);
         Numerical num = new Numerical(); // instance of the library-class
         int[] errorCode = new int[1];
-       
+        
         num.DoTargetedRecordSwap(swapping.getReplacementFile().getInputFilePath(),
                                  swapping.getReplacementFile().getOutputFilePath(),
                                  muargus.MuARGUS.getDefaultSeparator(),

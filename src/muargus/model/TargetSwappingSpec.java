@@ -37,8 +37,8 @@ public class TargetSwappingSpec extends ReplacementSpec {
         this.kThreshold = kThreshold;
         this.seed = seed;
         this.nSim = nSim;
-        this.nHier = nSim;
-        this.nRisk = nSim;
+        this.nHier = nHier;
+        this.nRisk = nRisk;
         this.similar = new int[nSim];
         this.hierarchy = new int[nHier];
         this.risk = new int[nRisk];
