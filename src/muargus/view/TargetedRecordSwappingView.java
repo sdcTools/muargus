@@ -28,6 +28,7 @@ public class TargetedRecordSwappingView extends DialogBase<TargetedRecordSwappin
     private DefaultListModel<VariableMu> similarListModel;
     private DefaultListModel<VariableMu> hierarchyListModel;
     private DefaultListModel<VariableMu> riskListModel;
+    private DefaultListModel<VariableMu> carryListModel;    
     private VariableMu hhIDVariable;
     private int hhindex;
         
@@ -46,6 +47,7 @@ public class TargetedRecordSwappingView extends DialogBase<TargetedRecordSwappin
         this.similarList.setCellRenderer(new VariableNameCellRenderer());
         this.hierarchyList.setCellRenderer(new VariableNameCellRenderer());
         this.riskList.setCellRenderer(new VariableNameCellRenderer());
+        this.carryList.setCellRenderer(new VariableNameCellRenderer());
     }
 
     /**
@@ -58,9 +60,11 @@ public class TargetedRecordSwappingView extends DialogBase<TargetedRecordSwappin
         this.similarListModel = new DefaultListModel<>();
         this.hierarchyListModel = new DefaultListModel<>();
         this.riskListModel = new DefaultListModel<>();
+        this.carryListModel = new DefaultListModel<>();
         this.similarList.setModel(this.similarListModel);
         this.hierarchyList.setModel(this.hierarchyListModel);
         this.riskList.setModel(this.riskListModel);
+        this.carryList.setModel(this.carryListModel);
         
         this.model = getMetadata().getCombinations().getTargetedRecordSwapping();
         String[][] data = new String[this.model.getVariables().size()][2];
@@ -100,6 +104,7 @@ public class TargetedRecordSwappingView extends DialogBase<TargetedRecordSwappin
             fillList(this.similarListModel,spec.getSimilarIndexes(),spec);
             fillList(this.hierarchyListModel,spec.getHierarchyIndexes(),spec);
             fillList(this.riskListModel,spec.getRiskIndexes(),spec);
+            fillList(this.carryListModel,spec.getCarryIndexes(),spec);
             this.updateVariableRows(spec);
         }
         updateValues();
@@ -157,6 +162,8 @@ public class TargetedRecordSwappingView extends DialogBase<TargetedRecordSwappin
                     hs += "H";
                 if (this.getSelectedRiskVariables().contains(variable))
                     hs += "R";
+                if (this.getSelectedCarryVariables().contains(variable))
+                    hs += "C";                
                 return hs;              
             }
         }
@@ -196,6 +203,18 @@ public class TargetedRecordSwappingView extends DialogBase<TargetedRecordSwappin
     public ArrayList<VariableMu> getSelectedRiskVariables() {
         ArrayList<VariableMu> selected = new ArrayList<>();
         for (Object variable : ((DefaultListModel) this.riskList.getModel()).toArray()) {
+            selected.add((VariableMu) variable);
+        }
+        return selected;
+    }
+    /**
+     * Gets the selected variables in carryList.
+     *
+     * @return Arraylist of VariableMu's containing the selected variables.
+     */
+    public ArrayList<VariableMu> getSelectedCarryVariables() {
+        ArrayList<VariableMu> selected = new ArrayList<>();
+        for (Object variable : ((DefaultListModel) this.carryList.getModel()).toArray()) {
             selected.add((VariableMu) variable);
         }
         return selected;
@@ -304,6 +323,13 @@ public class TargetedRecordSwappingView extends DialogBase<TargetedRecordSwappin
         calculateButton = new javax.swing.JButton();
         progressBar = new javax.swing.JProgressBar();
         okButton = new javax.swing.JButton();
+        jPanel9 = new javax.swing.JPanel();
+        jScrollPane5 = new javax.swing.JScrollPane();
+        carryList = new javax.swing.JList();
+        downcarry = new javax.swing.JButton();
+        unCarryButton = new javax.swing.JButton();
+        upcarry = new javax.swing.JButton();
+        tocarryButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Targeted Record Swapping");
@@ -486,7 +512,7 @@ public class TargetedRecordSwappingView extends DialogBase<TargetedRecordSwappin
                 .addComponent(uprisk)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(downrisk))
-            .addComponent(jScrollPane4, javax.swing.GroupLayout.Alignment.CENTER, javax.swing.GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE)
+            .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE)
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -553,7 +579,7 @@ public class TargetedRecordSwappingView extends DialogBase<TargetedRecordSwappin
         jPanel8.setLayout(jPanel8Layout);
         jPanel8Layout.setHorizontalGroup(
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(seedTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE)
+            .addComponent(seedTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 96, Short.MAX_VALUE)
         );
         jPanel8Layout.setVerticalGroup(
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -602,46 +628,103 @@ public class TargetedRecordSwappingView extends DialogBase<TargetedRecordSwappin
             }
         });
 
+        jPanel9.setBorder(javax.swing.BorderFactory.createTitledBorder("Carry"));
+
+        jScrollPane5.setViewportView(carryList);
+
+        downcarry.setText("↓");
+        downcarry.setToolTipText("");
+        downcarry.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                downcarryActionPerformed(evt);
+            }
+        });
+
+        unCarryButton.setText("<<");
+        unCarryButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                unCarryButtonActionPerformed(evt);
+            }
+        });
+
+        upcarry.setText("↑");
+        upcarry.setToolTipText("");
+        upcarry.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                upcarryActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel9Layout = new javax.swing.GroupLayout(jPanel9);
+        jPanel9.setLayout(jPanel9Layout);
+        jPanel9Layout.setHorizontalGroup(
+            jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+            .addGroup(jPanel9Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(unCarryButton, javax.swing.GroupLayout.Alignment.CENTER, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.CENTER, jPanel9Layout.createSequentialGroup()
+                        .addComponent(upcarry)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(downcarry)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel9Layout.setVerticalGroup(
+            jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel9Layout.createSequentialGroup()
+                .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 194, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(upcarry)
+                    .addComponent(downcarry))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(unCarryButton))
+        );
+
+        tocarryButton.setText(">> Carry");
+        tocarryButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tocarryButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(605, 605, 605)
-                        .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(605, 605, 605)
-                        .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(605, 605, 605)
-                        .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(tohierarchyButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(tosimilarButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(toriskButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addGap(109, 109, 109)
-                                .addComponent(progressBar, javax.swing.GroupLayout.PREFERRED_SIZE, 348, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                            .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(undoButton)
-                            .addComponent(calculateButton)
-                            .addComponent(okButton))))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(tohierarchyButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(tosimilarButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(toriskButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(tocarryButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jPanel9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(103, 103, 103)
+                        .addComponent(progressBar, javax.swing.GroupLayout.PREFERRED_SIZE, 470, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                        .addComponent(undoButton)
+                        .addComponent(calculateButton)
+                        .addComponent(okButton))
+                    .addComponent(jPanel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(10, 10, 10))
         );
         layout.setVerticalGroup(
@@ -666,18 +749,22 @@ public class TargetedRecordSwappingView extends DialogBase<TargetedRecordSwappin
                                 .addGap(13, 13, 13)
                                 .addComponent(okButton))
                             .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGap(50, 50, 50)
-                                        .addComponent(tosimilarButton)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(tohierarchyButton)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(toriskButton))
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                        .addComponent(jPanel3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(jPanel5, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addComponent(jPanel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(layout.createSequentialGroup()
+                                            .addGap(50, 50, 50)
+                                            .addComponent(tosimilarButton)
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                            .addComponent(tohierarchyButton)
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                            .addComponent(toriskButton)
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                            .addComponent(tocarryButton))
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                            .addComponent(jPanel3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                            .addComponent(jPanel5, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                            .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(progressBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(0, 0, Short.MAX_VALUE))
@@ -804,8 +891,28 @@ public class TargetedRecordSwappingView extends DialogBase<TargetedRecordSwappin
         updateValues();
     }//GEN-LAST:event_undoButtonActionPerformed
 
+    private void upcarryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_upcarryActionPerformed
+        moveUpinList(this.carryListModel,this.carryList);
+    }//GEN-LAST:event_upcarryActionPerformed
+
+    private void downcarryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_downcarryActionPerformed
+        moveDowninList(this.carryListModel,this.carryList);
+    }//GEN-LAST:event_downcarryActionPerformed
+
+    private void unCarryButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_unCarryButtonActionPerformed
+        fromSelectionList(this.carryListModel, this.carryList);
+        updateValues();
+    }//GEN-LAST:event_unCarryButtonActionPerformed
+
+    private void tocarryButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tocarryButtonActionPerformed
+        toSelectionList(this.carryListModel);
+        updateValues();
+    }//GEN-LAST:event_tocarryButtonActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton calculateButton;
+    private javax.swing.JList carryList;
+    private javax.swing.JButton downcarry;
     private javax.swing.JButton downhierarchy;
     private javax.swing.JButton downrisk;
     private javax.swing.JButton downsimilar;
@@ -819,10 +926,12 @@ public class TargetedRecordSwappingView extends DialogBase<TargetedRecordSwappin
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
+    private javax.swing.JPanel jPanel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JTextField kthresholdTextField;
     private javax.swing.JButton okButton;
     private javax.swing.JProgressBar progressBar;
@@ -830,13 +939,16 @@ public class TargetedRecordSwappingView extends DialogBase<TargetedRecordSwappin
     private javax.swing.JTextField seedTextField;
     private javax.swing.JList similarList;
     private javax.swing.JTextField swaprateTextField;
+    private javax.swing.JButton tocarryButton;
     private javax.swing.JButton tohierarchyButton;
     private javax.swing.JButton toriskButton;
     private javax.swing.JButton tosimilarButton;
+    private javax.swing.JButton unCarryButton;
     private javax.swing.JButton unHierarchyButton;
     private javax.swing.JButton unRiskButton;
     private javax.swing.JButton unSimilarButton;
     private javax.swing.JButton undoButton;
+    private javax.swing.JButton upcarry;
     private javax.swing.JButton uphierarchy;
     private javax.swing.JButton uprisk;
     private javax.swing.JButton upsimilar;

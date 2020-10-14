@@ -178,7 +178,7 @@ public class RWriter {
         String resourceDir;
         try{
             resourceDir = anonData.doubleSlashses(SystemUtils.getApplicationDirectory(MuARGUS.class).getAbsolutePath()+"\\resources");
-        } catch (IOException ex) {
+        } catch (Exception ex) {
             throw new ArgusException("Error writing to file. Error message: " + ex.getMessage());
         }
         

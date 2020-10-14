@@ -44,8 +44,8 @@ public class MuARGUS {
     // Version info
     public static final int MAJOR = 5;
     public static final int MINOR = 1;
-    public static final String REVISION = "4";
-    public static final int BUILD = 4;
+    public static final String REVISION = "5";
+    public static final int BUILD = 1;
 
     public static final int MAXDIMS = 10;
 
@@ -60,8 +60,8 @@ public class MuARGUS {
     private static Process helpViewerProcess;
 
     static {
-        System.loadLibrary("muargusdll");
         System.loadLibrary("numericaldll");
+        System.loadLibrary("muargusdll");
     }
 
     private static final CalculationService calcService = new CalculationService(new CMuArgCtrl());
@@ -91,7 +91,7 @@ public class MuARGUS {
     static{
         try{
             ClassPathHack.addFile(getSpssVersion() + "\\spssjavaplugin.jar");
-        }catch (IOException ex){System.out.print(ex.toString());};
+        }catch (IOException ex){System.out.print(ex.toString());}
     }
    
     /**
@@ -309,12 +309,10 @@ public class MuARGUS {
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
-
             @Override
             public void run() {
                 new MainFrameView().setVisible(true);
             }
         });
     }
-
 }

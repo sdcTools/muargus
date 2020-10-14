@@ -19,10 +19,12 @@ public class TargetSwappingSpec extends ReplacementSpec {
     private final int nSim;
     private final int nHier;
     private final int nRisk;
+    private final int nCarry;
     private int hhID;
     private int[] similar;
     private int[] hierarchy;
     private int[] risk;
+    private int[] carry;
     
     
     /**
@@ -31,7 +33,7 @@ public class TargetSwappingSpec extends ReplacementSpec {
      *                   Targeted Record Swapping
      * @param seed Integer to be used as seed in random number creation
      */
-    public TargetSwappingSpec(int nSim, int nHier, int nRisk, double swaprate, int kThreshold, int seed) {
+    public TargetSwappingSpec(int nSim, int nHier, int nRisk, int nCarry, double swaprate, int kThreshold, int seed) {
         this.hhID = 0;
         this.swaprate = swaprate;
         this.kThreshold = kThreshold;
@@ -39,9 +41,11 @@ public class TargetSwappingSpec extends ReplacementSpec {
         this.nSim = nSim;
         this.nHier = nHier;
         this.nRisk = nRisk;
+        this.nCarry = nCarry;
         this.similar = new int[nSim];
         this.hierarchy = new int[nHier];
         this.risk = new int[nRisk];
+        this.carry = new int[nCarry];
     }
 
     public int getNSim(){
@@ -54,6 +58,10 @@ public class TargetSwappingSpec extends ReplacementSpec {
 
     public int getNRisk(){
         return nRisk;
+    }
+
+    public int getNCarry(){
+        return nCarry;
     }
     
     /**
@@ -118,7 +126,11 @@ public class TargetSwappingSpec extends ReplacementSpec {
     public int[] getRiskIndexes() {
         return risk;
     }
-    
+
+    public int[] getCarryIndexes() {
+        return carry;
+    }    
+
     public void calculateSimilarIndexes(ArrayList<VariableMu> variables){
         int i=0;
         for (VariableMu variable : variables) similar[i++] = this.getOutputVariables().indexOf(variable);
@@ -133,7 +145,12 @@ public class TargetSwappingSpec extends ReplacementSpec {
         int i=0;
         for (VariableMu variable : variables) risk[i++] = this.getOutputVariables().indexOf(variable);
     }
-    
+
+    public void calculateCarryIndexes(ArrayList<VariableMu> variables){
+        int i=0;
+        for (VariableMu variable : variables) carry[i++] = this.getOutputVariables().indexOf(variable);
+    }    
+
     public void calculateHHIdIndex(VariableMu variable){
         this.hhID = this.getOutputVariables().indexOf(variable);
     }

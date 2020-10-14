@@ -83,6 +83,8 @@ public class TargetedRecordSwappingController extends ControllerBase<TargetedRec
                                  swapping.getNHier(),
                                  swapping.getRiskIndexes(),
                                  swapping.getNRisk(),
+                                 swapping.getCarryIndexes(),
+                                 swapping.getNCarry(),
                                  swapping.getHHID(),
                                  swapping.getkThreshold(),
                                  swapping.getSeed(),
@@ -183,6 +185,7 @@ public class TargetedRecordSwappingController extends ControllerBase<TargetedRec
         ArrayList<VariableMu> selectedSimilarVariables = getTargetedRecordSwappingView().getSelectedSimilarVariables();
         ArrayList<VariableMu> selectedHierarchyVariables = getTargetedRecordSwappingView().getSelectedHierarchyVariables();
         ArrayList<VariableMu> selectedRiskVariables = getTargetedRecordSwappingView().getSelectedRiskVariables();
+        ArrayList<VariableMu> selectedCarryVariables = getTargetedRecordSwappingView().getSelectedCarryVariables();
         if (variablesAreUsed(selectedSimilarVariables)||variablesAreUsed(selectedHierarchyVariables)||variablesAreUsed(selectedRiskVariables)) {
             if (!getView().showConfirmDialog("One or more of the selected variables are already modified. Continue?")) {
                 return;
@@ -198,11 +201,15 @@ public class TargetedRecordSwappingController extends ControllerBase<TargetedRec
         for (VariableMu variable : selectedRiskVariables){
             if (!selectedVariables.contains(variable)) selectedVariables.add(variable);
         }
+        for (VariableMu variable : selectedCarryVariables){
+            if (!selectedVariables.contains(variable)) selectedVariables.add(variable);
+        }
         selectedVariables.add(getTargetedRecordSwappingView().getHHIDVar());
         
         TargetSwappingSpec targetSwapping = new TargetSwappingSpec(selectedSimilarVariables.size(),
                                                                    selectedHierarchyVariables.size(),
                                                                    selectedRiskVariables.size(),
+                                                                   selectedCarryVariables.size(),
                                                                    getTargetedRecordSwappingView().getSwaprate(),
                                                                    getTargetedRecordSwappingView().getkanonThreshold(),
                                                                    getTargetedRecordSwappingView().getSeed());
@@ -212,6 +219,7 @@ public class TargetedRecordSwappingController extends ControllerBase<TargetedRec
             targetSwapping.calculateSimilarIndexes(selectedSimilarVariables);
             targetSwapping.calculateHierarchyIndexes(selectedHierarchyVariables);
             targetSwapping.calculateRiskIndexes(selectedRiskVariables);
+            targetSwapping.calculateCarryIndexes(selectedCarryVariables);
             targetSwapping.calculateHHIdIndex(getTargetedRecordSwappingView().getHHIDVar());
             this.metadata.getReplacementSpecs().add(targetSwapping);
             getCalculationService().makeReplacementFile(this);
