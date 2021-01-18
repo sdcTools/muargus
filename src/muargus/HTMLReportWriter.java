@@ -181,6 +181,10 @@ public class HTMLReportWriter {
                     for (int index : ((TargetSwappingSpec) replacement).getRiskIndexes()){
                         Info = Info + " " + replacement.getOutputVariables().get(index).getName() + ",";
                     }
+                    Info = Info.substring(0, Info.length()-1) + "}    C = {";
+                    for (int index : ((TargetSwappingSpec) replacement).getCarryIndexes()){
+                        Info = Info + " " + replacement.getOutputVariables().get(index).getName() + ",";
+                    }
                     Info = Info.substring(0, Info.length()-1) + "}    hhID = { " + 
                             replacement.getOutputVariables().get(((TargetSwappingSpec) replacement).getHHID()).getName();
                     

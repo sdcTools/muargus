@@ -46,6 +46,7 @@ public final class MetadataMu {
     private Combinations combinations;
     private int recordCount;
     private final ArrayList<ReplacementSpec> replacementSpecs;
+    //private TargetedRecordSwapping targetedRecordSwapping;
 
     /**
      * Constructor of the model class MetadataMu. Initializes the DataFilePair
@@ -113,7 +114,26 @@ public final class MetadataMu {
     public void setCombinations(Combinations combinations) {
         this.combinations = combinations;
     }
-
+    
+//     /*
+//     * Gets the model class of the TagetedRecordSwapping screen.
+//     *
+//     * @return Returns the TargetedRecordSwapping model class.
+//     */
+//    public TargetedRecordSwapping getTargetedRecordSwapping() {
+//        if (this.targetedRecordSwapping == null) {
+//            createTargetedRecordSwapping();
+//        }
+//        return this.targetedRecordSwapping;
+//    }
+//    
+//    /**
+//     * Creates a new instance of the TargetedRecordSwapping class.
+//     */
+//    private void createTargetedRecordSwapping() {
+//        this.targetedRecordSwapping = new TargetedRecordSwapping();
+//    }
+    
     /**
      * Checks whether the changes in the metadata are of significant importance.
      * If the changes are significant, this will mean that already specified

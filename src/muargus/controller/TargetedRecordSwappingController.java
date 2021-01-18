@@ -8,6 +8,8 @@ package muargus.controller;
 import argus.model.ArgusException;
 import argus.utils.SystemUtils;
 import java.util.ArrayList;
+import muargus.CalculationService;
+import muargus.MuARGUS;
 import muargus.extern.dataengine.Numerical;
 import muargus.model.MetadataMu;
 import muargus.model.TargetSwappingSpec;
@@ -38,11 +40,12 @@ public class TargetedRecordSwappingController extends ControllerBase<TargetedRec
     }
 
     /**
-     * Gets the model and fills the model with the numeric variables if the
+     * Gets the model and fills the model with the categorical variables if the
      * model is empty.
      */
     private void fillModel() {
         TargetedRecordSwapping model = metadata.getCombinations().getTargetedRecordSwapping();
+        //TargetedRecordSwapping model = metadata.getTargetedRecordSwapping();
         if (model.getVariables().isEmpty()) {
             for (VariableMu variable : this.metadata.getVariables()) {
                 if (!variable.isNumeric()) {
@@ -139,6 +142,9 @@ public class TargetedRecordSwappingController extends ControllerBase<TargetedRec
         for (VariableMu variable : getTargetedRecordSwappingView().getSelectedRiskVariables()){
             if (!selected.contains(variable)) selected.add(variable);
         }
+        for (VariableMu variable : getTargetedRecordSwappingView().getSelectedCarryVariables()){
+            if (!selected.contains(variable)) selected.add(variable);
+        }
         
         if (selected.isEmpty()) {
             getView().showMessage(String.format("Nothing to Undo: Targeted Record Swapping was not applied yet.\n"));
@@ -150,7 +156,8 @@ public class TargetedRecordSwappingController extends ControllerBase<TargetedRec
                 VariableMu.printVariableNames(selected)))) {
             return;
         }
-        String rankSwappings = (getModel().getTargetSwappings().size()>1)? "s are:" : " is:";
+        
+        String rankSwappings = (getModel().getTargetSwappings().size()>1) ? "s are:" : " is:";
         for (TargetSwappingSpec swapping : getModel().getTargetSwappings()) {
             if (swapping.getOutputVariables().size() == selected.size()) {
                 boolean difference = false;
@@ -171,7 +178,9 @@ public class TargetedRecordSwappingController extends ControllerBase<TargetedRec
             rankSwappings += "\n- " + VariableMu.printVariableNames(swapping.getOutputVariables());
         }
         
-        getView().showMessage(String.format("Nothing to Undo: Targeted Record Swapping was not applied yet.\n"));
+        getView().showMessage(String.format("Targeted Record Swapping involving %s not found.\n"
+                + "The available swapping" + rankSwappings, VariableMu.printVariableNames(selected)));
+                //"Nothing to Undo: Targeted Record Swapping was not applied yet.\n"));
     }
 
     /**
@@ -214,6 +223,7 @@ public class TargetedRecordSwappingController extends ControllerBase<TargetedRec
                                                                    getTargetedRecordSwappingView().getkanonThreshold(),
                                                                    getTargetedRecordSwappingView().getSeed());
         try {
+            CalculationService service = MuARGUS.getCalculationService();
             targetSwapping.getOutputVariables().addAll(selectedVariables);
             targetSwapping.setReplacementFile(new ReplacementFile("TargetSwapping"));
             targetSwapping.calculateSimilarIndexes(selectedSimilarVariables);
@@ -222,7 +232,11 @@ public class TargetedRecordSwappingController extends ControllerBase<TargetedRec
             targetSwapping.calculateCarryIndexes(selectedCarryVariables);
             targetSwapping.calculateHHIdIndex(getTargetedRecordSwappingView().getHHIDVar());
             this.metadata.getReplacementSpecs().add(targetSwapping);
-            getCalculationService().makeReplacementFile(this);
+            // Begin Calculation Service heeft mogelijk nog niet voldoende metadata, als TRS wordt aangeroepen vóór combinations gezet zijn
+            //service.setMetadata(this.metadata);
+            //service.exploreFile(this);
+            // End Calculation Service heeft mogelijk nog niet voldoende metadata, als TRS wordt aangeroepen vóór combinations gezet zijn
+            service.makeReplacementFile(this);
             getModel().getTargetSwappings().add(targetSwapping);
         } catch (ArgusException ex) {
             this.metadata.getReplacementSpecs().remove(targetSwapping);

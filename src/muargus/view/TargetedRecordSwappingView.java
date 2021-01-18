@@ -67,6 +67,7 @@ public class TargetedRecordSwappingView extends DialogBase<TargetedRecordSwappin
         this.carryList.setModel(this.carryListModel);
         
         this.model = getMetadata().getCombinations().getTargetedRecordSwapping();
+        //this.model = getMetadata().getTargetedRecordSwapping();
         String[][] data = new String[this.model.getVariables().size()][2];
         int index = 0;
         for (VariableMu variable : this.model.getVariables()) {
@@ -120,8 +121,16 @@ public class TargetedRecordSwappingView extends DialogBase<TargetedRecordSwappin
      * Enables/disables the calculate and undo button.
      */
     private void updateValues() {
+        TargetedRecordSwapping TRS = this.getMetadata().getCombinations().getTargetedRecordSwapping();
+        boolean b;
+        if (TRS.getTargetSwappings().size() > 0){
+            b = (TRS.getTargetSwappings().get(TRS.getTargetSwappings().size() - 1).getReplacementFile() != null);
+        }
+        else {
+            b = false;
+        }
         this.calculateButton.setEnabled(getSelectedRiskVariables().size()*getSelectedSimilarVariables().size()*getSelectedHierarchyVariables().size() > 0);
-        this.undoButton.setEnabled(this.calculateButton.isEnabled());
+        this.undoButton.setEnabled(b && this.calculateButton.isEnabled());
     }
 
     /**

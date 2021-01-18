@@ -331,8 +331,9 @@ public class CalculationService {
         this.c.SetOutFileInfo(this.metadata.getDataFileType() == MetadataMu.DATA_FILE_TYPE_FIXED
                 || this.metadata.getDataFileType() == MetadataMu.DATA_FILE_TYPE_SPSS,
                 this.metadata.getSeparator(),
-                "",
-                true
+                "", // First line
+                false // Strings not in quotes
+                //true // Strings in quotes
         );
         int index = 0;
         for (VariableMu variable : this.metadata.getVariables()) {

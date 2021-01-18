@@ -442,6 +442,17 @@ public class MakeProtectedFileView extends DialogBase<MakeProtectedFileControlle
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * Enables/Disables the MakeFile button.
+     *
+     * @param enabled Boolean indicating whether the MakeFile button
+     * needs to be enabled.
+     */
+    public void enableMakeFile(boolean enabled) {
+        this.makeFileButton.setEnabled(enabled);
+    }
+
+
     private void makeFileButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_makeFileButtonActionPerformed
         String filter;
         String selectedFile;
@@ -453,11 +464,13 @@ public class MakeProtectedFileView extends DialogBase<MakeProtectedFileControlle
             selectedFile = StrUtils.replaceExtension(getController().getMetadata().getFileNames().getDataFileName(), "Safe.saf");
         }
 
-       // this.setCursor(new Cursor(Cursor.WAIT_CURSOR));
-        String filePath = showFileDialog("Make safe micro file", true, new String[]{filter}, new File(selectedFile));
-        if (filePath != null) {
-            getController().makeFile(new File(filePath));
-        }
+       try{
+            String filePath = showFileDialog("Make safe micro file", true, new String[]{filter}, new File(selectedFile));
+            if (filePath != null) {
+                getController().makeFile(new File(filePath));
+            }
+       }
+       catch(Exception ex){}
     }//GEN-LAST:event_makeFileButtonActionPerformed
 
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed

@@ -149,6 +149,8 @@ public class MainFrameController {
         this.view.enableAction(Action.NumericalMicroAggregation, tablesCalculated && hasNumericalVariables);
         this.view.enableAction(Action.NumericalRankSwapping, tablesCalculated && hasNumericalVariables);
         this.view.enableAction(Action.TargetedRecordSwapping, tablesCalculated);
+        //this.view.enableAction(Action.TargetedRecordSwapping, this.metadata != null
+        //        && this.metadata.getVariables().size() > 0);
 
     }
 
