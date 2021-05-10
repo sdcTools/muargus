@@ -604,7 +604,7 @@ public class CalculationService {
                 exploreInBackground();
                 break;
             case MakeProtectedFile:
-                // If not (k+1)-anonymisation or no suppression, use "old" proceudre
+                // If not (k+1)-anonymisation or no suppression, use "old" procedure
                 if (!this.metadata.getCombinations().getProtectedFile().isKAnon() ||
                         (!this.metadata.getCombinations().getProtectedFile().isWithEntropy() && 
                             !this.metadata.getCombinations().getProtectedFile().isWithPrior())){

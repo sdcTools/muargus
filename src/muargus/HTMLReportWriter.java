@@ -101,6 +101,7 @@ public class HTMLReportWriter {
     private static Element writeOtherModificationsTable(MetadataMu metadata) {
         Element p = HTMLReportWriter.doc.createElement("p");
         addChildElement(p, "h2", "Other modifications");
+        Element TRS, tr1, tr2;
         Element table = addChildElement(p, "table");
         Element tr = addChildElement(table, "tr");
         addChildElement(tr, "th", "Method");
@@ -152,9 +153,43 @@ public class HTMLReportWriter {
                 }
             }
             else{
-                tr = addChildElement(table, "tr");
-                addChildElement(tr, "td", replacement.getReplacementFile().getReplacementType());                
-                addChildElement(tr, "td", VariableMu.printVariableNames(replacement.getOutputVariables()));
+                tr1 = addChildElement(table, "tr");
+                addChildElement(tr1, "td", replacement.getReplacementFile().getReplacementType()); 
+                if (replacement instanceof TargetSwappingSpec){
+                    TRS=addChildElement(tr1,"td");
+                    tr2=addChildElement(TRS,"table","class","inrow");
+                    tr=addChildElement(tr2,"tr");
+                    addChildElement(tr,"td","Similarity:");
+                    String Info="";
+                    for (int index : ((TargetSwappingSpec) replacement).getSimilarIndexes()){
+                        Info = Info + " " + replacement.getOutputVariables().get(index).getName() + ",";
+                    }
+                    addChildElement(tr,"td",Info.substring(0,Info.length()-1));
+                    tr=addChildElement(tr2,"tr");
+                    addChildElement(tr,"td","Hierarchy:");
+                    Info="";
+                    for (int index : ((TargetSwappingSpec) replacement).getHierarchyIndexes()){
+                        Info = Info + " " + replacement.getOutputVariables().get(index).getName() + ",";
+                    }
+                    addChildElement(tr,"td",Info.substring(0,Info.length()-1));
+                    tr=addChildElement(tr2,"tr");
+                    addChildElement(tr,"td","Risk:");
+                    Info="";
+                    for (int index : ((TargetSwappingSpec) replacement).getRiskIndexes()){
+                        Info = Info + " " + replacement.getOutputVariables().get(index).getName() + ",";
+                    }
+                    addChildElement(tr,"td",Info.substring(0,Info.length()-1));
+                    tr=addChildElement(tr2,"tr");
+                    addChildElement(tr,"td","CarryOver:");
+                    Info="";
+                    for (int index : ((TargetSwappingSpec) replacement).getCarryIndexes()){
+                        Info = Info + " " + replacement.getOutputVariables().get(index).getName() + ",";
+                    }
+                    addChildElement(tr,"td",Info.substring(0,Info.length()-1));
+                    tr=addChildElement(tr2,"tr");
+                    addChildElement(tr,"td","HouseholdID:");
+                    addChildElement(tr,"td",replacement.getOutputVariables().get(((TargetSwappingSpec) replacement).getHHID()).getName());
+                } else addChildElement(tr, "td", VariableMu.printVariableNames(replacement.getOutputVariables()));
                 if (replacement instanceof RankSwappingSpec) {
                     addChildElement(tr, "td", String.format("Percentage: %d %%", ((RankSwappingSpec) replacement).getPercentage()));
                 } else if (replacement instanceof MicroaggregationSpec) {
@@ -169,26 +204,17 @@ public class HTMLReportWriter {
                     }
                     addChildElement(tr, "td", alpha.substring(0, alpha.length() - 1));
                 } else if (replacement instanceof TargetSwappingSpec){
-                    String Info = "S = {";
-                    for (int index : ((TargetSwappingSpec) replacement).getSimilarIndexes()){
-                        Info = Info + " " + replacement.getOutputVariables().get(index).getName() + ",";
-                    }
-                    Info = Info.substring(0, Info.length()-1) + "}    H = {";
-                    for (int index : ((TargetSwappingSpec) replacement).getHierarchyIndexes()){
-                        Info = Info + " " + replacement.getOutputVariables().get(index).getName() + ",";
-                    }
-                    Info = Info.substring(0, Info.length()-1) + "}    R = {";
-                    for (int index : ((TargetSwappingSpec) replacement).getRiskIndexes()){
-                        Info = Info + " " + replacement.getOutputVariables().get(index).getName() + ",";
-                    }
-                    Info = Info.substring(0, Info.length()-1) + "}    C = {";
-                    for (int index : ((TargetSwappingSpec) replacement).getCarryIndexes()){
-                        Info = Info + " " + replacement.getOutputVariables().get(index).getName() + ",";
-                    }
-                    Info = Info.substring(0, Info.length()-1) + "}    hhID = { " + 
-                            replacement.getOutputVariables().get(((TargetSwappingSpec) replacement).getHHID()).getName();
-                    
-                    addChildElement(tr, "td", Info + "}");
+                        TRS=addChildElement(tr1,"td");
+                        tr2=addChildElement(TRS,"table","class","inrow");
+                        tr=addChildElement(tr2,"tr");
+                        addChildElement(tr,"td","Seed:");
+                        addChildElement(tr,"td",String.format("%d",((TargetSwappingSpec) replacement).getSeed()));
+                        tr=addChildElement(tr2,"tr");
+                        addChildElement(tr,"td","Swaprate:");
+                        addChildElement(tr,"td",String.format("%5.3f",((TargetSwappingSpec) replacement).getSwaprate()));
+                        tr=addChildElement(tr2,"tr");
+                        addChildElement(tr,"td","RiskThreshold (k):");
+                        addChildElement(tr,"td",String.format("%d",((TargetSwappingSpec) replacement).getkThreshold()));
                 }
             }
         }
@@ -487,8 +513,13 @@ public class HTMLReportWriter {
 
         Element p = HTMLReportWriter.doc.createElement("p");
         addChildElement(p, "h2", "Suppression overview ");
+        
         Element table = addChildElement(p, "table");
         Element tr = addChildElement(table, "tr");
+        if (metadata.getCombinations().getProtectedFile().getSuppressionType()==0){
+            addChildElement(tr,"td","\"No suppression\" selected");
+        }
+        else{        
         addChildElement(tr, "th", "Name");
         if (metadata.getCombinations().getProtectedFile().isWithEntropy()) {
             addChildElement(tr, "th", "Entropy");
@@ -515,7 +546,7 @@ public class HTMLReportWriter {
         addChildElement(tr, "td", "Total");
         addChildElement(tr, "td", "");
         addChildElement(tr, "td", Integer.toString(suppressions));
-
+        }
         return p;
     }
 
