@@ -216,9 +216,28 @@ public class HTMLReportWriter {
                         addChildElement(tr,"td","RiskThreshold (k):");
                         addChildElement(tr,"td",String.format("%d",((TargetSwappingSpec) replacement).getkThreshold()));
                 }
+                
+                if (replacement instanceof TargetSwappingSpec){
+                    addChildElement(p, "h2", "Info on Targeted Record Swapping");
+                    table = addChildElement(p, "table");
+                    tr=addChildElement(table,"tr");
+                    addChildElement(tr,"td","Number of swapped households:");
+                    addChildElement(tr,"td",String.format("%d",((TargetSwappingSpec) replacement).getCountSwappedHID()));
+                    tr=addChildElement(table,"tr");
+                    addChildElement(tr,"td","Number of swapped records:");
+                    addChildElement(tr,"td",String.format("%d",((TargetSwappingSpec) replacement).getCountSwappedRecords()));
+                    if (((TargetSwappingSpec) replacement).getCountNoDonor()>0){
+                        tr=addChildElement(table,"tr");
+                        addChildElement(tr,"td","Number of households without donor:");
+                        addChildElement(tr,"td",String.format("%d",((TargetSwappingSpec) replacement).getCountNoDonor()));
+                        table = addChildElement(p,"table");
+                        tr=addChildElement(table,"tr");
+                        addChildElement(tr,"td","See "+MuARGUS.getTempDir()+"\\NonSwappedHID.txt for HIDs of households for which no donor was found.");
+                    }
+                }
             }
         }
-        
+
         ProtectedFile protectedFile = metadata.getCombinations().getProtectedFile();
         if (protectedFile.isRandomizeOutput()) {
             tr = addChildElement(table, "tr");
@@ -616,7 +635,7 @@ public class HTMLReportWriter {
      */
     private static Element writeFooter() {
         Element p = HTMLReportWriter.doc.createElement("p");
-        addChildElement(p, "h2", String.format("μ-ARGUS version: %d.%d.%s (build: %d)",
+        addChildElement(p, "h2", "\u03bc-ARGUS version: " + String.format("%d.%d.%s (build: %d)",
                 MuARGUS.MAJOR, MuARGUS.MINOR, MuARGUS.REVISION, MuARGUS.BUILD));
         return p;
     }
@@ -721,7 +740,7 @@ public class HTMLReportWriter {
      */
     private static Element writeHeader() {
         Element elm = HTMLReportWriter.doc.createElement("head");
-        addChildElement(elm, "title", "µ-ARGUS Report");
+        addChildElement(elm, "title", "\u03bc-ARGUS Report");
         Element meta = addChildElement(elm, "META", "name", "author");
         meta.setAttribute("content", "Statistics; Netherlands");
         Element link = addChildElement(elm, "link", "rel", "stylesheet");

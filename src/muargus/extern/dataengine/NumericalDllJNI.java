@@ -25,7 +25,7 @@ public class NumericalDllJNI {
   public final static native int MIC_ERR_COL_get();
   public final static native int MIC_ERR_STD_get();
   public final static native long new_Numerical();
-  public final static native void Numerical_DoTargetedRecordSwap(long jarg1, Numerical jarg1_, String jarg2, String jarg3, String jarg4, int jarg5, double jarg6, int[] jarg7, int jarg8, int[] jarg9, int jarg10, int[] jarg11, int jarg12, int[] jarg13, int jarg14, int jarg15, int jarg16, int jarg17, int[] jarg18);
+  public final static native void Numerical_DoTargetedRecordSwap(long jarg1, Numerical jarg1_, String jarg2, String jarg3, String jarg4, int jarg5, double jarg6, int[] jarg7, int jarg8, int[] jarg9, int jarg10, int[] jarg11, int jarg12, int[] jarg13, int jarg14, int jarg15, int jarg16, int[] jarg17, int[] jarg18, int jarg19, int[] jarg20, String jarg21);
   public final static native void Numerical_DoRankSwap(long jarg1, Numerical jarg1_, String jarg2, String jarg3, String jarg4, int jarg5, int jarg6, int[] jarg7);
   public final static native void Numerical_DoMicroAggregation(long jarg1, Numerical jarg1_, String jarg2, String jarg3, String jarg4, int jarg5, int jarg6, int jarg7, int jarg8, int[] jarg9, int[] jarg10);
   public final static native void Numerical_SetProgressListener(long jarg1, Numerical jarg1_, long jarg2, IProgressListener2 jarg2_);

@@ -7,7 +7,10 @@ package muargus.controller;
 
 import argus.model.ArgusException;
 import argus.utils.SystemUtils;
+import java.io.BufferedReader;
 import java.util.ArrayList;
+import java.io.File;
+import java.io.FileReader;
 import muargus.CalculationService;
 import muargus.MuARGUS;
 import muargus.extern.dataengine.Numerical;
@@ -74,6 +77,12 @@ public class TargetedRecordSwappingController extends ControllerBase<TargetedRec
         TargetSwappingSpec swapping = getModel().getTargetSwappings().get(getModel().getTargetSwappings().size() - 1);
         Numerical num = new Numerical(); // instance of the library-class
         int[] errorCode = new int[1];
+        int[] count_HID = new int[1];
+        int[] count_record = new int[1];
+
+        // Remove logfile from previous run
+        File f1 = new File(MuARGUS.getTempDir()+"\\NonSwappedHID.txt");
+        f1.delete();
         
         num.DoTargetedRecordSwap(swapping.getReplacementFile().getInputFilePath(),
                                  swapping.getReplacementFile().getOutputFilePath(),
@@ -90,8 +99,11 @@ public class TargetedRecordSwappingController extends ControllerBase<TargetedRec
                                  swapping.getNCarry(),
                                  swapping.getHHID(),
                                  swapping.getkThreshold(),
+                                 count_record,
+                                 count_HID,
                                  swapping.getSeed(),
-                                 errorCode
+                                 errorCode,
+                                 MuARGUS.getTempDir() + "\\NonSwappedHID.txt"
                                  );
 
         if (errorCode[0] != 0) {
@@ -99,8 +111,29 @@ public class TargetedRecordSwappingController extends ControllerBase<TargetedRec
             this.metadata.getReplacementSpecs().remove(swapping);
             getModel().getTargetSwappings().remove(swapping);
         } else {
-            getView().showMessage("TargetedRecordSwapping successfully completed");
-            SystemUtils.writeLogbook("Tageted record swapping has been done.");
+            if (f1.exists()){
+                try{
+                    BufferedReader br = new BufferedReader(new FileReader(f1));
+                    String[] Words = br.readLine().split(" ");
+                    br.close();
+                    swapping.setCountNoDonor(Integer.parseInt(Words[0]));
+                    String Message = "WARNING: ";
+                    // First word in the file is number of non-swapped households
+                    Message += Words[0] + " households could not be swapped because no donor could be found (" + 
+                               count_HID[0] + " households did get swapped).\n";
+                    Message += "\nSee \"" + MuARGUS.getTempDir()+"\\NonSwappedHID.txt\" for the HID of households without donor.\n";
+                    getView().showMessage(Message);
+                    SystemUtils.writeLogbook(Message);
+                }
+                catch (Exception ex) {getView().showMessage(ex.getMessage());} 
+            }
+            else{
+                getView().showMessage("TargetedRecordSwapping successfully completed.\n" + count_HID[0] + " households are swapped.");
+            }
+
+            SystemUtils.writeLogbook("Tageted record swapping has been done.\n" + count_HID[0] + " households are swapped.");
+            swapping.setCountSwappedHID(count_HID[0]);
+            swapping.setCountSwappedRecords(count_record[0]);
         }
         getView().setProgress(0);
         getView().showStepName("");

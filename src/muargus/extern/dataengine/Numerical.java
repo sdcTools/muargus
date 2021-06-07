@@ -40,8 +40,8 @@ public class Numerical {
     this(NumericalDllJNI.new_Numerical(), true);
   }
 
-  public void DoTargetedRecordSwap(String inFileName, String outFileName, String separator, int numVar, double swaprate, int[] similar, int nSim, int[] hierarchy, int nHier, int[] risk, int nRisk, int[] carry, int nCarry, int hhID, int th, int seed, int[] errorCode) {
-    NumericalDllJNI.Numerical_DoTargetedRecordSwap(swigCPtr, this, inFileName, outFileName, separator, numVar, swaprate, similar, nSim, hierarchy, nHier, risk, nRisk, carry, nCarry, hhID, th, seed, errorCode);
+  public void DoTargetedRecordSwap(String inFileName, String outFileName, String separator, int numVar, double swaprate, int[] similar, int nSim, int[] hierarchy, int nHier, int[] risk, int nRisk, int[] carry, int nCarry, int hhID, int th, int[] count_swapped_records, int[] count_swapped_hid, int seed, int[] errorCode, String logFileName) {
+    NumericalDllJNI.Numerical_DoTargetedRecordSwap(swigCPtr, this, inFileName, outFileName, separator, numVar, swaprate, similar, nSim, hierarchy, nHier, risk, nRisk, carry, nCarry, hhID, th, count_swapped_records, count_swapped_hid, seed, errorCode, logFileName);
   }
 
   public void DoRankSwap(String inFileName, String outFileName, String separator, int numVar, int perc, int[] errorCode) {

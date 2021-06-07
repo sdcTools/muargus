@@ -44,8 +44,8 @@ public class MuARGUS {
     // Version info
     public static final int MAJOR = 5;
     public static final int MINOR = 1;
-    public static final String REVISION = "5";
-    public static final int BUILD = 4;
+    public static final String REVISION = "6";
+    public static final int BUILD = 1;
 
     public static final int MAXDIMS = 10;
 

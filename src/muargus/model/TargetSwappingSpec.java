@@ -21,10 +21,13 @@ public class TargetSwappingSpec extends ReplacementSpec {
     private final int nRisk;
     private final int nCarry;
     private int hhID;
-    private int[] similar;
-    private int[] hierarchy;
-    private int[] risk;
-    private int[] carry;
+    private final int[] similar;
+    private final int[] hierarchy;
+    private final int[] risk;
+    private final int[] carry;
+    private int count_HID;
+    private int count_records;
+    private int count_nodonor;
     
     
     /**
@@ -46,6 +49,33 @@ public class TargetSwappingSpec extends ReplacementSpec {
         this.hierarchy = new int[nHier];
         this.risk = new int[nRisk];
         this.carry = new int[nCarry];
+        this.count_HID = 0;
+        this.count_records = 0;
+        this.count_nodonor = 0;
+    }
+
+    public int getCountSwappedHID(){
+        return count_HID;
+    }
+
+    public void setCountSwappedHID(int count){
+        count_HID = count;
+    }
+
+    public int getCountSwappedRecords(){
+        return count_records;
+    }
+
+    public void setCountSwappedRecords(int count){
+        count_records = count;
+    }
+    
+    public int getCountNoDonor(){
+        return count_nodonor;
+    }
+
+    public void setCountNoDonor(int count){
+        count_nodonor = count;
     }
 
     public int getNSim(){
