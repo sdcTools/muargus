@@ -21,4 +21,4 @@ jobs:
         distribution: 'zulu'
         architecture: x86
     - name: Build with Ant
-      run: ant -Duser.properties.file=.\\my.properties -buildfile build.xml jar
+      run: ant -buildfile build.xml -Duser.properties.file=my.properties jar
