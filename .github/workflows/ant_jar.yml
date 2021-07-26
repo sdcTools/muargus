@@ -22,4 +22,4 @@ jobs:
         distribution: 'zulu'
         architecture: x86
     - name: Build with Ant
-      run: ant -buildfile build.xml -Dplatforms.JDK_1.8_Zulu_64_bit.home='${{env.JAVA_HOME}}' jar
+      run: ant -buildfile build.xml -propertyfile "D:\a\muargus\muargus\my.properties" jar
