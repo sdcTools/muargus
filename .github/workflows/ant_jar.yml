@@ -21,4 +21,4 @@ jobs:
         distribution: 'zulu'
         architecture: x86
     - name: Build with Ant
-      run: ant -Dplatforms.JDK_1.8_Zulu_64bit.home=${{ env.JAVA_HOME }} -buildfile build.xml jar
+      run: ant -buildfile build.xml jar
