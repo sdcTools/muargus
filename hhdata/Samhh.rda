@@ -1,0 +1,38 @@
+hhnum 1 4 "9998" "9999"
+    <HOUSE_ID>
+weight 5 5
+    <NUMERIC>
+    <DECIMALS> 2
+    <WEIGHT>
+town 10 1 "X"
+    <RECODABLE>
+    <IDLEVEL> 1
+    <SUPPRESSPRIORITY> 50
+    <CODELIST> "Town.cdl"
+province 11 1 "9"
+    <RECODABLE>
+    <IDLEVEL> 0
+    <SUPPRESSPRIORITY> 50
+MarStat 13 1 "9"
+    <RECODABLE>
+    <IDLEVEL> 1
+    <SUPPRESSPRIORITY> 50
+sex 14 1 "9"
+    <RECODABLE>
+    <IDLEVEL> 2
+    <SUPPRESSPRIORITY> 50
+age 15 2 "99"
+    <RECODABLE>
+    <IDLEVEL> 3
+    <SUPPRESSPRIORITY> 50
+employed 17 1 "9"
+    <RECODABLE>
+    <IDLEVEL> 3
+    <SUPPRESSPRIORITY> 50
+income 18 4 "9999"
+    <NUMERIC>
+agehh 23 2 "99"
+    <RECODABLE>
+    <HOUSEHOLD>
+    <IDLEVEL> 3
+    <SUPPRESSPRIORITY> 50
