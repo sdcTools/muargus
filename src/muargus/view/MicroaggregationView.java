@@ -184,7 +184,7 @@ public class MicroaggregationView extends DialogBase<MicroaggregationController>
         calculateButton = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        selectedVariableList = new javax.swing.JList();
+        selectedVariableList = new javax.swing.JList<>();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         variablesTable = new javax.swing.JTable();
@@ -510,7 +510,7 @@ public class MicroaggregationView extends DialogBase<MicroaggregationController>
     private javax.swing.JButton okButton;
     private javax.swing.JCheckBox optimalCheckbox;
     private javax.swing.JProgressBar progressBar;
-    private javax.swing.JList selectedVariableList;
+    private javax.swing.JList<VariableMu> selectedVariableList;
     private javax.swing.JLabel stepNameLabel;
     private javax.swing.JButton toSelectedButton;
     private javax.swing.JButton undoButton;

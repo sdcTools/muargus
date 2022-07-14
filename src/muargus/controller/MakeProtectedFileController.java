@@ -72,6 +72,7 @@ public class MakeProtectedFileController extends ControllerBase<ProtectedFile> {
             if (!isRiskThresholdSpecified()) {
                 return;
             }
+            ((MakeProtectedFileView) this.getView()).enableMakeFile(false);
             this.metadata.getCombinations().getProtectedFile().initSafeMeta(file, this.metadata);
             removeRedundentReplacementSpecs();
             if (this.metadata.isSpss()) {
@@ -205,6 +206,7 @@ public class MakeProtectedFileController extends ControllerBase<ProtectedFile> {
     protected void doNextStep(boolean success) {
         if (success) {
             saveSafeMeta();
+            ((MakeProtectedFileView) this.getView()).enableMakeFile(true);
             if (this.fileCreated) {
                 this.getView().setVisible(false);
             }

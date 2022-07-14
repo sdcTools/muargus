@@ -36,8 +36,8 @@ import muargus.model.VariableMu;
  */
 public class SyntheticDataView extends DialogBase<SyntheticDataController> {
 
-    private DefaultListModel variablesListModel;
-    private DefaultListModel nonSensitiveVariablesListModel;
+    private DefaultListModel<VariableMu> variablesListModel;
+    private DefaultListModel<VariableMu> nonSensitiveVariablesListModel;
 
     /**
      * Creates new form SyntheticDataView.
@@ -180,7 +180,7 @@ public class SyntheticDataView extends DialogBase<SyntheticDataController> {
 
         variablesPanel = new javax.swing.JPanel();
         variablesScrollPane = new javax.swing.JScrollPane();
-        variablesList = new javax.swing.JList();
+        variablesList = new javax.swing.JList<>();
         variablesLabel = new javax.swing.JLabel();
         moveToSensitiveVariablesButton = new javax.swing.JButton();
         moveFromSensitiveVariablesButton = new javax.swing.JButton();
@@ -192,7 +192,7 @@ public class SyntheticDataView extends DialogBase<SyntheticDataController> {
         moveFromNonSensitiveVariablesButton = new javax.swing.JButton();
         nonSensitiveVariablesLabel = new javax.swing.JLabel();
         nonSensitiveVariablesScrollPane = new javax.swing.JScrollPane();
-        nonSensitiveVariablesList = new javax.swing.JList();
+        nonSensitiveVariablesList = new javax.swing.JList<>();
         runSyntheticDataButton = new javax.swing.JButton();
         closeButton = new javax.swing.JButton();
 
@@ -466,7 +466,7 @@ public class SyntheticDataView extends DialogBase<SyntheticDataController> {
     private javax.swing.JButton moveToNonSensitiveVariablesButton;
     private javax.swing.JButton moveToSensitiveVariablesButton;
     private javax.swing.JLabel nonSensitiveVariablesLabel;
-    private javax.swing.JList nonSensitiveVariablesList;
+    private javax.swing.JList<VariableMu> nonSensitiveVariablesList;
     private javax.swing.JScrollPane nonSensitiveVariablesScrollPane;
     private javax.swing.JButton runSyntheticDataButton;
     private javax.swing.JLabel sensitiveVariablesLabel;
@@ -474,7 +474,7 @@ public class SyntheticDataView extends DialogBase<SyntheticDataController> {
     private javax.swing.JSlider sensitiveVariablesSlider;
     private javax.swing.JTable sensitiveVariablesTable;
     private javax.swing.JLabel variablesLabel;
-    private javax.swing.JList variablesList;
+    private javax.swing.JList<VariableMu> variablesList;
     private javax.swing.JPanel variablesPanel;
     private javax.swing.JScrollPane variablesScrollPane;
     // End of variables declaration//GEN-END:variables

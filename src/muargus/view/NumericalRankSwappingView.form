@@ -187,6 +187,9 @@
                   <StringArray count="0"/>
                 </Property>
               </Properties>
+              <AuxValues>
+                <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;VariableMu&gt;"/>
+              </AuxValues>
             </Component>
           </SubComponents>
         </Container>

@@ -172,7 +172,7 @@ public class NumericalRankSwappingView extends DialogBase<NumericalRankSwappingC
         variablesTable = new javax.swing.JTable();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        selectedVariableList = new javax.swing.JList();
+        selectedVariableList = new javax.swing.JList<>();
         upButton = new javax.swing.JButton();
         downButton = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
@@ -486,7 +486,7 @@ public class NumericalRankSwappingView extends DialogBase<NumericalRankSwappingC
     private javax.swing.JButton okButton;
     private javax.swing.JTextField percentageTextField;
     private javax.swing.JProgressBar progressBar;
-    private javax.swing.JList selectedVariableList;
+    private javax.swing.JList<VariableMu> selectedVariableList;
     private javax.swing.JLabel stepNameLabel;
     private javax.swing.JButton toSelectedButton;
     private javax.swing.JButton undoButton;

@@ -64,7 +64,7 @@ public class LogarithmicNumberAxis extends NumberAxis {
     @Override
     public List refreshTicks(Graphics2D g2, AxisState state, Rectangle2D dataArea, RectangleEdge edge) {
         List l = super.refreshTicks(g2, state, dataArea, edge);
-        List newList = new ArrayList<>();
+        List<NumberTick> newList = new ArrayList<>();
         for (Object tick : l) {
             NumberTick numberTick = (NumberTick) tick;
             newList.add(new NumberTick(numberTick.getNumber(),

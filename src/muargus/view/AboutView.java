@@ -18,13 +18,14 @@ package muargus.view;
 
 import java.io.File;
 import muargus.MuARGUS;
+import muargus.controller.ControllerBase;
 
 /**
  * Class of the About screen.
  *
  * @author Statistics Netherlands
  */
-public class AboutView extends DialogBase {
+public class AboutView extends DialogBase<ControllerBase> {
 
     /**
      * Creates new form AboutView

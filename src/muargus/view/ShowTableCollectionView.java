@@ -35,7 +35,7 @@ import muargus.model.VariableMu;
 public class ShowTableCollectionView extends DialogBase<ShowTableCollectionController> {
 
     TableCollection model;
-    private DefaultComboBoxModel variableListModel;
+    private DefaultComboBoxModel<VariableMu> variableListModel;
     private TableModel tableModel;
 
     /**
@@ -122,7 +122,7 @@ public class ShowTableCollectionView extends DialogBase<ShowTableCollectionContr
         showAllTablesCheckBox = new javax.swing.JCheckBox();
         closeButton = new javax.swing.JButton();
         selectVariableLabel = new javax.swing.JLabel();
-        selectVariableComboBox = new javax.swing.JComboBox();
+        selectVariableComboBox = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Table Collection");
@@ -166,7 +166,6 @@ public class ShowTableCollectionView extends DialogBase<ShowTableCollectionContr
 
         selectVariableLabel.setText("Select variable:");
 
-        selectVariableComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         selectVariableComboBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 selectVariableComboBoxActionPerformed(evt);
@@ -177,19 +176,21 @@ public class ShowTableCollectionView extends DialogBase<ShowTableCollectionContr
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(scrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(showAllTablesCheckBox)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 121, Short.MAX_VALUE)
-                .addComponent(selectVariableLabel)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(selectVariableComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(showAllTablesCheckBox)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 121, Short.MAX_VALUE)
+                        .addComponent(selectVariableLabel)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(selectVariableComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(0, 165, Short.MAX_VALUE)
+                        .addComponent(closeButton)
+                        .addGap(0, 161, Short.MAX_VALUE)))
                 .addContainerGap())
-            .addComponent(scrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(171, Short.MAX_VALUE)
-                .addComponent(closeButton)
-                .addContainerGap(171, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -226,7 +227,7 @@ public class ShowTableCollectionView extends DialogBase<ShowTableCollectionContr
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton closeButton;
     private javax.swing.JScrollPane scrollPane;
-    private javax.swing.JComboBox selectVariableComboBox;
+    private javax.swing.JComboBox<VariableMu> selectVariableComboBox;
     private javax.swing.JLabel selectVariableLabel;
     private javax.swing.JCheckBox showAllTablesCheckBox;
     private javax.swing.JTable table;

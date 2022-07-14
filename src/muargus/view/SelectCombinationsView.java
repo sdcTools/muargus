@@ -44,8 +44,8 @@ import muargus.model.VariableMu;
 public class SelectCombinationsView extends DialogBase<SelectCombinationsController> {
 
     private Combinations model;
-    private DefaultListModel variablesListModel;
-    private DefaultListModel variablesSelectedListModel;
+    private DefaultListModel<VariableMu> variablesListModel;
+    private DefaultListModel<VariableMu> variablesSelectedListModel;
     private TableModel tableModel;
     private final Frame parent;
     // gives the width of column 1, 2 and the final value is the width of all the other columns
@@ -197,9 +197,9 @@ public class SelectCombinationsView extends DialogBase<SelectCombinationsControl
     private void initComponents() {
 
         variablesScrollPane = new javax.swing.JScrollPane();
-        variablesList = new javax.swing.JList();
+        variablesList = new javax.swing.JList<>();
         variablesSelectedScrollPane = new javax.swing.JScrollPane();
-        variablesSelectedList = new javax.swing.JList();
+        variablesSelectedList = new javax.swing.JList<>();
         moveToSelectedButton = new javax.swing.JButton();
         removeFromSelectedButton = new javax.swing.JButton();
         removeAllFromSelectedButton = new javax.swing.JButton();
@@ -760,9 +760,9 @@ public class SelectCombinationsView extends DialogBase<SelectCombinationsControl
     private javax.swing.JScrollPane tablesScrollPane;
     private javax.swing.JLabel thresholdLabel;
     private javax.swing.JTextField thresholdTextField;
-    private javax.swing.JList variablesList;
+    private javax.swing.JList<VariableMu> variablesList;
     private javax.swing.JScrollPane variablesScrollPane;
-    private javax.swing.JList variablesSelectedList;
+    private javax.swing.JList<VariableMu> variablesSelectedList;
     private javax.swing.JScrollPane variablesSelectedScrollPane;
     // End of variables declaration//GEN-END:variables
 }

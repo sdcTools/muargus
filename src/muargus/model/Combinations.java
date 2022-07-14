@@ -40,6 +40,7 @@ public class Combinations {
     private ModifyNumericalVariables modifyNumericalVariables;
     private Microaggregation numericalMicroaggregation;
     private NumericalRankSwapping numericalRankSwapping;
+    private TargetedRecordSwapping targetedRecordSwapping;
     private PramSpecification pramSpecification;
     private SyntheticDataSpec syntheticData;
     private AnonDataSpec anonData;
@@ -267,12 +268,31 @@ public class Combinations {
         }
         return this.numericalRankSwapping;
     }
-
+    
     /**
      * Creates a new instance of the NumericalRankSwapping class.
      */
     private void createNumericalRankSwapping() {
         this.numericalRankSwapping = new NumericalRankSwapping();
+    }
+    
+     /*
+     * Gets the model class of the TagetedRecordSwapping screen.
+     *
+     * @return Returns the TargetedRecordSwapping model class.
+     */
+    public TargetedRecordSwapping getTargetedRecordSwapping() {
+        if (this.targetedRecordSwapping == null) {
+            createTargetedRecordSwapping();
+        }
+        return this.targetedRecordSwapping;
+    }
+    
+    /**
+     * Creates a new instance of the TargetedRecordSwapping class.
+     */
+    private void createTargetedRecordSwapping() {
+        this.targetedRecordSwapping = new TargetedRecordSwapping();
     }
 
     /**

@@ -16,13 +16,15 @@
  */
 package muargus.view;
 
+import muargus.controller.ControllerBase;
+
 /**
  * Input screen for values used to generates metadata from a comma separated
  * values (CSV) file.
  *
  * @author Statistics Netherlands
  */
-public class GenerateParameters extends DialogBase {
+public class GenerateParameters extends DialogBase<ControllerBase> {
 
     private boolean ok = false;
 

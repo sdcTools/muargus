@@ -13,29 +13,27 @@ import java.net.URLClassLoader;
 
 /**
  *
- * @author pwof
+ * @author Sean Patrick Floyd
  */
 public class ClassPathHack {
-    private static final Class[] parameters = new Class[] {URL.class};
+    private static final Class<URLClassLoader> URLCLASSLOADER = URLClassLoader.class;
+    private static final Class<?>[] parameters = new Class[] {URL.class};
 
-    public static void addFile(String s) throws IOException
-    {
-        File f = new File(s);
-        addFile(f);
+    public static void addFile(final String s) throws IOException{
+        addFile(new File(s));
     }
 
-    public static void addFile(File f) throws IOException
-    {
+    public static void addFile(final File f) throws IOException{
         addURL(f.toURI().toURL());
     }
 
-    public static void addURL(URL u) throws IOException
+    public static void addURL(final URL u) throws IOException
     {
-        URLClassLoader sysloader = (URLClassLoader) ClassLoader.getSystemClassLoader();
-        Class sysclass = URLClassLoader.class;
+        final URLClassLoader sysloader = getUrlClassLoader();
+        //Class sysclass = URLClassLoader.class;
 
         try {
-            Method method = sysclass.getDeclaredMethod("addURL", parameters);
+            final Method method = getAddUrlMethod();
             method.setAccessible(true);
             method.invoke(sysloader, new Object[] {u});
         } catch (Throwable t) {
@@ -43,5 +41,29 @@ public class ClassPathHack {
             throw new IOException("Error, could not add URL to system classloader");
         }
 
+    }
+    
+    private static Method addUrlMethod;
+    private static URLClassLoader urlClassLoader;
+    
+    private static Method getAddUrlMethod()
+        throws NoSuchMethodException{
+            if(addUrlMethod == null){
+                addUrlMethod =
+                    URLCLASSLOADER.getDeclaredMethod("addURL", parameters);
+            }
+            return addUrlMethod;
+        }
+
+    private static URLClassLoader getUrlClassLoader() {
+        if(urlClassLoader == null){
+            final ClassLoader sysloader = ClassLoader.getSystemClassLoader();
+            if(sysloader instanceof URLClassLoader){
+                urlClassLoader = (URLClassLoader) sysloader;
+            } else{
+                throw new IllegalStateException("Not an UrlClassLoader: "+sysloader);
+            }
+        }
+        return urlClassLoader;
     }
 }

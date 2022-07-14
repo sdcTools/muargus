@@ -47,7 +47,8 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
     private final VariableMu dummyVar = new VariableMu();
     private final java.awt.Frame parent;
 
-    private DefaultListModel variableListModel;
+    private DefaultListModel<VariableMu> variableListModel;
+    //private DefaultComboBoxModel<VariableMu> comboBoxModel;
 
     /**
      * Creates new form SpecifyMetadataView
@@ -86,16 +87,16 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
         }
 
         // add lists of names to the ComboBoxes
-        this.identificationComboBox.setModel(new DefaultComboBoxModel(this.idLevel));
-        this.priorityLocalSuppressionComboBox.setModel(new DefaultComboBoxModel(this.suppressionPriority));
-
+        this.identificationComboBox.setModel(new DefaultComboBoxModel<>(this.idLevel));
+        this.priorityLocalSuppressionComboBox.setModel(new DefaultComboBoxModel<>(this.suppressionPriority));
+        
         // set the format choise options
         if (getMetadata().isSpss()) {
             String[] tempFormat = {format[3]};
-            this.formatComboBox.setModel(new DefaultComboBoxModel(tempFormat));
+            this.formatComboBox.setModel(new DefaultComboBoxModel<>(tempFormat));
         } else {
             String[] tempFormat = {format[0], format[1], format[2]};
-            this.formatComboBox.setModel(new DefaultComboBoxModel(tempFormat));
+            this.formatComboBox.setModel(new DefaultComboBoxModel<>(tempFormat));
         }
 
         // selects the first variable if there are variables
@@ -225,8 +226,7 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
                 this.related.add((VariableMu) o);
             }
         }
-        this.relatedToComboBox.setModel(
-                new javax.swing.DefaultComboBoxModel(this.related.toArray()));
+        this.relatedToComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(this.related.toArray(new VariableMu[0])));
 
         if (selected.isRelated()) {
             this.relatedToComboBox.setSelectedItem(selected.getRelatedVariable());
@@ -366,7 +366,7 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
 
         variableTypeButtonGroup = new javax.swing.ButtonGroup();
         variablesPanel = new javax.swing.JPanel();
-        formatComboBox = new javax.swing.JComboBox();
+        formatComboBox = new javax.swing.JComboBox<>();
         variablesScrollPane = new javax.swing.JScrollPane();
         variablesList = new javax.swing.JList<>();
         moveUpButton = new javax.swing.JButton();
@@ -397,8 +397,8 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
         optionsArgusPanel = new javax.swing.JPanel();
         identificationLevelLabel = new javax.swing.JLabel();
         priorityLocalSuppressionLabel = new javax.swing.JLabel();
-        identificationComboBox = new javax.swing.JComboBox();
-        priorityLocalSuppressionComboBox = new javax.swing.JComboBox();
+        identificationComboBox = new javax.swing.JComboBox<>();
+        priorityLocalSuppressionComboBox = new javax.swing.JComboBox<>();
         categoriesPanel = new javax.swing.JPanel();
         truncationAllowedCheckBox = new javax.swing.JCheckBox();
         codelistfileCheckBox = new javax.swing.JCheckBox();
@@ -410,7 +410,7 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
         missing2Label = new javax.swing.JLabel();
         missing2TextField = new javax.swing.JTextField();
         relatedToPanel = new javax.swing.JLabel();
-        relatedToComboBox = new javax.swing.JComboBox();
+        relatedToComboBox = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Specify Metadata");
@@ -420,7 +420,7 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
         variablesPanel.setName(""); // NOI18N
         variablesPanel.setPreferredSize(new java.awt.Dimension(133, 446));
 
-        formatComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Fixed format", "Free format", "Free with meta", "SPSS system file" }));
+        formatComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Fixed format", "Free format", "Free with meta", "SPSS system file" }));
         formatComboBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 formatComboBoxActionPerformed(evt);
@@ -464,19 +464,19 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
             .addGroup(variablesPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(variablesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(variablesPanelLayout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(moveUpButton)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(moveDownButton)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(formatComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(variablesScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, variablesPanelLayout.createSequentialGroup()
-                        .addComponent(separatorLabel)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(separatorTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                    .addGroup(variablesPanelLayout.createSequentialGroup()
+                        .addGroup(variablesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(variablesPanelLayout.createSequentialGroup()
+                                .addComponent(moveUpButton)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(moveDownButton))
+                            .addComponent(formatComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(variablesPanelLayout.createSequentialGroup()
+                                .addComponent(separatorLabel)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(separatorTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(0, 3, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         variablesPanelLayout.setVerticalGroup(
@@ -700,7 +700,7 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
 
         priorityLocalSuppressionLabel.setText("Priority for local suppression:");
 
-        identificationComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        identificationComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         identificationComboBox.setMaximumSize(new java.awt.Dimension(51, 20));
         identificationComboBox.setMinimumSize(new java.awt.Dimension(51, 20));
         identificationComboBox.setPreferredSize(new java.awt.Dimension(51, 20));
@@ -710,7 +710,7 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
             }
         });
 
-        priorityLocalSuppressionComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        priorityLocalSuppressionComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         priorityLocalSuppressionComboBox.setMaximumSize(new java.awt.Dimension(51, 20));
         priorityLocalSuppressionComboBox.setMinimumSize(new java.awt.Dimension(51, 20));
         priorityLocalSuppressionComboBox.setPreferredSize(new java.awt.Dimension(51, 20));
@@ -1209,11 +1209,11 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
     private javax.swing.JLabel decimalsLabel;
     private javax.swing.JTextField decimalsTextField;
     private javax.swing.JButton deleteButton;
-    private javax.swing.JComboBox formatComboBox;
+    private javax.swing.JComboBox<String> formatComboBox;
     private javax.swing.JButton generateButton;
     private javax.swing.JRadioButton hhIdentifierRadioButton;
     private javax.swing.JRadioButton hhvariableRadioButton;
-    private javax.swing.JComboBox identificationComboBox;
+    private javax.swing.JComboBox<String> identificationComboBox;
     private javax.swing.JLabel identificationLevelLabel;
     private javax.swing.JLabel lengthLabel;
     private javax.swing.JTextField lengthTextField;
@@ -1231,9 +1231,9 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
     private javax.swing.JButton okButton;
     private javax.swing.JPanel optionsArgusPanel;
     private javax.swing.JRadioButton otherRadioButton;
-    private javax.swing.JComboBox priorityLocalSuppressionComboBox;
+    private javax.swing.JComboBox<String> priorityLocalSuppressionComboBox;
     private javax.swing.JLabel priorityLocalSuppressionLabel;
-    private javax.swing.JComboBox relatedToComboBox;
+    private javax.swing.JComboBox<VariableMu> relatedToComboBox;
     private javax.swing.JLabel relatedToPanel;
     private javax.swing.JLabel separatorLabel;
     private javax.swing.JTextField separatorTextField;
@@ -1242,7 +1242,7 @@ public class SpecifyMetadataView extends DialogBase<SpecifyMetadataController> {
     private javax.swing.JCheckBox truncationAllowedCheckBox;
     private javax.swing.ButtonGroup variableTypeButtonGroup;
     private javax.swing.JPanel variableTypePanel;
-    private javax.swing.JList variablesList;
+    private javax.swing.JList<VariableMu> variablesList;
     private javax.swing.JPanel variablesPanel;
     private javax.swing.JScrollPane variablesScrollPane;
     private javax.swing.JRadioButton weightRadioButton;

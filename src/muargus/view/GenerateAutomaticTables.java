@@ -21,6 +21,7 @@ import java.awt.HeadlessException;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import muargus.MuARGUS;
+import muargus.controller.ControllerBase;
 import muargus.model.Combinations;
 import muargus.model.MetadataMu;
 import muargus.model.VariableMu;
@@ -30,7 +31,7 @@ import muargus.model.VariableMu;
  *
  * @author Statistics Netherlands
  */
-public class GenerateAutomaticTables extends DialogBase {
+public class GenerateAutomaticTables extends DialogBase<ControllerBase> {
 
     private final Combinations model;
     private boolean valid; // is used to continue with the calculation

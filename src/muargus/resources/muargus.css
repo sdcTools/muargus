@@ -47,7 +47,6 @@ h6 {
   font-family: arial
 }
 /* tables */
-
 table        {
   border: thin solid black;
   text-align: left;
@@ -56,7 +55,6 @@ table        {
 }
 
 /* table header */
-
 th           {
   border: thin solid gray;
   border-collapse: collapse;
@@ -65,11 +63,16 @@ th           {
 }
 
 /* table cell */
-
 td           {
   border: thin solid gray;
   border-collapse: collapse;
   /* padding: top right bottom left */
   padding: 4px 6px 4px 4px; /* italic correction */
   font-style: italic;
+  vertical-align: baseline;
+}
+
+/* table within table: no borders */
+table.inrow, table.inrow tr, table.inrow td {
+	border: none;
 }

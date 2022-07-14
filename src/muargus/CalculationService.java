@@ -317,7 +317,21 @@ public class CalculationService {
             }
         }
     }
-
+    
+/**
+ * Creates first line with variablenames for FREE_WITH_META type files
+ * 
+ * @return String with variable names separated by metadata.Separator
+ */    
+    private String generateFirstLine(){
+        String hs="";
+        for (VariableMu variable : this.metadata.getVariables()) {
+            hs += variable.getName() + this.metadata.getSeparator();
+        }
+        hs = hs.substring(0,hs.length() - this.metadata.getSeparator().length()); // remove last separator
+        return hs;
+    }
+    
     /**
      * Makes the protected/safe file using "traditional suppression".
      *
@@ -327,12 +341,13 @@ public class CalculationService {
     private void makeFileInBackground() throws ArgusException {
         doChangeFiles();
         ProtectedFile protectedFile = this.metadata.getCombinations().getProtectedFile();
-
+        
         this.c.SetOutFileInfo(this.metadata.getDataFileType() == MetadataMu.DATA_FILE_TYPE_FIXED
                 || this.metadata.getDataFileType() == MetadataMu.DATA_FILE_TYPE_SPSS,
                 this.metadata.getSeparator(),
-                "",
-                true
+                (this.metadata.getDataFileType() == MetadataMu.DATA_FILE_TYPE_FREE_WITH_META) ? generateFirstLine() : "", // First line
+                false  // Strings not in quotes
+                //true // Strings in quotes
         );
         int index = 0;
         for (VariableMu variable : this.metadata.getVariables()) {
@@ -423,7 +438,7 @@ public class CalculationService {
         }
     }
     
-/**
+    /**
      * Makes the protected/safe file using output from (k+1)-anonymisation
      *
      * @throws ArgusException Throws an ArgusException when an error occurs
@@ -435,8 +450,9 @@ public class CalculationService {
         this.c.SetOutFileInfo(this.metadata.getDataFileType() == MetadataMu.DATA_FILE_TYPE_FIXED
                 || this.metadata.getDataFileType() == MetadataMu.DATA_FILE_TYPE_SPSS,
                 this.metadata.getSeparator(),
-                "",
-                true
+                (this.metadata.getDataFileType() == MetadataMu.DATA_FILE_TYPE_FREE_WITH_META) ? generateFirstLine() : "",
+                false  // strings not in quotes
+                //true // strings in quotes
         );
         int index = 0;
         for (VariableMu variable : this.metadata.getVariables()) {
@@ -603,10 +619,9 @@ public class CalculationService {
                 exploreInBackground();
                 break;
             case MakeProtectedFile:
-                // If not (k+1)-anonymisation or no suppression, use "old" proceudre
+                // If not (k+1)-anonymisation or no suppression, use "old" procedure
                 if (!this.metadata.getCombinations().getProtectedFile().isKAnon() ||
-                        (!this.metadata.getCombinations().getProtectedFile().isWithEntropy() && 
-                            !this.metadata.getCombinations().getProtectedFile().isWithPrior())){
+                        this.metadata.getCombinations().getProtectedFile().getSuppressionType() == ProtectedFile.NO_SUPPRESSION){
                     makeFileInBackground();
                 } else { // Use k-anonymity precedure
                     makeFileInBackgroundKAnon();

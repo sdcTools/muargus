@@ -207,7 +207,7 @@ public class PramSpecificationView extends DialogBase<PramSpecificationControlle
         for (int i = 0; i < numbers.length; i++) {
             numbers[i] = Integer.toString(i + 1);
         }
-        this.bandwidthComboBox.setModel(new javax.swing.DefaultComboBoxModel(numbers));
+        this.bandwidthComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(numbers));
         this.bandwidthComboBox.getModel().setSelectedItem(numbers[value - 1]);
         this.codesSlider.setValue(getSelectedCodeInfo().getPramProbability());
 
@@ -253,7 +253,7 @@ public class PramSpecificationView extends DialogBase<PramSpecificationControlle
         defaultProbabilityComboBox = new javax.swing.JComboBox();
         bandwidthPanel = new javax.swing.JPanel();
         bandwidthCheckBox = new javax.swing.JCheckBox();
-        bandwidthComboBox = new javax.swing.JComboBox();
+        bandwidthComboBox = new javax.swing.JComboBox<>();
         closeButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -467,8 +467,6 @@ public class PramSpecificationView extends DialogBase<PramSpecificationControlle
             }
         });
 
-        bandwidthComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
         javax.swing.GroupLayout bandwidthPanelLayout = new javax.swing.GroupLayout(bandwidthPanel);
         bandwidthPanel.setLayout(bandwidthPanelLayout);
         bandwidthPanelLayout.setHorizontalGroup(
@@ -591,7 +589,7 @@ public class PramSpecificationView extends DialogBase<PramSpecificationControlle
     private javax.swing.JPanel MiddlePanel;
     private javax.swing.JButton applyButton;
     private javax.swing.JCheckBox bandwidthCheckBox;
-    private javax.swing.JComboBox bandwidthComboBox;
+    private javax.swing.JComboBox<String> bandwidthComboBox;
     private javax.swing.JPanel bandwidthPanel;
     private javax.swing.JButton closeButton;
     private javax.swing.JScrollPane codesScrollPane;

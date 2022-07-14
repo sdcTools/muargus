@@ -18,6 +18,7 @@ package muargus.view;
 
 import java.util.ArrayList;
 import javax.swing.DefaultListModel;
+import muargus.controller.ControllerBase;
 
 /**
  * Class of th eTablePick View. The TablePickView shows all tables for which the
@@ -26,7 +27,7 @@ import javax.swing.DefaultListModel;
  *
  * @author Statistics Netherlands
  */
-public class TablePickView extends DialogBase {
+public class TablePickView extends DialogBase<ControllerBase> {
 
     private boolean cancelled = true;
 
@@ -49,7 +50,7 @@ public class TablePickView extends DialogBase {
      * risk model is set.
      */
     public void setTables(ArrayList<String> tables) {
-        DefaultListModel model = new DefaultListModel();
+        DefaultListModel<String> model = new DefaultListModel<>();
         for (String str : tables) {
             model.addElement(str);
         }
@@ -76,7 +77,7 @@ public class TablePickView extends DialogBase {
     private void initComponents() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
-        tableList = new javax.swing.JList();
+        tableList = new javax.swing.JList<>();
         okButton = new javax.swing.JButton();
         cancelButton = new javax.swing.JButton();
 
@@ -147,6 +148,6 @@ public class TablePickView extends DialogBase {
     private javax.swing.JButton cancelButton;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JButton okButton;
-    private javax.swing.JList tableList;
+    private javax.swing.JList<String> tableList;
     // End of variables declaration//GEN-END:variables
 }

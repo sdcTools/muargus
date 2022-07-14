@@ -21,6 +21,7 @@ import argus.utils.SystemUtils;
 import java.io.File;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import muargus.controller.ControllerBase;
 import org.apache.commons.io.FilenameUtils;
 
 /**
@@ -28,7 +29,7 @@ import org.apache.commons.io.FilenameUtils;
  *
  * @author Statistics Netherlands
  */
-public class OpenMicrodataView extends DialogBase {
+public class OpenMicrodataView extends DialogBase<ControllerBase> {
 
     private boolean canSelectSpss;
 
@@ -248,9 +249,7 @@ public class OpenMicrodataView extends DialogBase {
         this.fileChooser.setSelectedFile(new File(""));
         this.fileChooser.resetChoosableFileFilters();
         // filters are shown in order of declaration, setFileFilter sets the default filter
-        this.fileChooser.setFileFilter(new FileNameExtensionFilter("Microdata (*.asc)", "asc"));
-        this.fileChooser.addChoosableFileFilter(new FileNameExtensionFilter("Comma Separated File (*.csv)", "csv"));
-        this.fileChooser.addChoosableFileFilter(new FileNameExtensionFilter("Microdata (*.dat)", "dat"));
+        this.fileChooser.setFileFilter(new FileNameExtensionFilter("Microdata (*.asc; *.dat; *.csv)", "asc", "dat", "csv"));
         if (this.canSelectSpss) {
             this.fileChooser.addChoosableFileFilter(new FileNameExtensionFilter("SPSS system file (*.sav)", "sav"));
         }

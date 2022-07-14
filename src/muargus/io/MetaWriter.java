@@ -107,11 +107,15 @@ public class MetaWriter {
     private static void writeRda(PrintWriter writer, MetadataMu metadata, boolean all) {
         switch (metadata.getDataFileType()) {
             case MetadataMu.DATA_FILE_TYPE_FREE:
-                writer.println("   <SEPARATOR> " + StrUtils.quote(metadata.getSeparator()));
+                writer.println("<SEPARATOR> " + StrUtils.quote(metadata.getSeparator()));
+                break;
+            case MetadataMu.DATA_FILE_TYPE_FREE_WITH_META:
+                writer.println("<SEPARATOR> " + StrUtils.quote(metadata.getSeparator()));
+                writer.println("<NAMESINFRONT>");
                 break;
             case MetadataMu.DATA_FILE_TYPE_SPSS:
-                writer.println("   <SPSS>");
-                break;
+                writer.println("<SPSS>");
+                break;                
         }
         for (VariableMu variable : metadata.getVariables()) {
             writeVariableToRda(writer, variable, metadata.getDataFileType(), all, metadata);

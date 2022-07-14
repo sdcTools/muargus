@@ -40,6 +40,7 @@ import muargus.model.ReplacementSpec;
 import muargus.model.RiskSpecification;
 import muargus.model.SyntheticDataSpec;
 import muargus.model.TableMu;
+import muargus.model.TargetSwappingSpec;
 import muargus.model.VariableMu;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -100,6 +101,7 @@ public class HTMLReportWriter {
     private static Element writeOtherModificationsTable(MetadataMu metadata) {
         Element p = HTMLReportWriter.doc.createElement("p");
         addChildElement(p, "h2", "Other modifications");
+        Element TRS, tr1, tr2, tr3, tr0, tr00, tdP;
         Element table = addChildElement(p, "table");
         Element tr = addChildElement(table, "tr");
         addChildElement(tr, "th", "Method");
@@ -152,8 +154,62 @@ public class HTMLReportWriter {
             }
             else{
                 tr = addChildElement(table, "tr");
-                addChildElement(tr, "td", replacement.getReplacementFile().getReplacementType());                
-                addChildElement(tr, "td", VariableMu.printVariableNames(replacement.getOutputVariables()));
+                addChildElement(tr, "td", replacement.getReplacementFile().getReplacementType()); 
+                if (replacement instanceof TargetSwappingSpec){
+                    TRS=addChildElement(tr,"td");
+                    tr2=addChildElement(TRS,"table","class","inrow");
+                    tr1=addChildElement(tr2,"tr");
+                    addChildElement(tr1,"td","Similarity:");
+                    tdP=addChildElement(tr1,"td");
+                    tr0=addChildElement(tdP,"table","class","inrow");
+                    String Info="";
+                    if (((TargetSwappingSpec) replacement).getNProfiles()==1) {
+                        tr00=addChildElement(tr0,"tr");
+                        for (int index : ((TargetSwappingSpec) replacement).getSimilarIndexes()){
+                            Info = Info + " " + replacement.getOutputVariables().get(index).getName() + ",";
+                        }
+                        addChildElement(tr00,"td",Info.substring(0,Info.length()-1));
+                    }
+                    else{
+                        int k=0;
+                        for (int profile=0; profile < ((TargetSwappingSpec) replacement).getNProfiles(); profile++){
+                            tr00 = addChildElement(tr0,"tr");
+                            Info = "Profile " + (profile + 1) + ":";
+                            for (int j=0;j<((TargetSwappingSpec) replacement).getNSim()[profile];j++){
+                                Info = Info + " " + replacement.getOutputVariables().get(((TargetSwappingSpec) replacement).getSimilarIndexes()[k+j]).getName() + ",";
+                            }
+                            k += ((TargetSwappingSpec) replacement).getNSim()[profile];
+                            addChildElement(tr00,"td",Info.substring(0,Info.length()-1));
+                        }
+                    }
+
+                    tr1=addChildElement(tr2,"tr");
+                    addChildElement(tr1,"td","Hierarchy:");
+                    Info="";
+                    for (int index : ((TargetSwappingSpec) replacement).getHierarchyIndexes()){
+                        Info = Info + " " + replacement.getOutputVariables().get(index).getName() + ",";
+                    }
+                    addChildElement(tr1,"td",Info.substring(0,Info.length()-1));
+                    tr1=addChildElement(tr2,"tr");
+                    addChildElement(tr1,"td","Risk:");
+                    Info="";
+                    for (int index : ((TargetSwappingSpec) replacement).getRiskIndexes()){
+                        Info = Info + " " + replacement.getOutputVariables().get(index).getName() + ",";
+                    }
+                    addChildElement(tr1,"td",Info.substring(0,Info.length()-1));
+                    tr1=addChildElement(tr2,"tr");
+                    if (((TargetSwappingSpec) replacement).getCarryIndexes().length>0){
+                        addChildElement(tr1,"td","CarryAlong:");
+                        Info="";
+                        for (int index : ((TargetSwappingSpec) replacement).getCarryIndexes()){
+                            Info = Info + " " + replacement.getOutputVariables().get(index).getName() + ",";
+                        }
+                        addChildElement(tr1,"td",Info.substring(0,Info.length()-1));
+                    }
+                    tr1=addChildElement(tr2,"tr");
+                    addChildElement(tr1,"td","HouseholdID:");
+                    addChildElement(tr1,"td",replacement.getOutputVariables().get(((TargetSwappingSpec) replacement).getHHID()).getName());
+                } else addChildElement(tr, "td", VariableMu.printVariableNames(replacement.getOutputVariables()));
                 if (replacement instanceof RankSwappingSpec) {
                     addChildElement(tr, "td", String.format("Percentage: %d %%", ((RankSwappingSpec) replacement).getPercentage()));
                 } else if (replacement instanceof MicroaggregationSpec) {
@@ -167,10 +223,22 @@ public class HTMLReportWriter {
                         alpha = alpha + " " + v.getAlpha() + ",";
                     }
                     addChildElement(tr, "td", alpha.substring(0, alpha.length() - 1));
+                } else if (replacement instanceof TargetSwappingSpec){
+                        TRS=addChildElement(tr,"td");
+                        tr2=addChildElement(TRS,"table","class","inrow");
+                        tr3=addChildElement(tr2,"tr");
+                        addChildElement(tr3,"td","Seed:");
+                        addChildElement(tr3,"td",String.format("%d",((TargetSwappingSpec) replacement).getSeed()));
+                        tr3=addChildElement(tr2,"tr");
+                        addChildElement(tr3,"td","Swaprate:");
+                        addChildElement(tr3,"td",String.format("%5.3f",((TargetSwappingSpec) replacement).getSwaprate()));
+                        tr3=addChildElement(tr2,"tr");
+                        addChildElement(tr3,"td","K-anonymity:");
+                        addChildElement(tr3,"td",String.format("k = %d",((TargetSwappingSpec) replacement).getkThreshold()));
                 }
             }
         }
-        
+
         ProtectedFile protectedFile = metadata.getCombinations().getProtectedFile();
         if (protectedFile.isRandomizeOutput()) {
             tr = addChildElement(table, "tr");
@@ -204,7 +272,30 @@ public class HTMLReportWriter {
             }
             addChildElement(tr, "td", "HouseHold Identification variable has been removed from the safe file");
         }
-        return writePRAMTable(metadata, table, tr, p);
+        
+        writePRAMTable(metadata, table, tr, p);
+        
+        for (ReplacementSpec replacement : metadata.getReplacementSpecs()) {        
+            if (replacement instanceof TargetSwappingSpec){
+                addChildElement(p, "h2", "Info on Targeted Record Swapping results");
+                table = addChildElement(p, "table");
+                tr=addChildElement(table,"tr");
+                addChildElement(tr,"td","Number of swapped households:");
+                addChildElement(tr,"td",String.format("%d",((TargetSwappingSpec) replacement).getCountSwappedHID()));
+                tr=addChildElement(table,"tr");
+                addChildElement(tr,"td","Number of swapped records:");
+                addChildElement(tr,"td",String.format("%d",((TargetSwappingSpec) replacement).getCountSwappedRecords()));
+                if (((TargetSwappingSpec) replacement).getCountNoDonor()>0){
+                    tr=addChildElement(table,"tr");
+                    addChildElement(tr,"td","Number of households without donor:");
+                    addChildElement(tr,"td",String.format("%d",((TargetSwappingSpec) replacement).getCountNoDonor()));
+                    table = addChildElement(p,"table");
+                    tr=addChildElement(table,"tr");
+                    addChildElement(tr,"td","See "+MuARGUS.getTempDir()+"\\NonSwappedHID.txt for HIDs of households for which no donor was found.");
+                }
+            }
+        }
+        return p;
     }
 
     /**
@@ -465,8 +556,13 @@ public class HTMLReportWriter {
 
         Element p = HTMLReportWriter.doc.createElement("p");
         addChildElement(p, "h2", "Suppression overview ");
+        
         Element table = addChildElement(p, "table");
         Element tr = addChildElement(table, "tr");
+        if (metadata.getCombinations().getProtectedFile().getSuppressionType()==0){
+            addChildElement(tr,"td","\"No suppression\" selected");
+        }
+        else{        
         addChildElement(tr, "th", "Name");
         if (metadata.getCombinations().getProtectedFile().isWithEntropy()) {
             addChildElement(tr, "th", "Entropy");
@@ -493,7 +589,7 @@ public class HTMLReportWriter {
         addChildElement(tr, "td", "Total");
         addChildElement(tr, "td", "");
         addChildElement(tr, "td", Integer.toString(suppressions));
-
+        }
         return p;
     }
 
@@ -563,7 +659,7 @@ public class HTMLReportWriter {
      */
     private static Element writeFooter() {
         Element p = HTMLReportWriter.doc.createElement("p");
-        addChildElement(p, "h2", String.format("μ-ARGUS version: %d.%d.%s (build: %d)",
+        addChildElement(p, "h2", "µ-ARGUS version: " + String.format("%d.%d.%s (build: %d)",
                 MuARGUS.MAJOR, MuARGUS.MINOR, MuARGUS.REVISION, MuARGUS.BUILD));
         return p;
     }
