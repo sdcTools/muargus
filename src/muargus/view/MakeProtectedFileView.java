@@ -97,6 +97,7 @@ public class MakeProtectedFileView extends DialogBase<MakeProtectedFileControlle
 
         enableSuppressionTable();
         enableSuppressionApproach();
+        this.noSuppressionRadioButton.setSelected(true); // Default no suppression selected        
     }
 
     /**
@@ -122,7 +123,6 @@ public class MakeProtectedFileView extends DialogBase<MakeProtectedFileControlle
         else {
             this.suppressionPanel.setBorder(NoSupBorder);
         }
-        this.noSuppressionRadioButton.setSelected(true); // Default no suppression selected
     }
     
     /**
