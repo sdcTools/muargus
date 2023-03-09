@@ -1,3 +1,7 @@
+<!-- badges: start -->
+[![GitHub last
+commit](https://img.shields.io/github/last-commit/sdcTools/muargus.svg?logo=github)](https://github.com/sdcTools/muargus/commits/master)
+<!-- badges: end -->
 # Mu-Argus Open Source [![Mentioned in Awesome Official Statistics ](https://awesome.re/mentioned-badge.svg)](http://www.awesomeofficialstatistics.org)
 
 Software to apply Statistical Disclosure Control techniques
