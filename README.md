@@ -1,3 +1,7 @@
+<!-- badges: start -->
+[![GitHub last
+commit](https://img.shields.io/github/last-commit/sdcTools/muargus.svg?logo=github)](https://github.com/sdcTools/muargus/commits/master)
+<!-- badges: end -->
 # Mu-Argus Open Source [![Mentioned in Awesome Official Statistics ](https://awesome.re/mentioned-badge.svg)](http://www.awesomeofficialstatistics.org)
 
 Software to apply Statistical Disclosure Control techniques
@@ -6,9 +10,9 @@ Copyright 2014 Statistics Netherlands
 
 This program is free software; you can redistribute it and/or 
 modify it under the termcomboBoxOutputDimensions of the European Union Public Licence 
-(EUPL) version 1.1, as published by the European Commission.
+(EUPL) version 1.2, as published by the European Commission.
 
-You can find the text of the EUPL v1.1 on
+You can find the text of the EUPL v1.2 on
 https://joinup.ec.europa.eu/software/page/eupl/licence-eupl
 
 This software is distributed on an "AS IS" basis without 
