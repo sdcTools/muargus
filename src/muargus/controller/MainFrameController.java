@@ -470,7 +470,7 @@ public class MainFrameController {
                     fis.read(data);
                 }
                 String newsString = new String(data, "UTF-8");
-                String css = "<link href=\"file:///" + HTMLReportWriter.css.getAbsolutePath() + "\" rel=\"stylesheet\" type=\"text/css\">";
+                String css = "<link href=\"file:///" + HTMLReportWriter.CSSFILENAME.getAbsolutePath() + "\" rel=\"stylesheet\" type=\"text/css\">";
                 this.news = newsString.replace("<!--{CSS}-->", css);
             } catch (IOException ex) {
                 this.view.showErrorMessage(new ArgusException("Error while reading news file: " + ex.getMessage()));

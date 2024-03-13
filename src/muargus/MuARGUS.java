@@ -45,18 +45,18 @@ public class MuARGUS {
     public static final int MAJOR = 5;
     public static final int MINOR = 1;
     public static final String REVISION = "7";
-    public static final int BUILD = 3;
+    public static final int BUILD = 4;
 
     public static final int MAXDIMS = 10;
 
-    private static final String messageTitle = "Mu Argus";
-    private static final int nHistogramClasses = 10;
-    private static final int nCumulativeHistogramClasses = 100;
-    private static final String defaultSeparator = ",";
+    private static final String MESSAGETITLE = "Mu Argus";
+    private static final int NHISTOGRAMCLASSES = 10;
+    private static final int NCUMULATIVEHISTOGRAMCLASSES = 100;
+    private static final String DEFAULTSEPARATOR = ",";
 
-    private static final String lookAndFeel = "Windows";
-    private static final File manual = new File("resources/MUmanual5.1.3.pdf");
-    private static final int sleepTime = 2000;
+    private static final String LOOKANDFEEL = "Windows";
+    private static final File MANUAL = new File("resources/MUmanual5.1.3.pdf");
+    private static final int SLEEPTIME = 2000;
     private static Process helpViewerProcess;
 
     static {
@@ -125,7 +125,7 @@ public class MuARGUS {
      * @return String containing the message title.
      */
     public static String getMessageTitle() {
-        return MuARGUS.messageTitle;
+        return MuARGUS.MESSAGETITLE;
     }
 
     /**
@@ -136,7 +136,7 @@ public class MuARGUS {
      * @return Integer containing the number of histogram classes.
      */
     public static int getNHistogramClasses(boolean cumulative) {
-        return cumulative ? MuARGUS.nCumulativeHistogramClasses : MuARGUS.nHistogramClasses;
+        return cumulative ? MuARGUS.NCUMULATIVEHISTOGRAMCLASSES : MuARGUS.NHISTOGRAMCLASSES;
     }
 
     /**
@@ -154,7 +154,7 @@ public class MuARGUS {
      * @return String containing the default separator.
      */
     public static String getDefaultSeparator() {
-        return MuARGUS.defaultSeparator;
+        return MuARGUS.DEFAULTSEPARATOR;
     }
 
     /**
@@ -204,7 +204,7 @@ public class MuARGUS {
                 String version = "Version " + getFullVersion() + " (Build " + MuARGUS.BUILD + ")";
                 g.drawString(version, (splash.getSize().width / 2) - (version.length()*3), (3*splash.getSize().height/4));
                 splash.update();
-                sleepThread(MuARGUS.sleepTime);
+                sleepThread(MuARGUS.SLEEPTIME);
             }
         }
     }
@@ -219,7 +219,7 @@ public class MuARGUS {
     public static void showHelp(String namedDest) throws ArgusException {
         ArrayList<String> args = new ArrayList<>();
         args.add("-loadfile");
-        args.add(MuARGUS.manual.getAbsolutePath());
+        args.add(MuARGUS.MANUAL.getAbsolutePath());
         if (namedDest != null) {
             args.add("-nameddest");
             args.add(namedDest);
@@ -289,7 +289,7 @@ public class MuARGUS {
         /* Set the  look and feel */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if (MuARGUS.lookAndFeel.equals(info.getName())) {
+                if (MuARGUS.LOOKANDFEEL.equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
                 }
